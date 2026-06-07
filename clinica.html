@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Montgomery Magalhães - Saúde Integrativa</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+:root{
+  --pri:#3B6FA0;--pri-l:#EEF4FA;--pri-d:#1E3A5F;--pri-h:#4A84BA;
+  --bg:#F5F2ED;--white:#FDFAF6;--txt:#2C2A27;--txt-l:#7A746C;--brd:#DDD8CF;
+  --danger:#B83232;--warn:#C47A1E;--info:#1E5A96;--radius:10px;
+  --shadow:0 2px 10px rgba(44,42,39,.07);
+  --gold:#8B6914;--beige:#F0EBE0;--cream:#FDFAF6;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:var(--bg);color:var(--txt);display:flex;flex-direction:column;min-height:100vh}
+.layout{display:flex;flex:1}
+
+/* SIDEBAR */
+.sidebar{width:230px;background:var(--pri-d);color:#fff;position:fixed;height:100vh;overflow-y:auto;z-index:100;transition:transform .3s;display:flex;flex-direction:column}
+.sidebar .logo{padding:16px;text-align:center;border-bottom:1px solid rgba(255,255,255,.15)}
+.logo-img{width:80px;height:80px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.4);margin-bottom:8px;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;overflow:hidden}
+.logo-img img{width:100%;height:100%;object-fit:cover}
+.logo-txt h2{font-size:13px;font-weight:700;line-height:1.3;margin-bottom:2px}
+.logo-txt small{opacity:.65;font-size:10px;line-height:1.4;display:block}
+.sidebar nav{padding:8px 0;flex:1}
+.sidebar nav a{display:flex;align-items:center;gap:10px;padding:11px 18px;color:rgba(255,255,255,.82);font-size:13px;cursor:pointer;transition:all .18s;border-left:3px solid transparent}
+.sidebar nav a:hover,.sidebar nav a.active{background:rgba(255,255,255,.13);color:#fff;border-left-color:#7FB3D3}
+.sidebar nav a .icon{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.sidebar nav .sep{height:1px;background:rgba(255,255,255,.1);margin:5px 16px}
+.sidebar-footer{padding:12px 16px;border-top:1px solid rgba(255,255,255,.1);font-size:10px;opacity:.5;text-align:center;line-height:1.6}
+.menu-btn{display:none;background:var(--pri-d);color:#fff;border:none;font-size:22px;cursor:pointer;position:fixed;top:0;left:0;z-index:200;width:50px;height:50px;align-items:center;justify-content:center}
+.sid-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:99}
+.sid-ov.show{display:block}
+
+/* MAIN */
+.main{margin-left:230px;flex:1;padding:20px 24px;min-height:100vh;display:flex;flex-direction:column}
+.page{display:none;flex:1}.page.active{display:flex;flex-direction:column;animation:fi .2s ease}
+@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:9px}
+.page-header h1{font-size:19px;color:var(--pri-d);display:flex;align-items:center;gap:8px}
+
+/* CARDS */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:18px}
+.card{background:#FDFAF6;border-radius:var(--radius);padding:15px;box-shadow:var(--shadow);border-left:4px solid var(--pri)}
+.card h3{font-size:11px;color:var(--txt-l);text-transform:uppercase;margin-bottom:5px;letter-spacing:.5px}
+.card .value{font-size:21px;font-weight:700;color:var(--pri-d)}
+
+/* FORMS */
+.fc{background:#FDFAF6;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+.fst{font-size:13.5px;font-weight:700;color:var(--pri-d);margin-bottom:12px;padding-bottom:7px;border-bottom:2px solid var(--pri-l)}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px}
+.fr.full{grid-template-columns:1fr}.fr.tri{grid-template-columns:1fr 1fr 1fr}
+.fg{display:flex;flex-direction:column}
+.fg label{font-size:11.5px;font-weight:600;color:var(--pri-d);margin-bottom:4px}
+.fg input,.fg select,.fg textarea{padding:8px 10px;border:1.5px solid var(--brd);border-radius:6px;font-size:13px;font-family:inherit;transition:all .18s;background:#F0EBE0;color:var(--txt)}
+.fg input:focus,.fg select:focus,.fg textarea:focus{outline:none;border-color:var(--pri);background:#fff;box-shadow:0 0 0 3px rgba(59,111,160,.1)}
+.fg textarea{resize:vertical;min-height:70px;line-height:1.5}
+.req::after{content:" *";color:var(--danger)}
+
+/* FOTO */
+.foto-area{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 0 18px}
+.foto-ring{width:105px;height:105px;border-radius:50%;border:3px solid var(--pri);overflow:hidden;background:var(--pri-l);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:all .25s}
+.foto-ring:hover{box-shadow:0 0 0 5px rgba(46,125,50,.2)}
+.foto-ring img{width:100%;height:100%;object-fit:cover;display:none}
+.foto-ring .fp{font-size:40px}
+.foto-ov{position:absolute;bottom:0;left:0;right:0;background:rgba(27,94,32,.85);color:#fff;text-align:center;padding:4px;font-size:10px;font-weight:700;opacity:0;transition:opacity .2s}
+.foto-ring:hover .foto-ov{opacity:1}
+
+/* EXAMES */
+.ex-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;margin-top:8px}
+.ex-card{border-radius:7px;overflow:hidden;border:1.5px solid var(--brd);position:relative;background:#fafafa;aspect-ratio:1;cursor:pointer;transition:all .2s}
+.ex-card:hover{border-color:var(--pri);box-shadow:var(--shadow)}
+.ex-card img{width:100%;height:100%;object-fit:cover}
+.ex-card .ex-del{position:absolute;top:3px;right:3px;background:rgba(198,40,40,.85);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+.ex-card:hover .ex-del{opacity:1}
+.ex-card .ex-lb{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.55);color:#fff;font-size:9px;padding:2px 4px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ex-add{border-radius:7px;border:2px dashed var(--brd);background:#fafafa;aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;color:var(--txt-l);font-size:11px;gap:4px}
+.ex-add:hover{border-color:var(--pri);color:var(--pri);background:var(--pri-l)}
+
+/* TABS */
+.tabs{display:flex;border-bottom:2px solid var(--brd);margin-bottom:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{padding:9px 14px;border:none;background:none;font-size:12px;font-weight:600;color:var(--txt-l);cursor:pointer;border-bottom:3px solid transparent;transition:all .18s;white-space:nowrap;font-family:inherit;margin-bottom:-2px}
+.tabs button:hover{color:var(--pri)}.tabs button.active{color:var(--pri-d);border-bottom-color:var(--pri)}
+.tab-panel{display:none}.tab-panel.active{display:block}
+
+/* SAVE BAR */
+.sbar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--pri-l);border-radius:7px;margin-bottom:12px;flex-wrap:wrap;gap:7px}
+.sst{font-size:12px;font-weight:700}.sst.saved{color:var(--pri)}.sst.unsaved{color:var(--warn)}
+
+/* BUSCA PACIENTE */
+.ps-wrap{position:relative}
+.ps-inp{width:100%;padding:9px 11px;border:1.5px solid var(--brd);border-radius:7px 7px 0 0;font-size:13px;font-family:inherit;border-bottom:none;background:#fafcfa}
+.ps-inp:focus{outline:none;border-color:var(--pri)}
+.ps-list{max-height:200px;overflow-y:auto;border:1.5px solid var(--pri);border-top:none;border-radius:0 0 7px 7px;background:#fff;display:none;position:absolute;width:100%;z-index:60;box-shadow:0 6px 16px rgba(0,0,0,.1)}
+.ps-list.open{display:block}
+.ps-item{padding:9px 11px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:8px;transition:background .12s;border-bottom:1px solid #f0f0f0}
+.ps-item:last-child{border-bottom:none}.ps-item:hover{background:var(--pri-l)}
+.ps-foto{width:32px;height:32px;border-radius:50%;border:2px solid var(--pri);background:var(--pri-l);display:flex;align-items:center;justify-content:center;font-size:14px;overflow:hidden;flex-shrink:0}
+.ps-foto img{width:100%;height:100%;object-fit:cover}
+
+/* CALENDÁRIO */
+.cal-wrap{overflow-x:auto;border-radius:var(--radius);box-shadow:var(--shadow);background:#fff}
+.cal-table{width:100%;border-collapse:collapse;min-width:560px}
+.ev-card{border-radius:4px;padding:3px 5px;margin-bottom:3px;cursor:pointer;font-size:10px;transition:opacity .15s}
+.ev-card:hover{opacity:.8}
+
+/* TABELAS */
+.tw{background:#FDFAF6;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+.ttb{padding:11px 14px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;border-bottom:1px solid var(--brd)}
+.sw{position:relative;display:flex;align-items:center}
+.sw input{padding:7px 10px 7px 30px;border:1.5px solid var(--brd);border-radius:6px;font-size:13px;min-width:190px;transition:all .18s;background:#fafcfa}
+.sw input:focus{outline:none;border-color:var(--pri)}
+.si{position:absolute;left:8px;font-size:13px;color:var(--txt-l)}
+table{width:100%;border-collapse:collapse}
+thead{background:var(--pri-l)}
+th{padding:9px 11px;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--pri-d);font-weight:700;cursor:pointer;white-space:nowrap}
+td{padding:8px 11px;border-bottom:1px solid var(--brd);font-size:13px;vertical-align:middle}
+tr:hover td{background:#EEF2F7}
+.fmini{width:33px;height:33px;border-radius:50%;border:2px solid var(--pri);display:flex;align-items:center;justify-content:center;font-size:14px;overflow:hidden;background:var(--pri-l);flex-shrink:0}
+.fmini img{width:100%;height:100%;object-fit:cover}
+
+/* BADGES */
+.badge{padding:3px 7px;border-radius:10px;font-size:10px;font-weight:600;white-space:nowrap}
+.bp{background:#E3EFF8;color:#1E3A5F}.bpend{background:#FFF3E0;color:#C47A1E}.bc{background:#FFEBEE;color:#B83232}
+
+/* BOTÕES */
+.btn{padding:7px 15px;border:none;border-radius:6px;font-size:12.5px;font-weight:600;cursor:pointer;transition:all .18s;font-family:inherit;display:inline-flex;align-items:center;gap:6px;text-decoration:none;white-space:nowrap}
+.btn-pri{background:var(--pri);color:#fff}.btn-pri:hover{background:var(--pri-h)}
+.btn-sec{background:#fff;color:var(--pri);border:2px solid var(--pri)}.btn-sec:hover{background:var(--pri-l)}
+.btn-dan{background:#FFEBEE;color:var(--danger);border:1px solid #FFCDD2}.btn-dan:hover{background:#FFCDD2}
+.btn-war{background:#FFF3E0;color:var(--warn);border:1px solid #FFE0B2}.btn-war:hover{background:#FFE0B2}
+.btn-wa{background:#25D366;color:#fff}.btn-wa:hover{background:#128C7E}
+.btn-inf{background:#E3F2FD;color:var(--info);border:1px solid #BBDEFB}
+.btn-cal{background:#4285F4;color:#fff}.btn-cal:hover{background:#3367D6}
+.btn-gold{background:var(--gold);color:#fff}.btn-gold:hover{background:#6d5010}
+.btn-sm{padding:4px 9px;font-size:11.5px}
+.fa{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;padding-top:12px;border-top:1px solid var(--brd);flex-wrap:wrap}
+
+/* FINANCEIRO */
+.fg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin-bottom:14px}
+.fc-card{background:#fff;border-radius:var(--radius);padding:14px;text-align:center;box-shadow:var(--shadow)}
+.fc-card.g{border-top:4px solid var(--pri)}.fc-card.o{border-top:4px solid var(--warn)}.fc-card.b{border-top:4px solid var(--info)}.fc-card.p{border-top:4px solid #7B1FA2}
+.fc-card h4{font-size:10px;color:var(--txt-l);text-transform:uppercase;margin-bottom:5px}
+.fc-card .fv{font-size:18px;font-weight:700}
+.fc-card.g .fv{color:var(--pri)}.fc-card.o .fv{color:var(--warn)}.fc-card.b .fv{color:var(--info)}.fc-card.p .fv{color:#7B1FA2}
+
+/* MODAL */
+.mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:300;align-items:center;justify-content:center;padding:12px}
+.mov.show{display:flex}
+.modal{background:#FDFAF6;border-radius:var(--radius);padding:20px;max-width:620px;width:100%;max-height:92vh;overflow-y:auto;position:relative}
+.mcl{position:absolute;top:10px;right:10px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--txt-l);padding:4px}
+.mcl:hover{color:var(--danger)}
+
+/* FULLSCREEN EXAME */
+.exov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:400;align-items:center;justify-content:center}
+.exov.show{display:flex}
+.exov img{max-width:95vw;max-height:95vh;object-fit:contain;border-radius:7px}
+.exov .xcl{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:24px;cursor:pointer;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center}
+
+/* CONFIGURAÇÕES */
+.cfg-section{background:#FDFAF6;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+.cfg-section h3{color:var(--pri-d);font-size:14px;margin-bottom:12px;padding-bottom:7px;border-bottom:2px solid var(--pri-l);display:flex;align-items:center;gap:7px}
+.logo-preview-wrap{display:flex;align-items:center;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.logo-preview{width:90px;height:90px;border-radius:50%;border:3px solid var(--pri);overflow:hidden;background:var(--pri-l);display:flex;align-items:center;justify-content:center;font-size:32px;cursor:pointer;flex-shrink:0}
+.logo-preview img{width:100%;height:100%;object-fit:cover}
+
+/* BACKUP */
+.bx{background:#FDFAF6;border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-bottom:12px}
+.bx h3{color:var(--pri-d);margin-bottom:5px;font-size:13.5px}
+.bx p{color:var(--txt-l);font-size:12px;margin-bottom:10px;line-height:1.6}
+.bx-ac{display:flex;gap:7px;flex-wrap:wrap}
+.steps{list-style:none;counter-reset:s;padding:0;margin:7px 0}
+.steps li{counter-increment:s;display:flex;align-items:flex-start;gap:7px;font-size:12px;margin-bottom:6px;line-height:1.5}
+.steps li::before{content:counter(s);background:var(--pri);color:#fff;border-radius:50%;width:17px;height:17px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.drive-box{background:linear-gradient(135deg,#E8F5E9,#F1F8E9);border:2px solid var(--pri);border-radius:9px;padding:14px;margin-bottom:12px}
+.drive-box h4{color:var(--pri-d);margin-bottom:6px;font-size:13px}
+
+/* PERFIL */
+.ph{display:flex;align-items:center;gap:13px;margin-bottom:14px;padding-bottom:13px;border-bottom:2px solid var(--pri-l)}
+.ph-f{width:62px;height:62px;border-radius:50%;border:3px solid var(--pri);overflow:hidden;background:var(--pri-l);display:flex;align-items:center;justify-content:center;font-size:25px;flex-shrink:0}
+.ph-f img{width:100%;height:100%;object-fit:cover}
+.ph-i h3{color:var(--pri-d);font-size:15px;margin-bottom:3px}
+.ph-i p{color:var(--txt-l);font-size:12px;line-height:1.6}
+.psec{margin-bottom:12px}
+.psec h4{color:var(--pri);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;padding-bottom:3px;border-bottom:1px solid var(--brd)}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.pi{font-size:12px;line-height:1.6}
+.pi strong{color:var(--txt-l);display:block;font-size:10px;text-transform:uppercase}
+
+/* BOTTOM NAV */
+.bnav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--pri-d);z-index:150;padding:5px 0 env(safe-area-inset-bottom,5px)}
+.bnav-in{display:flex;justify-content:space-around}
+.bb{display:flex;flex-direction:column;align-items:center;gap:1px;color:rgba(255,255,255,.7);background:none;border:none;cursor:pointer;padding:4px 5px;font-family:inherit;transition:color .15s;min-width:50px}
+.bb.active,.bb:hover{color:#fff}
+.bb .bi{font-size:18px}.bb span{font-size:9px;font-weight:600}
+
+/* RODAPÉ */
+.site-footer{background:var(--pri-d);color:rgba(255,255,255,.8);text-align:center;padding:16px 20px;font-size:11px;line-height:2;margin-left:230px}
+.site-footer .footer-links{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:6px}
+.site-footer a{color:rgba(255,255,255,.7);text-decoration:none;font-size:11px;transition:color .2s}
+.site-footer a:hover{color:#fff}
+.footer-social{display:flex;justify-content:center;gap:12px;margin-top:8px;flex-wrap:wrap}
+.footer-social a{background:rgba(255,255,255,.1);border-radius:6px;padding:4px 10px;color:rgba(255,255,255,.8);text-decoration:none;font-size:11px;transition:all .2s;display:flex;align-items:center;gap:5px}
+.footer-social a:hover{background:rgba(255,255,255,.25);color:#fff}
+
+/* TOAST */
+.toast{position:fixed;bottom:18px;right:18px;background:var(--pri-d);color:#fff;padding:10px 16px;border-radius:7px;font-size:13px;font-weight:500;z-index:999;transform:translateY(70px);opacity:0;transition:all .28s;max-width:270px;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* PRINT */
+.rx-print{display:none}
+@media print{
+  .sidebar,.menu-btn,.bnav,.no-print,.mov,.toast,.sid-ov,.site-footer{display:none!important}
+  .main{margin:0;padding:0}.rx-print{display:block;width:100%}
+  @page{margin:10mm 12mm;size:A4;margin-header:0;margin-footer:0}
+  body{background:#fff}
+}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
+  .main{margin-left:0;padding:10px 11px;padding-top:54px;padding-bottom:66px}
+  .site-footer{margin-left:0;padding:12px}
+  .menu-btn{display:flex}.fr{grid-template-columns:1fr}.fr.tri{grid-template-columns:1fr 1fr}
+  .bnav{display:block}.cards{grid-template-columns:1fr 1fr;gap:8px}
+  .pgrid{grid-template-columns:1fr}.sw input{min-width:0;width:100%}
+  .ttb{flex-direction:column;align-items:stretch}
+}
+@media(max-width:400px){.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<button class="menu-btn no-print" onclick="toggleSB()">☰</button>
+<div class="sid-ov" id="sidOv" onclick="toggleSB()"></div>
+
+<div class="layout">
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="logo">
+    <div class="logo-img" id="sideLogoWrap">
+      <img id="sideLogo" src="" alt="Logo" style="display:none">
+      <span id="sideLogoEmoji" style="font-size:28px">🌿</span>
+    </div>
+    <div class="logo-txt">
+      <h2 id="sideNome">Montgomery Magalhães<br>Saúde Integrativa</h2>
+      <small>Acupuntura • Quiropraxia • Psicanálise</small>
+    </div>
+  </div>
+  <nav>
+    <a class="active" onclick="go('dashboard',this)"><span class="icon">🏠</span>Início</a>
+    <a onclick="go('novo-paciente',this)"><span class="icon">➕</span>Novo Paciente</a>
+    <a onclick="go('pacientes',this)"><span class="icon">👥</span>Pacientes</a>
+    <div class="sep"></div>
+    <a onclick="go('nova-sessao',this)"><span class="icon">📝</span>Nova Sessão</a>
+    <a onclick="go('agenda',this)"><span class="icon">📅</span>Agenda</a>
+    <a onclick="go('prescricao',this)"><span class="icon">🌿</span>Prescrição</a>
+    <div class="sep"></div>
+    <a onclick="go('financeiro',this)"><span class="icon">💰</span>Financeiro</a>
+    <div class="sep"></div>
+    <a onclick="go('configuracoes',this)"><span class="icon">⚙️</span>Configurações</a>
+    <a onclick="go('backup',this)"><span class="icon">💾</span>Backup</a>
+    <a onclick="go('contatos',this)"><span class="icon">📇</span>Importar Contatos</a>
+  </nav>
+  <div class="sidebar-footer">
+    Montgomery Magalhães<br>Saúde Integrativa<br>
+    Itambacuri - MG
+  </div>
+</aside>
+
+<main class="main">
+
+<!-- ===== DASHBOARD ===== -->
+<section class="page active" id="pg-dashboard">
+  <div class="page-header">
+    <h1>🏠 Painel</h1>
+    <span style="color:var(--txt-l);font-size:12px" id="dtHoje"></span>
+  </div>
+  <div class="cards">
+    <div class="card"><h3>Pacientes</h3><div class="value" id="stP">0</div></div>
+    <div class="card"><h3>Sessões/Mês</h3><div class="value" id="stS">0</div></div>
+    <div class="card"><h3>💰 Recebido</h3><div class="value" id="stR">R$0</div></div>
+    <div class="card"><h3>⏳ Pendente</h3><div class="value" id="stPd">R$0</div></div>
+  </div>
+  <div class="fc">
+    <div class="fst">📋 Últimas Sessões</div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Data</th><th>Paciente</th><th>Procedimento</th><th>Valor</th><th>Status</th></tr></thead>
+        <tbody id="dashT"><tr><td colspan="5" style="text-align:center;color:var(--txt-l);padding:28px">Nenhuma sessão registrada</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== NOVO PACIENTE ===== -->
+<section class="page" id="pg-novo-paciente">
+  <div class="page-header"><h1 id="fTit">➕ Novo Paciente</h1></div>
+  <div class="sbar no-print">
+    <div class="sst unsaved" id="saveSt">⚫ Não salvo</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn btn-sec btn-sm" onclick="salvarRasc()">💾 Rascunho</button>
+      <button class="btn btn-pri btn-sm" onclick="document.getElementById('fPac').dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}))">✅ Salvar</button>
+    </div>
+  </div>
+  <div class="fc">
+    <div class="foto-area">
+      <div class="foto-ring" onclick="document.getElementById('fotoInp').click()">
+        <div class="fp" id="fotoFP">👤</div>
+        <img id="fotoPv" alt="">
+        <div class="foto-ov">📷 FOTO</div>
+      </div>
+      <input type="file" id="fotoInp" style="display:none" accept="image/*" onchange="carregarFoto(this)">
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-sec btn-sm" onclick="document.getElementById('fotoInp').click()">📷 Foto</button>
+        <button class="btn btn-dan btn-sm" id="btnRmF" style="display:none" onclick="remFoto()">✕</button>
+      </div>
+    </div>
+    <div class="tabs" id="mTabs">
+      <button class="active" onclick="showTab('tp',this)">👤 Dados</button>
+      <button onclick="showTab('tq',this)">📝 Queixa</button>
+      <button onclick="showTab('th',this)">🏥 Histórico</button>
+      <button onclick="showTab('thb',this)">🍃 Hábitos</button>
+      <button onclick="showTab('ta',this)">🔴 Acupunt.</button>
+      <button onclick="showTab('tqr',this)">🔵 Quiropr.</button>
+      <button onclick="showTab('tps',this)">🟣 Psic.</button>
+      <button onclick="showTab('tc',this)">🌿 Complem.</button>
+      <button onclick="showTab('tex',this)">🖼️ Exames</button>
+    </div>
+    <form id="fPac" onsubmit="salvarPac(event)">
+      <div class="tab-panel active" id="tp">
+        <div class="fst">Dados Pessoais</div>
+        <div class="fr"><div class="fg"><label class="req">Nome</label><input type="text" id="pN" required oninput="mudou()"></div><div class="fg"><label>Email</label><input type="email" id="pE" oninput="mudou()"></div></div>
+        <div class="fr">
+          <div class="fg"><label>Telefone / WhatsApp</label>
+            <div style="display:flex;gap:6px"><input type="tel" id="pT" placeholder="(00) 00000-0000" style="flex:1" oninput="mudou();atuWA()"><a id="waBtn" href="#" target="_blank" class="btn btn-wa btn-sm" style="display:none">💬</a></div>
+          </div>
+          <div class="fg"><label>Nascimento</label><input type="date" id="pNasc" oninput="mudou()"></div>
+        </div>
+        <div class="fr"><div class="fg"><label>Gênero</label><select id="pG" onchange="mudou()"><option value="">-</option><option>Masculino</option><option>Feminino</option><option>Outro</option><option>Prefiro não dizer</option></select></div><div class="fg"><label>Religião</label><input type="text" id="pRl" oninput="mudou()"></div></div>
+        <div class="fr"><div class="fg"><label>Profissão</label><input type="text" id="pPr" oninput="mudou()"></div><div class="fg"><label>Estado Civil</label><select id="pEC" onchange="mudou()"><option value="">-</option><option>Solteiro(a)</option><option>Casado(a)</option><option>Divorciado(a)</option><option>Viúvo(a)</option><option>União Estável</option></select></div></div>
+        <div class="fr full"><div class="fg"><label>Endereço</label><input type="text" id="pEnd" oninput="mudou()"></div></div>
+        <div class="fr"><div class="fg"><label>Cidade</label><input type="text" id="pCid" oninput="mudou()"></div><div class="fg"><label>Estado</label><input type="text" id="pEst" oninput="mudou()"></div></div>
+        <div class="fr"><div class="fg"><label>CEP</label><input type="text" id="pCep" oninput="mudou()"></div><div class="fg"><label>Emergência</label><input type="text" id="pCE" oninput="mudou()"></div></div>
+        <div class="fr full"><div class="fg"><label>Tel. Emergência</label><input type="tel" id="pTE" oninput="mudou()"></div></div>
+      </div>
+      <div class="tab-panel" id="tq">
+        <div class="fst">Queixa Principal</div>
+        <div class="fr full"><div class="fg"><label>Queixa</label><textarea id="pQ" rows="4" oninput="mudou()"></textarea></div></div>
+        <div class="fr"><div class="fg"><label>Há quanto tempo?</label><input type="text" id="pTQ" oninput="mudou()"></div><div class="fg"><label>Intensidade</label><select id="pInt" onchange="mudou()"><option value="">-</option><option>0 - Sem dor</option><option>1-3 - Leve</option><option>4-6 - Moderada</option><option>7-9 - Intensa</option><option>10 - Insuportável</option></select></div></div>
+        <div class="fr full"><div class="fg"><label>O que melhora?</label><textarea id="pMlh" rows="2" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>O que piora?</label><textarea id="pPio" rows="2" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Tratamento anterior</label><textarea id="pTA" rows="2" oninput="mudou()"></textarea></div></div>
+      </div>
+      <div class="tab-panel" id="th">
+        <div class="fst">Histórico Médico</div>
+        <div class="fr full"><div class="fg"><label>Doenças</label><textarea id="pDo" rows="3" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Medicamentos</label><textarea id="pMd" rows="3" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Alergias</label><textarea id="pAl" rows="2" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Cirurgias</label><textarea id="pCi" rows="2" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Histórico familiar</label><textarea id="pHF" rows="2" oninput="mudou()"></textarea></div></div>
+        <div class="fr"><div class="fg"><label>Gestante?</label><select id="pGt" onchange="mudou()"><option value="">N/A</option><option>Sim</option><option>Não</option></select></div><div class="fg"><label>Semanas</label><input type="text" id="pSm" oninput="mudou()"></div></div>
+      </div>
+      <div class="tab-panel" id="thb">
+        <div class="fst">Hábitos</div>
+        <div class="fr"><div class="fg"><label>Sono</label><select id="pSn" onchange="mudou()"><option value="">-</option><option>Bom</option><option>Regular</option><option>Ruim</option><option>Péssimo</option></select></div><div class="fg"><label>Horas/noite</label><input type="text" id="pHs" oninput="mudou()"></div></div>
+        <div class="fr"><div class="fg"><label>Alimentação</label><select id="pAlm" onchange="mudou()"><option value="">-</option><option>Equilibrada</option><option>Irregular</option><option>Vegetariana</option><option>Vegana</option><option>Restritiva</option></select></div><div class="fg"><label>Água L/dia</label><input type="text" id="pAg" oninput="mudou()"></div></div>
+        <div class="fr"><div class="fg"><label>Atividade física</label><select id="pAF" onchange="mudou()"><option value="">-</option><option>Sedentário</option><option>1-2x/sem</option><option>3-4x/sem</option><option>Diário</option></select></div><div class="fg"><label>Tipo</label><input type="text" id="pTAF" oninput="mudou()"></div></div>
+        <div class="fr"><div class="fg"><label>Tabagismo</label><select id="pTb" onchange="mudou()"><option value="">-</option><option>Nunca fumou</option><option>Ex-fumante</option><option>Fumante</option></select></div><div class="fg"><label>Álcool</label><select id="pAc" onchange="mudou()"><option value="">-</option><option>Não bebe</option><option>Social</option><option>Frequente</option><option>Diário</option></select></div></div>
+        <div class="fr full"><div class="fg"><label>Estresse</label><select id="pStr" onchange="mudou()"><option value="">-</option><option>Baixo</option><option>Moderado</option><option>Alto</option><option>Muito alto</option></select></div></div>
+        <div class="fr full"><div class="fg"><label>Observações</label><textarea id="pOH" rows="2" oninput="mudou()"></textarea></div></div>
+      </div>
+      <div class="tab-panel" id="ta">
+        <div class="fst">Acupuntura Balance Método</div>
+        <div class="fr"><div class="fg"><label>Língua</label><textarea id="pLg" rows="3" oninput="mudou()"></textarea></div><div class="fg"><label>Pulso</label><textarea id="pPl" rows="3" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Meridianos</label><textarea id="pMr" rows="2" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Diagnóstico MTC</label><textarea id="pMTC" rows="3" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Pontos utilizados</label><textarea id="pPts" rows="3" placeholder="E36, IG4, B40..." oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Observações</label><textarea id="pOA" rows="2" oninput="mudou()"></textarea></div></div>
+      </div>
+      <div class="tab-panel" id="tqr">
+        <div class="fst">Quiropraxia</div>
+        <div class="fr full"><div class="fg"><label>Avaliação postural</label><textarea id="pPos" rows="3" oninput="mudou()"></textarea></div></div>
+        <div class="fr"><div class="fg"><label>Região</label><select id="pReg" onchange="mudou()"><option value="">-</option><option>Cervical C1-C7</option><option>Torácica T1-T12</option><option>Lombar L1-L5</option><option>Sacral/Cóccix</option><option>Múltiplas</option></select></div><div class="fg"><label>Vértebras</label><input type="text" id="pVrt" oninput="mudou()"></div></div>
+        <div class="fr full"><div class="fg"><label>Amplitude</label><textarea id="pAmp" rows="2" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Testes</label><textarea id="pTst" rows="2" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Ajustes</label><textarea id="pAjs" rows="3" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Observações</label><textarea id="pOQ" rows="2" oninput="mudou()"></textarea></div></div>
+      </div>
+      <div class="tab-panel" id="tps">
+        <div class="fst">Psicanálise</div>
+        <div class="fr full"><div class="fg"><label>Demanda</label><textarea id="pDm" rows="3" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Estado emocional</label><select id="pEmo" onchange="mudou()"><option value="">-</option><option>Estável</option><option>Ansioso(a)</option><option>Deprimido(a)</option><option>Irritado(a)</option><option>Confuso(a)</option><option>Em luto</option><option>Outro</option></select></div></div>
+        <div class="fr full"><div class="fg"><label>Histórico emocional</label><textarea id="pHE" rows="3" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Relações</label><textarea id="pRl2" rows="2" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Notas (sigilo)</label><textarea id="pNt" rows="4" placeholder="SIGILO PROFISSIONAL" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Encaminhamentos</label><textarea id="pEnc" rows="2" oninput="mudou()"></textarea></div></div>
+      </div>
+      <div class="tab-panel" id="tc">
+        <div class="fst">🌿 Fitoterapia</div>
+        <div class="fr full"><div class="fg"><label>Indicação</label><textarea id="pFt" rows="3" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Contraindicações</label><textarea id="pCF" rows="2" oninput="mudou()"></textarea></div></div>
+        <div class="fst" style="margin-top:14px">🧘 Seitai</div>
+        <div class="fr full"><div class="fg"><label>Avaliação</label><textarea id="pSA" rows="3" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Técnicas</label><textarea id="pST" rows="3" oninput="mudou()"></textarea></div></div>
+        <div class="fr full"><div class="fg"><label>Obs. gerais</label><textarea id="pOG" rows="3" oninput="mudou()"></textarea></div></div>
+      </div>
+      <div class="tab-panel" id="tex">
+        <div class="fst">🖼️ Exames e Imagens</div>
+        <p style="font-size:12px;color:var(--txt-l);margin-bottom:11px">Adicione fotos de exames, radiografias ou imagens relevantes. Clique para ampliar.</p>
+        <div class="ex-grid" id="exGrid"><div class="ex-add" onclick="document.getElementById('exInp').click()"><span style="font-size:24px">➕</span><span>Adicionar</span></div></div>
+        <input type="file" id="exInp" style="display:none" accept="image/*" multiple onchange="addExames(this)">
+        <div style="margin-top:11px;padding:9px;background:var(--pri-l);border-radius:6px;font-size:11.5px;color:var(--txt-l)">💡 Máx 5MB por imagem. Clique para ampliar.</div>
+      </div>
+      <div style="margin-top:13px;padding:10px;background:var(--pri-l);border-radius:6px">
+        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px">
+          <input type="checkbox" id="pCons" required style="margin-top:2px;flex-shrink:0">
+          <span>Autorizo o armazenamento dos dados conforme a <strong>LGPD</strong>.</span>
+        </label>
+      </div>
+      <div class="fa"><button type="button" class="btn btn-sec" onclick="limparForm()">Cancelar</button><button type="submit" class="btn btn-pri">✅ Salvar Paciente</button></div>
+    </form>
+  </div>
+</section>
+
+<!-- ===== PACIENTES ===== -->
+<section class="page" id="pg-pacientes">
+  <div class="page-header"><h1>👥 Pacientes</h1><button class="btn btn-pri btn-sm" onclick="go('novo-paciente',null)">➕ Novo</button></div>
+  <div class="tw">
+    <div class="ttb">
+      <div class="sw"><span class="si">🔍</span><input type="text" id="busP" placeholder="Buscar nome, telefone..." oninput="filtrarP()"></div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <button class="btn btn-sec btn-sm" onclick="ordP('az')">A→Z</button>
+        <button class="btn btn-sec btn-sm" onclick="ordP('za')">Z→A</button>
+        <button class="btn btn-sec btn-sm" onclick="ordP('novo')">🕐</button>
+        <span style="font-size:12px;color:var(--txt-l)" id="cntP">0</span>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>📷</th><th>Nome</th><th>WhatsApp</th><th>Queixa</th><th>Cadastro</th><th>Ações</th></tr></thead>
+        <tbody id="tabP"><tr><td colspan="6" style="text-align:center;color:var(--txt-l);padding:28px">Nenhum paciente cadastrado</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== NOVA SESSÃO ===== -->
+<section class="page" id="pg-nova-sessao">
+  <div class="page-header"><h1>📝 Nova Sessão</h1></div>
+  <div class="fc">
+    <div class="fst">🔍 Selecionar Paciente</div>
+    <div class="fg" style="margin-bottom:14px">
+      <div class="ps-wrap" id="psWrap">
+        <input type="text" class="ps-inp" id="psBusca" placeholder="🔍 Digite o nome do paciente..." oninput="filtrarPS()" onfocus="abrirPS()" autocomplete="off">
+        <div class="ps-list" id="psLista"></div>
+        <input type="hidden" id="psId">
+      </div>
+    </div>
+    <div id="psInfo" style="display:none;margin-bottom:13px;padding:10px;background:var(--pri-l);border-radius:7px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div id="psInfoF" style="width:42px;height:42px;border-radius:50%;border:2px solid var(--pri);overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div>
+        <div style="flex:1"><strong id="psInfoN" style="color:var(--pri-d)"></strong><div style="font-size:11px;color:var(--txt-l)" id="psInfoD"></div></div>
+        <a id="psInfoWA" href="#" target="_blank" class="btn btn-wa btn-sm">💬</a>
+      </div>
+    </div>
+    <form onsubmit="salvarSessao(event)">
+      <div class="fr"><div class="fg"><label class="req">Data</label><input type="date" id="sData" required></div><div class="fg"><label>Horário</label><input type="time" id="sHor"></div></div>
+      <div class="fr full"><div class="fg"><label>Procedimentos</label><input type="text" id="sProc" placeholder="Ex: Acupuntura + Quiropraxia + Seitai"></div></div>
+      <div class="fr full"><div class="fg"><label>Notas / Evolução</label><textarea id="sNot" rows="4"></textarea></div></div>
+      <div class="fr"><div class="fg"><label class="req">Valor R$</label><input type="number" id="sVal" required step="0.01" min="0" placeholder="0,00"></div><div class="fg"><label>Pagamento</label><select id="sFPg"><option value="">-</option><option>PIX</option><option>Dinheiro</option><option>Cartão Crédito</option><option>Cartão Débito</option><option>Transferência</option></select></div></div>
+      <div class="fr full"><div class="fg"><label>Status</label><select id="sSt"><option value="pago">✅ Pago</option><option value="pendente">⏳ Pendente</option><option value="cancelado">❌ Cancelado</option></select></div></div>
+      <div class="fa">
+        <button type="button" class="btn btn-sec" onclick="go('dashboard',null)">Cancelar</button>
+        <button type="button" class="btn btn-cal" onclick="salvarEGoogle()">📅 Salvar + Google</button>
+        <button type="submit" class="btn btn-pri">✅ Salvar Sessão</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ===== AGENDA ===== -->
+<section class="page" id="pg-agenda">
+  <div class="page-header">
+    <h1>📅 Agenda</h1>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn btn-sec btn-sm" onclick="expICS()">📥 Exportar .ICS</button>
+      <button class="btn btn-pri btn-sm" onclick="go('nova-sessao',null)">➕ Sessão</button>
+    </div>
+  </div>
+  <div style="background:#E8F5E9;border-radius:9px;padding:11px 14px;margin-bottom:14px;border-left:4px solid var(--pri);font-size:12px">
+    <strong style="color:var(--pri-d)">📅 Google Agenda:</strong> Clique em 📅 em qualquer sessão para abrir direto no Google já preenchido. Ou exporte .ICS para importar vários de uma vez.
+  </div>
+  <div class="fc" style="margin-bottom:12px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <button class="btn btn-sec btn-sm" onclick="navSem(-1)">◀</button>
+        <strong id="semLbl" style="color:var(--pri-d);font-size:13px"></strong>
+        <button class="btn btn-sec btn-sm" onclick="navSem(1)">▶</button>
+      </div>
+      <button class="btn btn-sec btn-sm" onclick="irHoje()">📍 Hoje</button>
+    </div>
+  </div>
+  <div class="cal-wrap" style="margin-bottom:14px"><div id="calSem"></div></div>
+  <div class="fc">
+    <div class="fst">📋 Sessões</div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px">
+      <div class="fg"><label>Mês</label><select id="agMes" onchange="renderAg()"><option value="">Todos</option><option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option><option value="3">Abril</option><option value="4">Maio</option><option value="5">Junho</option><option value="6">Julho</option><option value="7">Agosto</option><option value="8">Setembro</option><option value="9">Outubro</option><option value="10">Novembro</option><option value="11">Dezembro</option></select></div>
+      <div class="fg"><label>Ano</label><select id="agAno" onchange="renderAg()"><option value="2025">2025</option><option value="2026">2026</option><option value="2024">2024</option></select></div>
+      <div class="fg"><label>Status</label><select id="agSt" onchange="renderAg()"><option value="">Todos</option><option value="pago">✅ Pago</option><option value="pendente">⏳ Pendente</option><option value="cancelado">❌ Cancelado</option></select></div>
+    </div>
+    <div style="overflow-x:auto">
+      <table>
+        <thead><tr><th>Data</th><th>Hora</th><th>Paciente</th><th>Procedimento</th><th>Status</th><th>Ações</th></tr></thead>
+        <tbody id="tabAg"><tr><td colspan="6" style="text-align:center;color:var(--txt-l);padding:28px">Nenhuma sessão</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRESCRIÇÃO ===== -->
+<section class="page" id="pg-prescricao">
+  <div class="page-header"><h1>🌿 Prescrição Fitoterápica</h1></div>
+  <div class="fc">
+    <div class="fr"><div class="fg"><label>Paciente</label><select id="rxPac"><option value="">Selecione</option></select></div><div class="fg"><label>Data</label><input type="date" id="rxDt"></div></div>
+    <div class="fst" style="margin-top:4px">🌱 Plantas / Substâncias</div>
+    <div id="rxPlantas">
+      <div class="rx-p" style="padding:10px;background:var(--pri-l);border-radius:7px;margin-bottom:8px">
+        <div class="fr"><div class="fg"><label>Planta</label><input type="text" class="rxNm" placeholder="Ex: Passiflora incarnata"></div><div class="fg"><label>Forma</label><select class="rxFm"><option value="">-</option><option>Chá (infusão)</option><option>Chá (decocção)</option><option>Tintura</option><option>Cápsula</option><option>Extrato seco</option><option>Pomada</option><option>Óleo essencial</option><option>Banho</option><option>Outra</option></select></div></div>
+        <div class="fr tri"><div class="fg"><label>Dosagem</label><input type="text" class="rxDs"></div><div class="fg"><label>Frequência</label><input type="text" class="rxFq"></div><div class="fg"><label>Duração</label><input type="text" class="rxDu"></div></div>
+        <div class="fr full"><div class="fg"><label>Instruções</label><input type="text" class="rxIn"></div></div>
+      </div>
+    </div>
+    <button type="button" class="btn btn-sec btn-sm no-print" onclick="addPlanta()" style="margin-bottom:12px">➕ Planta</button>
+    <div class="fr"><div class="fg"><label>Duração geral</label><input type="text" id="rxDurG"></div><div class="fg"><label>Retorno em</label><input type="text" id="rxRet"></div></div>
+    <div class="fr full"><div class="fg"><label>Observações</label><textarea id="rxObs" rows="2"></textarea></div></div>
+    <div class="fa no-print">
+      <button type="button" class="btn btn-sec" onclick="gerarRx()">👁️ Visualizar</button>
+      <button type="button" class="btn btn-pri" onclick="imprimirRx()">🖨️ Imprimir</button>
+    </div>
+  </div>
+  <div class="fc no-print" id="rxPrev" style="display:none">
+    <div id="rxPrevC"></div>
+    <div style="display:flex;gap:7px;justify-content:flex-end;margin-top:12px">
+      <button class="btn btn-sec btn-sm" onclick="document.getElementById('rxPrev').style.display='none'">Fechar</button>
+      <button class="btn btn-pri btn-sm" onclick="imprimirRx()">🖨️ Imprimir</button>
+    </div>
+  </div>
+  <div class="rx-print" id="rxPrintA"></div>
+</section>
+
+<!-- ===== FINANCEIRO ===== -->
+<section class="page" id="pg-financeiro">
+  <div class="page-header"><h1>💰 Financeiro</h1></div>
+  <div style="background:#E3F2FD;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;border-left:4px solid var(--info)">
+    <strong style="color:var(--info)">ℹ️ Como usar:</strong> Registre sessões em "Nova Sessão". Cada sessão aparece aqui automaticamente. Clique ✅ para confirmar pagamentos. Use filtros para ver por período.
+  </div>
+  <div class="fg-grid">
+    <div class="fc-card g"><h4>💰 Recebido</h4><div class="fv" id="finR">R$ 0,00</div></div>
+    <div class="fc-card o"><h4>⏳ Pendente</h4><div class="fv" id="finP">R$ 0,00</div></div>
+    <div class="fc-card b"><h4>📅 Sessões</h4><div class="fv" id="finS">0</div></div>
+    <div class="fc-card p"><h4>📊 Média</h4><div class="fv" id="finM">R$ 0,00</div></div>
+  </div>
+  <div class="fc" style="margin-bottom:13px">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+      <div class="fg"><label>Mês</label><select id="fMes" onchange="atuFin()"><option value="">Todos</option><option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option><option value="3">Abril</option><option value="4">Maio</option><option value="5">Junho</option><option value="6">Julho</option><option value="7">Agosto</option><option value="8">Setembro</option><option value="9">Outubro</option><option value="10">Novembro</option><option value="11">Dezembro</option></select></div>
+      <div class="fg"><label>Ano</label><select id="fAno" onchange="atuFin()"><option value="">Todos</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option></select></div>
+      <div class="fg"><label>Status</label><select id="fSt" onchange="atuFin()"><option value="">Todos</option><option value="pago">✅ Pago</option><option value="pendente">⏳ Pendente</option><option value="cancelado">❌ Cancelado</option></select></div>
+    </div>
+  </div>
+  <div class="tw"><div style="overflow-x:auto">
+    <table>
+      <thead><tr><th>Data</th><th>Paciente</th><th>Procedimento</th><th>Valor</th><th>Pgto</th><th>Status</th><th>Ações</th></tr></thead>
+      <tbody id="tabFin"><tr><td colspan="7" style="text-align:center;color:var(--txt-l);padding:28px">Nenhuma sessão registrada</td></tr></tbody>
+    </table>
+  </div></div>
+</section>
+
+<!-- ===== CONFIGURAÇÕES ===== -->
+<section class="page" id="pg-configuracoes">
+  <div class="page-header"><h1>⚙️ Configurações</h1></div>
+
+  <div class="cfg-section">
+    <h3>🏥 Identidade da Clínica</h3>
+    <div class="logo-preview-wrap">
+      <div class="logo-preview" id="cfgLogoPreview" onclick="document.getElementById('cfgLogoInp').click()">
+        <img id="cfgLogoImg" src="" alt="Logo" style="display:none;width:100%;height:100%;object-fit:cover">
+        <span id="cfgLogoEmoji" style="font-size:28px">🌿</span>
+      </div>
+      <input type="file" id="cfgLogoInp" style="display:none" accept="image/*" onchange="carregarLogo(this)">
+      <div>
+        <p style="font-size:12.5px;color:var(--txt-l);margin-bottom:8px">Clique no círculo para adicionar sua logo.<br>Recomendado: imagem quadrada, mín. 200x200px</p>
+        <div style="display:flex;gap:7px;flex-wrap:wrap">
+          <button class="btn btn-sec btn-sm" onclick="document.getElementById('cfgLogoInp').click()">📷 Carregar Logo</button>
+          <button class="btn btn-dan btn-sm" onclick="removerLogo()">✕ Remover</button>
+        </div>
+      </div>
+    </div>
+    <div class="fr"><div class="fg"><label>Nome da Clínica</label><input type="text" id="cfgNome" value="Montgomery Magalhães Saúde Integrativa"></div><div class="fg"><label>Especialidades (subtítulo)</label><input type="text" id="cfgEsp" value="Acupuntura • Quiropraxia • Psicanálise"></div></div>
+    <div class="fr"><div class="fg"><label>Nome do Terapeuta</label><input type="text" id="cfgTer" value="Montgomery Magalhães"></div><div class="fg"><label>Registro Profissional</label><input type="text" id="cfgReg" placeholder="Ex: CRT-SP 0001"></div></div>
+  </div>
+
+  <div class="cfg-section">
+    <h3>📍 Endereço e Contato</h3>
+    <div class="fr full"><div class="fg"><label>Endereço completo</label><input type="text" id="cfgEnd" value="R. Miro Ferreira de Oliveira, 110 - Adelaide Bessa, Itambacuri - MG, 39.830-000"></div></div>
+    <div class="fr"><div class="fg"><label>Telefone / WhatsApp</label><input type="text" id="cfgTel" placeholder="(33) 00000-0000"></div><div class="fg"><label>Email</label><input type="email" id="cfgEmail" placeholder="contato@exemplo.com"></div></div>
+  </div>
+
+  <div class="cfg-section">
+    <h3>🌐 Redes Sociais</h3>
+    <div class="fr"><div class="fg"><label>Instagram</label><input type="text" id="cfgInsta" placeholder="@seuinstagram" value="@montgomerymagalhaes"></div><div class="fg"><label>WhatsApp (número)</label><input type="text" id="cfgWA" placeholder="5533900000000"></div></div>
+    <div class="fr"><div class="fg"><label>YouTube</label><input type="text" id="cfgYT" placeholder="Link do canal"></div><div class="fg"><label>Linktree / Site</label><input type="text" id="cfgLink" value="https://linktr.ee/montgomerymagalhaes"></div></div>
+    <div class="fr full"><div class="fg"><label>Facebook</label><input type="text" id="cfgFB" placeholder="Link do Facebook"></div></div>
+  </div>
+
+  <div class="cfg-section">
+    <h3>🎨 Informações para Prescrição</h3>
+    <p style="font-size:12px;color:var(--txt-l);margin-bottom:10px">Estas informações aparecem automaticamente em todas as prescrições.</p>
+    <div class="fr"><div class="fg"><label>Texto do rodapé da prescrição</label><input type="text" id="cfgRxRod" value="Em caso de reação adversa, suspenda o uso e entre em contato."></div><div class="fg"><label>Observação padrão</label><input type="text" id="cfgRxObs" placeholder="Texto padrão de observação..."></div></div>
+  </div>
+
+  <div style="display:flex;gap:9px;justify-content:flex-end">
+    <button class="btn btn-sec" onclick="resetarConfig()">↩️ Padrão</button>
+    <button class="btn btn-pri" onclick="salvarConfig()">✅ Salvar Configurações</button>
+  </div>
+</section>
+
+<!-- ===== BACKUP ===== -->
+<section class="page" id="pg-backup">
+  <div class="page-header"><h1>💾 Backup & Dados</h1></div>
+
+  <div style="background:#FFF3E0;border-radius:9px;padding:14px 16px;margin-bottom:14px;border-left:4px solid var(--warn)">
+    <strong style="color:var(--warn)">⚠️ IMPORTANTE - Como seus dados são salvos:</strong>
+    <ul style="margin:8px 0 0 16px;line-height:2.2;font-size:12.5px;color:#333">
+      <li>Os dados ficam salvos na <strong>memória do Chrome</strong> (não numa pasta)</li>
+      <li><strong>Risco:</strong> Se limpar o Chrome ou formatar o PC → dados perdidos!</li>
+      <li><strong>Solução:</strong> Faça backup semanal clicando em "Backup Completo"</li>
+      <li>Salve o arquivo na pasta do <strong>Google Drive</strong> para ter cópia na nuvem</li>
+    </ul>
+  </div>
+
+  <div class="drive-box">
+    <h4>☁️ Configurar Google Drive (Recomendado)</h4>
+    <ol class="steps">
+      <li>Crie a pasta <strong>C:\Montgomery\Clinica\Backup\</strong> no seu PC</li>
+      <li>Instale o <strong>Google Drive Desktop</strong> (drive.google.com/drive/download)</li>
+      <li>Sincronize essa pasta com o Drive</li>
+      <li>No Chrome: Configurações → Downloads → Defina essa pasta como padrão</li>
+      <li>Agora todo backup vai <strong>direto para a nuvem</strong> automaticamente!</li>
+    </ol>
+  </div>
+
+  <div class="bx">
+    <h3>📤 Exportar Dados</h3>
+    <p>Faça backup completo ou exporte para Excel. Salve na pasta do Google Drive!</p>
+    <div class="bx-ac">
+      <button class="btn btn-pri" onclick="expJSON()">📤 Backup Completo</button>
+      <button class="btn btn-sec" onclick="expCSVP()">👥 Pacientes (Excel)</button>
+      <button class="btn btn-sec" onclick="expCSVF()">💰 Financeiro (Excel)</button>
+    </div>
+  </div>
+  <div class="bx">
+    <h3>📥 Importar / Restaurar</h3>
+    <p>Restaura um backup anterior. <strong style="color:var(--danger)">Substitui todos os dados atuais!</strong></p>
+    <div class="bx-ac"><label class="btn btn-war" style="cursor:pointer">📥 Restaurar Backup<input type="file" accept=".json" style="display:none" onchange="impJSON(this)"></label></div>
+  </div>
+  <div class="bx">
+    <h3>📱 Usar no Celular Android</h3>
+    <ol class="steps">
+      <li>Salve o arquivo <strong>clinica.html</strong> no Google Drive</li>
+      <li>No celular → abra o app <strong>Google Drive</strong></li>
+      <li>Encontre o arquivo → toque → <strong>"Abrir com Chrome"</strong></li>
+      <li>No Chrome → <strong>3 pontinhos → "Adicionar à tela inicial"</strong></li>
+      <li>✅ Aparece como app na tela do celular!</li>
+    </ol>
+    <p style="font-size:11.5px;color:var(--danger);margin-top:8px">⚠️ Dados do celular ficam separados. Use Exportar/Importar para sincronizar.</p>
+  </div>
+  <div class="bx"><h3>🗑️ Limpar Dados</h3><p><strong style="color:var(--danger)">Irreversível!</strong> Faça backup antes.</p><div class="bx-ac"><button class="btn btn-dan" onclick="limparTudo()">🗑️ Limpar Tudo</button></div></div>
+  <div class="bx"><h3>📊 Status</h3><div id="infoSys" style="font-size:12px;color:var(--txt-l);line-height:2.2"></div></div>
+</section>
+
+<!-- ===== CONTATOS ===== -->
+<section class="page" id="pg-contatos">
+  <div class="page-header"><h1>📇 Importar Contatos</h1></div>
+  <div class="bx"><h3>📧 Google Contatos</h3><ol class="steps"><li>Acesse <strong>contacts.google.com</strong></li><li>Menu → <strong>Exportar</strong></li><li>Formato: <strong>vCard (.vcf)</strong></li><li>Importe abaixo</li></ol></div>
+  <div class="bx"><h3>📱 Celular</h3><ol class="steps"><li><strong>Android:</strong> App Contatos → Menu → Exportar → .vcf</li><li><strong>iPhone:</strong> icloud.com/contacts → Exportar vCard</li></ol></div>
+  <div class="bx"><h3>📥 Importar .VCF</h3>
+    <div class="bx-ac"><label class="btn btn-pri" style="cursor:pointer">📥 Selecionar .VCF<input type="file" accept=".vcf,.vcard" style="display:none" onchange="lerVCF(this)"></label></div>
+    <div id="vcfRes" style="margin-top:14px"></div>
+  </div>
+</section>
+
+</main>
+</div>
+
+<!-- BOTTOM NAV MOBILE -->
+<nav class="bnav no-print">
+  <div class="bnav-in">
+    <button class="bb active" id="bn0" onclick="go('dashboard',null);setBN(0)"><span class="bi">🏠</span><span>Início</span></button>
+    <button class="bb" id="bn1" onclick="go('pacientes',null);setBN(1)"><span class="bi">👥</span><span>Pacientes</span></button>
+    <button class="bb" id="bn2" onclick="go('nova-sessao',null);setBN(2)"><span class="bi">📝</span><span>Sessão</span></button>
+    <button class="bb" id="bn3" onclick="go('agenda',null);setBN(3)"><span class="bi">📅</span><span>Agenda</span></button>
+    <button class="bb" id="bn4" onclick="go('financeiro',null);setBN(4)"><span class="bi">💰</span><span>Financeiro</span></button>
+  </div>
+</nav>
+
+<!-- RODAPÉ -->
+<footer class="site-footer no-print">
+  <div>© 2026 Montgomery Magalhães - Saúde Integrativa</div>
+  <div>Acupuntura • Quiropraxia • Psicanálise</div>
+  <div>📍 R. Miro Ferreira de Oliveira, 110 - Adelaide Bessa, Itambacuri - MG, 39.830-000, Brasil</div>
+  <div class="footer-social">
+    <a href="https://linktr.ee/montgomerymagalhaes" target="_blank">🌐 Linktree</a>
+    <a href="https://instagram.com/montgomerymagalhaes" target="_blank">📸 Instagram</a>
+    <a href="https://wa.me/5533" target="_blank" id="footerWA">💬 WhatsApp</a>
+    <a href="#" onclick="go('configuracoes',null);return false">⚙️ Configurações</a>
+  </div>
+  <div class="footer-links" style="margin-top:6px">
+    <a href="#" onclick="mostrarPolitica();return false">Política de Privacidade</a>
+    <span style="opacity:.4">•</span>
+    <a href="https://linktr.ee/montgomerymagalhaes" target="_blank">Redes Sociais</a>
+    <span style="opacity:.4">•</span>
+    <a href="#" onclick="go('backup',null);return false">💾 Backup</a>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="mov" id="modP"><div class="modal"><button class="mcl" onclick="fMod()">✕</button><div id="modC"></div></div></div>
+
+<!-- FULLSCREEN EXAME -->
+<div class="exov" id="exOv" onclick="this.classList.remove('show')">
+  <button class="xcl" onclick="document.getElementById('exOv').classList.remove('show')">✕</button>
+  <img id="exImg" src="" alt="Exame">
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== BASE =====
+// ===== SUPABASE =====
+const SUPA_URL='https://eltjhrhrtuymejojxyhe.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsdGpocmhydHV5bWVqb2p4eWhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NDUxODcsImV4cCI6MjA5NjAyMTE4N30.cEgQrQ-Svr61s2O9JTLytqHEL8BpPYZWjS6ZCrAop58';
+
+async function supaReq(method,table,body=null,params=''){
+  const res=await fetch(`${SUPA_URL}/rest/v1/${table}${params}`,{
+    method,
+    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':method==='POST'?'return=representation':''},
+    body:body?JSON.stringify(body):null
+  });
+  if(!res.ok){const e=await res.text();console.error('Supabase erro:',e);return null;}
+  return method==='DELETE'?true:res.json();
+}
+
+// Cache local para performance
+let _cache={};
+
+async function dbGet(tabela){
+  if(_cache[tabela])return _cache[tabela];
+  const r=await supaReq('GET',tabela,null,'?user_id=eq.montgomery&order=id.asc');
+  const data=(r||[]).map(row=>row.dados);
+  _cache[tabela]=data;
+  return data;
+}
+async function dbSet(tabela,lista){
+  _cache[tabela]=lista;
+  // Apagar tudo e reinserir (simples e confiável)
+  await supaReq('DELETE',tabela,null,'?user_id=eq.montgomery');
+  if(lista.length>0){
+    const rows=lista.map(item=>({'user_id':'montgomery','dados':item}));
+    await supaReq('POST',tabela,rows);
+  }
+}
+
+// Compatibilidade: versões síncronas usam cache
+const gD=k=>_cache[k]||[];
+const sD=(k,v)=>{_cache[k]=v;dbSet(k,v);};
+const gC=k=>localStorage.getItem(k)||'';
+const sC=(k,v)=>localStorage.setItem(k,v);
+
+// Inicializar: carregar tudo do Supabase para o cache
+async function initDB(){
+  showLoading(true);
+  try{
+    await Promise.all([dbGet('pacientes'),dbGet('sessoes')]);
+    showLoading(false);
+    aplicarConfig();
+    atuDash();
+    renderEx();
+    toast('☁️ Dados carregados!');
+  }catch(e){
+    showLoading(false);
+    toast('⚠️ Erro ao conectar. Usando dados locais.','#EF6C00');
+    aplicarConfig();atuDash();renderEx();
+  }
+}
+function showLoading(show){
+  let el=document.getElementById('loadingOverlay');
+  if(!el){
+    el=document.createElement('div');
+    el.id='loadingOverlay';
+    el.style.cssText='position:fixed;inset:0;background:rgba(30,58,95,.85);z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-size:16px;gap:12px';
+    el.innerHTML='<div style="font-size:40px">☁️</div><div>Conectando ao banco de dados...</div><div style="font-size:12px;opacity:.7">Montgomery Saúde Integrativa</div>';
+    document.body.appendChild(el);
+  }
+  el.style.display=show?'flex':'none';
+}
+let fotoB64='',editId=null,exTemp=[],ordP_='az',semOff_=0;
+
+// ===== CONFIG PADRÃO =====
+const CFG_DEFAULT={
+  nome:'Montgomery Magalhães Saúde Integrativa',
+  esp:'Acupuntura • Quiropraxia • Psicanálise',
+  ter:'Montgomery Magalhães',reg:'',
+  end:'R. Miro Ferreira de Oliveira, 110 - Adelaide Bessa, Itambacuri - MG, 39.830-000',
+  tel:'',email:'',
+  insta:'@montgomerymagalhaes',wa:'',yt:'',link:'https://linktr.ee/montgomerymagalhaes',fb:'',
+  rxRod:'Em caso de reação adversa, suspenda o uso e entre em contato.',rxObs:'',
+  logo:''
+};
+
+function getCfg(){
+  const saved=localStorage.getItem('config');
+  return saved?{...CFG_DEFAULT,...JSON.parse(saved)}:{...CFG_DEFAULT};
+}
+function cfg(k){return getCfg()[k]||CFG_DEFAULT[k]||'';}
+
+// ===== TOAST =====
+function toast(msg,cor){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.style.background=cor||'var(--pri-d)';
+  t.classList.add('show');clearTimeout(t._t);
+  t._t=setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// ===== NAVEGAÇÃO =====
+function go(p,el){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById('pg-'+p).classList.add('active');
+  document.querySelectorAll('.sidebar nav a').forEach(x=>x.classList.remove('active'));
+  if(el)el.classList.add('active');
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidOv').classList.remove('show');
+  if(p==='nova-sessao')iniciarPS();
+  if(p==='prescricao')carregarRxSel();
+  if(p==='financeiro')atuFin();
+  if(p==='pacientes')renderP();
+  if(p==='dashboard')atuDash();
+  if(p==='backup')atuInfoSys();
+  if(p==='agenda')initAgenda();
+  if(p==='configuracoes')carregarFormConfig();
+}
+function toggleSB(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sidOv').classList.toggle('show');
+}
+function setBN(n){document.querySelectorAll('.bb').forEach((b,i)=>b.classList.toggle('active',i===n));}
+
+// ===== TABS =====
+function showTab(id,btn){
+  document.querySelectorAll('.tab-panel').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('#mTabs button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ===== SAVE STATUS =====
+function mudou(){
+  document.getElementById('saveSt').className='sst unsaved';
+  document.getElementById('saveSt').textContent='⚫ Não salvo';
+  atuWA();
+}
+function salvarRasc(){
+  const d=coletarDados();d.foto=fotoB64;d.exames=exTemp;
+  sD('rascunho',d);toast('💾 Rascunho salvo!');
+}
+
+// ===== WHATSAPP =====
+function atuWA(){
+  const t=(document.getElementById('pT')||{}).value||'';
+  const l=t.replace(/\D/g,'');
+  const b=document.getElementById('waBtn');
+  if(b){if(l.length>=10){b.href='https://wa.me/55'+l;b.style.display='inline-flex';}else b.style.display='none';}
+}
+function waUrl(tel){
+  if(!tel)return'#';
+  const l=tel.replace(/\D/g,'');
+  return l.length>=10?'https://wa.me/55'+l:'#';
+}
+
+// ===== FOTO =====
+function carregarFoto(inp){
+  const f=inp.files[0];if(!f)return;
+  if(f.size>3*1024*1024){toast('⚠️ Máx 3MB','#EF6C00');return;}
+  const r=new FileReader();
+  r.onload=e=>{
+    fotoB64=e.target.result;
+    const img=document.getElementById('fotoPv');
+    img.src=fotoB64;img.style.display='block';
+    document.getElementById('fotoFP').style.display='none';
+    document.getElementById('btnRmF').style.display='inline-flex';
+    mudou();
+  };
+  r.readAsDataURL(f);
+}
+function remFoto(){
+  fotoB64='';
+  document.getElementById('fotoPv').style.display='none';
+  document.getElementById('fotoPv').src='';
+  document.getElementById('fotoFP').style.display='block';
+  document.getElementById('btnRmF').style.display='none';
+  document.getElementById('fotoInp').value='';
+}
+
+// ===== EXAMES =====
+function addExames(inp){
+  Array.from(inp.files).forEach(f=>{
+    if(f.size>5*1024*1024){toast('⚠️ '+f.name+' > 5MB','#EF6C00');return;}
+    const r=new FileReader();
+    r.onload=e=>{exTemp.push({id:Date.now()+Math.random(),nome:f.name,data:e.target.result});renderEx();mudou();};
+    r.readAsDataURL(f);
+  });
+  inp.value='';
+}
+function renderEx(){
+  const g=document.getElementById('exGrid');if(!g)return;g.innerHTML='';
+  exTemp.forEach(ex=>{
+    const d=document.createElement('div');d.className='ex-card';
+    d.innerHTML=`<img src="${ex.data}" alt="${ex.nome}" onclick="verExImg('${ex.data}')">
+      <button class="ex-del" onclick="delEx('${ex.id}')">✕</button>
+      <div class="ex-lb">${ex.nome.substring(0,18)}</div>`;
+    g.appendChild(d);
+  });
+  const add=document.createElement('div');add.className='ex-add';
+  add.onclick=()=>document.getElementById('exInp').click();
+  add.innerHTML='<span style="font-size:22px">➕</span><span>Adicionar</span>';
+  g.appendChild(add);
+}
+function verExImg(src){document.getElementById('exImg').src=src;document.getElementById('exOv').classList.add('show');}
+function delEx(id){exTemp=exTemp.filter(e=>e.id!=id);renderEx();mudou();}
+
+// ===== COLETAR DADOS =====
+const v=id=>{const e=document.getElementById(id);return e?e.value:'';}
+function coletarDados(){
+  return{nome:v('pN'),email:v('pE'),telefone:v('pT'),nascimento:v('pNasc'),genero:v('pG'),religiao:v('pRl'),profissao:v('pPr'),estadoCivil:v('pEC'),endereco:v('pEnd'),cidade:v('pCid'),estado:v('pEst'),cep:v('pCep'),contatoEmerg:v('pCE'),telEmerg:v('pTE'),queixa:v('pQ'),tempoQueixa:v('pTQ'),intensidade:v('pInt'),melhora:v('pMlh'),piora:v('pPio'),tratAnterior:v('pTA'),doencas:v('pDo'),medicamentos:v('pMd'),alergias:v('pAl'),cirurgias:v('pCi'),histFamiliar:v('pHF'),gestante:v('pGt'),semanas:v('pSm'),sono:v('pSn'),horasSono:v('pHs'),alimentacao:v('pAlm'),agua:v('pAg'),ativFisica:v('pAF'),tipoAtiv:v('pTAF'),tabagismo:v('pTb'),alcool:v('pAc'),estresse:v('pStr'),obsHabitos:v('pOH'),lingua:v('pLg'),pulso:v('pPl'),meridianos:v('pMr'),diagMTC:v('pMTC'),pontos:v('pPts'),obsAcup:v('pOA'),postura:v('pPos'),regiao:v('pReg'),vertebras:v('pVrt'),amplitude:v('pAmp'),testes:v('pTst'),ajustes:v('pAjs'),obsQuiro:v('pOQ'),demandaPsi:v('pDm'),estadoEmocional:v('pEmo'),histEmocional:v('pHE'),relacoes:v('pRl2'),notasPsi:v('pNt'),encamPsi:v('pEnc'),fitoterapia:v('pFt'),contraFito:v('pCF'),seitaiAval:v('pSA'),seitaiTec:v('pST'),obsGeral:v('pOG')};
+}
+function preencherForm(p){
+  const mp={pN:p.nome,pE:p.email,pT:p.telefone,pNasc:p.nascimento,pG:p.genero,pRl:p.religiao,pPr:p.profissao,pEC:p.estadoCivil,pEnd:p.endereco,pCid:p.cidade,pEst:p.estado,pCep:p.cep,pCE:p.contatoEmerg,pTE:p.telEmerg,pQ:p.queixa,pTQ:p.tempoQueixa,pInt:p.intensidade,pMlh:p.melhora,pPio:p.piora,pTA:p.tratAnterior,pDo:p.doencas,pMd:p.medicamentos,pAl:p.alergias,pCi:p.cirurgias,pHF:p.histFamiliar,pGt:p.gestante,pSm:p.semanas,pSn:p.sono,pHs:p.horasSono,pAlm:p.alimentacao,pAg:p.agua,pAF:p.ativFisica,pTAF:p.tipoAtiv,pTb:p.tabagismo,pAc:p.alcool,pStr:p.estresse,pOH:p.obsHabitos,pLg:p.lingua,pPl:p.pulso,pMr:p.meridianos,pMTC:p.diagMTC,pPts:p.pontos,pOA:p.obsAcup,pPos:p.postura,pReg:p.regiao,pVrt:p.vertebras,pAmp:p.amplitude,pTst:p.testes,pAjs:p.ajustes,pOQ:p.obsQuiro,pDm:p.demandaPsi,pEmo:p.estadoEmocional,pHE:p.histEmocional,pRl2:p.relacoes,pNt:p.notasPsi,pEnc:p.encamPsi,pFt:p.fitoterapia,pCF:p.contraFito,pSA:p.seitaiAval,pST:p.seitaiTec,pOG:p.obsGeral};
+  Object.keys(mp).forEach(k=>{const e=document.getElementById(k);if(e&&mp[k])e.value=mp[k];});
+  if(p.foto){fotoB64=p.foto;document.getElementById('fotoPv').src=p.foto;document.getElementById('fotoPv').style.display='block';document.getElementById('fotoFP').style.display='none';document.getElementById('btnRmF').style.display='inline-flex';}
+  if(p.exames){exTemp=[...p.exames];renderEx();}
+  if(p.telefone)atuWA();
+  document.getElementById('pCons').checked=true;
+}
+
+// ===== SALVAR PACIENTE =====
+function salvarPac(e){
+  e.preventDefault();
+  const d=coletarDados();d.id=editId||Date.now();d.dataCadastro=new Date().toLocaleDateString('pt-BR');d.foto=fotoB64;d.exames=exTemp;
+  let pacs=gD('pacientes');
+  if(editId){pacs=pacs.map(x=>x.id===editId?d:x);toast('✅ Paciente atualizado!');}
+  else{pacs.push(d);toast('✅ Paciente cadastrado!');}
+  sD('pacientes',pacs);localStorage.removeItem('rascunho');limparForm();go('pacientes',null);
+}
+function limparForm(){
+  document.getElementById('fPac').reset();remFoto();fotoB64='';editId=null;exTemp=[];
+  document.getElementById('fTit').textContent='➕ Novo Paciente';
+  showTab('tp',document.querySelector('#mTabs button'));
+  document.getElementById('saveSt').className='sst unsaved';
+  document.getElementById('saveSt').textContent='⚫ Não salvo';
+  document.getElementById('waBtn').style.display='none';renderEx();
+}
+
+// ===== RENDER PACIENTES =====
+function ordP(o){ordP_=o;renderP();}
+function renderP(lista){
+  let pacs=lista||gD('pacientes');
+  if(ordP_==='az')pacs.sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
+  else if(ordP_==='za')pacs.sort((a,b)=>b.nome.localeCompare(a.nome,'pt-BR'));
+  else pacs.sort((a,b)=>b.id-a.id);
+  document.getElementById('cntP').textContent=pacs.length;
+  const tb=document.getElementById('tabP');
+  if(!pacs.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--txt-l);padding:28px">Nenhum paciente cadastrado</td></tr>';return;}
+  tb.innerHTML=pacs.map(p=>{
+    const fH=p.foto?`<div class="fmini"><img src="${p.foto}"></div>`:`<div class="fmini">👤</div>`;
+    const wa=waUrl(p.telefone);
+    const waB=wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm">💬 ${p.telefone}</a>`:`<span style="color:var(--txt-l)">${p.telefone||'-'}</span>`;
+    return`<tr><td>${fH}</td><td><strong>${p.nome}</strong></td><td>${waB}</td>
+      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--txt-l);font-size:12px">${p.queixa||'-'}</td>
+      <td style="color:var(--txt-l);font-size:12px;white-space:nowrap">${p.dataCadastro}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-inf btn-sm" onclick="verPac(${p.id})">👁️</button>
+        <button class="btn btn-sec btn-sm" onclick="editarPac(${p.id})">✏️</button>
+        <button class="btn btn-dan btn-sm" onclick="delPac(${p.id})">🗑️</button>
+      </td></tr>`;
+  }).join('');
+}
+function filtrarP(){
+  const b=document.getElementById('busP').value.toLowerCase();
+  renderP(gD('pacientes').filter(p=>p.nome.toLowerCase().includes(b)||(p.telefone||'').includes(b)||(p.queixa||'').toLowerCase().includes(b)));
+}
+function delPac(id){
+  if(!confirm('Excluir paciente permanentemente?'))return;
+  sD('pacientes',gD('pacientes').filter(p=>p.id!==id));renderP();toast('🗑️ Removido','#c62828');
+}
+
+// ===== VER PACIENTE =====
+function verPac(id){
+  const p=gD('pacientes').find(x=>x.id===id);if(!p)return;
+  const fH=p.foto?`<img src="${p.foto}">`:'👤';
+  const wa=waUrl(p.telefone);
+  const c=(l,val)=>val?`<div class="pi"><strong>${l}</strong><span>${val}</span></div>`:'';
+  const exH=p.exames&&p.exames.length?`<div class="psec"><h4>🖼️ Exames (${p.exames.length})</h4>
+    <div class="ex-grid" style="grid-template-columns:repeat(auto-fill,minmax(75px,1fr))">
+      ${p.exames.map(ex=>`<div class="ex-card" onclick="verExImg('${ex.data}')"><img src="${ex.data}"><div class="ex-lb">${ex.nome.substring(0,14)}</div></div>`).join('')}
+    </div></div>`:'';
+  document.getElementById('modC').innerHTML=`
+    <div class="ph"><div class="ph-f">${fH}</div><div class="ph-i">
+      <h3>${p.nome}</h3>
+      ${p.telefone?`<p><a href="${wa}" target="_blank" style="color:#25D366;font-weight:600;text-decoration:none">💬 ${p.telefone}</a></p>`:''}
+      ${p.email?`<p>📧 ${p.email}</p>`:''}${p.profissao?`<p>💼 ${p.profissao}</p>`:''}
+    </div></div>
+    ${p.queixa?`<div class="psec"><h4>📝 Queixa</h4><p style="font-size:12px">${p.queixa}</p><div class="pgrid" style="margin-top:6px">${c('Tempo',p.tempoQueixa)}${c('Intensidade',p.intensidade)}</div></div>`:''}
+    ${p.doencas||p.medicamentos?`<div class="psec"><h4>🏥 Histórico</h4><div class="pgrid">${c('Doenças',p.doencas)}${c('Medicamentos',p.medicamentos)}${c('Alergias',p.alergias)}</div></div>`:''}
+    ${p.pontos||p.diagMTC?`<div class="psec"><h4>🔴 Acupuntura</h4><div class="pgrid">${c('Diagnóstico',p.diagMTC)}${c('Pontos',p.pontos)}</div></div>`:''}
+    ${p.regiao?`<div class="psec"><h4>🔵 Quiropraxia</h4><div class="pgrid">${c('Região',p.regiao)}${c('Vértebras',p.vertebras)}</div></div>`:''}
+    ${p.fitoterapia?`<div class="psec"><h4>🌿 Fitoterapia</h4><p style="font-size:12px">${p.fitoterapia}</p></div>`:''}
+    ${exH}
+    <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:13px;flex-wrap:wrap">
+      ${wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm">💬</a>`:''}
+      <button class="btn btn-sec btn-sm" onclick="fMod()">Fechar</button>
+      <button class="btn btn-pri btn-sm" onclick="fMod();editarPac(${p.id})">✏️ Editar</button>
+    </div>`;
+  document.getElementById('modP').classList.add('show');
+}
+function fMod(){document.getElementById('modP').classList.remove('show');}
+function editarPac(id){
+  const p=gD('pacientes').find(x=>x.id===id);if(!p)return;
+  editId=id;go('novo-paciente',null);
+  document.getElementById('fTit').textContent='✏️ '+p.nome;
+  setTimeout(()=>{preencherForm(p);toast('✏️ Editando paciente','#1565C0');},80);
+}
+
+// ===== SELECT PACIENTE =====
+function iniciarPS(){
+  renderPS(gD('pacientes'));
+  document.getElementById('psId').value='';
+  document.getElementById('psBusca').value='';
+  document.getElementById('psInfo').style.display='none';
+}
+function renderPS(pacs){
+  const l=document.getElementById('psLista');
+  if(!pacs.length){l.innerHTML='<div style="padding:11px;color:var(--txt-l);font-size:13px;text-align:center">Nenhum paciente encontrado</div>';return;}
+  l.innerHTML=pacs.map(p=>{
+    const fH=p.foto?`<div class="ps-foto"><img src="${p.foto}"></div>`:`<div class="ps-foto">👤</div>`;
+    return`<div class="ps-item" onclick="selPS(${p.id})">${fH}<div><span style="font-weight:600">${p.nome}</span><small style="display:block;font-size:11px;color:var(--txt-l)">${p.telefone||'Sem telefone'}</small></div></div>`;
+  }).join('');
+}
+function filtrarPS(){renderPS(gD('pacientes').filter(p=>p.nome.toLowerCase().includes(document.getElementById('psBusca').value.toLowerCase())));abrirPS();}
+function abrirPS(){document.getElementById('psLista').classList.add('open');}
+function selPS(id){
+  const p=gD('pacientes').find(x=>x.id===id);if(!p)return;
+  document.getElementById('psId').value=id;
+  document.getElementById('psBusca').value=p.nome;
+  document.getElementById('psLista').classList.remove('open');
+  const fEl=document.getElementById('psInfoF');
+  fEl.innerHTML=p.foto?`<img src="${p.foto}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:'👤';
+  document.getElementById('psInfoN').textContent=p.nome;
+  document.getElementById('psInfoD').textContent=p.telefone||'Sem telefone';
+  const wa=waUrl(p.telefone);
+  const waB=document.getElementById('psInfoWA');
+  waB.href=wa;waB.style.display=wa!=='#'?'inline-flex':'none';
+  document.getElementById('psInfo').style.display='block';
+}
+document.addEventListener('click',e=>{
+  const w=document.getElementById('psWrap');
+  if(w&&!w.contains(e.target))document.getElementById('psLista').classList.remove('open');
+});
+
+// ===== SESSÃO =====
+function salvarSessao(e){
+  e.preventDefault();
+  const pacId=parseInt(document.getElementById('psId').value);
+  if(!pacId){toast('⚠️ Selecione um paciente!','#EF6C00');return;}
+  const pac=gD('pacientes').find(p=>p.id===pacId);
+  const s={id:Date.now(),pacienteId:pacId,pacienteNome:pac?pac.nome:'',pacienteFoto:pac?pac.foto:'',pacienteTel:pac?pac.telefone:'',data:v('sData'),horario:v('sHor'),procedimentos:v('sProc'),notas:v('sNot'),valor:parseFloat(v('sVal'))||0,formaPgto:v('sFPg'),status:v('sSt')};
+  const ss=gD('sessoes');ss.push(s);sD('sessoes',ss);
+  toast('✅ Sessão registrada!');e.target.reset();
+  document.getElementById('sData').value=new Date().toISOString().split('T')[0];
+  iniciarPS();go('financeiro',null);
+}
+function salvarEGoogle(){
+  const pacId=parseInt(document.getElementById('psId').value);
+  if(!pacId){toast('⚠️ Selecione um paciente!','#EF6C00');return;}
+  if(!v('sVal')){toast('⚠️ Informe o valor!','#EF6C00');return;}
+  const pac=gD('pacientes').find(p=>p.id===pacId);
+  const s={id:Date.now(),pacienteId:pacId,pacienteNome:pac?pac.nome:'',pacienteTel:pac?pac.telefone:'',data:v('sData'),horario:v('sHor'),procedimentos:v('sProc'),notas:v('sNot'),valor:parseFloat(v('sVal'))||0,formaPgto:v('sFPg'),status:v('sSt')};
+  const ss=gD('sessoes');ss.push(s);sD('sessoes',ss);
+  abrirGA(s);toast('✅ Salvo! Abrindo Google Agenda...');
+  document.querySelector('#pg-nova-sessao form').reset();
+  document.getElementById('sData').value=new Date().toISOString().split('T')[0];
+  iniciarPS();
+}
+
+// ===== FINANCEIRO =====
+function atuFin(){
+  let ss=gD('sessoes');
+  const mes=v('fMes'),ano=v('fAno'),st=v('fSt');
+  if(mes!=='')ss=ss.filter(s=>new Date(s.data).getMonth()===parseInt(mes));
+  if(ano)ss=ss.filter(s=>new Date(s.data).getFullYear()===parseInt(ano));
+  if(st)ss=ss.filter(s=>s.status===st);
+  const pago=ss.filter(s=>s.status==='pago').reduce((a,s)=>a+s.valor,0);
+  const pend=ss.filter(s=>s.status==='pendente').reduce((a,s)=>a+s.valor,0);
+  const med=ss.length?(pago+pend)/ss.length:0;
+  document.getElementById('finR').textContent=fm(pago);
+  document.getElementById('finP').textContent=fm(pend);
+  document.getElementById('finS').textContent=ss.length;
+  document.getElementById('finM').textContent=fm(med);
+  const tb=document.getElementById('tabFin');
+  if(!ss.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--txt-l);padding:28px">Nenhuma sessão no período</td></tr>';return;}
+  ss.sort((a,b)=>new Date(b.data)-new Date(a.data));
+  tb.innerHTML=ss.map(s=>{
+    const bc=s.status==='pago'?'bp':s.status==='pendente'?'bpend':'bc';
+    const bt=s.status==='pago'?'✅ Pago':s.status==='pendente'?'⏳ Pendente':'❌ Cancelado';
+    const wa=waUrl(s.pacienteTel||'');
+    return`<tr><td style="white-space:nowrap">${fd(s.data)}</td>
+      <td>${s.pacienteNome}${wa!=='#'?` <a href="${wa}" target="_blank" class="btn btn-wa btn-sm" style="padding:2px 5px;font-size:10px">💬</a>`:''}</td>
+      <td style="font-size:12px">${s.procedimentos||'Atendimento'}</td>
+      <td><strong>${fm(s.valor)}</strong></td>
+      <td style="font-size:12px">${s.formaPgto||'-'}</td>
+      <td><span class="badge ${bc}">${bt}</span></td>
+      <td style="white-space:nowrap">
+        ${s.status==='pendente'?`<button class="btn btn-pri btn-sm" onclick="mPago(${s.id})">✅</button>`:''}
+        <button class="btn btn-cal btn-sm" onclick="abrirGA(gD('sessoes').find(x=>x.id===${s.id}))" title="Google Agenda">📅</button>
+        <button class="btn btn-dan btn-sm" onclick="dSess(${s.id})">🗑️</button>
+      </td></tr>`;
+  }).join('');
+}
+function mPago(id){let ss=gD('sessoes').map(s=>{if(s.id===id)s.status='pago';return s});sD('sessoes',ss);atuFin();toast('✅ Pago!');}
+function dSess(id){if(!confirm('Excluir sessão?'))return;sD('sessoes',gD('sessoes').filter(s=>s.id!==id));atuFin();toast('🗑️ Removida','#c62828');}
+
+// ===== GOOGLE AGENDA =====
+function abrirGA(s){
+  if(!s||!s.data){toast('⚠️ Sessão sem data','#EF6C00');return;}
+  const data=s.data.replace(/-/g,'');
+  const hi=s.horario?s.horario.replace(':','')+'00':'080000';
+  let hf='090000';
+  if(s.horario){const[h,m]=s.horario.split(':').map(Number);hf=String((h+1)%24).padStart(2,'0')+String(m).padStart(2,'0')+'00';}
+  const end=cfg('end');
+  const url='https://calendar.google.com/calendar/render?action=TEMPLATE'+
+    '&text='+encodeURIComponent((s.procedimentos||'Atendimento')+' - '+s.pacienteNome)+
+    '&dates='+data+'T'+hi+'/'+data+'T'+hf+
+    '&details='+encodeURIComponent('Paciente: '+s.pacienteNome+'\nProcedimento: '+(s.procedimentos||'Atendimento')+'\nValor: '+fm(s.valor)+'\nStatus: '+s.status+(s.notas?'\nNotas: '+s.notas:'')+'\n\n'+cfg('nome'))+
+    '&location='+encodeURIComponent(end)+
+    '&sf=true&output=xml';
+  window.open(url,'_blank');
+}
+
+// ===== AGENDA =====
+function initAgenda(){semOff_=0;renderSemana();renderAg();const h=new Date();document.getElementById('agAno').value=h.getFullYear();}
+function navSem(d){semOff_+=d;renderSemana();}
+function irHoje(){semOff_=0;renderSemana();}
+function renderSemana(){
+  const hoje=new Date();
+  const ini=new Date(hoje);
+  const ds=hoje.getDay();
+  ini.setDate(hoje.getDate()+(ds===0?-6:1-ds)+(semOff_*7));
+  const dias=Array.from({length:6},(_,i)=>{const d=new Date(ini);d.setDate(ini.getDate()+i);return d;});
+  const fim=new Date(ini);fim.setDate(ini.getDate()+5);
+  document.getElementById('semLbl').textContent=ini.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'})+' — '+fim.toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'});
+  const ss=gD('sessoes');
+  const nms=['Seg','Ter','Qua','Qui','Sex','Sáb'];
+  let h=`<table class="cal-table"><thead><tr>`;
+  dias.forEach((d,i)=>{
+    const isH=d.toDateString()===new Date().toDateString();
+    h+=`<th style="color:${isH?'#fff':'var(--pri-d)'};background:${isH?'var(--pri)':'var(--pri-l)'};padding:9px 4px;text-align:center">
+      <div style="font-size:10px">${nms[i]}</div>
+      <div style="font-size:16px;font-weight:700">${d.getDate()}</div>
+      <div style="font-size:8px;opacity:.8">${d.toLocaleDateString('pt-BR',{month:'short'})}</div>
+    </th>`;
+  });
+  h+='</tr></thead><tbody><tr>';
+  dias.forEach(d=>{
+    const ds2=d.toISOString().split('T')[0];
+    const sd=ss.filter(s=>s.data===ds2).sort((a,b)=>(a.horario||'').localeCompare(b.horario||''));
+    const isH=d.toDateString()===new Date().toDateString();
+    h+=`<td style="background:${isH?'#f0fff0':'#fff'};min-height:80px;padding:5px;vertical-align:top;border-right:1px solid var(--brd);border-top:1px solid var(--brd)">`;
+    if(!sd.length)h+=`<div style="text-align:center;color:#ddd;font-size:10px;padding:14px 2px">—</div>`;
+    sd.forEach(s=>{
+      const cor=s.status==='pago'?'#2E7D32':s.status==='pendente'?'#EF6C00':'#c62828';
+      const bg=s.status==='pago'?'#E8F5E9':s.status==='pendente'?'#FFF3E0':'#FFEBEE';
+      h+=`<div class="ev-card" style="background:${bg};border-left:3px solid ${cor}" onclick="verEvento(${s.id})">
+        ${s.horario?`<div style="font-weight:700;color:${cor};font-size:9px">${s.horario}</div>`:''}
+        <div style="font-size:10px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px">${s.pacienteNome}</div>
+      </div>`;
+    });
+    h+=`<div style="text-align:center;margin-top:2px"><button onclick="novoNoDia('${ds2}')" style="background:none;border:1px dashed #ddd;border-radius:3px;color:#bbb;font-size:9px;padding:1px 4px;cursor:pointer;width:100%" onmouseover="this.style.color='var(--pri)'" onmouseout="this.style.color='#bbb'">+</button></div>`;
+    h+=`</td>`;
+  });
+  h+='</tr></tbody></table>';
+  document.getElementById('calSem').innerHTML=h;
+}
+function novoNoDia(data){go('nova-sessao',null);setTimeout(()=>document.getElementById('sData').value=data,100);}
+function verEvento(id){
+  const s=gD('sessoes').find(x=>x.id===id);if(!s)return;
+  const bc=s.status==='pago'?'bp':s.status==='pendente'?'bpend':'bc';
+  const bt=s.status==='pago'?'✅ Pago':s.status==='pendente'?'⏳ Pendente':'❌ Cancelado';
+  const wa=waUrl(s.pacienteTel||'');
+  document.getElementById('modC').innerHTML=`
+    <h3 style="color:var(--pri-d);margin-bottom:13px">📅 ${s.pacienteNome}</h3>
+    <div class="pgrid" style="margin-bottom:13px">
+      <div class="pi"><strong>Data</strong><span>${fd(s.data)}</span></div>
+      <div class="pi"><strong>Horário</strong><span>${s.horario||'—'}</span></div>
+      <div class="pi"><strong>Procedimento</strong><span>${s.procedimentos||'Atendimento'}</span></div>
+      <div class="pi"><strong>Valor</strong><span>${fm(s.valor)}</span></div>
+      <div class="pi"><strong>Pagamento</strong><span>${s.formaPgto||'-'}</span></div>
+      <div class="pi"><strong>Status</strong><span class="badge ${bc}">${bt}</span></div>
+    </div>
+    ${s.notas?`<div style="background:#f5f5f5;border-radius:6px;padding:8px;font-size:12px;margin-bottom:12px"><strong>📝 Notas:</strong><br>${s.notas}</div>`:''}
+    <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
+      ${wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm">💬</a>`:''}
+      <button class="btn btn-cal btn-sm" onclick="abrirGA(gD('sessoes').find(x=>x.id===${s.id}))">📅 Google</button>
+      ${s.status==='pendente'?`<button class="btn btn-pri btn-sm" onclick="mPago(${s.id});fMod();renderAg()">✅ Pago</button>`:''}
+      <button class="btn btn-sec btn-sm" onclick="fMod()">Fechar</button>
+    </div>`;
+  document.getElementById('modP').classList.add('show');
+}
+function renderAg(){
+  renderSemana();
+  let ss=gD('sessoes');
+  const mes=v('agMes'),ano=v('agAno'),st=v('agSt');
+  if(mes!=='')ss=ss.filter(s=>new Date(s.data).getMonth()===parseInt(mes));
+  if(ano)ss=ss.filter(s=>new Date(s.data).getFullYear()===parseInt(ano));
+  if(st)ss=ss.filter(s=>s.status===st);
+  ss.sort((a,b)=>{const dc=new Date(a.data)-new Date(b.data);return dc!==0?dc:(a.horario||'').localeCompare(b.horario||'');});
+  const tb=document.getElementById('tabAg');
+  if(!ss.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--txt-l);padding:28px">Nenhuma sessão</td></tr>';return;}
+  tb.innerHTML=ss.map(s=>{
+    const bc=s.status==='pago'?'bp':s.status==='pendente'?'bpend':'bc';
+    const bt=s.status==='pago'?'✅ Pago':s.status==='pendente'?'⏳ Pendente':'❌ Cancelado';
+    return`<tr>
+      <td style="white-space:nowrap;font-weight:600">${fd(s.data)}</td>
+      <td style="color:var(--pri-d);font-weight:600">${s.horario||'—'}</td>
+      <td><strong>${s.pacienteNome}</strong></td>
+      <td style="font-size:12px;color:var(--txt-l)">${s.procedimentos||'Atendimento'}</td>
+      <td><span class="badge ${bc}">${bt}</span></td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-inf btn-sm" onclick="verEvento(${s.id})">👁️</button>
+        <button class="btn btn-cal btn-sm" onclick="abrirGA(gD('sessoes').find(x=>x.id===${s.id}))">📅</button>
+        ${s.status==='pendente'?`<button class="btn btn-pri btn-sm" onclick="mPago(${s.id});renderAg()">✅</button>`:''}
+      </td></tr>`;
+  }).join('');
+}
+function expICS(){
+  let ss=gD('sessoes');
+  if(!ss.length){toast('⚠️ Nenhuma sessão','#EF6C00');return;}
+  let ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Montgomery Magalhaes//PT','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:Montgomery Magalhães - Saúde Integrativa'];
+  ss.forEach(s=>{
+    const data=s.data?s.data.replace(/-/g,''):'';if(!data)return;
+    const hi=s.horario?s.horario.replace(':','')+'00':'080000';
+    let hf='090000';
+    if(s.horario){const[h,m]=s.horario.split(':').map(Number);hf=String((h+1)%24).padStart(2,'0')+String(m).padStart(2,'0')+'00';}
+    const agora=new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
+    ics.push('BEGIN:VEVENT',`UID:${s.id}@montgomery`,`DTSTAMP:${agora}`,`DTSTART:${data}T${hi}`,`DTEND:${data}T${hf}`,
+      `SUMMARY:${(s.procedimentos||'Atendimento')+' - '+s.pacienteNome}`,
+      `DESCRIPTION:Paciente: ${s.pacienteNome}\\nValor: ${fm(s.valor)}\\nStatus: ${s.status}`,
+      `LOCATION:${cfg('end')}`,
+      'END:VEVENT');
+  });
+  ics.push('END:VCALENDAR');
+  dl(ics.join('\r\n'),'agenda_montgomery_'+new Date().toISOString().slice(0,10)+'.ics','text/calendar');
+  toast('📅 Exportado! Importe no Google Agenda.');
+}
+
+// ===== PRESCRIÇÃO =====
+function carregarRxSel(){
+  document.getElementById('rxPac').innerHTML='<option value="">Selecione o paciente</option>'+
+    gD('pacientes').map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
+}
+function addPlanta(){
+  const d=document.getElementById('rxPlantas');
+  const it=document.createElement('div');it.className='rx-p';
+  it.style.cssText='padding:10px;background:var(--pri-l);border-radius:7px;margin-bottom:8px;position:relative';
+  it.innerHTML=`<button type="button" onclick="this.parentElement.remove()" style="position:absolute;top:5px;right:5px;background:none;border:none;color:var(--danger);cursor:pointer;font-size:16px">✕</button>
+    <div class="fr"><div class="fg"><label>Planta</label><input type="text" class="rxNm"></div><div class="fg"><label>Forma</label><select class="rxFm"><option value="">-</option><option>Chá (infusão)</option><option>Chá (decocção)</option><option>Tintura</option><option>Cápsula</option><option>Extrato seco</option><option>Pomada</option><option>Óleo essencial</option><option>Banho</option><option>Outra</option></select></div></div>
+    <div class="fr tri"><div class="fg"><label>Dosagem</label><input type="text" class="rxDs"></div><div class="fg"><label>Frequência</label><input type="text" class="rxFq"></div><div class="fg"><label>Duração</label><input type="text" class="rxDu"></div></div>
+    <div class="fr full"><div class="fg"><label>Instruções</label><input type="text" class="rxIn"></div></div>`;
+  d.appendChild(it);
+}
+
+function gerarHtmlRx(){
+  const pac=gD('pacientes').find(p=>p.id===parseInt(v('rxPac')));
+  const cfgData=getCfg();
+  const ter=cfgData.ter||'Montgomery Magalhães';
+  const reg=cfgData.reg||'';
+  const tel=cfgData.tel||'';
+  const end=cfgData.end||'R. Miro Ferreira de Oliveira, 110 - Itambacuri - MG';
+  const logo=cfgData.logo||'';
+  const rod=cfgData.rxRod||'Em caso de reação adversa, suspenda o uso e entre em contato.';
+  const dt=v('rxDt');
+  let pl='';let n=1;
+  document.querySelectorAll('.rx-p').forEach(it=>{
+    const nm=it.querySelector('.rxNm').value;if(!nm)return;
+    const fm2=it.querySelector('.rxFm').value;
+    const ds=it.querySelector('.rxDs').value;
+    const fq=it.querySelector('.rxFq').value;
+    const du=it.querySelector('.rxDu').value;
+    const ins=it.querySelector('.rxIn').value;
+    pl+=`<tr><td style="padding:4px 7px;font-weight:700;color:#1B5E20;border-bottom:1px solid #eee;font-size:10.5pt">${n++}. ${nm}</td>
+      <td style="padding:4px 7px;font-size:9pt;border-bottom:1px solid #eee;color:#444">${[fm2,ds,fq,du].filter(Boolean).join(' · ')}</td></tr>
+      ${ins?`<tr><td colspan="2" style="padding:1px 7px 5px 16px;font-size:8.5pt;color:#777;font-style:italic">↳ ${ins}</td></tr>`:''}`;
+  });
+
+  const logoHtml=logo?`<img src="${logo}" style="width:55px;height:55px;border-radius:50%;object-fit:cover;border:2px solid #1B5E20;margin-right:10px;vertical-align:middle" alt="Logo">`:'<span style="font-size:22px;margin-right:8px">🌿</span>';
+
+  return`<div style="font-family:Arial,sans-serif;max-width:680px;margin:0 auto;font-size:10pt">
+    <table style="width:100%;border-bottom:2px solid #1B5E20;margin-bottom:10px;padding-bottom:8px">
+      <tr>
+        <td style="vertical-align:middle">
+          ${logoHtml}
+          <div style="display:inline-block;vertical-align:middle">
+            <div style="font-size:13pt;font-weight:700;color:#1B5E20;line-height:1.2">${ter}</div>
+            <div style="font-size:8pt;color:#555">Acupuntura • Quiropraxia • Psicanálise</div>
+            ${reg?`<div style="font-size:8pt;color:#777">${reg}</div>`:''}
+            ${tel?`<div style="font-size:8pt;color:#777">📞 ${tel}</div>`:''}
+          </div>
+        </td>
+        <td style="text-align:right;vertical-align:top">
+          <div style="font-size:8pt;color:#555">${end}</div>
+          <div style="font-size:8.5pt;font-weight:600;color:#333;margin-top:3px">${dt?fd(dt):new Date().toLocaleDateString('pt-BR')}</div>
+        </td>
+      </tr>
+    </table>
+
+    <div style="background:#f5faf5;border-left:3px solid #2E7D32;padding:5px 10px;margin-bottom:9px;border-radius:0 4px 4px 0">
+      <span style="font-size:8pt;color:#666;text-transform:uppercase">Paciente: </span>
+      <span style="font-size:11pt;font-weight:700;color:#1B5E20">${pac?pac.nome:'—'}</span>
+    </div>
+
+    <div style="text-align:center;font-size:9pt;font-weight:700;color:#1B5E20;letter-spacing:.8px;margin-bottom:8px;border-top:1px dashed #bbb;border-bottom:1px dashed #bbb;padding:4px 0;text-transform:uppercase">Prescrição Fitoterápica</div>
+
+    <table style="width:100%;border-collapse:collapse;margin-bottom:8px">${pl||'<tr><td style="color:#999;font-style:italic;padding:6px">Nenhuma planta adicionada.</td></tr>'}</table>
+
+    ${v('rxDurG')||v('rxRet')?`<div style="display:flex;gap:10px;margin-bottom:8px;flex-wrap:wrap">
+      ${v('rxDurG')?`<div style="background:#E8F5E9;border-radius:3px;padding:3px 8px;font-size:8.5pt"><strong>⏰ Duração:</strong> ${v('rxDurG')}</div>`:''}
+      ${v('rxRet')?`<div style="background:#E3F2FD;border-radius:3px;padding:3px 8px;font-size:8.5pt"><strong>📅 Retorno:</strong> ${v('rxRet')}</div>`:''}
+    </div>`:''}
+
+    ${v('rxObs')?`<div style="background:#FFF8E1;border-radius:3px;padding:6px 10px;font-size:8.5pt;margin-bottom:8px"><strong>⚠️</strong> ${v('rxObs')}</div>`:''}
+
+    <div style="border-top:1px solid #ddd;margin-top:8px;padding-top:7px">
+      <div style="font-size:7.5pt;color:#aaa;text-align:center;margin-bottom:10px">${rod}</div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end">
+        <div style="font-size:7pt;color:#ccc">Montgomery Magalhães • Saúde Integrativa • ${new Date().toLocaleDateString('pt-BR')}</div>
+        <div style="text-align:center;min-width:170px">
+          <div style="border-top:1px solid #333;padding-top:4px;font-size:8pt;color:#444">${ter}${reg?' · '+reg:''}</div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function gerarRx(){
+  document.getElementById('rxPrevC').innerHTML=gerarHtmlRx();
+  document.getElementById('rxPrev').style.display='block';
+  document.getElementById('rxPrev').scrollIntoView({behavior:'smooth'});
+}
+function imprimirRx(){
+  document.getElementById('rxPrintA').innerHTML=gerarHtmlRx();
+  setTimeout(()=>{window.print();setTimeout(()=>{document.getElementById('rxPrintA').innerHTML='';},600);},300);
+}
+
+// ===== CONFIGURAÇÕES =====
+function carregarFormConfig(){
+  const c=getCfg();
+  const campos={cfgNome:c.nome,cfgEsp:c.esp,cfgTer:c.ter,cfgReg:c.reg,cfgEnd:c.end,cfgTel:c.tel,cfgEmail:c.email,cfgInsta:c.insta,cfgWA:c.wa,cfgYT:c.yt,cfgLink:c.link,cfgFB:c.fb,cfgRxRod:c.rxRod,cfgRxObs:c.rxObs};
+  Object.keys(campos).forEach(k=>{const e=document.getElementById(k);if(e)e.value=campos[k]||'';});
+  if(c.logo){
+    document.getElementById('cfgLogoImg').src=c.logo;
+    document.getElementById('cfgLogoImg').style.display='block';
+    document.getElementById('cfgLogoEmoji').style.display='none';
+  }
+}
+function salvarConfig(){
+  const c={
+    nome:v('cfgNome')||CFG_DEFAULT.nome,
+    esp:v('cfgEsp')||CFG_DEFAULT.esp,
+    ter:v('cfgTer')||CFG_DEFAULT.ter,
+    reg:v('cfgReg'),
+    end:v('cfgEnd')||CFG_DEFAULT.end,
+    tel:v('cfgTel'),email:v('cfgEmail'),
+    insta:v('cfgInsta'),wa:v('cfgWA'),yt:v('cfgYT'),
+    link:v('cfgLink')||CFG_DEFAULT.link,fb:v('cfgFB'),
+    rxRod:v('cfgRxRod')||CFG_DEFAULT.rxRod,
+    rxObs:v('cfgRxObs'),
+    logo:gC('config_logo')
+  };
+  localStorage.setItem('config',JSON.stringify(c));
+  // Salvar config no Supabase
+  supaReq('DELETE','configuracoes',null,'?user_id=eq.montgomery').then(()=>supaReq('POST','configuracoes',[{user_id:'montgomery',dados:c}]));
+  aplicarConfig();
+  toast('✅ Configurações salvas!');
+}
+function resetarConfig(){
+  if(!confirm('Restaurar configurações padrão?'))return;
+  localStorage.removeItem('config');localStorage.removeItem('config_logo');
+  carregarFormConfig();aplicarConfig();toast('↩️ Configurações restauradas');
+}
+function carregarLogo(inp){
+  const f=inp.files[0];if(!f)return;
+  if(f.size>2*1024*1024){toast('⚠️ Logo máx 2MB','#EF6C00');return;}
+  const r=new FileReader();
+  r.onload=e=>{
+    const src=e.target.result;
+    sC('config_logo',src);
+    document.getElementById('cfgLogoImg').src=src;
+    document.getElementById('cfgLogoImg').style.display='block';
+    document.getElementById('cfgLogoEmoji').style.display='none';
+    aplicarLogoSidebar(src);
+    toast('✅ Logo carregada!');
+  };
+  r.readAsDataURL(f);
+}
+function removerLogo(){
+  localStorage.removeItem('config_logo');
+  document.getElementById('cfgLogoImg').style.display='none';
+  document.getElementById('cfgLogoEmoji').style.display='block';
+  aplicarLogoSidebar('');
+  toast('Logo removida');
+}
+function aplicarLogoSidebar(src){
+  const img=document.getElementById('sideLogo');
+  const emoji=document.getElementById('sideLogoEmoji');
+  if(src){img.src=src;img.style.display='block';emoji.style.display='none';}
+  else{img.style.display='none';emoji.style.display='block';}
+}
+function aplicarConfig(){
+  const c=getCfg();
+  const logo=gC('config_logo');
+  aplicarLogoSidebar(logo);
+  const nome=document.getElementById('sideNome');
+  if(nome)nome.innerHTML=c.nome||CFG_DEFAULT.nome;
+  // Atualizar WhatsApp no rodapé
+  const waN=c.wa||'';
+  const footerWA=document.getElementById('footerWA');
+  if(footerWA&&waN)footerWA.href='https://wa.me/'+waN.replace(/\D/g,'');
+}
+
+// ===== POLÍTICA DE PRIVACIDADE =====
+function mostrarPolitica(){
+  document.getElementById('modC').innerHTML=`
+    <h3 style="color:var(--pri-d);margin-bottom:14px">🔒 Política de Privacidade</h3>
+    <div style="font-size:12.5px;line-height:1.8;color:var(--txt)">
+      <p><strong>Montgomery Magalhães - Saúde Integrativa</strong></p>
+      <p style="margin-top:8px">Em conformidade com a <strong>LGPD (Lei 13.709/2018)</strong>, seus dados são coletados exclusivamente para fins de tratamento de saúde.</p>
+      <p style="margin-top:8px"><strong>Dados coletados:</strong> Nome, contato, histórico de saúde e informações de atendimento.</p>
+      <p style="margin-top:8px"><strong>Finalidade:</strong> Gestão de prontuário, agendamento e acompanhamento terapêutico.</p>
+      <p style="margin-top:8px"><strong>Armazenamento:</strong> Os dados são armazenados localmente no dispositivo do terapeuta com segurança.</p>
+      <p style="margin-top:8px"><strong>Seus direitos:</strong> Acesso, correção e exclusão dos dados mediante solicitação.</p>
+      <p style="margin-top:8px"><strong>Contato:</strong> ${cfg('email')||cfg('tel')||'Montgomery Magalhães'}</p>
+      <p style="margin-top:8px;color:var(--txt-l);font-size:11px">📍 ${cfg('end')}</p>
+    </div>
+    <div style="text-align:right;margin-top:14px"><button class="btn btn-pri btn-sm" onclick="fMod()">Entendido</button></div>`;
+  document.getElementById('modP').classList.add('show');
+}
+
+// ===== DASHBOARD =====
+function atuDash(){
+  const pacs=gD('pacientes'),ss=gD('sessoes');
+  const h=new Date();
+  const sm=ss.filter(s=>{const d=new Date(s.data);return d.getMonth()===h.getMonth()&&d.getFullYear()===h.getFullYear();});
+  document.getElementById('stP').textContent=pacs.length;
+  document.getElementById('stS').textContent=sm.length;
+  document.getElementById('stR').textContent=fm(sm.filter(s=>s.status==='pago').reduce((a,s)=>a+s.valor,0));
+  document.getElementById('stPd').textContent=fm(sm.filter(s=>s.status==='pendente').reduce((a,s)=>a+s.valor,0));
+  const ult=ss.sort((a,b)=>new Date(b.data)-new Date(a.data)).slice(0,6);
+  const tb=document.getElementById('dashT');
+  if(!ult.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--txt-l);padding:24px">Nenhuma sessão registrada</td></tr>';return;}
+  tb.innerHTML=ult.map(s=>{
+    const bc=s.status==='pago'?'bp':s.status==='pendente'?'bpend':'bc';
+    const bt=s.status==='pago'?'✅ Pago':s.status==='pendente'?'⏳ Pendente':'❌ Cancelado';
+    return`<tr><td style="white-space:nowrap">${fd(s.data)}</td><td>${s.pacienteNome}</td><td style="font-size:12px">${s.procedimentos||'Atendimento'}</td><td>${fm(s.valor)}</td><td><span class="badge ${bc}">${bt}</span></td></tr>`;
+  }).join('');
+}
+
+// ===== BACKUP =====
+function expJSON(){
+  const d={versao:'5.0',clinica:'Montgomery Magalhães',data:new Date().toISOString(),pacientes:gD('pacientes'),sessoes:gD('sessoes'),config:getCfg()};
+  dl(JSON.stringify(d,null,2),'montgomery_backup_'+new Date().toISOString().slice(0,10)+'.json','application/json');
+  toast('📤 Backup exportado!');
+}
+function expCSVP(){
+  const p=gD('pacientes');if(!p.length){toast('⚠️ Sem pacientes','#EF6C00');return;}
+  const h=['Nome','Email','Telefone','Nascimento','Gênero','Profissão','Cidade','Estado','Queixa','Cadastro'];
+  const r=p.map(x=>[x.nome,x.email,x.telefone,x.nascimento,x.genero,x.profissao,x.cidade,x.estado,(x.queixa||'').replace(/,/g,';').replace(/\n/g,' '),x.dataCadastro].map(z=>`"${z||''}"`).join(','));
+  dl('\uFEFF'+[h.join(','),...r].join('\n'),'pacientes_montgomery_'+new Date().toISOString().slice(0,10)+'.csv','text/csv');toast('📊 Exportado!');
+}
+function expCSVF(){
+  const ss=gD('sessoes');if(!ss.length){toast('⚠️ Sem sessões','#EF6C00');return;}
+  const h=['Data','Paciente','Procedimento','Valor','Pagamento','Status'];
+  const r=ss.sort((a,b)=>new Date(b.data)-new Date(a.data)).map(s=>[fd(s.data),s.pacienteNome,s.procedimentos,s.valor.toFixed(2).replace('.',','),s.formaPgto,s.status].map(z=>`"${z||''}"`).join(','));
+  dl('\uFEFF'+[h.join(','),...r].join('\n'),'financeiro_montgomery_'+new Date().toISOString().slice(0,10)+'.csv','text/csv');toast('💰 Exportado!');
+}
+function dl(c,n,t){const b=new Blob([c],{type:t});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=n;a.click();URL.revokeObjectURL(u);}
+async function impJSON(inp){
+  const f=inp.files[0];if(!f)return;
+  if(!confirm('⚠️ Substituirá TODOS os dados!\nFez backup? Continuar?')){inp.value='';return;}
+  const r=new FileReader();
+  r.onload=e=>{
+    try{
+      const d=JSON.parse(e.target.result);
+      if(!d.pacientes||!d.sessoes){toast('❌ Arquivo inválido!','#c62828');return;}
+      await dbSet('pacientes',d.pacientes);
+      await dbSet('sessoes',d.sessoes);
+      if(d.config){localStorage.setItem('config',JSON.stringify(d.config));supaReq('DELETE','configuracoes',null,'?user_id=eq.montgomery').then(()=>supaReq('POST','configuracoes',[{user_id:'montgomery',dados:d.config}]));}
+      atuInfoSys();atuDash();aplicarConfig();
+      toast('✅ '+d.pacientes.length+' pacientes restaurados na nuvem!');
+    }catch{toast('❌ Erro ao importar!','#c62828');}
+  };
+  r.readAsText(f);inp.value='';
+}
+async function limparTudo(){
+  if(!confirm('🗑️ Apagar TODOS os dados?\nEsta ação é IRREVERSÍVEL!'))return;
+  if(!confirm('Última confirmação: apagar tudo mesmo?'))return;
+  ['pacientes','sessoes','rascunho'].forEach(k=>localStorage.removeItem(k));
+  _cache={};
+  await Promise.all([supaReq('DELETE','pacientes',null,'?user_id=eq.montgomery'),supaReq('DELETE','sessoes',null,'?user_id=eq.montgomery')]);
+  atuInfoSys();atuDash();toast('🗑️ Dados removidos','#c62828');
+}
+function atuInfoSys(){
+  const p=gD('pacientes'),s=gD('sessoes');
+  const rec=s.filter(x=>x.status==='pago').reduce((a,x)=>a+x.valor,0);
+  const tam=(JSON.stringify(p).length+JSON.stringify(s).length)/1024;
+  document.getElementById('infoSys').innerHTML=`
+    👥 Pacientes: <strong>${p.length}</strong> (${p.filter(x=>x.foto).length} com foto)<br>
+    📅 Sessões registradas: <strong>${s.length}</strong><br>
+    💰 Total recebido: <strong>${fm(rec)}</strong><br>
+    💾 Tamanho dos dados: <strong>${tam.toFixed(1)} KB</strong> / 5120 KB disponíveis<br>
+    🕐 Atualizado: <strong>${new Date().toLocaleString('pt-BR')}</strong>`;
+}
+
+// ===== VCF =====
+function lerVCF(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>procVCF(e.target.result);r.readAsText(f,'UTF-8');inp.value='';}
+function procVCF(txt){
+  const cs=[];
+  txt.split('BEGIN:VCARD').forEach(b=>{
+    if(!b.trim())return;
+    const c={nome:'',telefone:'',email:''};
+    b.split('\n').forEach(l=>{
+      l=l.trim();
+      if(l.startsWith('FN:'))c.nome=l.replace('FN:','').trim();
+      else if(l.startsWith('N:')&&!c.nome){const p=l.replace('N:','').split(';');c.nome=((p[1]?p[1]+' ':'')+p[0]).trim();}
+      else if(l.includes('TEL')&&!c.telefone){const t=l.split(':').pop().trim().replace(/\s/g,'');if(t)c.telefone=t;}
+      else if(l.includes('EMAIL')&&!c.email){const em=l.split(':').pop().trim();if(em)c.email=em;}
+    });
+    if(c.nome)cs.push(c);
+  });
+  if(!cs.length){document.getElementById('vcfRes').innerHTML='<p style="color:var(--danger)">Nenhum contato encontrado.</p>';return;}
+  const ex=new Set(gD('pacientes').map(p=>p.nome.toLowerCase()));
+  window._vcf=cs;
+  document.getElementById('vcfRes').innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;flex-wrap:wrap;gap:7px">
+      <strong>${cs.length} contatos encontrados</strong>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn btn-sec btn-sm" onclick="selVCF(true)">Todos</button>
+        <button class="btn btn-sec btn-sm" onclick="selVCF(false)">Nenhum</button>
+        <button class="btn btn-pri btn-sm" onclick="impVCF()">✅ Importar Selecionados</button>
+      </div>
+    </div>
+    <div style="max-height:320px;overflow-y:auto;border:1px solid var(--brd);border-radius:7px">
+    <table style="width:100%;border-collapse:collapse">
+    <thead style="background:var(--pri-l);position:sticky;top:0">
+      <tr><th style="padding:7px;font-size:11px">✓</th><th style="padding:7px;text-align:left;font-size:11px">Nome</th><th style="padding:7px;text-align:left;font-size:11px">Telefone</th><th style="padding:7px;text-align:left;font-size:11px">Status</th></tr>
+    </thead><tbody>
+    ${cs.map((c,i)=>{
+      const e=ex.has(c.nome.toLowerCase());
+      return`<tr style="${e?'background:#FFF3E0':''}">
+        <td style="padding:6px 7px"><input type="checkbox" class="vcfCk" data-i="${i}" ${e?'disabled':'checked'}></td>
+        <td style="padding:6px 7px;font-size:12.5px">${c.nome}</td>
+        <td style="padding:6px 7px;font-size:12px">${c.telefone||'-'}</td>
+        <td style="padding:6px 7px"><span class="badge ${e?'bpend':'bp'}">${e?'⚠️ Já existe':'✅ Novo'}</span></td>
+      </tr>`;
+    }).join('')}
+    </tbody></table></div>`;
+}
+function selVCF(s){document.querySelectorAll('.vcfCk:not([disabled])').forEach(c=>c.checked=s);}
+function impVCF(){
+  const sel=[];
+  document.querySelectorAll('.vcfCk:checked:not([disabled])').forEach(c=>sel.push(window._vcf[+c.dataset.i]));
+  if(!sel.length){toast('⚠️ Selecione contatos','#EF6C00');return;}
+  const pacs=gD('pacientes');
+  sel.forEach(c=>{pacs.push({id:Date.now()+Math.random(),dataCadastro:new Date().toLocaleDateString('pt-BR'),foto:'',exames:[],nome:c.nome,email:c.email,telefone:c.telefone,queixa:'',doencas:'',medicamentos:'',alergias:'',nascimento:'',genero:'',religiao:'',profissao:'',estadoCivil:'',endereco:'',cidade:'',estado:'',cep:'',contatoEmerg:'',telEmerg:'',tempoQueixa:'',intensidade:'',melhora:'',piora:'',tratAnterior:'',cirurgias:'',histFamiliar:'',gestante:'',semanas:'',sono:'',horasSono:'',alimentacao:'',agua:'',ativFisica:'',tipoAtiv:'',tabagismo:'',alcool:'',estresse:'',obsHabitos:'',lingua:'',pulso:'',meridianos:'',diagMTC:'',pontos:'',obsAcup:'',postura:'',regiao:'',vertebras:'',amplitude:'',testes:'',ajustes:'',obsQuiro:'',demandaPsi:'',estadoEmocional:'',histEmocional:'',relacoes:'',notasPsi:'',encamPsi:'',fitoterapia:'',contraFito:'',seitaiAval:'',seitaiTec:'',obsGeral:''});});
+  sD('pacientes',pacs);toast('✅ '+sel.length+' contatos importados!');
+  document.getElementById('vcfRes').innerHTML='';atuDash();
+}
+
+// ===== HELPERS =====
+const fm=val=>'R$ '+val.toFixed(2).replace('.',',');
+const fd=d=>{if(!d)return'-';const p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];};
+
+// ===== INIT =====
+document.getElementById('dtHoje').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+document.getElementById('sData').value=new Date().toISOString().split('T')[0];
+document.getElementById('rxDt').value=new Date().toISOString().split('T')[0];
+document.getElementById('agAno').value=new Date().getFullYear();
+document.getElementById('modP').addEventListener('click',e=>{if(e.target===e.currentTarget)fMod();});
+// Iniciar com Supabase
+initDB();
+</script>
+</body>
+</html>
