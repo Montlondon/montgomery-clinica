@@ -1508,7 +1508,7 @@ async function impJSON(inp){
   const f=inp.files[0];if(!f)return;
   if(!confirm('⚠️ Substituirá TODOS os dados!\nFez backup? Continuar?')){inp.value='';return;}
   const r=new FileReader();
-  r.onload=e=>{
+  r.onload=async e=>{
     try{
       const d=JSON.parse(e.target.result);
       if(!d.pacientes||!d.sessoes){toast('❌ Arquivo inválido!','#c62828');return;}
@@ -1517,7 +1517,7 @@ async function impJSON(inp){
       if(d.config){localStorage.setItem('config',JSON.stringify(d.config));supaReq('DELETE','configuracoes',null,'?user_id=eq.montgomery').then(()=>supaReq('POST','configuracoes',[{user_id:'montgomery',dados:d.config}]));}
       atuInfoSys();atuDash();aplicarConfig();
       toast('✅ '+d.pacientes.length+' pacientes restaurados na nuvem!');
-    }catch{toast('❌ Erro ao importar!','#c62828');}
+    }catch(err){toast('❌ Erro ao importar!','#c62828');console.error(err);}
   };
   r.readAsText(f);inp.value='';
 }
