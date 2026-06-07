@@ -786,15 +786,14 @@ async function initDB(){
   showLoading(true);
   try{
     await Promise.all([dbGet('pacientes'),dbGet('sessoes')]);
+  }catch(e){
+    console.error('Erro Supabase:',e);
+    toast('⚠️ Erro ao conectar ao banco. Tente recarregar.','#EF6C00');
+  }finally{
     showLoading(false);
     aplicarConfig();
     atuDash();
     renderEx();
-    toast('☁️ Dados carregados!');
-  }catch(e){
-    showLoading(false);
-    toast('⚠️ Erro ao conectar. Usando dados locais.','#EF6C00');
-    aplicarConfig();atuDash();renderEx();
   }
 }
 function showLoading(show){
@@ -802,7 +801,7 @@ function showLoading(show){
   if(!el){
     el=document.createElement('div');
     el.id='loadingOverlay';
-    el.style.cssText='position:fixed;inset:0;background:rgba(30,58,95,.85);z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-size:16px;gap:12px';
+    el.style.cssText='position:fixed;inset:0;background:rgba(30,58,95,.85);z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;font-size:16px;gap:12px;pointer-events:none';
     el.innerHTML='<div style="font-size:40px">☁️</div><div>Conectando ao banco de dados...</div><div style="font-size:12px;opacity:.7">Montgomery Saúde Integrativa</div>';
     document.body.appendChild(el);
   }
