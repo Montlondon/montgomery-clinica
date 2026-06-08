@@ -784,17 +784,29 @@ let _cache={};
 
 async function dbGet(tabela){
   if(_cache[tabela])return _cache[tabela];
-  const r=await supaReq('GET',tabela,null,'?user_id=eq.montgomery&order=id.asc');
-  const data=(r||[]).map(row=>row.dados);
-  _cache[tabela]=data;
-  return data;
+  // Buscar em páginas de 1000 (limite do Supabase)
+  let todos=[];
+  let offset=0;
+  const LIMIT=1000;
+  while(true){
+    const r=await supaReq('GET',tabela,null,`?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=${offset}`);
+    const lote=(r||[]).map(row=>row.dados);
+    todos=todos.concat(lote);
+    if(lote.length<LIMIT)break;
+    offset+=LIMIT;
+  }
+  _cache[tabela]=todos;
+  return todos;
 }
 async function dbSet(tabela,lista){
   _cache[tabela]=lista;
-  // Apagar tudo e reinserir (simples e confiável)
+  // Apagar tudo primeiro
   await supaReq('DELETE',tabela,null,'?user_id=eq.montgomery');
-  if(lista.length>0){
-    const rows=lista.map(item=>({'user_id':'montgomery','dados':item}));
+  if(lista.length===0)return;
+  // Inserir em lotes de 100 (limite do Supabase)
+  const LOTE=100;
+  for(let i=0;i<lista.length;i+=LOTE){
+    const rows=lista.slice(i,i+LOTE).map(item=>({'user_id':'montgomery','dados':item}));
     await supaReq('POST',tabela,rows);
   }
 }
@@ -1550,50 +1562,6 @@ function atuInfoSys(){
 
 // ===== VCF =====
 function lerVCF(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>procVCF(e.target.result);r.readAsText(f,'UTF-8');inp.value='';}
-function procVCF(txt){
-  const cs=[];
-  txt.split('BEGIN:VCARD').forEach(b=>{
-    if(!b.trim())return;
-    const c={nome:'',telefone:'',email:''};
-    b.split('\n').forEach(l=>{
-      l=l.trim();
-      if(l.startsWith('FN:'))c.nome=l.replace('FN:','').trim();
-      else if(l.startsWith('N:')&&!c.nome){const p=l.replace('N:','').split(';');c.nome=((p[1]?p[1]+' ':'')+p[0]).trim();}
-      else if(l.includes('TEL')&&!c.telefone){const t=l.split(':').pop().trim().replace(/\s/g,'');if(t)c.telefone=t;}
-      else if(l.includes('EMAIL')&&!c.email){const em=l.split(':').pop().trim();if(em)c.email=em;}
-    });
-    if(c.nome)cs.push(c);
-  });
-  if(!cs.length){document.getElementById('vcfRes').innerHTML='<p style="color:var(--danger)">Nenhum contato encontrado.</p>';return;}
-  const ex=new Set(gD('pacientes').map(p=>p.nome.toLowerCase()));
-  window._vcf=cs;
-  document.getElementById('vcfRes').innerHTML=`
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;flex-wrap:wrap;gap:7px">
-      <strong>${cs.length} contatos encontrados</strong>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button class="btn btn-sec btn-sm" onclick="selVCF(true)">Todos</button>
-        <button class="btn btn-sec btn-sm" onclick="selVCF(false)">Nenhum</button>
-        <button class="btn btn-pri btn-sm" onclick="impVCF()">✅ Importar Selecionados</button>
-      </div>
-    </div>
-    <div style="max-height:320px;overflow-y:auto;border:1px solid var(--brd);border-radius:7px">
-    <table style="width:100%;border-collapse:collapse">
-    <thead style="background:var(--pri-l);position:sticky;top:0">
-      <tr><th style="padding:7px;font-size:11px">✓</th><th style="padding:7px;text-align:left;font-size:11px">Nome</th><th style="padding:7px;text-align:left;font-size:11px">Telefone</th><th style="padding:7px;text-align:left;font-size:11px">Status</th></tr>
-    </thead><tbody>
-    ${cs.map((c,i)=>{
-      const e=ex.has(c.nome.toLowerCase());
-      return`<tr style="${e?'background:#FFF3E0':''}">
-        <td style="padding:6px 7px"><input type="checkbox" class="vcfCk" data-i="${i}" ${e?'disabled':'checked'}></td>
-        <td style="padding:6px 7px;font-size:12.5px">${c.nome}</td>
-        <td style="padding:6px 7px;font-size:12px">${c.telefone||'-'}</td>
-        <td style="padding:6px 7px"><span class="badge ${e?'bpend':'bp'}">${e?'⚠️ Já existe':'✅ Novo'}</span></td>
-      </tr>`;
-    }).join('')}
-    </tbody></table></div>`;
-}
-// ===== VCF =====
-function lerVCF(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>procVCF(e.target.result);r.readAsText(f,'UTF-8');inp.value='';}
 
 function procVCF(txt){
   const cs=[];
@@ -1726,51 +1694,86 @@ async function impVCF(){
 }
 
 // ===== DELETAR PACIENTES EM MASSA =====
-function renderP(lista){
-  const pacs=lista||gD('pacientes');
-  const el=document.getElementById('tabPac');
-  const info=document.getElementById('pacInfo');
-  if(info)info.textContent=pacs.length+' paciente'+(pacs.length!==1?'s':'');
+let _pacPag=0;
+const PAC_POR_PAG=100;
 
-  // Botão de deletar selecionados
+function renderP(lista){
+  let pacs=lista||gD('pacientes');
+  if(ordP_==='az')pacs.sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
+  else if(ordP_==='za')pacs.sort((a,b)=>b.nome.localeCompare(a.nome,'pt-BR'));
+  else pacs.sort((a,b)=>b.id-a.id);
+  document.getElementById('cntP').textContent=pacs.length;
+
+  // Paginação
+  const totalPags=Math.max(1,Math.ceil(pacs.length/PAC_POR_PAG));
+  if(_pacPag>=totalPags)_pacPag=totalPags-1;
+  const inicio=_pacPag*PAC_POR_PAG;
+  const fim=Math.min(inicio+PAC_POR_PAG,pacs.length);
+  const pagina=pacs.slice(inicio,fim);
+
+  // Barra paginação
+  let pagBar=document.getElementById('pacPagBar');
+  if(!pagBar){
+    pagBar=document.createElement('div');
+    pagBar.id='pacPagBar';
+    pagBar.style.cssText='display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;padding:0 2px';
+    const tw=document.querySelector('#pg-pacientes .tw');
+    if(tw)tw.before(pagBar);
+  }
+  if(totalPags>1){
+    pagBar.style.display='flex';
+    pagBar.innerHTML=`
+      <button class="btn btn-sec btn-sm" onclick="_pacPag=0;renderP()" ${_pacPag===0?'disabled':''}>◀◀</button>
+      <button class="btn btn-sec btn-sm" onclick="_pacPag--;renderP()" ${_pacPag===0?'disabled':''}>◀</button>
+      <span style="font-size:12px;color:var(--txt-l)">Pág. <strong>${_pacPag+1}</strong>/${totalPags} &nbsp;·&nbsp; ${inicio+1}–${fim} de ${pacs.length}</span>
+      <button class="btn btn-sec btn-sm" onclick="_pacPag++;renderP()" ${_pacPag>=totalPags-1?'disabled':''}>▶</button>
+      <button class="btn btn-sec btn-sm" onclick="_pacPag=${totalPags-1};renderP()" ${_pacPag>=totalPags-1?'disabled':''}>▶▶</button>`;
+  } else {
+    pagBar.style.display='none';
+  }
+
+  // Barra deletar em massa
   let delBar=document.getElementById('delBar');
   if(!delBar){
     delBar=document.createElement('div');
     delBar.id='delBar';
-    delBar.style.cssText='display:none;background:#FFEBEE;border-radius:7px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px';
+    delBar.style.cssText='background:#FFEBEE;border-radius:7px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px';
     delBar.innerHTML=`
-      <span id="delBarInfo" style="font-size:13px;color:var(--danger);font-weight:600"></span>
-      <div style="display:flex;gap:7px">
-        <button class="btn btn-sec btn-sm" onclick="selPacs(false)">☐ Desmarcar todos</button>
+      <span id="delBarInfo" style="font-size:13px;color:var(--danger);font-weight:600">Marque pacientes para excluir em massa</span>
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        <button class="btn btn-sec btn-sm" onclick="selPacs(true)">☑️ Todos desta página</button>
+        <button class="btn btn-sec btn-sm" onclick="selPacs(false)">☐ Nenhum</button>
         <button class="btn btn-dan btn-sm" onclick="delPacsSel()">🗑️ Excluir Selecionados</button>
       </div>`;
     const ph=document.querySelector('#pg-pacientes .page-header');
     if(ph)ph.after(delBar);
   }
 
-  if(!el)return;
+  const tb=document.getElementById('tabP');
+  if(!tb)return;
   if(!pacs.length){
-    el.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--txt-l)">Nenhum paciente cadastrado.</td></tr>`;
-    delBar.style.display='none';
+    tb.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--txt-l)">Nenhum paciente cadastrado.</td></tr>`;
     return;
   }
-  delBar.style.display='flex';
 
-  el.innerHTML=pacs.map(p=>`<tr>
-    <td style="padding:6px 8px;width:32px"><input type="checkbox" class="pacCk" data-id="${p.id}" onchange="atuDelBar()"></td>
-    <td style="padding:8px 11px">
-      ${p.foto?`<img src="${p.foto}" style="width:30px;height:30px;border-radius:50%;object-fit:cover;margin-right:8px;vertical-align:middle">`:''}
-      <strong>${p.nome}</strong>
-    </td>
-    <td>${p.telefone?`<a href="https://wa.me/55${p.telefone.replace(/\D/g,'')}" target="_blank" style="color:var(--pri)">📱 ${p.telefone}</a>`:'-'}</td>
-    <td>${p.queixa?p.queixa.substring(0,30)+(p.queixa.length>30?'...':''):'-'}</td>
-    <td>${p.dataCadastro||'-'}</td>
-    <td>
-      <button class="btn btn-sec btn-sm" onclick="verPac(${p.id})" title="Ver">👁️</button>
-      <button class="btn btn-war btn-sm" onclick="editarPac(${p.id})" title="Editar">✏️</button>
-      <button class="btn btn-dan btn-sm" onclick="delPac(${p.id})" title="Excluir">🗑️</button>
-    </td>
-  </tr>`).join('');
+  tb.innerHTML=pagina.map(p=>{
+    const fH=p.foto?`<div class="fmini"><img src="${p.foto}"></div>`:`<div class="fmini">👤</div>`;
+    const wa=waUrl(p.telefone);
+    const waB=wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm">💬 ${p.telefone}</a>`:`<span style="color:var(--txt-l)">${p.telefone||'-'}</span>`;
+    return`<tr>
+      <td style="padding:6px 8px;width:32px"><input type="checkbox" class="pacCk" data-id="${p.id}" onchange="atuDelBar()"></td>
+      <td>${fH}</td>
+      <td><strong>${p.nome}</strong></td>
+      <td>${waB}</td>
+      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--txt-l);font-size:12px">${p.queixa||'-'}</td>
+      <td style="color:var(--txt-l);font-size:12px;white-space:nowrap">${p.dataCadastro||'-'}</td>
+      <td style="white-space:nowrap">
+        <button class="btn btn-inf btn-sm" onclick="verPac(${p.id})">👁️</button>
+        <button class="btn btn-sec btn-sm" onclick="editarPac(${p.id})">✏️</button>
+        <button class="btn btn-dan btn-sm" onclick="delPac(${p.id})">🗑️</button>
+      </td>
+    </tr>`;
+  }).join('');
   atuDelBar();
 }
 
