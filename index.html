@@ -999,35 +999,15 @@ function limparForm(){
 
 // ===== RENDER PACIENTES =====
 function ordP(o){ordP_=o;renderP();}
-function renderP(lista){
-  let pacs=lista||gD('pacientes');
-  if(ordP_==='az')pacs.sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
-  else if(ordP_==='za')pacs.sort((a,b)=>b.nome.localeCompare(a.nome,'pt-BR'));
-  else pacs.sort((a,b)=>b.id-a.id);
-  document.getElementById('cntP').textContent=pacs.length;
-  const tb=document.getElementById('tabP');
-  if(!pacs.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--txt-l);padding:28px">Nenhum paciente cadastrado</td></tr>';return;}
-  tb.innerHTML=pacs.map(p=>{
-    const fH=p.foto?`<div class="fmini"><img src="${p.foto}"></div>`:`<div class="fmini">👤</div>`;
-    const wa=waUrl(p.telefone);
-    const waB=wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm">💬 ${p.telefone}</a>`:`<span style="color:var(--txt-l)">${p.telefone||'-'}</span>`;
-    return`<tr><td>${fH}</td><td><strong>${p.nome}</strong></td><td>${waB}</td>
-      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--txt-l);font-size:12px">${p.queixa||'-'}</td>
-      <td style="color:var(--txt-l);font-size:12px;white-space:nowrap">${p.dataCadastro}</td>
-      <td style="white-space:nowrap">
-        <button class="btn btn-inf btn-sm" onclick="verPac(${p.id})">👁️</button>
-        <button class="btn btn-sec btn-sm" onclick="editarPac(${p.id})">✏️</button>
-        <button class="btn btn-dan btn-sm" onclick="delPac(${p.id})">🗑️</button>
-      </td></tr>`;
-  }).join('');
-}
 function filtrarP(){
   const b=document.getElementById('busP').value.toLowerCase();
   renderP(gD('pacientes').filter(p=>p.nome.toLowerCase().includes(b)||(p.telefone||'').includes(b)||(p.queixa||'').toLowerCase().includes(b)));
 }
-function delPac(id){
-  if(!confirm('Excluir paciente permanentemente?'))return;
-  sD('pacientes',gD('pacientes').filter(p=>p.id!==id));renderP();toast('🗑️ Removido','#c62828');
+async function delPac(id){
+  if(!confirm('Excluir este paciente permanentemente?'))return;
+  const pacs=gD('pacientes').filter(p=>p.id!==id);
+  await dbSet('pacientes',pacs);renderP();toast('🗑️ Removido','#c62828');atuDash();
+}
 }
 
 // ===== VER PACIENTE =====
@@ -1613,15 +1593,211 @@ function procVCF(txt){
     }).join('')}
     </tbody></table></div>`;
 }
+// ===== VCF =====
+function lerVCF(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=e=>procVCF(e.target.result);r.readAsText(f,'UTF-8');inp.value='';}
+
+function procVCF(txt){
+  const cs=[];
+  txt.split('BEGIN:VCARD').forEach(b=>{
+    if(!b.trim())return;
+    const c={nome:'',telefone:'',email:''};
+    b.split('\n').forEach(l=>{
+      l=l.trim();
+      if(l.startsWith('FN:'))c.nome=l.replace('FN:','').trim();
+      else if(l.startsWith('N:')&&!c.nome){const p=l.replace('N:','').split(';');c.nome=((p[1]?p[1]+' ':'')+p[0]).trim();}
+      else if(l.includes('TEL')&&!c.telefone){const t=l.split(':').pop().trim().replace(/\s/g,'');if(t)c.telefone=t;}
+      else if(l.includes('EMAIL')&&!c.email){const em=l.split(':').pop().trim();if(em)c.email=em;}
+    });
+    if(c.nome)cs.push(c);
+  });
+  if(!cs.length){document.getElementById('vcfRes').innerHTML='<p style="color:var(--danger)">Nenhum contato encontrado.</p>';return;}
+  const ex=new Set(gD('pacientes').map(p=>p.nome.toLowerCase()));
+  window._vcf=cs;
+  window._vcfPag=0;
+  renderVCF(ex);
+}
+
+const VCF_PAG=100;
+function renderVCF(exSet){
+  const cs=window._vcf;
+  const ex=exSet||new Set(gD('pacientes').map(p=>p.nome.toLowerCase()));
+  const pag=window._vcfPag||0;
+  const total=cs.length;
+  const novos=cs.filter(c=>!ex.has(c.nome.toLowerCase())).length;
+  const inicio=pag*VCF_PAG;
+  const fim=Math.min(inicio+VCF_PAG,total);
+  const totalPags=Math.ceil(total/VCF_PAG);
+
+  document.getElementById('vcfRes').innerHTML=`
+    <div style="background:var(--pri-l);border-radius:7px;padding:10px 14px;margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:7px">
+        <div>
+          <strong style="color:var(--pri-d)">${total.toLocaleString()} contatos encontrados</strong>
+          <span style="font-size:12px;color:var(--txt-l);margin-left:8px">${novos} novos · ${total-novos} já existem</span>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn btn-sec btn-sm" onclick="selVCF(true)">☑️ Todos da página</button>
+          <button class="btn btn-sec btn-sm" onclick="selVCF(false)">☐ Nenhum</button>
+          <button class="btn btn-war btn-sm" onclick="selVCFTodos()">☑️ Selecionar TODOS (${novos})</button>
+          <button class="btn btn-pri btn-sm" onclick="impVCF()">✅ Importar Selecionados</button>
+        </div>
+      </div>
+      <div style="margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span style="font-size:12px;color:var(--txt-l)">Página ${pag+1} de ${totalPags} (mostrando ${inicio+1}–${fim})</span>
+        <button class="btn btn-sec btn-sm" onclick="pagVCF(-1)" ${pag===0?'disabled':''}>◀ Anterior</button>
+        <button class="btn btn-sec btn-sm" onclick="pagVCF(1)" ${pag>=totalPags-1?'disabled':''}>Próxima ▶</button>
+      </div>
+    </div>
+    <div style="max-height:380px;overflow-y:auto;border:1px solid var(--brd);border-radius:7px">
+    <table style="width:100%;border-collapse:collapse">
+    <thead style="background:var(--pri-l);position:sticky;top:0">
+      <tr><th style="padding:7px;font-size:11px">✓</th><th style="padding:7px;text-align:left;font-size:11px">Nome</th><th style="padding:7px;text-align:left;font-size:11px">Telefone</th><th style="padding:7px;text-align:left;font-size:11px">Status</th></tr>
+    </thead><tbody>
+    ${cs.slice(inicio,fim).map((c,i)=>{
+      const e=ex.has(c.nome.toLowerCase());
+      const idx=inicio+i;
+      return`<tr style="${e?'background:#FFF3E0':''}">
+        <td style="padding:6px 7px"><input type="checkbox" class="vcfCk" data-i="${idx}" ${e?'disabled':'checked'}></td>
+        <td style="padding:6px 7px;font-size:12.5px">${c.nome}</td>
+        <td style="padding:6px 7px;font-size:12px">${c.telefone||'-'}</td>
+        <td style="padding:6px 7px"><span class="badge ${e?'bpend':'bp'}">${e?'⚠️ Já existe':'✅ Novo'}</span></td>
+      </tr>`;
+    }).join('')}
+    </tbody></table></div>
+    <div id="vcfProgresso" style="margin-top:10px"></div>`;
+}
+
+function pagVCF(dir){
+  const total=window._vcf.length;
+  const totalPags=Math.ceil(total/VCF_PAG);
+  window._vcfPag=Math.max(0,Math.min((window._vcfPag||0)+dir,totalPags-1));
+  renderVCF();
+}
+
 function selVCF(s){document.querySelectorAll('.vcfCk:not([disabled])').forEach(c=>c.checked=s);}
-function impVCF(){
-  const sel=[];
-  document.querySelectorAll('.vcfCk:checked:not([disabled])').forEach(c=>sel.push(window._vcf[+c.dataset.i]));
-  if(!sel.length){toast('⚠️ Selecione contatos','#EF6C00');return;}
+
+function selVCFTodos(){
+  // Marcar todos os novos de todas as páginas internamente
+  window._vcfTodos=true;
+  const ex=new Set(gD('pacientes').map(p=>p.nome.toLowerCase()));
+  const count=window._vcf.filter(c=>!ex.has(c.nome.toLowerCase())).length;
+  selVCF(true);
+  toast(`☑️ Todos os ${count} contatos novos selecionados para importar!`);
+}
+
+async function impVCF(){
+  const ex=new Set(gD('pacientes').map(p=>p.nome.toLowerCase()));
+  let sel=[];
+
+  if(window._vcfTodos){
+    // Todos os novos de todas as páginas
+    sel=window._vcf.filter(c=>!ex.has(c.nome.toLowerCase()));
+    window._vcfTodos=false;
+  } else {
+    document.querySelectorAll('.vcfCk:checked:not([disabled])').forEach(c=>sel.push(window._vcf[+c.dataset.i]));
+  }
+
+  if(!sel.length){toast('⚠️ Selecione ao menos um contato','#EF6C00');return;}
+
+  if(!confirm(`Importar ${sel.length.toLocaleString()} contatos como pacientes?\n\nIsso pode levar alguns segundos para muitos contatos.`))return;
+
+  const prog=document.getElementById('vcfProgresso');
   const pacs=gD('pacientes');
-  sel.forEach(c=>{pacs.push({id:Date.now()+Math.random(),dataCadastro:new Date().toLocaleDateString('pt-BR'),foto:'',exames:[],nome:c.nome,email:c.email,telefone:c.telefone,queixa:'',doencas:'',medicamentos:'',alergias:'',nascimento:'',genero:'',religiao:'',profissao:'',estadoCivil:'',endereco:'',cidade:'',estado:'',cep:'',contatoEmerg:'',telEmerg:'',tempoQueixa:'',intensidade:'',melhora:'',piora:'',tratAnterior:'',cirurgias:'',histFamiliar:'',gestante:'',semanas:'',sono:'',horasSono:'',alimentacao:'',agua:'',ativFisica:'',tipoAtiv:'',tabagismo:'',alcool:'',estresse:'',obsHabitos:'',lingua:'',pulso:'',meridianos:'',diagMTC:'',pontos:'',obsAcup:'',postura:'',regiao:'',vertebras:'',amplitude:'',testes:'',ajustes:'',obsQuiro:'',demandaPsi:'',estadoEmocional:'',histEmocional:'',relacoes:'',notasPsi:'',encamPsi:'',fitoterapia:'',contraFito:'',seitaiAval:'',seitaiTec:'',obsGeral:''});});
-  sD('pacientes',pacs);toast('✅ '+sel.length+' contatos importados!');
-  document.getElementById('vcfRes').innerHTML='';atuDash();
+  const LOTE=50;
+  let importados=0;
+
+  for(let i=0;i<sel.length;i+=LOTE){
+    const lote=sel.slice(i,i+LOTE);
+    lote.forEach(c=>{
+      pacs.push({id:Date.now()+Math.random(),dataCadastro:new Date().toLocaleDateString('pt-BR'),foto:'',exames:[],nome:c.nome,email:c.email,telefone:c.telefone,queixa:'',doencas:'',medicamentos:'',alergias:'',nascimento:'',genero:'',religiao:'',profissao:'',estadoCivil:'',endereco:'',cidade:'',estado:'',cep:'',contatoEmerg:'',telEmerg:'',tempoQueixa:'',intensidade:'',melhora:'',piora:'',tratAnterior:'',cirurgias:'',histFamiliar:'',gestante:'',semanas:'',sono:'',horasSono:'',alimentacao:'',agua:'',ativFisica:'',tipoAtiv:'',tabagismo:'',alcool:'',estresse:'',obsHabitos:'',lingua:'',pulso:'',meridianos:'',diagMTC:'',pontos:'',obsAcup:'',postura:'',regiao:'',vertebras:'',amplitude:'',testes:'',ajustes:'',obsQuiro:'',demandaPsi:'',estadoEmocional:'',histEmocional:'',relacoes:'',notasPsi:'',encamPsi:'',fitoterapia:'',contraFito:'',seitaiAval:'',seitaiTec:'',obsGeral:''});
+      importados++;
+    });
+    if(prog)prog.innerHTML=`<div style="background:var(--pri-l);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--pri-d)">⏳ Salvando... ${importados} de ${sel.length}</div>`;
+    await new Promise(r=>setTimeout(r,10));
+  }
+
+  // Salvar tudo no Supabase de uma vez
+  if(prog)prog.innerHTML=`<div style="background:var(--pri-l);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--pri-d)">☁️ Sincronizando com o banco de dados...</div>`;
+  await dbSet('pacientes',pacs);
+
+  if(prog)prog.innerHTML='';
+  document.getElementById('vcfRes').innerHTML='';
+  atuDash();
+  toast(`✅ ${importados.toLocaleString()} contatos importados com sucesso!`);
+}
+
+// ===== DELETAR PACIENTES EM MASSA =====
+function renderP(lista){
+  const pacs=lista||gD('pacientes');
+  const el=document.getElementById('tabPac');
+  const info=document.getElementById('pacInfo');
+  if(info)info.textContent=pacs.length+' paciente'+(pacs.length!==1?'s':'');
+
+  // Botão de deletar selecionados
+  let delBar=document.getElementById('delBar');
+  if(!delBar){
+    delBar=document.createElement('div');
+    delBar.id='delBar';
+    delBar.style.cssText='display:none;background:#FFEBEE;border-radius:7px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px';
+    delBar.innerHTML=`
+      <span id="delBarInfo" style="font-size:13px;color:var(--danger);font-weight:600"></span>
+      <div style="display:flex;gap:7px">
+        <button class="btn btn-sec btn-sm" onclick="selPacs(false)">☐ Desmarcar todos</button>
+        <button class="btn btn-dan btn-sm" onclick="delPacsSel()">🗑️ Excluir Selecionados</button>
+      </div>`;
+    const ph=document.querySelector('#pg-pacientes .page-header');
+    if(ph)ph.after(delBar);
+  }
+
+  if(!el)return;
+  if(!pacs.length){
+    el.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--txt-l)">Nenhum paciente cadastrado.</td></tr>`;
+    delBar.style.display='none';
+    return;
+  }
+  delBar.style.display='flex';
+
+  el.innerHTML=pacs.map(p=>`<tr>
+    <td style="padding:6px 8px;width:32px"><input type="checkbox" class="pacCk" data-id="${p.id}" onchange="atuDelBar()"></td>
+    <td style="padding:8px 11px">
+      ${p.foto?`<img src="${p.foto}" style="width:30px;height:30px;border-radius:50%;object-fit:cover;margin-right:8px;vertical-align:middle">`:''}
+      <strong>${p.nome}</strong>
+    </td>
+    <td>${p.telefone?`<a href="https://wa.me/55${p.telefone.replace(/\D/g,'')}" target="_blank" style="color:var(--pri)">📱 ${p.telefone}</a>`:'-'}</td>
+    <td>${p.queixa?p.queixa.substring(0,30)+(p.queixa.length>30?'...':''):'-'}</td>
+    <td>${p.dataCadastro||'-'}</td>
+    <td>
+      <button class="btn btn-sec btn-sm" onclick="verPac(${p.id})" title="Ver">👁️</button>
+      <button class="btn btn-war btn-sm" onclick="editarPac(${p.id})" title="Editar">✏️</button>
+      <button class="btn btn-dan btn-sm" onclick="delPac(${p.id})" title="Excluir">🗑️</button>
+    </td>
+  </tr>`).join('');
+  atuDelBar();
+}
+
+function atuDelBar(){
+  const sel=document.querySelectorAll('.pacCk:checked').length;
+  const total=document.querySelectorAll('.pacCk').length;
+  const bar=document.getElementById('delBar');
+  const info=document.getElementById('delBarInfo');
+  if(info)info.textContent=sel>0?`${sel} de ${total} selecionado${sel!==1?'s':''}`:` Marque pacientes para excluir em massa`;
+}
+
+function selPacs(s){
+  document.querySelectorAll('.pacCk').forEach(c=>c.checked=s);
+  atuDelBar();
+}
+
+async function delPacsSel(){
+  const ids=[];
+  document.querySelectorAll('.pacCk:checked').forEach(c=>ids.push(+c.dataset.id));
+  if(!ids.length){toast('⚠️ Selecione ao menos um paciente','#EF6C00');return;}
+  if(!confirm(`⚠️ ATENÇÃO!\n\nExcluir ${ids.length} paciente${ids.length!==1?'s':''} permanentemente?\n\nEsta ação NÃO pode ser desfeita!`))return;
+  if(!confirm(`✋ Tem certeza absoluta?\n\n${ids.length} paciente${ids.length!==1?'s':''} e todos os seus dados serão excluídos para sempre.`))return;
+  const pacs=gD('pacientes').filter(p=>!ids.includes(p.id));
+  await dbSet('pacientes',pacs);
+  renderP();atuDash();
+  toast(`🗑️ ${ids.length} paciente${ids.length!==1?'s':''} excluído${ids.length!==1?'s':''}!`,'#c62828');
 }
 
 // ===== HELPERS =====
