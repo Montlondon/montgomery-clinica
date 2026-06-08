@@ -1008,7 +1008,6 @@ async function delPac(id){
   const pacs=gD('pacientes').filter(p=>p.id!==id);
   await dbSet('pacientes',pacs);renderP();toast('🗑️ Removido','#c62828');atuDash();
 }
-}
 
 // ===== VER PACIENTE =====
 function verPac(id){
