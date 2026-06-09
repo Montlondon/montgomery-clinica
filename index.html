@@ -1100,19 +1100,35 @@ function salvarSessao(e){
   e.preventDefault();
   const pacId=parseInt(document.getElementById('psId').value);
   if(!pacId){toast('⚠️ Selecione um paciente!','#EF6C00');return;}
-  const pac=gD('pacientes').find(p=>p.id===pacId);
-  const s={id:Date.now(),pacienteId:pacId,pacienteNome:pac?pac.nome:'',pacienteFoto:pac?pac.foto:'',pacienteTel:pac?pac.telefone:'',data:v('sData'),horario:v('sHor'),procedimentos:v('sProc'),notas:v('sNot'),valor:parseFloat(v('sVal'))||0,formaPgto:v('sFPg'),status:v('sSt')};
-  const ss=gD('sessoes');ss.push(s);sD('sessoes',ss);
-  toast('✅ Sessão registrada!');e.target.reset();
+  const pacs=gD('pacientes');
+  const pac=pacs.find(p=>p.id===pacId)||pacs.find(p=>p.id==pacId);
+  const nomePac=pac?pac.nome:document.getElementById('psBusca').value||'';
+  if(!nomePac){toast('⚠️ Paciente não encontrado!','#EF6C00');return;}
+  const dados={pacienteId:pacId,pacienteNome:nomePac,pacienteTel:pac?pac.telefone:'',data:v('sData'),horario:v('sHor'),procedimentos:v('sProc'),notas:v('sNot'),valor:parseFloat(v('sVal'))||0,formaPgto:v('sFPg'),status:v('sSt')};
+  let ss=gD('sessoes');
+  if(window._editSessId){
+    // Atualizar sessão existente
+    ss=ss.map(s=>s.id===window._editSessId?{...s,...dados}:s);
+    window._editSessId=null;
+    toast('✅ Sessão atualizada!');
+  } else {
+    ss.push({id:Date.now(),...dados});
+    toast('✅ Sessão registrada!');
+  }
+  sD('sessoes',ss);
+  e.target.reset();
   document.getElementById('sData').value=new Date().toISOString().split('T')[0];
-  iniciarPS();go('financeiro',null);
+  iniciarPS();go('agenda',null);
 }
 function salvarEGoogle(){
   const pacId=parseInt(document.getElementById('psId').value);
   if(!pacId){toast('⚠️ Selecione um paciente!','#EF6C00');return;}
   if(!v('sVal')){toast('⚠️ Informe o valor!','#EF6C00');return;}
-  const pac=gD('pacientes').find(p=>p.id===pacId);
-  const s={id:Date.now(),pacienteId:pacId,pacienteNome:pac?pac.nome:'',pacienteTel:pac?pac.telefone:'',data:v('sData'),horario:v('sHor'),procedimentos:v('sProc'),notas:v('sNot'),valor:parseFloat(v('sVal'))||0,formaPgto:v('sFPg'),status:v('sSt')};
+  const pacs=gD('pacientes');
+  const pac=pacs.find(p=>p.id===pacId)||pacs.find(p=>p.id==pacId);
+  const nomePac=pac?pac.nome:document.getElementById('psBusca').value||'';
+  if(!nomePac){toast('⚠️ Paciente não encontrado!','#EF6C00');return;}
+  const s={id:Date.now(),pacienteId:pacId,pacienteNome:nomePac,pacienteTel:pac?pac.telefone:'',data:v('sData'),horario:v('sHor'),procedimentos:v('sProc'),notas:v('sNot'),valor:parseFloat(v('sVal'))||0,formaPgto:v('sFPg'),status:v('sSt')};
   const ss=gD('sessoes');ss.push(s);sD('sessoes',ss);
   abrirGA(s);toast('✅ Salvo! Abrindo Google Agenda...');
   document.querySelector('#pg-nova-sessao form').reset();
@@ -1143,7 +1159,7 @@ function atuFin(){
     const wa=waUrl(s.pacienteTel||'');
     return`<tr><td style="white-space:nowrap">${fd(s.data)}</td>
       <td>${s.pacienteNome}${wa!=='#'?` <a href="${wa}" target="_blank" class="btn btn-wa btn-sm" style="padding:2px 5px;font-size:10px">💬</a>`:''}</td>
-      <td style="font-size:12px">${s.procedimentos||'Atendimento'}</td>
+      <td style="font-size:12px">${s.procedimentos||'—'}</td>
       <td><strong>${fm(s.valor)}</strong></td>
       <td style="font-size:12px">${s.formaPgto||'-'}</td>
       <td><span class="badge ${bc}">${bt}</span></td>
@@ -1166,9 +1182,9 @@ function abrirGA(s){
   if(s.horario){const[h,m]=s.horario.split(':').map(Number);hf=String((h+1)%24).padStart(2,'0')+String(m).padStart(2,'0')+'00';}
   const end=cfg('end');
   const url='https://calendar.google.com/calendar/render?action=TEMPLATE'+
-    '&text='+encodeURIComponent((s.procedimentos||'Atendimento')+' - '+s.pacienteNome)+
+    '&text='+encodeURIComponent((s.procedimentos||'—')+' - '+s.pacienteNome)+
     '&dates='+data+'T'+hi+'/'+data+'T'+hf+
-    '&details='+encodeURIComponent('Paciente: '+s.pacienteNome+'\nProcedimento: '+(s.procedimentos||'Atendimento')+'\nValor: '+fm(s.valor)+'\nStatus: '+s.status+(s.notas?'\nNotas: '+s.notas:'')+'\n\n'+cfg('nome'))+
+    '&details='+encodeURIComponent('Paciente: '+s.pacienteNome+'\nProcedimento: '+(s.procedimentos||'—')+'\nValor: '+fm(s.valor)+'\nStatus: '+s.status+(s.notas?'\nNotas: '+s.notas:'')+'\n\n'+cfg('nome'))+
     '&location='+encodeURIComponent(end)+
     '&sf=true&output=xml';
   window.open(url,'_blank');
@@ -1207,9 +1223,14 @@ function renderSemana(){
     sd.forEach(s=>{
       const cor=s.status==='pago'?'#2E7D32':s.status==='pendente'?'#EF6C00':'#c62828';
       const bg=s.status==='pago'?'#E8F5E9':s.status==='pendente'?'#FFF3E0':'#FFEBEE';
-      h+=`<div class="ev-card" style="background:${bg};border-left:3px solid ${cor}" onclick="verEvento(${s.id})">
+      h+=`<div class="ev-card" style="background:${bg};border-left:3px solid ${cor};position:relative">
         ${s.horario?`<div style="font-weight:700;color:${cor};font-size:9px">${s.horario}</div>`:''}
-        <div style="font-size:10px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px">${s.pacienteNome}</div>
+        <div style="font-size:10px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px;cursor:pointer" onclick="verEvento(${s.id})">${s.pacienteNome||'—'}</div>
+        <div style="display:flex;gap:2px;margin-top:2px">
+          <button onclick="event.stopPropagation();verEvento(${s.id})" style="background:none;border:none;font-size:9px;cursor:pointer;padding:0 2px" title="Ver">👁️</button>
+          <button onclick="event.stopPropagation();fMod();editarSessao(${s.id})" style="background:none;border:none;font-size:9px;cursor:pointer;padding:0 2px" title="Editar">✏️</button>
+          <button onclick="event.stopPropagation();dSessAg(${s.id})" style="background:none;border:none;font-size:9px;cursor:pointer;padding:0 2px" title="Deletar">🗑️</button>
+        </div>
       </div>`;
     });
     h+=`<div style="text-align:center;margin-top:2px"><button onclick="novoNoDia('${ds2}')" style="background:none;border:1px dashed #ddd;border-radius:3px;color:#bbb;font-size:9px;padding:1px 4px;cursor:pointer;width:100%" onmouseover="this.style.color='var(--pri)'" onmouseout="this.style.color='#bbb'">+</button></div>`;
@@ -1224,24 +1245,58 @@ function verEvento(id){
   const bc=s.status==='pago'?'bp':s.status==='pendente'?'bpend':'bc';
   const bt=s.status==='pago'?'✅ Pago':s.status==='pendente'?'⏳ Pendente':'❌ Cancelado';
   const wa=waUrl(s.pacienteTel||'');
+  const end=cfg('end')||'';
+  const mapaUrl=`https://maps.google.com/maps?q=${encodeURIComponent(end)}&output=embed`;
   document.getElementById('modC').innerHTML=`
     <h3 style="color:var(--pri-d);margin-bottom:13px">📅 ${s.pacienteNome}</h3>
     <div class="pgrid" style="margin-bottom:13px">
       <div class="pi"><strong>Data</strong><span>${fd(s.data)}</span></div>
       <div class="pi"><strong>Horário</strong><span>${s.horario||'—'}</span></div>
-      <div class="pi"><strong>Procedimento</strong><span>${s.procedimentos||'Atendimento'}</span></div>
+      <div class="pi"><strong>Procedimento</strong><span>${s.procedimentos||'—'}</span></div>
       <div class="pi"><strong>Valor</strong><span>${fm(s.valor)}</span></div>
       <div class="pi"><strong>Pagamento</strong><span>${s.formaPgto||'-'}</span></div>
       <div class="pi"><strong>Status</strong><span class="badge ${bc}">${bt}</span></div>
     </div>
-    ${s.notas?`<div style="background:#f5f5f5;border-radius:6px;padding:8px;font-size:12px;margin-bottom:12px"><strong>📝 Notas:</strong><br>${s.notas}</div>`:''}
+    ${s.notas?`<div style="background:var(--beige);border-radius:6px;padding:8px;font-size:12px;margin-bottom:12px"><strong>📝 Notas:</strong><br>${s.notas}</div>`:''}
+    ${end?`<div style="margin-bottom:12px">
+      <div style="font-size:11px;color:var(--txt-l);margin-bottom:5px">📍 ${end}</div>
+      <iframe width="100%" height="220" frameborder="0" style="border:0;border-radius:8px" src="${mapaUrl}" allowfullscreen loading="lazy"></iframe>
+    </div>`:''}
     <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
-      ${wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm">💬</a>`:''}
-      <button class="btn btn-cal btn-sm" onclick="abrirGA(gD('sessoes').find(x=>x.id===${s.id}))">📅 Google</button>
+      ${wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm">💬 WhatsApp</a>`:''}
+      <button class="btn btn-cal btn-sm" onclick="abrirGA(gD('sessoes').find(x=>x.id===${s.id}))">📅 Agenda</button>
       ${s.status==='pendente'?`<button class="btn btn-pri btn-sm" onclick="mPago(${s.id});fMod();renderAg()">✅ Pago</button>`:''}
+      <button class="btn btn-war btn-sm" onclick="fMod();editarSessao(${s.id})">✏️ Editar</button>
+      <button class="btn btn-dan btn-sm" onclick="fMod();dSessAg(${s.id})">🗑️ Deletar</button>
       <button class="btn btn-sec btn-sm" onclick="fMod()">Fechar</button>
     </div>`;
   document.getElementById('modP').classList.add('show');
+}
+function dSessAg(id){
+  if(!confirm('Excluir este agendamento permanentemente?'))return;
+  sD('sessoes',gD('sessoes').filter(s=>s.id!==id));
+  renderAg();atuFin();atuDash();
+  toast('🗑️ Agendamento removido','#c62828');
+}
+function editarSessao(id){
+  const s=gD('sessoes').find(x=>x.id===id);if(!s)return;
+  go('nova-sessao',null);
+  setTimeout(()=>{
+    // Preencher formulário com dados da sessão
+    document.getElementById('sData').value=s.data||'';
+    document.getElementById('sHor').value=s.horario||'';
+    document.getElementById('sProc').value=s.procedimentos||'';
+    document.getElementById('sNot').value=s.notas||'';
+    document.getElementById('sVal').value=s.valor||'';
+    document.getElementById('sFPg').value=s.formaPgto||'';
+    document.getElementById('sSt').value=s.status||'pendente';
+    // Preencher paciente
+    document.getElementById('psId').value=s.pacienteId||'';
+    document.getElementById('psBusca').value=s.pacienteNome||'';
+    // Guardar ID para atualizar ao salvar
+    window._editSessId=id;
+    toast('✏️ Editando sessão — salve para atualizar','#1565C0');
+  },150);
 }
 function renderAg(){
   renderSemana();
@@ -1260,12 +1315,14 @@ function renderAg(){
       <td style="white-space:nowrap;font-weight:600">${fd(s.data)}</td>
       <td style="color:var(--pri-d);font-weight:600">${s.horario||'—'}</td>
       <td><strong>${s.pacienteNome}</strong></td>
-      <td style="font-size:12px;color:var(--txt-l)">${s.procedimentos||'Atendimento'}</td>
+      <td style="font-size:12px;color:var(--txt-l)">${s.procedimentos||'—'}</td>
       <td><span class="badge ${bc}">${bt}</span></td>
       <td style="white-space:nowrap">
         <button class="btn btn-inf btn-sm" onclick="verEvento(${s.id})">👁️</button>
+        <button class="btn btn-war btn-sm" onclick="editarSessao(${s.id})">✏️</button>
         <button class="btn btn-cal btn-sm" onclick="abrirGA(gD('sessoes').find(x=>x.id===${s.id}))">📅</button>
         ${s.status==='pendente'?`<button class="btn btn-pri btn-sm" onclick="mPago(${s.id});renderAg()">✅</button>`:''}
+        <button class="btn btn-dan btn-sm" onclick="dSessAg(${s.id})">🗑️</button>
       </td></tr>`;
   }).join('');
 }
@@ -1280,7 +1337,7 @@ function expICS(){
     if(s.horario){const[h,m]=s.horario.split(':').map(Number);hf=String((h+1)%24).padStart(2,'0')+String(m).padStart(2,'0')+'00';}
     const agora=new Date().toISOString().replace(/[-:]/g,'').split('.')[0]+'Z';
     ics.push('BEGIN:VEVENT',`UID:${s.id}@montgomery`,`DTSTAMP:${agora}`,`DTSTART:${data}T${hi}`,`DTEND:${data}T${hf}`,
-      `SUMMARY:${(s.procedimentos||'Atendimento')+' - '+s.pacienteNome}`,
+      `SUMMARY:${(s.procedimentos||'—')+' - '+s.pacienteNome}`,
       `DESCRIPTION:Paciente: ${s.pacienteNome}\\nValor: ${fm(s.valor)}\\nStatus: ${s.status}`,
       `LOCATION:${cfg('end')}`,
       'END:VEVENT');
@@ -1501,7 +1558,7 @@ function atuDash(){
   tb.innerHTML=ult.map(s=>{
     const bc=s.status==='pago'?'bp':s.status==='pendente'?'bpend':'bc';
     const bt=s.status==='pago'?'✅ Pago':s.status==='pendente'?'⏳ Pendente':'❌ Cancelado';
-    return`<tr><td style="white-space:nowrap">${fd(s.data)}</td><td>${s.pacienteNome}</td><td style="font-size:12px">${s.procedimentos||'Atendimento'}</td><td>${fm(s.valor)}</td><td><span class="badge ${bc}">${bt}</span></td></tr>`;
+    return`<tr><td style="white-space:nowrap">${fd(s.data)}</td><td>${s.pacienteNome}</td><td style="font-size:12px">${s.procedimentos||'—'}</td><td>${fm(s.valor)}</td><td><span class="badge ${bc}">${bt}</span></td></tr>`;
   }).join('');
 }
 
