@@ -1181,8 +1181,10 @@ function abrirGA(s){
   let hf='090000';
   if(s.horario){const[h,m]=s.horario.split(':').map(Number);hf=String((h+1)%24).padStart(2,'0')+String(m).padStart(2,'0')+'00';}
   const end=cfg('end');
+  // Título: apenas o nome do paciente, limpo
+  const titulo=s.pacienteNome.trim();
   const url='https://calendar.google.com/calendar/render?action=TEMPLATE'+
-    '&text='+encodeURIComponent((s.procedimentos||'—')+' - '+s.pacienteNome)+
+    '&text='+encodeURIComponent(titulo)+
     '&dates='+data+'T'+hi+'/'+data+'T'+hf+
     '&details='+encodeURIComponent('Paciente: '+s.pacienteNome+'\nProcedimento: '+(s.procedimentos||'—')+'\nValor: '+fm(s.valor)+'\nStatus: '+s.status+(s.notas?'\nNotas: '+s.notas:'')+'\n\n'+cfg('nome'))+
     '&location='+encodeURIComponent(end)+
@@ -1246,7 +1248,6 @@ function verEvento(id){
   const bt=s.status==='pago'?'✅ Pago':s.status==='pendente'?'⏳ Pendente':'❌ Cancelado';
   const wa=waUrl(s.pacienteTel||'');
   const end=cfg('end')||'';
-  const mapaUrl=`https://maps.google.com/maps?q=${encodeURIComponent(end)}&output=embed`;
   document.getElementById('modC').innerHTML=`
     <h3 style="color:var(--pri-d);margin-bottom:13px">📅 ${s.pacienteNome}</h3>
     <div class="pgrid" style="margin-bottom:13px">
@@ -1258,9 +1259,24 @@ function verEvento(id){
       <div class="pi"><strong>Status</strong><span class="badge ${bc}">${bt}</span></div>
     </div>
     ${s.notas?`<div style="background:var(--beige);border-radius:6px;padding:8px;font-size:12px;margin-bottom:12px"><strong>📝 Notas:</strong><br>${s.notas}</div>`:''}
-    ${end?`<div style="margin-bottom:12px">
-      <div style="font-size:11px;color:var(--txt-l);margin-bottom:5px">📍 ${end}</div>
-      <iframe width="100%" height="220" frameborder="0" style="border:0;border-radius:8px" src="${mapaUrl}" allowfullscreen loading="lazy"></iframe>
+    ${end?`<div style="margin-bottom:12px;border:1px solid var(--brd);border-radius:8px;overflow:hidden">
+      <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(end)}" target="_blank" style="display:block;text-decoration:none">
+        <div style="background:var(--pri-l);padding:10px 14px;display:flex;align-items:center;gap:10px">
+          <span style="font-size:22px">📍</span>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--pri-d)">Ver no Google Maps</div>
+            <div style="font-size:11px;color:var(--txt-l)">${end}</div>
+          </div>
+          <span style="margin-left:auto;color:var(--pri);font-size:18px">↗️</span>
+        </div>
+        <img src="https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(end)}&zoom=16&size=600x200&markers=color:red|${encodeURIComponent(end)}&key=AIzaSyD-placeholder" 
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+          style="width:100%;height:160px;object-fit:cover;display:block">
+        <div style="display:none;height:120px;align-items:center;justify-content:center;background:#f0f4f8;flex-direction:column;gap:6px">
+          <span style="font-size:32px">🗺️</span>
+          <span style="font-size:12px;color:var(--txt-l)">Toque para abrir no Maps</span>
+        </div>
+      </a>
     </div>`:''}
     <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
       ${wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm">💬 WhatsApp</a>`:''}
