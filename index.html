@@ -1654,36 +1654,32 @@ function selVCFTodos(){
 }
 
 async function impVCF(){
-  const ex=new Set(gD('pacientes').map(p=>p.nome.toLowerCase()));
   let sel=[];
-
   if(window._vcfTodos){
-    sel=window._vcf.filter(c=>!ex.has(c.nome.toLowerCase()));
+    // Pegar TODOS os contatos do arquivo diretamente, sem filtrar pelo cache
+    sel=window._vcf||[];
     window._vcfTodos=false;
   } else {
     document.querySelectorAll('.vcfCk:checked:not([disabled])').forEach(c=>sel.push(window._vcf[+c.dataset.i]));
   }
 
   if(!sel.length){toast('⚠️ Selecione ao menos um contato','#EF6C00');return;}
-  if(!confirm(`Importar ${sel.length.toLocaleString()} contatos?\n\nIsso pode levar alguns minutos para muitos contatos.`))return;
+  if(!confirm(`Importar ${sel.length.toLocaleString()} contatos?\n\nIsso pode levar alguns minutos. Não feche a página!`))return;
 
   const prog=document.getElementById('vcfProgresso');
-  const LOTE_INSERT=20; // lotes pequenos para garantir inserção
+  const LOTE_INSERT=20;
   let importados=0;
-  const novos=[];
-
-  // Montar objetos dos novos pacientes
-  for(const c of sel){
-    novos.push({id:Date.now()+Math.random(),dataCadastro:new Date().toLocaleDateString('pt-BR'),foto:'',exames:[],nome:c.nome,email:c.email||'',telefone:c.telefone||'',queixa:'',doencas:'',medicamentos:'',alergias:'',nascimento:'',genero:'',religiao:'',profissao:'',estadoCivil:'',endereco:'',cidade:'',estado:'',cep:'',contatoEmerg:'',telEmerg:'',tempoQueixa:'',intensidade:'',melhora:'',piora:'',tratAnterior:'',cirurgias:'',histFamiliar:'',gestante:'',semanas:'',sono:'',horasSono:'',alimentacao:'',agua:'',ativFisica:'',tipoAtiv:'',tabagismo:'',alcool:'',estresse:'',obsHabitos:'',lingua:'',pulso:'',meridianos:'',diagMTC:'',pontos:'',obsAcup:'',postura:'',regiao:'',vertebras:'',amplitude:'',testes:'',ajustes:'',obsQuiro:'',demandaPsi:'',estadoEmocional:'',histEmocional:'',relacoes:'',notasPsi:'',encamPsi:'',fitoterapia:'',contraFito:'',seitaiAval:'',seitaiTec:'',obsGeral:''});
-  }
-
-  // Inserir diretamente no Supabase em lotes (SEM apagar os existentes)
   let erros=0;
+
+  // Montar objetos
+  const novos=sel.map(c=>({id:Date.now()+Math.random(),dataCadastro:new Date().toLocaleDateString('pt-BR'),foto:'',exames:[],nome:c.nome,email:c.email||'',telefone:c.telefone||'',queixa:'',doencas:'',medicamentos:'',alergias:'',nascimento:'',genero:'',religiao:'',profissao:'',estadoCivil:'',endereco:'',cidade:'',estado:'',cep:'',contatoEmerg:'',telEmerg:'',tempoQueixa:'',intensidade:'',melhora:'',piora:'',tratAnterior:'',cirurgias:'',histFamiliar:'',gestante:'',semanas:'',sono:'',horasSono:'',alimentacao:'',agua:'',ativFisica:'',tipoAtiv:'',tabagismo:'',alcool:'',estresse:'',obsHabitos:'',lingua:'',pulso:'',meridianos:'',diagMTC:'',pontos:'',obsAcup:'',postura:'',regiao:'',vertebras:'',amplitude:'',testes:'',ajustes:'',obsQuiro:'',demandaPsi:'',estadoEmocional:'',histEmocional:'',relacoes:'',notasPsi:'',encamPsi:'',fitoterapia:'',contraFito:'',seitaiAval:'',seitaiTec:'',obsGeral:''}));
+
+  // Inserir em lotes direto no Supabase
   for(let i=0;i<novos.length;i+=LOTE_INSERT){
     const lote=novos.slice(i,i+LOTE_INSERT);
     const rows=lote.map(item=>({'user_id':'montgomery','dados':item}));
     const ok=await supaReq('POST','pacientes',rows);
-    if(!ok){erros++;console.error(`Erro no lote ${i}-${i+LOTE_INSERT}`);}
+    if(!ok){erros++;console.error(`Erro lote ${i}`);}
     else importados+=lote.length;
     if(prog)prog.innerHTML=`<div style="background:var(--pri-l);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--pri-d)">
       ☁️ Salvando... <strong>${importados.toLocaleString()}</strong> de <strong>${novos.length.toLocaleString()}</strong>
@@ -1691,21 +1687,20 @@ async function impVCF(){
         <div style="background:var(--pri);height:6px;border-radius:4px;width:${Math.round(importados/novos.length*100)}%"></div>
       </div>
     </div>`;
-    await new Promise(r=>setTimeout(r,50));
+    await new Promise(r=>setTimeout(r,30));
   }
 
-  // Recarregar cache do Supabase
+  // Recarregar cache
   delete _cache['pacientes'];
   await dbGet('pacientes');
-
   if(prog)prog.innerHTML='';
   document.getElementById('vcfRes').innerHTML='';
   _pacPag=0;
   renderP();atuDash();
   if(erros>0){
-    toast(`⚠️ ${importados.toLocaleString()} importados, ${erros} lotes com erro.`,'#EF6C00');
+    toast(`⚠️ ${importados.toLocaleString()} importados, ${erros} lotes falharam.`,'#EF6C00');
   } else {
-    toast(`✅ ${importados.toLocaleString()} contatos importados com sucesso!`);
+    toast(`✅ ${importados.toLocaleString()} contatos importados!`);
   }
 }
 
