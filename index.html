@@ -537,8 +537,14 @@ tr:hover td{background:#EEF2F7}
       <div class="fg">
         <label>Paciente</label>
         <div style="position:relative">
-          <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none">🔍</span>
-          <select id="rxPac" style="padding-left:32px"><option value="">Selecione o paciente</option></select>
+          <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none;z-index:1">🔍</span>
+          <input type="text" id="rxPacBusca" placeholder="Digite o nome do paciente..." 
+            style="padding-left:32px;width:100%" 
+            oninput="filtrarRxPac()" 
+            onblur="fecharRxPacLista()"
+            autocomplete="off">
+          <input type="hidden" id="rxPacId">
+          <div id="rxPacLista" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--cream);border:1px solid var(--brd);border-radius:0 0 7px 7px;box-shadow:var(--shadow);z-index:200;max-height:220px;overflow-y:auto"></div>
         </div>
       </div>
       <div class="fg"><label>Data</label><input type="date" id="rxDt"></div>
@@ -1367,10 +1373,37 @@ function expICS(){
 }
 
 // ===== PRESCRIÇÃO =====
+// Estado do paciente selecionado na prescrição
+let _rxPacSel=null;
+
 function carregarRxSel(){
-  document.getElementById('rxPac').innerHTML='<option value="">Selecione o paciente</option>'+
-    gD('pacientes').map(p=>`<option value="${p.id}">${p.nome}</option>`).join('');
+  _rxPacSel=null;
+  document.getElementById('rxPacBusca').value='';
+  document.getElementById('rxPacId').value='';
+  document.getElementById('rxPacLista').style.display='none';
 }
+
+function filtrarRxPac(){
+  const q=document.getElementById('rxPacBusca').value.toLowerCase().trim();
+  const lista=document.getElementById('rxPacLista');
+  if(!q){lista.style.display='none';_rxPacSel=null;document.getElementById('rxPacId').value='';return;}
+  const pacs=gD('pacientes').filter(p=>p.nome.toLowerCase().includes(q)).slice(0,12);
+  if(!pacs.length){lista.innerHTML='<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Nenhum paciente encontrado</div>';lista.style.display='block';return;}
+  lista.innerHTML=pacs.map(p=>`<div onclick="selecionarRxPac('${p.id}','${p.nome.replace(/'/g,"\\'")}','${(p.telefone||'').replace(/'/g,"\\'")}'')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${p.nome}${p.telefone?`<span style="color:var(--txt-l);font-size:11px;margin-left:8px">${p.telefone}</span>`:''}</div>`).join('');
+  lista.style.display='block';
+}
+
+function selecionarRxPac(id,nome,tel){
+  _rxPacSel={id,nome,telefone:tel};
+  document.getElementById('rxPacBusca').value=nome;
+  document.getElementById('rxPacId').value=id;
+  document.getElementById('rxPacLista').style.display='none';
+}
+
+function fecharRxPacLista(){
+  setTimeout(()=>document.getElementById('rxPacLista').style.display='none',200);
+}
+
 function addPlanta(){
   const d=document.getElementById('rxPlantas');
   const it=document.createElement('div');it.className='rx-p';
@@ -1383,12 +1416,24 @@ function addPlanta(){
 }
 
 function gerarHtmlRx(){
-  const pac=gD('pacientes').find(p=>p.id===parseInt(v('rxPac')));
+  // Buscar paciente pelo estado _rxPacSel ou pelo ID salvo
+  let pac=_rxPacSel;
+  if(!pac){
+    const idSalvo=document.getElementById('rxPacId').value;
+    const nomeSalvo=document.getElementById('rxPacBusca').value;
+    if(idSalvo){
+      // Buscar por ID (comparação string para evitar problema de float)
+      pac=gD('pacientes').find(p=>String(p.id)===String(idSalvo));
+    }
+    if(!pac&&nomeSalvo){
+      pac={nome:nomeSalvo,telefone:''};
+    }
+  }
   const cfgData=getCfg();
   const ter=cfgData.ter||'Montgomery Magalhães';
   const reg=cfgData.reg||'';
   const tel=cfgData.tel||'';
-  const end=cfgData.end||'R. Miro Ferreira de Oliveira, 110 - Itambacuri - MG';
+  const end=cfgData.end||'R. Miro Ferreira de Oliveira, 110 - Adelaide Bessa, Itambacuri - MG, 39.830-000, Brasil';
   const logo=cfgData.logo||'';
   const rod=cfgData.rxRod||'Em caso de reação adversa, suspenda o uso e entre em contato.';
   const dt=v('rxDt');
@@ -1480,8 +1525,8 @@ function carregarHtml2Canvas(){
 }
 
 async function exportarRxJpg(){
-  const pac=gD('pacientes').find(p=>p.id===parseInt(v('rxPac')));
-  const nome=(pac?pac.nome:'recomendacao').replace(/\s+/g,'_').toLowerCase();
+  const pac=_rxPacSel||{nome:'recomendacao'};
+  const nome=(pac.nome).replace(/\s+/g,'_').toLowerCase();
   toast('⏳ Gerando imagem...');
   await carregarHtml2Canvas();
   const el=document.getElementById('rxPrevC');
@@ -1494,8 +1539,8 @@ async function exportarRxJpg(){
 }
 
 async function compartilharRx(){
-  const pac=gD('pacientes').find(p=>p.id===parseInt(v('rxPac')));
-  const nome=(pac?pac.nome:'recomendacao').replace(/\s+/g,'_').toLowerCase();
+  const pac=_rxPacSel||{nome:'recomendacao',telefone:''};
+  const nome=(pac.nome).replace(/\s+/g,'_').toLowerCase();
   toast('⏳ Preparando...');
   await carregarHtml2Canvas();
   const el=document.getElementById('rxPrevC');
@@ -1520,7 +1565,7 @@ async function compartilharRx(){
 }
 
 function enviarWhatsApp(){
-  const pac=gD('pacientes').find(p=>p.id===parseInt(v('rxPac')));
+  const pac=_rxPacSel||gD('pacientes').find(p=>String(p.id)===String(document.getElementById('rxPacId').value));
   if(!pac){toast('⚠️ Selecione um paciente','#EF6C00');return;}
   const tel=(pac.telefone||'').replace(/\D/g,'');
   if(!tel){toast('⚠️ Paciente sem telefone cadastrado','#EF6C00');return;}
