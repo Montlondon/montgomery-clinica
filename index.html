@@ -220,9 +220,11 @@ tr:hover td{background:#EEF2F7}
 .rx-print{display:none}
 @media print{
   .sidebar,.menu-btn,.bnav,.no-print,.mov,.toast,.sid-ov,.site-footer{display:none!important}
-  .main{margin:0;padding:0}.rx-print{display:block;width:100%}
+  .main{margin:0;padding:0}.rx-print{display:block!important;width:100%}
+  /* Esconder TUDO exceto o documento impresso */
+  #pg-prescricao .fc,#pg-prescricao .page-header,#pg-prescricao .fa{display:none!important}
   @page{margin:10mm 12mm;size:A4;margin-header:0;margin-footer:0}
-  body{background:#fff}
+  body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 
 /* RESPONSIVE */
@@ -263,7 +265,7 @@ tr:hover td{background:#EEF2F7}
     <div class="sep"></div>
     <a onclick="go('nova-sessao',this)"><span class="icon">📝</span>Nova Sessão</a>
     <a onclick="go('agenda',this)"><span class="icon">📅</span>Agenda</a>
-    <a onclick="go('prescricao',this)"><span class="icon">🌿</span>Prescrição</a>
+    <a onclick="go('prescricao',this)"><span class="icon">🌿</span>Recomendação Terapêutica</a>
     <div class="sep"></div>
     <a onclick="go('financeiro',this)"><span class="icon">💰</span>Financeiro</a>
     <div class="sep"></div>
@@ -529,9 +531,18 @@ tr:hover td{background:#EEF2F7}
 
 <!-- ===== PRESCRIÇÃO ===== -->
 <section class="page" id="pg-prescricao">
-  <div class="page-header"><h1>🌿 Prescrição Fitoterápica</h1></div>
-  <div class="fc">
-    <div class="fr"><div class="fg"><label>Paciente</label><select id="rxPac"><option value="">Selecione</option></select></div><div class="fg"><label>Data</label><input type="date" id="rxDt"></div></div>
+  <div class="page-header"><h1>🌿 Recomendação Terapêutica</h1></div>
+  <div class="fc no-print">
+    <div class="fr">
+      <div class="fg">
+        <label>Paciente</label>
+        <div style="position:relative">
+          <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none">🔍</span>
+          <select id="rxPac" style="padding-left:32px"><option value="">Selecione o paciente</option></select>
+        </div>
+      </div>
+      <div class="fg"><label>Data</label><input type="date" id="rxDt"></div>
+    </div>
     <div class="fst" style="margin-top:4px">🌱 Plantas / Substâncias</div>
     <div id="rxPlantas">
       <div class="rx-p" style="padding:10px;background:var(--pri-l);border-radius:7px;margin-bottom:8px">
@@ -540,18 +551,21 @@ tr:hover td{background:#EEF2F7}
         <div class="fr full"><div class="fg"><label>Instruções</label><input type="text" class="rxIn"></div></div>
       </div>
     </div>
-    <button type="button" class="btn btn-sec btn-sm no-print" onclick="addPlanta()" style="margin-bottom:12px">➕ Planta</button>
+    <button type="button" class="btn btn-sec btn-sm" onclick="addPlanta()" style="margin-bottom:12px">➕ Planta</button>
     <div class="fr"><div class="fg"><label>Duração geral</label><input type="text" id="rxDurG"></div><div class="fg"><label>Retorno em</label><input type="text" id="rxRet"></div></div>
     <div class="fr full"><div class="fg"><label>Observações</label><textarea id="rxObs" rows="2"></textarea></div></div>
-    <div class="fa no-print">
+    <div class="fa">
       <button type="button" class="btn btn-sec" onclick="gerarRx()">👁️ Visualizar</button>
       <button type="button" class="btn btn-pri" onclick="imprimirRx()">🖨️ Imprimir</button>
     </div>
   </div>
   <div class="fc no-print" id="rxPrev" style="display:none">
     <div id="rxPrevC"></div>
-    <div style="display:flex;gap:7px;justify-content:flex-end;margin-top:12px">
+    <div style="display:flex;gap:7px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap">
       <button class="btn btn-sec btn-sm" onclick="document.getElementById('rxPrev').style.display='none'">Fechar</button>
+      <button class="btn btn-war btn-sm" onclick="exportarRxJpg()">📸 Exportar JPG</button>
+      <button class="btn btn-sm" onclick="compartilharRx()" style="background:#25D366;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">📤 Compartilhar</button>
+      <button class="btn btn-wa btn-sm" onclick="enviarWhatsApp()">💬 WhatsApp</button>
       <button class="btn btn-pri btn-sm" onclick="imprimirRx()">🖨️ Imprimir</button>
     </div>
   </div>
@@ -623,7 +637,7 @@ tr:hover td{background:#EEF2F7}
   </div>
 
   <div class="cfg-section">
-    <h3>🎨 Informações para Prescrição</h3>
+    <h3>🎨 Informações para Recomendação Terapêutica</h3>
     <p style="font-size:12px;color:var(--txt-l);margin-bottom:10px">Estas informações aparecem automaticamente em todas as prescrições.</p>
     <div class="fr"><div class="fg"><label>Texto do rodapé da prescrição</label><input type="text" id="cfgRxRod" value="Em caso de reação adversa, suspenda o uso e entre em contato."></div><div class="fg"><label>Observação padrão</label><input type="text" id="cfgRxObs" placeholder="Texto padrão de observação..."></div></div>
   </div>
@@ -1259,25 +1273,14 @@ function verEvento(id){
       <div class="pi"><strong>Status</strong><span class="badge ${bc}">${bt}</span></div>
     </div>
     ${s.notas?`<div style="background:var(--beige);border-radius:6px;padding:8px;font-size:12px;margin-bottom:12px"><strong>📝 Notas:</strong><br>${s.notas}</div>`:''}
-    ${end?`<div style="margin-bottom:12px;border:1px solid var(--brd);border-radius:8px;overflow:hidden">
-      <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(end)}" target="_blank" style="display:block;text-decoration:none">
-        <div style="background:var(--pri-l);padding:10px 14px;display:flex;align-items:center;gap:10px">
-          <span style="font-size:22px">📍</span>
-          <div>
-            <div style="font-size:12px;font-weight:700;color:var(--pri-d)">Ver no Google Maps</div>
-            <div style="font-size:11px;color:var(--txt-l)">${end}</div>
-          </div>
-          <span style="margin-left:auto;color:var(--pri);font-size:18px">↗️</span>
-        </div>
-        <img src="https://maps.googleapis.com/maps/api/staticmap?center=${encodeURIComponent(end)}&zoom=16&size=600x200&markers=color:red|${encodeURIComponent(end)}&key=AIzaSyD-placeholder" 
-          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
-          style="width:100%;height:160px;object-fit:cover;display:block">
-        <div style="display:none;height:120px;align-items:center;justify-content:center;background:#f0f4f8;flex-direction:column;gap:6px">
-          <span style="font-size:32px">🗺️</span>
-          <span style="font-size:12px;color:var(--txt-l)">Toque para abrir no Maps</span>
-        </div>
-      </a>
-    </div>`:''}
+    ${end?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(end)}" target="_blank" style="display:flex;align-items:center;gap:12px;background:var(--pri-l);border:1px solid var(--brd);border-radius:8px;padding:12px 14px;margin-bottom:12px;text-decoration:none">
+      <span style="font-size:28px">📍</span>
+      <div style="flex:1">
+        <div style="font-size:12px;font-weight:700;color:var(--pri-d)">Abrir no Google Maps</div>
+        <div style="font-size:11px;color:var(--txt-l);margin-top:2px">${end}</div>
+      </div>
+      <span style="color:var(--pri);font-size:20px">↗️</span>
+    </a>`:''}
     <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
       ${wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm">💬 WhatsApp</a>`:''}
       <button class="btn btn-cal btn-sm" onclick="abrirGA(gD('sessoes').find(x=>x.id===${s.id}))">📅 Agenda</button>
@@ -1428,7 +1431,7 @@ function gerarHtmlRx(){
       <span style="font-size:11pt;font-weight:700;color:#1B5E20">${pac?pac.nome:'—'}</span>
     </div>
 
-    <div style="text-align:center;font-size:9pt;font-weight:700;color:#1B5E20;letter-spacing:.8px;margin-bottom:8px;border-top:1px dashed #bbb;border-bottom:1px dashed #bbb;padding:4px 0;text-transform:uppercase">Prescrição Fitoterápica</div>
+    <div style="text-align:center;font-size:9pt;font-weight:700;color:#1B5E20;letter-spacing:.8px;margin-bottom:8px;border-top:1px dashed #bbb;border-bottom:1px dashed #bbb;padding:4px 0;text-transform:uppercase">Recomendação Terapêutica</div>
 
     <table style="width:100%;border-collapse:collapse;margin-bottom:8px">${pl||'<tr><td style="color:#999;font-style:italic;padding:6px">Nenhuma planta adicionada.</td></tr>'}</table>
 
@@ -1457,8 +1460,78 @@ function gerarRx(){
   document.getElementById('rxPrev').scrollIntoView({behavior:'smooth'});
 }
 function imprimirRx(){
-  document.getElementById('rxPrintA').innerHTML=gerarHtmlRx();
-  setTimeout(()=>{window.print();setTimeout(()=>{document.getElementById('rxPrintA').innerHTML='';},600);},300);
+  const win=window.open('','_blank','width=800,height=900');
+  win.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Recomendação Terapêutica</title>
+  <style>@page{margin:10mm 12mm;size:A4}body{margin:0;padding:12px;background:#fff;font-family:Georgia,serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}</style>
+  </head><body>${gerarHtmlRx()}</body></html>`);
+  win.document.close();win.focus();
+  setTimeout(()=>{win.print();setTimeout(()=>win.close(),800);},400);
+}
+
+// Carregar html2canvas dinamicamente
+function carregarHtml2Canvas(){
+  return new Promise((res,rej)=>{
+    if(window.html2canvas){res();return;}
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    s.onload=res;s.onerror=rej;
+    document.head.appendChild(s);
+  });
+}
+
+async function exportarRxJpg(){
+  const pac=gD('pacientes').find(p=>p.id===parseInt(v('rxPac')));
+  const nome=(pac?pac.nome:'recomendacao').replace(/\s+/g,'_').toLowerCase();
+  toast('⏳ Gerando imagem...');
+  await carregarHtml2Canvas();
+  const el=document.getElementById('rxPrevC');
+  const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#FDFAF6'});
+  const link=document.createElement('a');
+  link.download=`recomendacao_${nome}.jpg`;
+  link.href=canvas.toDataURL('image/jpeg',0.92);
+  link.click();
+  toast('📸 JPG salvo!');
+}
+
+async function compartilharRx(){
+  const pac=gD('pacientes').find(p=>p.id===parseInt(v('rxPac')));
+  const nome=(pac?pac.nome:'recomendacao').replace(/\s+/g,'_').toLowerCase();
+  toast('⏳ Preparando...');
+  await carregarHtml2Canvas();
+  const el=document.getElementById('rxPrevC');
+  const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#FDFAF6'});
+  canvas.toBlob(async blob=>{
+    const file=new File([blob],`recomendacao_${nome}.jpg`,{type:'image/jpeg'});
+    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+      try{
+        await navigator.share({title:'Recomendação Terapêutica',text:`Recomendação de ${pac?pac.nome:''}`,files:[file]});
+        toast('✅ Compartilhado!');
+      }catch(e){
+        if(e.name!=='AbortError')toast('⚠️ Erro ao compartilhar','#EF6C00');
+      }
+    } else {
+      // Fallback: baixar o arquivo
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');a.href=url;a.download=`recomendacao_${nome}.jpg`;a.click();
+      URL.revokeObjectURL(url);
+      toast('📸 Imagem baixada (compartilhamento não suportado neste dispositivo)','#EF6C00');
+    }
+  },'image/jpeg',0.92);
+}
+
+function enviarWhatsApp(){
+  const pac=gD('pacientes').find(p=>p.id===parseInt(v('rxPac')));
+  if(!pac){toast('⚠️ Selecione um paciente','#EF6C00');return;}
+  const tel=(pac.telefone||'').replace(/\D/g,'');
+  if(!tel){toast('⚠️ Paciente sem telefone cadastrado','#EF6C00');return;}
+  const msg=encodeURIComponent(
+    `Olá ${pac.nome}! 👋\n\n`+
+    `Segue sua Recomendação Terapêutica da *Montgomery Magalhães - Saúde Integrativa*.\n\n`+
+    `📅 Data: ${v('rxDt')?new Date(v('rxDt')+'T12:00:00').toLocaleDateString('pt-BR'):new Date().toLocaleDateString('pt-BR')}\n\n`+
+    `Em caso de dúvidas, entre em contato. 🌿`
+  );
+  const numero=tel.startsWith('55')?tel:'55'+tel;
+  window.open(`https://wa.me/${numero}?text=${msg}`,'_blank');
 }
 
 // ===== CONFIGURAÇÕES =====
