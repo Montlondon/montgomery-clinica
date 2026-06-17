@@ -337,6 +337,7 @@ tr:hover td{background:#EEF2F7}
       <button onclick="showTab('tps',this)">🟣 Psic.</button>
       <button onclick="showTab('tc',this)">🌿 Complem.</button>
       <button onclick="showTab('tex',this)">🖼️ Exames</button>
+      <button onclick="showTab('trx',this)">🌿 Recomendações</button>
     </div>
     <form id="fPac" onsubmit="salvarPac(event)">
       <div class="tab-panel active" id="tp">
@@ -422,6 +423,11 @@ tr:hover td{background:#EEF2F7}
         <div class="ex-grid" id="exGrid"><div class="ex-add" onclick="document.getElementById('exInp').click()"><span style="font-size:24px">➕</span><span>Adicionar</span></div></div>
         <input type="file" id="exInp" style="display:none" accept="image/*" multiple onchange="addExames(this)">
         <div style="margin-top:11px;padding:9px;background:var(--pri-l);border-radius:6px;font-size:11.5px;color:var(--txt-l)">💡 Máx 5MB por imagem. Clique para ampliar.</div>
+      </div>
+      <div class="tab-panel" id="trx">
+        <div class="fst">🌿 Histórico de Recomendações Terapêuticas</div>
+        <p style="font-size:12px;color:var(--txt-l);margin-bottom:11px">Todas as recomendações já feitas para este paciente. Duplique uma antiga para agilizar um novo atendimento.</p>
+        <div id="rxHistLista"><div style="text-align:center;color:var(--txt-l);padding:20px;font-size:13px">Nenhuma recomendação registrada ainda.</div></div>
       </div>
       <div style="margin-top:13px;padding:10px;background:var(--pri-l);border-radius:6px">
         <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px">
@@ -803,8 +809,8 @@ async function supaReq(method,table,body=null,params=''){
 // Cache local para performance
 let _cache={};
 
-async function dbGet(tabela){
-  if(_cache[tabela])return _cache[tabela];
+async function dbGet(tabela,forcar=false){
+  if(_cache[tabela]&&!forcar)return _cache[tabela];
   // Buscar em páginas de 1000 (limite do Supabase)
   let todos=[];
   let offset=0;
@@ -832,6 +838,21 @@ async function dbSet(tabela,lista){
   }
 }
 
+// Inserir UM registro sem reescrever a tabela inteira (rápido e seguro)
+async function dbAdd(tabela,item){
+  if(!_cache[tabela])_cache[tabela]=[];
+  _cache[tabela].push(item);
+  await supaReq('POST',tabela,[{'user_id':'montgomery','dados':item}]);
+}
+
+// Recarregar tudo do banco e atualizar a tela (chamar após qualquer mudança importante)
+async function syncTudo(){
+  await Promise.all([dbGet('pacientes',true),dbGet('sessoes',true)]);
+  if(document.getElementById('cntP'))renderP();
+  if(document.getElementById('pg-dashboard'))atuDash();
+  if(document.getElementById('pg-financeiro'))atuFin();
+}
+
 // Compatibilidade: versões síncronas usam cache
 const gD=k=>_cache[k]||[];
 const sD=(k,v)=>{_cache[k]=v;dbSet(k,v);};
@@ -842,7 +863,7 @@ const sC=(k,v)=>localStorage.setItem(k,v);
 async function initDB(){
   showLoading(true);
   try{
-    await Promise.all([dbGet('pacientes'),dbGet('sessoes')]);
+    await Promise.all([dbGet('pacientes',true),dbGet('sessoes',true)]);
   }catch(e){
     console.error('Erro Supabase:',e);
     toast('⚠️ Erro ao conectar ao banco. Tente recarregar.','#EF6C00');
@@ -921,6 +942,7 @@ function showTab(id,btn){
   document.querySelectorAll('#mTabs button').forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
+  if(id==='trx'&&editId)carregarRxHistPac(editId);
 }
 
 // ===== SAVE STATUS =====
@@ -1013,13 +1035,28 @@ function preencherForm(p){
 }
 
 // ===== SALVAR PACIENTE =====
-function salvarPac(e){
+async function salvarPac(e){
   e.preventDefault();
-  const d=coletarDados();d.id=editId||Date.now();d.dataCadastro=new Date().toLocaleDateString('pt-BR');d.foto=fotoB64;d.exames=exTemp;
-  let pacs=gD('pacientes');
-  if(editId){pacs=pacs.map(x=>x.id===editId?d:x);toast('✅ Paciente atualizado!');}
-  else{pacs.push(d);toast('✅ Paciente cadastrado!');}
-  sD('pacientes',pacs);localStorage.removeItem('rascunho');limparForm();go('pacientes',null);
+  const d=coletarDados();d.id=editId||(Date.now()+Math.random());d.dataCadastro=new Date().toLocaleDateString('pt-BR');d.foto=fotoB64;d.exames=exTemp;
+  const pacs=gD('pacientes');
+  if(editId){
+    // Atualizar: editar só este paciente no Supabase
+    const idx=pacs.findIndex(x=>String(x.id)===String(editId));
+    if(idx>=0)pacs[idx]=d;else pacs.push(d);
+    _cache['pacientes']=pacs;
+    await supaReq('DELETE','pacientes',null,`?dados->>id=eq.${editId}`);
+    await supaReq('POST','pacientes',[{'user_id':'montgomery','dados':d}]);
+    toast('✅ Paciente atualizado!');
+  } else {
+    // Novo: apenas adicionar, sem reescrever a tabela inteira
+    pacs.push(d);
+    _cache['pacientes']=pacs;
+    await supaReq('POST','pacientes',[{'user_id':'montgomery','dados':d}]);
+    toast('✅ Paciente cadastrado!');
+  }
+  localStorage.removeItem('rascunho');limparForm();
+  renderP();atuDash();
+  go('pacientes',null);
 }
 function limparForm(){
   document.getElementById('fPac').reset();remFoto();fotoB64='';editId=null;exTemp=[];
@@ -1038,13 +1075,15 @@ function filtrarP(){
 }
 async function delPac(id){
   if(!confirm('Excluir este paciente permanentemente?'))return;
-  const pacs=gD('pacientes').filter(p=>p.id!==id);
-  await dbSet('pacientes',pacs);renderP();toast('🗑️ Removido','#c62828');atuDash();
+  const pacs=gD('pacientes').filter(p=>String(p.id)!==String(id));
+  _cache['pacientes']=pacs;
+  await supaReq('DELETE','pacientes',null,`?dados->>id=eq.${id}`);
+  renderP();toast('🗑️ Removido','#c62828');atuDash();
 }
 
 // ===== VER PACIENTE =====
 function verPac(id){
-  const p=gD('pacientes').find(x=>x.id===id);if(!p)return;
+  const p=gD('pacientes').find(x=>String(x.id)===String(id));if(!p)return;
   const fH=p.foto?`<img src="${p.foto}">`:'👤';
   const wa=waUrl(p.telefone);
   const c=(l,val)=>val?`<div class="pi"><strong>${l}</strong><span>${val}</span></div>`:'';
@@ -1067,14 +1106,14 @@ function verPac(id){
     <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:13px;flex-wrap:wrap">
       ${wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm">💬</a>`:''}
       <button class="btn btn-sec btn-sm" onclick="fMod()">Fechar</button>
-      <button class="btn btn-pri btn-sm" onclick="fMod();editarPac(${p.id})">✏️ Editar</button>
+      <button class="btn btn-pri btn-sm" onclick="fMod();editarPac('${p.id}')">✏️ Editar</button>
     </div>`;
   document.getElementById('modP').classList.add('show');
 }
 function fMod(){document.getElementById('modP').classList.remove('show');}
 function editarPac(id){
-  const p=gD('pacientes').find(x=>x.id===id);if(!p)return;
-  editId=id;go('novo-paciente',null);
+  const p=gD('pacientes').find(x=>String(x.id)===String(id));if(!p)return;
+  editId=p.id;go('novo-paciente',null);
   document.getElementById('fTit').textContent='✏️ '+p.nome;
   setTimeout(()=>{preencherForm(p);toast('✏️ Editando paciente','#1565C0');},80);
 }
@@ -1091,13 +1130,13 @@ function renderPS(pacs){
   if(!pacs.length){l.innerHTML='<div style="padding:11px;color:var(--txt-l);font-size:13px;text-align:center">Nenhum paciente encontrado</div>';return;}
   l.innerHTML=pacs.map(p=>{
     const fH=p.foto?`<div class="ps-foto"><img src="${p.foto}"></div>`:`<div class="ps-foto">👤</div>`;
-    return`<div class="ps-item" onclick="selPS(${p.id})">${fH}<div><span style="font-weight:600">${p.nome}</span><small style="display:block;font-size:11px;color:var(--txt-l)">${p.telefone||'Sem telefone'}</small></div></div>`;
+    return`<div class="ps-item" onclick="selPS('${p.id}')">${fH}<div><span style="font-weight:600">${p.nome}</span><small style="display:block;font-size:11px;color:var(--txt-l)">${p.telefone||'Sem telefone'}</small></div></div>`;
   }).join('');
 }
 function filtrarPS(){renderPS(gD('pacientes').filter(p=>p.nome.toLowerCase().includes(document.getElementById('psBusca').value.toLowerCase())));abrirPS();}
 function abrirPS(){document.getElementById('psLista').classList.add('open');}
 function selPS(id){
-  const p=gD('pacientes').find(x=>x.id===id);if(!p)return;
+  const p=gD('pacientes').find(x=>String(x.id)===String(id));if(!p)return;
   document.getElementById('psId').value=id;
   document.getElementById('psBusca').value=p.nome;
   document.getElementById('psLista').classList.remove('open');
@@ -1116,44 +1155,53 @@ document.addEventListener('click',e=>{
 });
 
 // ===== SESSÃO =====
-function salvarSessao(e){
+async function salvarSessao(e){
   e.preventDefault();
-  const pacId=parseInt(document.getElementById('psId').value);
-  if(!pacId){toast('⚠️ Selecione um paciente!','#EF6C00');return;}
+  const pacIdRaw=document.getElementById('psId').value;
+  if(!pacIdRaw){toast('⚠️ Selecione um paciente!','#EF6C00');return;}
   const pacs=gD('pacientes');
-  const pac=pacs.find(p=>p.id===pacId)||pacs.find(p=>p.id==pacId);
+  const pac=pacs.find(p=>String(p.id)===String(pacIdRaw));
   const nomePac=pac?pac.nome:document.getElementById('psBusca').value||'';
   if(!nomePac){toast('⚠️ Paciente não encontrado!','#EF6C00');return;}
-  const dados={pacienteId:pacId,pacienteNome:nomePac,pacienteTel:pac?pac.telefone:'',data:v('sData'),horario:v('sHor'),procedimentos:v('sProc'),notas:v('sNot'),valor:parseFloat(v('sVal'))||0,formaPgto:v('sFPg'),status:v('sSt')};
-  let ss=gD('sessoes');
+  const dados={pacienteId:pacIdRaw,pacienteNome:nomePac,pacienteTel:pac?pac.telefone:'',data:v('sData'),horario:v('sHor'),procedimentos:v('sProc'),notas:v('sNot'),valor:parseFloat(v('sVal'))||0,formaPgto:v('sFPg'),status:v('sSt')};
+  const ss=gD('sessoes');
   if(window._editSessId){
-    // Atualizar sessão existente
-    ss=ss.map(s=>s.id===window._editSessId?{...s,...dados}:s);
+    const idx=ss.findIndex(s=>s.id===window._editSessId);
+    if(idx>=0){
+      ss[idx]={...ss[idx],...dados};
+      await supaReq('DELETE','sessoes',null,`?dados->>id=eq.${window._editSessId}`);
+      await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':ss[idx]}]);
+    }
     window._editSessId=null;
     toast('✅ Sessão atualizada!');
   } else {
-    ss.push({id:Date.now(),...dados});
+    const nova={id:Date.now(),...dados};
+    ss.push(nova);
+    await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':nova}]);
     toast('✅ Sessão registrada!');
   }
-  sD('sessoes',ss);
+  _cache['sessoes']=ss;
   e.target.reset();
   document.getElementById('sData').value=new Date().toISOString().split('T')[0];
-  iniciarPS();go('agenda',null);
+  iniciarPS();atuFin();atuDash();
+  go('agenda',null);
 }
-function salvarEGoogle(){
-  const pacId=parseInt(document.getElementById('psId').value);
-  if(!pacId){toast('⚠️ Selecione um paciente!','#EF6C00');return;}
+async function salvarEGoogle(){
+  const pacIdRaw=document.getElementById('psId').value;
+  if(!pacIdRaw){toast('⚠️ Selecione um paciente!','#EF6C00');return;}
   if(!v('sVal')){toast('⚠️ Informe o valor!','#EF6C00');return;}
   const pacs=gD('pacientes');
-  const pac=pacs.find(p=>p.id===pacId)||pacs.find(p=>p.id==pacId);
+  const pac=pacs.find(p=>String(p.id)===String(pacIdRaw));
   const nomePac=pac?pac.nome:document.getElementById('psBusca').value||'';
   if(!nomePac){toast('⚠️ Paciente não encontrado!','#EF6C00');return;}
-  const s={id:Date.now(),pacienteId:pacId,pacienteNome:nomePac,pacienteTel:pac?pac.telefone:'',data:v('sData'),horario:v('sHor'),procedimentos:v('sProc'),notas:v('sNot'),valor:parseFloat(v('sVal'))||0,formaPgto:v('sFPg'),status:v('sSt')};
-  const ss=gD('sessoes');ss.push(s);sD('sessoes',ss);
+  const s={id:Date.now(),pacienteId:pacIdRaw,pacienteNome:nomePac,pacienteTel:pac?pac.telefone:'',data:v('sData'),horario:v('sHor'),procedimentos:v('sProc'),notas:v('sNot'),valor:parseFloat(v('sVal'))||0,formaPgto:v('sFPg'),status:v('sSt')};
+  const ss=gD('sessoes');ss.push(s);
+  _cache['sessoes']=ss;
+  await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':s}]);
   abrirGA(s);toast('✅ Salvo! Abrindo Google Agenda...');
   document.querySelector('#pg-nova-sessao form').reset();
   document.getElementById('sData').value=new Date().toISOString().split('T')[0];
-  iniciarPS();
+  iniciarPS();atuFin();atuDash();
 }
 
 // ===== FINANCEIRO =====
@@ -1279,7 +1327,7 @@ function verEvento(id){
       <div class="pi"><strong>Status</strong><span class="badge ${bc}">${bt}</span></div>
     </div>
     ${s.notas?`<div style="background:var(--beige);border-radius:6px;padding:8px;font-size:12px;margin-bottom:12px"><strong>📝 Notas:</strong><br>${s.notas}</div>`:''}
-    ${end?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(end)}" target="_blank" style="display:flex;align-items:center;gap:12px;background:var(--pri-l);border:1px solid var(--brd);border-radius:8px;padding:12px 14px;margin-bottom:12px;text-decoration:none">
+    ${end?`<a href="https://maps.google.com/?q=${encodeURIComponent(end)}" target="_blank" style="display:flex;align-items:center;gap:12px;background:var(--pri-l);border:1px solid var(--brd);border-radius:8px;padding:12px 14px;margin-bottom:12px;text-decoration:none">
       <span style="font-size:28px">📍</span>
       <div style="flex:1">
         <div style="font-size:12px;font-weight:700;color:var(--pri-d)">Abrir no Google Maps</div>
@@ -1377,9 +1425,11 @@ function expICS(){
 let _rxPacSel=null;
 
 function carregarRxSel(){
-  _rxPacSel=null;
-  document.getElementById('rxPacBusca').value='';
-  document.getElementById('rxPacId').value='';
+  // Só reseta se não houver paciente já selecionado (evita perder seleção ao navegar)
+  if(!_rxPacSel){
+    document.getElementById('rxPacBusca').value='';
+    document.getElementById('rxPacId').value='';
+  }
   document.getElementById('rxPacLista').style.display='none';
 }
 
@@ -1389,7 +1439,7 @@ function filtrarRxPac(){
   if(!q){lista.style.display='none';_rxPacSel=null;document.getElementById('rxPacId').value='';return;}
   const pacs=gD('pacientes').filter(p=>p.nome.toLowerCase().includes(q)).slice(0,12);
   if(!pacs.length){lista.innerHTML='<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Nenhum paciente encontrado</div>';lista.style.display='block';return;}
-  lista.innerHTML=pacs.map(p=>`<div onclick="selecionarRxPac('${p.id}','${p.nome.replace(/'/g,"\\'")}','${(p.telefone||'').replace(/'/g,"\\'")}'')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${p.nome}${p.telefone?`<span style="color:var(--txt-l);font-size:11px;margin-left:8px">${p.telefone}</span>`:''}</div>`).join('');
+  lista.innerHTML=pacs.map(p=>`<div onclick="selecionarRxPac('${p.id}','${p.nome.replace(/'/g,"\\'")}','${(p.telefone||'').replace(/'/g,"\\'")}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${p.nome}${p.telefone?`<span style="color:var(--txt-l);font-size:11px;margin-left:8px">${p.telefone}</span>`:''}</div>`).join('');
   lista.style.display='block';
 }
 
@@ -1500,9 +1550,11 @@ function gerarHtmlRx(){
 }
 
 function gerarRx(){
+  if(!_rxPacSel){toast('⚠️ Selecione um paciente primeiro','#EF6C00');return;}
   document.getElementById('rxPrevC').innerHTML=gerarHtmlRx();
   document.getElementById('rxPrev').style.display='block';
   document.getElementById('rxPrev').scrollIntoView({behavior:'smooth'});
+  salvarRxHistorico();
 }
 function imprimirRx(){
   const win=window.open('','_blank','width=800,height=900');
@@ -1511,6 +1563,92 @@ function imprimirRx(){
   </head><body>${gerarHtmlRx()}</body></html>`);
   win.document.close();win.focus();
   setTimeout(()=>{win.print();setTimeout(()=>win.close(),800);},400);
+}
+
+// ===== HISTÓRICO DE RECOMENDAÇÕES POR PACIENTE =====
+async function salvarRxHistorico(){
+  if(!_rxPacSel)return;
+  const plantas=[];
+  document.querySelectorAll('.rx-p').forEach(it=>{
+    const nm=it.querySelector('.rxNm').value;if(!nm)return;
+    plantas.push({nome:nm,forma:it.querySelector('.rxFm').value,dosagem:it.querySelector('.rxDs').value,freq:it.querySelector('.rxFq').value,dur:it.querySelector('.rxDu').value,inst:it.querySelector('.rxIn').value});
+  });
+  if(!plantas.length)return;
+  const rx={id:Date.now()+Math.random(),pacienteId:_rxPacSel.id,pacienteNome:_rxPacSel.nome,data:v('rxDt')||new Date().toISOString().split('T')[0],plantas,durGeral:v('rxDurG'),retorno:v('rxRet'),obs:v('rxObs')};
+  const rxs=gD('prescricoes');
+  rxs.push(rx);
+  _cache['prescricoes']=rxs;
+  await supaReq('POST','prescricoes',[{'user_id':'montgomery','dados':rx}]);
+}
+
+async function carregarRxHistPac(pacId){
+  let rxs=gD('prescricoes');
+  if(!rxs.length)rxs=await dbGet('prescricoes',true);
+  const doPac=rxs.filter(r=>String(r.pacienteId)===String(pacId)).sort((a,b)=>b.data.localeCompare(a.data));
+  const el=document.getElementById('rxHistLista');
+  if(!el)return;
+  if(!doPac.length){el.innerHTML='<div style="text-align:center;color:var(--txt-l);padding:20px;font-size:13px">Nenhuma recomendação registrada ainda.</div>';return;}
+  el.innerHTML=doPac.map(rx=>`
+    <div style="background:var(--beige);border-radius:8px;padding:12px;margin-bottom:10px;border-left:3px solid var(--pri)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;flex-wrap:wrap;gap:6px">
+        <strong style="color:var(--pri-d);font-size:13px">🌿 ${fd(rx.data)}</strong>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-sec btn-sm" onclick="duplicarRx('${rx.id}')">📋 Duplicar</button>
+          <button class="btn btn-dan btn-sm" onclick="delRxHist('${rx.id}')">🗑️</button>
+        </div>
+      </div>
+      <div style="font-size:12px;color:var(--txt)">
+        ${rx.plantas.map(p=>`<span style="display:inline-block;background:var(--pri-l);border-radius:4px;padding:2px 7px;margin:2px;font-size:11px">🌱 ${p.nome}</span>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function duplicarRx(rxId){
+  const rxs=gD('prescricoes');
+  const rx=rxs.find(r=>String(r.id)===String(rxId));
+  if(!rx)return;
+  go('prescricao',null);
+  setTimeout(()=>{
+    // Selecionar o paciente
+    selecionarRxPac(rx.pacienteId,rx.pacienteNome,'');
+    document.getElementById('rxDt').value=new Date().toISOString().split('T')[0];
+    document.getElementById('rxDurG').value=rx.durGeral||'';
+    document.getElementById('rxRet').value=rx.retorno||'';
+    document.getElementById('rxObs').value=rx.obs||'';
+    // Recriar plantas
+    const cont=document.getElementById('rxPlantas');
+    cont.innerHTML='';
+    rx.plantas.forEach((p,i)=>{
+      if(i===0){
+        cont.innerHTML=`<div class="rx-p" style="padding:10px;background:var(--pri-l);border-radius:7px;margin-bottom:8px">
+          <div class="fr"><div class="fg"><label>Planta</label><input type="text" class="rxNm" value="${p.nome}"></div><div class="fg"><label>Forma</label><select class="rxFm"><option value="">-</option><option>Chá (infusão)</option><option>Chá (decocção)</option><option>Tintura</option><option>Cápsula</option><option>Extrato seco</option><option>Pomada</option><option>Óleo essencial</option><option>Banho</option><option>Outra</option></select></div></div>
+          <div class="fr tri"><div class="fg"><label>Dosagem</label><input type="text" class="rxDs" value="${p.dosagem||''}"></div><div class="fg"><label>Frequência</label><input type="text" class="rxFq" value="${p.freq||''}"></div><div class="fg"><label>Duração</label><input type="text" class="rxDu" value="${p.dur||''}"></div></div>
+          <div class="fr full"><div class="fg"><label>Instruções</label><input type="text" class="rxIn" value="${p.inst||''}"></div></div>
+        </div>`;
+        cont.querySelector('.rxFm').value=p.forma||'';
+      } else {
+        addPlanta();
+        const items=cont.querySelectorAll('.rx-p');
+        const last=items[items.length-1];
+        last.querySelector('.rxNm').value=p.nome;
+        last.querySelector('.rxFm').value=p.forma||'';
+        last.querySelector('.rxDs').value=p.dosagem||'';
+        last.querySelector('.rxFq').value=p.freq||'';
+        last.querySelector('.rxDu').value=p.dur||'';
+        last.querySelector('.rxIn').value=p.inst||'';
+      }
+    });
+    toast('📋 Recomendação duplicada! Ajuste se necessário.');
+  },200);
+}
+
+async function delRxHist(rxId){
+  if(!confirm('Excluir esta recomendação do histórico?'))return;
+  const rxs=gD('prescricoes').filter(r=>String(r.id)!==String(rxId));
+  _cache['prescricoes']=rxs;
+  await supaReq('DELETE','prescricoes',null,`?dados->>id=eq.${rxId}`);
+  if(editId)carregarRxHistPac(editId);
+  toast('🗑️ Removido do histórico','#c62828');
 }
 
 // Carregar html2canvas dinamicamente
@@ -1970,9 +2108,9 @@ function renderP(lista){
       <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--txt-l);font-size:12px">${p.queixa||'-'}</td>
       <td style="color:var(--txt-l);font-size:12px;white-space:nowrap">${p.dataCadastro||'-'}</td>
       <td style="white-space:nowrap">
-        <button class="btn btn-inf btn-sm" onclick="verPac(${p.id})">👁️</button>
-        <button class="btn btn-sec btn-sm" onclick="editarPac(${p.id})">✏️</button>
-        <button class="btn btn-dan btn-sm" onclick="delPac(${p.id})">🗑️</button>
+        <button class="btn btn-inf btn-sm" onclick="verPac('${p.id}')">👁️</button>
+        <button class="btn btn-sec btn-sm" onclick="editarPac('${p.id}')">✏️</button>
+        <button class="btn btn-dan btn-sm" onclick="delPac('${p.id}')">🗑️</button>
       </td>
     </tr>`;
   }).join('');
