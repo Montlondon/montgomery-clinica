@@ -579,6 +579,7 @@ tr:hover td{background:#EEF2F7}
       <button class="btn btn-sm" onclick="compartilharRx()" style="background:#25D366;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">📤 Compartilhar</button>
       <button class="btn btn-wa btn-sm" onclick="enviarWhatsApp()">💬 WhatsApp</button>
       <button class="btn btn-pri btn-sm" onclick="imprimirRx()">🖨️ Imprimir</button>
+      <button class="btn btn-sm" id="btnSalvarRx" onclick="salvarRxComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700">💾 Salvar Recomendação</button>
     </div>
   </div>
   <div class="rx-print" id="rxPrintA"></div>
@@ -1026,10 +1027,26 @@ function coletarDados(){
   return{nome:v('pN'),email:v('pE'),telefone:v('pT'),nascimento:v('pNasc'),genero:v('pG'),religiao:v('pRl'),profissao:v('pPr'),estadoCivil:v('pEC'),endereco:v('pEnd'),cidade:v('pCid'),estado:v('pEst'),cep:v('pCep'),contatoEmerg:v('pCE'),telEmerg:v('pTE'),queixa:v('pQ'),tempoQueixa:v('pTQ'),intensidade:v('pInt'),melhora:v('pMlh'),piora:v('pPio'),tratAnterior:v('pTA'),doencas:v('pDo'),medicamentos:v('pMd'),alergias:v('pAl'),cirurgias:v('pCi'),histFamiliar:v('pHF'),gestante:v('pGt'),semanas:v('pSm'),sono:v('pSn'),horasSono:v('pHs'),alimentacao:v('pAlm'),agua:v('pAg'),ativFisica:v('pAF'),tipoAtiv:v('pTAF'),tabagismo:v('pTb'),alcool:v('pAc'),estresse:v('pStr'),obsHabitos:v('pOH'),lingua:v('pLg'),pulso:v('pPl'),meridianos:v('pMr'),diagMTC:v('pMTC'),pontos:v('pPts'),obsAcup:v('pOA'),postura:v('pPos'),regiao:v('pReg'),vertebras:v('pVrt'),amplitude:v('pAmp'),testes:v('pTst'),ajustes:v('pAjs'),obsQuiro:v('pOQ'),demandaPsi:v('pDm'),estadoEmocional:v('pEmo'),histEmocional:v('pHE'),relacoes:v('pRl2'),notasPsi:v('pNt'),encamPsi:v('pEnc'),fitoterapia:v('pFt'),contraFito:v('pCF'),seitaiAval:v('pSA'),seitaiTec:v('pST'),obsGeral:v('pOG')};
 }
 function preencherForm(p){
+  // Limpar SEMPRE a foto antes de preencher — evita herdar foto do paciente anterior
+  fotoB64='';
+  document.getElementById('fotoPv').src='';
+  document.getElementById('fotoPv').style.display='none';
+  document.getElementById('fotoFP').style.display='block';
+  document.getElementById('btnRmF').style.display='none';
+
   const mp={pN:p.nome,pE:p.email,pT:p.telefone,pNasc:p.nascimento,pG:p.genero,pRl:p.religiao,pPr:p.profissao,pEC:p.estadoCivil,pEnd:p.endereco,pCid:p.cidade,pEst:p.estado,pCep:p.cep,pCE:p.contatoEmerg,pTE:p.telEmerg,pQ:p.queixa,pTQ:p.tempoQueixa,pInt:p.intensidade,pMlh:p.melhora,pPio:p.piora,pTA:p.tratAnterior,pDo:p.doencas,pMd:p.medicamentos,pAl:p.alergias,pCi:p.cirurgias,pHF:p.histFamiliar,pGt:p.gestante,pSm:p.semanas,pSn:p.sono,pHs:p.horasSono,pAlm:p.alimentacao,pAg:p.agua,pAF:p.ativFisica,pTAF:p.tipoAtiv,pTb:p.tabagismo,pAc:p.alcool,pStr:p.estresse,pOH:p.obsHabitos,pLg:p.lingua,pPl:p.pulso,pMr:p.meridianos,pMTC:p.diagMTC,pPts:p.pontos,pOA:p.obsAcup,pPos:p.postura,pReg:p.regiao,pVrt:p.vertebras,pAmp:p.amplitude,pTst:p.testes,pAjs:p.ajustes,pOQ:p.obsQuiro,pDm:p.demandaPsi,pEmo:p.estadoEmocional,pHE:p.histEmocional,pRl2:p.relacoes,pNt:p.notasPsi,pEnc:p.encamPsi,pFt:p.fitoterapia,pCF:p.contraFito,pSA:p.seitaiAval,pST:p.seitaiTec,pOG:p.obsGeral};
   Object.keys(mp).forEach(k=>{const e=document.getElementById(k);if(e&&mp[k])e.value=mp[k];});
-  if(p.foto){fotoB64=p.foto;document.getElementById('fotoPv').src=p.foto;document.getElementById('fotoPv').style.display='block';document.getElementById('fotoFP').style.display='none';document.getElementById('btnRmF').style.display='inline-flex';}
-  if(p.exames){exTemp=[...p.exames];renderEx();}
+
+  // Carregar foto APENAS se este paciente específico tiver uma (validação estrita)
+  if(p.foto&&String(p.foto).length>0){
+    fotoB64=p.foto;
+    document.getElementById('fotoPv').src=p.foto;
+    document.getElementById('fotoPv').style.display='block';
+    document.getElementById('fotoFP').style.display='none';
+    document.getElementById('btnRmF').style.display='inline-flex';
+  }
+
+  exTemp=p.exames?[...p.exames]:[];renderEx();
   if(p.telefone)atuWA();
   document.getElementById('pCons').checked=true;
 }
@@ -1445,6 +1462,7 @@ function filtrarRxPac(){
 
 function selecionarRxPac(id,nome,tel){
   _rxPacSel={id,nome,telefone:tel};
+  _rxJaSalvo=false; // nova seleção = nova recomendação, libera salvamento
   document.getElementById('rxPacBusca').value=nome;
   document.getElementById('rxPacId').value=id;
   document.getElementById('rxPacLista').style.display='none';
@@ -1455,6 +1473,7 @@ function fecharRxPacLista(){
 }
 
 function addPlanta(){
+  _rxJaSalvo=false;
   const d=document.getElementById('rxPlantas');
   const it=document.createElement('div');it.className='rx-p';
   it.style.cssText='padding:10px;background:var(--pri-l);border-radius:7px;margin-bottom:8px;position:relative';
@@ -1554,7 +1573,6 @@ function gerarRx(){
   document.getElementById('rxPrevC').innerHTML=gerarHtmlRx();
   document.getElementById('rxPrev').style.display='block';
   document.getElementById('rxPrev').scrollIntoView({behavior:'smooth'});
-  salvarRxHistorico();
 }
 function imprimirRx(){
   const win=window.open('','_blank','width=800,height=900');
@@ -1566,6 +1584,24 @@ function imprimirRx(){
 }
 
 // ===== HISTÓRICO DE RECOMENDAÇÕES POR PACIENTE =====
+let _rxJaSalvo=false; // evita salvar a mesma recomendação duas vezes na mesma sessão de preview
+
+async function salvarRxComProtecao(btn){
+  if(!_rxPacSel){toast('⚠️ Selecione um paciente primeiro','#EF6C00');return;}
+  if(_rxJaSalvo){toast('ℹ️ Esta recomendação já foi salva. Gere uma nova para salvar novamente.','#1565C0');return;}
+  // Desabilita o botão por 1 segundo para evitar duplo clique
+  btn.disabled=true;
+  const textoOriginal=btn.textContent;
+  btn.textContent='💾 Salvando...';
+  btn.style.opacity='0.6';
+  await salvarRxHistorico();
+  setTimeout(()=>{
+    btn.disabled=false;
+    btn.textContent=textoOriginal;
+    btn.style.opacity='1';
+  },1000);
+}
+
 async function salvarRxHistorico(){
   if(!_rxPacSel)return;
   const plantas=[];
@@ -1573,12 +1609,14 @@ async function salvarRxHistorico(){
     const nm=it.querySelector('.rxNm').value;if(!nm)return;
     plantas.push({nome:nm,forma:it.querySelector('.rxFm').value,dosagem:it.querySelector('.rxDs').value,freq:it.querySelector('.rxFq').value,dur:it.querySelector('.rxDu').value,inst:it.querySelector('.rxIn').value});
   });
-  if(!plantas.length)return;
+  if(!plantas.length){toast('⚠️ Adicione ao menos uma planta antes de salvar','#EF6C00');return;}
   const rx={id:Date.now()+Math.random(),pacienteId:_rxPacSel.id,pacienteNome:_rxPacSel.nome,data:v('rxDt')||new Date().toISOString().split('T')[0],plantas,durGeral:v('rxDurG'),retorno:v('rxRet'),obs:v('rxObs')};
   const rxs=gD('prescricoes');
   rxs.push(rx);
   _cache['prescricoes']=rxs;
   await supaReq('POST','prescricoes',[{'user_id':'montgomery','dados':rx}]);
+  _rxJaSalvo=true;
+  toast('💾 Recomendação salva no histórico do paciente!');
 }
 
 async function carregarRxHistPac(pacId){
