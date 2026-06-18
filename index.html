@@ -1632,7 +1632,8 @@ async function carregarRxHistPac(pacId){
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;flex-wrap:wrap;gap:6px">
         <strong style="color:var(--pri-d);font-size:13px">🌿 ${fd(rx.data)}</strong>
         <div style="display:flex;gap:6px">
-          <button class="btn btn-sec btn-sm" onclick="duplicarRx('${rx.id}')">📋 Duplicar</button>
+          <button class="btn btn-sec btn-sm" onclick="verRxHist('${rx.id}')">👁️ Ver</button>
+          <button class="btn btn-sec btn-sm" onclick="duplicarRx('${rx.id}')">📋 Editar/Duplicar</button>
           <button class="btn btn-dan btn-sm" onclick="delRxHist('${rx.id}')">🗑️</button>
         </div>
       </div>
@@ -1640,6 +1641,32 @@ async function carregarRxHistPac(pacId){
         ${rx.plantas.map(p=>`<span style="display:inline-block;background:var(--pri-l);border-radius:4px;padding:2px 7px;margin:2px;font-size:11px">🌱 ${p.nome}</span>`).join('')}
       </div>
     </div>`).join('');
+}
+
+function verRxHist(rxId){
+  const rx=gD('prescricoes').find(r=>String(r.id)===String(rxId));
+  if(!rx)return;
+  const cfgData=getCfg();
+  const html=`<div style="font-family:Georgia,serif;max-width:680px;margin:0 auto;font-size:10pt;background:#FDFAF6;color:#2C2A27;padding:14px">
+    <div style="font-size:14pt;font-weight:700;color:#1E3A5F;margin-bottom:8px">${cfgData.ter||'Montgomery Magalhães'}</div>
+    <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:6px">Paciente: ${rx.pacienteNome}</div>
+    <div style="font-size:9pt;color:#7A746C;margin-bottom:10px">Data: ${fd(rx.data)}</div>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:10px">
+    ${rx.plantas.map((p,i)=>`<tr><td style="padding:5px 8px;font-weight:700;color:#1E3A5F;border-bottom:1px solid #DDD8CF;font-size:10.5pt">${i+1}. ${p.nome}</td>
+      <td style="padding:5px 8px;font-size:9pt;border-bottom:1px solid #DDD8CF;color:#5a5550">${[p.forma,p.dosagem,p.freq,p.dur].filter(Boolean).join(' · ')}</td></tr>
+      ${p.inst?`<tr><td colspan="2" style="padding:1px 8px 5px 18px;font-size:8.5pt;color:#8a7f75;font-style:italic">↳ ${p.inst}</td></tr>`:''}`).join('')}
+    </table>
+    ${rx.durGeral||rx.retorno?`<div style="font-size:9pt;color:#1E3A5F;margin-bottom:8px">${rx.durGeral?'⏰ '+rx.durGeral:''} ${rx.retorno?' · 📅 Retorno: '+rx.retorno:''}</div>`:''}
+    ${rx.obs?`<div style="background:#FFF8E1;padding:7px 11px;font-size:8.5pt;border-radius:4px">⚠️ ${rx.obs}</div>`:''}
+  </div>`;
+  document.getElementById('modC').innerHTML=`
+    <h3 style="color:var(--pri-d);margin-bottom:12px">🌿 Recomendação de ${fd(rx.data)}</h3>
+    <div style="border:1px solid var(--brd);border-radius:8px;overflow:hidden">${html}</div>
+    <div style="display:flex;gap:7px;justify-content:flex-end;margin-top:13px">
+      <button class="btn btn-sec btn-sm" onclick="fMod()">Fechar</button>
+      <button class="btn btn-pri btn-sm" onclick="fMod();duplicarRx('${rx.id}')">📋 Editar/Duplicar</button>
+    </div>`;
+  document.getElementById('modP').classList.add('show');
 }
 
 function duplicarRx(rxId){
@@ -1726,13 +1753,12 @@ async function compartilharRx(){
     const file=new File([blob],`recomendacao_${nome}.jpg`,{type:'image/jpeg'});
     if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
       try{
-        await navigator.share({title:'Recomendação Terapêutica',text:`Recomendação de ${pac?pac.nome:''}`,files:[file]});
+        await navigator.share({files:[file]});
         toast('✅ Compartilhado!');
       }catch(e){
         if(e.name!=='AbortError')toast('⚠️ Erro ao compartilhar','#EF6C00');
       }
     } else {
-      // Fallback: baixar o arquivo
       const url=URL.createObjectURL(blob);
       const a=document.createElement('a');a.href=url;a.download=`recomendacao_${nome}.jpg`;a.click();
       URL.revokeObjectURL(url);
@@ -1741,19 +1767,9 @@ async function compartilharRx(){
   },'image/jpeg',0.92);
 }
 
-function enviarWhatsApp(){
-  const pac=_rxPacSel||gD('pacientes').find(p=>String(p.id)===String(document.getElementById('rxPacId').value));
-  if(!pac){toast('⚠️ Selecione um paciente','#EF6C00');return;}
-  const tel=(pac.telefone||'').replace(/\D/g,'');
-  if(!tel){toast('⚠️ Paciente sem telefone cadastrado','#EF6C00');return;}
-  const msg=encodeURIComponent(
-    `Olá ${pac.nome}! 👋\n\n`+
-    `Segue sua Recomendação Terapêutica da *Montgomery Magalhães - Saúde Integrativa*.\n\n`+
-    `📅 Data: ${v('rxDt')?new Date(v('rxDt')+'T12:00:00').toLocaleDateString('pt-BR'):new Date().toLocaleDateString('pt-BR')}\n\n`+
-    `Em caso de dúvidas, entre em contato. 🌿`
-  );
-  const numero=tel.startsWith('55')?tel:'55'+tel;
-  window.open(`https://wa.me/${numero}?text=${msg}`,'_blank');
+// Botão WhatsApp agora usa o mesmo compartilhamento nativo (envia direto a imagem, sem mensagem de texto separada)
+async function enviarWhatsApp(){
+  await compartilharRx();
 }
 
 // ===== CONFIGURAÇÕES =====
