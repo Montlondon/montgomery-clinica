@@ -1725,8 +1725,10 @@ function carregarHtml2Canvas(){
   return new Promise((res,rej)=>{
     if(window.html2canvas){res();return;}
     const s=document.createElement('script');
-    s.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-    s.onload=res;s.onerror=rej;
+    s.src='https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+    const timeout=setTimeout(()=>rej(new Error('Tempo esgotado ao carregar html2canvas')),8000);
+    s.onload=()=>{clearTimeout(timeout);res();};
+    s.onerror=()=>{clearTimeout(timeout);rej(new Error('Falha ao carregar html2canvas'));};
     document.head.appendChild(s);
   });
 }
@@ -1735,39 +1737,49 @@ async function exportarRxJpg(){
   const pac=_rxPacSel||{nome:'recomendacao'};
   const nome=(pac.nome).replace(/\s+/g,'_').toLowerCase();
   toast('⏳ Gerando imagem...');
-  await carregarHtml2Canvas();
-  const el=document.getElementById('rxPrevC');
-  const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#FDFAF6'});
-  const link=document.createElement('a');
-  link.download=`recomendacao_${nome}.jpg`;
-  link.href=canvas.toDataURL('image/jpeg',0.92);
-  link.click();
-  toast('📸 JPG salvo!');
+  try{
+    await carregarHtml2Canvas();
+    const el=document.getElementById('rxPrevC');
+    const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#FDFAF6'});
+    const link=document.createElement('a');
+    link.download=`recomendacao_${nome}.jpg`;
+    link.href=canvas.toDataURL('image/jpeg',0.92);
+    link.click();
+    toast('📸 JPG salvo!');
+  }catch(e){
+    console.error('Erro ao gerar JPG:',e);
+    toast('❌ Erro ao gerar imagem. Verifique sua conexão e tente novamente.','#c62828');
+  }
 }
 
 async function compartilharRx(){
   const pac=_rxPacSel||{nome:'recomendacao',telefone:''};
   const nome=(pac.nome).replace(/\s+/g,'_').toLowerCase();
   toast('⏳ Preparando...');
-  await carregarHtml2Canvas();
-  const el=document.getElementById('rxPrevC');
-  const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#FDFAF6'});
-  canvas.toBlob(async blob=>{
-    const file=new File([blob],`recomendacao_${nome}.jpg`,{type:'image/jpeg'});
-    if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-      try{
-        await navigator.share({files:[file]});
-        toast('✅ Compartilhado!');
-      }catch(e){
-        if(e.name!=='AbortError')toast('⚠️ Erro ao compartilhar','#EF6C00');
+  try{
+    await carregarHtml2Canvas();
+    const el=document.getElementById('rxPrevC');
+    const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#FDFAF6'});
+    canvas.toBlob(async blob=>{
+      const file=new File([blob],`recomendacao_${nome}.jpg`,{type:'image/jpeg'});
+      if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+        try{
+          await navigator.share({files:[file]});
+          toast('✅ Compartilhado!');
+        }catch(e){
+          if(e.name!=='AbortError')toast('⚠️ Erro ao compartilhar','#EF6C00');
+        }
+      } else {
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a');a.href=url;a.download=`recomendacao_${nome}.jpg`;a.click();
+        URL.revokeObjectURL(url);
+        toast('📸 Imagem baixada (compartilhamento não suportado neste dispositivo)','#EF6C00');
       }
-    } else {
-      const url=URL.createObjectURL(blob);
-      const a=document.createElement('a');a.href=url;a.download=`recomendacao_${nome}.jpg`;a.click();
-      URL.revokeObjectURL(url);
-      toast('📸 Imagem baixada (compartilhamento não suportado neste dispositivo)','#EF6C00');
-    }
-  },'image/jpeg',0.92);
+    },'image/jpeg',0.92);
+  }catch(e){
+    console.error('Erro ao compartilhar:',e);
+    toast('❌ Erro ao gerar imagem. Verifique sua conexão e tente novamente.','#c62828');
+  }
 }
 
 // Botão WhatsApp agora usa o mesmo compartilhamento nativo (envia direto a imagem, sem mensagem de texto separada)
