@@ -1724,12 +1724,23 @@ async function delRxHist(rxId){
 function carregarHtml2Canvas(){
   return new Promise((res,rej)=>{
     if(window.html2canvas){res();return;}
-    const s=document.createElement('script');
-    s.src='https://html2canvas.hertzen.com/dist/html2canvas.min.js';
-    const timeout=setTimeout(()=>rej(new Error('Tempo esgotado ao carregar html2canvas')),8000);
-    s.onload=()=>{clearTimeout(timeout);res();};
-    s.onerror=()=>{clearTimeout(timeout);rej(new Error('Falha ao carregar html2canvas'));};
-    document.head.appendChild(s);
+    const urls=[
+      'https://unpkg.com/html2canvas@1.4.1/dist/html2canvas.min.js',
+      'https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js',
+      'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js',
+      'https://html2canvas.hertzen.com/dist/html2canvas.min.js'
+    ];
+    let i=0;
+    function tentar(){
+      if(i>=urls.length){rej(new Error('Todos os CDNs falharam'));return;}
+      const s=document.createElement('script');
+      s.src=urls[i];
+      const timeout=setTimeout(()=>{i++;tentar();},5000);
+      s.onload=()=>{clearTimeout(timeout);if(window.html2canvas)res();else{i++;tentar();}};
+      s.onerror=()=>{clearTimeout(timeout);i++;tentar();};
+      document.head.appendChild(s);
+    }
+    tentar();
   });
 }
 
