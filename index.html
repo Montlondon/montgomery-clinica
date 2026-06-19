@@ -1350,8 +1350,22 @@ function atuFin(){
       </td></tr>`;
   }).join('');
 }
-function mPago(id){let ss=gD('sessoes').map(s=>{if(s.id===id)s.status='pago';return s});sD('sessoes',ss);atuFin();toast('✅ Pago!');}
-function dSess(id){if(!confirm('Excluir sessão?'))return;sD('sessoes',gD('sessoes').filter(s=>s.id!==id));atuFin();toast('🗑️ Removida','#c62828');}
+async function mPago(id){
+  const ss=gD('sessoes');
+  const idx=ss.findIndex(s=>s.id===id);
+  if(idx<0)return;
+  ss[idx]={...ss[idx],status:'pago'};
+  _cache['sessoes']=ss;
+  await supaReq('DELETE','sessoes',null,`?dados->>id=eq.${id}`);
+  await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':ss[idx]}]);
+  atuFin();toast('✅ Pago!');
+}
+async function dSess(id){
+  if(!confirm('Excluir sessão?'))return;
+  _cache['sessoes']=gD('sessoes').filter(s=>s.id!==id);
+  await supaReq('DELETE','sessoes',null,`?dados->>id=eq.${id}`);
+  atuFin();toast('🗑️ Removida','#c62828');
+}
 
 // ===== GOOGLE AGENDA =====
 function abrirGA(s){
@@ -1457,9 +1471,10 @@ function verEvento(id){
     </div>`;
   document.getElementById('modP').classList.add('show');
 }
-function dSessAg(id){
+async function dSessAg(id){
   if(!confirm('Excluir este agendamento permanentemente?'))return;
-  sD('sessoes',gD('sessoes').filter(s=>s.id!==id));
+  _cache['sessoes']=gD('sessoes').filter(s=>s.id!==id);
+  await supaReq('DELETE','sessoes',null,`?dados->>id=eq.${id}`);
   renderAg();atuFin();atuDash();
   toast('🗑️ Agendamento removido','#c62828');
 }
@@ -1570,6 +1585,7 @@ function fecharRxPacLista(){
 // ===== DIAGNÓSTICO INTEGRADO =====
 let _diagPacSel=null;
 let _diagJaSalvo=false;
+let _diagEditandoId=null; // id do diagnóstico em edição (null = nova avaliação)
 let _diagSelecoes={elementos:[],pontos:[]}; // guarda o que foi clicado nesta avaliação
 
 const bancoIntegrativoCompleto = {
@@ -1802,33 +1818,21 @@ function limparDiagnostico(){
   document.getElementById('diagEscalaEmo').value='';
   document.getElementById('diagEmoObs').value='';
   _diagJaSalvo=false;
+  _diagEditandoId=null;
+  const btn=document.getElementById('btnSalvarDiag');
+  if(btn)btn.textContent='💾 Salvar Avaliação';
   renderElementosGrid();renderPontosGrid();renderDiagPainel();
 }
 
 function enviarDiagParaRx(){
   if(!_diagPacSel){toast('⚠️ Selecione um paciente primeiro','#EF6C00');return;}
-  if(!_diagSelecoes.elementos.length){toast('⚠️ Selecione ao menos um elemento','#EF6C00');return;}
-  // Monta texto de observações com base no diagnóstico para levar à recomendação
-  let obsTexto='Diagnóstico Integrado: ';
-  obsTexto+=_diagSelecoes.elementos.map(nome=>{
-    const e=bancoIntegrativoCompleto.matrizCincoElementos[nome];
-    return `${nome} (${e.titulo.split('(')[1]?.replace(')','')})`;
-  }).join(' + ');
-  const emo=document.getElementById('diagEscalaEmo').value;
-  if(emo)obsTexto+=` | Estado emocional: ${emo}`;
-
+  // Apenas leva para a tela de Recomendação com o mesmo paciente já selecionado.
+  // Diagnóstico e Recomendação são registros distintos e não compartilham dados.
+  const pacId=_diagPacSel.id,pacNome=_diagPacSel.nome;
   go('prescricao',null);
   setTimeout(()=>{
-    selecionarRxPac(_diagPacSel.id,_diagPacSel.nome,'');
-    document.getElementById('rxObs').value=obsTexto;
-    // Sugerir a primeira planta do primeiro elemento selecionado
-    if(_diagSelecoes.elementos.length){
-      const primeiro=bancoIntegrativoCompleto.matrizCincoElementos[_diagSelecoes.elementos[0]];
-      const primeiroNome=primeiro.fito.split(',')[0].split('(')[0].trim();
-      const campo=document.querySelector('.rxNm');
-      if(campo&&!campo.value)campo.value=primeiroNome;
-    }
-    toast('🌿 Dados enviados para Recomendação Terapêutica!');
+    selecionarRxPac(pacId,pacNome,'');
+    toast('🌿 Paciente selecionado em Recomendação Terapêutica.');
   },200);
 }
 
@@ -1836,17 +1840,17 @@ async function salvarDiagComProtecao(btn){
   if(!_diagPacSel){toast('⚠️ Selecione um paciente primeiro','#EF6C00');return;}
   if(_diagJaSalvo){toast('ℹ️ Esta avaliação já foi salva.','#1565C0');return;}
   btn.disabled=true;
-  const textoOriginal=btn.textContent;
-  btn.textContent='💾 Salvando...';
   btn.style.opacity='0.6';
+  const textoSalvando='💾 Salvando...';
+  btn.textContent=textoSalvando;
   await salvarDiagnostico();
-  setTimeout(()=>{btn.disabled=false;btn.textContent=textoOriginal;btn.style.opacity='1';},1000);
+  setTimeout(()=>{btn.disabled=false;btn.style.opacity='1';},1000);
 }
 
 async function salvarDiagnostico(){
   if(!_diagPacSel)return;
   const diag={
-    id:Date.now()+Math.random(),
+    id:_diagEditandoId||(Date.now()+Math.random()),
     pacienteId:_diagPacSel.id,
     pacienteNome:_diagPacSel.nome,
     data:document.getElementById('diagDt').value||new Date().toISOString().split('T')[0],
@@ -1855,12 +1859,49 @@ async function salvarDiagnostico(){
     escalaEmocional:document.getElementById('diagEscalaEmo').value,
     emoObs:document.getElementById('diagEmoObs').value
   };
-  const diags=gD('diagnosticos')||[];
-  diags.push(diag);
-  _cache['diagnosticos']=diags;
-  await supaReq('POST','diagnosticos',[{'user_id':'montgomery','dados':diag}]);
+  if(_diagEditandoId){
+    // Atualização: substitui só este registro (mesmo id), sem afetar os demais
+    const diags=gD('diagnosticos').filter(d=>String(d.id)!==String(_diagEditandoId));
+    diags.push(diag);
+    _cache['diagnosticos']=diags;
+    await supaReq('DELETE','diagnosticos',null,`?dados->>id=eq.${_diagEditandoId}`);
+    await supaReq('POST','diagnosticos',[{'user_id':'montgomery','dados':diag}]);
+    _diagEditandoId=null;
+    const btn=document.getElementById('btnSalvarDiag');
+    if(btn)btn.textContent='💾 Salvar Avaliação';
+    toast('✏️ Avaliação atualizada com sucesso!');
+  } else {
+    const diags=gD('diagnosticos')||[];
+    diags.push(diag);
+    _cache['diagnosticos']=diags;
+    await supaReq('POST','diagnosticos',[{'user_id':'montgomery','dados':diag}]);
+    const btn=document.getElementById('btnSalvarDiag');
+    if(btn)btn.textContent='💾 Salvar Avaliação';
+    toast('💾 Avaliação salva no histórico do paciente!');
+  }
   _diagJaSalvo=true;
-  toast('💾 Avaliação salva no histórico do paciente!');
+}
+
+function editarDiagHist(diagId,pacId){
+  const diag=gD('diagnosticos').find(d=>String(d.id)===String(diagId));
+  if(!diag)return;
+  const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
+  _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos]};
+  _diagEditandoId=diag.id;
+  _diagJaSalvo=false;
+  go('diagnostico',null);
+  setTimeout(()=>{
+    document.getElementById('diagPacBusca').value=_diagPacSel.nome;
+    document.getElementById('diagPacId').value=_diagPacSel.id;
+    document.getElementById('diagDt').value=diag.data||'';
+    document.getElementById('diagEscalaEmo').value=diag.escalaEmocional||'';
+    document.getElementById('diagEmoObs').value=diag.emoObs||'';
+    const btn=document.getElementById('btnSalvarDiag');
+    if(btn)btn.textContent='✏️ Salvar Alterações';
+    renderElementosGrid();renderPontosGrid();renderDiagPainel();
+    toast('✏️ Editando avaliação. Altere o que precisar e salve.','#1565C0');
+  },200);
 }
 
 function addPlanta(){
@@ -1943,7 +1984,7 @@ function gerarHtmlRx(){
       <span style="display:inline-block;background:#1E3A5F;color:#fff;font-size:10pt;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:7px 22px;border-radius:20px">Recomendação Terapêutica</span>
     </div>
 
-    <div style="background:#fff;border-radius:10px;padding:6px 18px;margin-bottom:18px;border:1px solid #EDE7DB">${pl||'<div style="color:#aaa;font-style:italic;padding:14px;text-align:center">Nenhuma planta adicionada.</div>'}</div>
+    <div style="background:#fff;border-radius:10px;padding:6px 18px;margin-bottom:18px;border:1px solid #EDE7DB">${pl?`<table style="width:100%;border-collapse:collapse">${pl}</table>`:'<div style="color:#aaa;font-style:italic;padding:14px;text-align:center">Nenhuma planta adicionada.</div>'}</div>
 
     ${v('rxDurG')||v('rxRet')?`<table style="width:100%;margin-bottom:16px"><tr>
       ${v('rxDurG')?`<td style="padding-right:8px"><div style="background:#EEF4FA;border-radius:8px;padding:9px 14px"><div style="font-size:7.5pt;color:#1E3A5F;text-transform:uppercase;letter-spacing:.4px">⏰ Duração</div><div style="font-size:10pt;font-weight:600;color:#1E3A5F;margin-top:2px">${v('rxDurG')}</div></div></td>`:''}
@@ -2048,7 +2089,10 @@ async function carregarDiagHistPac(pacId){
     <div style="background:var(--beige);border-radius:8px;padding:12px;margin-bottom:10px;border-left:3px solid var(--pri)">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;flex-wrap:wrap;gap:6px">
         <strong style="color:var(--pri-d);font-size:13px">🔮 ${fd(d.data)}</strong>
-        <button class="btn btn-dan btn-sm" onclick="delDiagHist('${d.id}','${pacId}')">🗑️</button>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-sec btn-sm" onclick="editarDiagHist('${d.id}','${pacId}')">✏️ Editar</button>
+          <button class="btn btn-dan btn-sm" onclick="delDiagHist('${d.id}','${pacId}')">🗑️</button>
+        </div>
       </div>
       <div style="font-size:12px;color:var(--txt)">
         ${d.elementos.map(nome=>`<span style="display:inline-block;background:var(--pri-l);border-radius:4px;padding:2px 7px;margin:2px;font-size:11px">${nome}</span>`).join('')}
@@ -2165,14 +2209,35 @@ function carregarHtml2Canvas(){
   });
 }
 
+// Captura defensiva do documento de Recomendação como imagem.
+// Evita o erro "canvas vazio" garantindo que: o preview foi atualizado,
+// está visível durante a captura, e todas as imagens (logo) já carregaram.
+async function capturarRxComoCanvas(){
+  await carregarHtml2Canvas();
+  const prev=document.getElementById('rxPrev');
+  const el=document.getElementById('rxPrevC');
+  el.innerHTML=gerarHtmlRx();
+  const displayAntes=prev.style.display;
+  prev.style.display='block';
+  try{
+    const imgs=Array.from(el.querySelectorAll('img'));
+    await Promise.all(imgs.map(img=>img.complete?Promise.resolve():new Promise(res=>{img.onload=res;img.onerror=res;})));
+    // Aguarda o navegador terminar de calcular o layout antes de medir o elemento
+    await new Promise(res=>requestAnimationFrame(()=>requestAnimationFrame(res)));
+    if(!el.offsetWidth||!el.offsetHeight)throw new Error('Elemento de pré-visualização sem dimensões.');
+    return await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#FDFAF6'});
+  }finally{
+    prev.style.display=displayAntes;
+  }
+}
+
 async function exportarRxJpg(){
+  if(!_rxPacSel){toast('⚠️ Selecione um paciente primeiro','#EF6C00');return;}
   const pac=_rxPacSel||{nome:'recomendacao'};
   const nome=(pac.nome).replace(/\s+/g,'_').toLowerCase();
   toast('⏳ Gerando imagem...');
   try{
-    await carregarHtml2Canvas();
-    const el=document.getElementById('rxPrevC');
-    const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#FDFAF6'});
+    const canvas=await capturarRxComoCanvas();
     const link=document.createElement('a');
     link.download=`recomendacao_${nome}.jpg`;
     link.href=canvas.toDataURL('image/jpeg',0.92);
@@ -2185,13 +2250,12 @@ async function exportarRxJpg(){
 }
 
 async function compartilharRx(){
+  if(!_rxPacSel){toast('⚠️ Selecione um paciente primeiro','#EF6C00');return;}
   const pac=_rxPacSel||{nome:'recomendacao',telefone:''};
   const nome=(pac.nome).replace(/\s+/g,'_').toLowerCase();
   toast('⏳ Preparando...');
   try{
-    await carregarHtml2Canvas();
-    const el=document.getElementById('rxPrevC');
-    const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#FDFAF6'});
+    const canvas=await capturarRxComoCanvas();
     canvas.toBlob(async blob=>{
       const file=new File([blob],`recomendacao_${nome}.jpg`,{type:'image/jpeg'});
       if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
