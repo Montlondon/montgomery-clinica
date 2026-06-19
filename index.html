@@ -339,6 +339,7 @@ tr:hover td{background:#EEF2F7}
       <button onclick="showTab('tc',this)">🌿 Complem.</button>
       <button onclick="showTab('tex',this)">🖼️ Exames</button>
       <button onclick="showTab('trx',this)">🌿 Recomendações</button>
+      <button onclick="showTab('tdg',this)">🔮 Diagnósticos</button>
     </div>
     <form id="fPac" onsubmit="salvarPac(event)">
       <div class="tab-panel active" id="tp">
@@ -429,6 +430,11 @@ tr:hover td{background:#EEF2F7}
         <div class="fst">🌿 Histórico de Recomendações Terapêuticas</div>
         <p style="font-size:12px;color:var(--txt-l);margin-bottom:11px">Todas as recomendações já feitas para este paciente. Duplique uma antiga para agilizar um novo atendimento.</p>
         <div id="rxHistLista"><div style="text-align:center;color:var(--txt-l);padding:20px;font-size:13px">Nenhuma recomendação registrada ainda.</div></div>
+      </div>
+      <div class="tab-panel" id="tdg">
+        <div class="fst">🔮 Histórico de Diagnósticos Integrados</div>
+        <p style="font-size:12px;color:var(--txt-l);margin-bottom:11px">Todas as avaliações de Diagnóstico Integrado já registradas para este paciente.</p>
+        <div id="diagHistLista"><div style="text-align:center;color:var(--txt-l);padding:20px;font-size:13px">Nenhuma avaliação registrada ainda.</div></div>
       </div>
       <div style="margin-top:13px;padding:10px;background:var(--pri-l);border-radius:6px">
         <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px">
@@ -894,32 +900,6 @@ async function supaReq(method,table,body=null,params=''){
   return res.json();
 }
 
-// Confirma que a escrita no Supabase realmente aconteceu antes de avisar o usuário.
-// Uso: const ok = await confirmarEscrita(supaReq('POST', tabela, [...]), 'msg sucesso', 'msg erro');
-async function confirmarEscrita(promessaSupaReq, msgSucesso, msgErro){
-  const resultado = await promessaSupaReq;
-  if(resultado === null){
-    toast(msgErro || '❌ Não foi possível salvar no servidor. Tente novamente.', '#c62828');
-    return false;
-  }
-  toast(msgSucesso, '#1E3A5F');
-  return true;
-}
-
-// Garante que toda <img> dentro do elemento já carregou (ou remove a que falhou)
-// antes do html2canvas tentar desenhá-la — evita o erro de canvas 0x0.
-function aguardarImagens(el){
-  const imgs = el.querySelectorAll('img');
-  return Promise.all(Array.from(imgs).map(img=>{
-    if(img.complete && img.naturalWidth > 0) return Promise.resolve();
-    return new Promise(resolve=>{
-      img.onload = () => resolve();
-      img.onerror = () => { img.remove(); resolve(); };
-      setTimeout(resolve, 3000);
-    });
-  }));
-}
-
 // Cache local para performance
 let _cache={};
 
@@ -961,7 +941,7 @@ async function dbAdd(tabela,item){
 
 // Recarregar tudo do banco e atualizar a tela (chamar após qualquer mudança importante)
 async function syncTudo(){
-  await Promise.all([dbGet('pacientes',true),dbGet('sessoes',true)]);
+  await Promise.all([dbGet('pacientes',true),dbGet('sessoes',true),dbGet('diagnosticos',true)]);
   if(document.getElementById('cntP'))renderP();
   if(document.getElementById('pg-dashboard'))atuDash();
   if(document.getElementById('pg-financeiro'))atuFin();
@@ -977,7 +957,7 @@ const sC=(k,v)=>localStorage.setItem(k,v);
 async function initDB(){
   showLoading(true);
   try{
-    await Promise.all([dbGet('pacientes',true),dbGet('sessoes',true)]);
+    await Promise.all([dbGet('pacientes',true),dbGet('sessoes',true),dbGet('diagnosticos',true)]);
   }catch(e){
     console.error('Erro Supabase:',e);
     toast('⚠️ Erro ao conectar ao banco. Tente recarregar.','#EF6C00');
@@ -1058,6 +1038,7 @@ function showTab(id,btn){
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
   if(id==='trx'&&editId)carregarRxHistPac(editId);
+  if(id==='tdg'&&editId)carregarDiagHistPac(editId);
 }
 
 // ===== SAVE STATUS =====
@@ -1874,18 +1855,12 @@ async function salvarDiagnostico(){
     escalaEmocional:document.getElementById('diagEscalaEmo').value,
     emoObs:document.getElementById('diagEmoObs').value
   };
-
-  const ok = await confirmarEscrita(
-    supaReq('POST','diagnosticos',[{'user_id':'montgomery','dados':diag}]),
-    '💾 Avaliação salva no histórico do paciente!',
-    '❌ Não foi possível salvar a avaliação no servidor. Tente novamente.'
-  );
-  if(!ok) return;
-
   const diags=gD('diagnosticos')||[];
   diags.push(diag);
   _cache['diagnosticos']=diags;
+  await supaReq('POST','diagnosticos',[{'user_id':'montgomery','dados':diag}]);
   _diagJaSalvo=true;
+  toast('💾 Avaliação salva no histórico do paciente!');
 }
 
 function addPlanta(){
@@ -1935,7 +1910,7 @@ function gerarHtmlRx(){
       ${ins?`<tr><td style="padding:0 4px 11px 14px;font-size:8.5pt;color:#9a938b;font-style:italic;border-bottom:1px solid #EDE7DB">↳ ${ins}</td></tr>`:`<tr><td style="padding:0 4px 11px;border-bottom:1px solid #EDE7DB"></td></tr>`}`;
   });
 
-  const logoHtml=logo?`<div style="width:64px;height:64px;border-radius:50%;background-image:url('${logo}');background-size:cover;background-position:center;border:3px solid #1E3A5F;margin-right:14px"></div>`:'<div style="width:64px;height:64px;border-radius:50%;background:#EEF4FA;display:flex;align-items:center;justify-content:center;font-size:28px;margin-right:14px">🌿</div>';
+  const logoHtml=logo?`<img src="${logo}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid #1E3A5F;margin-right:14px" alt="Logo">`:'<div style="width:64px;height:64px;border-radius:50%;background:#EEF4FA;display:flex;align-items:center;justify-content:center;font-size:28px;margin-right:14px">🌿</div>';
 
   return`<div style="font-family:'Georgia',serif;max-width:640px;margin:0 auto;background:#FDFAF6;color:#2C2A27;padding:28px 30px;border-radius:14px">
     
@@ -2029,20 +2004,13 @@ async function salvarRxHistorico(){
     plantas.push({nome:nm,forma:it.querySelector('.rxFm').value,dosagem:it.querySelector('.rxDs').value,freq:it.querySelector('.rxFq').value,dur:it.querySelector('.rxDu').value,inst:it.querySelector('.rxIn').value});
   });
   if(!plantas.length){toast('⚠️ Adicione ao menos uma planta antes de salvar','#EF6C00');return;}
-
   const rx={id:Date.now()+Math.random(),pacienteId:_rxPacSel.id,pacienteNome:_rxPacSel.nome,data:v('rxDt')||new Date().toISOString().split('T')[0],plantas,durGeral:v('rxDurG'),retorno:v('rxRet'),obs:v('rxObs')};
-
-  const ok = await confirmarEscrita(
-    supaReq('POST','prescricoes',[{'user_id':'montgomery','dados':rx}]),
-    '💾 Recomendação salva no histórico do paciente!',
-    '❌ Não foi possível salvar no servidor. Verifique sua conexão e tente novamente.'
-  );
-  if(!ok) return;
-
   const rxs=gD('prescricoes');
   rxs.push(rx);
   _cache['prescricoes']=rxs;
+  await supaReq('POST','prescricoes',[{'user_id':'montgomery','dados':rx}]);
   _rxJaSalvo=true;
+  toast('💾 Recomendação salva no histórico do paciente!');
 }
 
 async function carregarRxHistPac(pacId){
@@ -2066,6 +2034,37 @@ async function carregarRxHistPac(pacId){
         ${rx.plantas.map(p=>`<span style="display:inline-block;background:var(--pri-l);border-radius:4px;padding:2px 7px;margin:2px;font-size:11px">🌱 ${p.nome}</span>`).join('')}
       </div>
     </div>`).join('');
+}
+
+// ===== HISTÓRICO DE DIAGNÓSTICO INTEGRADO POR PACIENTE =====
+async function carregarDiagHistPac(pacId){
+  let diags=gD('diagnosticos');
+  if(!diags.length)diags=await dbGet('diagnosticos',true);
+  const doPac=diags.filter(d=>String(d.pacienteId)===String(pacId)).sort((a,b)=>b.data.localeCompare(a.data));
+  const el=document.getElementById('diagHistLista');
+  if(!el)return;
+  if(!doPac.length){el.innerHTML='<div style="text-align:center;color:var(--txt-l);padding:20px;font-size:13px">Nenhuma avaliação registrada ainda.</div>';return;}
+  el.innerHTML=doPac.map(d=>`
+    <div style="background:var(--beige);border-radius:8px;padding:12px;margin-bottom:10px;border-left:3px solid var(--pri)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;flex-wrap:wrap;gap:6px">
+        <strong style="color:var(--pri-d);font-size:13px">🔮 ${fd(d.data)}</strong>
+        <button class="btn btn-dan btn-sm" onclick="delDiagHist('${d.id}','${pacId}')">🗑️</button>
+      </div>
+      <div style="font-size:12px;color:var(--txt)">
+        ${d.elementos.map(nome=>`<span style="display:inline-block;background:var(--pri-l);border-radius:4px;padding:2px 7px;margin:2px;font-size:11px">${nome}</span>`).join('')}
+        ${d.pontos.map(nome=>`<span style="display:inline-block;background:#E3F2FD;border-radius:4px;padding:2px 7px;margin:2px;font-size:11px">🦴 ${nome}</span>`).join('')}
+      </div>
+      ${d.escalaEmocional?`<div style="font-size:11.5px;color:var(--txt-l);margin-top:5px">Estado emocional: ${d.escalaEmocional}</div>`:''}
+    </div>`).join('');
+}
+
+async function delDiagHist(diagId,pacId){
+  if(!confirm('Excluir esta avaliação do histórico?'))return;
+  const diags=gD('diagnosticos').filter(d=>String(d.id)!==String(diagId));
+  _cache['diagnosticos']=diags;
+  await supaReq('DELETE','diagnosticos',null,`?dados->>id=eq.${diagId}`);
+  carregarDiagHistPac(pacId);
+  toast('🗑️ Removido do histórico','#c62828');
 }
 
 function verRxHist(rxId){
@@ -2173,7 +2172,6 @@ async function exportarRxJpg(){
   try{
     await carregarHtml2Canvas();
     const el=document.getElementById('rxPrevC');
-    await aguardarImagens(el);
     const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#FDFAF6'});
     const link=document.createElement('a');
     link.download=`recomendacao_${nome}.jpg`;
@@ -2193,7 +2191,6 @@ async function compartilharRx(){
   try{
     await carregarHtml2Canvas();
     const el=document.getElementById('rxPrevC');
-    await aguardarImagens(el);
     const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#FDFAF6'});
     canvas.toBlob(async blob=>{
       const file=new File([blob],`recomendacao_${nome}.jpg`,{type:'image/jpeg'});
