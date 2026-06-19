@@ -894,6 +894,32 @@ async function supaReq(method,table,body=null,params=''){
   return res.json();
 }
 
+// Confirma que a escrita no Supabase realmente aconteceu antes de avisar o usuário.
+// Uso: const ok = await confirmarEscrita(supaReq('POST', tabela, [...]), 'msg sucesso', 'msg erro');
+async function confirmarEscrita(promessaSupaReq, msgSucesso, msgErro){
+  const resultado = await promessaSupaReq;
+  if(resultado === null){
+    toast(msgErro || '❌ Não foi possível salvar no servidor. Tente novamente.', '#c62828');
+    return false;
+  }
+  toast(msgSucesso, '#1E3A5F');
+  return true;
+}
+
+// Garante que toda <img> dentro do elemento já carregou (ou remove a que falhou)
+// antes do html2canvas tentar desenhá-la — evita o erro de canvas 0x0.
+function aguardarImagens(el){
+  const imgs = el.querySelectorAll('img');
+  return Promise.all(Array.from(imgs).map(img=>{
+    if(img.complete && img.naturalWidth > 0) return Promise.resolve();
+    return new Promise(resolve=>{
+      img.onload = () => resolve();
+      img.onerror = () => { img.remove(); resolve(); };
+      setTimeout(resolve, 3000);
+    });
+  }));
+}
+
 // Cache local para performance
 let _cache={};
 
@@ -1848,12 +1874,18 @@ async function salvarDiagnostico(){
     escalaEmocional:document.getElementById('diagEscalaEmo').value,
     emoObs:document.getElementById('diagEmoObs').value
   };
+
+  const ok = await confirmarEscrita(
+    supaReq('POST','diagnosticos',[{'user_id':'montgomery','dados':diag}]),
+    '💾 Avaliação salva no histórico do paciente!',
+    '❌ Não foi possível salvar a avaliação no servidor. Tente novamente.'
+  );
+  if(!ok) return;
+
   const diags=gD('diagnosticos')||[];
   diags.push(diag);
   _cache['diagnosticos']=diags;
-  await supaReq('POST','diagnosticos',[{'user_id':'montgomery','dados':diag}]);
   _diagJaSalvo=true;
-  toast('💾 Avaliação salva no histórico do paciente!');
 }
 
 function addPlanta(){
@@ -1997,13 +2029,20 @@ async function salvarRxHistorico(){
     plantas.push({nome:nm,forma:it.querySelector('.rxFm').value,dosagem:it.querySelector('.rxDs').value,freq:it.querySelector('.rxFq').value,dur:it.querySelector('.rxDu').value,inst:it.querySelector('.rxIn').value});
   });
   if(!plantas.length){toast('⚠️ Adicione ao menos uma planta antes de salvar','#EF6C00');return;}
+
   const rx={id:Date.now()+Math.random(),pacienteId:_rxPacSel.id,pacienteNome:_rxPacSel.nome,data:v('rxDt')||new Date().toISOString().split('T')[0],plantas,durGeral:v('rxDurG'),retorno:v('rxRet'),obs:v('rxObs')};
+
+  const ok = await confirmarEscrita(
+    supaReq('POST','prescricoes',[{'user_id':'montgomery','dados':rx}]),
+    '💾 Recomendação salva no histórico do paciente!',
+    '❌ Não foi possível salvar no servidor. Verifique sua conexão e tente novamente.'
+  );
+  if(!ok) return;
+
   const rxs=gD('prescricoes');
   rxs.push(rx);
   _cache['prescricoes']=rxs;
-  await supaReq('POST','prescricoes',[{'user_id':'montgomery','dados':rx}]);
   _rxJaSalvo=true;
-  toast('💾 Recomendação salva no histórico do paciente!');
 }
 
 async function carregarRxHistPac(pacId){
@@ -2134,6 +2173,7 @@ async function exportarRxJpg(){
   try{
     await carregarHtml2Canvas();
     const el=document.getElementById('rxPrevC');
+    await aguardarImagens(el);
     const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#FDFAF6'});
     const link=document.createElement('a');
     link.download=`recomendacao_${nome}.jpg`;
@@ -2153,6 +2193,7 @@ async function compartilharRx(){
   try{
     await carregarHtml2Canvas();
     const el=document.getElementById('rxPrevC');
+    await aguardarImagens(el);
     const canvas=await html2canvas(el,{scale:2,useCORS:true,backgroundColor:'#FDFAF6'});
     canvas.toBlob(async blob=>{
       const file=new File([blob],`recomendacao_${nome}.jpg`,{type:'image/jpeg'});
