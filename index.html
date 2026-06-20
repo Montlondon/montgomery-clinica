@@ -1067,9 +1067,20 @@ function go(p,el){
   if(p==='agenda')initAgenda();
   if(p==='configuracoes')carregarFormConfig();
   if(p==='diagnostico'){
-    // Mesma proteção aplicada ao Diagnóstico Integrado.
+    // Acesso pelo menu lateral (clique real, "el" existe) sempre começa do
+    // zero: zera paciente, elementos/pontos marcados e o modo de edição.
+    // Continuar uma avaliação salva só é possível via "Editar"/"Duplicar"
+    // dentro do cadastro do paciente (que chamam go('diagnostico', null)).
     if(el){
       _diagEditandoId=null;
+      _diagPacSel=null;
+      _diagSelecoes={elementos:[],pontos:[],elementosObs:{}};
+      _diagJaSalvo=false;
+      document.getElementById('diagPacBusca').value='';
+      document.getElementById('diagPacId').value='';
+      document.getElementById('diagDt').value='';
+      document.getElementById('diagEscalaEmo').value='';
+      document.getElementById('diagEmoObs').value='';
       const b=document.getElementById('btnSalvarDiag');
       if(b)b.textContent='💾 Salvar Avaliação';
     }
@@ -1741,6 +1752,7 @@ const bancoIntegrativoCompleto = {
 function initDiagnostico(){
   renderElementosGrid();
   renderPontosGrid();
+  renderDiagPainel();
   if(!document.getElementById('diagDt').value)document.getElementById('diagDt').value=new Date().toISOString().split('T')[0];
   if(!_diagPacSel){
     document.getElementById('diagPacBusca').value='';
@@ -2198,7 +2210,9 @@ async function carregarDiagHistPac(pacId){
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;flex-wrap:wrap;gap:6px">
         <strong style="color:var(--pri-d);font-size:13px">🔮 ${fd(d.data)}</strong>
         <div style="display:flex;gap:6px">
+          <button class="btn btn-sec btn-sm" onclick="verDiagHist('${d.id}')">👁️ Ver</button>
           <button class="btn btn-sec btn-sm" onclick="editarDiagHist('${d.id}','${pacId}')">✏️ Editar</button>
+          <button class="btn btn-sec btn-sm" onclick="duplicarDiagHist('${d.id}','${pacId}')">📋 Duplicar</button>
           <button class="btn btn-dan btn-sm" onclick="delDiagHist('${d.id}','${pacId}')">🗑️</button>
         </div>
       </div>
@@ -2208,6 +2222,86 @@ async function carregarDiagHistPac(pacId){
       </div>
       ${d.escalaEmocional?`<div style="font-size:11.5px;color:var(--txt-l);margin-top:5px">Estado emocional: ${d.escalaEmocional}</div>`:''}
     </div>`).join('');
+}
+
+// Monta o HTML de leitura (somente exibição) de uma avaliação salva — usado
+// no modal "Ver" do histórico do paciente.
+function montarHtmlDiagnostico(diag){
+  let html='';
+  (diag.elementos||[]).forEach(nome=>{
+    const e=bancoIntegrativoCompleto.matrizCincoElementos[nome];
+    if(!e)return;
+    const obs=(diag.elementosObs&&diag.elementosObs[nome])||'';
+    html+=`<div class="fc" style="border-left:5px solid ${e.cor}">
+      <div class="fst" style="color:${e.cor}">${e.emoji} ${e.titulo}</div>
+      <div style="font-size:12.5px;line-height:1.7">
+        <p style="margin-bottom:7px"><strong>${e.relogio}</strong></p>
+        <p style="margin-bottom:7px"><strong>🧠 Psique/Emoções:</strong> ${e.psique}</p>
+        <p style="margin:9px 0 7px"><strong>🦴 Quiropraxia:</strong> ${e.quiro}</p>
+        <p><strong>🌿 Fitoterapia sugerida:</strong> ${e.fito}</p>
+        ${obs?`<p style="margin-top:9px;background:var(--pri-l);padding:8px;border-radius:6px"><strong>📝 Observações:</strong> ${escHtml(obs)}</p>`:''}
+      </div>
+    </div>`;
+  });
+  (diag.pontos||[]).forEach(nome=>{
+    const p=bancoIntegrativoCompleto.pontosCorpo[nome];
+    if(!p)return;
+    html+=`<div class="fc" style="border-left:5px solid var(--pri)">
+      <div class="fst">🦴 ${p.regiao}</div>
+      <div style="font-size:12.5px;line-height:1.7">
+        <p style="margin-bottom:7px"><strong>Músculo:</strong> ${p.musculo}</p>
+        <p style="margin-bottom:7px"><strong>Tendão:</strong> ${p.tendao}</p>
+        <p style="margin-bottom:7px"><strong>Ajuste indicado:</strong> ${p.quiro}</p>
+        <p><strong>Canal energético relacionado:</strong> ${p.canal}</p>
+      </div>
+    </div>`;
+  });
+  if(diag.escalaEmocional){
+    html+=`<div class="fc"><div class="fst">🌀 Estado emocional</div><p style="font-size:12.5px">${escHtml(diag.escalaEmocional)}${diag.emoObs?'<br><span style="color:var(--txt-l)">'+escHtml(diag.emoObs)+'</span>':''}</p></div>`;
+  }
+  return html||'<p style="color:var(--txt-l);font-size:13px">Nenhum elemento ou ponto registrado nesta avaliação.</p>';
+}
+
+// "Ver" — leitura rápida da avaliação, sem entrar em modo de edição.
+function verDiagHist(diagId){
+  const diag=gD('diagnosticos').find(d=>String(d.id)===String(diagId));
+  if(!diag)return;
+  document.getElementById('modC').innerHTML=`
+    <h3 style="color:var(--pri-d);margin-bottom:4px">🔮 Diagnóstico de ${fd(diag.data)}</h3>
+    <div style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Paciente: ${escHtml(diag.pacienteNome)}</div>
+    ${montarHtmlDiagnostico(diag)}
+    <div style="display:flex;gap:7px;justify-content:flex-end;margin-top:13px">
+      <button class="btn btn-sec btn-sm" onclick="fMod()">Fechar</button>
+      <button class="btn btn-pri btn-sm" onclick="fMod();editarDiagHist('${diag.id}','${diag.pacienteId}')">✏️ Editar</button>
+      <button class="btn btn-sec btn-sm" onclick="fMod();duplicarDiagHist('${diag.id}','${diag.pacienteId}')">📋 Duplicar</button>
+    </div>`;
+  document.getElementById('modP').classList.add('show');
+}
+
+// "Duplicar" — usa uma avaliação antiga como ponto de partida para uma
+// avaliação NOVA (registro separado, com data de hoje). A original
+// permanece intacta no histórico — mesmo padrão já usado em Recomendações.
+function duplicarDiagHist(diagId,pacId){
+  if(temEdicaoPacientePendente()&&!confirm('⚠️ Você tem alterações não salvas no cadastro deste paciente. Se continuar, elas serão perdidas. Continuar mesmo assim?'))return;
+  const diag=gD('diagnosticos').find(d=>String(d.id)===String(diagId));
+  if(!diag)return;
+  const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
+  _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})}};
+  _diagEditandoId=null;
+  _diagJaSalvo=false;
+  go('diagnostico',null);
+  setTimeout(()=>{
+    document.getElementById('diagPacBusca').value=_diagPacSel.nome;
+    document.getElementById('diagPacId').value=_diagPacSel.id;
+    document.getElementById('diagDt').value=new Date().toISOString().split('T')[0];
+    document.getElementById('diagEscalaEmo').value=diag.escalaEmocional||'';
+    document.getElementById('diagEmoObs').value=diag.emoObs||'';
+    const btn=document.getElementById('btnSalvarDiag');
+    if(btn)btn.textContent='💾 Salvar Avaliação';
+    renderElementosGrid();renderPontosGrid();renderDiagPainel();
+    toast('📋 Avaliação duplicada! Ajuste se necessário e salve.');
+  },200);
 }
 
 async function delDiagHist(diagId,pacId){
