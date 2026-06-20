@@ -979,6 +979,7 @@ async function syncTudo(){
 
 // Compatibilidade: versões síncronas usam cache
 const gD=k=>_cache[k]||[];
+const escHtml=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const sD=(k,v)=>{_cache[k]=v;dbSet(k,v);};
 const gC=k=>localStorage.getItem(k)||'';
 const sC=(k,v)=>localStorage.setItem(k,v);
@@ -1635,7 +1636,7 @@ function fecharRxPacLista(){
 let _diagPacSel=null;
 let _diagJaSalvo=false;
 let _diagEditandoId=null; // id do diagnóstico em edição (null = nova avaliação)
-let _diagSelecoes={elementos:[],pontos:[]}; // guarda o que foi clicado nesta avaliação
+let _diagSelecoes={elementos:[],pontos:[],elementosObs:{}}; // guarda o que foi clicado nesta avaliação + anotações por elemento
 
 const bancoIntegrativoCompleto = {
   // Nomes dos 6 sistemas fixos do Dr. Tan, sempre na mesma ordem
@@ -1756,7 +1757,8 @@ function renderPontosGrid(){
 
 function toggleElemento(nome){
   const i=_diagSelecoes.elementos.indexOf(nome);
-  if(i>=0)_diagSelecoes.elementos.splice(i,1);else _diagSelecoes.elementos.push(nome);
+  if(i>=0){_diagSelecoes.elementos.splice(i,1);delete _diagSelecoes.elementosObs[nome];}
+  else _diagSelecoes.elementos.push(nome);
   _diagJaSalvo=false;
   renderElementosGrid();
   renderDiagPainel();
@@ -1767,6 +1769,12 @@ function togglePonto(nome){
   _diagJaSalvo=false;
   renderPontosGrid();
   renderDiagPainel();
+}
+function atualizarObsElemento(nome,valor){
+  _diagSelecoes.elementosObs[nome]=valor;
+  _diagJaSalvo=false;
+  // Não re-renderiza o painel aqui de propósito: re-renderizar a cada tecla
+  // digitada destruiria o <textarea> e tiraria o foco/cursor do terapeuta.
 }
 
 function montarTabelaBalance(nomeElemento){
@@ -1805,6 +1813,7 @@ function renderDiagPainel(){
   let html='';
   _diagSelecoes.elementos.forEach(nome=>{
     const e=bancoIntegrativoCompleto.matrizCincoElementos[nome];
+    const obsAtual=_diagSelecoes.elementosObs[nome]||'';
     html+=`<div class="fc" style="border-left:5px solid ${e.cor}">
       <div class="fst" style="color:${e.cor}">${e.emoji} ${e.titulo}</div>
       <div style="font-size:12.5px;line-height:1.7">
@@ -1814,6 +1823,10 @@ function renderDiagPainel(){
         ${montarTabelaBalance(nome)}
         <p style="margin:9px 0 7px"><strong>🦴 Quiropraxia:</strong> ${e.quiro}</p>
         <p><strong>🌿 Fitoterapia sugerida:</strong> ${e.fito}</p>
+      </div>
+      <div style="margin-top:11px">
+        <label style="font-size:12px;font-weight:700;color:${e.cor}">📝 Observações clínicas — ${nome}</label>
+        <textarea rows="3" style="width:100%;margin-top:5px" placeholder="Anote achados, intensidade, evolução ou qualquer dado específico deste elemento neste paciente..." oninput="atualizarObsElemento('${nome}',this.value)">${escHtml(obsAtual)}</textarea>
       </div>
     </div>`;
   });
@@ -1863,7 +1876,7 @@ function fecharDiagPacLista(){
 
 function limparDiagnostico(){
   if(!confirm('Limpar toda a avaliação atual?'))return;
-  _diagSelecoes={elementos:[],pontos:[]};
+  _diagSelecoes={elementos:[],pontos:[],elementosObs:{}};
   document.getElementById('diagEscalaEmo').value='';
   document.getElementById('diagEmoObs').value='';
   _diagJaSalvo=false;
@@ -1905,30 +1918,44 @@ async function salvarDiagnostico(){
     data:document.getElementById('diagDt').value||new Date().toISOString().split('T')[0],
     elementos:[..._diagSelecoes.elementos],
     pontos:[..._diagSelecoes.pontos],
+    elementosObs:{..._diagSelecoes.elementosObs},
     escalaEmocional:document.getElementById('diagEscalaEmo').value,
     emoObs:document.getElementById('diagEmoObs').value
   };
-  if(_diagEditandoId){
-    // Atualização: substitui só este registro (mesmo id), sem afetar os demais
-    const diags=gD('diagnosticos').filter(d=>String(d.id)!==String(_diagEditandoId));
-    diags.push(diag);
-    _cache['diagnosticos']=diags;
-    await supaReq('DELETE','diagnosticos',null,`?dados->>id=eq.${_diagEditandoId}`);
-    await supaReq('POST','diagnosticos',[{'user_id':'montgomery','dados':diag}]);
-    _diagEditandoId=null;
-    const btn=document.getElementById('btnSalvarDiag');
-    if(btn)btn.textContent='💾 Salvar Avaliação';
-    toast('✏️ Avaliação atualizada com sucesso!');
-  } else {
-    const diags=gD('diagnosticos')||[];
-    diags.push(diag);
-    _cache['diagnosticos']=diags;
-    await supaReq('POST','diagnosticos',[{'user_id':'montgomery','dados':diag}]);
-    const btn=document.getElementById('btnSalvarDiag');
-    if(btn)btn.textContent='💾 Salvar Avaliação';
-    toast('💾 Avaliação salva no histórico do paciente!');
+  try{
+    if(_diagEditandoId){
+      // Atualização: substitui só este registro (mesmo id), sem afetar os demais
+      await supaReq('DELETE','diagnosticos',null,`?dados->>id=eq.${_diagEditandoId}`);
+      const ok=await supaReq('POST','diagnosticos',[{'user_id':'montgomery','dados':diag}]);
+      if(!ok){
+        toast('❌ Não foi possível salvar no servidor. Verifique sua conexão e tente novamente.','#c62828');
+        return;
+      }
+      const diags=gD('diagnosticos').filter(d=>String(d.id)!==String(_diagEditandoId));
+      diags.push(diag);
+      _cache['diagnosticos']=diags;
+      _diagEditandoId=null;
+      const btn=document.getElementById('btnSalvarDiag');
+      if(btn)btn.textContent='💾 Salvar Avaliação';
+      toast('✏️ Avaliação atualizada com sucesso!');
+    } else {
+      const ok=await supaReq('POST','diagnosticos',[{'user_id':'montgomery','dados':diag}]);
+      if(!ok){
+        toast('❌ Não foi possível salvar no servidor. Verifique sua conexão e tente novamente.','#c62828');
+        return;
+      }
+      const diags=gD('diagnosticos')||[];
+      diags.push(diag);
+      _cache['diagnosticos']=diags;
+      const btn=document.getElementById('btnSalvarDiag');
+      if(btn)btn.textContent='💾 Salvar Avaliação';
+      toast('💾 Avaliação salva no histórico do paciente!');
+    }
+    _diagJaSalvo=true;
+  }catch(e){
+    console.error('Erro ao salvar diagnóstico:',e);
+    toast('❌ Erro ao salvar avaliação: '+(e.message||'verifique sua conexão'),'#c62828');
   }
-  _diagJaSalvo=true;
 }
 
 function editarDiagHist(diagId,pacId){
@@ -1936,7 +1963,7 @@ function editarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos]};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})}};
   _diagEditandoId=diag.id;
   _diagJaSalvo=false;
   go('diagnostico',null);
@@ -2158,7 +2185,7 @@ async function carregarDiagHistPac(pacId){
         </div>
       </div>
       <div style="font-size:12px;color:var(--txt)">
-        ${d.elementos.map(nome=>`<span style="display:inline-block;background:var(--pri-l);border-radius:4px;padding:2px 7px;margin:2px;font-size:11px">${nome}</span>`).join('')}
+        ${d.elementos.map(nome=>`<span style="display:inline-block;background:var(--pri-l);border-radius:4px;padding:2px 7px;margin:2px;font-size:11px">${nome}${d.elementosObs&&d.elementosObs[nome]?' 📝':''}</span>`).join('')}
         ${d.pontos.map(nome=>`<span style="display:inline-block;background:#E3F2FD;border-radius:4px;padding:2px 7px;margin:2px;font-size:11px">🦴 ${nome}</span>`).join('')}
       </div>
       ${d.escalaEmocional?`<div style="font-size:11.5px;color:var(--txt-l);margin-top:5px">Estado emocional: ${d.escalaEmocional}</div>`:''}
