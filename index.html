@@ -1011,6 +1011,7 @@ function showLoading(show){
   el.style.display=show?'flex':'none';
 }
 let fotoB64='',editId=null,exTemp=[],ordP_='az',semOff_=0;
+let _pacFormDirty=false; // true quando há alteração real não salva no cadastro do paciente aberto
 
 // ===== CONFIG PADRÃO =====
 const CFG_DEFAULT={
@@ -1093,9 +1094,17 @@ function showTab(id,btn){
 
 // ===== SAVE STATUS =====
 function mudou(){
+  _pacFormDirty=true;
   document.getElementById('saveSt').className='sst unsaved';
   document.getElementById('saveSt').textContent='⚫ Não salvo';
   atuWA();
+}
+// Verdadeiro só quando o cadastro do paciente está aberto E tem alteração real
+// não salva — usado para avisar antes de navegar para Diagnóstico/Recomendação
+// a partir de dentro do cadastro, evitando perda silenciosa de dados.
+function temEdicaoPacientePendente(){
+  const pg=document.getElementById('pg-novo-paciente');
+  return !!(_pacFormDirty&&pg&&pg.classList.contains('active'));
 }
 function salvarRasc(){
   const d=coletarDados();d.foto=fotoB64;d.exames=exTemp;
@@ -1224,6 +1233,7 @@ function limparForm(){
   document.getElementById('fPac').reset();remFoto();fotoB64='';editId=null;exTemp=[];
   document.getElementById('fTit').textContent='➕ Novo Paciente';
   showTab('tp',document.querySelector('#mTabs button'));
+  _pacFormDirty=false;
   document.getElementById('saveSt').className='sst unsaved';
   document.getElementById('saveSt').textContent='⚫ Não salvo';
   document.getElementById('waBtn').style.display='none';renderEx();
@@ -1277,7 +1287,13 @@ function editarPac(id){
   const p=gD('pacientes').find(x=>String(x.id)===String(id));if(!p)return;
   editId=p.id;go('novo-paciente',null);
   document.getElementById('fTit').textContent='✏️ '+p.nome;
-  setTimeout(()=>{preencherForm(p);toast('✏️ Editando paciente','#1565C0');},80);
+  setTimeout(()=>{
+    preencherForm(p);
+    toast('✏️ Editando paciente','#1565C0');
+    _pacFormDirty=false;
+    document.getElementById('saveSt').className='sst saved';
+    document.getElementById('saveSt').textContent='✅ Salvo';
+  },80);
 }
 
 // ===== SELECT PACIENTE =====
@@ -1888,6 +1904,7 @@ function limparDiagnostico(){
 
 function enviarDiagParaRx(){
   if(!_diagPacSel){toast('⚠️ Selecione um paciente primeiro','#EF6C00');return;}
+  if(temEdicaoPacientePendente()&&!confirm('⚠️ Você tem alterações não salvas no cadastro deste paciente. Se continuar, elas serão perdidas. Continuar mesmo assim?'))return;
   // Apenas leva para a tela de Recomendação com o mesmo paciente já selecionado.
   // Diagnóstico e Recomendação são registros distintos e não compartilham dados.
   const pacId=_diagPacSel.id,pacNome=_diagPacSel.nome;
@@ -1959,6 +1976,7 @@ async function salvarDiagnostico(){
 }
 
 function editarDiagHist(diagId,pacId){
+  if(temEdicaoPacientePendente()&&!confirm('⚠️ Você tem alterações não salvas no cadastro deste paciente. Se continuar, elas serão perdidas. Continuar mesmo assim?'))return;
   const diag=gD('diagnosticos').find(d=>String(d.id)===String(diagId));
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
@@ -2264,6 +2282,7 @@ function _preencherFormRx(rx,dataParaUsar){
 // Edição real: abre uma recomendação já salva para alterar e, ao salvar,
 // ATUALIZA o mesmo registro do histórico (não cria um novo).
 function editarRx(rxId){
+  if(temEdicaoPacientePendente()&&!confirm('⚠️ Você tem alterações não salvas no cadastro deste paciente. Se continuar, elas serão perdidas. Continuar mesmo assim?'))return;
   const rx=gD('prescricoes').find(r=>String(r.id)===String(rxId));
   if(!rx)return;
   _rxEditandoId=rx.id;
@@ -2281,6 +2300,7 @@ function editarRx(rxId){
 // recomendação NOVA (registro separado, com data de hoje). O original
 // permanece intacto no histórico.
 function duplicarRx(rxId){
+  if(temEdicaoPacientePendente()&&!confirm('⚠️ Você tem alterações não salvas no cadastro deste paciente. Se continuar, elas serão perdidas. Continuar mesmo assim?'))return;
   const rxs=gD('prescricoes');
   const rx=rxs.find(r=>String(r.id)===String(rxId));
   if(!rx)return;
