@@ -106,6 +106,7 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .tabs{display:flex;border-bottom:2px solid var(--brd);margin-bottom:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tabs button{padding:9px 14px;border:none;background:none;font-size:12px;font-weight:600;color:var(--txt-l);cursor:pointer;border-bottom:3px solid transparent;transition:all .18s;white-space:nowrap;font-family:inherit;margin-bottom:-2px}
+.tabs button .btn-ic{vertical-align:-2px;margin-right:3px}
 .tabs button:hover{color:var(--pri)}.tabs button.active{color:var(--pri-d);border-bottom-color:var(--pri)}
 .tab-panel{display:none}.tab-panel.active{display:block}
 
@@ -385,26 +386,26 @@ tr:hover td{background:#EEF2F7}
       <div class="foto-ring" onclick="document.getElementById('fotoInp').click()">
         <div class="fp" id="fotoFP">👤</div>
         <img id="fotoPv" alt="">
-        <div class="foto-ov">📷 FOTO</div>
+        <div class="foto-ov"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5a1.5 1.5 0 0 1 1.5-1.5h2L9 5h6l1.5 2h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5Z"/><circle cx="12" cy="12.5" r="3.2"/></svg></span> FOTO</div>
       </div>
       <input type="file" id="fotoInp" style="display:none" accept="image/*" onchange="carregarFoto(this)">
       <div style="display:flex;gap:6px">
-        <button class="btn btn-sec btn-sm" onclick="document.getElementById('fotoInp').click()">📷 Foto</button>
+        <button class="btn btn-sec btn-sm" onclick="document.getElementById('fotoInp').click()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5a1.5 1.5 0 0 1 1.5-1.5h2L9 5h6l1.5 2h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5Z"/><circle cx="12" cy="12.5" r="3.2"/></svg></span> Foto</button>
         <button class="btn btn-dan btn-sm" id="btnRmF" style="display:none" onclick="remFoto()">✕</button>
       </div>
     </div>
     <div class="tabs" id="mTabs">
-      <button class="active" onclick="showTab('tp',this)">👤 Dados</button>
-      <button onclick="showTab('tq',this)">📝 Queixa</button>
-      <button onclick="showTab('th',this)">🏥 Histórico</button>
-      <button onclick="showTab('thb',this)">🍃 Hábitos</button>
-      <button onclick="showTab('ta',this)">🔴 Acupunt.</button>
-      <button onclick="showTab('tqr',this)">🔵 Quiropr.</button>
-      <button onclick="showTab('tps',this)">🟣 Psic.</button>
-      <button onclick="showTab('tc',this)">🌿 Complem.</button>
-      <button onclick="showTab('tex',this)">🖼️ Exames</button>
-      <button onclick="showTab('trx',this)">🌿 Recomendações</button>
-      <button onclick="showTab('tdg',this)">🔮 Diagnósticos</button>
+      <button class="active" onclick="showTab('tp',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6"/></svg></span>Dados</button>
+      <button onclick="showTab('tq',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M9 12h6M9 16h6"/></svg></span>Queixa</button>
+      <button onclick="showTab('th',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V9l7-5 7 5v12"/><path d="M9 21v-6h6v6"/><path d="M12 7v3M10.5 8.5h3"/></svg></span>Histórico</button>
+      <button onclick="showTab('thb',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg></span>Hábitos</button>
+      <button onclick="showTab('ta',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 7 4-14 2 7h6"/></svg></span>Acupunt.</button>
+      <button onclick="showTab('tqr',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.6"/><path d="M11.3 7v3.5l-2.2 2v3M12.7 10.5V14l2.2 2v3"/><circle cx="9" cy="13" r="1.2"/><circle cx="15" cy="16.5" r="1.2"/></svg></span>Quiropr.</button>
+      <button onclick="showTab('tps',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3 3 0 0 0 7 18a3 3 0 0 0 5-1 3 3 0 0 0 5 1 3 3 0 0 0 2-5.2A3 3 0 0 0 18 7a3 3 0 0 0-3-3 3 3 0 0 0-3 1 3 3 0 0 0-3-1Z"/></svg></span>Psic.</button>
+      <button onclick="showTab('tc',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-3 5-6 11-11"/></svg></span>Complem.</button>
+      <button onclick="showTab('tex',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg></span>Exames</button>
+      <button onclick="showTab('trx',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-3 5-6 11-11"/></svg></span>Recomendações</button>
+      <button onclick="showTab('tdg',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 7 4-14 2 7h6"/></svg></span>Diagnósticos</button>
     </div>
     <form id="fPac" onsubmit="salvarPac(event)">
       <div class="tab-panel active" id="tp">
@@ -527,7 +528,7 @@ tr:hover td{background:#EEF2F7}
     </div>
     <div style="overflow-x:auto">
       <table>
-        <thead><tr><th>📷</th><th>Nome</th><th>WhatsApp</th><th>Queixa</th><th>Cadastro</th><th>Ações</th></tr></thead>
+        <thead><tr><th><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5a1.5 1.5 0 0 1 1.5-1.5h2L9 5h6l1.5 2h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5Z"/><circle cx="12" cy="12.5" r="3.2"/></svg></span></th><th>Nome</th><th>WhatsApp</th><th>Queixa</th><th>Cadastro</th><th>Ações</th></tr></thead>
         <tbody id="tabP"><tr><td colspan="6" style="text-align:center;color:var(--txt-l);padding:28px">Nenhum paciente cadastrado</td></tr></tbody>
       </table>
     </div>
@@ -867,7 +868,7 @@ tr:hover td{background:#EEF2F7}
       <div>
         <p style="font-size:12.5px;color:var(--txt-l);margin-bottom:8px">Clique no círculo para adicionar sua logo.<br>Recomendado: imagem quadrada, mín. 200x200px</p>
         <div style="display:flex;gap:7px;flex-wrap:wrap">
-          <button class="btn btn-sec btn-sm" onclick="document.getElementById('cfgLogoInp').click()">📷 Carregar Logo</button>
+          <button class="btn btn-sec btn-sm" onclick="document.getElementById('cfgLogoInp').click()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8.5a1.5 1.5 0 0 1 1.5-1.5h2L9 5h6l1.5 2h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5Z"/><circle cx="12" cy="12.5" r="3.2"/></svg></span> Carregar Logo</button>
           <button class="btn btn-dan btn-sm" onclick="removerLogo()">✕ Remover</button>
         </div>
       </div>
