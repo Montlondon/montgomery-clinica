@@ -181,6 +181,7 @@ tr:hover td{background:#EEF2F7}
 .abc-merid-btn:hover{background:var(--bg)}
 .abc-merid-btn.on{background:var(--pri-deep);color:#fff;border-color:var(--pri-deep)}
 .abc-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow)}
+.abc-boneco{width:100%;max-width:160px;display:block;margin:0 auto 10px}
 
 /* FINANCEIRO CLÍNICA/PESSOAL */
 .seg-scope{display:flex;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:5px;width:fit-content;margin-bottom:18px}
@@ -2158,6 +2159,34 @@ function abcRenderMeridianoGrid(sel){
   if(!el)return;
   el.innerHTML=MERIDIANOS_12.map(m=>`<button type="button" class="abc-merid-btn${m===sel?' on':''}" onclick="abcFiltrarMeridiano('${m}')">${m}</button>`).join('');
 }
+// Boneco esquemático (braços e pernas) que desenha, por sistema, qual
+// posição corresponde ao meridiano selecionado (m) e quais são os outros 3
+// meridianos de balanço — lê só s.pontos, não cria dado novo.
+const ABC_BONECO_SLOTS=[
+  ['bracoEsquerdo',40,22,'start'],
+  ['bracoDireito',160,22,'end'],
+  ['pernaEsquerda',55,228,'middle'],
+  ['pernaDireita',145,228,'middle']
+];
+function abcBonecoSVG(s,m){
+  const pts=ABC_BONECO_SLOTS.map(([chave,x,y,anchor])=>{
+    const v=s.pontos[chave];
+    const arr=Array.isArray(v)?v:[v];
+    const hit=arr.includes(m);
+    return {chave,x,y,anchor,label:arr.join('/'),hit};
+  });
+  const linha=(x,y)=>`<line x1="100" y1="60" x2="${x}" y2="${y<130?y:60}"/>`;
+  return `<svg class="abc-boneco" viewBox="0 0 200 250" fill="none" stroke="var(--line)" stroke-width="3" stroke-linecap="round">
+    <circle cx="100" cy="30" r="14"/>
+    <line x1="100" y1="44" x2="100" y2="140"/>
+    <line x1="100" y1="60" x2="40" y2="22"/>
+    <line x1="100" y1="60" x2="160" y2="22"/>
+    <line x1="100" y1="140" x2="55" y2="228"/>
+    <line x1="100" y1="140" x2="145" y2="228"/>
+    ${pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="13" fill="${p.hit?'var(--pri-deep)':'var(--surface)'}" stroke="${p.hit?'var(--pri-deep)':'var(--ink-soft)'}" stroke-width="2"/>
+      <text x="${p.x}" y="${p.y+4}" text-anchor="middle" font-size="11" font-weight="700" font-family="Inter,sans-serif" fill="${p.hit?'#fff':'var(--ink)'}" stroke="none">${p.label}</text>`).join('')}
+  </svg>`;
+}
 function abcFiltrarMeridiano(m){
   abcRenderMeridianoGrid(m);
   const labelsSeg=[['Braço Esquerdo','bracoEsquerdo'],['Braço Direito','bracoDireito'],['Perna Esquerda','pernaEsquerda'],['Perna Direita','pernaDireita']];
@@ -2175,7 +2204,8 @@ function abcFiltrarMeridiano(m){
     return `<div class="abc-card">
       <div style="font-family:'Lora',serif;font-weight:600;font-size:14px;color:var(--pri-deep)">Sistema ${s.id} — ${s.elemento}</div>
       <div style="font-size:11px;color:var(--ink-soft);margin-bottom:8px">${s.categoria}</div>
-      <div style="font-size:12px;margin-bottom:8px"><strong>Meridianos de balanço a tratar:</strong> ${outros.join(', ')||'—'}</div>
+      ${abcBonecoSVG(s,m)}
+      <div style="font-size:12px;margin-bottom:8px;text-align:center"><strong>Meridianos de balanço a tratar:</strong> ${outros.join(', ')||'—'}</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px">${segHtml}</div>
       <div style="font-size:11.5px;color:var(--ink-soft);line-height:1.5">${s.protocolo}</div>
     </div>`;
