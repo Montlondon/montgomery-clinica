@@ -21,16 +21,18 @@ Objetivo do Montgomery: clicar no sintoma e o sistema já indicar qual elemento/
 ### 3. Módulo de Aurículoterapia
 Baseado no livro do curso do Montgomery (arquivo local, não vai para o Git — material com direitos de autor). Planejar estrutura de dados (zonas auriculares, indicações, pontos) e tela de visualização, no mesmo padrão usado para Sistemas ABC e Pontos do Corpo.
 
-### 4. Login na plataforma
-Hoje o app é aberto, sem autenticação — qualquer pessoa com o link acessa. Decisão: login via conta Google (OAuth), aproveitando que o app já usa Supabase.
+### 4. Login na plataforma — **DECIDIDO, agendado para depois**
+Hoje o app é aberto, sem autenticação — qualquer pessoa com o link acessa, e a chave do Supabase já fica visível no código-fonte da página. Um botão de login "decorativo" (só na tela) não protegeria os dados de verdade, porque a chave continuaria acessível direto pela API.
 
-**O que precisa ser feito (envolve passos manuais fora do código):**
+**Decisão tomada:** Supabase Auth com provedor Google, porque vincula login real ao e-mail do Montgomery e permite configurar RLS (regra no banco) restringindo os dados só à conta autenticada — a segurança fica no banco, não na tela.
+
+**O que precisa ser feito quando formos implementar (envolve passos manuais fora do código):**
 - Criar credenciais OAuth no Google Cloud Console (Client ID/Secret)
 - Habilitar o provedor Google em Supabase → Authentication → Providers
 - No código: trocar as chamadas REST diretas (`user_id='montgomery'` fixo) por sessão autenticada do Supabase Auth, e adicionar uma tela de login antes de liberar o painel
 - Decidir: login fica restrito só ao e-mail do Montgomery, ou permite múltiplos terapeutas no futuro?
 
-Esse é o item mais "arquitetural" da lista — muda a forma como o app fala com o banco. Vale planejar com calma antes de implementar.
+Status: priorizamos outras frentes primeiro (boneco do Balanço Método etc.) e voltamos a este item depois.
 
 ## Pendências / decisões em aberto
 
