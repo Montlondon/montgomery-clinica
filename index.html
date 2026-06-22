@@ -2162,14 +2162,14 @@ function abcRenderMeridianoGrid(sel){
 // Boneco esquemático (braços e pernas) que desenha, por sistema, qual
 // posição corresponde ao meridiano selecionado (m) e quais são os outros 3
 // meridianos de balanço — lê só s.pontos, não cria dado novo.
-// Posições espelhadas de propósito: paciente em decúbito dorsal, terapeuta de
-// frente para ele — o lado esquerdo do paciente cai do lado direito da tela
-// (e vice-versa), por isso bracoEsquerdo/pernaEsquerda desenham à direita.
+// Posição no desenho é literal (bracoEsquerdo desenha à esquerda da tela).
+// A inversão esquerda/direita do paciente em decúbito dorsal é só de
+// nomenclatura — ver ABC_LABEL_SEG, onde o rótulo exibido é invertido.
 const ABC_BONECO_SLOTS=[
-  ['bracoEsquerdo',160,22,'end'],
-  ['bracoDireito',40,22,'start'],
-  ['pernaEsquerda',145,228,'middle'],
-  ['pernaDireita',55,228,'middle']
+  ['bracoEsquerdo',40,22,'start'],
+  ['bracoDireito',160,22,'end'],
+  ['pernaEsquerda',55,228,'middle'],
+  ['pernaDireita',145,228,'middle']
 ];
 function abcBonecoSVG(s,m){
   const pts=ABC_BONECO_SLOTS.map(([chave,x,y,anchor])=>{
@@ -2196,7 +2196,9 @@ function abcBonecoSVG(s,m){
 }
 function abcFiltrarMeridiano(m){
   abcRenderMeridianoGrid(m);
-  const labelsSeg=[['Braço Esquerdo','bracoEsquerdo'],['Braço Direito','bracoDireito'],['Perna Esquerda','pernaEsquerda'],['Perna Direita','pernaDireita']];
+  // Rótulo exibido é o lado clínico do paciente (decúbito dorsal, terapeuta de
+  // frente) — por isso aparece invertido em relação ao nome do campo de dados.
+  const labelsSeg=[['Braço Direito','bracoEsquerdo'],['Braço Esquerdo','bracoDireito'],['Perna Direita','pernaEsquerda'],['Perna Esquerda','pernaDireita']];
   const matches=sistemasABC.filter(s=>s.id===m||abcGrupo(s).includes(m));
   const el=document.getElementById('abcResultados');
   if(!matches.length){el.innerHTML='<p style="font-size:12.5px;color:var(--ink-soft);padding:10px 0">Nenhum sistema encontrado para esse meridiano.</p>';return;}
