@@ -40,7 +40,14 @@ Hoje o app é aberto, sem autenticação — qualquer pessoa com o link acessa, 
 
 Status: priorizamos outras frentes primeiro (boneco do Balanço Método etc.) e voltamos a este item depois.
 
+### 5. Publicar como app nativo na Play Store (TWA) — **BEM FUTURO, sem pressa**
+Empacotar o site como Trusted Web Activity (caminho oficial do Google): gera um `.apk`/`.aab` de verdade, instalável pela Play Store, abrindo sem barra de navegador — visualmente idêntico a um app nativo. Exige conta de desenvolvedor Google Play (taxa única ~US$25) e processo de build/assinatura do pacote. Pré-requisito natural: ter o login (item 4) resolvido antes, já que um app na loja precisa de autenticação real.
+
+### 6. Carregamento mais rápido dos dados (cache local)
+Hoje todo carregamento do app baixa do zero todos os pacientes/sessões/diagnósticos/despesas do Supabase (4.000+ pacientes), por isso a tela "Conectando ao banco de dados..." demora alguns segundos. Possível melhoria futura: guardar os dados no próprio celular e mostrar na hora, atualizando em segundo plano — sem mudar nada na forma de usar o app.
+
 ## Pendências / decisões em aberto
 
 - Tabela `despesas` no Supabase: confirmar se RLS/policy está ativa igual às outras tabelas
 - Expandir "Pontos do Corpo" com mais regiões conforme a prática pedir
+- Ajuste de zoom mobile (10% hoje, reduzido de 18% por causar corte de tabelas) — acompanhar se está confortável de ler/tocar ou se precisa de mais um ajuste fino
