@@ -58,16 +58,19 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .ph-ic svg{width:20px;height:20px}
 .ic-sm{display:inline-flex;width:12px;height:12px;vertical-align:-1px;margin-right:4px;color:inherit}
 .ic-sm svg{width:12px;height:12px}
+.ic-md{display:inline-flex;width:15px;height:15px;flex-shrink:0;color:inherit}
+.ic-md svg{width:15px;height:15px}
 
 /* CARDS */
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:18px}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow)}
 .card h3,.card .label{font-size:11.5px;color:var(--ink-soft);text-transform:uppercase;margin-bottom:6px;letter-spacing:.05em;font-weight:600}
 .card .value,.card .valor{font-family:'Lora',serif;font-size:28px;font-weight:600;color:var(--pri-deep);margin-top:0}
+.card.money.oculto .value{filter:blur(7px);user-select:none;transition:filter .15s}
 
 /* FORMS */
 .fc{background:#FDFAF6;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
-.fst{font-size:13.5px;font-weight:700;color:var(--pri-d);margin-bottom:12px;padding-bottom:7px;border-bottom:2px solid var(--pri-l)}
+.fst{font-size:13.5px;font-weight:700;color:var(--pri-d);margin-bottom:12px;padding-bottom:7px;border-bottom:2px solid var(--pri-l);display:flex;align-items:center;gap:6px}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px}
 .fr.full{grid-template-columns:1fr}.fr.tri{grid-template-columns:1fr 1fr 1fr}
 .fg{display:flex;flex-direction:column;min-width:0}
@@ -212,7 +215,7 @@ tr:hover td{background:#EEF2F7}
 
 /* BACKUP */
 .bx{background:#FDFAF6;border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-bottom:12px}
-.bx h3{color:var(--pri-d);margin-bottom:5px;font-size:13.5px}
+.bx h3{color:var(--pri-d);margin-bottom:5px;font-size:13.5px;display:flex;align-items:center;gap:6px}
 .bx p{color:var(--txt-l);font-size:12px;margin-bottom:10px;line-height:1.6}
 .bx-ac{display:flex;gap:7px;flex-wrap:wrap}
 .steps{list-style:none;counter-reset:s;padding:0;margin:7px 0}
@@ -228,7 +231,7 @@ tr:hover td{background:#EEF2F7}
 .ph-i h3{color:var(--pri-d);font-size:15px;margin-bottom:3px}
 .ph-i p{color:var(--txt-l);font-size:12px;line-height:1.6}
 .psec{margin-bottom:12px}
-.psec h4{color:var(--pri);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;padding-bottom:3px;border-bottom:1px solid var(--brd)}
+.psec h4{color:var(--pri);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;padding-bottom:3px;border-bottom:1px solid var(--brd);display:flex;align-items:center;gap:5px}
 .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 .pi{font-size:12px;line-height:1.6}
 .pi strong{color:var(--txt-l);display:block;font-size:10px;text-transform:uppercase}
@@ -329,16 +332,19 @@ tr:hover td{background:#EEF2F7}
 <section class="page active" id="pg-dashboard">
   <div class="page-header">
     <h1><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>Painel</h1>
-    <span style="color:var(--txt-l);font-size:12px" id="dtHoje"></span>
+    <span style="display:flex;align-items:center;gap:10px">
+      <span style="color:var(--txt-l);font-size:12px" id="dtHoje"></span>
+      <button class="btn btn-sec btn-sm no-print" id="btnOcultarValores" onclick="toggleValoresPainel()" title="Ocultar/exibir valores"></button>
+    </span>
   </div>
   <div class="cards">
     <div class="card"><h3>Pacientes</h3><div class="value" id="stP">0</div></div>
     <div class="card"><h3>Sessões/Mês</h3><div class="value" id="stS">0</div></div>
-    <div class="card"><h3><span class="ic-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M8.3 12.5l2.4 2.4 5-5.4"/></svg></span>Recebido</h3><div class="value" id="stR">R$0</div></div>
-    <div class="card"><h3><span class="ic-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v5l3.3 2"/></svg></span>Pendente</h3><div class="value" id="stPd">R$0</div></div>
+    <div class="card money"><h3><span class="ic-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M8.3 12.5l2.4 2.4 5-5.4"/></svg></span>Recebido</h3><div class="value" id="stR">R$0</div></div>
+    <div class="card money"><h3><span class="ic-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v5l3.3 2"/></svg></span>Pendente</h3><div class="value" id="stPd">R$0</div></div>
   </div>
   <div class="fc">
-    <div class="fst">📋 Últimas Sessões</div>
+    <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M9 12h6M9 16h6"/></svg></span>Últimas Sessões</div>
     <div style="overflow-x:auto">
       <table>
         <thead><tr><th>Data</th><th>Paciente</th><th>Procedimento</th><th>Valor</th><th>Status</th></tr></thead>
@@ -454,28 +460,28 @@ tr:hover td{background:#EEF2F7}
         <div class="fr full"><div class="fg"><label>Encaminhamentos</label><textarea id="pEnc" rows="2" oninput="mudou()"></textarea></div></div>
       </div>
       <div class="tab-panel" id="tc">
-        <div class="fst">🌿 Fitoterapia</div>
+        <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-3 5-6 11-11"/></svg></span>Fitoterapia</div>
         <div class="fr full"><div class="fg"><label>Indicação</label><textarea id="pFt" rows="3" oninput="mudou()"></textarea></div></div>
         <div class="fr full"><div class="fg"><label>Contraindicações</label><textarea id="pCF" rows="2" oninput="mudou()"></textarea></div></div>
-        <div class="fst" style="margin-top:14px">🧘 Seitai</div>
+        <div class="fst" style="margin-top:14px"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="M12 7v6M7 11l5 2 5-2M9 22l3-7 3 7"/></svg></span>Seitai</div>
         <div class="fr full"><div class="fg"><label>Avaliação</label><textarea id="pSA" rows="3" oninput="mudou()"></textarea></div></div>
         <div class="fr full"><div class="fg"><label>Técnicas</label><textarea id="pST" rows="3" oninput="mudou()"></textarea></div></div>
         <div class="fr full"><div class="fg"><label>Obs. gerais</label><textarea id="pOG" rows="3" oninput="mudou()"></textarea></div></div>
       </div>
       <div class="tab-panel" id="tex">
-        <div class="fst">🖼️ Exames e Imagens</div>
+        <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg></span>Exames e Imagens</div>
         <p style="font-size:12px;color:var(--txt-l);margin-bottom:11px">Adicione fotos de exames, radiografias ou imagens relevantes. Clique para ampliar.</p>
         <div class="ex-grid" id="exGrid"><div class="ex-add" onclick="document.getElementById('exInp').click()"><span style="font-size:24px">➕</span><span>Adicionar</span></div></div>
         <input type="file" id="exInp" style="display:none" accept="image/*" multiple onchange="addExames(this)">
         <div style="margin-top:11px;padding:9px;background:var(--pri-l);border-radius:6px;font-size:11.5px;color:var(--txt-l)">💡 Máx 5MB por imagem. Clique para ampliar.</div>
       </div>
       <div class="tab-panel" id="trx">
-        <div class="fst">🌿 Histórico de Recomendações Terapêuticas</div>
+        <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-3 5-6 11-11"/></svg></span>Histórico de Recomendações Terapêuticas</div>
         <p style="font-size:12px;color:var(--txt-l);margin-bottom:11px">Todas as recomendações já feitas para este paciente. Duplique uma antiga para agilizar um novo atendimento.</p>
         <div id="rxHistLista"><div style="text-align:center;color:var(--txt-l);padding:20px;font-size:13px">Nenhuma recomendação registrada ainda.</div></div>
       </div>
       <div class="tab-panel" id="tdg">
-        <div class="fst">🔮 Histórico de Diagnósticos Integrados</div>
+        <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 7 4-14 2 7h6"/></svg></span>Histórico de Diagnósticos Integrados</div>
         <p style="font-size:12px;color:var(--txt-l);margin-bottom:11px">Todas as avaliações de Diagnóstico Integrado já registradas para este paciente.</p>
         <div id="diagHistLista"><div style="text-align:center;color:var(--txt-l);padding:20px;font-size:13px">Nenhuma avaliação registrada ainda.</div></div>
       </div>
@@ -516,7 +522,7 @@ tr:hover td{background:#EEF2F7}
 <section class="page" id="pg-nova-sessao">
   <div class="page-header"><h1><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M12 11v6M9 14h6"/></svg></span>Nova Sessão</h1></div>
   <div class="fc">
-    <div class="fst">🔍 Selecionar Paciente</div>
+    <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>Selecionar Paciente</div>
     <div class="fg" style="margin-bottom:14px">
       <div class="ps-wrap" id="psWrap">
         <input type="text" class="ps-inp" id="psBusca" placeholder="🔍 Digite o nome do paciente..." oninput="filtrarPS()" onfocus="abrirPS()" autocomplete="off">
@@ -570,7 +576,7 @@ tr:hover td{background:#EEF2F7}
   </div>
   <div class="cal-wrap" style="margin-bottom:14px"><div id="calSem"></div></div>
   <div class="fc">
-    <div class="fst">📋 Sessões</div>
+    <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M9 12h6M9 16h6"/></svg></span>Sessões</div>
     <div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px">
       <div class="fg"><label>Mês</label><select id="agMes" onchange="renderAg()"><option value="">Todos</option><option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option><option value="3">Abril</option><option value="4">Maio</option><option value="5">Junho</option><option value="6">Julho</option><option value="7">Agosto</option><option value="8">Setembro</option><option value="9">Outubro</option><option value="10">Novembro</option><option value="11">Dezembro</option></select></div>
       <div class="fg"><label>Ano</label><select id="agAno" onchange="renderAg()"><option value="2025">2025</option><option value="2026">2026</option><option value="2024">2024</option></select></div>
@@ -606,7 +612,7 @@ tr:hover td{background:#EEF2F7}
       </div>
       <div class="fg"><label>Data</label><input type="date" id="rxDt"></div>
     </div>
-    <div class="fst" style="margin-top:4px">🌱 Plantas / Substâncias</div>
+    <div class="fst" style="margin-top:4px"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-9"/><path d="M12 12c0-5 3-8 7-8 0 5-2 8-7 8Z"/><path d="M12 15c0-4-3-6-6-6 0 4 2 6 6 6Z"/></svg></span>Plantas / Substâncias</div>
     <div id="rxPlantas">
       <div class="rx-p" style="padding:10px;background:var(--pri-l);border-radius:7px;margin-bottom:8px">
         <div class="fr"><div class="fg"><label>Planta</label><input type="text" class="rxNm" placeholder="Ex: Passiflora incarnata"></div><div class="fg"><label>Forma</label><select class="rxFm"><option value="">-</option><option>Chá (infusão)</option><option>Chá (decocção)</option><option>Tintura</option><option>Cápsula</option><option>Extrato seco</option><option>Pomada</option><option>Óleo essencial</option><option>Banho</option><option>Outra</option></select></div></div>
@@ -661,13 +667,13 @@ tr:hover td{background:#EEF2F7}
   </div>
 
   <div class="fc">
-    <div class="fst">☯️ 5 Elementos — Medicina Tradicional Chinesa</div>
+    <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9"/><circle cx="12" cy="7.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="12" cy="16.5" r="1.3" fill="currentColor" stroke="none"/></svg></span>5 Elementos — Medicina Tradicional Chinesa</div>
     <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Clique em um elemento para ver órgãos, relógio biológico, psique, método Balance e fitoterapia.</p>
     <div id="elementosGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px"></div>
   </div>
 
   <div class="fc">
-    <div class="fst">🦴 Pontos do Corpo — Avaliação Quiroprática</div>
+    <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.6"/><path d="M11.3 7v3.5l-2.2 2v3M12.7 10.5V14l2.2 2v3"/><circle cx="9" cy="13" r="1.2"/><circle cx="15" cy="16.5" r="1.2"/></svg></span>Pontos do Corpo — Avaliação Quiroprática</div>
     <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Clique em uma região para ver músculos, tendões, ajustes e canal energético relacionado.</p>
     <div id="pontosGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px"></div>
   </div>
@@ -675,7 +681,7 @@ tr:hover td{background:#EEF2F7}
   <div id="diagPainel" style="display:none"></div>
 
   <div class="fc">
-    <div class="fst">🌀 Escala de Orientação Emocional</div>
+    <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg></span>Escala de Orientação Emocional</div>
     <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Registro do estado emocional predominante do paciente nesta avaliação.</p>
     <div class="fg full">
       <select id="diagEscalaEmo" style="width:100%" onchange="renderDiagPainel()">
@@ -712,7 +718,7 @@ tr:hover td{background:#EEF2F7}
   </div>
 
   <div class="fc" id="diagResumoBox" style="display:none">
-    <div class="fst">📋 Resumo da Avaliação</div>
+    <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M9 12h6M9 16h6"/></svg></span>Resumo da Avaliação</div>
     <div id="diagResumo" style="font-size:13px;line-height:1.7"></div>
     <div class="fa" style="margin-top:14px">
       <button type="button" class="btn btn-sec" onclick="limparDiagnostico()">🗑️ Limpar Avaliação</button>
@@ -808,7 +814,7 @@ tr:hover td{background:#EEF2F7}
   <div class="page-header"><h1><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v2.3M12 19.2v2.3M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.3M19.2 12h2.3M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg></span>Configurações</h1></div>
 
   <div class="cfg-section">
-    <h3>🏥 Identidade da Clínica</h3>
+    <h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V9l7-5 7 5v12"/><path d="M9 21v-6h6v6"/><path d="M12 7v3M10.5 8.5h3"/></svg></span>Identidade da Clínica</h3>
     <div class="logo-preview-wrap">
       <div class="logo-preview" id="cfgLogoPreview" onclick="document.getElementById('cfgLogoInp').click()">
         <img id="cfgLogoImg" src="" alt="Logo" style="display:none;width:100%;height:100%;object-fit:cover">
@@ -828,20 +834,20 @@ tr:hover td{background:#EEF2F7}
   </div>
 
   <div class="cfg-section">
-    <h3>📍 Endereço e Contato</h3>
+    <h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-7.4 7-12a7 7 0 1 0-14 0c0 4.6 7 12 7 12Z"/><circle cx="12" cy="9" r="2.3"/></svg></span>Endereço e Contato</h3>
     <div class="fr full"><div class="fg"><label>Endereço completo</label><input type="text" id="cfgEnd" value="R. Miro Ferreira de Oliveira, 110 - Adelaide Bessa, Itambacuri - MG, 39.830-000"></div></div>
     <div class="fr"><div class="fg"><label>Telefone / WhatsApp</label><input type="text" id="cfgTel" placeholder="(33) 00000-0000"></div><div class="fg"><label>Email</label><input type="email" id="cfgEmail" placeholder="contato@exemplo.com"></div></div>
   </div>
 
   <div class="cfg-section">
-    <h3>🌐 Redes Sociais</h3>
+    <h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 4 6.2 4 9s-1.5 6.3-4 9c-2.5-2.7-4-6.2-4-9s1.5-6.3 4-9Z"/></svg></span>Redes Sociais</h3>
     <div class="fr"><div class="fg"><label>Instagram</label><input type="text" id="cfgInsta" placeholder="@seuinstagram" value="@montgomerymagalhaes"></div><div class="fg"><label>WhatsApp (número)</label><input type="text" id="cfgWA" placeholder="5533900000000"></div></div>
     <div class="fr"><div class="fg"><label>YouTube</label><input type="text" id="cfgYT" placeholder="Link do canal"></div><div class="fg"><label>Linktree / Site</label><input type="text" id="cfgLink" value="https://linktr.ee/montgomerymagalhaes"></div></div>
     <div class="fr full"><div class="fg"><label>Facebook</label><input type="text" id="cfgFB" placeholder="Link do Facebook"></div></div>
   </div>
 
   <div class="cfg-section">
-    <h3>💰 Financeiro</h3>
+    <h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.2"/><path d="M3 10.5h18"/><circle cx="16.3" cy="14.3" r="1.1" fill="currentColor" stroke="none"/></svg></span>Financeiro</h3>
     <div class="toggle-row">
       <div>
         <div class="desc">Mostrar finanças pessoais</div>
@@ -852,7 +858,7 @@ tr:hover td{background:#EEF2F7}
   </div>
 
   <div class="cfg-section">
-    <h3>🎨 Informações para Recomendação Terapêutica</h3>
+    <h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-3 5-6 11-11"/></svg></span>Informações para Recomendação Terapêutica</h3>
     <p style="font-size:12px;color:var(--txt-l);margin-bottom:10px">Estas informações aparecem automaticamente em todas as prescrições.</p>
     <div class="fr"><div class="fg"><label>Texto do rodapé da prescrição</label><input type="text" id="cfgRxRod" value="Em caso de reação adversa, suspenda o uso e entre em contato."></div><div class="fg"><label>Observação padrão</label><input type="text" id="cfgRxObs" placeholder="Texto padrão de observação..."></div></div>
   </div>
@@ -878,7 +884,7 @@ tr:hover td{background:#EEF2F7}
   </div>
 
   <div class="drive-box">
-    <h4>☁️ Configurar Google Drive (Recomendado)</h4>
+    <h4 style="display:flex;align-items:center;gap:6px"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18a4.5 4.5 0 0 1-.5-8.97A5.5 5.5 0 0 1 17 8.5a4 4 0 0 1 .5 7.95"/><path d="M7 18h10"/></svg></span>Configurar Google Drive (Recomendado)</h4>
     <ol class="steps">
       <li>Crie a pasta <strong>C:\Montgomery\Clinica\Backup\</strong> no seu PC</li>
       <li>Instale o <strong>Google Drive Desktop</strong> (drive.google.com/drive/download)</li>
@@ -889,7 +895,7 @@ tr:hover td{background:#EEF2F7}
   </div>
 
   <div class="bx">
-    <h3>📤 Exportar Dados</h3>
+    <h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg></span>Exportar Dados</h3>
     <p>Faça backup completo ou exporte para Excel. Salve na pasta do Google Drive!</p>
     <div class="bx-ac">
       <button class="btn btn-pri" onclick="expJSON()">📤 Backup Completo</button>
@@ -898,12 +904,12 @@ tr:hover td{background:#EEF2F7}
     </div>
   </div>
   <div class="bx">
-    <h3>📥 Importar / Restaurar</h3>
+    <h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M7 11l5 5 5-5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg></span>Importar / Restaurar</h3>
     <p>Restaura um backup anterior. <strong style="color:var(--danger)">Substitui todos os dados atuais!</strong></p>
     <div class="bx-ac"><label class="btn btn-war" style="cursor:pointer">📥 Restaurar Backup<input type="file" accept=".json" style="display:none" onchange="impJSON(this)"></label></div>
   </div>
   <div class="bx">
-    <h3>📱 Usar no Celular Android</h3>
+    <h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 19h2"/></svg></span>Usar no Celular Android</h3>
     <ol class="steps">
       <li>Salve o arquivo <strong>clinica.html</strong> no Google Drive</li>
       <li>No celular → abra o app <strong>Google Drive</strong></li>
@@ -913,16 +919,16 @@ tr:hover td{background:#EEF2F7}
     </ol>
     <p style="font-size:11.5px;color:var(--danger);margin-top:8px">⚠️ Dados do celular ficam separados. Use Exportar/Importar para sincronizar.</p>
   </div>
-  <div class="bx"><h3>🗑️ Limpar Dados</h3><p><strong style="color:var(--danger)">Irreversível!</strong> Faça backup antes.</p><div class="bx-ac"><button class="btn btn-dan" onclick="limparTudo()">🗑️ Limpar Tudo</button></div></div>
-  <div class="bx"><h3>📊 Status</h3><div id="infoSys" style="font-size:12px;color:var(--txt-l);line-height:2.2"></div></div>
+  <div class="bx"><h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span>Limpar Dados</h3><p><strong style="color:var(--danger)">Irreversível!</strong> Faça backup antes.</p><div class="bx-ac"><button class="btn btn-dan" onclick="limparTudo()">🗑️ Limpar Tudo</button></div></div>
+  <div class="bx"><h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M10 20V4M16 20v-8M21 20H3"/></svg></span>Status</h3><div id="infoSys" style="font-size:12px;color:var(--txt-l);line-height:2.2"></div></div>
 </section>
 
 <!-- ===== CONTATOS ===== -->
 <section class="page" id="pg-contatos">
   <div class="page-header"><h1><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="14" height="18" rx="2"/><circle cx="11" cy="10" r="2.3"/><path d="M7.5 16.5c0-1.8 1.5-3 3.5-3s3.5 1.2 3.5 3"/><path d="M2 7h2M2 11h2M2 15h2"/></svg></span>Importar Contatos</h1></div>
-  <div class="bx"><h3>📧 Google Contatos</h3><ol class="steps"><li>Acesse <strong>contacts.google.com</strong></li><li>Menu → <strong>Exportar</strong></li><li>Formato: <strong>vCard (.vcf)</strong></li><li>Importe abaixo</li></ol></div>
-  <div class="bx"><h3>📱 Celular</h3><ol class="steps"><li><strong>Android:</strong> App Contatos → Menu → Exportar → .vcf</li><li><strong>iPhone:</strong> icloud.com/contacts → Exportar vCard</li></ol></div>
-  <div class="bx"><h3>📥 Importar .VCF</h3>
+  <div class="bx"><h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg></span>Google Contatos</h3><ol class="steps"><li>Acesse <strong>contacts.google.com</strong></li><li>Menu → <strong>Exportar</strong></li><li>Formato: <strong>vCard (.vcf)</strong></li><li>Importe abaixo</li></ol></div>
+  <div class="bx"><h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 19h2"/></svg></span>Celular</h3><ol class="steps"><li><strong>Android:</strong> App Contatos → Menu → Exportar → .vcf</li><li><strong>iPhone:</strong> icloud.com/contacts → Exportar vCard</li></ol></div>
+  <div class="bx"><h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M7 11l5 5 5-5"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg></span>Importar .VCF</h3>
     <div class="bx-ac"><label class="btn btn-pri" style="cursor:pointer">📥 Selecionar .VCF<input type="file" accept=".vcf,.vcard" style="display:none" onchange="lerVCF(this)"></label></div>
     <div id="vcfRes" style="margin-top:14px"></div>
   </div>
@@ -1405,7 +1411,7 @@ function verPac(id){
   const fH=p.foto?`<img src="${p.foto}">`:'👤';
   const wa=waUrl(p.telefone);
   const c=(l,val)=>val?`<div class="pi"><strong>${l}</strong><span>${val}</span></div>`:'';
-  const exH=p.exames&&p.exames.length?`<div class="psec"><h4>🖼️ Exames (${p.exames.length})</h4>
+  const exH=p.exames&&p.exames.length?`<div class="psec"><h4><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg></span>Exames (${p.exames.length})</h4>
     <div class="ex-grid" style="grid-template-columns:repeat(auto-fill,minmax(75px,1fr))">
       ${p.exames.map(ex=>`<div class="ex-card" onclick="verExImg('${ex.data}')"><img src="${ex.data}"><div class="ex-lb">${ex.nome.substring(0,14)}</div></div>`).join('')}
     </div></div>`:'';
@@ -1415,11 +1421,11 @@ function verPac(id){
       ${p.telefone?`<p><a href="${wa}" target="_blank" style="color:#25D366;font-weight:600;text-decoration:none">💬 ${p.telefone}</a></p>`:''}
       ${p.email?`<p>📧 ${p.email}</p>`:''}${p.profissao?`<p>💼 ${p.profissao}</p>`:''}
     </div></div>
-    ${p.queixa?`<div class="psec"><h4>📝 Queixa</h4><p style="font-size:12px">${p.queixa}</p><div class="pgrid" style="margin-top:6px">${c('Tempo',p.tempoQueixa)}${c('Intensidade',p.intensidade)}</div></div>`:''}
-    ${p.doencas||p.medicamentos?`<div class="psec"><h4>🏥 Histórico</h4><div class="pgrid">${c('Doenças',p.doencas)}${c('Medicamentos',p.medicamentos)}${c('Alergias',p.alergias)}</div></div>`:''}
-    ${p.pontos||p.diagMTC?`<div class="psec"><h4>🔴 Acupuntura</h4><div class="pgrid">${c('Diagnóstico',p.diagMTC)}${c('Pontos',p.pontos)}</div></div>`:''}
-    ${p.regiao?`<div class="psec"><h4>🔵 Quiropraxia</h4><div class="pgrid">${c('Região',p.regiao)}${c('Vértebras',p.vertebras)}</div></div>`:''}
-    ${p.fitoterapia?`<div class="psec"><h4>🌿 Fitoterapia</h4><p style="font-size:12px">${p.fitoterapia}</p></div>`:''}
+    ${p.queixa?`<div class="psec"><h4><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M12 11v6M9 14h6"/></svg></span>Queixa</h4><p style="font-size:12px">${p.queixa}</p><div class="pgrid" style="margin-top:6px">${c('Tempo',p.tempoQueixa)}${c('Intensidade',p.intensidade)}</div></div>`:''}
+    ${p.doencas||p.medicamentos?`<div class="psec"><h4><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V9l7-5 7 5v12"/><path d="M9 21v-6h6v6"/><path d="M12 7v3M10.5 8.5h3"/></svg></span>Histórico</h4><div class="pgrid">${c('Doenças',p.doencas)}${c('Medicamentos',p.medicamentos)}${c('Alergias',p.alergias)}</div></div>`:''}
+    ${p.pontos||p.diagMTC?`<div class="psec"><h4><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 7 4-14 2 7h6"/></svg></span>Acupuntura</h4><div class="pgrid">${c('Diagnóstico',p.diagMTC)}${c('Pontos',p.pontos)}</div></div>`:''}
+    ${p.regiao?`<div class="psec"><h4><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.6"/><path d="M11.3 7v3.5l-2.2 2v3M12.7 10.5V14l2.2 2v3"/><circle cx="9" cy="13" r="1.2"/><circle cx="15" cy="16.5" r="1.2"/></svg></span>Quiropraxia</h4><div class="pgrid">${c('Região',p.regiao)}${c('Vértebras',p.vertebras)}</div></div>`:''}
+    ${p.fitoterapia?`<div class="psec"><h4><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-3 5-6 11-11"/></svg></span>Fitoterapia</h4><p style="font-size:12px">${p.fitoterapia}</p></div>`:''}
     ${exH}
     <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:13px;flex-wrap:wrap">
       ${wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm">💬</a>`:''}
@@ -2167,7 +2173,7 @@ function renderDiagPainel(){
   _diagSelecoes.pontos.forEach(nome=>{
     const p=bancoIntegrativoCompleto.pontosCorpo[nome];
     html+=`<div class="fc" style="border-left:5px solid var(--pri)">
-      <div class="fst">🦴 ${p.regiao}</div>
+      <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.6"/><path d="M11.3 7v3.5l-2.2 2v3M12.7 10.5V14l2.2 2v3"/><circle cx="9" cy="13" r="1.2"/><circle cx="15" cy="16.5" r="1.2"/></svg></span>${p.regiao}</div>
       <div style="font-size:12.5px;line-height:1.7">
         <p style="margin-bottom:7px"><strong>Músculo:</strong> ${p.musculo}</p>
         <p style="margin-bottom:7px"><strong>Tendão:</strong> ${p.tendao}</p>
@@ -2553,7 +2559,7 @@ function montarHtmlDiagnostico(diag){
     const p=bancoIntegrativoCompleto.pontosCorpo[nome];
     if(!p)return;
     html+=`<div class="fc" style="border-left:5px solid var(--pri)">
-      <div class="fst">🦴 ${p.regiao}</div>
+      <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.6"/><path d="M11.3 7v3.5l-2.2 2v3M12.7 10.5V14l2.2 2v3"/><circle cx="9" cy="13" r="1.2"/><circle cx="15" cy="16.5" r="1.2"/></svg></span>${p.regiao}</div>
       <div style="font-size:12.5px;line-height:1.7">
         <p style="margin-bottom:7px"><strong>Músculo:</strong> ${p.musculo}</p>
         <p style="margin-bottom:7px"><strong>Tendão:</strong> ${p.tendao}</p>
@@ -2563,7 +2569,7 @@ function montarHtmlDiagnostico(diag){
     </div>`;
   });
   if(diag.escalaEmocional){
-    html+=`<div class="fc"><div class="fst">🌀 Estado emocional</div><p style="font-size:12.5px">${escHtml(diag.escalaEmocional)}${diag.emoObs?'<br><span style="color:var(--txt-l)">'+escHtml(diag.emoObs)+'</span>':''}</p></div>`;
+    html+=`<div class="fc"><div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg></span>Estado emocional</div><p style="font-size:12.5px">${escHtml(diag.escalaEmocional)}${diag.emoObs?'<br><span style="color:var(--txt-l)">'+escHtml(diag.emoObs)+'</span>':''}</p></div>`;
   }
   return html||'<p style="color:var(--txt-l);font-size:13px">Nenhum elemento ou ponto registrado nesta avaliação.</p>';
 }
@@ -2921,6 +2927,19 @@ function mostrarPolitica(){
 }
 
 // ===== DASHBOARD =====
+const eyeOpenSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>';
+const eyeOffSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><path d="M2 12s3.6-7 10-7c1.8 0 3.4.4 4.7 1.1M22 12s-3.6 7-10 7c-1.8 0-3.4-.4-4.7-1.1"/><path d="M9.5 9.5a3 3 0 0 0 4.2 4.2"/><path d="M3 3l18 18"/></svg>';
+function ocultarValoresAtivo(){return localStorage.getItem('cfg_ocultar_valores_painel')==='true';}
+function aplicarOcultarValores(){
+  const on=ocultarValoresAtivo();
+  document.querySelectorAll('.card.money').forEach(c=>c.classList.toggle('oculto',on));
+  const btn=document.getElementById('btnOcultarValores');
+  if(btn)btn.innerHTML=(on?eyeOffSvg+' Mostrar':eyeOpenSvg+' Ocultar')+' valores';
+}
+function toggleValoresPainel(){
+  localStorage.setItem('cfg_ocultar_valores_painel',ocultarValoresAtivo()?'false':'true');
+  aplicarOcultarValores();
+}
 function atuDash(){
   const pacs=gD('pacientes'),ss=gD('sessoes');
   const h=new Date();
@@ -2929,6 +2948,7 @@ function atuDash(){
   document.getElementById('stS').textContent=sm.length;
   document.getElementById('stR').textContent=fm(sm.filter(s=>s.status==='pago').reduce((a,s)=>a+s.valor,0));
   document.getElementById('stPd').textContent=fm(sm.filter(s=>s.status==='pendente').reduce((a,s)=>a+s.valor,0));
+  aplicarOcultarValores();
   const ult=ss.sort((a,b)=>new Date(b.data)-new Date(a.data)).slice(0,6);
   const tb=document.getElementById('dashT');
   if(!ult.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--txt-l);padding:24px">Nenhuma sessão registrada</td></tr>';return;}
