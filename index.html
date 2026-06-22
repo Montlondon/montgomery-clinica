@@ -908,7 +908,13 @@ tr:hover td{background:#EEF2F7}
 
 <!-- ===== SUPLEMENTOS ===== -->
 <section class="page" id="pg-suplementos">
-  <div class="page-header"><h1><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v4l2 2v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-2Z"/><path d="M9 3h6M9 12h6"/></svg></span>Suplementos</h1><button class="btn btn-pri btn-sm" onclick="abrirModalSuplemento()">➕ Novo</button></div>
+  <div class="page-header"><h1><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v4l2 2v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-2Z"/><path d="M9 3h6M9 12h6"/></svg></span>Suplementos</h1>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="btn btn-sec btn-sm" onclick="exportarSuplementosCsv()" title="Salva uma planilha .csv que abre direto no Excel ou Google Sheets"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5a1 1 0 0 0 1 1h5"/><path d="M19 9v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h8z"/><path d="M9 13h6M9 16h6"/></svg></span> Exportar Excel</button>
+      <button class="btn btn-sec btn-sm" onclick="imprimirSuplementos()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg></span> Imprimir</button>
+      <button class="btn btn-pri btn-sm" onclick="abrirModalSuplemento()">➕ Novo</button>
+    </div>
+  </div>
   <div class="tw">
     <div class="ttb">
       <div class="sw"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><input type="text" id="busSup" placeholder="Buscar produto, fornecedor..." oninput="renderSuplementos()"></div>
@@ -1719,7 +1725,7 @@ function atuResumoGeralClinica(){
   document.getElementById('finResumoDesp').textContent=fm(desp);
   const elSaldo=document.getElementById('finResumoSaldo');
   elSaldo.textContent=fm(saldo);
-  elSaldo.style.color=saldo>=0?'#3F5C33':'#A23B3B';
+  elSaldo.style.color=saldo>=0?'#A8E6A1':'#FF8A80';
 }
 function atuFin(){
   let ss=gD('sessoes');
@@ -1952,6 +1958,39 @@ async function dDespesa(id){
 }
 
 // ===== SUPLEMENTOS (catálogo / estoque) =====
+// Exporta o catálogo de suplementos como .csv (abre direto no Excel/Google Sheets),
+// pensado pra compartilhar a lista de estoque com quem faz a compra (ex: esposa).
+function exportarSuplementosCsv(){
+  const lista=gD('suplementos').sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
+  if(!lista.length){toast('⚠️ Nenhum produto no catálogo','#EF6C00');return;}
+  const linhas=[['Produto','Fornecedor','Descrição','Preço','Estoque']];
+  lista.forEach(p=>linhas.push([p.nome,p.fornecedor||'',p.descricao||'',p.preco,p.estoque]));
+  const csv=linhas.map(l=>l.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(';')).join('\r\n');
+  const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
+  const link=document.createElement('a');
+  link.href=URL.createObjectURL(blob);
+  link.download=`suplementos_${new Date().toISOString().split('T')[0]}.csv`;
+  link.click();
+  toast('📊 Planilha exportada!');
+}
+function imprimirSuplementos(){
+  const lista=gD('suplementos').sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
+  const linhas=lista.map(p=>`<tr><td>${escHtml(p.nome)}</td><td>${escHtml(p.fornecedor||'-')}</td><td style="text-align:right">${fm(p.preco)}</td><td style="text-align:right${p.estoque<=0?';color:#c62828;font-weight:700':''}">${p.estoque}</td></tr>`).join('');
+  const win=window.open('','_blank','width=700,height=900');
+  win.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Catálogo de Suplementos</title>
+  <style>@page{margin:10mm 12mm;size:A4}body{margin:0;padding:16px;font-family:Georgia,serif;color:#2C2A27}
+  h1{font-size:18px;margin-bottom:4px}p{font-size:11px;color:#777;margin-bottom:16px}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  th{text-align:left;border-bottom:2px solid #2C2A27;padding:6px 8px}
+  td{border-bottom:1px solid #ddd;padding:6px 8px}</style>
+  </head><body>
+  <h1>Catálogo de Suplementos — Montgomery Magalhães</h1>
+  <p>Gerado em ${new Date().toLocaleDateString('pt-BR')}</p>
+  <table><thead><tr><th>Produto</th><th>Fornecedor</th><th>Preço</th><th>Estoque</th></tr></thead><tbody>${linhas}</tbody></table>
+  </body></html>`);
+  win.document.close();win.focus();
+  setTimeout(()=>{win.print();setTimeout(()=>win.close(),800);},400);
+}
 function renderSuplementos(){
   const b=(document.getElementById('busSup')||{}).value?.toLowerCase()||'';
   let lista=gD('suplementos').filter(p=>p.nome.toLowerCase().includes(b)||(p.fornecedor||'').toLowerCase().includes(b));
@@ -1967,8 +2006,8 @@ function renderSuplementos(){
     <td style="padding:6px 8px;text-align:right">${fm(p.preco)}</td>
     <td style="padding:6px 8px;text-align:right;${p.estoque<=0?'color:var(--danger);font-weight:700':''}">${p.estoque}</td>
     <td style="padding:6px 8px;white-space:nowrap;text-align:right">
-      <button class="btn btn-sec btn-sm" onclick="abrirModalSuplemento('${p.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span></button>
-      <button class="btn btn-dan btn-sm" onclick="dSuplemento('${p.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span></button>
+      <button class="btn btn-sec btn-sm" title="Editar" onclick="abrirModalSuplemento('${p.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span></button>
+      <button class="btn btn-dan btn-sm" title="Excluir" onclick="dSuplemento('${p.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span></button>
     </td>
   </tr>`).join('');
 }
