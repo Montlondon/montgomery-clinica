@@ -52,3 +52,4 @@ Hoje todo carregamento do app baixa do zero todos os pacientes/sessões/diagnós
 - Tabela `despesas` no Supabase: confirmar se RLS/policy está ativa igual às outras tabelas
 - Expandir "Pontos do Corpo" com mais regiões conforme a prática pedir
 - Ajuste de zoom mobile (10% hoje, reduzido de 18% por causar corte de tabelas) — acompanhar se está confortável de ler/tocar ou se precisa de mais um ajuste fino
+- Configurar `settings.json` (permissões do Claude Code) para pré-autorizar comandos de rotina (git, node) e o Montgomery não precisar clicar "Allow once" toda hora — combinado de fazer depois, não é parte da plataforma em si, é ajuste de fluxo de trabalho
