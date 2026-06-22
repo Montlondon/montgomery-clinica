@@ -2162,11 +2162,14 @@ function abcRenderMeridianoGrid(sel){
 // Boneco esquemático (braços e pernas) que desenha, por sistema, qual
 // posição corresponde ao meridiano selecionado (m) e quais são os outros 3
 // meridianos de balanço — lê só s.pontos, não cria dado novo.
+// Posições espelhadas de propósito: paciente em decúbito dorsal, terapeuta de
+// frente para ele — o lado esquerdo do paciente cai do lado direito da tela
+// (e vice-versa), por isso bracoEsquerdo/pernaEsquerda desenham à direita.
 const ABC_BONECO_SLOTS=[
-  ['bracoEsquerdo',40,22,'start'],
-  ['bracoDireito',160,22,'end'],
-  ['pernaEsquerda',55,228,'middle'],
-  ['pernaDireita',145,228,'middle']
+  ['bracoEsquerdo',160,22,'end'],
+  ['bracoDireito',40,22,'start'],
+  ['pernaEsquerda',145,228,'middle'],
+  ['pernaDireita',55,228,'middle']
 ];
 function abcBonecoSVG(s,m){
   const pts=ABC_BONECO_SLOTS.map(([chave,x,y,anchor])=>{
