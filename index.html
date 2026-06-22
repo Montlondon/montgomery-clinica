@@ -647,7 +647,12 @@ tr:hover td{background:#EEF2F7}
     <button type="button" class="btn btn-sec btn-sm" onclick="addPlanta()" style="margin-bottom:12px">➕ Planta</button>
 
     <div class="fst" style="margin-top:4px"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v4l2 2v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-2Z"/><path d="M9 3h6M9 12h6"/></svg></span>Suplementos</div>
-    <div class="fr"><div class="fg" style="flex:2"><label>Produto</label><select id="rxSupSel"></select></div><div class="fg"><label>Qtd.</label><input type="number" id="rxSupQtd" min="1" value="1" style="width:70px"></div>
+    <div class="fr"><div class="fg" style="flex:2;position:relative"><label>Produto</label>
+        <input type="text" id="rxSupBusca" placeholder="Digite o nome do produto..." oninput="filtrarRxSup()" onblur="fecharRxSupLista()" autocomplete="off">
+        <input type="hidden" id="rxSupSel">
+        <div id="rxSupListaBusca" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--cream);border:1px solid var(--brd);border-radius:0 0 7px 7px;box-shadow:var(--shadow);z-index:200;max-height:220px;overflow-y:auto"></div>
+      </div>
+      <div class="fg"><label>Qtd.</label><input type="number" id="rxSupQtd" min="1" value="1" style="width:70px"></div>
       <div class="fg" style="flex:0;align-self:flex-end"><button type="button" class="btn btn-sec btn-sm" onclick="addRxSuplemento()">➕ Adicionar</button></div></div>
     <div id="rxSupLista" style="margin-bottom:12px"></div>
 
@@ -735,6 +740,15 @@ tr:hover td{background:#EEF2F7}
   </div>
 
   <div id="diagPainel" style="display:none"></div>
+
+  <div class="fc">
+    <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v4l2 2v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-2Z"/><path d="M9 3h6M9 12h6"/></svg></span>Suplementos</div>
+    <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Marque aqui os suplementos indicados nesta avaliação — eles já chegam prontos se você enviar para Recomendação Terapêutica.</p>
+    <div class="fg full" style="position:relative">
+      <input type="text" id="diagSupBusca" placeholder="Digite o nome do produto..." oninput="filtrarDiagSup()" onblur="fecharDiagSupLista()" autocomplete="off">
+      <div id="diagSupLista" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--cream);border:1px solid var(--brd);border-radius:0 0 7px 7px;box-shadow:var(--shadow);z-index:200;max-height:220px;overflow-y:auto"></div>
+    </div>
+  </div>
 
   <div class="fc">
     <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg></span>Escala de Orientação Emocional</div>
@@ -1327,7 +1341,7 @@ function go(p,el){
     if(el){
       _diagEditandoId=null;
       _diagPacSel=null;
-      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[]};
+      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[]};
       _diagJaSalvo=false;
       document.getElementById('diagPacBusca').value='';
       document.getElementById('diagPacId').value='';
@@ -2162,7 +2176,7 @@ function fecharRxPacLista(){
 let _diagPacSel=null;
 let _diagJaSalvo=false;
 let _diagEditandoId=null; // id do diagnóstico em edição (null = nova avaliação)
-let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[]}; // guarda o que foi clicado nesta avaliação + anotações por elemento
+let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[]}; // guarda o que foi clicado nesta avaliação + anotações por elemento
 
 const bancoIntegrativoCompleto = {
   // Nomes dos 6 sistemas fixos do Dr. Tan, sempre na mesma ordem
@@ -2505,6 +2519,37 @@ function toggleSistemaAbc(id,m){
   abcFiltrarMeridiano(m);
   renderDiagPainel();
 }
+function filtrarDiagSup(){
+  const q=document.getElementById('diagSupBusca').value.toLowerCase().trim();
+  const lista=document.getElementById('diagSupLista');
+  if(!q){lista.style.display='none';return;}
+  const usados=new Set(_diagSelecoes.suplementos.map(s=>String(s.id)));
+  const itens=gD('suplementos').filter(p=>p.nome.toLowerCase().includes(q)&&!usados.has(String(p.id))).slice(0,12);
+  if(!itens.length){lista.innerHTML='<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Nenhum produto encontrado</div>';lista.style.display='block';return;}
+  lista.innerHTML=itens.map(p=>`<div onclick="selecionarDiagSup('${p.id}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${escHtml(p.nome)}<span style="color:var(--txt-l);font-size:11px;margin-left:8px">${fm(p.preco)}</span></div>`).join('');
+  lista.style.display='block';
+}
+function fecharDiagSupLista(){
+  setTimeout(()=>document.getElementById('diagSupLista').style.display='none',200);
+}
+function selecionarDiagSup(id){
+  const p=gD('suplementos').find(x=>String(x.id)===String(id));
+  if(!p)return;
+  _diagSelecoes.suplementos.push({id:p.id,nome:p.nome,precoUnit:p.preco,qtd:1});
+  _diagJaSalvo=false;
+  document.getElementById('diagSupBusca').value='';
+  document.getElementById('diagSupLista').style.display='none';
+  renderDiagPainel();
+}
+function removerDiagSup(idx){
+  _diagSelecoes.suplementos.splice(idx,1);
+  _diagJaSalvo=false;
+  renderDiagPainel();
+}
+function atualizarQtdDiagSup(idx,qtd){
+  _diagSelecoes.suplementos[idx].qtd=Math.max(1,parseInt(qtd)||1);
+  _diagJaSalvo=false;
+}
 function atualizarObsElemento(nome,valor){
   _diagSelecoes.elementosObs[nome]=valor;
   _diagJaSalvo=false;
@@ -2540,7 +2585,7 @@ function montarTabelaBalance(nomeElemento){
 function renderDiagPainel(){
   const painel=document.getElementById('diagPainel');
   const resumoBox=document.getElementById('diagResumoBox');
-  const temAlgo=_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length;
+  const temAlgo=_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length;
   if(!temAlgo){painel.style.display='none';resumoBox.style.display='none';return;}
   painel.style.display='block';
   resumoBox.style.display='block';
@@ -2587,6 +2632,19 @@ function renderDiagPainel(){
       <div style="font-size:11.5px;color:var(--ink-soft);line-height:1.5;margin-top:6px">${s.protocolo}</div>
     </div>`;
   });
+  if((_diagSelecoes.suplementos||[]).length){
+    const totalSup=_diagSelecoes.suplementos.reduce((a,s)=>a+s.precoUnit*s.qtd,0);
+    html+=`<div class="fc" style="border-left:5px solid var(--pri-deep)">
+      <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v4l2 2v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-2Z"/><path d="M9 3h6M9 12h6"/></svg></span>Suplementos</div>
+      ${_diagSelecoes.suplementos.map((s,idx)=>`<div class="linha-fin" style="padding:6px 0">
+        <div class="info"><div class="desc">${escHtml(s.nome)}</div><div class="det">${fm(s.precoUnit)} / un.</div></div>
+        <input type="number" min="1" value="${s.qtd}" style="width:55px" onchange="atualizarQtdDiagSup(${idx},this.value);renderDiagPainel()">
+        <div class="valor-item">${fm(s.precoUnit*s.qtd)}</div>
+        <button type="button" class="btn btn-dan btn-sm" onclick="removerDiagSup(${idx})">✕</button>
+      </div>`).join('')}
+      <div style="text-align:right;font-size:13px;font-weight:700;color:var(--pri-d);margin-top:8px">Total Suplementos: ${fm(totalSup)}</div>
+    </div>`;
+  }
   painel.innerHTML=html;
 
   // Resumo compacto
@@ -2595,6 +2653,7 @@ function renderDiagPainel(){
   if(_diagSelecoes.elementos.length)partes.push(`<strong>Elementos:</strong> ${_diagSelecoes.elementos.join(', ')}`);
   if(_diagSelecoes.pontos.length)partes.push(`<strong>Pontos:</strong> ${_diagSelecoes.pontos.join(', ')}`);
   if((_diagSelecoes.sistemasAbc||[]).length)partes.push(`<strong>Sistemas ABC:</strong> ${_diagSelecoes.sistemasAbc.join(', ')}`);
+  if((_diagSelecoes.suplementos||[]).length)partes.push(`<strong>Suplementos:</strong> ${_diagSelecoes.suplementos.map(s=>s.nome).join(', ')}`);
   const emo=document.getElementById('diagEscalaEmo').value;
   if(emo)partes.push(`<strong>Estado emocional:</strong> ${emo}`);
   resumo.innerHTML=partes.map(p=>`<p style="margin-bottom:5px">${p}</p>`).join('');
@@ -2614,6 +2673,7 @@ function gerarHtmlDiag(diagRec){
   const elementosObs=diagRec?(diagRec.elementosObs||{}):_diagSelecoes.elementosObs;
   const pontos=diagRec?(diagRec.pontos||[]):_diagSelecoes.pontos;
   const sistemasAbcSel=diagRec?(diagRec.sistemasAbc||[]):(_diagSelecoes.sistemasAbc||[]);
+  const suplementosSel=diagRec?(diagRec.suplementos||[]):(_diagSelecoes.suplementos||[]);
   const emo=diagRec?diagRec.escalaEmocional:document.getElementById('diagEscalaEmo').value;
   const emoObs=diagRec?diagRec.emoObs:document.getElementById('diagEmoObs').value;
 
@@ -2646,6 +2706,14 @@ function gerarHtmlDiag(diagRec){
       <div style="font-size:9pt;line-height:1.5;color:#6b6358;margin-top:4px">${s.protocolo}</div>
     </div>`;
   });
+  if(suplementosSel.length){
+    const totalSup=suplementosSel.reduce((a,s)=>a+s.precoUnit*s.qtd,0);
+    blocos+=`<div style="border-left:4px solid #7a5c1e;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
+      <div style="font-size:11.5pt;font-weight:700;color:#7a5c1e;margin-bottom:5px">Suplementos</div>
+      ${suplementosSel.map(s=>`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27">${s.qtd}x ${s.nome} — ${fm(s.precoUnit*s.qtd)}</div>`).join('')}
+      <div style="font-size:9.5pt;font-weight:700;color:#7a5c1e;margin-top:5px">Total: ${fm(totalSup)}</div>
+    </div>`;
+  }
   if(!blocos)blocos='<div style="color:#aaa;font-style:italic;padding:14px;text-align:center">Nenhum item selecionado na avaliação.</div>';
 
   return`<div style="font-family:'Georgia',serif;max-width:640px;margin:0 auto;background:#FDFAF6;color:#2C2A27;padding:28px 30px;border-radius:14px">
@@ -2720,7 +2788,7 @@ function fecharDiagPacLista(){
 
 function limparDiagnostico(){
   if(!confirm('Limpar toda a avaliação atual?'))return;
-  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[]};
+  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[]};
   document.getElementById('diagEscalaEmo').value='';
   document.getElementById('diagEmoObs').value='';
   _diagJaSalvo=false;
@@ -2736,10 +2804,17 @@ function enviarDiagParaRx(){
   // Apenas leva para a tela de Recomendação com o mesmo paciente já selecionado.
   // Diagnóstico e Recomendação são registros distintos e não compartilham dados.
   const pacId=_diagPacSel.id,pacNome=_diagPacSel.nome;
+  const supDoDiag=(_diagSelecoes.suplementos||[]).map(s=>({...s}));
   go('prescricao',null);
   setTimeout(()=>{
     selecionarRxPac(pacId,pacNome,'');
-    toast('🌿 Paciente selecionado em Recomendação Terapêutica.');
+    if(supDoDiag.length){
+      _rxSuplementosSel=supDoDiag;
+      renderRxSupLista();
+      toast(`🌿 Paciente e ${supDoDiag.length} suplemento(s) do Diagnóstico já estão na Recomendação.`);
+    } else {
+      toast('🌿 Paciente selecionado em Recomendação Terapêutica.');
+    }
   },200);
 }
 
@@ -2765,6 +2840,7 @@ async function salvarDiagnostico(){
     pontos:[..._diagSelecoes.pontos],
     elementosObs:{..._diagSelecoes.elementosObs},
     sistemasAbc:[...(_diagSelecoes.sistemasAbc||[])],
+    suplementos:[...(_diagSelecoes.suplementos||[])],
     escalaEmocional:document.getElementById('diagEscalaEmo').value,
     emoObs:document.getElementById('diagEmoObs').value
   };
@@ -2810,7 +2886,7 @@ function editarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])]};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])]};
   _diagEditandoId=diag.id;
   _diagJaSalvo=false;
   go('diagnostico',null);
@@ -2841,11 +2917,23 @@ function addPlanta(){
 
 // ===== SUPLEMENTOS NA RECOMENDAÇÃO =====
 let _rxSuplementosSel=[];
-function popularRxSupSel(){
-  const sel=document.getElementById('rxSupSel');
-  if(!sel)return;
-  const catalogo=gD('suplementos').slice().sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
-  sel.innerHTML='<option value="">Selecione...</option>'+catalogo.map(p=>`<option value="${p.id}">${escHtml(p.nome)} — ${fm(p.preco)}${p.estoque<=0?' (sem estoque)':''}</option>`).join('');
+function popularRxSupSel(){} // mantido por compatibilidade; a busca agora é por digitação (filtrarRxSup)
+function filtrarRxSup(){
+  const q=document.getElementById('rxSupBusca').value.toLowerCase().trim();
+  const lista=document.getElementById('rxSupListaBusca');
+  if(!q){lista.style.display='none';document.getElementById('rxSupSel').value='';return;}
+  const itens=gD('suplementos').filter(p=>p.nome.toLowerCase().includes(q)).slice(0,12);
+  if(!itens.length){lista.innerHTML='<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Nenhum produto encontrado</div>';lista.style.display='block';return;}
+  lista.innerHTML=itens.map(p=>`<div onclick="selecionarRxSup('${p.id}','${p.nome.replace(/'/g,"\\'")}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${escHtml(p.nome)}<span style="color:var(--txt-l);font-size:11px;margin-left:8px">${fm(p.preco)}${p.estoque<=0?' (sem estoque)':''}</span></div>`).join('');
+  lista.style.display='block';
+}
+function selecionarRxSup(id,nome){
+  document.getElementById('rxSupBusca').value=nome;
+  document.getElementById('rxSupSel').value=id;
+  document.getElementById('rxSupListaBusca').style.display='none';
+}
+function fecharRxSupLista(){
+  setTimeout(()=>document.getElementById('rxSupListaBusca').style.display='none',200);
 }
 function addRxSuplemento(){
   const id=v('rxSupSel');
@@ -2855,6 +2943,8 @@ function addRxSuplemento(){
   const qtd=Math.max(1,parseInt(v('rxSupQtd'))||1);
   if(qtd>p.estoque){toast(`⚠️ Estoque insuficiente (disponível: ${p.estoque})`,'#EF6C00');return;}
   _rxSuplementosSel.push({id:p.id,nome:p.nome,precoUnit:p.preco,qtd});
+  document.getElementById('rxSupBusca').value='';
+  document.getElementById('rxSupSel').value='';
   document.getElementById('rxSupQtd').value='1';
   renderRxSupLista();
 }
@@ -3182,7 +3272,7 @@ function duplicarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])]};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])]};
   _diagEditandoId=null;
   _diagJaSalvo=false;
   go('diagnostico',null);
