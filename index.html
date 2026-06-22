@@ -335,6 +335,7 @@ tr:hover td{background:#EEF2F7}
     <a onclick="go('diagnostico',this)"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 7 4-14 2 7h6"/></svg></span>Diagnóstico Integrado</a>
     <div class="sep"></div>
     <a onclick="go('financeiro',this)"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.2"/><path d="M3 10.5h18"/><circle cx="16.3" cy="14.3" r="1.1" fill="currentColor" stroke="none"/></svg></span>Financeiro</a>
+    <a onclick="go('suplementos',this)"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v4l2 2v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-2Z"/><path d="M9 3h6M9 12h6"/></svg></span>Suplementos</a>
     <div class="sep"></div>
     <a onclick="go('configuracoes',this)"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v2.3M12 19.2v2.3M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.3M19.2 12h2.3M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg></span>Configurações</a>
     <a onclick="go('backup',this)"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span>Backup</a>
@@ -362,6 +363,7 @@ tr:hover td{background:#EEF2F7}
     <div class="card"><h3>Sessões/Mês</h3><div class="value" id="stS">0</div></div>
     <div class="card money"><h3><span class="ic-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M8.3 12.5l2.4 2.4 5-5.4"/></svg></span>Recebido</h3><div class="value" id="stR">R$0</div></div>
     <div class="card money"><h3><span class="ic-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v5l3.3 2"/></svg></span>Pendente</h3><div class="value" id="stPd">R$0</div></div>
+    <div class="card money"><h3><span class="ic-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v4l2 2v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-2Z"/><path d="M9 3h6M9 12h6"/></svg></span>Suplementos (mês)</h3><div class="value" id="stSup">R$0</div></div>
   </div>
   <div class="fc">
     <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M9 12h6M9 16h6"/></svg></span>Últimas Sessões</div>
@@ -643,6 +645,12 @@ tr:hover td{background:#EEF2F7}
       </div>
     </div>
     <button type="button" class="btn btn-sec btn-sm" onclick="addPlanta()" style="margin-bottom:12px">➕ Planta</button>
+
+    <div class="fst" style="margin-top:4px"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v4l2 2v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-2Z"/><path d="M9 3h6M9 12h6"/></svg></span>Suplementos</div>
+    <div class="fr"><div class="fg" style="flex:2"><label>Produto</label><select id="rxSupSel"></select></div><div class="fg"><label>Qtd.</label><input type="number" id="rxSupQtd" min="1" value="1" style="width:70px"></div>
+      <div class="fg" style="flex:0;align-self:flex-end"><button type="button" class="btn btn-sec btn-sm" onclick="addRxSuplemento()">➕ Adicionar</button></div></div>
+    <div id="rxSupLista" style="margin-bottom:12px"></div>
+
     <div class="fr"><div class="fg"><label>Duração geral</label><input type="text" id="rxDurG"></div><div class="fg"><label>Retorno em</label><input type="text" id="rxRet"></div></div>
     <div class="fr full"><div class="fg"><label>Observações</label><textarea id="rxObs" rows="2"></textarea></div></div>
     <div class="fa">
@@ -812,6 +820,12 @@ tr:hover td{background:#EEF2F7}
       </table>
     </div></div>
 
+    <div class="painel" style="background:#FDFAF6;border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:18px">
+      <h3 style="font-size:14px;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center">Suplementos vendidos <span class="fv" id="finSupTotal" style="font-size:14px;color:var(--pri-d)">R$ 0,00</span></h3>
+      <div style="font-size:11.5px;color:var(--ink-soft);margin-bottom:10px">Recebido: <strong id="finSupRecebido">R$ 0,00</strong> · Pendente: <strong id="finSupPendente">R$ 0,00</strong></div>
+      <div id="listaVendasSup"></div>
+    </div>
+
     <div class="painel" style="background:#FDFAF6;border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)">
       <h3 style="font-size:14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center">Despesas da clínica <span class="fv" id="finDespClinicaTotal" style="font-size:14px;color:#8A4B2C">R$ 0,00</span></h3>
       <div id="listaDespClinica"></div>
@@ -852,6 +866,49 @@ tr:hover td{background:#EEF2F7}
         <div class="fg"><label>Recorrente</label><select id="despRec"><option value="">Não</option><option value="1">Sim</option></select></div></div>
       <div class="fa">
         <button type="button" class="btn btn-sec" onclick="fecharModalDespesa()">Cancelar</button>
+        <button type="submit" class="btn btn-pri"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span> Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ===== SUPLEMENTOS ===== -->
+<section class="page" id="pg-suplementos">
+  <div class="page-header"><h1><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v4l2 2v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-2Z"/><path d="M9 3h6M9 12h6"/></svg></span>Suplementos</h1><button class="btn btn-pri btn-sm" onclick="abrirModalSuplemento()">➕ Novo</button></div>
+  <div class="tw">
+    <div class="ttb">
+      <div class="sw"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><input type="text" id="busSup" placeholder="Buscar produto, fornecedor..." oninput="renderSuplementos()"></div>
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:12px;color:var(--txt-l)" id="cntSup">0</span> produtos
+      </div>
+    </div>
+    <div id="supVazio" style="display:none;text-align:center;padding:20px">
+      <p style="font-size:12.5px;color:var(--txt-l);margin-bottom:10px">Nenhum produto cadastrado ainda.</p>
+      <button class="btn btn-sec btn-sm" onclick="importarCatalogoInicial()">📥 Importar catálogo inicial (71 itens da planilha)</button>
+    </div>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr><th style="text-align:left;padding:8px">Produto</th><th style="text-align:left;padding:8px">Fornecedor</th><th style="text-align:right;padding:8px">Preço</th><th style="text-align:right;padding:8px">Estoque</th><th style="padding:8px"></th></tr></thead>
+        <tbody id="tabSup"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== MODAL SUPLEMENTO ===== -->
+<div class="mov no-print" id="movSuplemento">
+  <div class="modal" style="max-width:420px">
+    <button class="mcl" onclick="fecharModalSuplemento()">✕</button>
+    <div class="fst" id="supModalTit">Novo produto</div>
+    <form onsubmit="salvarSuplemento(event)">
+      <input type="hidden" id="supId">
+      <div class="fr full"><div class="fg"><label class="req">Produto</label><input type="text" id="supNome" required></div></div>
+      <div class="fr"><div class="fg"><label>Fornecedor</label><input type="text" id="supFornecedor"></div>
+        <div class="fg"><label>Descrição</label><input type="text" id="supDescricao" placeholder="Ex: 1 frasco c/60 caps."></div></div>
+      <div class="fr"><div class="fg"><label class="req">Preço (R$)</label><input type="number" id="supPreco" step="0.01" min="0" required></div>
+        <div class="fg"><label>Estoque (qtd.)</label><input type="number" id="supEstoque" step="1" min="0" value="0"></div></div>
+      <div class="fa">
+        <button type="button" class="btn btn-sec" onclick="fecharModalSuplemento()">Cancelar</button>
         <button type="submit" class="btn btn-pri"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span> Salvar</button>
       </div>
     </form>
@@ -1137,7 +1194,7 @@ async function dbAdd(tabela,item){
 
 // Recarregar tudo do banco e atualizar a tela (chamar após qualquer mudança importante)
 async function syncTudo(){
-  await Promise.all([dbGet('pacientes',true),dbGet('sessoes',true),dbGet('diagnosticos',true),dbGet('despesas',true)]);
+  await Promise.all([dbGet('pacientes',true),dbGet('sessoes',true),dbGet('diagnosticos',true),dbGet('despesas',true),dbGet('suplementos',true),dbGet('vendas_suplementos',true)]);
   if(document.getElementById('cntP'))renderP();
   if(document.getElementById('pg-dashboard'))atuDash();
   if(document.getElementById('pg-financeiro'))atuFin();
@@ -1179,7 +1236,7 @@ async function syncConfigSupabase(){
 async function initDB(){
   showLoading(true);
   try{
-    await Promise.all([dbGet('pacientes',true),dbGet('sessoes',true),dbGet('diagnosticos',true),dbGet('despesas',true),syncConfigSupabase()]);
+    await Promise.all([dbGet('pacientes',true),dbGet('sessoes',true),dbGet('diagnosticos',true),dbGet('despesas',true),dbGet('suplementos',true),dbGet('vendas_suplementos',true),syncConfigSupabase()]);
   }catch(e){
     console.error('Erro Supabase:',e);
     toast('⚠️ Erro ao conectar ao banco. Tente recarregar.','#EF6C00');
@@ -1249,10 +1306,14 @@ function go(p,el){
       if(b1)b1.innerHTML=SAVE_ICON_HTML+' Salvar Recomendação';
       if(b2)b2.innerHTML=SAVE_ICON_HTML+' Salvar Recomendação';
       document.getElementById('rxDt').value=new Date().toISOString().split('T')[0];
+      _rxSuplementosSel=[];
+      renderRxSupLista();
     }
+    popularRxSupSel();
     carregarRxSel();
   }
   if(p==='financeiro'){atuFin();initFinScope();}
+  if(p==='suplementos')renderSuplementos();
   if(p==='pacientes')renderP();
   if(p==='dashboard')atuDash();
   if(p==='backup')atuInfoSys();
@@ -1673,6 +1734,7 @@ function initFinScope(){
   }
   renderDespesasClinica();
   renderDespesasPessoal();
+  renderVendasSuplementos();
 }
 function finSetScope(escopo){
   const onClinica=escopo==='clinica';
@@ -1683,6 +1745,38 @@ function finSetScope(escopo){
 }
 const catIconDesp='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="11" rx="1.6"/><path d="M2 19h20M9 19l1-3.5h4L15 19"/></svg>';
 const catIconReceita='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5 12 4l8 7.5"/><path d="M6 10v9.5a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V10"/></svg>';
+function renderVendasSuplementos(){
+  const lista=gD('vendas_suplementos').sort((a,b)=>new Date(b.data)-new Date(a.data));
+  const recebido=lista.filter(v=>v.status==='pago').reduce((a,v)=>a+v.valor,0);
+  const pendente=lista.filter(v=>v.status==='pendente').reduce((a,v)=>a+v.valor,0);
+  document.getElementById('finSupTotal').textContent=fm(recebido+pendente);
+  document.getElementById('finSupRecebido').textContent=fm(recebido);
+  document.getElementById('finSupPendente').textContent=fm(pendente);
+  const el=document.getElementById('listaVendasSup');
+  if(!lista.length){el.innerHTML='<p style="font-size:12.5px;color:var(--ink-soft);padding:10px 0">Nenhuma venda de suplemento ainda.</p>';return;}
+  el.innerHTML=lista.map(vd=>{
+    const resumoItens=vd.itens.map(i=>`${i.qtd}x ${i.nome}`).join(', ');
+    return`<div class="linha-fin">
+      <div class="cat-ic">${catIconReceita}</div>
+      <div class="info"><div class="desc">${escHtml(vd.pacienteNome)}</div><div class="det">${escHtml(resumoItens)} · ${fd(vd.data)}</div></div>
+      <div class="valor-item green">${fm(vd.valor)}</div>
+      <span class="badge ${vd.status==='pago'?'bp':'bpend'}">${vd.status==='pago'?'✅ Pago':'⏳ Pendente'}</span>
+      ${vd.status==='pendente'?`<button class="btn btn-pri btn-sm" onclick="mPagoSup('${vd.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span></button>`:''}
+    </div>`;
+  }).join('');
+}
+async function mPagoSup(id){
+  const lista=gD('vendas_suplementos');
+  const idx=lista.findIndex(v=>String(v.id)===String(id));
+  if(idx<0)return;
+  lista[idx]={...lista[idx],status:'pago'};
+  _cache['vendas_suplementos']=lista;
+  await supaReq('DELETE','vendas_suplementos',null,`?dados->>id=eq.${id}`);
+  await supaReq('POST','vendas_suplementos',[{'user_id':'montgomery','dados':lista[idx]}]);
+  renderVendasSuplementos();atuDash();
+  toast('✅ Pago!');
+}
+
 function renderDespesasClinica(){
   const lista=gD('despesas').filter(d=>d.escopo==='clinica').sort((a,b)=>new Date(b.data)-new Date(a.data));
   const total=lista.filter(d=>d.tipo==='despesa').reduce((a,d)=>a+Number(d.valor),0);
@@ -1748,6 +1842,87 @@ async function dDespesa(id){
   await supaReq('DELETE','despesas',null,`?dados->>id=eq.${id}`);
   renderDespesasClinica();renderDespesasPessoal();
   toast('🗑️ Removido','#c62828');
+}
+
+// ===== SUPLEMENTOS (catálogo / estoque) =====
+function renderSuplementos(){
+  const b=(document.getElementById('busSup')||{}).value?.toLowerCase()||'';
+  let lista=gD('suplementos').filter(p=>p.nome.toLowerCase().includes(b)||(p.fornecedor||'').toLowerCase().includes(b));
+  lista=lista.sort((a,b2)=>a.nome.localeCompare(b2.nome,'pt-BR'));
+  document.getElementById('cntSup').textContent=lista.length;
+  document.getElementById('supVazio').style.display=gD('suplementos').length?'none':'block';
+  const tb=document.getElementById('tabSup');
+  if(!tb)return;
+  if(!lista.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:18px;color:var(--txt-l)">Nenhum produto encontrado.</td></tr>';return;}
+  tb.innerHTML=lista.map(p=>`<tr>
+    <td style="padding:6px 8px"><strong>${escHtml(p.nome)}</strong>${p.descricao?`<div style="font-size:11px;color:var(--txt-l)">${escHtml(p.descricao)}</div>`:''}</td>
+    <td style="padding:6px 8px;font-size:12px;color:var(--txt-l)">${escHtml(p.fornecedor||'-')}</td>
+    <td style="padding:6px 8px;text-align:right">${fm(p.preco)}</td>
+    <td style="padding:6px 8px;text-align:right;${p.estoque<=0?'color:var(--danger);font-weight:700':''}">${p.estoque}</td>
+    <td style="padding:6px 8px;white-space:nowrap;text-align:right">
+      <button class="btn btn-sec btn-sm" onclick="abrirModalSuplemento('${p.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span></button>
+      <button class="btn btn-dan btn-sm" onclick="dSuplemento('${p.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span></button>
+    </td>
+  </tr>`).join('');
+}
+function abrirModalSuplemento(id){
+  document.getElementById('supId').value=id||'';
+  if(id){
+    const p=gD('suplementos').find(x=>String(x.id)===String(id));
+    document.getElementById('supModalTit').textContent='Editar produto';
+    document.getElementById('supNome').value=p.nome;
+    document.getElementById('supFornecedor').value=p.fornecedor||'';
+    document.getElementById('supDescricao').value=p.descricao||'';
+    document.getElementById('supPreco').value=p.preco;
+    document.getElementById('supEstoque').value=p.estoque;
+  } else {
+    document.getElementById('supModalTit').textContent='Novo produto';
+    document.getElementById('supNome').value='';
+    document.getElementById('supFornecedor').value='';
+    document.getElementById('supDescricao').value='';
+    document.getElementById('supPreco').value='';
+    document.getElementById('supEstoque').value='0';
+  }
+  document.getElementById('movSuplemento').classList.add('show');
+}
+function fecharModalSuplemento(){document.getElementById('movSuplemento').classList.remove('show');}
+async function salvarSuplemento(ev){
+  ev.preventDefault();
+  const id=v('supId');
+  const p={
+    id:id||(Date.now()+Math.random()),
+    nome:v('supNome'),
+    fornecedor:v('supFornecedor'),
+    descricao:v('supDescricao'),
+    preco:parseFloat(v('supPreco'))||0,
+    estoque:parseInt(v('supEstoque'))||0
+  };
+  if(id){
+    const lista=gD('suplementos').map(x=>String(x.id)===String(id)?p:x);
+    _cache['suplementos']=lista;
+    await supaReq('DELETE','suplementos',null,`?dados->>id=eq.${id}`);
+    await supaReq('POST','suplementos',[{'user_id':'montgomery','dados':p}]);
+    toast('✅ Produto atualizado!');
+  } else {
+    await dbAdd('suplementos',p);
+    toast('💾 Produto cadastrado!');
+  }
+  fecharModalSuplemento();
+  renderSuplementos();
+}
+async function dSuplemento(id){
+  if(!confirm('Excluir este produto do catálogo?'))return;
+  _cache['suplementos']=gD('suplementos').filter(p=>String(p.id)!==String(id));
+  await supaReq('DELETE','suplementos',null,`?dados->>id=eq.${id}`);
+  renderSuplementos();
+  toast('🗑️ Removido','#c62828');
+}
+async function importarCatalogoInicial(){
+  if(!confirm('Importar os 71 produtos da planilha inicial para o catálogo?'))return;
+  const itens=CATALOGO_SUPLEMENTOS_INICIAL.map(p=>({id:Date.now()+Math.random(),...p}));
+  await dbSet('suplementos',[...gD('suplementos'),...itens]);
+  renderSuplementos();
+  toast(`✅ ${itens.length} produtos importados!`);
 }
 
 // ===== GOOGLE AGENDA =====
@@ -2064,6 +2239,9 @@ const bancoIntegrativoCompleto = {
       icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v8l-4.5 6.5a1 1 0 0 0 .8 1.5H18a1 1 0 0 0 .9-1.4l-2.4-5.1"/><path d="M10 11h6.5"/></svg>' }
   }
 };
+
+// ===== CATÁLOGO INICIAL DE SUPLEMENTOS (seed, da planilha "Tabela de preços") =====
+const CATALOGO_SUPLEMENTOS_INICIAL=[{"fornecedor": "Rei Terra", "nome": "AGAR AGAR", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 30.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "AGNUS CASTUS", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 40.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "ALCACHOFRA C/60", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "ALECRIM", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "ALHO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "ANTI ESTRESSE C/60", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "BCAA ULTRA CONCENTRADO 120CAPS 750 MG", "descricao": "1 frasco c/120 caps. De 750 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "BICARBONATO C/60", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 26.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "BIOTINA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 30.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "CÁLCIO DE OSTRA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "CAMOMILA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 30.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "CARDO MARIANO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "CAVALINHA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "CLORETO DE MAGNÉSIO 120 CAPS. 500MG", "descricao": "1 frasco c/120 caps de 500 mg", "preco": 30.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "COEZIMA Q10", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 24.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "COGUMELO DO SOL", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "COGUMELO JUBA DE LEÃO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "CONDRO 1000. 120 CAPS", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 45.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "CORDÍCEPES EXTRATO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 45.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "CREATINA 120 CAPSULAS 750MG", "descricao": "1 frasco c/120 caps. De 750 mg", "preco": 42.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "CURCUMA LONGA 60 CAPS.500MG", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Suprivida", "nome": "DESINFLAN", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Suprivida", "nome": "DES-STRESS COMPOSTO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "DIMALATO DE MAGNESIO 100 CAPS 500 MG", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 33.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "DOLOMITA EM PÓ", "descricao": "1 frasco c/200 grs", "preco": 36.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "ESPINHEIRA SANTA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "GANODERMA REISHI EXTRATO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 45.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "GELEIA REAL", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 63.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "GENGIBRE", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "GINKGO BILOBA CIRCULAÇÃO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "HIALURÔNICO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "IMUNE", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "JUBA DE LEÃO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 40.0, "estoque": 0}, {"fornecedor": "Suprivida", "nome": "KARV-ON CARVÃO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Muwiz", "nome": "LACTASE", "descricao": "1 frasco c/60 caps. de 400 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "LARANJA MORO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 32.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "LAVANDA ALFAZEMA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 40.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "L-CARNITINA", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "LEVEDÃO 240 CAPS. - LEVEDO DE CERVEJA", "descricao": "1 frasco c/240 caps. de 500 mg", "preco": 39.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "LISINA PROLINA GLICINA 120 CAPSULAS 500 MG", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 30.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "MAG 7 120CAPS", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 40.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "MAMAO E AMEIXA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "MELATONINA 30 CAPSULAS", "descricao": "1 frasco c/30 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "MEMORY ACTIVE", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 42.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "MULATEIRO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 30.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "MULUNGU", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "OLEO DE COCO 60 CAPS. 500 MG", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "OLEO DE COCO 100 CAPS. 1400 MG", "descricao": "1 frasco c/100 caps. de 1400mg", "preco": 54.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "OLEO DE SEMENTE DE ABOBORA 120 CAPS", "descricao": "1 frasco c/120 caps. de 1000 mg", "preco": 54.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "QUEBRA PEDRA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "PYTAIA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 30.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "PRO PLUS 120 500 MG", "descricao": "1 frasco c/120 caps de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "PRÓPOLIS", "descricao": "1 frasco c/120 caps de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "PSYLLIUM 120 CAPS 500MG", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "RESVERATROL 30 ML", "descricao": "1 frasco c/ 30ml", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "SAÚDE FEMININA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 30.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "SENE", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "SPIRULINA 120 CPS 500 MG", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 45.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "TAURINA 120 CAPS 500MG", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "TOP MEGA 3,6,9 HOMEM 120 CAPS 1000MG", "descricao": "1 frasco c/120 caps. de 1000 mg", "preco": 54.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "TRIBULUS TERRESTRIS", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "TRIPTOFANO 60 CAPS 500 MG", "descricao": "1 frasco c/60 caps. De 500 mg", "preco": 30.0, "estoque": 0}, {"fornecedor": "Suprivida", "nome": "TRITUS QUEBRA PEDRA", "descricao": "1 frasco c/60 caps. De 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "VALERIANA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "VITAMINA A 60 CAPS 500 MG", "descricao": "1 frasco c/60 caps de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "VITAMINA COMPLEXO B 60 CAPS 500mg", "descricao": "1 frasco c/60 caps de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "VITAMINA FOSFORO 60 CAPS.500 MG", "descricao": "1 frasco c/60 caps de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "VITAMINA INOSITOL", "descricao": "1 frasco c/60 caps de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "VITAMINA K2 + VITAMINA D3 60 CAPS 500MG", "descricao": "1 frasco c/60 caps de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "VITAMINA ZINCO 60 CAPS. 500MG", "descricao": "1 frasco c/60 caps de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "VIVI CAPS 120 CAPS 500 MG", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 30.0, "estoque": 0}];
 
 // ===== SISTEMAS ABC (Dr. Tan) =====
 const sistemasABC=[
@@ -2643,6 +2821,41 @@ function addPlanta(){
   d.appendChild(it);
 }
 
+// ===== SUPLEMENTOS NA RECOMENDAÇÃO =====
+let _rxSuplementosSel=[];
+function popularRxSupSel(){
+  const sel=document.getElementById('rxSupSel');
+  if(!sel)return;
+  const catalogo=gD('suplementos').slice().sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
+  sel.innerHTML='<option value="">Selecione...</option>'+catalogo.map(p=>`<option value="${p.id}">${escHtml(p.nome)} — ${fm(p.preco)}${p.estoque<=0?' (sem estoque)':''}</option>`).join('');
+}
+function addRxSuplemento(){
+  const id=v('rxSupSel');
+  if(!id){toast('⚠️ Selecione um produto','#EF6C00');return;}
+  const p=gD('suplementos').find(x=>String(x.id)===String(id));
+  if(!p)return;
+  const qtd=Math.max(1,parseInt(v('rxSupQtd'))||1);
+  if(qtd>p.estoque){toast(`⚠️ Estoque insuficiente (disponível: ${p.estoque})`,'#EF6C00');return;}
+  _rxSuplementosSel.push({id:p.id,nome:p.nome,precoUnit:p.preco,qtd});
+  document.getElementById('rxSupQtd').value='1';
+  renderRxSupLista();
+}
+function removerRxSuplemento(idx){
+  _rxSuplementosSel.splice(idx,1);
+  renderRxSupLista();
+}
+function renderRxSupLista(){
+  const el=document.getElementById('rxSupLista');
+  if(!el)return;
+  if(!_rxSuplementosSel.length){el.innerHTML='';return;}
+  const total=_rxSuplementosSel.reduce((a,i)=>a+i.precoUnit*i.qtd,0);
+  el.innerHTML=_rxSuplementosSel.map((i,idx)=>`<div class="linha-fin" style="padding:6px 10px">
+    <div class="info"><div class="desc">${escHtml(i.nome)}</div><div class="det">${i.qtd}x ${fm(i.precoUnit)}</div></div>
+    <div class="valor-item">${fm(i.precoUnit*i.qtd)}</div>
+    <button type="button" class="btn btn-dan btn-sm" onclick="removerRxSuplemento(${idx})">✕</button>
+  </div>`).join('')+`<div style="text-align:right;font-size:13px;font-weight:700;color:var(--pri-d);padding:6px 10px">Total Suplementos: ${fm(total)}</div>`;
+}
+
 function gerarHtmlRx(){
   // Buscar paciente pelo estado _rxPacSel ou pelo ID salvo
   let pac=_rxPacSel;
@@ -2713,6 +2926,12 @@ function gerarHtmlRx(){
 
     <div style="background:#fff;border-radius:10px;padding:6px 18px;margin-bottom:18px;border:1px solid #EDE7DB">${pl?`<table style="width:100%;border-collapse:collapse">${pl}</table>`:'<div style="color:#aaa;font-style:italic;padding:14px;text-align:center">Nenhuma planta adicionada.</div>'}</div>
 
+    ${_rxSuplementosSel.length?`<div style="text-align:center;margin-bottom:14px"><span style="display:inline-block;background:#7a5c1e;color:#fff;font-size:9pt;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 18px;border-radius:20px">Suplementos</span></div>
+    <div style="background:#fff;border-radius:10px;padding:10px 18px;margin-bottom:18px;border:1px solid #EDE7DB">
+      <table style="width:100%;border-collapse:collapse">${_rxSuplementosSel.map(i=>`<tr><td style="padding:4px 4px;font-size:9.5pt;color:#2C2A27">${i.qtd}x ${i.nome}</td><td style="padding:4px 4px;font-size:9.5pt;color:#6b6358;text-align:right">${fm(i.precoUnit*i.qtd)}</td></tr>`).join('')}
+      <tr><td style="padding:6px 4px 0;font-weight:700;font-size:10pt;color:#7a5c1e;border-top:1px solid #EDE7DB">Total Suplementos</td><td style="padding:6px 4px 0;font-weight:700;font-size:10pt;color:#7a5c1e;text-align:right;border-top:1px solid #EDE7DB">${fm(_rxSuplementosSel.reduce((a,i)=>a+i.precoUnit*i.qtd,0))}</td></tr></table>
+    </div>`:''}
+
     ${v('rxDurG')||v('rxRet')?`<table style="width:100%;margin-bottom:16px"><tr>
       ${v('rxDurG')?`<td style="padding-right:8px"><div style="background:#EEF4FA;border-radius:8px;padding:9px 14px"><div style="font-size:7.5pt;color:#1E3A5F;text-transform:uppercase;letter-spacing:.4px">⏰ Duração</div><div style="font-size:10pt;font-weight:600;color:#1E3A5F;margin-top:2px">${v('rxDurG')}</div></div></td>`:''}
       ${v('rxRet')?`<td><div style="background:#F0EBE0;border-radius:8px;padding:9px 14px"><div style="font-size:7.5pt;color:#7a5c1e;text-transform:uppercase;letter-spacing:.4px"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span> Retorno</div><div style="font-size:10pt;font-weight:600;color:#7a5c1e;margin-top:2px">${v('rxRet')}</div></div></td>`:''}
@@ -2770,11 +2989,14 @@ async function salvarRxHistorico(){
     const nm=it.querySelector('.rxNm').value;if(!nm)return;
     plantas.push({nome:nm,forma:it.querySelector('.rxFm').value,dosagem:it.querySelector('.rxDs').value,freq:it.querySelector('.rxFq').value,dur:it.querySelector('.rxDu').value,inst:it.querySelector('.rxIn').value});
   });
-  if(!plantas.length){toast('⚠️ Adicione ao menos uma planta antes de salvar','#EF6C00');return;}
-  const rx={id:_rxEditandoId||(Date.now()+Math.random()),pacienteId:_rxPacSel.id,pacienteNome:_rxPacSel.nome,data:v('rxDt')||new Date().toISOString().split('T')[0],plantas,durGeral:v('rxDurG'),retorno:v('rxRet'),obs:v('rxObs')};
+  if(!plantas.length&&!_rxSuplementosSel.length){toast('⚠️ Adicione ao menos uma planta ou suplemento antes de salvar','#EF6C00');return;}
+  const valorSuplementos=_rxSuplementosSel.reduce((a,i)=>a+i.precoUnit*i.qtd,0);
+  const rx={id:_rxEditandoId||(Date.now()+Math.random()),pacienteId:_rxPacSel.id,pacienteNome:_rxPacSel.nome,data:v('rxDt')||new Date().toISOString().split('T')[0],plantas,suplementos:[..._rxSuplementosSel],valorSuplementos,durGeral:v('rxDurG'),retorno:v('rxRet'),obs:v('rxObs')};
   const b1=document.getElementById('btnSalvarRx'),b2=document.getElementById('btnSalvarRxMain');
   if(_rxEditandoId){
     // Atualização real: substitui só este registro (mesmo id), sem criar duplicata
+    // Obs: edição não desconta estoque de novo nem gera nova venda — isso só
+    // acontece na criação original da recomendação.
     const rxs=gD('prescricoes').filter(r=>String(r.id)!==String(_rxEditandoId));
     rxs.push(rx);
     _cache['prescricoes']=rxs;
@@ -2789,9 +3011,31 @@ async function salvarRxHistorico(){
     rxs.push(rx);
     _cache['prescricoes']=rxs;
     await supaReq('POST','prescricoes',[{'user_id':'montgomery','dados':rx}]);
+    if(_rxSuplementosSel.length)await registrarVendaSuplementos(rx);
     toast('💾 Recomendação salva no histórico do paciente!');
   }
   _rxJaSalvo=true;
+}
+
+// Desconta o estoque dos produtos usados e registra a venda no Financeiro
+// (status "pendente" — Montgomery marca como recebido quando o cliente paga).
+async function registrarVendaSuplementos(rx){
+  const catalogo=gD('suplementos').map(p=>{
+    const usado=rx.suplementos.find(s=>String(s.id)===String(p.id));
+    return usado?{...p,estoque:Math.max(0,p.estoque-usado.qtd)}:p;
+  });
+  await dbSet('suplementos',catalogo);
+  const venda={
+    id:Date.now()+Math.random(),
+    pacienteId:rx.pacienteId,
+    pacienteNome:rx.pacienteNome,
+    recomendacaoId:rx.id,
+    data:rx.data,
+    itens:[...rx.suplementos],
+    valor:rx.valorSuplementos,
+    status:'pendente'
+  };
+  await dbAdd('vendas_suplementos',venda);
 }
 
 async function carregarRxHistPac(pacId){
@@ -3004,6 +3248,8 @@ function _preencherFormRx(rx,dataParaUsar){
       last.querySelector('.rxIn').value=p.inst||'';
     }
   });
+  _rxSuplementosSel=(rx.suplementos||[]).map(s=>({...s}));
+  renderRxSupLista();
 }
 
 // Edição real: abre uma recomendação já salva para alterar e, ao salvar,
@@ -3262,13 +3508,17 @@ function toggleValoresPainel(){
   aplicarOcultarValores();
 }
 function atuDash(){
-  const pacs=gD('pacientes'),ss=gD('sessoes');
+  const pacs=gD('pacientes'),ss=gD('sessoes'),vsup=gD('vendas_suplementos');
   const h=new Date();
   const sm=ss.filter(s=>{const d=new Date(s.data);return d.getMonth()===h.getMonth()&&d.getFullYear()===h.getFullYear();});
+  const vsm=vsup.filter(s=>{const d=new Date(s.data);return d.getMonth()===h.getMonth()&&d.getFullYear()===h.getFullYear();});
+  const supPago=vsm.filter(s=>s.status==='pago').reduce((a,s)=>a+s.valor,0);
+  const supPend=vsm.filter(s=>s.status==='pendente').reduce((a,s)=>a+s.valor,0);
   document.getElementById('stP').textContent=pacs.length;
   document.getElementById('stS').textContent=sm.length;
-  document.getElementById('stR').textContent=fm(sm.filter(s=>s.status==='pago').reduce((a,s)=>a+s.valor,0));
-  document.getElementById('stPd').textContent=fm(sm.filter(s=>s.status==='pendente').reduce((a,s)=>a+s.valor,0));
+  document.getElementById('stR').textContent=fm(sm.filter(s=>s.status==='pago').reduce((a,s)=>a+s.valor,0)+supPago);
+  document.getElementById('stPd').textContent=fm(sm.filter(s=>s.status==='pendente').reduce((a,s)=>a+s.valor,0)+supPend);
+  document.getElementById('stSup').textContent=fm(supPago+supPend);
   aplicarOcultarValores();
   const ult=ss.sort((a,b)=>new Date(b.data)-new Date(a.data)).slice(0,6);
   const tb=document.getElementById('dashT');
