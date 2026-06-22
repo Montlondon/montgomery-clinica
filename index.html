@@ -1707,6 +1707,8 @@ function atuFin(){
       <td style="font-size:12px">${s.formaPgto||'-'}</td>
       <td><span class="badge ${bc}">${bt}</span></td>
       <td style="white-space:nowrap">
+        <button class="btn btn-inf btn-sm" onclick="verEvento(${s.id})"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
+        <button class="btn btn-war btn-sm" onclick="editarSessao(${s.id})"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span></button>
         ${s.status==='pendente'?`<button class="btn btn-pri btn-sm" onclick="mPago(${s.id})"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span></button>`:''}
         <button class="btn btn-cal btn-sm" onclick="abrirGA(gD('sessoes').find(x=>x.id===${s.id}))" title="Google Agenda"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span></button>
         <button class="btn btn-dan btn-sm" onclick="dSess(${s.id})"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span></button>
@@ -3041,11 +3043,11 @@ function gerarHtmlRx(){
     </div>`:''}
 
     ${v('rxDurG')||v('rxRet')?`<table style="width:100%;margin-bottom:16px"><tr>
-      ${v('rxDurG')?`<td style="padding-right:8px"><div style="background:#EEF4FA;border-radius:8px;padding:9px 14px"><div style="font-size:7.5pt;color:#1E3A5F;text-transform:uppercase;letter-spacing:.4px">⏰ Duração</div><div style="font-size:10pt;font-weight:600;color:#1E3A5F;margin-top:2px">${v('rxDurG')}</div></div></td>`:''}
+      ${v('rxDurG')?`<td style="padding-right:8px"><div style="background:#EEF4FA;border-radius:8px;padding:9px 14px"><div style="font-size:7.5pt;color:#1E3A5F;text-transform:uppercase;letter-spacing:.4px"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="#1E3A5F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.3 2"/></svg>Duração</div><div style="font-size:10pt;font-weight:600;color:#1E3A5F;margin-top:2px">${v('rxDurG')}</div></div></td>`:''}
       ${v('rxRet')?`<td><div style="background:#F0EBE0;border-radius:8px;padding:9px 14px"><div style="font-size:7.5pt;color:#7a5c1e;text-transform:uppercase;letter-spacing:.4px"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span> Retorno</div><div style="font-size:10pt;font-weight:600;color:#7a5c1e;margin-top:2px">${v('rxRet')}</div></div></td>`:''}
     </tr></table>`:''}
 
-    ${v('rxObs')?`<div style="background:#FFF8E1;border-radius:8px;padding:12px 16px;font-size:9.5pt;margin-bottom:16px;border-left:3px solid #C47A1E;color:#5a4a1e;line-height:1.5"><strong>⚠️ Observações:</strong> ${v('rxObs')}</div>`:''}
+    ${v('rxObs')?`<div style="background:#FFF8E1;border-radius:8px;padding:12px 16px;font-size:9.5pt;margin-bottom:16px;border-left:3px solid #C47A1E;color:#5a4a1e;line-height:1.5"><strong><svg viewBox="0 0 24 24" width="11" height="11" fill="none" stroke="#C47A1E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18.5a1.5 1.5 0 0 0 1.3 2.3h17.8a1.5 1.5 0 0 0 1.3-2.3L13.7 3.9a1.5 1.5 0 0 0-2.6 0Z"/></svg>Observações:</strong> ${v('rxObs')}</div>`:''}
 
     <div style="height:1px;background:#EDE7DB;margin:18px 0 14px"></div>
 
@@ -3311,8 +3313,8 @@ function verRxHist(rxId){
       <td style="padding:5px 8px;font-size:9pt;border-bottom:1px solid #DDD8CF;color:#5a5550">${[p.forma,p.dosagem,p.freq,p.dur].filter(Boolean).join(' · ')}</td></tr>
       ${p.inst?`<tr><td colspan="2" style="padding:1px 8px 5px 18px;font-size:8.5pt;color:#8a7f75;font-style:italic">↳ ${p.inst}</td></tr>`:''}`).join('')}
     </table>
-    ${rx.durGeral||rx.retorno?`<div style="font-size:9pt;color:#1E3A5F;margin-bottom:8px">${rx.durGeral?'⏰ '+rx.durGeral:''} ${rx.retorno?' · 📅 Retorno: '+rx.retorno:''}</div>`:''}
-    ${rx.obs?`<div style="background:#FFF8E1;padding:7px 11px;font-size:8.5pt;border-radius:4px">⚠️ ${rx.obs}</div>`:''}
+    ${rx.durGeral||rx.retorno?`<div style="font-size:9pt;color:#1E3A5F;margin-bottom:8px">${rx.durGeral?'<svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="#1E3A5F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.3 2"/></svg> '+rx.durGeral:''} ${rx.retorno?' · <svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="#1E3A5F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg> Retorno: '+rx.retorno:''}</div>`:''}
+    ${rx.obs?`<div style="background:#FFF8E1;padding:7px 11px;font-size:8.5pt;border-radius:4px"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="#C47A1E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:2px"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18.5a1.5 1.5 0 0 0 1.3 2.3h17.8a1.5 1.5 0 0 0 1.3-2.3L13.7 3.9a1.5 1.5 0 0 0-2.6 0Z"/></svg> ${rx.obs}</div>`:''}
   </div>`;
   document.getElementById('modC').innerHTML=`
     <h3 style="color:var(--pri-d);margin-bottom:12px">🌿 Recomendação de ${fd(rx.data)}</h3>
