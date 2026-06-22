@@ -1762,6 +1762,7 @@ function renderVendasSuplementos(){
       <div class="valor-item green">${fm(vd.valor)}</div>
       <span class="badge ${vd.status==='pago'?'bp':'bpend'}">${vd.status==='pago'?'✅ Pago':'⏳ Pendente'}</span>
       ${vd.status==='pendente'?`<button class="btn btn-pri btn-sm" onclick="mPagoSup('${vd.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span></button>`:''}
+      <button class="btn btn-dan btn-sm" onclick="dVendaSup('${vd.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span></button>
     </div>`;
   }).join('');
 }
@@ -1775,6 +1776,23 @@ async function mPagoSup(id){
   await supaReq('POST','vendas_suplementos',[{'user_id':'montgomery','dados':lista[idx]}]);
   renderVendasSuplementos();atuDash();
   toast('✅ Pago!');
+}
+// Cancela uma venda de suplemento (cliente desistiu, troca de produto etc.):
+// remove o lançamento financeiro e devolve a quantidade ao estoque, para o
+// catálogo e o Financeiro nunca ficarem desalinhados.
+async function dVendaSup(id){
+  const venda=gD('vendas_suplementos').find(v=>String(v.id)===String(id));
+  if(!venda)return;
+  if(!confirm(`Cancelar esta venda (${fm(venda.valor)})?\n\nO estoque dos itens será devolvido automaticamente.`))return;
+  const catalogo=gD('suplementos').map(p=>{
+    const usado=venda.itens.find(i=>String(i.id)===String(p.id));
+    return usado?{...p,estoque:p.estoque+usado.qtd}:p;
+  });
+  await dbSet('suplementos',catalogo);
+  _cache['vendas_suplementos']=gD('vendas_suplementos').filter(v=>String(v.id)!==String(id));
+  await supaReq('DELETE','vendas_suplementos',null,`?dados->>id=eq.${id}`);
+  renderVendasSuplementos();renderSuplementos();atuDash();
+  toast('🗑️ Venda cancelada e estoque devolvido','#c62828');
 }
 
 function renderDespesasClinica(){
