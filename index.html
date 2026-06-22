@@ -771,6 +771,7 @@ tr:hover td{background:#EEF2F7}
     <div class="fa" style="margin-top:14px">
       <button type="button" class="btn btn-sec" onclick="limparDiagnostico()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span> Limpar Avaliação</button>
       <button type="button" class="btn btn-pri" onclick="enviarDiagParaRx()">🌿 Enviar para Recomendação Terapêutica</button>
+      <button type="button" class="btn btn-sec" onclick="imprimirDiag()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg></span> Imprimir</button>
       <button type="button" class="btn" id="btnSalvarDiag" onclick="salvarDiagComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;font-weight:700"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span> Salvar Avaliação</button>
     </div>
   </div>
@@ -1295,11 +1296,14 @@ function showTab(id,btn){
 }
 
 // ===== SAVE STATUS =====
+let _autoRascTimer=null;
 function mudou(){
   _pacFormDirty=true;
   document.getElementById('saveSt').className='sst unsaved';
   document.getElementById('saveSt').textContent='⚫ Não salvo';
   atuWA();
+  clearTimeout(_autoRascTimer);
+  _autoRascTimer=setTimeout(()=>salvarRasc(true),1500);
 }
 // Verdadeiro só quando o cadastro do paciente está aberto E tem alteração real
 // não salva — usado para avisar antes de navegar para Diagnóstico/Recomendação
@@ -1308,9 +1312,15 @@ function temEdicaoPacientePendente(){
   const pg=document.getElementById('pg-novo-paciente');
   return !!(_pacFormDirty&&pg&&pg.classList.contains('active'));
 }
-function salvarRasc(){
+function salvarRasc(auto){
   const d=coletarDados();d.foto=fotoB64;d.exames=exTemp;
-  sD('rascunho',d);toast('💾 Rascunho salvo!');
+  sD('rascunho',d);
+  if(auto){
+    const st=document.getElementById('saveSt');
+    if(st){st.className='sst';st.textContent='💾 Rascunho salvo automaticamente';}
+  } else {
+    toast('💾 Rascunho salvo!');
+  }
 }
 
 // ===== WHATSAPP =====
@@ -2392,6 +2402,92 @@ function renderDiagPainel(){
   const emo=document.getElementById('diagEscalaEmo').value;
   if(emo)partes.push(`<strong>Estado emocional:</strong> ${emo}`);
   resumo.innerHTML=partes.map(p=>`<p style="margin-bottom:5px">${p}</p>`).join('');
+}
+
+function gerarHtmlDiag(){
+  const cfgData=getCfg();
+  const ter=cfgData.ter||'Montgomery Magalhães';
+  const reg=cfgData.reg||'';
+  const logo=gC('config_logo')||cfgData.logo||'';
+  const logoHtml=logo?`<img src="${logo}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid #1E3A5F;margin-right:14px" alt="Logo">`:'<div style="width:64px;height:64px;border-radius:50%;background:#EEF4FA;display:flex;align-items:center;justify-content:center;font-size:28px;margin-right:14px">🩺</div>';
+  const nomePac=_diagPacSel?_diagPacSel.nome:'—';
+  const dt=document.getElementById('diagDt').value;
+  const emo=document.getElementById('diagEscalaEmo').value;
+  const emoObs=document.getElementById('diagEmoObs').value;
+
+  let blocos='';
+  _diagSelecoes.elementos.forEach(nome=>{
+    const e=bancoIntegrativoCompleto.matrizCincoElementos[nome];
+    const obs=_diagSelecoes.elementosObs[nome]||'';
+    blocos+=`<div style="border-left:4px solid ${e.cor};padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
+      <div style="font-size:11.5pt;font-weight:700;color:${e.cor};margin-bottom:5px">${e.titulo}</div>
+      <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27"><strong>Psique/Emoções:</strong> ${e.psique}</div>
+      <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>Quiropraxia:</strong> ${e.quiro}</div>
+      <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>Fitoterapia:</strong> ${e.fito}</div>
+      ${obs?`<div style="font-size:9pt;line-height:1.5;color:#6b6358;margin-top:6px;font-style:italic">Obs.: ${obs}</div>`:''}
+    </div>`;
+  });
+  _diagSelecoes.pontos.forEach(nome=>{
+    const p=bancoIntegrativoCompleto.pontosCorpo[nome];
+    blocos+=`<div style="border-left:4px solid #1E3A5F;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
+      <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">${p.regiao}</div>
+      <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27"><strong>Músculo:</strong> ${p.musculo}</div>
+      <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>Ajuste indicado:</strong> ${p.quiro}</div>
+      <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>Canal energético:</strong> ${p.canal}</div>
+    </div>`;
+  });
+  (_diagSelecoes.sistemasAbc||[]).forEach(id=>{
+    const s=sistemasABC.find(x=>x.id===id);if(!s)return;
+    blocos+=`<div style="border-left:4px solid #7a5c1e;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
+      <div style="font-size:11.5pt;font-weight:700;color:#7a5c1e;margin-bottom:5px">Sistema ${s.id} — ${s.elemento}</div>
+      <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27"><strong>Meridianos do grupo:</strong> ${abcGrupoDisplay(s).join(', ')}</div>
+      <div style="font-size:9pt;line-height:1.5;color:#6b6358;margin-top:4px">${s.protocolo}</div>
+    </div>`;
+  });
+  if(!blocos)blocos='<div style="color:#aaa;font-style:italic;padding:14px;text-align:center">Nenhum item selecionado na avaliação.</div>';
+
+  return`<div style="font-family:'Georgia',serif;max-width:640px;margin:0 auto;background:#FDFAF6;color:#2C2A27;padding:28px 30px;border-radius:14px">
+    <table style="width:100%;margin-bottom:20px">
+      <tr>
+        <td style="vertical-align:middle;width:64px">${logoHtml}</td>
+        <td style="vertical-align:middle;padding-left:4px">
+          <div style="font-size:17pt;font-weight:700;color:#1E3A5F;line-height:1.25;letter-spacing:.2px">${ter}</div>
+          <div style="font-size:9pt;color:#8a8278;margin-top:2px;letter-spacing:.3px">Acupuntura • Quiropraxia • Psicanálise</div>
+        </td>
+      </tr>
+    </table>
+    <div style="height:1px;background:linear-gradient(to right,#1E3A5F,#DDD8CF);margin-bottom:18px"></div>
+    <table style="width:100%;margin-bottom:18px">
+      <tr>
+        <td style="vertical-align:top">
+          <div style="font-size:8.5pt;color:#9a938b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px">Paciente</div>
+          <div style="font-size:14pt;font-weight:700;color:#1E3A5F">${nomePac}</div>
+        </td>
+        <td style="vertical-align:top;text-align:right">
+          <div style="font-size:8.5pt;color:#9a938b;text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px">Data</div>
+          <div style="font-size:11pt;font-weight:600;color:#2C2A27">${dt?fd(dt):new Date().toLocaleDateString('pt-BR')}</div>
+        </td>
+      </tr>
+    </table>
+    <div style="text-align:center;margin-bottom:18px">
+      <span style="display:inline-block;background:#1E3A5F;color:#fff;font-size:10pt;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:7px 22px;border-radius:20px">Diagnóstico Integrado</span>
+    </div>
+    ${blocos}
+    ${emo?`<div style="background:#FFF8E1;border-radius:8px;padding:12px 16px;font-size:9.5pt;margin-top:6px;margin-bottom:6px;border-left:3px solid #C47A1E;color:#5a4a1e;line-height:1.5"><strong>Estado emocional:</strong> ${emo}${emoObs?'<br>'+emoObs:''}</div>`:''}
+    <div style="height:1px;background:#EDE7DB;margin:18px 0 14px"></div>
+    <div style="text-align:right">
+      <div style="border-top:1.5px solid #2C2A27;padding-top:6px;min-width:190px;display:inline-block;font-size:10pt;color:#2C2A27;font-weight:700;text-align:center">${ter}${reg?'<br><span style="font-size:8.5pt;color:#6b6358;font-weight:600">'+reg+'</span>':''}</div>
+    </div>
+  </div>`;
+}
+function imprimirDiag(){
+  if(!_diagPacSel){toast('⚠️ Selecione um paciente primeiro','#EF6C00');return;}
+  const win=window.open('','_blank','width=800,height=900');
+  win.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Diagnóstico Integrado</title>
+  <style>@page{margin:10mm 12mm;size:A4}body{margin:0;padding:12px;background:#fff;font-family:Georgia,serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}</style>
+  </head><body>${gerarHtmlDiag()}</body></html>`);
+  win.document.close();win.focus();
+  setTimeout(()=>{win.print();setTimeout(()=>win.close(),800);},400);
 }
 
 function filtrarDiagPac(){
