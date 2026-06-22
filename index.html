@@ -60,6 +60,8 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .ic-sm svg{width:12px;height:12px}
 .ic-md{display:inline-flex;width:15px;height:15px;flex-shrink:0;color:inherit}
 .ic-md svg{width:15px;height:15px}
+.btn-ic{display:inline-flex;width:13px;height:13px;flex-shrink:0;color:inherit}
+.btn-ic svg{width:13px;height:13px}
 
 /* CARDS */
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px;margin-bottom:18px}
@@ -375,7 +377,7 @@ tr:hover td{background:#EEF2F7}
     <div class="sst unsaved" id="saveSt">⚫ Não salvo</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
       <button class="btn btn-sec btn-sm" onclick="salvarRasc()">💾 Rascunho</button>
-      <button class="btn btn-pri btn-sm" onclick="document.getElementById('fPac').dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}))">✅ Salvar</button>
+      <button class="btn btn-pri btn-sm" onclick="document.getElementById('fPac').dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}))"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Salvar</button>
     </div>
   </div>
   <div class="fc">
@@ -410,7 +412,7 @@ tr:hover td{background:#EEF2F7}
         <div class="fr"><div class="fg"><label class="req">Nome</label><input type="text" id="pN" required oninput="mudou()"></div><div class="fg"><label>Email</label><input type="email" id="pE" oninput="mudou()"></div></div>
         <div class="fr">
           <div class="fg"><label>Telefone / WhatsApp</label>
-            <div style="display:flex;gap:6px"><input type="tel" id="pT" placeholder="(00) 00000-0000" style="flex:1" oninput="mudou();atuWA()"><a id="waBtn" href="#" target="_blank" class="btn btn-wa btn-sm" style="display:none">💬</a></div>
+            <div style="display:flex;gap:6px"><input type="tel" id="pT" placeholder="(00) 00000-0000" style="flex:1" oninput="mudou();atuWA()"><a id="waBtn" href="#" target="_blank" class="btn btn-wa btn-sm" style="display:none"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.2-1.1L3 20l1.2-5.1"/></svg></span></a></div>
           </div>
           <div class="fg"><label>Nascimento</label><input type="date" id="pNasc" oninput="mudou()"></div>
         </div>
@@ -505,7 +507,7 @@ tr:hover td{background:#EEF2F7}
           <span>Autorizo o armazenamento dos dados conforme a <strong>LGPD</strong>.</span>
         </label>
       </div>
-      <div class="fa"><button type="button" class="btn btn-sec" onclick="limparForm()">Cancelar</button><button type="submit" class="btn btn-pri">✅ Salvar Paciente</button></div>
+      <div class="fa"><button type="button" class="btn btn-sec" onclick="limparForm()">Cancelar</button><button type="submit" class="btn btn-pri"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Salvar Paciente</button></div>
     </form>
   </div>
 </section>
@@ -549,7 +551,7 @@ tr:hover td{background:#EEF2F7}
       <div style="display:flex;align-items:center;gap:10px">
         <div id="psInfoF" style="width:42px;height:42px;border-radius:50%;border:2px solid var(--pri);overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div>
         <div style="flex:1"><strong id="psInfoN" style="color:var(--pri-d)"></strong><div style="font-size:11px;color:var(--txt-l)" id="psInfoD"></div></div>
-        <a id="psInfoWA" href="#" target="_blank" class="btn btn-wa btn-sm">💬</a>
+        <a id="psInfoWA" href="#" target="_blank" class="btn btn-wa btn-sm"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.2-1.1L3 20l1.2-5.1"/></svg></span></a>
       </div>
     </div>
     <form onsubmit="salvarSessao(event)">
@@ -557,11 +559,11 @@ tr:hover td{background:#EEF2F7}
       <div class="fr full"><div class="fg"><label>Procedimentos</label><input type="text" id="sProc" placeholder="Ex: Acupuntura + Quiropraxia + Seitai"></div></div>
       <div class="fr full"><div class="fg"><label>Notas / Evolução</label><textarea id="sNot" rows="4"></textarea></div></div>
       <div class="fr"><div class="fg"><label class="req">Valor R$</label><input type="number" id="sVal" required step="0.01" min="0" placeholder="0,00"></div><div class="fg"><label>Pagamento</label><select id="sFPg"><option value="">-</option><option>PIX</option><option>Dinheiro</option><option>Cartão Crédito</option><option>Cartão Débito</option><option>Transferência</option></select></div></div>
-      <div class="fr full"><div class="fg"><label>Status</label><select id="sSt"><option value="pago">✅ Pago</option><option value="pendente">⏳ Pendente</option><option value="cancelado">❌ Cancelado</option></select></div></div>
+      <div class="fr full"><div class="fg"><label>Status</label><select id="sSt"><option value="pago"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Pago</option><option value="pendente">⏳ Pendente</option><option value="cancelado">❌ Cancelado</option></select></div></div>
       <div class="fa">
         <button type="button" class="btn btn-sec" onclick="go('dashboard',null)">Cancelar</button>
-        <button type="button" class="btn btn-cal" onclick="salvarEGoogle()">📅 Salvar + Google</button>
-        <button type="submit" class="btn btn-pri">✅ Salvar Sessão</button>
+        <button type="button" class="btn btn-cal" onclick="salvarEGoogle()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span> Salvar + Google</button>
+        <button type="submit" class="btn btn-pri"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Salvar Sessão</button>
       </div>
     </form>
   </div>
@@ -577,7 +579,7 @@ tr:hover td{background:#EEF2F7}
     </div>
   </div>
   <div style="background:#E8F5E9;border-radius:9px;padding:11px 14px;margin-bottom:14px;border-left:4px solid var(--pri);font-size:12px">
-    <strong style="color:var(--pri-d)">📅 Google Agenda:</strong> Clique em 📅 em qualquer sessão para abrir direto no Google já preenchido. Ou exporte .ICS para importar vários de uma vez.
+    <strong style="color:var(--pri-d)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span> Google Agenda:</strong> Clique em 📅 em qualquer sessão para abrir direto no Google já preenchido. Ou exporte .ICS para importar vários de uma vez.
   </div>
   <div class="fc" style="margin-bottom:12px">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
@@ -595,7 +597,7 @@ tr:hover td{background:#EEF2F7}
     <div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px">
       <div class="fg"><label>Mês</label><select id="agMes" onchange="renderAg()"><option value="">Todos</option><option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option><option value="3">Abril</option><option value="4">Maio</option><option value="5">Junho</option><option value="6">Julho</option><option value="7">Agosto</option><option value="8">Setembro</option><option value="9">Outubro</option><option value="10">Novembro</option><option value="11">Dezembro</option></select></div>
       <div class="fg"><label>Ano</label><select id="agAno" onchange="renderAg()"><option value="2025">2025</option><option value="2026">2026</option><option value="2024">2024</option></select></div>
-      <div class="fg"><label>Status</label><select id="agSt" onchange="renderAg()"><option value="">Todos</option><option value="pago">✅ Pago</option><option value="pendente">⏳ Pendente</option><option value="cancelado">❌ Cancelado</option></select></div>
+      <div class="fg"><label>Status</label><select id="agSt" onchange="renderAg()"><option value="">Todos</option><option value="pago"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Pago</option><option value="pendente">⏳ Pendente</option><option value="cancelado">❌ Cancelado</option></select></div>
     </div>
     <div style="overflow-x:auto">
       <table>
@@ -639,7 +641,7 @@ tr:hover td{background:#EEF2F7}
     <div class="fr"><div class="fg"><label>Duração geral</label><input type="text" id="rxDurG"></div><div class="fg"><label>Retorno em</label><input type="text" id="rxRet"></div></div>
     <div class="fr full"><div class="fg"><label>Observações</label><textarea id="rxObs" rows="2"></textarea></div></div>
     <div class="fa">
-      <button type="button" class="btn btn-sec" onclick="gerarRx()">👁️ Visualizar</button>
+      <button type="button" class="btn btn-sec" onclick="gerarRx()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span> Visualizar</button>
       <button type="button" class="btn btn-pri" onclick="imprimirRx()">🖨️ Imprimir</button>
       <button type="button" class="btn" id="btnSalvarRxMain" onclick="salvarRxComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;font-weight:700">💾 Salvar Recomendação</button>
     </div>
@@ -650,7 +652,7 @@ tr:hover td{background:#EEF2F7}
       <button class="btn btn-sec btn-sm" onclick="document.getElementById('rxPrev').style.display='none'">Fechar</button>
       <button class="btn btn-war btn-sm" onclick="exportarRxJpg()">📸 Exportar JPG</button>
       <button class="btn btn-sm" onclick="compartilharRx()" style="background:#25D366;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">📤 Compartilhar</button>
-      <button class="btn btn-wa btn-sm" onclick="enviarWhatsApp()">💬 WhatsApp</button>
+      <button class="btn btn-wa btn-sm" onclick="enviarWhatsApp()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.2-1.1L3 20l1.2-5.1"/></svg></span> WhatsApp</button>
       <button class="btn btn-pri btn-sm" onclick="imprimirRx()">🖨️ Imprimir</button>
       <button class="btn btn-sm" id="btnSalvarRx" onclick="salvarRxComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700">💾 Salvar Recomendação</button>
     </div>
@@ -762,7 +764,7 @@ tr:hover td{background:#EEF2F7}
     <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M9 12h6M9 16h6"/></svg></span>Resumo da Avaliação</div>
     <div id="diagResumo" style="font-size:13px;line-height:1.7"></div>
     <div class="fa" style="margin-top:14px">
-      <button type="button" class="btn btn-sec" onclick="limparDiagnostico()">🗑️ Limpar Avaliação</button>
+      <button type="button" class="btn btn-sec" onclick="limparDiagnostico()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span> Limpar Avaliação</button>
       <button type="button" class="btn btn-pri" onclick="enviarDiagParaRx()">🌿 Enviar para Recomendação Terapêutica</button>
       <button type="button" class="btn" id="btnSalvarDiag" onclick="salvarDiagComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;font-weight:700">💾 Salvar Avaliação</button>
     </div>
@@ -794,7 +796,7 @@ tr:hover td{background:#EEF2F7}
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
         <div class="fg"><label>Mês</label><select id="fMes" onchange="atuFin()"><option value="">Todos</option><option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option><option value="3">Abril</option><option value="4">Maio</option><option value="5">Junho</option><option value="6">Julho</option><option value="7">Agosto</option><option value="8">Setembro</option><option value="9">Outubro</option><option value="10">Novembro</option><option value="11">Dezembro</option></select></div>
         <div class="fg"><label>Ano</label><select id="fAno" onchange="atuFin()"><option value="">Todos</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option></select></div>
-        <div class="fg"><label>Status</label><select id="fSt" onchange="atuFin()"><option value="">Todos</option><option value="pago">✅ Pago</option><option value="pendente">⏳ Pendente</option><option value="cancelado">❌ Cancelado</option></select></div>
+        <div class="fg"><label>Status</label><select id="fSt" onchange="atuFin()"><option value="">Todos</option><option value="pago"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Pago</option><option value="pendente">⏳ Pendente</option><option value="cancelado">❌ Cancelado</option></select></div>
       </div>
     </div>
     <div class="tw" style="margin-bottom:18px"><div style="overflow-x:auto">
@@ -906,7 +908,7 @@ tr:hover td{background:#EEF2F7}
 
   <div style="display:flex;gap:9px;justify-content:flex-end">
     <button class="btn btn-sec" onclick="resetarConfig()">↩️ Padrão</button>
-    <button class="btn btn-pri" onclick="salvarConfig()">✅ Salvar Configurações</button>
+    <button class="btn btn-pri" onclick="salvarConfig()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Salvar Configurações</button>
   </div>
 </section>
 
@@ -956,11 +958,11 @@ tr:hover td{background:#EEF2F7}
       <li>No celular → abra o app <strong>Google Drive</strong></li>
       <li>Encontre o arquivo → toque → <strong>"Abrir com Chrome"</strong></li>
       <li>No Chrome → <strong>3 pontinhos → "Adicionar à tela inicial"</strong></li>
-      <li>✅ Aparece como app na tela do celular!</li>
+      <li><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Aparece como app na tela do celular!</li>
     </ol>
     <p style="font-size:11.5px;color:var(--danger);margin-top:8px">⚠️ Dados do celular ficam separados. Use Exportar/Importar para sincronizar.</p>
   </div>
-  <div class="bx"><h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span>Limpar Dados</h3><p><strong style="color:var(--danger)">Irreversível!</strong> Faça backup antes.</p><div class="bx-ac"><button class="btn btn-dan" onclick="limparTudo()">🗑️ Limpar Tudo</button></div></div>
+  <div class="bx"><h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span>Limpar Dados</h3><p><strong style="color:var(--danger)">Irreversível!</strong> Faça backup antes.</p><div class="bx-ac"><button class="btn btn-dan" onclick="limparTudo()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span> Limpar Tudo</button></div></div>
   <div class="bx"><h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M10 20V4M16 20v-8M21 20H3"/></svg></span>Status</h3><div id="infoSys" style="font-size:12px;color:var(--txt-l);line-height:2.2"></div></div>
 </section>
 
@@ -1459,7 +1461,7 @@ function verPac(id){
   document.getElementById('modC').innerHTML=`
     <div class="ph"><div class="ph-f">${fH}</div><div class="ph-i">
       <h3>${p.nome}</h3>
-      ${p.telefone?`<p><a href="${wa}" target="_blank" style="color:#25D366;font-weight:600;text-decoration:none">💬 ${p.telefone}</a></p>`:''}
+      ${p.telefone?`<p><a href="${wa}" target="_blank" style="color:#25D366;font-weight:600;text-decoration:none"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.2-1.1L3 20l1.2-5.1"/></svg></span> ${p.telefone}</a></p>`:''}
       ${p.email?`<p>📧 ${p.email}</p>`:''}${p.profissao?`<p>💼 ${p.profissao}</p>`:''}
     </div></div>
     ${p.queixa?`<div class="psec"><h4><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M12 11v6M9 14h6"/></svg></span>Queixa</h4><p style="font-size:12px">${p.queixa}</p><div class="pgrid" style="margin-top:6px">${c('Tempo',p.tempoQueixa)}${c('Intensidade',p.intensidade)}</div></div>`:''}
@@ -1469,9 +1471,9 @@ function verPac(id){
     ${p.fitoterapia?`<div class="psec"><h4><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-3 5-6 11-11"/></svg></span>Fitoterapia</h4><p style="font-size:12px">${p.fitoterapia}</p></div>`:''}
     ${exH}
     <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:13px;flex-wrap:wrap">
-      ${wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm">💬</a>`:''}
+      ${wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.2-1.1L3 20l1.2-5.1"/></svg></span></a>`:''}
       <button class="btn btn-sec btn-sm" onclick="fMod()">Fechar</button>
-      <button class="btn btn-pri btn-sm" onclick="fMod();editarPac('${p.id}')">✏️ Editar</button>
+      <button class="btn btn-pri btn-sm" onclick="fMod();editarPac('${p.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span> Editar</button>
     </div>`;
   document.getElementById('modP').classList.add('show');
 }
@@ -1597,15 +1599,15 @@ function atuFin(){
     const bt=s.status==='pago'?'✅ Pago':s.status==='pendente'?'⏳ Pendente':'❌ Cancelado';
     const wa=waUrl(s.pacienteTel||'');
     return`<tr><td style="white-space:nowrap">${fd(s.data)}</td>
-      <td>${s.pacienteNome}${wa!=='#'?` <a href="${wa}" target="_blank" class="btn btn-wa btn-sm" style="padding:2px 5px;font-size:10px">💬</a>`:''}</td>
+      <td>${s.pacienteNome}${wa!=='#'?` <a href="${wa}" target="_blank" class="btn btn-wa btn-sm" style="padding:2px 5px;font-size:10px"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.2-1.1L3 20l1.2-5.1"/></svg></span></a>`:''}</td>
       <td style="font-size:12px">${s.procedimentos||'—'}</td>
       <td><strong>${fm(s.valor)}</strong></td>
       <td style="font-size:12px">${s.formaPgto||'-'}</td>
       <td><span class="badge ${bc}">${bt}</span></td>
       <td style="white-space:nowrap">
-        ${s.status==='pendente'?`<button class="btn btn-pri btn-sm" onclick="mPago(${s.id})">✅</button>`:''}
-        <button class="btn btn-cal btn-sm" onclick="abrirGA(gD('sessoes').find(x=>x.id===${s.id}))" title="Google Agenda">📅</button>
-        <button class="btn btn-dan btn-sm" onclick="dSess(${s.id})">🗑️</button>
+        ${s.status==='pendente'?`<button class="btn btn-pri btn-sm" onclick="mPago(${s.id})"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span></button>`:''}
+        <button class="btn btn-cal btn-sm" onclick="abrirGA(gD('sessoes').find(x=>x.id===${s.id}))" title="Google Agenda"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span></button>
+        <button class="btn btn-dan btn-sm" onclick="dSess(${s.id})"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span></button>
       </td></tr>`;
   }).join('');
 }
@@ -1664,7 +1666,7 @@ function renderDespesasClinica(){
     <div class="cat-ic">${d.tipo==='receita'?catIconReceita:catIconDesp}</div>
     <div class="info"><div class="desc">${escHtml(d.descricao)}</div><div class="det">${escHtml(d.categoria||'Geral')} · ${fd(d.data)}</div></div>
     <div class="valor-item ${d.tipo==='receita'?'green':'clay'}">${d.tipo==='receita'?'+ ':'– '}${fm(d.valor)}</div>
-    <button class="btn btn-dan btn-sm" onclick="dDespesa(${d.id})">🗑️</button>
+    <button class="btn btn-dan btn-sm" onclick="dDespesa(${d.id})"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span></button>
   </div>`).join('');
 }
 function renderDespesasPessoal(){
@@ -1680,7 +1682,7 @@ function renderDespesasPessoal(){
     <div class="cat-ic">${d.tipo==='receita'?catIconReceita:catIconDesp}</div>
     <div class="info"><div class="desc">${escHtml(d.descricao)}</div><div class="det">${escHtml(d.categoria||'Geral')} · ${fd(d.data)}</div></div>
     <div class="valor-item ${d.tipo==='receita'?'green':'clay'}">${d.tipo==='receita'?'+ ':'– '}${fm(d.valor)}</div>
-    <button class="btn btn-dan btn-sm" onclick="dDespesa(${d.id})">🗑️</button>
+    <button class="btn btn-dan btn-sm" onclick="dDespesa(${d.id})"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span></button>
   </div>`).join('');
 }
 function abrirModalDespesa(escopo,tipo){
@@ -1777,9 +1779,9 @@ function renderSemana(){
         ${s.horario?`<div style="font-weight:700;color:${cor};font-size:9px">${s.horario}</div>`:''}
         <div style="font-size:10px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px;cursor:pointer" onclick="verEvento(${s.id})">${s.pacienteNome||'—'}</div>
         <div style="display:flex;gap:2px;margin-top:2px">
-          <button onclick="event.stopPropagation();verEvento(${s.id})" style="background:none;border:none;font-size:9px;cursor:pointer;padding:0 2px" title="Ver">👁️</button>
-          <button onclick="event.stopPropagation();fMod();editarSessao(${s.id})" style="background:none;border:none;font-size:9px;cursor:pointer;padding:0 2px" title="Editar">✏️</button>
-          <button onclick="event.stopPropagation();dSessAg(${s.id})" style="background:none;border:none;font-size:9px;cursor:pointer;padding:0 2px" title="Deletar">🗑️</button>
+          <button onclick="event.stopPropagation();verEvento(${s.id})" style="background:none;border:none;font-size:9px;cursor:pointer;padding:0 2px" title="Ver"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
+          <button onclick="event.stopPropagation();fMod();editarSessao(${s.id})" style="background:none;border:none;font-size:9px;cursor:pointer;padding:0 2px" title="Editar"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span></button>
+          <button onclick="event.stopPropagation();dSessAg(${s.id})" style="background:none;border:none;font-size:9px;cursor:pointer;padding:0 2px" title="Deletar"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span></button>
         </div>
       </div>`;
     });
@@ -1797,7 +1799,7 @@ function verEvento(id){
   const wa=waUrl(s.pacienteTel||'');
   const end=cfg('end')||'';
   document.getElementById('modC').innerHTML=`
-    <h3 style="color:var(--pri-d);margin-bottom:13px">📅 ${s.pacienteNome}</h3>
+    <h3 style="color:var(--pri-d);margin-bottom:13px"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span> ${s.pacienteNome}</h3>
     <div class="pgrid" style="margin-bottom:13px">
       <div class="pi"><strong>Data</strong><span>${fd(s.data)}</span></div>
       <div class="pi"><strong>Horário</strong><span>${s.horario||'—'}</span></div>
@@ -1816,11 +1818,11 @@ function verEvento(id){
       <span style="color:var(--pri);font-size:20px">↗️</span>
     </a>`:''}
     <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
-      ${wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm">💬 WhatsApp</a>`:''}
-      <button class="btn btn-cal btn-sm" onclick="abrirGA(gD('sessoes').find(x=>x.id===${s.id}))">📅 Agenda</button>
-      ${s.status==='pendente'?`<button class="btn btn-pri btn-sm" onclick="mPago(${s.id});fMod();renderAg()">✅ Pago</button>`:''}
-      <button class="btn btn-war btn-sm" onclick="fMod();editarSessao(${s.id})">✏️ Editar</button>
-      <button class="btn btn-dan btn-sm" onclick="fMod();dSessAg(${s.id})">🗑️ Deletar</button>
+      ${wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.2-1.1L3 20l1.2-5.1"/></svg></span> WhatsApp</a>`:''}
+      <button class="btn btn-cal btn-sm" onclick="abrirGA(gD('sessoes').find(x=>x.id===${s.id}))"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span> Agenda</button>
+      ${s.status==='pendente'?`<button class="btn btn-pri btn-sm" onclick="mPago(${s.id});fMod();renderAg()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Pago</button>`:''}
+      <button class="btn btn-war btn-sm" onclick="fMod();editarSessao(${s.id})"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span> Editar</button>
+      <button class="btn btn-dan btn-sm" onclick="fMod();dSessAg(${s.id})"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span> Deletar</button>
       <button class="btn btn-sec btn-sm" onclick="fMod()">Fechar</button>
     </div>`;
   document.getElementById('modP').classList.add('show');
@@ -1872,11 +1874,11 @@ function renderAg(){
       <td style="font-size:12px;color:var(--txt-l)">${s.procedimentos||'—'}</td>
       <td><span class="badge ${bc}">${bt}</span></td>
       <td style="white-space:nowrap">
-        <button class="btn btn-inf btn-sm" onclick="verEvento(${s.id})">👁️</button>
-        <button class="btn btn-war btn-sm" onclick="editarSessao(${s.id})">✏️</button>
-        <button class="btn btn-cal btn-sm" onclick="abrirGA(gD('sessoes').find(x=>x.id===${s.id}))">📅</button>
-        ${s.status==='pendente'?`<button class="btn btn-pri btn-sm" onclick="mPago(${s.id});renderAg()">✅</button>`:''}
-        <button class="btn btn-dan btn-sm" onclick="dSessAg(${s.id})">🗑️</button>
+        <button class="btn btn-inf btn-sm" onclick="verEvento(${s.id})"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
+        <button class="btn btn-war btn-sm" onclick="editarSessao(${s.id})"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span></button>
+        <button class="btn btn-cal btn-sm" onclick="abrirGA(gD('sessoes').find(x=>x.id===${s.id}))"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span></button>
+        ${s.status==='pendente'?`<button class="btn btn-pri btn-sm" onclick="mPago(${s.id});renderAg()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span></button>`:''}
+        <button class="btn btn-dan btn-sm" onclick="dSessAg(${s.id})"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span></button>
       </td></tr>`;
   }).join('');
 }
@@ -2513,7 +2515,7 @@ function gerarHtmlRx(){
 
     ${v('rxDurG')||v('rxRet')?`<table style="width:100%;margin-bottom:16px"><tr>
       ${v('rxDurG')?`<td style="padding-right:8px"><div style="background:#EEF4FA;border-radius:8px;padding:9px 14px"><div style="font-size:7.5pt;color:#1E3A5F;text-transform:uppercase;letter-spacing:.4px">⏰ Duração</div><div style="font-size:10pt;font-weight:600;color:#1E3A5F;margin-top:2px">${v('rxDurG')}</div></div></td>`:''}
-      ${v('rxRet')?`<td><div style="background:#F0EBE0;border-radius:8px;padding:9px 14px"><div style="font-size:7.5pt;color:#7a5c1e;text-transform:uppercase;letter-spacing:.4px">📅 Retorno</div><div style="font-size:10pt;font-weight:600;color:#7a5c1e;margin-top:2px">${v('rxRet')}</div></div></td>`:''}
+      ${v('rxRet')?`<td><div style="background:#F0EBE0;border-radius:8px;padding:9px 14px"><div style="font-size:7.5pt;color:#7a5c1e;text-transform:uppercase;letter-spacing:.4px"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span> Retorno</div><div style="font-size:10pt;font-weight:600;color:#7a5c1e;margin-top:2px">${v('rxRet')}</div></div></td>`:''}
     </tr></table>`:''}
 
     ${v('rxObs')?`<div style="background:#FFF8E1;border-radius:8px;padding:12px 16px;font-size:9.5pt;margin-bottom:16px;border-left:3px solid #C47A1E;color:#5a4a1e;line-height:1.5"><strong>⚠️ Observações:</strong> ${v('rxObs')}</div>`:''}
@@ -2604,10 +2606,10 @@ async function carregarRxHistPac(pacId){
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;flex-wrap:wrap;gap:6px">
         <strong style="color:var(--pri-d);font-size:13px">🌿 ${fd(rx.data)}</strong>
         <div style="display:flex;gap:6px">
-          <button class="btn btn-sec btn-sm" onclick="verRxHist('${rx.id}')">👁️ Ver</button>
-          <button class="btn btn-sec btn-sm" onclick="editarRx('${rx.id}')">✏️ Editar</button>
+          <button class="btn btn-sec btn-sm" onclick="verRxHist('${rx.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span> Ver</button>
+          <button class="btn btn-sec btn-sm" onclick="editarRx('${rx.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span> Editar</button>
           <button class="btn btn-sec btn-sm" onclick="duplicarRx('${rx.id}')">📋 Duplicar</button>
-          <button class="btn btn-dan btn-sm" onclick="delRxHist('${rx.id}')">🗑️</button>
+          <button class="btn btn-dan btn-sm" onclick="delRxHist('${rx.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span></button>
         </div>
       </div>
       <div style="font-size:12px;color:var(--txt)">
@@ -2629,10 +2631,10 @@ async function carregarDiagHistPac(pacId){
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;flex-wrap:wrap;gap:6px">
         <strong style="color:var(--pri-d);font-size:13px">🔮 ${fd(d.data)}</strong>
         <div style="display:flex;gap:6px">
-          <button type="button" class="btn btn-sec btn-sm" onclick="verDiagHist('${d.id}')">👁️ Ver</button>
-          <button type="button" class="btn btn-sec btn-sm" onclick="editarDiagHist('${d.id}','${pacId}')">✏️ Editar</button>
+          <button type="button" class="btn btn-sec btn-sm" onclick="verDiagHist('${d.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span> Ver</button>
+          <button type="button" class="btn btn-sec btn-sm" onclick="editarDiagHist('${d.id}','${pacId}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span> Editar</button>
           <button type="button" class="btn btn-sec btn-sm" onclick="duplicarDiagHist('${d.id}','${pacId}')">📋 Duplicar</button>
-          <button type="button" class="btn btn-dan btn-sm" onclick="delDiagHist('${d.id}','${pacId}')">🗑️</button>
+          <button type="button" class="btn btn-dan btn-sm" onclick="delDiagHist('${d.id}','${pacId}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span></button>
         </div>
       </div>
       <div style="font-size:12px;color:var(--txt)">
@@ -2691,7 +2693,7 @@ function verDiagHist(diagId){
     ${montarHtmlDiagnostico(diag)}
     <div style="display:flex;gap:7px;justify-content:flex-end;margin-top:13px">
       <button class="btn btn-sec btn-sm" onclick="fMod()">Fechar</button>
-      <button class="btn btn-pri btn-sm" onclick="fMod();editarDiagHist('${diag.id}','${diag.pacienteId}')">✏️ Editar</button>
+      <button class="btn btn-pri btn-sm" onclick="fMod();editarDiagHist('${diag.id}','${diag.pacienteId}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span> Editar</button>
       <button class="btn btn-sec btn-sm" onclick="fMod();duplicarDiagHist('${diag.id}','${diag.pacienteId}')">📋 Duplicar</button>
     </div>`;
   document.getElementById('modP').classList.add('show');
@@ -2753,7 +2755,7 @@ function verRxHist(rxId){
     <div style="border:1px solid var(--brd);border-radius:8px;overflow:hidden">${html}</div>
     <div style="display:flex;gap:7px;justify-content:flex-end;margin-top:13px">
       <button class="btn btn-sec btn-sm" onclick="fMod()">Fechar</button>
-      <button class="btn btn-pri btn-sm" onclick="fMod();editarRx('${rx.id}')">✏️ Editar</button>
+      <button class="btn btn-pri btn-sm" onclick="fMod();editarRx('${rx.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span> Editar</button>
       <button class="btn btn-sec btn-sm" onclick="fMod();duplicarRx('${rx.id}')">📋 Duplicar</button>
     </div>`;
   document.getElementById('modP').classList.add('show');
@@ -3168,7 +3170,7 @@ function renderVCF(exSet){
           <button class="btn btn-sec btn-sm" onclick="selVCF(true)">☑️ Todos da página</button>
           <button class="btn btn-sec btn-sm" onclick="selVCF(false)">☐ Nenhum</button>
           <button class="btn btn-war btn-sm" onclick="selVCFTodos()">☑️ Selecionar TODOS (${novos})</button>
-          <button class="btn btn-pri btn-sm" onclick="impVCF()">✅ Importar Selecionados</button>
+          <button class="btn btn-pri btn-sm" onclick="impVCF()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Importar Selecionados</button>
         </div>
       </div>
       <div style="margin-top:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
@@ -3315,7 +3317,7 @@ function renderP(lista){
       <div style="display:flex;gap:7px;flex-wrap:wrap">
         <button class="btn btn-sec btn-sm" onclick="selPacs(true)">☑️ Todos desta página</button>
         <button class="btn btn-sec btn-sm" onclick="selPacs(false)">☐ Nenhum</button>
-        <button class="btn btn-dan btn-sm" onclick="delPacsSel()">🗑️ Excluir Selecionados</button>
+        <button class="btn btn-dan btn-sm" onclick="delPacsSel()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span> Excluir Selecionados</button>
       </div>`;
     const ph=document.querySelector('#pg-pacientes .page-header');
     if(ph)ph.after(delBar);
@@ -3331,7 +3333,7 @@ function renderP(lista){
   tb.innerHTML=pagina.map(p=>{
     const fH=p.foto?`<div class="fmini"><img src="${p.foto}"></div>`:`<div class="fmini">👤</div>`;
     const wa=waUrl(p.telefone);
-    const waB=wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm">💬 ${p.telefone}</a>`:`<span style="color:var(--txt-l)">${p.telefone||'-'}</span>`;
+    const waB=wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.2-1.1L3 20l1.2-5.1"/></svg></span> ${p.telefone}</a>`:`<span style="color:var(--txt-l)">${p.telefone||'-'}</span>`;
     return`<tr>
       <td style="padding:6px 8px;width:32px"><input type="checkbox" class="pacCk" data-id="${p.id}" onchange="atuDelBar()"></td>
       <td>${fH}</td>
@@ -3340,9 +3342,9 @@ function renderP(lista){
       <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--txt-l);font-size:12px">${p.queixa||'-'}</td>
       <td style="color:var(--txt-l);font-size:12px;white-space:nowrap">${p.dataCadastro||'-'}</td>
       <td style="white-space:nowrap">
-        <button class="btn btn-inf btn-sm" onclick="verPac('${p.id}')">👁️</button>
-        <button class="btn btn-sec btn-sm" onclick="editarPac('${p.id}')">✏️</button>
-        <button class="btn btn-dan btn-sm" onclick="delPac('${p.id}')">🗑️</button>
+        <button class="btn btn-inf btn-sm" onclick="verPac('${p.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
+        <button class="btn btn-sec btn-sm" onclick="editarPac('${p.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span></button>
+        <button class="btn btn-dan btn-sm" onclick="delPac('${p.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span></button>
       </td>
     </tr>`;
   }).join('');
