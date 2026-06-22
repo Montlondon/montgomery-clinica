@@ -526,6 +526,7 @@ tr:hover td{background:#EEF2F7}
         <button class="btn btn-sec btn-sm" onclick="ordP('az')">A→Z</button>
         <button class="btn btn-sec btn-sm" onclick="ordP('za')">Z→A</button>
         <button class="btn btn-sec btn-sm" onclick="ordP('novo')">🕐</button>
+        <button class="btn btn-sec btn-sm" id="btnFiltroTriagem" onclick="toggleFiltroTriagem()">🆕 Pendentes de triagem (<span id="cntTriagem">0</span>)</button>
         <span style="font-size:12px;color:var(--txt-l)" id="cntP">0</span>
       </div>
     </div>
@@ -1442,9 +1443,19 @@ function limparForm(){
 
 // ===== RENDER PACIENTES =====
 function ordP(o){ordP_=o;renderP();}
+let _filtroTriagem=false;
+function toggleFiltroTriagem(){
+  _filtroTriagem=!_filtroTriagem;
+  const btn=document.getElementById('btnFiltroTriagem');
+  if(btn)btn.classList.toggle('btn-pri',_filtroTriagem);
+  _pacPag=0;
+  filtrarP();
+}
 function filtrarP(){
   const b=document.getElementById('busP').value.toLowerCase();
-  renderP(gD('pacientes').filter(p=>p.nome.toLowerCase().includes(b)||(p.telefone||'').includes(b)||(p.queixa||'').toLowerCase().includes(b)));
+  let pacs=gD('pacientes').filter(p=>p.nome.toLowerCase().includes(b)||(p.telefone||'').includes(b)||(p.queixa||'').toLowerCase().includes(b));
+  if(_filtroTriagem)pacs=pacs.filter(p=>p.triagem);
+  renderP(pacs);
 }
 async function delPac(id){
   if(!confirm('Excluir este paciente permanentemente?'))return;
@@ -3327,7 +3338,7 @@ async function impVCF(){
   let erros=0;
 
   // Montar objetos
-  const novos=sel.map(c=>({id:Date.now()+Math.random(),dataCadastro:new Date().toLocaleDateString('pt-BR'),foto:'',exames:[],nome:c.nome,email:c.email||'',telefone:c.telefone||'',queixa:'',doencas:'',medicamentos:'',alergias:'',nascimento:'',genero:'',religiao:'',profissao:'',estadoCivil:'',endereco:'',cidade:'',estado:'',cep:'',contatoEmerg:'',telEmerg:'',tempoQueixa:'',intensidade:'',melhora:'',piora:'',tratAnterior:'',cirurgias:'',histFamiliar:'',gestante:'',semanas:'',sono:'',horasSono:'',alimentacao:'',agua:'',ativFisica:'',tipoAtiv:'',tabagismo:'',alcool:'',estresse:'',obsHabitos:'',lingua:'',pulso:'',meridianos:'',diagMTC:'',pontos:'',obsAcup:'',postura:'',regiao:'',vertebras:'',amplitude:'',testes:'',ajustes:'',obsQuiro:'',demandaPsi:'',estadoEmocional:'',histEmocional:'',relacoes:'',notasPsi:'',encamPsi:'',fitoterapia:'',contraFito:'',seitaiAval:'',seitaiTec:'',obsGeral:''}));
+  const novos=sel.map(c=>({id:Date.now()+Math.random(),dataCadastro:new Date().toLocaleDateString('pt-BR'),triagem:true,foto:'',exames:[],nome:c.nome,email:c.email||'',telefone:c.telefone||'',queixa:'',doencas:'',medicamentos:'',alergias:'',nascimento:'',genero:'',religiao:'',profissao:'',estadoCivil:'',endereco:'',cidade:'',estado:'',cep:'',contatoEmerg:'',telEmerg:'',tempoQueixa:'',intensidade:'',melhora:'',piora:'',tratAnterior:'',cirurgias:'',histFamiliar:'',gestante:'',semanas:'',sono:'',horasSono:'',alimentacao:'',agua:'',ativFisica:'',tipoAtiv:'',tabagismo:'',alcool:'',estresse:'',obsHabitos:'',lingua:'',pulso:'',meridianos:'',diagMTC:'',pontos:'',obsAcup:'',postura:'',regiao:'',vertebras:'',amplitude:'',testes:'',ajustes:'',obsQuiro:'',demandaPsi:'',estadoEmocional:'',histEmocional:'',relacoes:'',notasPsi:'',encamPsi:'',fitoterapia:'',contraFito:'',seitaiAval:'',seitaiTec:'',obsGeral:''}));
 
   // Inserir em lotes direto no Supabase
   for(let i=0;i<novos.length;i+=LOTE_INSERT){
@@ -3364,7 +3375,10 @@ let _pacPag=0;
 const PAC_POR_PAG=100;
 
 function renderP(lista){
+  const cntT=document.getElementById('cntTriagem');
+  if(cntT)cntT.textContent=gD('pacientes').filter(p=>p.triagem).length;
   let pacs=lista||gD('pacientes');
+  if(!lista&&_filtroTriagem)pacs=pacs.filter(p=>p.triagem);
   if(ordP_==='az')pacs.sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
   else if(ordP_==='za')pacs.sort((a,b)=>b.nome.localeCompare(a.nome,'pt-BR'));
   else pacs.sort((a,b)=>b.id-a.id);
@@ -3409,6 +3423,7 @@ function renderP(lista){
       <div style="display:flex;gap:7px;flex-wrap:wrap">
         <button class="btn btn-sec btn-sm" onclick="selPacs(true)">☑️ Todos desta página</button>
         <button class="btn btn-sec btn-sm" onclick="selPacs(false)">☐ Nenhum</button>
+        <button class="btn btn-pri btn-sm" onclick="marcarTriagemSel()">✅ Marcar como revisado</button>
         <button class="btn btn-dan btn-sm" onclick="delPacsSel()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span> Excluir Selecionados</button>
       </div>`;
     const ph=document.querySelector('#pg-pacientes .page-header');
@@ -3429,7 +3444,7 @@ function renderP(lista){
     return`<tr>
       <td style="padding:6px 8px;width:32px"><input type="checkbox" class="pacCk" data-id="${p.id}" onchange="atuDelBar()"></td>
       <td>${fH}</td>
-      <td><strong>${p.nome}</strong></td>
+      <td><strong>${p.nome}</strong>${p.triagem?' <span style="background:#FFF3CD;color:#8A6D00;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;vertical-align:middle">NOVO</span>':''}</td>
       <td>${waB}</td>
       <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--txt-l);font-size:12px">${p.queixa||'-'}</td>
       <td style="color:var(--txt-l);font-size:12px;white-space:nowrap">${p.dataCadastro||'-'}</td>
@@ -3466,6 +3481,16 @@ async function delPacsSel(){
   await dbSet('pacientes',pacs);
   renderP();atuDash();
   toast(`🗑️ ${ids.length} paciente${ids.length!==1?'s':''} excluído${ids.length!==1?'s':''}!`,'#c62828');
+}
+
+async function marcarTriagemSel(){
+  const ids=[];
+  document.querySelectorAll('.pacCk:checked').forEach(c=>ids.push(+c.dataset.id));
+  if(!ids.length){toast('⚠️ Selecione ao menos um paciente','#EF6C00');return;}
+  const pacs=gD('pacientes').map(p=>ids.includes(p.id)?{...p,triagem:false}:p);
+  await dbSet('pacientes',pacs);
+  renderP();
+  toast(`✅ ${ids.length} paciente${ids.length!==1?'s':''} marcado${ids.length!==1?'s':''} como revisado${ids.length!==1?'s':''}!`);
 }
 
 // ===== HELPERS =====
