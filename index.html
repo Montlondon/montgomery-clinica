@@ -169,6 +169,16 @@ tr:hover td{background:#EEF2F7}
 .fc-card .fv{font-size:18px;font-weight:700}
 .fc-card.g .fv{color:var(--pri)}.fc-card.o .fv{color:var(--warn)}.fc-card.b .fv{color:var(--info)}.fc-card.p .fv{color:#7B1FA2}
 
+/* BALANÇO MÉTODO ABC */
+.seg{display:flex;gap:4px;background:var(--bg);border-radius:11px;padding:4px;width:fit-content;margin-bottom:14px}
+.seg button{border:none;background:none;padding:8px 16px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.tw-zebra tbody tr:nth-child(even) td{background:var(--bg)}
+.abc-merid-btn{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:8px 0;font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;text-align:center}
+.abc-merid-btn:hover{background:var(--bg)}
+.abc-merid-btn.on{background:var(--pri-deep);color:#fff;border-color:var(--pri-deep)}
+.abc-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow)}
+
 /* FINANCEIRO CLÍNICA/PESSOAL */
 .seg-scope{display:flex;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:5px;width:fit-content;margin-bottom:18px}
 .seg-scope button{border:none;background:none;padding:9px 22px;border-radius:9px;font-size:13.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:7px}
@@ -681,6 +691,32 @@ tr:hover td{background:#EEF2F7}
     <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.6"/><path d="M11.3 7v3.5l-2.2 2v3M12.7 10.5V14l2.2 2v3"/><circle cx="9" cy="13" r="1.2"/><circle cx="15" cy="16.5" r="1.2"/></svg></span>Pontos do Corpo — Avaliação Quiroprática</div>
     <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Clique em uma região para ver músculos, tendões, ajustes e canal energético relacionado.</p>
     <div id="pontosGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px"></div>
+  </div>
+
+  <div class="fio-elementos"></div>
+
+  <div class="fc">
+    <div class="fst" style="font-family:'Lora',serif"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M5 7h14"/><path d="M5 7l-2.5 6a3 3 0 0 0 5.8 1.2"/><path d="M19 7l2.5 6a3 3 0 0 1-5.8 1.2"/><path d="M8 21h8"/></svg></span>Balanço Método (Sistemas ABC)</div>
+    <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Sistemas de equilíbrio do Dr. Tan: veja a tabela completa dos 12 sistemas ou filtre pelo meridiano afetado para encontrar os meridianos de balanço a tratar.</p>
+    <div class="seg" id="abcModoSeg">
+      <button class="on" data-modo="tabela" onclick="setAbcModo('tabela')">Tabela Completa</button>
+      <button data-modo="filtro" onclick="setAbcModo('filtro')">Filtro por Meridiano</button>
+    </div>
+
+    <div id="abcModoTabela">
+      <div class="tw tw-zebra"><div style="overflow-x:auto">
+        <table>
+          <thead><tr><th>Sistema</th><th>Meridianos do grupo</th><th>Relação / Lógica</th></tr></thead>
+          <tbody id="abcTabelaBody"></tbody>
+        </table>
+      </div></div>
+    </div>
+
+    <div id="abcModoFiltro" style="display:none">
+      <p style="font-size:11.5px;color:var(--txt-l);margin-bottom:8px">Selecione o meridiano afetado:</p>
+      <div id="abcMeridianoGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(48px,1fr));gap:6px;margin-bottom:16px"></div>
+      <div id="abcResultados"></div>
+    </div>
   </div>
 
   <div id="diagPainel" style="display:none"></div>
@@ -2070,11 +2106,82 @@ function initDiagnostico(){
   renderElementosGrid();
   renderPontosGrid();
   renderDiagPainel();
+  initBalancoABC();
   if(!document.getElementById('diagDt').value)document.getElementById('diagDt').value=new Date().toISOString().split('T')[0];
   if(!_diagPacSel){
     document.getElementById('diagPacBusca').value='';
     document.getElementById('diagPacId').value='';
   }
+}
+
+// ===== BALANÇO MÉTODO — SISTEMAS ABC (leitura de sistemasABC, definido mais abaixo) =====
+const MERIDIANOS_12=['P','IG','E','BP','C','ID','B','R','PC','TA','VB','F'];
+const ELEMENTO_MERIDIANO_ABC={'Madeira':'F','Fogo':'C','Terra':'BP','Metal':'P','Água':'R'};
+// O objeto sistemasABC usa 'BA' como id do sistema Baço/Pâncreas, mas em alguns
+// pontos do próprio objeto a referência cruzada aparece como 'BP' (abreviação
+// clínica padrão). Normalizamos só para comparar/filtrar, sem tocar no objeto.
+const abcNorm=m=>m==='BP'?'BA':m;
+function abcGrupo(s){
+  const vals=[s.id,s.pontos.bracoEsquerdo,s.pontos.bracoDireito,s.pontos.pernaEsquerda,s.pontos.pernaDireita];
+  let flat=[];
+  vals.forEach(v=>{if(Array.isArray(v))flat.push(...v);else if(v)flat.push(v);});
+  return [...new Set(flat)];
+}
+const abcGrupoDisplay=s=>abcGrupo(s).map(m=>m==='BA'?'BP':m);
+function meridianoPredominanteABC(){
+  const els=_diagSelecoes.elementos||[];
+  for(const e of els){if(ELEMENTO_MERIDIANO_ABC[e])return ELEMENTO_MERIDIANO_ABC[e];}
+  return '';
+}
+function abcRenderTabela(){
+  const el=document.getElementById('abcTabelaBody');
+  if(!el)return;
+  el.innerHTML=sistemasABC.map(s=>`<tr>
+    <td><strong>${s.id}</strong> · ${s.elemento}<br><span style="font-size:10.5px;color:var(--ink-soft)">${s.categoria}</span></td>
+    <td>${abcGrupoDisplay(s).join(', ')}</td>
+    <td style="font-size:11.5px;color:var(--ink-soft);max-width:360px">${s.protocolo}</td>
+  </tr>`).join('');
+}
+function abcRenderMeridianoGrid(sel){
+  const el=document.getElementById('abcMeridianoGrid');
+  if(!el)return;
+  el.innerHTML=MERIDIANOS_12.map(m=>`<button type="button" class="abc-merid-btn${m===sel?' on':''}" onclick="abcFiltrarMeridiano('${m}')">${m}</button>`).join('');
+}
+function abcFiltrarMeridiano(m){
+  abcRenderMeridianoGrid(m);
+  const norm=abcNorm(m);
+  const labelsSeg=[['Braço Esquerdo','bracoEsquerdo'],['Braço Direito','bracoDireito'],['Perna Esquerda','pernaEsquerda'],['Perna Direita','pernaDireita']];
+  const matches=sistemasABC.filter(s=>abcNorm(s.id)===norm||abcGrupo(s).some(g=>abcNorm(g)===norm));
+  const el=document.getElementById('abcResultados');
+  if(!matches.length){el.innerHTML='<p style="font-size:12.5px;color:var(--ink-soft);padding:10px 0">Nenhum sistema encontrado para esse meridiano.</p>';return;}
+  el.innerHTML=matches.map(s=>{
+    const outros=abcGrupoDisplay(s).filter(g=>abcNorm(g)!==norm);
+    const segHtml=labelsSeg.map(([lbl,chave])=>{
+      const v=s.pontos[chave];
+      const arr=Array.isArray(v)?v:[v];
+      const hit=arr.some(x=>abcNorm(x)===norm);
+      return `<div style="font-size:11.5px;${hit?'color:var(--pri-deep);font-weight:700':'color:var(--ink-soft)'}">${lbl}: ${arr.map(x=>x==='BA'?'BP':x).join(' / ')}</div>`;
+    }).join('');
+    return `<div class="abc-card">
+      <div style="font-family:'Lora',serif;font-weight:600;font-size:14px;color:var(--pri-deep)">Sistema ${s.id==='BA'?'BP':s.id} — ${s.elemento}</div>
+      <div style="font-size:11px;color:var(--ink-soft);margin-bottom:8px">${s.categoria}</div>
+      <div style="font-size:12px;margin-bottom:8px"><strong>Meridianos de balanço a tratar:</strong> ${outros.join(', ')||'—'}</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px">${segHtml}</div>
+      <div style="font-size:11.5px;color:var(--ink-soft);line-height:1.5">${s.protocolo}</div>
+    </div>`;
+  }).join('');
+}
+function setAbcModo(modo){
+  document.getElementById('abcModoTabela').style.display=modo==='tabela'?'block':'none';
+  document.getElementById('abcModoFiltro').style.display=modo==='filtro'?'block':'none';
+  document.querySelectorAll('#abcModoSeg button').forEach(b=>b.classList.toggle('on',b.dataset.modo===modo));
+}
+function initBalancoABC(){
+  if(!document.getElementById('abcTabelaBody'))return;
+  abcRenderTabela();
+  const pre=meridianoPredominanteABC();
+  if(pre){setAbcModo('filtro');abcFiltrarMeridiano(pre);}
+  else{abcRenderMeridianoGrid('');document.getElementById('abcResultados').innerHTML='';}
 }
 
 function renderElementosGrid(){
