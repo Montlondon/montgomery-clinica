@@ -2760,7 +2760,7 @@ function imprimirDiag(diagId){
   } else if(!_diagPacSel){
     toast('⚠️ Selecione um paciente primeiro','#EF6C00');return;
   }
-  const win=window.open('','_blank','width=800,height=900');
+  const win=window.open('','_blank','width=460,height=900');
   win.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Diagnóstico Integrado</title>
   <style>@page{margin:10mm 12mm;size:A4}body{margin:0;padding:12px;background:#fff;font-family:Georgia,serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}</style>
   </head><body>${gerarHtmlDiag(diagRec)}</body></html>`);
@@ -3066,7 +3066,7 @@ function gerarRx(){
   document.getElementById('rxPrev').scrollIntoView({behavior:'smooth'});
 }
 function imprimirRx(){
-  const win=window.open('','_blank','width=800,height=900');
+  const win=window.open('','_blank','width=460,height=900');
   win.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Recomendação Terapêutica</title>
   <style>@page{margin:10mm 12mm;size:A4}body{margin:0;padding:12px;background:#fff;font-family:Georgia,serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}</style>
   </head><body>${gerarHtmlRx()}</body></html>`);
