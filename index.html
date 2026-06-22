@@ -2199,7 +2199,7 @@ function abcFiltrarMeridiano(m){
   // Rótulo exibido é o lado clínico do paciente (decúbito dorsal, terapeuta de
   // frente) — por isso aparece invertido em relação ao nome do campo de dados.
   const labelsSeg=[['Braço Direito','bracoEsquerdo'],['Braço Esquerdo','bracoDireito'],['Perna Direita','pernaEsquerda'],['Perna Esquerda','pernaDireita']];
-  const matches=sistemasABC.filter(s=>s.id===m||abcGrupo(s).includes(m));
+  const matches=sistemasABC.filter(s=>s.id===m||abcGrupo(s).includes(m)).sort((a,b)=>(a.id===m?-1:0)-(b.id===m?-1:0));
   const el=document.getElementById('abcResultados');
   if(!matches.length){el.innerHTML='<p style="font-size:12.5px;color:var(--ink-soft);padding:10px 0">Nenhum sistema encontrado para esse meridiano.</p>';return;}
   el.innerHTML=matches.map(s=>{
