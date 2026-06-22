@@ -2404,21 +2404,27 @@ function renderDiagPainel(){
   resumo.innerHTML=partes.map(p=>`<p style="margin-bottom:5px">${p}</p>`).join('');
 }
 
-function gerarHtmlDiag(){
+function gerarHtmlDiag(diagRec){
   const cfgData=getCfg();
   const ter=cfgData.ter||'Montgomery Magalhães';
   const reg=cfgData.reg||'';
   const logo=gC('config_logo')||cfgData.logo||'';
   const logoHtml=logo?`<img src="${logo}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid #1E3A5F;margin-right:14px" alt="Logo">`:'<div style="width:64px;height:64px;border-radius:50%;background:#EEF4FA;display:flex;align-items:center;justify-content:center;font-size:28px;margin-right:14px">🩺</div>';
-  const nomePac=_diagPacSel?_diagPacSel.nome:'—';
-  const dt=document.getElementById('diagDt').value;
-  const emo=document.getElementById('diagEscalaEmo').value;
-  const emoObs=document.getElementById('diagEmoObs').value;
+
+  // Lê do registro de histórico (diagRec) quando fornecido, senão do formulário atual em edição
+  const nomePac=diagRec?diagRec.pacienteNome:(_diagPacSel?_diagPacSel.nome:'—');
+  const dt=diagRec?diagRec.data:document.getElementById('diagDt').value;
+  const elementos=diagRec?(diagRec.elementos||[]):_diagSelecoes.elementos;
+  const elementosObs=diagRec?(diagRec.elementosObs||{}):_diagSelecoes.elementosObs;
+  const pontos=diagRec?(diagRec.pontos||[]):_diagSelecoes.pontos;
+  const sistemasAbcSel=diagRec?(diagRec.sistemasAbc||[]):(_diagSelecoes.sistemasAbc||[]);
+  const emo=diagRec?diagRec.escalaEmocional:document.getElementById('diagEscalaEmo').value;
+  const emoObs=diagRec?diagRec.emoObs:document.getElementById('diagEmoObs').value;
 
   let blocos='';
-  _diagSelecoes.elementos.forEach(nome=>{
+  elementos.forEach(nome=>{
     const e=bancoIntegrativoCompleto.matrizCincoElementos[nome];
-    const obs=_diagSelecoes.elementosObs[nome]||'';
+    const obs=elementosObs[nome]||'';
     blocos+=`<div style="border-left:4px solid ${e.cor};padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
       <div style="font-size:11.5pt;font-weight:700;color:${e.cor};margin-bottom:5px">${e.titulo}</div>
       <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27"><strong>Psique/Emoções:</strong> ${e.psique}</div>
@@ -2427,7 +2433,7 @@ function gerarHtmlDiag(){
       ${obs?`<div style="font-size:9pt;line-height:1.5;color:#6b6358;margin-top:6px;font-style:italic">Obs.: ${obs}</div>`:''}
     </div>`;
   });
-  _diagSelecoes.pontos.forEach(nome=>{
+  pontos.forEach(nome=>{
     const p=bancoIntegrativoCompleto.pontosCorpo[nome];
     blocos+=`<div style="border-left:4px solid #1E3A5F;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
       <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">${p.regiao}</div>
@@ -2436,7 +2442,7 @@ function gerarHtmlDiag(){
       <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>Canal energético:</strong> ${p.canal}</div>
     </div>`;
   });
-  (_diagSelecoes.sistemasAbc||[]).forEach(id=>{
+  sistemasAbcSel.forEach(id=>{
     const s=sistemasABC.find(x=>x.id===id);if(!s)return;
     blocos+=`<div style="border-left:4px solid #7a5c1e;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
       <div style="font-size:11.5pt;font-weight:700;color:#7a5c1e;margin-bottom:5px">Sistema ${s.id} — ${s.elemento}</div>
@@ -2480,12 +2486,18 @@ function gerarHtmlDiag(){
     </div>
   </div>`;
 }
-function imprimirDiag(){
-  if(!_diagPacSel){toast('⚠️ Selecione um paciente primeiro','#EF6C00');return;}
+function imprimirDiag(diagId){
+  let diagRec=null;
+  if(diagId){
+    diagRec=gD('diagnosticos').find(d=>String(d.id)===String(diagId));
+    if(!diagRec){toast('⚠️ Avaliação não encontrada','#EF6C00');return;}
+  } else if(!_diagPacSel){
+    toast('⚠️ Selecione um paciente primeiro','#EF6C00');return;
+  }
   const win=window.open('','_blank','width=800,height=900');
   win.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Diagnóstico Integrado</title>
   <style>@page{margin:10mm 12mm;size:A4}body{margin:0;padding:12px;background:#fff;font-family:Georgia,serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}</style>
-  </head><body>${gerarHtmlDiag()}</body></html>`);
+  </head><body>${gerarHtmlDiag(diagRec)}</body></html>`);
   win.document.close();win.focus();
   setTimeout(()=>{win.print();setTimeout(()=>win.close(),800);},400);
 }
@@ -2893,6 +2905,7 @@ function verDiagHist(diagId){
     <div style="display:flex;gap:7px;justify-content:flex-end;margin-top:13px">
       <button class="btn btn-sec btn-sm" onclick="fMod()">Fechar</button>
       <button class="btn btn-pri btn-sm" onclick="fMod();editarDiagHist('${diag.id}','${diag.pacienteId}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span> Editar</button>
+      <button class="btn btn-sec btn-sm" onclick="imprimirDiag('${diag.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg></span> Imprimir</button>
       <button class="btn btn-sec btn-sm" onclick="fMod();duplicarDiagHist('${diag.id}','${diag.pacienteId}')">📋 Duplicar</button>
     </div>`;
   document.getElementById('modP').classList.add('show');
