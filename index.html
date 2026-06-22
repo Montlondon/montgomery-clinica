@@ -2181,6 +2181,10 @@ function abcBonecoSVG(s,m){
   const linha=(x,y)=>`<line x1="100" y1="60" x2="${x}" y2="${y<130?y:60}"/>`;
   return `<svg class="abc-boneco" viewBox="0 0 200 250" fill="none" stroke="var(--line)" stroke-width="3" stroke-linecap="round">
     <circle cx="100" cy="30" r="14"/>
+    <circle cx="95" cy="28" r="1.4" fill="var(--ink-soft)" stroke="none"/>
+    <circle cx="105" cy="28" r="1.4" fill="var(--ink-soft)" stroke="none"/>
+    <line x1="100" y1="30" x2="100" y2="33" stroke-width="2"/>
+    <path d="M95 36q5 4 10 0" stroke-width="2"/>
     <line x1="100" y1="44" x2="100" y2="140"/>
     <line x1="100" y1="60" x2="40" y2="22"/>
     <line x1="100" y1="60" x2="160" y2="22"/>
