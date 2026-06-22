@@ -13,6 +13,7 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 - Boneco e rótulos esquerdo/direito corrigidos conforme decúbito dorsal (desenho literal + rótulo clínico invertido, validado sistema a sistema com o Montgomery)
 - Sistemas ABC integrados ao Diagnóstico Integrado: clicar num sistema o adiciona à avaliação do paciente, junto com Elementos e Pontos do Corpo (resumo, histórico e persistência no Supabase)
 - Triagem de contatos importados: novos contatos via VCF entram com etiqueta "NOVO", filtro dedicado em Pacientes e ação em massa para marcar como revisado, facilitando limpar a base
+- Módulo Suplementos: catálogo/estoque (71 produtos importados da planilha "Tabela de preços"), seleção de suplementos na Recomendação Terapêutica com desconto automático de estoque, e registro financeiro separado (pendente/pago) somado ao Painel sem se misturar com sessão
 
 ## Em planejamento
 
@@ -49,6 +50,7 @@ Hoje todo carregamento do app baixa do zero todos os pacientes/sessões/diagnós
 
 ## Pendências / decisões em aberto
 
+- **Ação necessária do Montgomery:** rodar `suplementos_schema.sql` no Supabase (SQL Editor) antes de usar o módulo Suplementos — cria as tabelas `suplementos` e `vendas_suplementos`
 - Tabela `despesas` no Supabase: confirmar se RLS/policy está ativa igual às outras tabelas
 - Expandir "Pontos do Corpo" com mais regiões conforme a prática pedir
 - Ajuste de zoom mobile (10% hoje, reduzido de 18% por causar corte de tabelas) — acompanhar se está confortável de ler/tocar ou se precisa de mais um ajuste fino
