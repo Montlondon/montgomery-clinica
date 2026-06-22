@@ -2065,8 +2065,8 @@ const sistemasABC=[
     protocolo:'Trajeto na linha média posterior do braço, ombro, pescoço lateral até têmpora/orelha. Sintoma nessa faixa indica TA afetado; combo Yang Mão acionado, estímulo espelho/imagem no segmento equivalente.'
   },
   {
-    id:'BA',elemento:'Baço/Pâncreas',categoria:'Yin Pé',
-    pontos:{bracoEsquerdo:['ID','TA'],bracoDireito:['P','C'],pernaEsquerda:'BA',pernaDireita:'E'},
+    id:'BP',elemento:'Baço/Pâncreas',categoria:'Yin Pé',
+    pontos:{bracoEsquerdo:['ID','TA'],bracoDireito:['P','C'],pernaEsquerda:'BP',pernaDireita:'E'},
     sindromes:['dor face medial-anterior da perna/coxa/joelho','queixas abdominais associadas ao trajeto'],
     protocolo:'Trajeto na face medial-anterior da perna e coxa até o abdômen. Sintoma nesse trajeto indica BA afetado; combo Yin Pé acionado com estímulo espelho/imagem no segmento correspondente.'
   },
@@ -2084,7 +2084,7 @@ const sistemasABC=[
   },
   {
     id:'E',elemento:'Estômago',categoria:'Yang Pé',
-    pontos:{bracoEsquerdo:'PC',bracoDireito:'IG',pernaEsquerda:'E',pernaDireita:'BA'},
+    pontos:{bracoEsquerdo:'PC',bracoDireito:'IG',pernaEsquerda:'E',pernaDireita:'BP'},
     sindromes:['dor face anterior da perna/coxa','queixas faciais ou abdominais anteriores no trajeto'],
     protocolo:'Trajeto na face, região anterior do tronco/abdômen e face anterior da coxa/perna. Sintoma nesse percurso indica E afetado; combo Yang Pé acionado, estímulo espelho/imagem no segmento equivalente.'
   },
@@ -2117,17 +2117,13 @@ function initDiagnostico(){
 // ===== BALANÇO MÉTODO — SISTEMAS ABC (leitura de sistemasABC, definido mais abaixo) =====
 const MERIDIANOS_12=['P','IG','E','BP','C','ID','B','R','PC','TA','VB','F'];
 const ELEMENTO_MERIDIANO_ABC={'Madeira':'F','Fogo':'C','Terra':'BP','Metal':'P','Água':'R'};
-// O objeto sistemasABC usa 'BA' como id do sistema Baço/Pâncreas, mas em alguns
-// pontos do próprio objeto a referência cruzada aparece como 'BP' (abreviação
-// clínica padrão). Normalizamos só para comparar/filtrar, sem tocar no objeto.
-const abcNorm=m=>m==='BP'?'BA':m;
 function abcGrupo(s){
   const vals=[s.id,s.pontos.bracoEsquerdo,s.pontos.bracoDireito,s.pontos.pernaEsquerda,s.pontos.pernaDireita];
   let flat=[];
   vals.forEach(v=>{if(Array.isArray(v))flat.push(...v);else if(v)flat.push(v);});
   return [...new Set(flat)];
 }
-const abcGrupoDisplay=s=>abcGrupo(s).map(m=>m==='BA'?'BP':m);
+const abcGrupoDisplay=s=>abcGrupo(s);
 function meridianoPredominanteABC(){
   const els=_diagSelecoes.elementos||[];
   for(const e of els){if(ELEMENTO_MERIDIANO_ABC[e])return ELEMENTO_MERIDIANO_ABC[e];}
@@ -2149,21 +2145,20 @@ function abcRenderMeridianoGrid(sel){
 }
 function abcFiltrarMeridiano(m){
   abcRenderMeridianoGrid(m);
-  const norm=abcNorm(m);
   const labelsSeg=[['Braço Esquerdo','bracoEsquerdo'],['Braço Direito','bracoDireito'],['Perna Esquerda','pernaEsquerda'],['Perna Direita','pernaDireita']];
-  const matches=sistemasABC.filter(s=>abcNorm(s.id)===norm||abcGrupo(s).some(g=>abcNorm(g)===norm));
+  const matches=sistemasABC.filter(s=>s.id===m||abcGrupo(s).includes(m));
   const el=document.getElementById('abcResultados');
   if(!matches.length){el.innerHTML='<p style="font-size:12.5px;color:var(--ink-soft);padding:10px 0">Nenhum sistema encontrado para esse meridiano.</p>';return;}
   el.innerHTML=matches.map(s=>{
-    const outros=abcGrupoDisplay(s).filter(g=>abcNorm(g)!==norm);
+    const outros=abcGrupoDisplay(s).filter(g=>g!==m);
     const segHtml=labelsSeg.map(([lbl,chave])=>{
       const v=s.pontos[chave];
       const arr=Array.isArray(v)?v:[v];
-      const hit=arr.some(x=>abcNorm(x)===norm);
-      return `<div style="font-size:11.5px;${hit?'color:var(--pri-deep);font-weight:700':'color:var(--ink-soft)'}">${lbl}: ${arr.map(x=>x==='BA'?'BP':x).join(' / ')}</div>`;
+      const hit=arr.includes(m);
+      return `<div style="font-size:11.5px;${hit?'color:var(--pri-deep);font-weight:700':'color:var(--ink-soft)'}">${lbl}: ${arr.join(' / ')}</div>`;
     }).join('');
     return `<div class="abc-card">
-      <div style="font-family:'Lora',serif;font-weight:600;font-size:14px;color:var(--pri-deep)">Sistema ${s.id==='BA'?'BP':s.id} — ${s.elemento}</div>
+      <div style="font-family:'Lora',serif;font-weight:600;font-size:14px;color:var(--pri-deep)">Sistema ${s.id} — ${s.elemento}</div>
       <div style="font-size:11px;color:var(--ink-soft);margin-bottom:8px">${s.categoria}</div>
       <div style="font-size:12px;margin-bottom:8px"><strong>Meridianos de balanço a tratar:</strong> ${outros.join(', ')||'—'}</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:8px">${segHtml}</div>
