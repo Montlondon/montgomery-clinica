@@ -1800,11 +1800,20 @@ async function dVendaSup(id){
   const venda=gD('vendas_suplementos').find(v=>String(v.id)===String(id));
   if(!venda)return;
   if(!confirm(`Cancelar esta venda (${fm(venda.valor)})?\n\nO estoque dos itens será devolvido automaticamente.`))return;
-  const catalogo=gD('suplementos').map(p=>{
+  // Atualiza só os produtos afetados, um a um — nunca reescrever a tabela toda
+  // (ver nota em delPacsSel sobre o risco de dbSet com cache incompleto).
+  const catalogo=gD('suplementos');
+  for(const item of venda.itens){
+    const p=catalogo.find(x=>String(x.id)===String(item.id));
+    if(!p)continue;
+    const atualizado={...p,estoque:p.estoque+item.qtd};
+    await supaReq('DELETE','suplementos',null,`?dados->>id=eq.${item.id}`);
+    await supaReq('POST','suplementos',[{'user_id':'montgomery','dados':atualizado}]);
+  }
+  _cache['suplementos']=catalogo.map(p=>{
     const usado=venda.itens.find(i=>String(i.id)===String(p.id));
     return usado?{...p,estoque:p.estoque+usado.qtd}:p;
   });
-  await dbSet('suplementos',catalogo);
   _cache['vendas_suplementos']=gD('vendas_suplementos').filter(v=>String(v.id)!==String(id));
   await supaReq('DELETE','vendas_suplementos',null,`?dados->>id=eq.${id}`);
   renderVendasSuplementos();renderSuplementos();atuDash();
@@ -1954,7 +1963,9 @@ async function dSuplemento(id){
 async function importarCatalogoInicial(){
   if(!confirm('Importar os 71 produtos da planilha inicial para o catálogo?'))return;
   const itens=CATALOGO_SUPLEMENTOS_INICIAL.map(p=>({id:Date.now()+Math.random(),...p}));
-  await dbSet('suplementos',[...gD('suplementos'),...itens]);
+  for(const item of itens){
+    await dbAdd('suplementos',item);
+  }
   renderSuplementos();
   toast(`✅ ${itens.length} produtos importados!`);
 }
@@ -3130,11 +3141,19 @@ async function salvarRxHistorico(){
 // Desconta o estoque dos produtos usados e registra a venda no Financeiro
 // (status "pendente" — Montgomery marca como recebido quando o cliente paga).
 async function registrarVendaSuplementos(rx){
-  const catalogo=gD('suplementos').map(p=>{
+  // Atualiza só os produtos usados, um a um — nunca reescrever a tabela toda.
+  const catalogo=gD('suplementos');
+  for(const usado of rx.suplementos){
+    const p=catalogo.find(x=>String(x.id)===String(usado.id));
+    if(!p)continue;
+    const atualizado={...p,estoque:Math.max(0,p.estoque-usado.qtd)};
+    await supaReq('DELETE','suplementos',null,`?dados->>id=eq.${usado.id}`);
+    await supaReq('POST','suplementos',[{'user_id':'montgomery','dados':atualizado}]);
+  }
+  _cache['suplementos']=catalogo.map(p=>{
     const usado=rx.suplementos.find(s=>String(s.id)===String(p.id));
     return usado?{...p,estoque:Math.max(0,p.estoque-usado.qtd)}:p;
   });
-  await dbSet('suplementos',catalogo);
   const venda={
     id:Date.now()+Math.random(),
     pacienteId:rx.pacienteId,
@@ -3940,14 +3959,22 @@ function selPacs(s){
   atuDelBar();
 }
 
+// IMPORTANTE: nunca usar dbSet('pacientes', lista) aqui — dbSet reescreve a
+// tabela INTEIRA com a lista dada. Se o cache local (gD('pacientes')) por
+// qualquer motivo não tiver os 100% dos registros (ex.: sincronização
+// incompleta), os registros de fora do cache seriam apagados de verdade no
+// Supabase. Por isso as ações abaixo afetam só as linhas selecionadas,
+// uma por uma, direto no banco — sem nunca reescrever a tabela toda.
 async function delPacsSel(){
   const ids=[];
   document.querySelectorAll('.pacCk:checked').forEach(c=>ids.push(+c.dataset.id));
   if(!ids.length){toast('⚠️ Selecione ao menos um paciente','#EF6C00');return;}
   if(!confirm(`⚠️ ATENÇÃO!\n\nExcluir ${ids.length} paciente${ids.length!==1?'s':''} permanentemente?\n\nEsta ação NÃO pode ser desfeita!`))return;
   if(!confirm(`✋ Tem certeza absoluta?\n\n${ids.length} paciente${ids.length!==1?'s':''} e todos os seus dados serão excluídos para sempre.`))return;
-  const pacs=gD('pacientes').filter(p=>!ids.includes(p.id));
-  await dbSet('pacientes',pacs);
+  for(const id of ids){
+    await supaReq('DELETE','pacientes',null,`?dados->>id=eq.${id}`);
+  }
+  _cache['pacientes']=gD('pacientes').filter(p=>!ids.includes(p.id));
   renderP();atuDash();
   toast(`🗑️ ${ids.length} paciente${ids.length!==1?'s':''} excluído${ids.length!==1?'s':''}!`,'#c62828');
 }
@@ -3956,8 +3983,15 @@ async function marcarTriagemSel(){
   const ids=[];
   document.querySelectorAll('.pacCk:checked').forEach(c=>ids.push(+c.dataset.id));
   if(!ids.length){toast('⚠️ Selecione ao menos um paciente','#EF6C00');return;}
-  const pacs=gD('pacientes').map(p=>ids.includes(p.id)?{...p,triagem:false}:p);
-  await dbSet('pacientes',pacs);
+  const pacs=gD('pacientes');
+  for(const id of ids){
+    const p=pacs.find(x=>String(x.id)===String(id));
+    if(!p)continue;
+    const atualizado={...p,triagem:false};
+    await supaReq('DELETE','pacientes',null,`?dados->>id=eq.${id}`);
+    await supaReq('POST','pacientes',[{'user_id':'montgomery','dados':atualizado}]);
+  }
+  _cache['pacientes']=pacs.map(p=>ids.includes(p.id)?{...p,triagem:false}:p);
   renderP();
   toast(`✅ ${ids.length} paciente${ids.length!==1?'s':''} marcado${ids.length!==1?'s':''} como revisado${ids.length!==1?'s':''}!`);
 }
