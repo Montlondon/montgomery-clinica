@@ -9,17 +9,21 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 - Botão de ocultar/exibir valores no Painel
 - Seção "Balanço Método (Sistemas ABC)" em Diagnóstico Integrado — tabela completa + filtro por meridiano (lê `sistemasABC`, id padronizado em `BP`)
 - "Pontos do Corpo" com ícone próprio por região + adição de Pelve, Sacroilíaca e Tornozelo
+- Boneco esquemático (SVG) no Balanço Método — ao filtrar por meridiano, cada sistema mostra a posição do meridiano afetado destacada e os outros 3 meridianos de balanço, igual às fotos de referência do Dr. Tan
 
 ## Em planejamento
 
-### 1. Boneco clicável — Balanço Método
-Silhueta humana (braços erguidos, como nas fotos de referência do Dr. Tan) com pontos clicáveis nos 4 segmentos (braço esq./dir., perna esq./dir.). Ao selecionar um sistema, desenhar as linhas do meridiano afetado até os meridianos de balanço, usando os dados que já existem em `sistemasABC[].pontos`. Reaproveita a lógica de `abcFiltrarMeridiano()` já implementada — é uma camada visual nova sobre dados que já existem.
+### 1. Boneco do Balanço Método — refinar ilustração (v2)
+A v1 já está no ar: boneco esquemático em traços simples (círculos + linhas), funcional, lendo `sistemasABC[].pontos` via `abcBonecoSVG()`. Próximo passo, se quiser: trocar o traço simples por uma ilustração mais anatômica do corpo (braços erguidos), mantendo a mesma lógica de dados.
 
 ### 2. Integração Sintoma → Elemento/Meridiano
 Objetivo do Montgomery: clicar no sintoma e o sistema já indicar qual elemento/meridiano equilibrar — unificando "Pontos do Corpo" (quiropraxia), "5 Elementos" (MTC) e "Balanço Método (ABC)" num fluxo só, em vez de três seções separadas. Cada uma já guarda uma ponta dessa lógica (`canal` em `pontosCorpo`, `balance` em `matrizCincoElementos`, `pontos` em `sistemasABC`) — o trabalho é cruzar esses dados num único motor de sugestão.
 
 ### 3. Módulo de Aurículoterapia
 Baseado no livro do curso do Montgomery (arquivo local, não vai para o Git — material com direitos de autor). Planejar estrutura de dados (zonas auriculares, indicações, pontos) e tela de visualização, no mesmo padrão usado para Sistemas ABC e Pontos do Corpo.
+
+### 3b. Florais
+Item novo, ainda sem detalhamento — Montgomery vai trazer um resumo de como quer estruturar isso (provavelmente floral indicado por estado emocional/queixa, possivelmente cruzando com a Escala de Orientação Emocional que já existe em Diagnóstico Integrado).
 
 ### 4. Login na plataforma — **DECIDIDO, agendado para depois**
 Hoje o app é aberto, sem autenticação — qualquer pessoa com o link acessa, e a chave do Supabase já fica visível no código-fonte da página. Um botão de login "decorativo" (só na tela) não protegeria os dados de verdade, porque a chave continuaria acessível direto pela API.
