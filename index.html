@@ -376,7 +376,7 @@ tr:hover td{background:#EEF2F7}
   <div class="sbar no-print">
     <div class="sst unsaved" id="saveSt">⚫ Não salvo</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button class="btn btn-sec btn-sm" onclick="salvarRasc()">💾 Rascunho</button>
+      <button class="btn btn-sec btn-sm" onclick="salvarRasc()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span> Rascunho</button>
       <button class="btn btn-pri btn-sm" onclick="document.getElementById('fPac').dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}))"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Salvar</button>
     </div>
   </div>
@@ -642,8 +642,8 @@ tr:hover td{background:#EEF2F7}
     <div class="fr full"><div class="fg"><label>Observações</label><textarea id="rxObs" rows="2"></textarea></div></div>
     <div class="fa">
       <button type="button" class="btn btn-sec" onclick="gerarRx()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span> Visualizar</button>
-      <button type="button" class="btn btn-pri" onclick="imprimirRx()">🖨️ Imprimir</button>
-      <button type="button" class="btn" id="btnSalvarRxMain" onclick="salvarRxComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;font-weight:700">💾 Salvar Recomendação</button>
+      <button type="button" class="btn btn-pri" onclick="imprimirRx()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg></span> Imprimir</button>
+      <button type="button" class="btn" id="btnSalvarRxMain" onclick="salvarRxComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;font-weight:700"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span> Salvar Recomendação</button>
     </div>
   </div>
   <div class="fc no-print" id="rxPrev" style="display:none">
@@ -653,8 +653,8 @@ tr:hover td{background:#EEF2F7}
       <button class="btn btn-war btn-sm" onclick="exportarRxJpg()">📸 Exportar JPG</button>
       <button class="btn btn-sm" onclick="compartilharRx()" style="background:#25D366;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px">📤 Compartilhar</button>
       <button class="btn btn-wa btn-sm" onclick="enviarWhatsApp()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.2-1.1L3 20l1.2-5.1"/></svg></span> WhatsApp</button>
-      <button class="btn btn-pri btn-sm" onclick="imprimirRx()">🖨️ Imprimir</button>
-      <button class="btn btn-sm" id="btnSalvarRx" onclick="salvarRxComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700">💾 Salvar Recomendação</button>
+      <button class="btn btn-pri btn-sm" onclick="imprimirRx()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg></span> Imprimir</button>
+      <button class="btn btn-sm" id="btnSalvarRx" onclick="salvarRxComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span> Salvar Recomendação</button>
     </div>
   </div>
   <div class="rx-print" id="rxPrintA"></div>
@@ -766,7 +766,7 @@ tr:hover td{background:#EEF2F7}
     <div class="fa" style="margin-top:14px">
       <button type="button" class="btn btn-sec" onclick="limparDiagnostico()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span> Limpar Avaliação</button>
       <button type="button" class="btn btn-pri" onclick="enviarDiagParaRx()">🌿 Enviar para Recomendação Terapêutica</button>
-      <button type="button" class="btn" id="btnSalvarDiag" onclick="salvarDiagComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;font-weight:700">💾 Salvar Avaliação</button>
+      <button type="button" class="btn" id="btnSalvarDiag" onclick="salvarDiagComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;font-weight:700"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span> Salvar Avaliação</button>
     </div>
   </div>
 </section>
@@ -846,7 +846,7 @@ tr:hover td{background:#EEF2F7}
         <div class="fg"><label>Recorrente</label><select id="despRec"><option value="">Não</option><option value="1">Sim</option></select></div></div>
       <div class="fa">
         <button type="button" class="btn btn-sec" onclick="fecharModalDespesa()">Cancelar</button>
-        <button type="submit" class="btn btn-pri">💾 Salvar</button>
+        <button type="submit" class="btn btn-pri"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span> Salvar</button>
       </div>
     </form>
   </div>
@@ -1054,6 +1054,8 @@ tr:hover td{background:#EEF2F7}
 </script>
 
 <script>
+const SAVE_ICON_HTML='<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span>';
+const EDIT_ICON_HTML='<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span>';
 // ===== PWA MANIFEST =====
 (function(){
   const manifest = {
@@ -1238,8 +1240,8 @@ function go(p,el){
     if(el){
       _rxEditandoId=null;
       const b1=document.getElementById('btnSalvarRx'),b2=document.getElementById('btnSalvarRxMain');
-      if(b1)b1.textContent='💾 Salvar Recomendação';
-      if(b2)b2.textContent='💾 Salvar Recomendação';
+      if(b1)b1.innerHTML=SAVE_ICON_HTML+' Salvar Recomendação';
+      if(b2)b2.innerHTML=SAVE_ICON_HTML+' Salvar Recomendação';
       document.getElementById('rxDt').value=new Date().toISOString().split('T')[0];
     }
     carregarRxSel();
@@ -1266,7 +1268,7 @@ function go(p,el){
       document.getElementById('diagEscalaEmo').value='';
       document.getElementById('diagEmoObs').value='';
       const b=document.getElementById('btnSalvarDiag');
-      if(b)b.textContent='💾 Salvar Avaliação';
+      if(b)b.innerHTML=SAVE_ICON_HTML+' Salvar Avaliação';
     }
     initDiagnostico();
   }
@@ -1481,7 +1483,7 @@ function fMod(){document.getElementById('modP').classList.remove('show');}
 function editarPac(id){
   const p=gD('pacientes').find(x=>String(x.id)===String(id));if(!p)return;
   editId=p.id;go('novo-paciente',null);
-  document.getElementById('fTit').textContent='✏️ '+p.nome;
+  document.getElementById('fTit').innerHTML=EDIT_ICON_HTML+' '+escHtml(p.nome);
   setTimeout(()=>{
     preencherForm(p);
     toast('✏️ Editando paciente','#1565C0');
@@ -2331,7 +2333,7 @@ function limparDiagnostico(){
   _diagJaSalvo=false;
   _diagEditandoId=null;
   const btn=document.getElementById('btnSalvarDiag');
-  if(btn)btn.textContent='💾 Salvar Avaliação';
+  if(btn)btn.innerHTML=SAVE_ICON_HTML+' Salvar Avaliação';
   renderElementosGrid();renderPontosGrid();renderDiagPainel();
 }
 
@@ -2353,8 +2355,8 @@ async function salvarDiagComProtecao(btn){
   if(_diagJaSalvo){toast('ℹ️ Esta avaliação já foi salva.','#1565C0');return;}
   btn.disabled=true;
   btn.style.opacity='0.6';
-  const textoSalvando='💾 Salvando...';
-  btn.textContent=textoSalvando;
+  const textoSalvando=SAVE_ICON_HTML+' Salvando...';
+  btn.innerHTML=textoSalvando;
   await salvarDiagnostico();
   setTimeout(()=>{btn.disabled=false;btn.style.opacity='1';},1000);
 }
@@ -2386,7 +2388,7 @@ async function salvarDiagnostico(){
       _cache['diagnosticos']=diags;
       _diagEditandoId=null;
       const btn=document.getElementById('btnSalvarDiag');
-      if(btn)btn.textContent='💾 Salvar Avaliação';
+      if(btn)btn.innerHTML=SAVE_ICON_HTML+' Salvar Avaliação';
       toast('✏️ Avaliação atualizada com sucesso!');
     } else {
       const ok=await supaReq('POST','diagnosticos',[{'user_id':'montgomery','dados':diag}]);
@@ -2398,7 +2400,7 @@ async function salvarDiagnostico(){
       diags.push(diag);
       _cache['diagnosticos']=diags;
       const btn=document.getElementById('btnSalvarDiag');
-      if(btn)btn.textContent='💾 Salvar Avaliação';
+      if(btn)btn.innerHTML=SAVE_ICON_HTML+' Salvar Avaliação';
       toast('💾 Avaliação salva no histórico do paciente!');
     }
     _diagJaSalvo=true;
@@ -2425,7 +2427,7 @@ function editarDiagHist(diagId,pacId){
     document.getElementById('diagEscalaEmo').value=diag.escalaEmocional||'';
     document.getElementById('diagEmoObs').value=diag.emoObs||'';
     const btn=document.getElementById('btnSalvarDiag');
-    if(btn)btn.textContent='✏️ Salvar Alterações';
+    if(btn)btn.innerHTML=EDIT_ICON_HTML+' Salvar Alterações';
     renderElementosGrid();renderPontosGrid();renderDiagPainel();
     toast('✏️ Editando avaliação. Altere o que precisar e salve.','#1565C0');
   },200);
@@ -2555,7 +2557,7 @@ async function salvarRxComProtecao(btn){
   // Desabilita o botão por 1 segundo para evitar duplo clique
   btn.disabled=true;
   btn.style.opacity='0.6';
-  btn.textContent='💾 Salvando...';
+  btn.innerHTML=SAVE_ICON_HTML+' Salvando...';
   await salvarRxHistorico();
   setTimeout(()=>{
     btn.disabled=false;
@@ -2581,8 +2583,8 @@ async function salvarRxHistorico(){
     await supaReq('DELETE','prescricoes',null,`?dados->>id=eq.${_rxEditandoId}`);
     await supaReq('POST','prescricoes',[{'user_id':'montgomery','dados':rx}]);
     _rxEditandoId=null;
-    if(b1)b1.textContent='💾 Salvar Recomendação';
-    if(b2)b2.textContent='💾 Salvar Recomendação';
+    if(b1)b1.innerHTML=SAVE_ICON_HTML+' Salvar Recomendação';
+    if(b2)b2.innerHTML=SAVE_ICON_HTML+' Salvar Recomendação';
     toast('✏️ Recomendação atualizada com sucesso!');
   } else {
     const rxs=gD('prescricoes');
@@ -2719,7 +2721,7 @@ function duplicarDiagHist(diagId,pacId){
     document.getElementById('diagEscalaEmo').value=diag.escalaEmocional||'';
     document.getElementById('diagEmoObs').value=diag.emoObs||'';
     const btn=document.getElementById('btnSalvarDiag');
-    if(btn)btn.textContent='💾 Salvar Avaliação';
+    if(btn)btn.innerHTML=SAVE_ICON_HTML+' Salvar Avaliação';
     renderElementosGrid();renderPontosGrid();renderDiagPainel();
     toast('📋 Avaliação duplicada! Ajuste se necessário e salve.');
   },200);
@@ -2805,8 +2807,8 @@ function editarRx(rxId){
   setTimeout(()=>{
     _preencherFormRx(rx,rx.data||new Date().toISOString().split('T')[0]);
     const b1=document.getElementById('btnSalvarRx'),b2=document.getElementById('btnSalvarRxMain');
-    if(b1)b1.textContent='✏️ Salvar Alterações';
-    if(b2)b2.textContent='✏️ Salvar Alterações';
+    if(b1)b1.innerHTML=EDIT_ICON_HTML+' Salvar Alterações';
+    if(b2)b2.innerHTML=EDIT_ICON_HTML+' Salvar Alterações';
     toast('✏️ Editando recomendação. Altere o que precisar e salve.','#1565C0');
   },200);
 }
@@ -2824,8 +2826,8 @@ function duplicarRx(rxId){
   setTimeout(()=>{
     _preencherFormRx(rx,new Date().toISOString().split('T')[0]);
     const b1=document.getElementById('btnSalvarRx'),b2=document.getElementById('btnSalvarRxMain');
-    if(b1)b1.textContent='💾 Salvar Recomendação';
-    if(b2)b2.textContent='💾 Salvar Recomendação';
+    if(b1)b1.innerHTML=SAVE_ICON_HTML+' Salvar Recomendação';
+    if(b2)b2.innerHTML=SAVE_ICON_HTML+' Salvar Recomendação';
     toast('📋 Recomendação duplicada! Ajuste se necessário.');
   },200);
 }
