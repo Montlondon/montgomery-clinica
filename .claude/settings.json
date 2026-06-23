@@ -6,7 +6,7 @@
       "Write",
       "Glob",
       "Grep",
-      "Bash(cd *)",
+      "Bash(git -C *)",
       "Bash(git status:*)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
@@ -28,7 +28,12 @@
       "Bash(git push -f:*)",
       "Bash(git reset --hard:*)",
       "Bash(rm -rf:*)",
-      "Bash(git branch -D:*)"
+      "Bash(git branch -D:*)",
+      "Bash(*push --force*)",
+      "Bash(*push -f*)",
+      "Bash(*reset --hard*)",
+      "Bash(*rm -rf*)",
+      "Bash(*branch -D*)"
     ]
   }
 }
