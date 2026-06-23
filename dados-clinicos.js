@@ -35,7 +35,7 @@ const bancoIntegrativoCompleto = {
 
   matrizCincoElementos: {
     'Madeira': {
-      cor:'#2E7D32',emoji:'🌳',
+      cor:'#2E7D32',icone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 7 10h2.5L6 16h4v5h4v-5h4l-3.5-6H15Z"/></svg>',
       titulo: 'Elemento Madeira (Fígado / Vesícula Biliar)',
       relogio: '🕒 Pico: 23:00h às 03:00h • Ancoragem psíquica do Hun.',
       psique: 'Bloqueios por sentimentos de raiva reprimida, estresse crônico por cenários de injustiça, indignação oculta e severa irritabilidade ou rigidez mental perante a dinâmica familiar.',
@@ -44,7 +44,7 @@ const bancoIntegrativoCompleto = {
       fito: 'Extrato seco de Alcachofra (Cynara scolymus), Cardo Mariano (Silimarina) e Boldo do Chile. Dente-de-leão para drenagem hepática, Hortelã-pimenta para espasmos de vesícula, Curcuma como anti-inflamatório hepático. Indicar Magnésio Dimalato para contraturas.'
     },
     'Fogo': {
-      cor:'#c62828',emoji:'🔥',
+      cor:'#c62828',icone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-3.3 0-6-2.4-6-5.8 0-2 1-3.4 1.8-4.6.3 1 1 1.8 1.8 1.8-.3-2.6.6-5.3 3-7 0 2 .8 3 1.8 3.8 1.6 1.3 3.6 3 3.6 6 0 3.4-2.7 5.8-6 5.8Z"/></svg>',
       titulo: 'Elemento Fogo (Coração / Intestino Delgado)',
       relogio: '🕒 Pico: 11:00h às 15:00h • Maior atividade e circulação do Shen.',
       psique: 'Ansiedade generalizada, palpitações por desamparo emocional, euforia defensiva ou angústia existencial com sensação de vazio no peito.',
@@ -53,7 +53,7 @@ const bancoIntegrativoCompleto = {
       fito: 'Passiflora (Passiflora incarnata), Valeriana officinalis para acalmar o Shen do Coração e Mulungu. Erva-cidreira/Melissa para palpitações ansiosas, Camomila para Shen levemente agitado, Flor de Lótus na tradição clássica. Indicar Magnésio Dimalato.'
     },
     'Terra': {
-      cor:'#C47A1E',emoji:'🌾',
+      cor:'#C47A1E',icone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19 9 7l3 5 2-3 7 10Z"/></svg>',
       titulo: 'Elemento Terra (Baço-Pâncreas / Estômago)',
       relogio: '🕒 Pico: 07:00h às 11:00h • Ápice da digestão e absorção central.',
       psique: 'Ruminação mental obsessiva, pensamentos repetitivos, preocupação crônica por segurança material/familiar e fadiga psíquica.',
@@ -62,7 +62,7 @@ const bancoIntegrativoCompleto = {
       fito: 'Espinheira Santa (Maytenus ilicifolia) para proteção de mucosa, Ginseng Nacional para tonificação do Qi do Aquecedor Médio e Carqueja. Gengibre para Qi do Aquecedor Médio e digestão fria, Hortelã para distensão, Canela para tonificar o Yang da Terra. Indicar Magnésio Dimalato.'
     },
     'Metal': {
-      cor:'#616161',emoji:'⚙️',
+      cor:'#616161',icone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8"/></svg>',
       titulo: 'Elemento Metal (Pulmão / Intestino Grosso)',
       relogio: '🕒 Pico: 03:00h às 07:00h • Oxigenação celular e evacuação fisiológica.',
       psique: 'Lutos não elaborados, tristeza crônica profunda, melancolia retida, necessidade neurótica de controle e extrema dificuldade em aceitar perdas ou "desapegar".',
@@ -71,7 +71,7 @@ const bancoIntegrativoCompleto = {
       fito: 'Extrato de Guaco (Mikania glomerata) para expansão do Qi pulmonar, Alcaçuz (Glycyrrhiza glabra) e Cáscara Sagrada. Eucalipto como expectorante, Tomilho para o Qi pulmonar, Psyllium para regulação intestinal suave. Indicar Magnésio Dimalato.'
     },
     'Água': {
-      cor:'#1565C0',emoji:'💧',
+      cor:'#1565C0',icone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c4 5 6 8 6 11a6 6 0 1 1-12 0c0-3 2-6 6-11Z"/></svg>',
       titulo: 'Elemento Água (Rim / Bexiga)',
       relogio: '🕒 Pico: 15:00h às 19:00h • Filtração renal e consolidação do Jing ancestral.',
       psique: 'Insegurança existencial arcaica, fobias, medos profundos de rejeição ou escassez crônica, e esgotamento psíquico por alerta prolongado.',
@@ -90,9 +90,9 @@ const bancoIntegrativoCompleto = {
     'Cotovelo': { regiao: 'Articulação do Cotovelo', musculo: 'm. Supinador e m. Braquiorradial', tendao: 'Tendão Extensor Comum (Epicôndilo)', quiro: 'Restrição da cabeça do rádio e umeroulnar.', canal: 'IG e TR',
       icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l6 7-2 9"/><path d="M11 12l7-3"/><circle cx="11" cy="12" r="1.7" fill="currentColor" stroke="none"/></svg>' },
     'Pelve': { regiao: 'Pelve / Bacia', musculo: 'm. Glúteo Médio e m. Iliopsoas', tendao: 'Fáscia Lata e Trato Iliotibial', quiro: 'Correção de báscula pélvica e nivelamento de crista ilíaca.', canal: 'BP e R',
-      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 4v6c0 4.5 2 6.5 2 11M17.5 4v6c0 4.5-2 6.5-2 11M6.5 10h11"/></svg>' },
+      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6c0 4.5 1.5 6.5 4 7.5L5.5 20M20 6c0 4.5-1.5 6.5-4 7.5l2.5 6.5"/><path d="M4 6c2.5 2 13.5 2 16 0"/><path d="M9 13.8c2 .8 4 .8 6 0"/></svg>' },
     'Sacroilíaca': { regiao: 'Articulação Sacroilíaca / Crista Ilíaca', musculo: 'm. Piriforme e m. Glúteo Máximo', tendao: 'Ligamento Sacroilíaco Posterior', quiro: 'Ajuste sacroilíaco e correção de báscula de bacia (ilíaca anteriorizada/posteriorizada).', canal: 'B e VB',
-      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5v7c0 3 1.5 5 1.5 9M17 5v7c0 3-1.5 5-1.5 9M7 12h10"/><circle cx="9" cy="12" r="1" fill="currentColor" stroke="none"/><circle cx="15" cy="12" r="1" fill="currentColor" stroke="none"/></svg>' },
+      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 8 14h8L12 4Z"/><path d="M8 14 5.5 16.5M16 14l2.5 2.5"/><circle cx="5" cy="17.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="17.5" r="1.5" fill="currentColor" stroke="none"/></svg>' },
     'Tornozelo': { regiao: 'Tornozelo e Pé', musculo: 'm. Fibulares e m. Tibial Anterior', tendao: 'Tendão de Aquiles e Ligamento Talofibular', quiro: 'Mobilização talo-crural e correção de entorse.', canal: 'VB e B',
       icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v8l-4.5 6.5a1 1 0 0 0 .8 1.5H18a1 1 0 0 0 .9-1.4l-2.4-5.1"/><path d="M10 11h6.5"/></svg>' }
   }

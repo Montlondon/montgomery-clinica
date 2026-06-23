@@ -151,6 +151,9 @@ tr:hover td{background:#EEF2F7}
 /* BADGES */
 .badge{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:999px;font-size:10.5px;font-weight:700;white-space:nowrap;letter-spacing:.02em}
 .badge-ic{display:inline-flex;width:11px;height:11px;flex-shrink:0}
+.dica-box{position:relative}
+.dica-x{position:absolute;top:7px;right:8px;width:18px;height:18px;border:none;background:none;color:inherit;opacity:.45;cursor:pointer;padding:0;font-size:13px;line-height:18px;border-radius:50%;transition:opacity .15s,background .15s}
+.dica-x:hover{opacity:.9;background:rgba(0,0,0,.06)}
 .bp{background:#E3F2E1;color:#3F5C33}.bpend{background:#FFF3E0;color:#C47A1E}.bc{background:#FFEBEE;color:#B83232}
 
 /* BOTÕES */
@@ -271,7 +274,7 @@ tr:hover td{background:#EEF2F7}
 .footer-addr{display:flex;justify-content:center;align-items:center;gap:5px}
 .footer-addr svg{width:12px;height:12px;flex-shrink:0}
 .footer-social{display:flex;justify-content:center;gap:10px;margin-top:8px;flex-wrap:wrap}
-.footer-social a{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:6px 13px;color:var(--ink);text-decoration:none;font-size:11.5px;font-weight:600;transition:all .15s;display:flex;align-items:center;gap:6px}
+.footer-social a{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:6px 13px;color:var(--ink);text-decoration:none;font-size:11.5px;font-weight:600;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;min-width:104px}
 .footer-social a svg{width:14px;height:14px}
 .footer-social a:hover{background:var(--pri-pale);color:var(--pri-deep);border-color:var(--pri-pale)}
 
@@ -383,7 +386,7 @@ tr:hover td{background:#EEF2F7}
   <div class="sbar no-print">
     <div class="sst unsaved" id="saveSt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:-1.5px"><circle cx="12" cy="12" r="9"/></svg> Não salvo</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
-      <button class="btn btn-sec btn-sm" onclick="salvarRasc()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span> Rascunho</button>
+      <button class="btn btn-sec btn-sm" onclick="salvarRasc()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.3 2.3L16 9.5"/></svg></span> Rascunho</button>
       <button class="btn btn-pri btn-sm" onclick="document.getElementById('fPac').dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}))"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Salvar</button>
     </div>
   </div>
@@ -586,8 +589,9 @@ tr:hover td{background:#EEF2F7}
       <button class="btn btn-pri btn-sm" onclick="go('nova-sessao',null)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>Sessão</button>
     </div>
   </div>
-  <div style="background:#E8F5E9;border-radius:9px;padding:11px 14px;margin-bottom:14px;border-left:4px solid var(--pri);font-size:12px">
+  <div class="dica-box no-print" id="dica-agenda" style="background:#E8F5E9;border-radius:9px;padding:11px 30px 11px 14px;margin-bottom:14px;border-left:4px solid var(--pri);font-size:12px">
     <strong style="color:var(--pri-d)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span> Google Agenda:</strong> Clique no ícone de calendário em qualquer sessão para abrir direto no Google já preenchido. Ou exporte .ICS para importar vários de uma vez.
+    <button class="dica-x" title="Ocultar" onclick="ocultarDica('agenda')">✕</button>
   </div>
   <div class="fc" style="margin-bottom:12px">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
@@ -662,7 +666,7 @@ tr:hover td{background:#EEF2F7}
     <div class="fa">
       <button type="button" class="btn btn-sec" onclick="gerarRx()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span> Visualizar</button>
       <button type="button" class="btn btn-pri" onclick="imprimirRx()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg></span> Imprimir</button>
-      <button type="button" class="btn" id="btnSalvarRxMain" onclick="salvarRxComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;font-weight:700"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span> Salvar Recomendação</button>
+      <button type="button" class="btn" id="btnSalvarRxMain" onclick="salvarRxComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;font-weight:700"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.3 2.3L16 9.5"/></svg></span> Salvar Recomendação</button>
     </div>
   </div>
   <div class="fc no-print" id="rxPrev" style="display:none">
@@ -673,7 +677,7 @@ tr:hover td{background:#EEF2F7}
       <button class="btn btn-sm" onclick="compartilharRx()" style="background:#25D366;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 0 4 4m-4-4-4 4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></span>Compartilhar</button>
       <button class="btn btn-wa btn-sm" onclick="enviarWhatsApp()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8.4 8.4 0 0 1-12.2 7.5L4 20l1.1-4.1a8.4 8.4 0 1 1 15.4-4.4Z"/><path d="M8.5 10.3c0 3.4 2.8 6.2 6.2 6.2"/></svg></span> WhatsApp</button>
       <button class="btn btn-pri btn-sm" onclick="imprimirRx()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg></span> Imprimir</button>
-      <button class="btn btn-sm" id="btnSalvarRx" onclick="salvarRxComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span> Salvar Recomendação</button>
+      <button class="btn btn-sm" id="btnSalvarRx" onclick="salvarRxComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.3 2.3L16 9.5"/></svg></span> Salvar Recomendação</button>
     </div>
   </div>
   <div class="rx-print" id="rxPrintA"></div>
@@ -795,7 +799,7 @@ tr:hover td{background:#EEF2F7}
       <button type="button" class="btn btn-sec" onclick="limparDiagnostico()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span> Limpar Avaliação</button>
       <button type="button" class="btn btn-pri" onclick="enviarDiagParaRx()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20C4 14 6 6 16 4c1 6-2 13-10 16Z"/><path d="M7 19c2-4 4-7 8-10"/></svg></span>Enviar para Recomendação Terapêutica</button>
       <button type="button" class="btn btn-sec" onclick="imprimirDiag()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg></span> Imprimir</button>
-      <button type="button" class="btn" id="btnSalvarDiag" onclick="salvarDiagComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;font-weight:700"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span> Salvar Avaliação</button>
+      <button type="button" class="btn" id="btnSalvarDiag" onclick="salvarDiagComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;font-weight:700"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.3 2.3L16 9.5"/></svg></span> Salvar Avaliação</button>
     </div>
   </div>
 </section>
@@ -831,8 +835,9 @@ tr:hover td{background:#EEF2F7}
         <button class="btn btn-sec btn-sm" onclick="imprimirSessoes()" title="Imprimir"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg></span></button>
       </div>
     </div>
-    <div style="background:#E3F2FD;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;border-left:4px solid var(--info)">
+    <div class="dica-box no-print" id="dica-fin-comousar" style="background:#E3F2FD;border-radius:8px;padding:10px 30px 10px 14px;margin-bottom:14px;font-size:12px;border-left:4px solid var(--info)">
       <strong style="color:var(--info)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg> Como usar:</strong> Registre sessões em "Nova Sessão". Cada sessão aparece aqui automaticamente. Clique no <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:-1px;color:#3F5C33"><circle cx="12" cy="12" r="9"/><path d="M8.3 12.5l2.4 2.4 5-5.4"/></svg> para confirmar pagamentos. Use filtros para ver por período.
+      <button class="dica-x" title="Ocultar" onclick="ocultarDica('fin-comousar')">✕</button>
     </div>
     <div class="fg-grid">
       <div class="fc-card g"><h4><span class="ic-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M8.3 12.5l2.4 2.4 5-5.4"/></svg></span>Recebido</h4><div class="fv" id="finR">R$ 0,00</div></div>
@@ -922,7 +927,7 @@ tr:hover td{background:#EEF2F7}
         <div class="fg"><label>Recorrente</label><select id="despRec"><option value="">Não</option><option value="1">Sim</option></select></div></div>
       <div class="fa">
         <button type="button" class="btn btn-sec" onclick="fecharModalDespesa()">Cancelar</button>
-        <button type="submit" class="btn btn-pri"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span> Salvar</button>
+        <button type="submit" class="btn btn-pri"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.3 2.3L16 9.5"/></svg></span> Salvar</button>
       </div>
     </form>
   </div>
@@ -940,7 +945,7 @@ tr:hover td{background:#EEF2F7}
       <div style="text-align:right;font-weight:700;color:var(--pri-d);margin:8px 0" id="vendaSupTotalPreview">Total: R$ 0,00</div>
       <div class="fa">
         <button type="button" class="btn btn-sec" onclick="fecharModalVendaSup()">Cancelar</button>
-        <button type="submit" class="btn btn-pri"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span> Salvar</button>
+        <button type="submit" class="btn btn-pri"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.3 2.3L16 9.5"/></svg></span> Salvar</button>
       </div>
     </form>
   </div>
@@ -989,7 +994,7 @@ tr:hover td{background:#EEF2F7}
         <div class="fg"><label>Estoque (qtd.)</label><input type="number" id="supEstoque" step="1" min="0" value="0"></div></div>
       <div class="fa">
         <button type="button" class="btn btn-sec" onclick="fecharModalSuplemento()">Cancelar</button>
-        <button type="submit" class="btn btn-pri"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span> Salvar</button>
+        <button type="submit" class="btn btn-pri"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.3 2.3L16 9.5"/></svg></span> Salvar</button>
       </div>
     </form>
   </div>
@@ -1044,6 +1049,27 @@ tr:hover td{background:#EEF2F7}
   </div>
 
   <div class="cfg-section">
+    <h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></span>Dicas e Avisos</h3>
+    <p style="font-size:12px;color:var(--txt-l);margin-bottom:10px">Textos explicativos que aparecem em algumas telas. Pode ocultar os que já souber de cor.</p>
+    <div class="toggle-row">
+      <div><div class="desc">Google Agenda (tela Agenda)</div></div>
+      <div class="switch" id="swDicaAgenda" onclick="toggleDicaCfg('agenda')"><div class="knob"></div></div>
+    </div>
+    <div class="toggle-row">
+      <div><div class="desc">Como usar (tela Financeiro)</div></div>
+      <div class="switch" id="swDicaFinComousar" onclick="toggleDicaCfg('fin-comousar')"><div class="knob"></div></div>
+    </div>
+    <div class="toggle-row">
+      <div><div class="desc">Aviso importante (tela Backup)</div></div>
+      <div class="switch" id="swDicaBackup" onclick="toggleDicaCfg('backup-importante')"><div class="knob"></div></div>
+    </div>
+    <div class="toggle-row">
+      <div><div class="desc">Barra de seleção em massa (tela Pacientes)</div></div>
+      <div class="switch" id="swBarSelMassa" onclick="toggleBarSelMassaCfg()"><div class="knob"></div></div>
+    </div>
+  </div>
+
+  <div class="cfg-section">
     <h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-3 5-6 11-11"/></svg></span>Informações para Recomendação Terapêutica</h3>
     <p style="font-size:12px;color:var(--txt-l);margin-bottom:10px">Estas informações aparecem automaticamente em todas as prescrições.</p>
     <div class="fr"><div class="fg"><label>Texto do rodapé da prescrição</label><input type="text" id="cfgRxRod" value="Em caso de reação adversa, suspenda o uso e entre em contato."></div><div class="fg"><label>Observação padrão</label><input type="text" id="cfgRxObs" placeholder="Texto padrão de observação..."></div></div>
@@ -1059,7 +1085,7 @@ tr:hover td{background:#EEF2F7}
 <section class="page" id="pg-backup">
   <div class="page-header"><h1><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span>Backup & Dados</h1></div>
 
-  <div style="background:#FFF3E0;border-radius:9px;padding:14px 16px;margin-bottom:14px;border-left:4px solid var(--warn)">
+  <div class="dica-box no-print" id="dica-backup-importante" style="background:#FFF3E0;border-radius:9px;padding:14px 30px 14px 16px;margin-bottom:14px;border-left:4px solid var(--warn)">
     <strong style="color:var(--warn)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><path d="M12 4 21 19H3Z"/><path d="M12 10v4M12 17h.01"/></svg> IMPORTANTE - Como seus dados são salvos:</strong>
     <ul style="margin:8px 0 0 16px;line-height:2.2;font-size:12.5px;color:#333">
       <li>Os dados ficam salvos na <strong>memória do Chrome</strong> (não numa pasta)</li>
@@ -1067,6 +1093,7 @@ tr:hover td{background:#EEF2F7}
       <li><strong>Solução:</strong> Faça backup semanal clicando em "Backup Completo"</li>
       <li>Salve o arquivo na pasta do <strong>Google Drive</strong> para ter cópia na nuvem</li>
     </ul>
+    <button class="dica-x" title="Ocultar" onclick="ocultarDica('backup-importante')">✕</button>
   </div>
 
   <div class="drive-box">
@@ -1143,12 +1170,11 @@ tr:hover td{background:#EEF2F7}
     <a href="https://linktr.ee/montgomerymagalhaes" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 4 6.2 4 9s-1.5 6.3-4 9c-2.5-2.7-4-6.2-4-9s1.5-6.3 4-9Z"/></svg>Linktree</a>
     <a href="https://instagram.com/montgomerymagalhaes" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.7"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none"/></svg>Instagram</a>
     <a href="https://wa.me/5533" target="_blank" id="footerWA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8.4 8.4 0 0 1-12.2 7.5L4 20l1.1-4.1a8.4 8.4 0 1 1 15.4-4.4Z"/><path d="M8.5 10.3c0 3.4 2.8 6.2 6.2 6.2"/></svg>WhatsApp</a>
-    <a href="#" onclick="go('configuracoes',null);return false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v2.3M12 19.2v2.3M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.3M19.2 12h2.3M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>Configurações</a>
   </div>
   <div class="footer-links" style="margin-top:6px">
     <a href="#" onclick="mostrarPolitica();return false">Política de Privacidade</a>
     <span style="opacity:.4">•</span>
-    <a href="https://linktr.ee/montgomerymagalhaes" target="_blank">Redes Sociais</a>
+    <a href="#" onclick="go('configuracoes',null);return false">Configurações</a>
     <span style="opacity:.4">•</span>
     <a href="#" onclick="go('backup',null);return false">Backup</a>
   </div>
@@ -1198,7 +1224,7 @@ tr:hover td{background:#EEF2F7}
 </script>
 
 <script>
-const SAVE_ICON_HTML='<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span>';
+const SAVE_ICON_HTML='<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.3 2.3L16 9.5"/></svg></span>';
 const EDIT_ICON_HTML='<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span>';
 const PLUS_ICON_HTML='<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>';
 const TRASH_ICON_HTML='<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span>';
@@ -1214,7 +1240,7 @@ const badgeTxtAlerta='<span class="badge-ic">'+BADGE_ICO_ALERTA+'</span>Já exis
 const badgeTxtNovo='<span class="badge-ic">'+BADGE_ICO_PAGO+'</span>Novo';
 const STAT_ICO_UNSAVED='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:-1.5px"><circle cx="12" cy="12" r="9"/></svg>';
 const STAT_ICO_SAVED='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:-1.5px"><circle cx="12" cy="12" r="9"/><path d="M8.3 12.5l2.4 2.4 5-5.4"/></svg>';
-const STAT_ICO_SAVE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:-1.5px"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg>';
+const STAT_ICO_SAVE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:-1.5px"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.3 2.3L16 9.5"/></svg>';
 // ===== PWA MANIFEST =====
 (function(){
   const manifest = {
@@ -1302,6 +1328,40 @@ const escHtml=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>
 // Exibição padronizada de nomes em CAIXA ALTA (ex: catálogo de suplementos importado da planilha)
 // como "Agar Agar" em vez de "AGAR AGAR" — só na tela, nunca altera o dado salvo.
 const nomeCap=s=>String(s||'').toLowerCase().replace(/(^|\s)\S/g,c=>c.toUpperCase());
+// Dica ocultável: lembra a preferência no navegador (mesmo padrão de mostrarFinPessoal/toggleFinPessoal).
+// Uso: <div class="dica-box" id="dica-xyz">...conteúdo...<button class="dica-x" onclick="ocultarDica('xyz')">✕</button></div>
+// e chamar initDicas() depois de inserir o HTML na página.
+function dicaOculta(id){return localStorage.getItem('cfg_dica_oculta_'+id)==='true';}
+const DICA_SWITCH_ID={'agenda':'swDicaAgenda','fin-comousar':'swDicaFinComousar','backup-importante':'swDicaBackup'};
+function aplicarDica(id){
+  const oculta=dicaOculta(id);
+  const el=document.getElementById('dica-'+id);
+  if(el)el.style.display=oculta?'none':'';
+  const sw=document.getElementById(DICA_SWITCH_ID[id]||'');
+  if(sw)sw.classList.toggle('off',oculta);
+}
+function ocultarDica(id){
+  localStorage.setItem('cfg_dica_oculta_'+id,'true');
+  aplicarDica(id);
+}
+function toggleDicaCfg(id){
+  localStorage.setItem('cfg_dica_oculta_'+id,(!dicaOculta(id)).toString());
+  aplicarDica(id);
+}
+function initDicas(){
+  document.querySelectorAll('.dica-box').forEach(el=>aplicarDica(el.id.replace(/^dica-/,'')));
+  const ocultaBarSel=localStorage.getItem('cfg_pac_delbar_oculta')==='true';
+  const swBar=document.getElementById('swBarSelMassa');
+  if(swBar)swBar.classList.toggle('off',ocultaBarSel);
+}
+function toggleBarSelMassaCfg(){
+  const oculta=localStorage.getItem('cfg_pac_delbar_oculta')==='true';
+  localStorage.setItem('cfg_pac_delbar_oculta',(!oculta).toString());
+  document.getElementById('swBarSelMassa').classList.toggle('off',!oculta);
+  const bar=document.getElementById('delBar'),tg=document.getElementById('toggleBarSel');
+  if(bar)bar.style.display=oculta?'flex':'none';
+  if(tg)tg.style.display=oculta?'none':'inline-flex';
+}
 const sD=(k,v)=>{_cache[k]=v;dbSet(k,v);};
 const gC=k=>localStorage.getItem(k)||'';
 const sC=(k,v)=>localStorage.setItem(k,v);
@@ -2628,7 +2688,7 @@ function renderElementosGrid(){
     const e=bancoIntegrativoCompleto.matrizCincoElementos[nome];
     const ativo=_diagSelecoes.elementos.includes(nome);
     return `<div onclick="toggleElemento('${nome}')" style="cursor:pointer;background:${ativo?e.cor:'var(--cream)'};border:2px solid ${e.cor};border-radius:10px;padding:14px 10px;text-align:center;transition:all .2s">
-      <div style="font-size:26px">${e.emoji}</div>
+      <div style="width:26px;height:26px;margin:0 auto;color:${ativo?'#fff':e.cor}">${e.icone}</div>
       <div style="font-weight:700;font-size:12.5px;margin-top:4px;color:${ativo?'#fff':e.cor}">${nome}</div>
     </div>`;
   }).join('');
@@ -2745,7 +2805,7 @@ function renderDiagPainel(){
     const e=bancoIntegrativoCompleto.matrizCincoElementos[nome];
     const obsAtual=_diagSelecoes.elementosObs[nome]||'';
     html+=`<div class="fc" style="border-left:5px solid ${e.cor}">
-      <div class="fst" style="color:${e.cor}">${e.emoji} ${e.titulo}</div>
+      <div class="fst" style="color:${e.cor}"><span style="display:inline-flex;width:16px;height:16px;vertical-align:-3px">${e.icone}</span> ${e.titulo}</div>
       <div style="font-size:12.5px;line-height:1.7">
         <p style="margin-bottom:7px"><strong>${e.relogio}</strong></p>
         <p style="margin-bottom:7px"><strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-2px"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3.2 3.2 0 0 0 7 18a3 3 0 0 0 5 1.8V6"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3.2 3.2 0 0 1 17 18a3 3 0 0 1-5 1.8"/></svg> Psique/Emoções:</strong> ${e.psique}</p>
@@ -3365,7 +3425,7 @@ function montarHtmlDiagnostico(diag){
     if(!e)return;
     const obs=(diag.elementosObs&&diag.elementosObs[nome])||'';
     html+=`<div class="fc" style="border-left:5px solid ${e.cor}">
-      <div class="fst" style="color:${e.cor}">${e.emoji} ${e.titulo}</div>
+      <div class="fst" style="color:${e.cor}"><span style="display:inline-flex;width:16px;height:16px;vertical-align:-3px">${e.icone}</span> ${e.titulo}</div>
       <div style="font-size:12.5px;line-height:1.7">
         <p style="margin-bottom:7px"><strong>${e.relogio}</strong></p>
         <p style="margin-bottom:7px"><strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-2px"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3.2 3.2 0 0 0 7 18a3 3 0 0 0 5 1.8V6"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3.2 3.2 0 0 1 17 18a3 3 0 0 1-5 1.8"/></svg> Psique/Emoções:</strong> ${e.psique}</p>
@@ -3847,7 +3907,7 @@ function atuInfoSys(){
   const icoPac='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c0-3 2.5-5.3 5.5-5.3s5.5 2.3 5.5 5.3"/><circle cx="17" cy="9" r="2.4"/><path d="M15.2 13.2c2.3.3 4.3 2.2 4.3 5.8"/></svg>';
   const icoCal='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>';
   const icoMoney='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v9M9.5 9.5c0-1.2 1.1-2 2.5-2s2.5.8 2.5 2-1.1 1.6-2.5 2-2.5.8-2.5 2 1.1 2 2.5 2 2.5-.8 2.5-2"/></svg>';
-  const icoSave='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg>';
+  const icoSave='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.3 2.3L16 9.5"/></svg>';
   const icoClock='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>';
   document.getElementById('infoSys').innerHTML=`
     ${icoPac} Pacientes: <strong>${p.length}</strong> (${p.filter(x=>x.foto).length} com foto)<br>
@@ -4042,12 +4102,12 @@ function renderP(lista){
     pagBar.style.display='none';
   }
 
-  // Barra deletar em massa
+  // Barra deletar em massa — ocultável (lembra a preferência), pra não poluir quando não for usar
   let delBar=document.getElementById('delBar');
   if(!delBar){
     delBar=document.createElement('div');
     delBar.id='delBar';
-    delBar.style.cssText='background:#FFEBEE;border-radius:7px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px';
+    delBar.style.cssText='background:#FFEBEE;border-radius:7px;padding:8px 34px 8px 12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:7px;position:relative';
     delBar.innerHTML=`
       <span id="delBarInfo" style="font-size:13px;color:var(--danger);font-weight:600">Marque pacientes para excluir em massa</span>
       <div style="display:flex;gap:7px;flex-wrap:wrap">
@@ -4055,10 +4115,25 @@ function renderP(lista){
         <button class="btn btn-sec btn-sm" onclick="selPacs(false)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/></svg></span>Nenhum</button>
         <button class="btn btn-pri btn-sm" onclick="marcarTriagemSel()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>Marcar como revisado</button>
         <button class="btn btn-dan btn-sm" onclick="delPacsSel()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span> Excluir Selecionados</button>
-      </div>`;
+      </div>
+      <button class="dica-x" title="Ocultar" onclick="ocultarBarSelMassa()">✕</button>`;
     const ph=document.querySelector('#pg-pacientes .page-header');
     if(ph)ph.after(delBar);
   }
+  let toggleBarSel=document.getElementById('toggleBarSel');
+  if(!toggleBarSel){
+    toggleBarSel=document.createElement('button');
+    toggleBarSel.id='toggleBarSel';
+    toggleBarSel.className='btn btn-sec btn-sm';
+    toggleBarSel.style.cssText='margin-bottom:10px';
+    toggleBarSel.title='Selecionar em massa';
+    toggleBarSel.innerHTML='<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/><path d="M7.5 12l3 3 6-6.5"/></svg></span>Selecionar em massa';
+    toggleBarSel.onclick=mostrarBarSelMassa;
+    delBar.before(toggleBarSel);
+  }
+  const ocultaBarSel=localStorage.getItem('cfg_pac_delbar_oculta')==='true';
+  delBar.style.display=ocultaBarSel?'none':'flex';
+  toggleBarSel.style.display=ocultaBarSel?'inline-flex':'none';
 
   const tb=document.getElementById('tabP');
   if(!tb)return;
@@ -4088,6 +4163,20 @@ function renderP(lista){
   atuDelBar();
 }
 
+function ocultarBarSelMassa(){
+  localStorage.setItem('cfg_pac_delbar_oculta','true');
+  document.getElementById('delBar').style.display='none';
+  document.getElementById('toggleBarSel').style.display='inline-flex';
+  const sw=document.getElementById('swBarSelMassa');
+  if(sw)sw.classList.add('off');
+}
+function mostrarBarSelMassa(){
+  localStorage.setItem('cfg_pac_delbar_oculta','false');
+  document.getElementById('delBar').style.display='flex';
+  document.getElementById('toggleBarSel').style.display='none';
+  const sw=document.getElementById('swBarSelMassa');
+  if(sw)sw.classList.remove('off');
+}
 function atuDelBar(){
   const sel=document.querySelectorAll('.pacCk:checked').length;
   const total=document.querySelectorAll('.pacCk').length;
@@ -4148,6 +4237,7 @@ document.getElementById('sData').value=new Date().toISOString().split('T')[0];
 document.getElementById('rxDt').value=new Date().toISOString().split('T')[0];
 document.getElementById('agAno').value=new Date().getFullYear();
 document.getElementById('modP').addEventListener('click',e=>{if(e.target===e.currentTarget)fMod();});
+initDicas();
 // Iniciar com Supabase
 initDB();
 </script>
