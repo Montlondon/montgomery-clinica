@@ -758,6 +758,28 @@ tr:hover td{background:#EEF2F7}
   </div>
 
   <div class="fc">
+    <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5C5 8 4 11 5 15c1 4 4 6 7 6s5-2 6-5c.7-2 .3-4-1-5"/><circle cx="13" cy="11" r="2"/></svg></span>Auriculoterapia</div>
+    <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Busque por queixa/protocolo ou por um ponto específico — só os pontos relevantes aparecem destacados na orelha, evitando poluir a tela.</p>
+    <div class="seg" id="auriculoModoSeg">
+      <button class="on" data-modo="protocolo" onclick="setAuriculoModo('protocolo')">Por Queixa/Protocolo</button>
+      <button data-modo="ponto" onclick="setAuriculoModo('ponto')">Por Ponto</button>
+    </div>
+    <div id="auriculoModoProtocolo">
+      <div class="fg full" style="position:relative">
+        <input type="text" id="auriculoProtocoloBusca" placeholder="Ex: enxaqueca, dor lombar, ansiedade, tabagismo..." oninput="filtrarAuriculoProtocolo()" onblur="fecharAuriculoProtocoloLista()" autocomplete="off">
+        <div id="auriculoProtocoloLista" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--cream);border:1px solid var(--brd);border-radius:0 0 7px 7px;box-shadow:var(--shadow);z-index:200;max-height:220px;overflow-y:auto"></div>
+      </div>
+    </div>
+    <div id="auriculoModoPonto" style="display:none">
+      <div class="fg full" style="position:relative">
+        <input type="text" id="auriculoPontoBusca" placeholder="Ex: shen men, rim, ápice, fígado..." oninput="filtrarAuriculoPonto()" onblur="fecharAuriculoPontoLista()" autocomplete="off">
+        <div id="auriculoPontoLista" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--cream);border:1px solid var(--brd);border-radius:0 0 7px 7px;box-shadow:var(--shadow);z-index:200;max-height:220px;overflow-y:auto"></div>
+      </div>
+    </div>
+    <div id="auriculoResultado"></div>
+  </div>
+
+  <div class="fc">
     <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg></span>Escala de Orientação Emocional</div>
     <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Registro do estado emocional predominante do paciente nesta avaliação.</p>
     <div class="fg full">
@@ -1503,7 +1525,7 @@ function go(p,el){
     if(el){
       _diagEditandoId=null;
       _diagPacSel=null;
-      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[]};
+      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[]};
       _diagJaSalvo=false;
       document.getElementById('diagPacBusca').value='';
       document.getElementById('diagPacId').value='';
@@ -2573,7 +2595,7 @@ function fecharRxPacLista(){
 let _diagPacSel=null;
 let _diagJaSalvo=false;
 let _diagEditandoId=null; // id do diagnóstico em edição (null = nova avaliação)
-let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[]}; // guarda o que foi clicado nesta avaliação + anotações por elemento
+let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[]}; // guarda o que foi clicado nesta avaliação + anotações por elemento
 
 // Dados (bancoIntegrativoCompleto, CATALOGO_SUPLEMENTOS_INICIAL, sistemasABC) movidos para dados-clinicos.js
 
@@ -2699,6 +2721,126 @@ function initBalancoABC(){
   else{abcRenderMeridianoGrid('');document.getElementById('abcResultados').innerHTML='';}
 }
 
+// ===== AURICULOTERAPIA =====
+const auriculoPontosPorId=Object.fromEntries(auriculoPontos.map(p=>[p.id,p]));
+const auriculoProtocolosPorId=Object.fromEntries(auriculoProtocolos.map(p=>[p.id,p]));
+let _auriculoModo='protocolo';
+let _auriculoPreview=null; // {tipo:'protocolo'|'ponto', id}
+
+function auriculoBaseSVG(pontosAtivos,tamanho){
+  tamanho=tamanho||220;
+  const dots=(pontosAtivos||[]).map(p=>{
+    const ladoEsq=p.x<160;
+    const tx=ladoEsq?p.x-8:p.x+8;
+    const anchor=ladoEsq?'end':'start';
+    return `<circle cx="${p.x}" cy="${p.y}" r="5" fill="#b5651d" stroke="#3a2c1c" stroke-width="1"/>
+      <text x="${tx}" y="${p.y+3}" font-size="10" font-family="Inter,Arial,sans-serif" fill="#5b4636" text-anchor="${anchor}">${escHtml(p.nome)}</text>`;
+  }).join('');
+  return `<svg viewBox="0 0 320 420" style="width:${tamanho}px;height:${tamanho*420/320}px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">
+    <path fill="none" stroke="#5b4636" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M150,28 C100,30 62,75 55,140 C48,205 55,270 85,320 C105,352 130,372 158,380 C182,386 205,378 215,358 C225,338 215,318 195,310 C175,302 168,288 175,270" />
+    <path fill="none" stroke="#5b4636" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M150,28 C195,30 222,55 232,95 C242,138 232,175 205,195" />
+    <path fill="none" stroke="#8a7460" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" d="M118,75 C108,100 110,128 128,150 C146,172 150,200 140,228 C132,250 140,272 165,282" />
+    <path fill="none" stroke="#8a7460" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" d="M118,75 C130,68 148,64 162,70" />
+    <path fill="none" stroke="#8a7460" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" d="M128,150 C150,148 170,156 182,172" />
+    <path fill="none" stroke="#5b4636" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M95,205 C108,198 122,202 128,216 C132,228 124,238 110,236 C98,234 90,222 95,205 Z" />
+    <path fill="none" stroke="#5b4636" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M165,282 C180,278 196,284 200,298 C203,310 192,320 178,316 C166,312 160,298 165,282 Z" />
+    <path fill="none" stroke="#5b4636" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M158,380 C150,372 145,358 152,344 C160,330 178,326 192,334 C206,342 210,358 200,370 C190,382 170,388 158,380 Z" />
+    ${dots}
+  </svg>`;
+}
+
+function setAuriculoModo(modo){
+  _auriculoModo=modo;
+  _auriculoPreview=null;
+  document.getElementById('auriculoModoProtocolo').style.display=modo==='protocolo'?'block':'none';
+  document.getElementById('auriculoModoPonto').style.display=modo==='ponto'?'block':'none';
+  document.querySelectorAll('#auriculoModoSeg button').forEach(b=>b.classList.toggle('on',b.dataset.modo===modo));
+  document.getElementById('auriculoResultado').innerHTML='';
+}
+
+function filtrarAuriculoProtocolo(){
+  const q=document.getElementById('auriculoProtocoloBusca').value.toLowerCase().trim();
+  const lista=document.getElementById('auriculoProtocoloLista');
+  if(!q){lista.style.display='none';return;}
+  const itens=auriculoProtocolos.filter(p=>p.titulo.toLowerCase().includes(q)).slice(0,12);
+  if(!itens.length){lista.innerHTML='<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Nenhum protocolo encontrado</div>';lista.style.display='block';return;}
+  lista.innerHTML=itens.map(p=>`<div onclick="selecionarAuriculoProtocolo('${p.id}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${escHtml(p.titulo)}</div>`).join('');
+  lista.style.display='block';
+}
+function fecharAuriculoProtocoloLista(){setTimeout(()=>{const l=document.getElementById('auriculoProtocoloLista');if(l)l.style.display='none';},200);}
+function selecionarAuriculoProtocolo(id){
+  _auriculoPreview={tipo:'protocolo',id};
+  document.getElementById('auriculoProtocoloBusca').value=auriculoProtocolosPorId[id].titulo;
+  document.getElementById('auriculoProtocoloLista').style.display='none';
+  renderAuriculoResultado();
+}
+
+function filtrarAuriculoPonto(){
+  const q=document.getElementById('auriculoPontoBusca').value.toLowerCase().trim();
+  const lista=document.getElementById('auriculoPontoLista');
+  if(!q){lista.style.display='none';return;}
+  const itens=auriculoPontos.filter(p=>p.nome.toLowerCase().includes(q)).slice(0,12);
+  if(!itens.length){lista.innerHTML='<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Nenhum ponto encontrado</div>';lista.style.display='block';return;}
+  lista.innerHTML=itens.map(p=>`<div onclick="selecionarAuriculoPonto('${p.id}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${escHtml(p.nome)} <span style="color:var(--txt-l);font-size:11px">— ${escHtml(p.grupo)}</span></div>`).join('');
+  lista.style.display='block';
+}
+function fecharAuriculoPontoLista(){setTimeout(()=>{const l=document.getElementById('auriculoPontoLista');if(l)l.style.display='none';},200);}
+function selecionarAuriculoPonto(id){
+  _auriculoPreview={tipo:'ponto',id};
+  document.getElementById('auriculoPontoBusca').value=auriculoPontosPorId[id].nome;
+  document.getElementById('auriculoPontoLista').style.display='none';
+  renderAuriculoResultado();
+}
+
+function renderAuriculoResultado(){
+  const el=document.getElementById('auriculoResultado');
+  if(!_auriculoPreview){el.innerHTML='';return;}
+  if(_auriculoPreview.tipo==='protocolo'){
+    const pr=auriculoProtocolosPorId[_auriculoPreview.id];
+    const pontosObj=pr.pontosIds.map(id=>auriculoPontosPorId[id]).filter(Boolean);
+    el.innerHTML=`<div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;margin-top:10px">
+      <div>${auriculoBaseSVG(pontosObj,200)}</div>
+      <div style="flex:1;min-width:220px">
+        <div style="font-weight:700;color:var(--pri-d);margin-bottom:6px">${escHtml(pr.titulo)}${pr.categoria?` <span style="font-size:11px;color:var(--txt-l);font-weight:400">— ${escHtml(pr.categoria)}</span>`:''}</div>
+        <ul style="font-size:12.5px;line-height:1.7;padding-left:18px;margin-bottom:8px">${pr.passos.map(p=>`<li>${escHtml(p)}</li>`).join('')}</ul>
+        ${pr.observacoes.length?`<p style="font-size:11.5px;color:var(--txt-l);line-height:1.6;margin-bottom:10px">${pr.observacoes.map(o=>escHtml(o)).join(' ')}</p>`:''}
+        <button class="btn btn-pri btn-sm" onclick="adicionarAuriculoFicha()">${PLUS_ICON_HTML} Adicionar à ficha</button>
+      </div>
+    </div>`;
+  } else {
+    const p=auriculoPontosPorId[_auriculoPreview.id];
+    el.innerHTML=`<div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;margin-top:10px">
+      <div>${auriculoBaseSVG([p],200)}</div>
+      <div style="flex:1;min-width:220px">
+        <div style="font-weight:700;color:var(--pri-d);margin-bottom:2px">${escHtml(p.nome)}</div>
+        <div style="font-size:11px;color:var(--txt-l);margin-bottom:8px">${escHtml(p.grupo)}</div>
+        <p style="font-size:12.5px;line-height:1.7;margin-bottom:6px"><strong>Localização:</strong> ${escHtml(p.localizacao)}</p>
+        <p style="font-size:12.5px;line-height:1.7;margin-bottom:6px"><strong>Estímulo:</strong> ${escHtml(p.estimulo)}</p>
+        <p style="font-size:12.5px;line-height:1.7;margin-bottom:6px"><strong>Indicações:</strong> ${escHtml(p.indicacoes)}</p>
+        ${p.combinacoes?`<p style="font-size:12.5px;line-height:1.7;margin-bottom:10px"><strong>Combinações:</strong> ${escHtml(p.combinacoes)}</p>`:''}
+        <button class="btn btn-pri btn-sm" onclick="adicionarAuriculoFicha()">${PLUS_ICON_HTML} Adicionar à ficha</button>
+      </div>
+    </div>`;
+  }
+}
+
+function adicionarAuriculoFicha(){
+  if(!_auriculoPreview)return;
+  if(!_diagSelecoes.auriculo)_diagSelecoes.auriculo=[];
+  const idsNovos=_auriculoPreview.tipo==='protocolo'?auriculoProtocolosPorId[_auriculoPreview.id].pontosIds:[_auriculoPreview.id];
+  let adicionou=0;
+  idsNovos.forEach(id=>{if(!_diagSelecoes.auriculo.includes(id)){_diagSelecoes.auriculo.push(id);adicionou++;}});
+  _diagJaSalvo=false;
+  renderDiagPainel();
+  toast(adicionou?`👂 ${adicionou} ponto(s) adicionado(s) à ficha`:'ℹ️ Esses pontos já estavam na ficha','#1565C0');
+}
+function removerAuriculoFicha(id){
+  const i=_diagSelecoes.auriculo.indexOf(id);
+  if(i>=0)_diagSelecoes.auriculo.splice(i,1);
+  _diagJaSalvo=false;
+  renderDiagPainel();
+}
+
 function renderElementosGrid(){
   const el=document.getElementById('elementosGrid');
   el.innerHTML=Object.keys(bancoIntegrativoCompleto.matrizCincoElementos).map(nome=>{
@@ -2812,7 +2954,7 @@ function montarTabelaBalance(nomeElemento){
 function renderDiagPainel(){
   const painel=document.getElementById('diagPainel');
   const resumoBox=document.getElementById('diagResumoBox');
-  const temAlgo=_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length;
+  const temAlgo=_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length||(_diagSelecoes.auriculo||[]).length;
   if(!temAlgo){painel.style.display='none';resumoBox.style.display='none';return;}
   painel.style.display='block';
   resumoBox.style.display='block';
@@ -2872,6 +3014,21 @@ function renderDiagPainel(){
       <div style="text-align:right;font-size:13px;font-weight:700;color:var(--pri-d);margin-top:8px">Total Suplementos: ${fm(totalSup)}</div>
     </div>`;
   }
+  if((_diagSelecoes.auriculo||[]).length){
+    const pontosFicha=_diagSelecoes.auriculo.map(id=>auriculoPontosPorId[id]).filter(Boolean);
+    html+=`<div class="fc" style="border-left:5px solid var(--pri-deep)">
+      <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5C5 8 4 11 5 15c1 4 4 6 7 6s5-2 6-5c.7-2 .3-4-1-5"/><circle cx="13" cy="11" r="2"/></svg></span>Auriculoterapia</div>
+      <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start">
+        <div>${auriculoBaseSVG(pontosFicha,180)}</div>
+        <div style="flex:1;min-width:200px">
+          ${pontosFicha.map(p=>`<div class="linha-fin" style="padding:5px 0">
+            <div class="info"><div class="desc">${escHtml(p.nome)}</div><div class="det">${escHtml(p.grupo)}</div></div>
+            <button type="button" class="btn btn-dan btn-sm" onclick="removerAuriculoFicha('${p.id}')">✕</button>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  }
   painel.innerHTML=html;
 
   // Resumo compacto
@@ -2881,6 +3038,7 @@ function renderDiagPainel(){
   if(_diagSelecoes.pontos.length)partes.push(`<strong>Pontos:</strong> ${_diagSelecoes.pontos.join(', ')}`);
   if((_diagSelecoes.sistemasAbc||[]).length)partes.push(`<strong>Sistemas ABC:</strong> ${_diagSelecoes.sistemasAbc.join(', ')}`);
   if((_diagSelecoes.suplementos||[]).length)partes.push(`<strong>Suplementos:</strong> ${_diagSelecoes.suplementos.map(s=>nomeCap(s.nome)).join(', ')}`);
+  if((_diagSelecoes.auriculo||[]).length)partes.push(`<strong>Auriculoterapia:</strong> ${_diagSelecoes.auriculo.map(id=>auriculoPontosPorId[id]?auriculoPontosPorId[id].nome:id).join(', ')}`);
   const emo=document.getElementById('diagEscalaEmo').value;
   if(emo)partes.push(`<strong>Estado emocional:</strong> ${emo}`);
   resumo.innerHTML=partes.map(p=>`<p style="margin-bottom:5px">${p}</p>`).join('');
@@ -2901,6 +3059,7 @@ function gerarHtmlDiag(diagRec){
   const pontos=diagRec?(diagRec.pontos||[]):_diagSelecoes.pontos;
   const sistemasAbcSel=diagRec?(diagRec.sistemasAbc||[]):(_diagSelecoes.sistemasAbc||[]);
   const suplementosSel=diagRec?(diagRec.suplementos||[]):(_diagSelecoes.suplementos||[]);
+  const auriculoSel=diagRec?(diagRec.auriculo||[]):(_diagSelecoes.auriculo||[]);
   const emo=diagRec?diagRec.escalaEmocional:document.getElementById('diagEscalaEmo').value;
   const emoObs=diagRec?diagRec.emoObs:document.getElementById('diagEmoObs').value;
 
@@ -2939,6 +3098,13 @@ function gerarHtmlDiag(diagRec){
       <div style="font-size:11.5pt;font-weight:700;color:#7a5c1e;margin-bottom:5px">Suplementos</div>
       ${suplementosSel.map(s=>`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27">${s.qtd}x ${nomeCap(s.nome)} — ${fm(s.precoUnit*s.qtd)}</div>`).join('')}
       <div style="font-size:9.5pt;font-weight:700;color:#7a5c1e;margin-top:5px">Total: ${fm(totalSup)}</div>
+    </div>`;
+  }
+  if(auriculoSel.length){
+    const nomesAuriculo=auriculoSel.map(id=>auriculoPontosPorId[id]).filter(Boolean).map(p=>p.nome).join(', ');
+    blocos+=`<div style="border-left:4px solid #1E3A5F;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
+      <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">Auriculoterapia</div>
+      <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27">${nomesAuriculo}</div>
     </div>`;
   }
   if(!blocos)blocos='<div style="color:#aaa;font-style:italic;padding:14px;text-align:center">Nenhum item selecionado na avaliação.</div>';
@@ -3015,7 +3181,7 @@ function fecharDiagPacLista(){
 
 function limparDiagnostico(){
   if(!confirm('Limpar toda a avaliação atual?'))return;
-  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[]};
+  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[]};
   document.getElementById('diagEscalaEmo').value='';
   document.getElementById('diagEmoObs').value='';
   _diagJaSalvo=false;
@@ -3068,6 +3234,7 @@ async function salvarDiagnostico(){
     elementosObs:{..._diagSelecoes.elementosObs},
     sistemasAbc:[...(_diagSelecoes.sistemasAbc||[])],
     suplementos:[...(_diagSelecoes.suplementos||[])],
+    auriculo:[...(_diagSelecoes.auriculo||[])],
     escalaEmocional:document.getElementById('diagEscalaEmo').value,
     emoObs:document.getElementById('diagEmoObs').value
   };
@@ -3113,7 +3280,7 @@ function editarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])]};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])]};
   _diagEditandoId=diag.id;
   _diagJaSalvo=false;
   go('diagnostico',null);
@@ -3507,7 +3674,7 @@ function duplicarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])]};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])]};
   _diagEditandoId=null;
   _diagJaSalvo=false;
   go('diagnostico',null);
