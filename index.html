@@ -149,8 +149,9 @@ tr:hover td{background:#EEF2F7}
 .fmini img{width:100%;height:100%;object-fit:cover}
 
 /* BADGES */
-.badge{padding:3px 7px;border-radius:10px;font-size:10px;font-weight:600;white-space:nowrap}
-.bp{background:#E3EFF8;color:#1E3A5F}.bpend{background:#FFF3E0;color:#C47A1E}.bc{background:#FFEBEE;color:#B83232}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:999px;font-size:10.5px;font-weight:700;white-space:nowrap;letter-spacing:.02em}
+.badge-ic{display:inline-flex;width:11px;height:11px;flex-shrink:0}
+.bp{background:#E3F2E1;color:#3F5C33}.bpend{background:#FFF3E0;color:#C47A1E}.bc{background:#FFEBEE;color:#B83232}
 
 /* BOTÕES */
 .btn{padding:10px 18px;border:none;border-radius:10px;font-size:13.5px;font-weight:600;cursor:pointer;transition:transform .12s,box-shadow .12s;font-family:'Inter',sans-serif;display:inline-flex;align-items:center;gap:6px;text-decoration:none;white-space:nowrap}
@@ -158,7 +159,7 @@ tr:hover td{background:#EEF2F7}
 .btn-sec,.btn-ghost{background:var(--surface);color:var(--ink);border:1.5px solid var(--line)}.btn-sec:hover,.btn-ghost:hover{background:var(--bg)}
 .btn-dan{background:#FFEBEE;color:var(--danger);border:1px solid #FFCDD2}.btn-dan:hover{background:#FFCDD2}
 .btn-war{background:#FFF3E0;color:var(--warn);border:1px solid #FFE0B2}.btn-war:hover{background:#FFE0B2}
-.btn-wa{background:#25D366;color:#fff}.btn-wa:hover{background:#128C7E}
+.btn-wa{background:#25D366;color:#fff;box-shadow:0 2px 8px rgba(37,211,102,.35)}.btn-wa:hover{background:#1DA851;transform:translateY(-1px);box-shadow:0 6px 16px rgba(37,211,102,.4)}
 .btn-inf{background:#E3F2FD;color:var(--info);border:1px solid #BBDEFB}
 .btn-cal{background:#4285F4;color:#fff}.btn-cal:hover{background:#3367D6}
 .btn-gold{background:var(--gold);color:#fff}.btn-gold:hover{background:#6d5010}
@@ -380,7 +381,7 @@ tr:hover td{background:#EEF2F7}
 <section class="page" id="pg-novo-paciente">
   <div class="page-header"><h1 id="fTit"><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9.5" cy="8" r="3.2"/><path d="M3.5 20c0-3.3 2.8-5.8 6-5.8s6 2.5 6 5.8"/><path d="M18.5 8v5M16 10.5h5"/></svg></span>Novo Paciente</h1></div>
   <div class="sbar no-print">
-    <div class="sst unsaved" id="saveSt">⚫ Não salvo</div>
+    <div class="sst unsaved" id="saveSt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:-1.5px"><circle cx="12" cy="12" r="9"/></svg> Não salvo</div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
       <button class="btn btn-sec btn-sm" onclick="salvarRasc()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span> Rascunho</button>
       <button class="btn btn-pri btn-sm" onclick="document.getElementById('fPac').dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}))"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Salvar</button>
@@ -418,7 +419,7 @@ tr:hover td{background:#EEF2F7}
         <div class="fr"><div class="fg"><label class="req">Nome</label><input type="text" id="pN" required oninput="mudou()"></div><div class="fg"><label>Email</label><input type="email" id="pE" oninput="mudou()"></div></div>
         <div class="fr">
           <div class="fg"><label>Telefone / WhatsApp</label>
-            <div style="display:flex;gap:6px"><input type="tel" id="pT" placeholder="(00) 00000-0000" style="flex:1" oninput="mudou();atuWA()"><a id="waBtn" href="#" target="_blank" class="btn btn-wa btn-sm" style="display:none"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.2-1.1L3 20l1.2-5.1"/></svg></span></a></div>
+            <div style="display:flex;gap:6px"><input type="tel" id="pT" placeholder="(00) 00000-0000" style="flex:1" oninput="mudou();atuWA()"><a id="waBtn" href="#" target="_blank" class="btn btn-wa btn-sm" style="display:none"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8.4 8.4 0 0 1-12.2 7.5L4 20l1.1-4.1a8.4 8.4 0 1 1 15.4-4.4Z"/><path d="M8.5 10.3c0 3.4 2.8 6.2 6.2 6.2"/></svg></span></a></div>
           </div>
           <div class="fg"><label>Nascimento</label><input type="date" id="pNasc" oninput="mudou()"></div>
         </div>
@@ -558,7 +559,7 @@ tr:hover td{background:#EEF2F7}
       <div style="display:flex;align-items:center;gap:10px">
         <div id="psInfoF" style="width:42px;height:42px;border-radius:50%;border:2px solid var(--pri);overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0"></div>
         <div style="flex:1"><strong id="psInfoN" style="color:var(--pri-d)"></strong><div style="font-size:11px;color:var(--txt-l)" id="psInfoD"></div></div>
-        <a id="psInfoWA" href="#" target="_blank" class="btn btn-wa btn-sm"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.2-1.1L3 20l1.2-5.1"/></svg></span></a>
+        <a id="psInfoWA" href="#" target="_blank" class="btn btn-wa btn-sm"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8.4 8.4 0 0 1-12.2 7.5L4 20l1.1-4.1a8.4 8.4 0 1 1 15.4-4.4Z"/><path d="M8.5 10.3c0 3.4 2.8 6.2 6.2 6.2"/></svg></span></a>
       </div>
     </div>
     <form onsubmit="salvarSessao(event)">
@@ -566,7 +567,7 @@ tr:hover td{background:#EEF2F7}
       <div class="fr full"><div class="fg"><label>Procedimentos</label><input type="text" id="sProc" placeholder="Ex: Acupuntura + Quiropraxia + Seitai"></div></div>
       <div class="fr full"><div class="fg"><label>Notas / Evolução</label><textarea id="sNot" rows="4"></textarea></div></div>
       <div class="fr"><div class="fg"><label class="req">Valor R$</label><input type="number" id="sVal" required step="0.01" min="0" placeholder="0,00"></div><div class="fg"><label>Pagamento</label><select id="sFPg"><option value="">-</option><option>PIX</option><option>Dinheiro</option><option>Cartão Crédito</option><option>Cartão Débito</option><option>Transferência</option></select></div></div>
-      <div class="fr full"><div class="fg"><label>Status</label><select id="sSt"><option value="pago"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Pago</option><option value="pendente">⏳ Pendente</option><option value="cancelado">❌ Cancelado</option></select></div></div>
+      <div class="fr full"><div class="fg"><label>Status</label><select id="sSt"><option value="pago">Pago</option><option value="pendente">Pendente</option><option value="cancelado">Cancelado</option></select></div></div>
       <div class="fa">
         <button type="button" class="btn btn-sec" onclick="go('dashboard',null)">Cancelar</button>
         <button type="button" class="btn btn-cal" onclick="salvarEGoogle()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span> Salvar + Google</button>
@@ -586,7 +587,7 @@ tr:hover td{background:#EEF2F7}
     </div>
   </div>
   <div style="background:#E8F5E9;border-radius:9px;padding:11px 14px;margin-bottom:14px;border-left:4px solid var(--pri);font-size:12px">
-    <strong style="color:var(--pri-d)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span> Google Agenda:</strong> Clique em 📅 em qualquer sessão para abrir direto no Google já preenchido. Ou exporte .ICS para importar vários de uma vez.
+    <strong style="color:var(--pri-d)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span> Google Agenda:</strong> Clique no ícone de calendário em qualquer sessão para abrir direto no Google já preenchido. Ou exporte .ICS para importar vários de uma vez.
   </div>
   <div class="fc" style="margin-bottom:12px">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
@@ -604,7 +605,7 @@ tr:hover td{background:#EEF2F7}
     <div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:12px">
       <div class="fg"><label>Mês</label><select id="agMes" onchange="renderAg()"><option value="">Todos</option><option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option><option value="3">Abril</option><option value="4">Maio</option><option value="5">Junho</option><option value="6">Julho</option><option value="7">Agosto</option><option value="8">Setembro</option><option value="9">Outubro</option><option value="10">Novembro</option><option value="11">Dezembro</option></select></div>
       <div class="fg"><label>Ano</label><select id="agAno" onchange="renderAg()"><option value="2025">2025</option><option value="2026">2026</option><option value="2024">2024</option></select></div>
-      <div class="fg"><label>Status</label><select id="agSt" onchange="renderAg()"><option value="">Todos</option><option value="pago"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Pago</option><option value="pendente">⏳ Pendente</option><option value="cancelado">❌ Cancelado</option></select></div>
+      <div class="fg"><label>Status</label><select id="agSt" onchange="renderAg()"><option value="">Todos</option><option value="pago">Pago</option><option value="pendente">Pendente</option><option value="cancelado">Cancelado</option></select></div>
     </div>
     <div style="overflow-x:auto">
       <table>
@@ -670,7 +671,7 @@ tr:hover td{background:#EEF2F7}
       <button class="btn btn-sec btn-sm" onclick="document.getElementById('rxPrev').style.display='none'">Fechar</button>
       <button class="btn btn-war btn-sm" onclick="exportarRxJpg()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.3"/></svg></span>Exportar JPG</button>
       <button class="btn btn-sm" onclick="compartilharRx()" style="background:#25D366;color:#fff;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 0 4 4m-4-4-4 4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></span>Compartilhar</button>
-      <button class="btn btn-wa btn-sm" onclick="enviarWhatsApp()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.2-1.1L3 20l1.2-5.1"/></svg></span> WhatsApp</button>
+      <button class="btn btn-wa btn-sm" onclick="enviarWhatsApp()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8.4 8.4 0 0 1-12.2 7.5L4 20l1.1-4.1a8.4 8.4 0 1 1 15.4-4.4Z"/><path d="M8.5 10.3c0 3.4 2.8 6.2 6.2 6.2"/></svg></span> WhatsApp</button>
       <button class="btn btn-pri btn-sm" onclick="imprimirRx()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg></span> Imprimir</button>
       <button class="btn btn-sm" id="btnSalvarRx" onclick="salvarRxComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:700"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg></span> Salvar Recomendação</button>
     </div>
@@ -831,7 +832,7 @@ tr:hover td{background:#EEF2F7}
       </div>
     </div>
     <div style="background:#E3F2FD;border-radius:8px;padding:10px 14px;margin-bottom:14px;font-size:12px;border-left:4px solid var(--info)">
-      <strong style="color:var(--info)">ℹ️ Como usar:</strong> Registre sessões em "Nova Sessão". Cada sessão aparece aqui automaticamente. Clique ✅ para confirmar pagamentos. Use filtros para ver por período.
+      <strong style="color:var(--info)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg> Como usar:</strong> Registre sessões em "Nova Sessão". Cada sessão aparece aqui automaticamente. Clique no <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:-1px;color:#3F5C33"><circle cx="12" cy="12" r="9"/><path d="M8.3 12.5l2.4 2.4 5-5.4"/></svg> para confirmar pagamentos. Use filtros para ver por período.
     </div>
     <div class="fg-grid">
       <div class="fc-card g"><h4><span class="ic-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M8.3 12.5l2.4 2.4 5-5.4"/></svg></span>Recebido</h4><div class="fv" id="finR">R$ 0,00</div></div>
@@ -843,7 +844,7 @@ tr:hover td{background:#EEF2F7}
       <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
         <div class="fg"><label>Mês</label><select id="fMes" onchange="atuFin()"><option value="">Todos</option><option value="0">Janeiro</option><option value="1">Fevereiro</option><option value="2">Março</option><option value="3">Abril</option><option value="4">Maio</option><option value="5">Junho</option><option value="6">Julho</option><option value="7">Agosto</option><option value="8">Setembro</option><option value="9">Outubro</option><option value="10">Novembro</option><option value="11">Dezembro</option></select></div>
         <div class="fg"><label>Ano</label><select id="fAno" onchange="atuFin()"><option value="">Todos</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option></select></div>
-        <div class="fg"><label>Status</label><select id="fSt" onchange="atuFin()"><option value="">Todos</option><option value="pago"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Pago</option><option value="pendente">⏳ Pendente</option><option value="cancelado">❌ Cancelado</option></select></div>
+        <div class="fg"><label>Status</label><select id="fSt" onchange="atuFin()"><option value="">Todos</option><option value="pago">Pago</option><option value="pendente">Pendente</option><option value="cancelado">Cancelado</option></select></div>
       </div>
     </div>
     <div class="tw" style="margin-bottom:18px"><div style="overflow-x:auto">
@@ -1059,7 +1060,7 @@ tr:hover td{background:#EEF2F7}
   <div class="page-header"><h1><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6"/><path d="M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span>Backup & Dados</h1></div>
 
   <div style="background:#FFF3E0;border-radius:9px;padding:14px 16px;margin-bottom:14px;border-left:4px solid var(--warn)">
-    <strong style="color:var(--warn)">⚠️ IMPORTANTE - Como seus dados são salvos:</strong>
+    <strong style="color:var(--warn)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><path d="M12 4 21 19H3Z"/><path d="M12 10v4M12 17h.01"/></svg> IMPORTANTE - Como seus dados são salvos:</strong>
     <ul style="margin:8px 0 0 16px;line-height:2.2;font-size:12.5px;color:#333">
       <li>Os dados ficam salvos na <strong>memória do Chrome</strong> (não numa pasta)</li>
       <li><strong>Risco:</strong> Se limpar o Chrome ou formatar o PC → dados perdidos!</li>
@@ -1102,7 +1103,7 @@ tr:hover td{background:#EEF2F7}
       <li>No Chrome → <strong>3 pontinhos → "Adicionar à tela inicial"</strong></li>
       <li><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Aparece como app na tela do celular!</li>
     </ol>
-    <p style="font-size:11.5px;color:var(--danger);margin-top:8px">⚠️ Dados do celular ficam separados. Use Exportar/Importar para sincronizar.</p>
+    <p style="font-size:11.5px;color:var(--danger);margin-top:8px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;vertical-align:-2px"><path d="M12 4 21 19H3Z"/><path d="M12 10v4M12 17h.01"/></svg> Dados do celular ficam separados. Use Exportar/Importar para sincronizar.</p>
   </div>
   <div class="bx"><h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span>Limpar Dados</h3><p><strong style="color:var(--danger)">Irreversível!</strong> Faça backup antes.</p><div class="bx-ac"><button class="btn btn-dan" onclick="limparTudo()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span> Limpar Tudo</button></div></div>
   <div class="bx"><h3><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V11M10 20V4M16 20v-8M21 20H3"/></svg></span>Status</h3><div id="infoSys" style="font-size:12px;color:var(--txt-l);line-height:2.2"></div></div>
@@ -1141,7 +1142,7 @@ tr:hover td{background:#EEF2F7}
   <div class="footer-social">
     <a href="https://linktr.ee/montgomerymagalhaes" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 4 6.2 4 9s-1.5 6.3-4 9c-2.5-2.7-4-6.2-4-9s1.5-6.3 4-9Z"/></svg>Linktree</a>
     <a href="https://instagram.com/montgomerymagalhaes" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.7"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none"/></svg>Instagram</a>
-    <a href="https://wa.me/5533" target="_blank" id="footerWA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.2-1.1L3 20l1.2-5.1"/></svg>WhatsApp</a>
+    <a href="https://wa.me/5533" target="_blank" id="footerWA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8.4 8.4 0 0 1-12.2 7.5L4 20l1.1-4.1a8.4 8.4 0 1 1 15.4-4.4Z"/><path d="M8.5 10.3c0 3.4 2.8 6.2 6.2 6.2"/></svg>WhatsApp</a>
     <a href="#" onclick="go('configuracoes',null);return false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v2.3M12 19.2v2.3M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.3M19.2 12h2.3M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>Configurações</a>
   </div>
   <div class="footer-links" style="margin-top:6px">
@@ -1202,6 +1203,18 @@ const EDIT_ICON_HTML='<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" 
 const PLUS_ICON_HTML='<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>';
 const TRASH_ICON_HTML='<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span>';
 const PERSON_PLUS_ICON_HTML='<span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9.5" cy="8" r="3.2"/><path d="M3.5 20c0-3.3 2.8-5.8 6-5.8s6 2.5 6 5.8"/><path d="M18.5 8v5M16 10.5h5"/></svg></span>';
+const BADGE_ICO_PAGO='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.3 12.5l2.4 2.4 5-5.4"/></svg>';
+const BADGE_ICO_PEND='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.3 2"/></svg>';
+const BADGE_ICO_CANC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5l5 5M14.5 9.5l-5 5"/></svg>';
+const BADGE_ICO_ALERTA='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 21 19H3Z"/><path d="M12 10v4M12 17h.01"/></svg>';
+const badgeTxtPago='<span class="badge-ic">'+BADGE_ICO_PAGO+'</span>Pago';
+const badgeTxtPend='<span class="badge-ic">'+BADGE_ICO_PEND+'</span>Pendente';
+const badgeTxtCanc='<span class="badge-ic">'+BADGE_ICO_CANC+'</span>Cancelado';
+const badgeTxtAlerta='<span class="badge-ic">'+BADGE_ICO_ALERTA+'</span>Já existe';
+const badgeTxtNovo='<span class="badge-ic">'+BADGE_ICO_PAGO+'</span>Novo';
+const STAT_ICO_UNSAVED='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:-1.5px"><circle cx="12" cy="12" r="9"/></svg>';
+const STAT_ICO_SAVED='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:-1.5px"><circle cx="12" cy="12" r="9"/><path d="M8.3 12.5l2.4 2.4 5-5.4"/></svg>';
+const STAT_ICO_SAVE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:-1.5px"><path d="M5 4h11l3 3v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 4v5h7V4"/><path d="M8 21v-6h8v6"/></svg>';
 // ===== PWA MANIFEST =====
 (function(){
   const manifest = {
@@ -1286,6 +1299,9 @@ async function syncTudo(){
 // Compatibilidade: versões síncronas usam cache
 const gD=k=>_cache[k]||[];
 const escHtml=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// Exibição padronizada de nomes em CAIXA ALTA (ex: catálogo de suplementos importado da planilha)
+// como "Agar Agar" em vez de "AGAR AGAR" — só na tela, nunca altera o dado salvo.
+const nomeCap=s=>String(s||'').toLowerCase().replace(/(^|\s)\S/g,c=>c.toUpperCase());
 const sD=(k,v)=>{_cache[k]=v;dbSet(k,v);};
 const gC=k=>localStorage.getItem(k)||'';
 const sC=(k,v)=>localStorage.setItem(k,v);
@@ -1444,7 +1460,7 @@ let _autoRascTimer=null;
 function mudou(){
   _pacFormDirty=true;
   document.getElementById('saveSt').className='sst unsaved';
-  document.getElementById('saveSt').textContent='⚫ Não salvo';
+  document.getElementById('saveSt').innerHTML=STAT_ICO_UNSAVED+' Não salvo';
   atuWA();
   clearTimeout(_autoRascTimer);
   _autoRascTimer=setTimeout(()=>salvarRasc(true),1500);
@@ -1461,7 +1477,7 @@ function salvarRasc(auto){
   sD('rascunho',d);
   if(auto){
     const st=document.getElementById('saveSt');
-    if(st){st.className='sst';st.textContent='💾 Rascunho salvo automaticamente';}
+    if(st){st.className='sst';st.innerHTML=STAT_ICO_SAVE+' Rascunho salvo automaticamente';}
   } else {
     toast('💾 Rascunho salvo!');
   }
@@ -1591,7 +1607,7 @@ function limparForm(){
   showTab('tp',document.querySelector('#mTabs button'));
   _pacFormDirty=false;
   document.getElementById('saveSt').className='sst unsaved';
-  document.getElementById('saveSt').textContent='⚫ Não salvo';
+  document.getElementById('saveSt').innerHTML=STAT_ICO_UNSAVED+' Não salvo';
   document.getElementById('waBtn').style.display='none';renderEx();
 }
 
@@ -1632,7 +1648,7 @@ function verPac(id){
   document.getElementById('modC').innerHTML=`
     <div class="ph"><div class="ph-f">${fH}</div><div class="ph-i">
       <h3>${p.nome}</h3>
-      ${p.telefone?`<p><a href="${wa}" target="_blank" style="color:#25D366;font-weight:600;text-decoration:none"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.2-1.1L3 20l1.2-5.1"/></svg></span> ${p.telefone}</a></p>`:''}
+      ${p.telefone?`<p><a href="${wa}" target="_blank" style="color:#25D366;font-weight:600;text-decoration:none"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8.4 8.4 0 0 1-12.2 7.5L4 20l1.1-4.1a8.4 8.4 0 1 1 15.4-4.4Z"/><path d="M8.5 10.3c0 3.4 2.8 6.2 6.2 6.2"/></svg></span> ${p.telefone}</a></p>`:''}
       ${p.email?`<p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><rect x="3.5" y="5" width="17" height="14" rx="1.6"/><path d="M4 6.5l8 6 8-6"/></svg> ${p.email}</p>`:''}${p.profissao?`<p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><rect x="3" y="7.5" width="18" height="12" rx="1.6"/><path d="M8 7.5V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1.5M3 12.5h18"/></svg> ${p.profissao}</p>`:''}
     </div></div>
     ${p.queixa?`<div class="psec"><h4><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M12 11v6M9 14h6"/></svg></span>Queixa</h4><p style="font-size:12px">${p.queixa}</p><div class="pgrid" style="margin-top:6px">${c('Tempo',p.tempoQueixa)}${c('Intensidade',p.intensidade)}</div></div>`:''}
@@ -1642,7 +1658,7 @@ function verPac(id){
     ${p.fitoterapia?`<div class="psec"><h4><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-3 5-6 11-11"/></svg></span>Fitoterapia</h4><p style="font-size:12px">${p.fitoterapia}</p></div>`:''}
     ${exH}
     <div style="display:flex;gap:6px;justify-content:flex-end;margin-top:13px;flex-wrap:wrap">
-      ${wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.2-1.1L3 20l1.2-5.1"/></svg></span></a>`:''}
+      ${wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8.4 8.4 0 0 1-12.2 7.5L4 20l1.1-4.1a8.4 8.4 0 1 1 15.4-4.4Z"/><path d="M8.5 10.3c0 3.4 2.8 6.2 6.2 6.2"/></svg></span></a>`:''}
       <button class="btn btn-sec btn-sm" onclick="fMod()">Fechar</button>
       <button class="btn btn-pri btn-sm" onclick="fMod();editarPac('${p.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span> Editar</button>
     </div>`;
@@ -1658,7 +1674,7 @@ function editarPac(id){
     toast('✏️ Editando paciente','#1565C0');
     _pacFormDirty=false;
     document.getElementById('saveSt').className='sst saved';
-    document.getElementById('saveSt').textContent='✅ Salvo';
+    document.getElementById('saveSt').innerHTML=STAT_ICO_SAVED+' Salvo';
   },80);
 }
 
@@ -1787,10 +1803,10 @@ function atuFin(){
   ss.sort((a,b)=>new Date(b.data)-new Date(a.data));
   tb.innerHTML=ss.map(s=>{
     const bc=s.status==='pago'?'bp':s.status==='pendente'?'bpend':'bc';
-    const bt=s.status==='pago'?'✅ Pago':s.status==='pendente'?'⏳ Pendente':'❌ Cancelado';
+    const bt=s.status==='pago'?badgeTxtPago:s.status==='pendente'?badgeTxtPend:badgeTxtCanc;
     const wa=waUrl(s.pacienteTel||'');
     return`<tr><td style="white-space:nowrap">${fd(s.data)}</td>
-      <td>${s.pacienteNome}${wa!=='#'?` <a href="${wa}" target="_blank" class="btn btn-wa btn-sm" style="padding:2px 5px;font-size:10px"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.2-1.1L3 20l1.2-5.1"/></svg></span></a>`:''}</td>
+      <td>${s.pacienteNome}${wa!=='#'?` <a href="${wa}" target="_blank" class="btn btn-wa btn-sm" style="padding:2px 5px;font-size:10px"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8.4 8.4 0 0 1-12.2 7.5L4 20l1.1-4.1a8.4 8.4 0 1 1 15.4-4.4Z"/><path d="M8.5 10.3c0 3.4 2.8 6.2 6.2 6.2"/></svg></span></a>`:''}</td>
       <td style="font-size:12px">${s.procedimentos||'—'}</td>
       <td><strong>${fm(s.valor)}</strong></td>
       <td style="font-size:12px">${s.formaPgto||'-'}</td>
@@ -1861,12 +1877,12 @@ function renderVendasSuplementos(){
   const el=document.getElementById('listaVendasSup');
   if(!lista.length){el.innerHTML='<p style="font-size:12.5px;color:var(--ink-soft);padding:10px 0">Nenhuma venda de suplemento ainda.</p>';atuResumoGeralClinica();return;}
   el.innerHTML=lista.map(vd=>{
-    const resumoItens=vd.itens.map(i=>`${i.qtd}x ${i.nome}`).join(', ');
+    const resumoItens=vd.itens.map(i=>`${i.qtd}x ${nomeCap(i.nome)}`).join(', ');
     return`<div class="linha-fin">
       <div class="cat-ic">${catIconReceita}</div>
       <div class="info"><div class="desc">${escHtml(vd.pacienteNome)}</div><div class="det">${escHtml(resumoItens)} · ${fd(vd.data)}</div></div>
       <div class="valor-item green">${fm(vd.valor)}</div>
-      <span class="badge ${vd.status==='pago'?'bp':'bpend'}">${vd.status==='pago'?'✅ Pago':'⏳ Pendente'}</span>
+      <span class="badge ${vd.status==='pago'?'bp':'bpend'}">${vd.status==='pago'?badgeTxtPago:badgeTxtPend}</span>
       ${vd.status==='pendente'?`<button class="btn btn-pri btn-sm" onclick="mPagoSup('${vd.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span></button>`:''}
       <button class="btn btn-war btn-sm" title="Editar" onclick="abrirModalVendaSup('${vd.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span></button>
       <button class="btn btn-dan btn-sm" title="Cancelar venda" onclick="dVendaSup('${vd.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span></button>
@@ -1983,7 +1999,7 @@ function exportarVendasSupCsv(){
 function imprimirVendasSup(){
   const lista=gD('vendas_suplementos').sort((a,b)=>new Date(b.data)-new Date(a.data));
   if(!lista.length){toast('⚠️ Nenhuma venda para imprimir','#EF6C00');return;}
-  const linhas=lista.map(vd=>`<tr><td>${fd(vd.data)}</td><td>${escHtml(vd.pacienteNome)}</td><td>${escHtml(vd.itens.map(i=>`${i.qtd}x ${i.nome}`).join(', '))}</td><td style="text-align:right">${fm(vd.valor)}</td><td>${vd.status==='pago'?'Pago':'Pendente'}</td></tr>`).join('');
+  const linhas=lista.map(vd=>`<tr><td>${fd(vd.data)}</td><td>${escHtml(vd.pacienteNome)}</td><td>${escHtml(vd.itens.map(i=>`${i.qtd}x ${nomeCap(i.nome)}`).join(', '))}</td><td style="text-align:right">${fm(vd.valor)}</td><td>${vd.status==='pago'?'Pago':'Pendente'}</td></tr>`).join('');
   const win=window.open('','_blank','width=800,height=900');
   win.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Suplementos Vendidos</title>
   <style>@page{margin:10mm 12mm;size:A4}body{margin:0;padding:16px;font-family:Georgia,serif;color:#2C2A27}
@@ -2163,7 +2179,7 @@ function exportarSuplementosCsv(){
 }
 function imprimirSuplementos(){
   const lista=gD('suplementos').sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
-  const linhas=lista.map(p=>`<tr><td>${escHtml(p.nome)}</td><td>${escHtml(p.fornecedor||'-')}</td><td style="text-align:right">${fm(p.preco)}</td><td style="text-align:right${p.estoque<=0?';color:#c62828;font-weight:700':''}">${p.estoque}</td></tr>`).join('');
+  const linhas=lista.map(p=>`<tr><td>${escHtml(nomeCap(p.nome))}</td><td>${escHtml(p.fornecedor||'-')}</td><td style="text-align:right">${fm(p.preco)}</td><td style="text-align:right${p.estoque<=0?';color:#c62828;font-weight:700':''}">${p.estoque}</td></tr>`).join('');
   const win=window.open('','_blank','width=700,height=900');
   win.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Catálogo de Suplementos</title>
   <style>@page{margin:10mm 12mm;size:A4}body{margin:0;padding:16px;font-family:Georgia,serif;color:#2C2A27}
@@ -2189,7 +2205,7 @@ function renderSuplementos(){
   if(!tb)return;
   if(!lista.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;padding:18px;color:var(--txt-l)">Nenhum produto encontrado.</td></tr>';return;}
   tb.innerHTML=lista.map(p=>`<tr>
-    <td style="padding:6px 8px"><strong>${escHtml(p.nome)}</strong>${p.descricao?`<div style="font-size:11px;color:var(--txt-l)">${escHtml(p.descricao)}</div>`:''}</td>
+    <td style="padding:6px 8px"><span style="font-weight:600">${escHtml(nomeCap(p.nome))}</span>${p.descricao?`<div style="font-size:11px;color:var(--txt-l)">${escHtml(p.descricao)}</div>`:''}</td>
     <td style="padding:6px 8px;font-size:12px;color:var(--txt-l)">${escHtml(p.fornecedor||'-')}</td>
     <td style="padding:6px 8px;text-align:right">${fm(p.preco)}</td>
     <td style="padding:6px 8px;text-align:right;${p.estoque<=0?'color:var(--danger);font-weight:700':''}">${p.estoque}</td>
@@ -2333,7 +2349,7 @@ function novoNoDia(data){go('nova-sessao',null);setTimeout(()=>document.getEleme
 function verEvento(id){
   const s=gD('sessoes').find(x=>x.id===id);if(!s)return;
   const bc=s.status==='pago'?'bp':s.status==='pendente'?'bpend':'bc';
-  const bt=s.status==='pago'?'✅ Pago':s.status==='pendente'?'⏳ Pendente':'❌ Cancelado';
+  const bt=s.status==='pago'?badgeTxtPago:s.status==='pendente'?badgeTxtPend:badgeTxtCanc;
   const wa=waUrl(s.pacienteTel||'');
   const end=cfg('end')||'';
   document.getElementById('modC').innerHTML=`
@@ -2356,7 +2372,7 @@ function verEvento(id){
       <span style="color:var(--pri);font-size:20px">↗️</span>
     </a>`:''}
     <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end">
-      ${wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.2-1.1L3 20l1.2-5.1"/></svg></span> WhatsApp</a>`:''}
+      ${wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8.4 8.4 0 0 1-12.2 7.5L4 20l1.1-4.1a8.4 8.4 0 1 1 15.4-4.4Z"/><path d="M8.5 10.3c0 3.4 2.8 6.2 6.2 6.2"/></svg></span> WhatsApp</a>`:''}
       <button class="btn btn-cal btn-sm" onclick="abrirGA(gD('sessoes').find(x=>x.id===${s.id}))"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span> Agenda</button>
       ${s.status==='pendente'?`<button class="btn btn-pri btn-sm" onclick="mPago(${s.id});fMod();renderAg()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Pago</button>`:''}
       <button class="btn btn-war btn-sm" onclick="fMod();editarSessao(${s.id})"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span> Editar</button>
@@ -2404,7 +2420,7 @@ function renderAg(){
   if(!ss.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--txt-l);padding:28px">Nenhuma sessão</td></tr>';return;}
   tb.innerHTML=ss.map(s=>{
     const bc=s.status==='pago'?'bp':s.status==='pendente'?'bpend':'bc';
-    const bt=s.status==='pago'?'✅ Pago':s.status==='pendente'?'⏳ Pendente':'❌ Cancelado';
+    const bt=s.status==='pago'?badgeTxtPago:s.status==='pendente'?badgeTxtPend:badgeTxtCanc;
     return`<tr>
       <td style="white-space:nowrap;font-weight:600">${fd(s.data)}</td>
       <td style="color:var(--pri-d);font-weight:600">${s.horario||'—'}</td>
@@ -2660,7 +2676,7 @@ function filtrarDiagSup(){
   const usados=new Set(_diagSelecoes.suplementos.map(s=>String(s.id)));
   const itens=gD('suplementos').filter(p=>p.nome.toLowerCase().includes(q)&&!usados.has(String(p.id))).slice(0,12);
   if(!itens.length){lista.innerHTML='<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Nenhum produto encontrado</div>';lista.style.display='block';return;}
-  lista.innerHTML=itens.map(p=>`<div onclick="selecionarDiagSup('${p.id}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${escHtml(p.nome)}<span style="color:var(--txt-l);font-size:11px;margin-left:8px">${fm(p.preco)}</span></div>`).join('');
+  lista.innerHTML=itens.map(p=>`<div onclick="selecionarDiagSup('${p.id}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${escHtml(nomeCap(p.nome))}<span style="color:var(--txt-l);font-size:11px;margin-left:8px">${fm(p.preco)}</span></div>`).join('');
   lista.style.display='block';
 }
 function fecharDiagSupLista(){
@@ -2771,7 +2787,7 @@ function renderDiagPainel(){
     html+=`<div class="fc" style="border-left:5px solid var(--pri-deep)">
       <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v4l2 2v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-2Z"/><path d="M9 3h6M9 12h6"/></svg></span>Suplementos</div>
       ${_diagSelecoes.suplementos.map((s,idx)=>`<div class="linha-fin" style="padding:6px 0">
-        <div class="info"><div class="desc">${escHtml(s.nome)}</div><div class="det">${fm(s.precoUnit)} / un.</div></div>
+        <div class="info"><div class="desc">${escHtml(nomeCap(s.nome))}</div><div class="det">${fm(s.precoUnit)} / un.</div></div>
         <input type="number" min="1" value="${s.qtd}" style="width:55px" onchange="atualizarQtdDiagSup(${idx},this.value);renderDiagPainel()">
         <div class="valor-item">${fm(s.precoUnit*s.qtd)}</div>
         <button type="button" class="btn btn-dan btn-sm" onclick="removerDiagSup(${idx})">✕</button>
@@ -2787,7 +2803,7 @@ function renderDiagPainel(){
   if(_diagSelecoes.elementos.length)partes.push(`<strong>Elementos:</strong> ${_diagSelecoes.elementos.join(', ')}`);
   if(_diagSelecoes.pontos.length)partes.push(`<strong>Pontos:</strong> ${_diagSelecoes.pontos.join(', ')}`);
   if((_diagSelecoes.sistemasAbc||[]).length)partes.push(`<strong>Sistemas ABC:</strong> ${_diagSelecoes.sistemasAbc.join(', ')}`);
-  if((_diagSelecoes.suplementos||[]).length)partes.push(`<strong>Suplementos:</strong> ${_diagSelecoes.suplementos.map(s=>s.nome).join(', ')}`);
+  if((_diagSelecoes.suplementos||[]).length)partes.push(`<strong>Suplementos:</strong> ${_diagSelecoes.suplementos.map(s=>nomeCap(s.nome)).join(', ')}`);
   const emo=document.getElementById('diagEscalaEmo').value;
   if(emo)partes.push(`<strong>Estado emocional:</strong> ${emo}`);
   resumo.innerHTML=partes.map(p=>`<p style="margin-bottom:5px">${p}</p>`).join('');
@@ -2844,7 +2860,7 @@ function gerarHtmlDiag(diagRec){
     const totalSup=suplementosSel.reduce((a,s)=>a+s.precoUnit*s.qtd,0);
     blocos+=`<div style="border-left:4px solid #7a5c1e;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
       <div style="font-size:11.5pt;font-weight:700;color:#7a5c1e;margin-bottom:5px">Suplementos</div>
-      ${suplementosSel.map(s=>`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27">${s.qtd}x ${s.nome} — ${fm(s.precoUnit*s.qtd)}</div>`).join('')}
+      ${suplementosSel.map(s=>`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27">${s.qtd}x ${nomeCap(s.nome)} — ${fm(s.precoUnit*s.qtd)}</div>`).join('')}
       <div style="font-size:9.5pt;font-weight:700;color:#7a5c1e;margin-top:5px">Total: ${fm(totalSup)}</div>
     </div>`;
   }
@@ -3058,7 +3074,7 @@ function filtrarRxSup(){
   if(!q){lista.style.display='none';document.getElementById('rxSupSel').value='';return;}
   const itens=gD('suplementos').filter(p=>p.nome.toLowerCase().includes(q)).slice(0,12);
   if(!itens.length){lista.innerHTML='<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Nenhum produto encontrado</div>';lista.style.display='block';return;}
-  lista.innerHTML=itens.map(p=>`<div onclick="selecionarRxSup('${p.id}','${p.nome.replace(/'/g,"\\'")}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${escHtml(p.nome)}<span style="color:var(--txt-l);font-size:11px;margin-left:8px">${fm(p.preco)}${p.estoque<=0?' (sem estoque)':''}</span></div>`).join('');
+  lista.innerHTML=itens.map(p=>`<div onclick="selecionarRxSup('${p.id}','${p.nome.replace(/'/g,"\\'")}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${escHtml(nomeCap(p.nome))}<span style="color:var(--txt-l);font-size:11px;margin-left:8px">${fm(p.preco)}${p.estoque<=0?' (sem estoque)':''}</span></div>`).join('');
   lista.style.display='block';
 }
 function selecionarRxSup(id,nome){
@@ -3092,7 +3108,7 @@ function renderRxSupLista(){
   if(!_rxSuplementosSel.length){el.innerHTML='';return;}
   const total=_rxSuplementosSel.reduce((a,i)=>a+i.precoUnit*i.qtd,0);
   el.innerHTML=_rxSuplementosSel.map((i,idx)=>`<div class="linha-fin" style="padding:6px 10px">
-    <div class="info"><div class="desc">${escHtml(i.nome)}</div><div class="det">${i.qtd}x ${fm(i.precoUnit)}</div></div>
+    <div class="info"><div class="desc">${escHtml(nomeCap(i.nome))}</div><div class="det">${i.qtd}x ${fm(i.precoUnit)}</div></div>
     <div class="valor-item">${fm(i.precoUnit*i.qtd)}</div>
     <button type="button" class="btn btn-dan btn-sm" onclick="removerRxSuplemento(${idx})">✕</button>
   </div>`).join('')+`<div style="text-align:right;font-size:13px;font-weight:700;color:var(--pri-d);padding:6px 10px">Total Suplementos: ${fm(total)}</div>`;
@@ -3170,7 +3186,7 @@ function gerarHtmlRx(){
 
     ${_rxSuplementosSel.length?`<div style="text-align:center;margin-bottom:14px"><span style="display:inline-block;background:#7a5c1e;color:#fff;font-size:9pt;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 18px;border-radius:20px">Suplementos</span></div>
     <div style="background:#fff;border-radius:10px;padding:10px 18px;margin-bottom:18px;border:1px solid #EDE7DB">
-      <table style="width:100%;border-collapse:collapse">${_rxSuplementosSel.map(i=>`<tr><td style="padding:4px 4px;font-size:9.5pt;color:#2C2A27">${i.qtd}x ${i.nome}</td><td style="padding:4px 4px;font-size:9.5pt;color:#6b6358;text-align:right">${fm(i.precoUnit*i.qtd)}</td></tr>`).join('')}
+      <table style="width:100%;border-collapse:collapse">${_rxSuplementosSel.map(i=>`<tr><td style="padding:4px 4px;font-size:9.5pt;color:#2C2A27">${i.qtd}x ${nomeCap(i.nome)}</td><td style="padding:4px 4px;font-size:9.5pt;color:#6b6358;text-align:right">${fm(i.precoUnit*i.qtd)}</td></tr>`).join('')}
       <tr><td style="padding:6px 4px 0;font-weight:700;font-size:10pt;color:#7a5c1e;border-top:1px solid #EDE7DB">Total Suplementos</td><td style="padding:6px 4px 0;font-weight:700;font-size:10pt;color:#7a5c1e;text-align:right;border-top:1px solid #EDE7DB">${fm(_rxSuplementosSel.reduce((a,i)=>a+i.precoUnit*i.qtd,0))}</td></tr></table>
     </div>`:''}
 
@@ -3775,7 +3791,7 @@ function atuDash(){
   if(!ult.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--txt-l);padding:24px">Nenhuma sessão registrada</td></tr>';return;}
   tb.innerHTML=ult.map(s=>{
     const bc=s.status==='pago'?'bp':s.status==='pendente'?'bpend':'bc';
-    const bt=s.status==='pago'?'✅ Pago':s.status==='pendente'?'⏳ Pendente':'❌ Cancelado';
+    const bt=s.status==='pago'?badgeTxtPago:s.status==='pendente'?badgeTxtPend:badgeTxtCanc;
     return`<tr><td style="white-space:nowrap">${fd(s.data)}</td><td>${s.pacienteNome}</td><td style="font-size:12px">${s.procedimentos||'—'}</td><td>${fm(s.valor)}</td><td><span class="badge ${bc}">${bt}</span></td></tr>`;
   }).join('');
 }
@@ -3908,7 +3924,7 @@ function renderVCF(exSet){
         <td style="padding:6px 7px"><input type="checkbox" class="vcfCk" data-i="${idx}" ${e?'disabled':'checked'}></td>
         <td style="padding:6px 7px;font-size:12.5px">${c.nome}</td>
         <td style="padding:6px 7px;font-size:12px">${c.telefone||'-'}</td>
-        <td style="padding:6px 7px"><span class="badge ${e?'bpend':'bp'}">${e?'⚠️ Já existe':'✅ Novo'}</span></td>
+        <td style="padding:6px 7px"><span class="badge ${e?'bpend':'bp'}">${e?badgeTxtAlerta:badgeTxtNovo}</span></td>
       </tr>`;
     }).join('')}
     </tbody></table></div>
@@ -4037,7 +4053,7 @@ function renderP(lista){
       <div style="display:flex;gap:7px;flex-wrap:wrap">
         <button class="btn btn-sec btn-sm" onclick="selPacs(true)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/><path d="M7.5 12l3 3 6-6.5"/></svg></span>Todos desta página</button>
         <button class="btn btn-sec btn-sm" onclick="selPacs(false)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/></svg></span>Nenhum</button>
-        <button class="btn btn-pri btn-sm" onclick="marcarTriagemSel()">✅ Marcar como revisado</button>
+        <button class="btn btn-pri btn-sm" onclick="marcarTriagemSel()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>Marcar como revisado</button>
         <button class="btn btn-dan btn-sm" onclick="delPacsSel()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span> Excluir Selecionados</button>
       </div>`;
     const ph=document.querySelector('#pg-pacientes .page-header');
@@ -4054,7 +4070,7 @@ function renderP(lista){
   tb.innerHTML=pagina.map(p=>{
     const fH=p.foto?`<div class="fmini"><img src="${p.foto}"></div>`:`<div class="fmini"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:55%;height:55%;opacity:.55"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6"/></svg></div>`;
     const wa=waUrl(p.telefone);
-    const waB=wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 1 1-3.8-7.1"/><path d="M21 11.5c0 4.7-3.8 8.5-8.5 8.5a8.4 8.4 0 0 1-4.2-1.1L3 20l1.2-5.1"/></svg></span> ${p.telefone}</a>`:`<span style="color:var(--txt-l)">${p.telefone||'-'}</span>`;
+    const waB=wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8.4 8.4 0 0 1-12.2 7.5L4 20l1.1-4.1a8.4 8.4 0 1 1 15.4-4.4Z"/><path d="M8.5 10.3c0 3.4 2.8 6.2 6.2 6.2"/></svg></span> ${p.telefone}</a>`:`<span style="color:var(--txt-l)">${p.telefone||'-'}</span>`;
     return`<tr>
       <td style="padding:6px 8px;width:32px"><input type="checkbox" class="pacCk" data-id="${p.id}" onchange="atuDelBar()"></td>
       <td>${fH}</td>

@@ -21,7 +21,10 @@
       "Bash(cat:*)",
       "Bash(mkdir:*)",
       "Bash(rm -f *.json)",
-      "Bash(rm -f _tmp_*)"
+      "Bash(rm -f _tmp_*)",
+      "Bash(git remote:*)",
+      "mcp__computer-use__screenshot",
+      "mcp__Claude_in_Chrome__tabs_context_mcp"
     ],
     "deny": [
       "Bash(git push --force:*)",
