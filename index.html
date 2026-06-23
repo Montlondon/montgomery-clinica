@@ -1336,7 +1336,20 @@ const DICA_SWITCH_ID={'agenda':'swDicaAgenda','fin-comousar':'swDicaFinComousar'
 function aplicarDica(id){
   const oculta=dicaOculta(id);
   const el=document.getElementById('dica-'+id);
-  if(el)el.style.display=oculta?'none':'';
+  if(el){
+    el.style.display=oculta?'none':'';
+    let mini=document.getElementById('dica-mini-'+id);
+    if(!mini){
+      mini=document.createElement('button');
+      mini.id='dica-mini-'+id;
+      mini.className='btn btn-ghost btn-sm no-print';
+      mini.style.cssText='margin-bottom:14px';
+      mini.innerHTML='<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span>Mostrar dica';
+      mini.onclick=()=>toggleDicaCfg(id);
+      el.after(mini);
+    }
+    mini.style.display=oculta?'inline-flex':'none';
+  }
   const sw=document.getElementById(DICA_SWITCH_ID[id]||'');
   if(sw)sw.classList.toggle('off',oculta);
 }
