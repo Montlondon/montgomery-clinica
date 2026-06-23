@@ -2654,10 +2654,13 @@ const ABC_BONECO_SLOTS=[
   ['pernaDireita',145,228,'middle']
 ];
 function abcBonecoSVG(s,m){
+  // O destaque em azul é sempre o próprio sistema (s.id) — cada card mostra
+  // a si mesmo em destaque, não o meridiano buscado (m), pra ficar coerente
+  // em qualquer lugar que o boneco apareça (card principal ou relacionado).
   const pts=ABC_BONECO_SLOTS.map(([chave,x,y,anchor])=>{
     const v=s.pontos[chave];
     const arr=Array.isArray(v)?v:[v];
-    const hit=arr.includes(m);
+    const hit=arr.includes(s.id);
     return {chave,x,y,anchor,label:arr.join('/'),hit};
   });
   const linha=(x,y)=>`<line x1="100" y1="60" x2="${x}" y2="${y<130?y:60}"/>`;
@@ -2689,7 +2692,7 @@ function abcFiltrarMeridiano(m){
     const segHtml=labelsSeg.map(([lbl,chave])=>{
       const v=s.pontos[chave];
       const arr=Array.isArray(v)?v:[v];
-      const hit=arr.includes(m);
+      const hit=arr.includes(s.id);
       return `<div style="font-size:11.5px;${hit?'color:var(--pri-deep);font-weight:700':'color:var(--ink-soft)'}">${lbl}: ${arr.join(' / ')}</div>`;
     }).join('');
     const naAvaliacao=(_diagSelecoes.sistemasAbc||[]).includes(s.id);
