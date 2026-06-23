@@ -274,7 +274,7 @@ tr:hover td{background:#EEF2F7}
 .footer-addr{display:flex;justify-content:center;align-items:center;gap:5px}
 .footer-addr svg{width:12px;height:12px;flex-shrink:0}
 .footer-social{display:flex;justify-content:center;gap:10px;margin-top:8px;flex-wrap:wrap}
-.footer-social a{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:6px 13px;color:var(--ink);text-decoration:none;font-size:11.5px;font-weight:600;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;min-width:104px}
+.footer-social a{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:6px 13px;color:var(--ink);text-decoration:none;font-size:11.5px;font-weight:600;transition:all .15s;display:flex;align-items:center;gap:6px}
 .footer-social a svg{width:14px;height:14px}
 .footer-social a:hover{background:var(--pri-pale);color:var(--pri-deep);border-color:var(--pri-pale)}
 
@@ -305,6 +305,8 @@ tr:hover td{background:#EEF2F7}
   .ttb{flex-direction:column;align-items:stretch}
   .fg input,.fg select,.fg textarea{font-size:16px;padding:10px 11px}
   .fg label{font-size:13px}
+  .footer-social{flex-direction:column;align-items:stretch;max-width:280px;margin:8px auto 0}
+  .footer-social a{width:100%;justify-content:center}
 }
 @media(max-width:400px){.cards{grid-template-columns:1fr}}
 </style>
@@ -1163,18 +1165,20 @@ tr:hover td{background:#EEF2F7}
 
 <!-- RODAPÉ -->
 <footer class="site-footer no-print">
-  <div>© 2026 Montgomery Magalhães - Saúde Integrativa</div>
-  <div>Acupuntura • Quiropraxia • Psicanálise</div>
-  <div class="footer-addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-7.4 7-12a7 7 0 1 0-14 0c0 4.6 7 12 7 12Z"/><circle cx="12" cy="9" r="2.3"/></svg>R. Miro Ferreira de Oliveira, 110 - Adelaide Bessa, Itambacuri - MG, 39.830-000, Brasil</div>
   <div class="footer-social">
     <a href="https://linktr.ee/montgomerymagalhaes" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 4 6.2 4 9s-1.5 6.3-4 9c-2.5-2.7-4-6.2-4-9s1.5-6.3 4-9Z"/></svg>Linktree</a>
     <a href="https://instagram.com/montgomerymagalhaes" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="3.7"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none"/></svg>Instagram</a>
+    <a href="https://www.facebook.com/montgomery.magalhaes.3/" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M15 4h-2.5A3.5 3.5 0 0 0 9 7.5V10H6.5v3H9v7h3v-7h2.5l.5-3H12V7.7c0-.7.5-1.2 1.2-1.2H15Z"/></svg>Facebook</a>
     <a href="https://wa.me/5533" target="_blank" id="footerWA"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8.4 8.4 0 0 1-12.2 7.5L4 20l1.1-4.1a8.4 8.4 0 1 1 15.4-4.4Z"/><path d="M8.5 10.3c0 3.4 2.8 6.2 6.2 6.2"/></svg>WhatsApp</a>
+    <a href="#" onclick="go('configuracoes',null);return false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v2.3M12 19.2v2.3M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.3M19.2 12h2.3M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg>Configurações</a>
   </div>
+  <div style="margin-top:10px">© 2026 Montgomery Magalhães - Saúde Integrativa</div>
+  <div>Acupuntura • Quiropraxia • Psicanálise</div>
+  <div class="footer-addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-7.4 7-12a7 7 0 1 0-14 0c0 4.6 7 12 7 12Z"/><circle cx="12" cy="9" r="2.3"/></svg>R. Miro Ferreira de Oliveira, 110 - Adelaide Bessa, Itambacuri - MG, 39.830-000, Brasil</div>
   <div class="footer-links" style="margin-top:6px">
     <a href="#" onclick="mostrarPolitica();return false">Política de Privacidade</a>
     <span style="opacity:.4">•</span>
-    <a href="#" onclick="go('configuracoes',null);return false">Configurações</a>
+    <a href="https://linktr.ee/montgomerymagalhaes" target="_blank">Redes Sociais</a>
     <span style="opacity:.4">•</span>
     <a href="#" onclick="go('backup',null);return false">Backup</a>
   </div>
