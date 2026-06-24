@@ -301,7 +301,7 @@ tr:hover td{background:#EEF2F7}
 
 /* RESPONSIVE */
 @media(max-width:768px){
-  body{zoom:1.1;overflow-x:auto}
+  body{zoom:1.1;overflow-x:hidden}
   .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
   .main{margin-left:0;padding:10px 11px;padding-top:54px;padding-bottom:66px}
   .site-footer{margin-left:0;padding:12px}
@@ -1699,12 +1699,12 @@ function _diplomaOrdenados(){
 function renderSobre(){
   const g=document.getElementById('diplomaGrid');if(!g)return;
   const lista=_diplomaOrdenados();
-  g.innerHTML=lista.length?lista.map(d=>`<a href="${d.imagem}" target="_blank"><img src="${d.imagem}" alt="${escHtml(d.nome)}"><span>${escHtml(d.nome)}${d.dataConclusao?`<br><small>${escHtml(d.dataConclusao)}</small>`:''}</span></a>`).join(''):'<p style="font-size:12.5px;color:var(--ink-soft)">Nenhum diploma cadastrado ainda.</p>';
+  g.innerHTML=lista.length?lista.map(d=>`<a href="#" onclick="verExImg('${d.imagem}');return false"><img src="${d.imagem}" alt="${escHtml(d.nome)}"><span>${escHtml(d.nome)}${d.dataConclusao?`<br><small>${escHtml(d.dataConclusao)}</small>`:''}</span></a>`).join(''):'<p style="font-size:12.5px;color:var(--ink-soft)">Nenhum diploma cadastrado ainda.</p>';
 }
 function renderDiplomaGerenciarGrid(){
   const g=document.getElementById('diplomaGerenciarGrid');if(!g)return;
   const lista=_diplomaOrdenados();
-  g.innerHTML=lista.map(d=>`<div style="position:relative"><a href="${d.imagem}" target="_blank"><img src="${d.imagem}" alt="${escHtml(d.nome)}"><span>${escHtml(d.nome)}${d.dataConclusao?`<br><small>${escHtml(d.dataConclusao)}</small>`:''}</span></a><button class="ex-del" style="position:absolute;top:6px;right:6px" onclick="delDiploma(${d.id})">✕</button></div>`).join('');
+  g.innerHTML=lista.map(d=>`<div style="position:relative"><a href="#" onclick="verExImg('${d.imagem}');return false"><img src="${d.imagem}" alt="${escHtml(d.nome)}"><span>${escHtml(d.nome)}${d.dataConclusao?`<br><small>${escHtml(d.dataConclusao)}</small>`:''}</span></a><button class="ex-del" style="position:absolute;top:6px;right:6px" onclick="delDiploma(${d.id})">✕</button></div>`).join('');
 }
 
 // ===== EXAMES =====
@@ -2693,6 +2693,7 @@ function initDiagnostico(){
   renderPontosGrid();
   renderDiagPainel();
   initBalancoABC();
+  initBaguaWheel();
   if(!document.getElementById('diagDt').value)document.getElementById('diagDt').value=new Date().toISOString().split('T')[0];
   if(!_diagPacSel){
     document.getElementById('diagPacBusca').value='';
