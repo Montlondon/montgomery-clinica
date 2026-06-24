@@ -301,7 +301,8 @@ tr:hover td{background:#EEF2F7}
 
 /* RESPONSIVE */
 @media(max-width:768px){
-  body{zoom:1.1;overflow-x:hidden}
+  html{font-size:110%}
+  body{overflow-x:hidden}
   .sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}
   .main{margin-left:0;padding:10px 11px;padding-top:54px;padding-bottom:66px}
   .site-footer{margin-left:0;padding:12px}
@@ -3778,7 +3779,7 @@ function duplicarDiagHist(diagId,pacId){
     document.getElementById('diagEmoObs').value=diag.emoObs||'';
     const btn=document.getElementById('btnSalvarDiag');
     if(btn)btn.innerHTML=SAVE_ICON_HTML+' Salvar Avaliação';
-    renderElementosGrid();renderPontosGrid();renderDiagPainel();
+    renderElementosGrid();renderPontosGrid();initBaguaWheel();renderDiagPainel();
     toast('📋 Avaliação duplicada! Ajuste se necessário e salve.');
   },200);
 }
