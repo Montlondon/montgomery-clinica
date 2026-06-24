@@ -2787,7 +2787,7 @@ const ORGAO_ELEMENTO_COR=(()=>{
   m.PC=m.C;m.TA=m.ID; // Fogo Ministerial (Pericárdio/Triplo Aquecedor) usa o tom do Fogo
   return m;
 })();
-const BAGUA_ORDEM=['C','ID','B','R','PC','TA','VB','F','P','IG','E','BP'];
+const BAGUA_ORDEM=['C','ID','PC','TA','BP','E','P','IG','R','B','F','VB']; // agrupado por elemento (Fogo no topo, seguindo o ciclo de geração: Fogo→Terra→Metal→Água→Madeira)
 const BAGUA_HORAS={C:'11-13h',ID:'13-15h',B:'15-17h',R:'17-19h',PC:'19-21h',TA:'21-23h',VB:'23-01h',F:'01-03h',P:'03-05h',IG:'05-07h',E:'07-09h',BP:'09-11h'};
 function baguaOrgaoAtual(){
   const h=new Date().getHours();
@@ -2808,7 +2808,7 @@ function baguaWheelSVG(selecionado){
   const orgaoAtual=baguaOrgaoAtual();
   let circulos='';
   BAGUA_ORDEM.forEach((id,i)=>{
-    const ang=(-90+i*30)*Math.PI/180;
+    const ang=(-135+i*30)*Math.PI/180; // -135 (em vez de -90) centraliza o bloco do Fogo (4 nós) exatamente no topo
     const x=cx+Rmerid*Math.cos(ang),y=cy+Rmerid*Math.sin(ang);
     const s=sistemasABC.find(x=>x.id===id);
     const cor=ORGAO_ELEMENTO_COR[id]||'var(--pri-deep)';
