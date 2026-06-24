@@ -753,6 +753,13 @@ tr:hover td{background:#EEF2F7}
     </div>
   </div>
 
+  <div class="fc">
+    <div class="fst" style="font-family:'Lora',serif"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9"/><circle cx="12" cy="7.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="12" cy="16.5" r="1.3" fill="currentColor" stroke="none"/></svg></span>Bagua — Diagnóstico Circular</div>
+    <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Clique num meridiano da roda para ver o par Yin/Yang completo: boneco do combo de balanço de cada um e os sintomas/síndromes que indicam desequilíbrio.</p>
+    <div id="baguaWheel"></div>
+    <div id="baguaResultado" style="margin-top:14px"></div>
+  </div>
+
   <div id="diagPainel" style="display:none"></div>
 
   <div class="fc">
@@ -1381,6 +1388,7 @@ async function syncTudo(){
 // Compatibilidade: versões síncronas usam cache
 const gD=k=>_cache[k]||[];
 const escHtml=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const jsq=s=>"'"+String(s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'")+"'";
 // Exibição padronizada de nomes em CAIXA ALTA (ex: catálogo de suplementos importado da planilha)
 // como "Agar Agar" em vez de "AGAR AGAR" — só na tela, nunca altera o dado salvo.
 const nomeCap=s=>String(s||'').toLowerCase().replace(/(^|\s)\S/g,c=>c.toUpperCase());
@@ -1556,7 +1564,7 @@ function go(p,el){
     if(el){
       _diagEditandoId=null;
       _diagPacSel=null;
-      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[]};
+      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],bagua:[]};
       _diagJaSalvo=false;
       document.getElementById('diagPacBusca').value='';
       document.getElementById('diagPacId').value='';
@@ -2683,7 +2691,7 @@ function fecharRxPacLista(){
 let _diagPacSel=null;
 let _diagJaSalvo=false;
 let _diagEditandoId=null; // id do diagnóstico em edição (null = nova avaliação)
-let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[]}; // guarda o que foi clicado nesta avaliação + anotações por elemento
+let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],bagua:[]}; // guarda o que foi clicado nesta avaliação + anotações por elemento
 
 // Dados (bancoIntegrativoCompleto, CATALOGO_SUPLEMENTOS_INICIAL, sistemasABC) movidos para dados-clinicos.js
 
@@ -2767,6 +2775,109 @@ function abcBonecoSVG(s,m){
     ${pts.map(p=>`<circle cx="${p.x}" cy="${p.y}" r="13" fill="${p.hit?'var(--pri-deep)':'var(--surface)'}" stroke="${p.hit?'var(--pri-deep)':'var(--ink-soft)'}" stroke-width="2"/>
       <text x="${p.x}" y="${p.y+4}" text-anchor="middle" font-size="11" font-weight="700" font-family="Inter,sans-serif" fill="${p.hit?'#fff':'var(--ink)'}" stroke="none">${p.label}</text>`).join('')}
   </svg>`;
+}
+// ===== BAGUA — diagnóstico circular (Yin/Yang) =====
+const PAR_ORGANO={P:'IG',IG:'P',C:'ID',ID:'C',BP:'E',E:'BP',R:'B',B:'R',F:'VB',VB:'F',PC:'TA',TA:'PC'};
+const ORGAO_ELEMENTO_COR=(()=>{
+  const m={};
+  Object.keys(bancoIntegrativoCompleto.meridianosPorElemento).forEach(el=>{
+    const cor=bancoIntegrativoCompleto.matrizCincoElementos[el].cor;
+    bancoIntegrativoCompleto.meridianosPorElemento[el].forEach(id=>m[id]=cor);
+  });
+  m.PC=m.C;m.TA=m.ID; // Fogo Ministerial (Pericárdio/Triplo Aquecedor) usa o tom do Fogo
+  return m;
+})();
+const BAGUA_ORDEM=['C','ID','B','R','PC','TA','VB','F','P','IG','E','BP'];
+const BAGUA_HORAS={C:'11-13h',ID:'13-15h',B:'15-17h',R:'17-19h',PC:'19-21h',TA:'21-23h',VB:'23-01h',F:'01-03h',P:'03-05h',IG:'05-07h',E:'07-09h',BP:'09-11h'};
+function baguaOrgaoAtual(){
+  const h=new Date().getHours();
+  for(let i=0;i<12;i++){
+    const ini=(11+i*2)%24,fim=(ini+2)%24;
+    if(fim>ini?(h>=ini&&h<fim):(h>=ini||h<fim))return BAGUA_ORDEM[i];
+  }
+  return BAGUA_ORDEM[0];
+}
+function baguaBonecoQuiroSVG(cor){
+  return `<g transform="translate(190,178)" stroke="${cor}" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="0" cy="-26" r="7" fill="${cor}" stroke="none"/>
+    <path d="M0 -19 C2 -8 2 4 0 16 M0 -10 C-10 -6 -14 0 -16 6 M0 -10 C10 -6 14 0 16 6 M0 16 C-3 26 -6 32 -9 38 M0 16 C3 26 6 32 9 38"/>
+  </g>`;
+}
+function baguaWheelSVG(selecionado){
+  const cx=190,cy=190,Rmerid=145;
+  const orgaoAtual=baguaOrgaoAtual();
+  let circulos='';
+  BAGUA_ORDEM.forEach((id,i)=>{
+    const ang=(-90+i*30)*Math.PI/180;
+    const x=cx+Rmerid*Math.cos(ang),y=cy+Rmerid*Math.sin(ang);
+    const s=sistemasABC.find(x=>x.id===id);
+    const cor=ORGAO_ELEMENTO_COR[id]||'var(--pri-deep)';
+    const on=selecionado&&(id===selecionado||PAR_ORGANO[selecionado]===id);
+    const plantao=id===orgaoAtual;
+    circulos+=`${plantao?`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="25" fill="none" stroke="${cor}" stroke-width="1.5" stroke-dasharray="3,3" opacity=".7"/>`:''}
+      <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="20" fill="${cor}" stroke="${on?'#2C2A27':'#fff'}" stroke-width="${on?3:1.5}" style="cursor:pointer" onclick="baguaSelecionar('${id}')"/>
+      <text x="${x.toFixed(1)}" y="${(y+4).toFixed(1)}" text-anchor="middle" font-size="12.5" font-weight="700" font-family="Inter,sans-serif" fill="#fff" style="cursor:pointer;pointer-events:none">${id}</text>`;
+  });
+  const corCentro=selecionado?(ORGAO_ELEMENTO_COR[selecionado]||'var(--pri-deep)'):'var(--ink-soft)';
+  const totalFicha=(typeof _diagSelecoes!=='undefined'&&_diagSelecoes.sistemasAbc)?_diagSelecoes.sistemasAbc.length:0;
+  const sAtual=sistemasABC.find(s=>s.id===orgaoAtual);
+  return `<svg viewBox="0 0 380 380" style="width:100%;max-width:380px;display:block;margin:0 auto">
+    <circle cx="190" cy="190" r="60" fill="var(--cream)" stroke="var(--brd)" stroke-width="1.5"/>
+    ${baguaBonecoQuiroSVG(corCentro)}
+    <text x="190" y="221" text-anchor="middle" font-size="9.5" font-family="Inter,sans-serif" fill="var(--ink-soft)">de plantão: ${orgaoAtual}${sAtual?' · '+BAGUA_HORAS[orgaoAtual]:''}</text>
+    ${totalFicha?`<circle cx="237" cy="143" r="13" fill="var(--pri-deep)"/><text x="237" y="147" text-anchor="middle" font-size="11" font-weight="700" font-family="Inter,sans-serif" fill="#fff">${totalFicha}</text>`:''}
+    ${circulos}
+  </svg>`;
+}
+function baguaSelecionar(id){
+  _baguaSel=id;
+  const par=PAR_ORGANO[id];
+  const sYin=sistemasABC.find(s=>s.id===id).categoria.includes('Yin')?sistemasABC.find(s=>s.id===id):sistemasABC.find(s=>s.id===par);
+  const sYang=sYin.id===id?sistemasABC.find(s=>s.id===par):sistemasABC.find(s=>s.id===id);
+  const cartao=(s,tipo)=>{
+    const m=s.id;
+    const outros=abcGrupoDisplay(s).filter(g=>g!==m);
+    return `<div class="abc-card" style="${tipo==='yin'?'background:var(--cream)':'border-width:2px'}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+        <div>
+          <div style="font-family:'Lora',serif;font-weight:600;font-size:14px;color:var(--pri-deep)">${tipo==='yin'?'☯ Yin (interno) — ':'☯ Yang (externo) — '}Sistema ${s.id} — ${s.elemento}</div>
+          <div style="font-size:11px;color:var(--ink-soft);margin-bottom:8px">${s.categoria}</div>
+        </div>
+      </div>
+      ${abcBonecoSVG(s,m)}
+      <div style="font-size:12px;margin-bottom:8px;text-align:center"><strong>Meridianos de balanço:</strong> ${outros.join(', ')||'—'}</div>
+      <div style="font-size:11.5px;color:var(--ink-soft);margin-bottom:6px"><strong>Sintomas/síndromes (clique para adicionar à ficha):</strong></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        ${(s.sindromes||[]).map(sd=>{
+          const on=baguaSindromeMarcada(m,sd);
+          return `<span onclick="baguaToggleSindrome('${m}',${jsq(sd)})" style="cursor:pointer;font-size:11px;padding:4px 9px;border-radius:8px;border:1px solid ${on?'var(--pri-deep)':'var(--line)'};background:${on?'var(--pri-deep)':'var(--surface)'};color:${on?'#fff':'var(--ink)'}">${on?'✓ ':''}${escHtml(sd)}</span>`;
+        }).join('')}
+      </div>
+    </div>`;
+  };
+  document.getElementById('baguaWheel').innerHTML=baguaWheelSVG(id);
+  document.getElementById('baguaResultado').innerHTML=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">${cartao(sYin,'yin')}${cartao(sYang,'yang')}</div>`;
+}
+function baguaSindromeMarcada(meridiano,sindrome){
+  return (_diagSelecoes.bagua||[]).some(b=>b.meridiano===meridiano&&b.sindrome===sindrome);
+}
+function baguaToggleSindrome(meridiano,sindrome){
+  if(!_diagSelecoes.bagua)_diagSelecoes.bagua=[];
+  const i=_diagSelecoes.bagua.findIndex(b=>b.meridiano===meridiano&&b.sindrome===sindrome);
+  if(i>=0)_diagSelecoes.bagua.splice(i,1);
+  else _diagSelecoes.bagua.push({meridiano,sindrome});
+  if(_baguaSel)baguaSelecionar(_baguaSel);
+  renderDiagPainel();
+}
+function baguaRemoverSindrome(meridiano,sindrome){
+  _diagSelecoes.bagua=(_diagSelecoes.bagua||[]).filter(b=>!(b.meridiano===meridiano&&b.sindrome===sindrome));
+  if(_baguaSel)baguaSelecionar(_baguaSel);
+  renderDiagPainel();
+}
+let _baguaSel=null;
+function initBaguaWheel(){
+  const el=document.getElementById('baguaWheel');
+  if(el)el.innerHTML=baguaWheelSVG(_baguaSel);
 }
 function abcFiltrarMeridiano(m){
   abcRenderMeridianoGrid(m);
@@ -3046,7 +3157,7 @@ function montarTabelaBalance(nomeElemento){
 function renderDiagPainel(){
   const painel=document.getElementById('diagPainel');
   const resumoBox=document.getElementById('diagResumoBox');
-  const temAlgo=_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length||(_diagSelecoes.auriculo||[]).length;
+  const temAlgo=_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length||(_diagSelecoes.auriculo||[]).length||(_diagSelecoes.bagua||[]).length;
   if(!temAlgo){painel.style.display='none';resumoBox.style.display='none';return;}
   painel.style.display='block';
   resumoBox.style.display='block';
@@ -3121,6 +3232,15 @@ function renderDiagPainel(){
       </div>
     </div>`;
   }
+  if((_diagSelecoes.bagua||[]).length){
+    html+=`<div class="fc" style="border-left:5px solid var(--pri-deep)">
+      <div class="fst" style="font-family:'Lora',serif"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9"/></svg></span>Bagua — Acupuntura</div>
+      ${_diagSelecoes.bagua.map(b=>`<div class="linha-fin" style="padding:5px 0">
+        <div class="info"><div class="desc">${escHtml(b.sindrome)}</div><div class="det">Meridiano ${escHtml(b.meridiano)}</div></div>
+        <button type="button" class="btn btn-dan btn-sm" onclick="baguaRemoverSindrome('${b.meridiano}',${jsq(b.sindrome)})">✕</button>
+      </div>`).join('')}
+    </div>`;
+  }
   painel.innerHTML=html;
 
   // Resumo compacto
@@ -3131,6 +3251,7 @@ function renderDiagPainel(){
   if((_diagSelecoes.sistemasAbc||[]).length)partes.push(`<strong>Sistemas ABC:</strong> ${_diagSelecoes.sistemasAbc.join(', ')}`);
   if((_diagSelecoes.suplementos||[]).length)partes.push(`<strong>Suplementos:</strong> ${_diagSelecoes.suplementos.map(s=>nomeCap(s.nome)).join(', ')}`);
   if((_diagSelecoes.auriculo||[]).length)partes.push(`<strong>Auriculoterapia:</strong> ${_diagSelecoes.auriculo.map(id=>auriculoPontosPorId[id]?auriculoPontosPorId[id].nome:id).join(', ')}`);
+  if((_diagSelecoes.bagua||[]).length)partes.push(`<strong>Bagua:</strong> ${_diagSelecoes.bagua.map(b=>b.sindrome).join(', ')}`);
   const emo=document.getElementById('diagEscalaEmo').value;
   if(emo)partes.push(`<strong>Estado emocional:</strong> ${emo}`);
   resumo.innerHTML=partes.map(p=>`<p style="margin-bottom:5px">${p}</p>`).join('');
@@ -3152,6 +3273,7 @@ function gerarHtmlDiag(diagRec){
   const sistemasAbcSel=diagRec?(diagRec.sistemasAbc||[]):(_diagSelecoes.sistemasAbc||[]);
   const suplementosSel=diagRec?(diagRec.suplementos||[]):(_diagSelecoes.suplementos||[]);
   const auriculoSel=diagRec?(diagRec.auriculo||[]):(_diagSelecoes.auriculo||[]);
+  const baguaSel=diagRec?(diagRec.bagua||[]):(_diagSelecoes.bagua||[]);
   const emo=diagRec?diagRec.escalaEmocional:document.getElementById('diagEscalaEmo').value;
   const emoObs=diagRec?diagRec.emoObs:document.getElementById('diagEmoObs').value;
 
@@ -3197,6 +3319,12 @@ function gerarHtmlDiag(diagRec){
     blocos+=`<div style="border-left:4px solid #1E3A5F;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
       <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">Auriculoterapia</div>
       <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27">${nomesAuriculo}</div>
+    </div>`;
+  }
+  if(baguaSel.length){
+    blocos+=`<div style="border-left:4px solid #1E3A5F;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
+      <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">Bagua — Acupuntura</div>
+      <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27">${baguaSel.map(b=>`${escHtml(b.sindrome)} (${escHtml(b.meridiano)})`).join(', ')}</div>
     </div>`;
   }
   if(!blocos)blocos='<div style="color:#aaa;font-style:italic;padding:14px;text-align:center">Nenhum item selecionado na avaliação.</div>';
@@ -3273,14 +3401,14 @@ function fecharDiagPacLista(){
 
 function limparDiagnostico(){
   if(!confirm('Limpar toda a avaliação atual?'))return;
-  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[]};
+  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],bagua:[]};
   document.getElementById('diagEscalaEmo').value='';
   document.getElementById('diagEmoObs').value='';
   _diagJaSalvo=false;
   _diagEditandoId=null;
   const btn=document.getElementById('btnSalvarDiag');
   if(btn)btn.innerHTML=SAVE_ICON_HTML+' Salvar Avaliação';
-  renderElementosGrid();renderPontosGrid();renderDiagPainel();
+  renderElementosGrid();renderPontosGrid();initBaguaWheel();renderDiagPainel();
 }
 
 function enviarDiagParaRx(){
@@ -3327,6 +3455,7 @@ async function salvarDiagnostico(){
     sistemasAbc:[...(_diagSelecoes.sistemasAbc||[])],
     suplementos:[...(_diagSelecoes.suplementos||[])],
     auriculo:[...(_diagSelecoes.auriculo||[])],
+    bagua:[...(_diagSelecoes.bagua||[])],
     escalaEmocional:document.getElementById('diagEscalaEmo').value,
     emoObs:document.getElementById('diagEmoObs').value
   };
@@ -3372,7 +3501,7 @@ function editarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])]};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],bagua:[...(diag.bagua||[])]};
   _diagEditandoId=diag.id;
   _diagJaSalvo=false;
   go('diagnostico',null);
@@ -3384,7 +3513,7 @@ function editarDiagHist(diagId,pacId){
     document.getElementById('diagEmoObs').value=diag.emoObs||'';
     const btn=document.getElementById('btnSalvarDiag');
     if(btn)btn.innerHTML=EDIT_ICON_HTML+' Salvar Alterações';
-    renderElementosGrid();renderPontosGrid();renderDiagPainel();
+    renderElementosGrid();renderPontosGrid();initBaguaWheel();renderDiagPainel();
     toast('✏️ Editando avaliação. Altere o que precisar e salve.','#1565C0');
   },200);
 }
@@ -3766,7 +3895,7 @@ function duplicarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])]};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],bagua:[...(diag.bagua||[])]};
   _diagEditandoId=null;
   _diagJaSalvo=false;
   go('diagnostico',null);
