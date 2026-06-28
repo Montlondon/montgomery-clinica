@@ -2716,6 +2716,38 @@ function initDiagnostico(){
 // ===== BALANÇO MÉTODO — SISTEMAS ABC (leitura de sistemasABC, definido mais abaixo) =====
 const MERIDIANOS_12=['P','IG','E','BP','C','ID','B','R','PC','TA','VB','F'];
 const ELEMENTO_MERIDIANO_ABC={'Madeira':'F','Fogo':'C','Terra':'BP','Metal':'P','Água':'R'};
+// Correspondência Wu Xing padrão dos 12 meridianos (conhecimento geral de MTC, não específico de um curso)
+const MERIDIANO_ELEMENTO_WUXING={'F':'Madeira','VB':'Madeira','C':'Fogo','ID':'Fogo','PC':'Fogo','TA':'Fogo','BP':'Terra','E':'Terra','P':'Metal','IG':'Metal','R':'Água','B':'Água'};
+function meridianosDoCanal(canalStr){
+  if(!canalStr)return[];
+  return canalStr.split(/\s+e\s+|,/).map(c=>c.trim().replace(/^TR$/,'TA')).filter(c=>MERIDIANO_ELEMENTO_WUXING[c]);
+}
+function calcularSugestoesCruzadas(){
+  const meridianosFoco=new Set();
+  (_diagSelecoes.pontos||[]).forEach(nome=>{
+    const p=bancoIntegrativoCompleto.pontosCorpo[nome];
+    meridianosDoCanal(p&&p.canal).forEach(m=>meridianosFoco.add(m));
+  });
+  (_diagSelecoes.elementos||[]).forEach(nome=>{
+    if(ELEMENTO_MERIDIANO_ABC[nome])meridianosFoco.add(ELEMENTO_MERIDIANO_ABC[nome]);
+  });
+  (_diagSelecoes.sistemasAbc||[]).forEach(id=>meridianosFoco.add(id));
+  return [...meridianosFoco].map(m=>{
+    const elemento=MERIDIANO_ELEMENTO_WUXING[m];
+    const sistema=sistemasABC.find(s=>s.id===m);
+    const orgao=sistema?sistema.elemento:m;
+    const elementoJaNaFicha=elemento&&(_diagSelecoes.elementos||[]).includes(elemento);
+    const sistemaJaNaFicha=(_diagSelecoes.sistemasAbc||[]).includes(m);
+    const auriculoSugerido=auriculoPontos.filter(p=>!_diagSelecoes.auriculo.includes(p.id)&&(p.nome.toLowerCase().includes(orgao.toLowerCase())||p.indicacoes.toLowerCase().includes(orgao.toLowerCase()))).slice(0,3);
+    return {meridiano:m,orgao,elemento,elementoJaNaFicha,sistema,sistemaJaNaFicha,auriculoSugerido};
+  }).filter(s=>!s.elementoJaNaFicha||!s.sistemaJaNaFicha||s.auriculoSugerido.length);
+}
+function adicionarAuriculoSugerido(id){
+  if(!_diagSelecoes.auriculo)_diagSelecoes.auriculo=[];
+  if(!_diagSelecoes.auriculo.includes(id))_diagSelecoes.auriculo.push(id);
+  _diagJaSalvo=false;
+  renderDiagPainel();
+}
 function abcGrupo(s){
   const vals=[s.id,s.pontos.bracoEsquerdo,s.pontos.bracoDireito,s.pontos.pernaEsquerda,s.pontos.pernaDireita];
   let flat=[];
@@ -3317,6 +3349,19 @@ function renderDiagPainel(){
       ${_diagSelecoes.bagua.map(b=>`<div class="linha-fin" style="padding:5px 0">
         <div class="info"><div class="desc">${escHtml(b.sindrome)}</div><div class="det">Meridiano ${escHtml(b.meridiano)}</div></div>
         <button type="button" class="btn btn-dan btn-sm" onclick="baguaRemoverSindrome('${b.meridiano}',${jsq(b.sindrome)})">✕</button>
+      </div>`).join('')}
+    </div>`;
+  }
+  const sugestoes=calcularSugestoesCruzadas();
+  if(sugestoes.length){
+    html+=`<div class="fc" style="border-left:5px solid var(--pri);background:var(--pri-l)">
+      <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="3"/><circle cx="17" cy="17" r="3"/><path d="M9.1 9.1l5.8 5.8"/></svg></span>Sugestões cruzadas</div>
+      <p style="font-size:11.5px;color:var(--txt-l);margin-bottom:8px">A partir do que já está na ficha, estes itens de outros módulos podem se relacionar pelo mesmo meridiano — confira e adicione só o que fizer sentido pra este paciente.</p>
+      ${sugestoes.map(s=>`<div style="padding:7px 0;border-bottom:1px solid var(--brd);font-size:12px">
+        <strong>${escHtml(s.meridiano)} (${escHtml(s.orgao)})</strong>
+        ${s.elemento&&!s.elementoJaNaFicha?` · Elemento <strong>${escHtml(s.elemento)}</strong> <button type="button" class="btn btn-sec btn-sm" style="padding:2px 8px;font-size:10.5px" onclick="toggleElemento('${s.elemento}')">+ adicionar</button>`:''}
+        ${s.sistema&&!s.sistemaJaNaFicha?` · Sistema ABC <strong>${escHtml(s.sistema.id)}</strong> <button type="button" class="btn btn-sec btn-sm" style="padding:2px 8px;font-size:10.5px" onclick="toggleSistemaAbc('${s.sistema.id}','${s.sistema.id}')">+ adicionar</button>`:''}
+        ${s.auriculoSugerido.length?` · Auriculoterapia: ${s.auriculoSugerido.map(p=>`${escHtml(p.nome)} <button type="button" class="btn btn-sec btn-sm" style="padding:2px 8px;font-size:10.5px" onclick="adicionarAuriculoSugerido('${p.id}')">+ adicionar</button>`).join(', ')}`:''}
       </div>`).join('')}
     </div>`;
   }
