@@ -740,7 +740,7 @@ tr:hover td{background:#EEF2F7}
     <div id="abcModoTabela">
       <div class="tw tw-zebra"><div style="overflow-x:auto">
         <table>
-          <thead><tr><th>Sistema</th><th>Meridianos do grupo</th><th>Relação / Lógica</th></tr></thead>
+          <thead><tr><th>Sistema</th><th>Meridianos do grupo</th><th>Relação / Lógica</th><th>Síndromes (clique para tratar)</th></tr></thead>
           <tbody id="abcTabelaBody"></tbody>
         </table>
       </div></div>
@@ -2731,6 +2731,10 @@ function abcRenderTabela(){
     <td><strong>${s.id}</strong> · ${s.elemento}<br><span style="font-size:10.5px;color:var(--ink-soft)">${s.categoria}</span></td>
     <td>${abcGrupoDisplay(s).join(', ')}</td>
     <td style="font-size:11.5px;color:var(--ink-soft);max-width:360px">${s.protocolo}</td>
+    <td style="min-width:220px"><div style="display:flex;gap:4px;flex-wrap:wrap">${(s.sindromes||[]).map(sd=>{
+      const on=baguaSindromeMarcada(s.id,sd);
+      return `<span onclick="baguaToggleSindrome('${s.id}',${jsq(sd)})" style="cursor:pointer;font-size:10.5px;padding:3px 7px;border-radius:7px;border:1px solid ${on?'var(--pri-deep)':'var(--line)'};background:${on?'var(--pri-deep)':'var(--surface)'};color:${on?'#fff':'var(--ink)'}">${on?'✓ ':''}${escHtml(sd)}</span>`;
+    }).join('')}</div></td>
   </tr>`).join('');
 }
 function abcRenderMeridianoGrid(sel){
@@ -2798,9 +2802,18 @@ function baguaOrgaoAtual(){
   return BAGUA_ORDEM[0];
 }
 function baguaBonecoQuiroSVG(cor){
-  return `<g transform="translate(190,178)" stroke="${cor}" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <circle cx="0" cy="-26" r="7" fill="${cor}" stroke="none"/>
-    <path d="M0 -19 C2 -8 2 4 0 16 M0 -10 C-10 -6 -14 0 -16 6 M0 -10 C10 -6 14 0 16 6 M0 16 C-3 26 -6 32 -9 38 M0 16 C3 26 6 32 9 38"/>
+  // Mesmo boneco do Balanço Método (abcBonecoSVG), só reduzido pro centro da roda do Bagua
+  return `<g transform="translate(158,140) scale(0.32)" fill="none" stroke="${cor}" stroke-width="6" stroke-linecap="round">
+    <circle cx="100" cy="30" r="14"/>
+    <circle cx="95" cy="28" r="1.4" fill="${cor}" stroke="none"/>
+    <circle cx="105" cy="28" r="1.4" fill="${cor}" stroke="none"/>
+    <line x1="100" y1="30" x2="100" y2="33" stroke-width="6"/>
+    <path d="M95 36q5 4 10 0" stroke-width="6"/>
+    <line x1="100" y1="44" x2="100" y2="140"/>
+    <line x1="100" y1="60" x2="40" y2="22"/>
+    <line x1="100" y1="60" x2="160" y2="22"/>
+    <line x1="100" y1="140" x2="55" y2="228"/>
+    <line x1="100" y1="140" x2="145" y2="228"/>
   </g>`;
 }
 function baguaWheelSVG(selecionado){
@@ -2818,16 +2831,21 @@ function baguaWheelSVG(selecionado){
       <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="20" fill="${cor}" stroke="${on?'#2C2A27':'#fff'}" stroke-width="${on?3:1.5}" style="cursor:pointer" onclick="baguaSelecionar('${id}')"/>
       <text x="${x.toFixed(1)}" y="${(y+4).toFixed(1)}" text-anchor="middle" font-size="12.5" font-weight="700" font-family="Inter,sans-serif" fill="#fff" style="cursor:pointer;pointer-events:none">${id}</text>`;
   });
-  const corCentro=selecionado?(ORGAO_ELEMENTO_COR[selecionado]||'var(--pri-deep)'):'var(--ink-soft)';
   const totalFicha=(typeof _diagSelecoes!=='undefined'&&_diagSelecoes.sistemasAbc)?_diagSelecoes.sistemasAbc.length:0;
   const sAtual=sistemasABC.find(s=>s.id===orgaoAtual);
+  const sCentro=selecionado?sistemasABC.find(s=>s.id===selecionado):null;
+  const bonecoCentro=sCentro?`<svg x="144" y="132" width="92" height="115" viewBox="0 0 200 250" fill="none" stroke="var(--ink-soft)" stroke-width="3" stroke-linecap="round">${abcBonecoInner(sCentro,selecionado)}</svg>`:baguaBonecoQuiroSVG('var(--ink-soft)');
   return `<svg viewBox="0 0 380 380" style="width:100%;max-width:380px;display:block;margin:0 auto">
-    <circle cx="190" cy="190" r="60" fill="var(--cream)" stroke="var(--brd)" stroke-width="1.5"/>
-    ${baguaBonecoQuiroSVG(corCentro)}
-    <text x="190" y="221" text-anchor="middle" font-size="9.5" font-family="Inter,sans-serif" fill="var(--ink-soft)">de plantão: ${orgaoAtual}${sAtual?' · '+BAGUA_HORAS[orgaoAtual]:''}</text>
+    <circle cx="190" cy="190" r="60" fill="var(--bg)" stroke="var(--line)" stroke-width="1.5"/>
+    ${bonecoCentro}
     ${totalFicha?`<circle cx="237" cy="143" r="13" fill="var(--pri-deep)"/><text x="237" y="147" text-anchor="middle" font-size="11" font-weight="700" font-family="Inter,sans-serif" fill="#fff">${totalFicha}</text>`:''}
     ${circulos}
-  </svg>`;
+  </svg>
+  <div style="text-align:center;font-size:10.5px;color:var(--ink-soft);font-family:Inter,sans-serif;margin-top:4px">de plantão: ${orgaoAtual}${sAtual?' · '+BAGUA_HORAS[orgaoAtual]:''}</div>`;
+}
+function abcBonecoInner(s,m){
+  const full=abcBonecoSVG(s,m);
+  return full.slice(full.indexOf('>')+1,full.lastIndexOf('</svg>'));
 }
 function baguaSelecionar(id){
   _baguaSel=id;
@@ -2867,11 +2885,13 @@ function baguaToggleSindrome(meridiano,sindrome){
   if(i>=0)_diagSelecoes.bagua.splice(i,1);
   else _diagSelecoes.bagua.push({meridiano,sindrome});
   if(_baguaSel)baguaSelecionar(_baguaSel);
+  if(document.getElementById('abcTabelaBody'))abcRenderTabela();
   renderDiagPainel();
 }
 function baguaRemoverSindrome(meridiano,sindrome){
   _diagSelecoes.bagua=(_diagSelecoes.bagua||[]).filter(b=>!(b.meridiano===meridiano&&b.sindrome===sindrome));
   if(_baguaSel)baguaSelecionar(_baguaSel);
+  if(document.getElementById('abcTabelaBody'))abcRenderTabela();
   renderDiagPainel();
 }
 let _baguaSel=null;
