@@ -651,6 +651,11 @@ tr:hover td{background:#EEF2F7}
       </div>
       <div class="fg"><label>Data</label><input type="date" id="rxDt"></div>
     </div>
+    <div class="fg full" style="position:relative;margin-bottom:6px">
+      <label><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><rect x="8" y="8" width="12" height="12" rx="1.6"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg> Reaproveitar de outro paciente como modelo (mesmas plantas/suplementos, você só ajusta)</label>
+      <input type="text" id="rxModeloBusca" placeholder="Digite o nome do paciente que já recebeu algo parecido..." oninput="filtrarRxModelo()" onblur="fecharRxModeloLista()" autocomplete="off">
+      <div id="rxModeloLista" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--cream);border:1px solid var(--brd);border-radius:0 0 7px 7px;box-shadow:var(--shadow);z-index:200;max-height:260px;overflow-y:auto"></div>
+    </div>
     <div class="fst" style="margin-top:4px"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21v-9"/><path d="M12 12c0-5 3-8 7-8 0 5-2 8-7 8Z"/><path d="M12 15c0-4-3-6-6-6 0 4 2 6 6 6Z"/></svg></span>Plantas / Substâncias</div>
     <div id="rxPlantas">
       <div class="rx-p" style="padding:10px;background:var(--pri-l);border-radius:7px;margin-bottom:8px">
@@ -3748,6 +3753,14 @@ function renderRxSupLista(){
   </div>`).join('')+`<div style="text-align:right;font-size:13px;font-weight:700;color:var(--pri-d);padding:6px 10px">Total Suplementos: ${fm(total)}</div>`;
 }
 
+function coletarRxPlantasDom(){
+  const plantas=[];
+  document.querySelectorAll('.rx-p').forEach(it=>{
+    const nm=it.querySelector('.rxNm').value;if(!nm)return;
+    plantas.push({nome:nm,forma:it.querySelector('.rxFm').value,dosagem:it.querySelector('.rxDs').value,freq:it.querySelector('.rxFq').value,dur:it.querySelector('.rxDu').value,inst:it.querySelector('.rxIn').value});
+  });
+  return plantas;
+}
 function gerarHtmlRx(){
   // Buscar paciente pelo estado _rxPacSel ou pelo ID salvo
   let pac=_rxPacSel;
@@ -3879,11 +3892,7 @@ async function salvarRxComProtecao(btn){
 
 async function salvarRxHistorico(){
   if(!_rxPacSel)return;
-  const plantas=[];
-  document.querySelectorAll('.rx-p').forEach(it=>{
-    const nm=it.querySelector('.rxNm').value;if(!nm)return;
-    plantas.push({nome:nm,forma:it.querySelector('.rxFm').value,dosagem:it.querySelector('.rxDs').value,freq:it.querySelector('.rxFq').value,dur:it.querySelector('.rxDu').value,inst:it.querySelector('.rxIn').value});
-  });
+  const plantas=coletarRxPlantasDom();
   if(!plantas.length&&!_rxSuplementosSel.length){toast('⚠️ Adicione ao menos uma planta ou suplemento antes de salvar','#EF6C00');return;}
   const valorSuplementos=_rxSuplementosSel.reduce((a,i)=>a+i.precoUnit*i.qtd,0);
   const rx={id:_rxEditandoId||(Date.now()+Math.random()),pacienteId:_rxPacSel.id,pacienteNome:_rxPacSel.nome,data:v('rxDt')||new Date().toISOString().split('T')[0],plantas,suplementos:[..._rxSuplementosSel],valorSuplementos,durGeral:v('rxDurG'),retorno:v('rxRet'),obs:v('rxObs')};
@@ -4123,15 +4132,10 @@ function verRxHist(rxId){
 // Preenche o formulário de Recomendação Terapêutica com os dados de uma
 // recomendação já existente. Usada tanto por editarRx (edição real) quanto
 // por duplicarRx (cria uma cópia nova), evitando repetir o mesmo código.
-function _preencherFormRx(rx,dataParaUsar){
-  selecionarRxPac(rx.pacienteId,rx.pacienteNome,'');
-  document.getElementById('rxDt').value=dataParaUsar;
-  document.getElementById('rxDurG').value=rx.durGeral||'';
-  document.getElementById('rxRet').value=rx.retorno||'';
-  document.getElementById('rxObs').value=rx.obs||'';
+function _preencherPlantasForm(plantas){
   const cont=document.getElementById('rxPlantas');
   cont.innerHTML='';
-  rx.plantas.forEach((p,i)=>{
+  (plantas||[]).forEach((p,i)=>{
     if(i===0){
       cont.innerHTML=`<div class="rx-p" style="padding:10px;background:var(--pri-l);border-radius:7px;margin-bottom:8px">
         <div class="fr"><div class="fg"><label>Planta</label><input type="text" class="rxNm" value="${p.nome}"></div><div class="fg"><label>Forma</label><select class="rxFm"><option value="">-</option><option>Chá (infusão)</option><option>Chá (decocção)</option><option>Tintura</option><option>Cápsula</option><option>Extrato seco</option><option>Pomada</option><option>Óleo essencial</option><option>Banho</option><option>Outra</option></select></div></div>
@@ -4151,8 +4155,60 @@ function _preencherFormRx(rx,dataParaUsar){
       last.querySelector('.rxIn').value=p.inst||'';
     }
   });
+  if(!(plantas||[]).length){
+    document.getElementById('rxPlantas').innerHTML=`<div class="rx-p" style="padding:10px;background:var(--pri-l);border-radius:7px;margin-bottom:8px">
+      <div class="fr"><div class="fg"><label>Planta</label><input type="text" class="rxNm" placeholder="Ex: Passiflora incarnata"></div><div class="fg"><label>Forma</label><select class="rxFm"><option value="">-</option><option>Chá (infusão)</option><option>Chá (decocção)</option><option>Tintura</option><option>Cápsula</option><option>Extrato seco</option><option>Pomada</option><option>Óleo essencial</option><option>Banho</option><option>Outra</option></select></div></div>
+      <div class="fr tri"><div class="fg"><label>Dosagem</label><input type="text" class="rxDs"></div><div class="fg"><label>Frequência</label><input type="text" class="rxFq"></div><div class="fg"><label>Duração</label><input type="text" class="rxDu"></div></div>
+      <div class="fr full"><div class="fg"><label>Instruções</label><input type="text" class="rxIn"></div></div>
+    </div>`;
+  }
+}
+function _preencherFormRx(rx,dataParaUsar){
+  selecionarRxPac(rx.pacienteId,rx.pacienteNome,'');
+  document.getElementById('rxDt').value=dataParaUsar;
+  document.getElementById('rxDurG').value=rx.durGeral||'';
+  document.getElementById('rxRet').value=rx.retorno||'';
+  document.getElementById('rxObs').value=rx.obs||'';
+  _preencherPlantasForm(rx.plantas);
   _rxSuplementosSel=(rx.suplementos||[]).map(s=>({...s}));
   renderRxSupLista();
+}
+
+// ===== REAPROVEITAR RECEITA DE OUTRO PACIENTE COMO MODELO =====
+// Ex: receitou pra João, Maria quer algo parecido - busca a receita do
+// João e carrega só plantas/suplementos/duração/obs, SEM trocar o
+// paciente selecionado (Maria continua selecionada, só o conteúdo entra).
+async function filtrarRxModelo(){
+  const q=document.getElementById('rxModeloBusca').value.toLowerCase().trim();
+  const lista=document.getElementById('rxModeloLista');
+  if(!q){lista.style.display='none';return;}
+  let todas=gD('prescricoes');
+  if(!todas.length)todas=await dbGet('prescricoes',true);
+  if(document.getElementById('rxModeloBusca').value.toLowerCase().trim()!==q)return; // usuário já digitou outra coisa enquanto carregava
+  const rxs=todas.filter(r=>(r.pacienteNome||'').toLowerCase().includes(q)).sort((a,b)=>b.data.localeCompare(a.data)).slice(0,15);
+  if(!rxs.length){lista.innerHTML='<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Nenhuma recomendação encontrada</div>';lista.style.display='block';return;}
+  lista.innerHTML=rxs.map(r=>{
+    const resumo=(r.plantas||[]).map(p=>p.nome).concat((r.suplementos||[]).map(s=>nomeCap(s.nome))).join(', ')||'(sem itens)';
+    return `<div onclick="usarRxComoModelo('${r.id}')" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">
+      <div style="font-size:13px;font-weight:600">${escHtml(r.pacienteNome)} <span style="color:var(--txt-l);font-weight:400;font-size:11px">— ${fd(r.data)}</span></div>
+      <div style="font-size:11px;color:var(--txt-l)">${escHtml(resumo)}</div>
+    </div>`;
+  }).join('');
+  lista.style.display='block';
+}
+function fecharRxModeloLista(){setTimeout(()=>{const l=document.getElementById('rxModeloLista');if(l)l.style.display='none';},200);}
+function usarRxComoModelo(rxId){
+  const rx=gD('prescricoes').find(r=>String(r.id)===String(rxId));
+  if(!rx)return;
+  _preencherPlantasForm(rx.plantas);
+  _rxSuplementosSel=(rx.suplementos||[]).map(s=>({...s}));
+  renderRxSupLista();
+  document.getElementById('rxDurG').value=rx.durGeral||'';
+  document.getElementById('rxRet').value=rx.retorno||'';
+  document.getElementById('rxObs').value=rx.obs||'';
+  document.getElementById('rxModeloBusca').value='';
+  document.getElementById('rxModeloLista').style.display='none';
+  toast(`📋 Modelo de ${rx.pacienteNome} carregado — ajuste o que precisar antes de salvar`);
 }
 
 // Edição real: abre uma recomendação já salva para alterar e, ao salvar,
@@ -4309,29 +4365,50 @@ async function compartilharRx(){
   }
 }
 
-// Botão WhatsApp: abre direto a conversa do PACIENTE (não pede pra escolher
-// contato) e baixa a imagem pronta pra anexar com um toque. O WhatsApp não
-// permite anexar arquivo automaticamente via link (restrição de segurança
-// deles, não nossa) - por isso são dois passos rápidos em vez de um só.
-async function enviarWhatsApp(){
+// Monta o texto curto e padronizado da Recomendação pro WhatsApp - mesmo
+// formato sempre, sem depender de anexar imagem (que o WhatsApp não deixa
+// fazer automaticamente via link, então sempre exigia um passo manual).
+function gerarTextoRxWhatsApp(){
+  const nomePac=(_rxPacSel&&_rxPacSel.nome)||v('rxPacBusca')||'';
+  const primeiroNome=nomePac.split(' ')[0]||'';
+  const dt=v('rxDt');
+  const plantas=coletarRxPlantasDom();
+  const linhas=[];
+  linhas.push(`*Recomendação Terapêutica*${primeiroNome?` - ${primeiroNome}`:''}`);
+  linhas.push(dt?fd(dt):new Date().toLocaleDateString('pt-BR'));
+  linhas.push('');
+  if(plantas.length){
+    linhas.push('*Plantas/Substâncias:*');
+    plantas.forEach((p,i)=>{
+      const detalhes=[p.dosagem,p.freq,p.dur].filter(Boolean).join(', ');
+      linhas.push(`${i+1}. ${p.nome}${p.forma?` (${p.forma})`:''}${detalhes?` - ${detalhes}`:''}`);
+      if(p.inst)linhas.push(`   ${p.inst}`);
+    });
+    linhas.push('');
+  }
+  if(_rxSuplementosSel.length){
+    linhas.push('*Suplementos:*');
+    _rxSuplementosSel.forEach(s=>linhas.push(`${s.qtd}x ${nomeCap(s.nome)}`));
+    linhas.push('');
+  }
+  const durG=v('rxDurG'),ret=v('rxRet'),obs=v('rxObs');
+  if(durG)linhas.push(`Duração geral: ${durG}`);
+  if(ret)linhas.push(`Retorno em: ${ret}`);
+  if(obs)linhas.push(`Obs: ${obs}`);
+  linhas.push('');
+  linhas.push(`- ${(getCfg().ter||'Montgomery Magalhães')}`);
+  return linhas.join('\n').trim();
+}
+
+// Botão WhatsApp: abre direto a conversa do PACIENTE (usa o telefone
+// cadastrado) já com o texto da recomendação pronto - formato curto,
+// objetivo e padronizado, igual sempre. Não depende de anexar imagem.
+function enviarWhatsApp(){
   if(!_rxPacSel){toast('⚠️ Selecione um paciente primeiro','#EF6C00');return;}
   const tel=(_rxPacSel.telefone||'').replace(/\D/g,'');
   if(tel.length<10){toast('⚠️ Este paciente não tem WhatsApp cadastrado','#EF6C00');return;}
-  const nome=(_rxPacSel.nome).replace(/\s+/g,'_').toLowerCase();
-  toast('⏳ Preparando...');
-  try{
-    const canvas=await obterRxCanvas();
-    const link=document.createElement('a');
-    link.download=`recomendacao_${nome}.jpg`;
-    link.href=canvas.toDataURL('image/jpeg',0.92);
-    link.click();
-    const texto=encodeURIComponent(`Olá ${_rxPacSel.nome.split(' ')[0]}! Segue sua recomendação terapêutica 🌿 (a imagem acabou de ser baixada no seu aparelho - toque em anexar 📎 e escolha a mais recente)`);
-    window.open(`https://wa.me/55${tel}?text=${texto}`,'_blank');
-    toast('📸 Imagem baixada — anexe no chat que abriu');
-  }catch(e){
-    console.error('Erro ao preparar WhatsApp:',e);
-    toast(`❌ Erro ao gerar imagem: ${e.message||e}`,'#c62828');
-  }
+  const texto=encodeURIComponent(gerarTextoRxWhatsApp());
+  window.open(`https://wa.me/55${tel}?text=${texto}`,'_blank');
 }
 
 // ===== CONFIGURAÇÕES =====
