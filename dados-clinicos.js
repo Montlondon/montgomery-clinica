@@ -41,7 +41,8 @@ const bancoIntegrativoCompleto = {
       psique: 'Bloqueios por sentimentos de raiva reprimida, estresse crônico por cenários de injustiça, indignação oculta e severa irritabilidade ou rigidez mental perante a dinâmica familiar.',
       balance: 'Método Balance: Equilibrar via canais do Triplo Aquecedor (TR) ou Circulação e Sexo/Pericárdio (CS) contralateral de membros superiores (Sistemas 1 e 2 do Dr. Tan).',
       quiro: 'Subluxações comuns nos segmentos de T8-T10 e espasmo reflexo nos músculos Romboide e Trapézio Médio.',
-      fito: 'Extrato seco de Alcachofra (Cynara scolymus), Cardo Mariano (Silimarina) e Boldo do Chile. Dente-de-leão para drenagem hepática, Hortelã-pimenta para espasmos de vesícula, Curcuma como anti-inflamatório hepático. Indicar Magnésio Dimalato para contraturas.'
+      fito: 'Extrato seco de Alcachofra (Cynara scolymus), Cardo Mariano (Silimarina) e Boldo do Chile. Dente-de-leão para drenagem hepática, Hortelã-pimenta para espasmos de vesícula, Curcuma como anti-inflamatório hepático. Indicar Magnésio Dimalato para contraturas.',
+      sintomas: ['conflito interno / indecisão','impaciência','irritabilidade','intolerância','raiva','agressividade / violência','expansão sem olhar para o outro','frustração','pressão interna']
     },
     'Fogo': {
       cor:'#c62828',icone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-3.3 0-6-2.4-6-5.8 0-2 1-3.4 1.8-4.6.3 1 1 1.8 1.8 1.8-.3-2.6.6-5.3 3-7 0 2 .8 3 1.8 3.8 1.6 1.3 3.6 3 3.6 6 0 3.4-2.7 5.8-6 5.8Z"/></svg>',
@@ -50,7 +51,8 @@ const bancoIntegrativoCompleto = {
       psique: 'Ansiedade generalizada, palpitações por desamparo emocional, euforia defensiva ou angústia existencial com sensação de vazio no peito.',
       balance: 'Método Balance: Equilibrar o Shao Yin (Coração) utilizando os canais do Rim (R) ou Bexiga (B), ou tratar via Intestino Delgado (ID) espelhando nos membros inferiores.',
       quiro: 'Fixações mecânicas na região de T1-T4 (inervação cardiopulmonar) gerando dores escapulares e tensão peitoral.',
-      fito: 'Passiflora (Passiflora incarnata), Valeriana officinalis para acalmar o Shen do Coração e Mulungu. Erva-cidreira/Melissa para palpitações ansiosas, Camomila para Shen levemente agitado, Flor de Lótus na tradição clássica. Indicar Magnésio Dimalato.'
+      fito: 'Passiflora (Passiflora incarnata), Valeriana officinalis para acalmar o Shen do Coração e Mulungu. Erva-cidreira/Melissa para palpitações ansiosas, Camomila para Shen levemente agitado, Flor de Lótus na tradição clássica. Indicar Magnésio Dimalato.',
+      sintomas: ['agitação / ansiedade','excitamento grande','entusiasmo desmedido','irresponsabilidade','exaustão após muita atividade']
     },
     'Terra': {
       cor:'#C47A1E',icone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19 9 7l3 5 2-3 7 10Z"/></svg>',
@@ -59,7 +61,8 @@ const bancoIntegrativoCompleto = {
       psique: 'Ruminação mental obsessiva, pensamentos repetitivos, preocupação crônica por segurança material/familiar e fadiga psíquica.',
       balance: 'Método Balance: Equilibrar o Yang Ming (Estômago) utilizando o Intestino Grosso (IG) ou Baço através do canal do Pulmão (P) distais.',
       quiro: 'Fixação articular no nível de T5-T7 e hipomobilidade da transição toracolombar afetando o diafragma.',
-      fito: 'Espinheira Santa (Maytenus ilicifolia) para proteção de mucosa, Ginseng Nacional para tonificação do Qi do Aquecedor Médio e Carqueja. Gengibre para Qi do Aquecedor Médio e digestão fria, Hortelã para distensão, Canela para tonificar o Yang da Terra. Indicar Magnésio Dimalato.'
+      fito: 'Espinheira Santa (Maytenus ilicifolia) para proteção de mucosa, Ginseng Nacional para tonificação do Qi do Aquecedor Médio e Carqueja. Gengibre para Qi do Aquecedor Médio e digestão fria, Hortelã para distensão, Canela para tonificar o Yang da Terra. Indicar Magnésio Dimalato.',
+      sintomas: ['preocupações infindáveis, ruminações mentais','muito pensamento e pouca ação','sensação de vazio (dificulta cuidar de si e do outro)','solicitude (dependência, apego, medo de perder, insegurança)']
     },
     'Metal': {
       cor:'#616161',icone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8"/></svg>',
@@ -68,7 +71,8 @@ const bancoIntegrativoCompleto = {
       psique: 'Lutos não elaborados, tristeza crônica profunda, melancolia retida, necessidade neurótica de controle e extrema dificuldade em aceitar perdas ou "desapegar".',
       balance: 'Método Balance: Equilibrar o Tai Yin (Pulmão) através do canal do Baço-Pâncreas (BP) ou Intestino Grosso (IG) no joelho/cotovelo espelhado.',
       quiro: 'Subluxações na transição Cervicotorácica (C7-T1) e restrições de mobilidade na primeira e segunda costelas (músculos escalenos).',
-      fito: 'Extrato de Guaco (Mikania glomerata) para expansão do Qi pulmonar, Alcaçuz (Glycyrrhiza glabra) e Cáscara Sagrada. Eucalipto como expectorante, Tomilho para o Qi pulmonar, Psyllium para regulação intestinal suave. Indicar Magnésio Dimalato.'
+      fito: 'Extrato de Guaco (Mikania glomerata) para expansão do Qi pulmonar, Alcaçuz (Glycyrrhiza glabra) e Cáscara Sagrada. Eucalipto como expectorante, Tomilho para o Qi pulmonar, Psyllium para regulação intestinal suave. Indicar Magnésio Dimalato.',
+      sintomas: ['dificuldade nos processos de luto','dificuldade em processar perdas e mágoas','dificuldade de viver e criar vínculos duradouros']
     },
     'Água': {
       cor:'#1565C0',icone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c4 5 6 8 6 11a6 6 0 1 1-12 0c0-3 2-6 6-11Z"/></svg>',
@@ -77,24 +81,35 @@ const bancoIntegrativoCompleto = {
       psique: 'Insegurança existencial arcaica, fobias, medos profundos de rejeição ou escassez crônica, e esgotamento psíquico por alerta prolongado.',
       balance: 'Método Balance: Equilibrar o Shao Yin do Pé (Rim) através do canal do Coração (C) ou Intestino Grosso (IG) via correspondência anatômica distal de membros.',
       quiro: 'Complexo de subluxação L5-S1 (base sagrada) e disfunções Sacroilíacas, tensionando os músculos Piriforme (ciatalgia) e Psoas Maior.',
-      fito: 'Cavalinha (Equisetum arvense) para drenagem, Quebra-Pedra (Phyllanthus niruri) e Chapéu-de-Couro. Cordyceps para tonificação do Jing, Uva-ursi para trato urinário, Ashwagandha como adaptógeno para esgotamento do Jing. Indicar Magnésio Dimalato.'
+      fito: 'Cavalinha (Equisetum arvense) para drenagem, Quebra-Pedra (Phyllanthus niruri) e Chapéu-de-Couro. Cordyceps para tonificação do Jing, Uva-ursi para trato urinário, Ashwagandha como adaptógeno para esgotamento do Jing. Indicar Magnésio Dimalato.',
+      sintomas: ['falta de determinação','medo desencorajado por dificuldades','medo do fracasso, das responsabilidades, da morte, da vida, da solidão, do contato social','falta de autoestima','ambição e crueldade','poder e dominação']
     }
   },
   pontosCorpo: {
     'Joelho': { regiao: 'Joelho (Patelar e Lateral)', musculo: 'm. Quadríceps e m. Bíceps Femoral', tendao: 'Tendão Patelar e Trato Iliotibial', quiro: 'Ajuste L4-L5, mobilidade fêmoro-patelar.', canal: 'VB e E',
-      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v7l7 4v7"/><circle cx="8" cy="11" r="1.7" fill="currentColor" stroke="none"/></svg>' },
+      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v7l7 4v7"/><circle cx="8" cy="11" r="1.7" fill="currentColor" stroke="none"/></svg>',
+      sintomas: ['dor patelar','dor lateral do joelho','estalos/crepitação ao mover','instabilidade fêmoro-patelar','derrame articular (joelho inchado)','bloqueio ao estender totalmente'] },
     'Lombar': { regiao: 'Coluna Lombar (L1-L5) e Sacro', musculo: 'm. Quadrado Lombar e m. Piriforme', tendao: 'Fáscia Toracolombar', quiro: 'Correção de báscula de bacia e subluxação L5-S1.', canal: 'B',
-      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v3M9 7h6M12 7v3M8.5 12h7M12 12v3M8 17h8M12 17v3"/></svg>' },
+      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v3M9 7h6M12 7v3M8.5 12h7M12 12v3M8 17h8M12 17v3"/></svg>',
+      sintomas: ['ciática','lombalgia','constipação, colite, disenteria','diarreia','hérnia inguinal','dor/queixa em órgãos sexuais, útero ou bexiga','cãibra, dificuldade circulatória, veias varicosas','problemas menstruais (dor ou irregularidade)','dor nos joelhos','problemas urinários','inchaço e fragilidade nas pernas/tornozelos'] },
     'Cervical': { regiao: 'Coluna Cervical (C1-C7)', musculo: 'm. Trapézio Superior e m. Escalenos', tendao: 'Fáscia Cervical Superficial', quiro: 'Ajuste Occipito-Atlantal (C0-C1) para cefaleias e C5-C6.', canal: 'VB e IG',
-      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="2.3"/><path d="M12 6.8v3M9.7 8.6h4.6M12 9.8v3M9.7 11.6h4.6M12 12.8v3"/></svg>' },
+      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="2.3"/><path d="M12 6.8v3M9.7 8.6h4.6M12 9.8v3M9.7 11.6h4.6M12 12.8v3"/></svg>',
+      sintomas: ['dor de cabeça / cefaleia','nervosismo, insônia','resfriados frequentes','hipertensão arterial','enxaqueca','esgotamento nervoso, cansaço crônico','vertigem','problemas sinusais','estrabismo','perda repentina de audição ou visão sem motivo aparente','nevralgia, neurite','acne, eczema no rosto','febre do feno, secreção nasal, adenoides','laringite, faringite, rouquidão','dor de garganta, amigdalite','rigidez no pescoço','dor no braço superior externo','bursite no ombro','problemas de tireoide'] },
+    'Torácica': { regiao: 'Coluna Torácica (T1-T12) e Costelas', musculo: 'm. Eretores da Espinha (porção torácica) e m. Intercostais', tendao: 'Ligamentos Costovertebrais e Costotransversos', quiro: 'Ajuste costovertebral/costotransverso e mobilização da cifose torácica.', canal: 'Diversos — cada segmento T1-T12 relaciona-se a um órgão/víscera distinto',
+      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M7 6h10M7.5 9.5h9M8 13h8M7.5 16.5h9"/></svg>',
+      sintomas: ['asma, dificuldade respiratória','dor no antebraço/mãos','alterações cardíacas, dor na região superior das costas','bronquite, pleurite, pneumonia','problemas de vesícula biliar, icterícia','problemas hepáticos, anemia, circulação deficiente','problemas gástricos, indigestão, pirose','úlcera, gastrite','baixa resistência, soluço','alergias, urticária','problemas renais, cansaço crônico','problemas de pele, acne, eczema','reumatismo, flatulência'] },
     'Cotovelo': { regiao: 'Articulação do Cotovelo', musculo: 'm. Supinador e m. Braquiorradial', tendao: 'Tendão Extensor Comum (Epicôndilo)', quiro: 'Restrição da cabeça do rádio e umeroulnar.', canal: 'IG e TR',
-      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l6 7-2 9"/><path d="M11 12l7-3"/><circle cx="11" cy="12" r="1.7" fill="currentColor" stroke="none"/></svg>' },
+      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l6 7-2 9"/><path d="M11 12l7-3"/><circle cx="11" cy="12" r="1.7" fill="currentColor" stroke="none"/></svg>',
+      sintomas: ['dor lateral do cotovelo (tipo epicondilite)','dor medial do cotovelo','restrição de rotação do antebraço (supinação/pronação)','formigamento até a mão'] },
     'Pelve': { regiao: 'Pelve / Bacia', musculo: 'm. Glúteo Médio e m. Iliopsoas', tendao: 'Fáscia Lata e Trato Iliotibial', quiro: 'Correção de báscula pélvica e nivelamento de crista ilíaca.', canal: 'BP e R',
-      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6c0 4.5 1.5 6.5 4 7.5L5.5 20M20 6c0 4.5-1.5 6.5-4 7.5l2.5 6.5"/><path d="M4 6c2.5 2 13.5 2 16 0"/><path d="M9 13.8c2 .8 4 .8 6 0"/></svg>' },
+      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6c0 4.5 1.5 6.5 4 7.5L5.5 20M20 6c0 4.5-1.5 6.5-4 7.5l2.5 6.5"/><path d="M4 6c2.5 2 13.5 2 16 0"/><path d="M9 13.8c2 .8 4 .8 6 0"/></svg>',
+      sintomas: ['báscula pélvica','crista ilíaca desnivelada','tensão no iliopsoas','sensação de "perna mais curta"','tensão excessiva no quadril (bursite, artrose)'] },
     'Sacroilíaca': { regiao: 'Articulação Sacroilíaca / Crista Ilíaca', musculo: 'm. Piriforme e m. Glúteo Máximo', tendao: 'Ligamento Sacroilíaco Posterior', quiro: 'Ajuste sacroilíaco e correção de báscula de bacia (ilíaca anteriorizada/posteriorizada).', canal: 'B e VB',
-      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 8 14h8L12 4Z"/><path d="M8 14 5.5 16.5M16 14l2.5 2.5"/><circle cx="5" cy="17.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="17.5" r="1.5" fill="currentColor" stroke="none"/></svg>' },
+      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 8 14h8L12 4Z"/><path d="M8 14 5.5 16.5M16 14l2.5 2.5"/><circle cx="5" cy="17.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="17.5" r="1.5" fill="currentColor" stroke="none"/></svg>',
+      sintomas: ['dor sacroilíaca que piora pela manhã e melhora com a atividade','dor unilateral','histórico de torção/levantamento de peso com sensação de fisgada','dor irradiada pra nádega, coxa posterior (até o joelho) e virilha do mesmo lado','escoliose de adaptação (compensação torácica/cervical)','tensão/dor no quadril (bursite, artrose)','tensão crônica no joelho ou tornozelo do mesmo lado'] },
     'Tornozelo': { regiao: 'Tornozelo e Pé', musculo: 'm. Fibulares e m. Tibial Anterior', tendao: 'Tendão de Aquiles e Ligamento Talofibular', quiro: 'Mobilização talo-crural e correção de entorse.', canal: 'VB e B',
-      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v8l-4.5 6.5a1 1 0 0 0 .8 1.5H18a1 1 0 0 0 .9-1.4l-2.4-5.1"/><path d="M10 11h6.5"/></svg>' }
+      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v8l-4.5 6.5a1 1 0 0 0 .8 1.5H18a1 1 0 0 0 .9-1.4l-2.4-5.1"/><path d="M10 11h6.5"/></svg>',
+      sintomas: ['entorse de tornozelo (histórico ou recente)','dor no tendão de Aquiles','instabilidade talo-crural ("tornozelo fraco")','inchaço recorrente'] }
   }
 };
 

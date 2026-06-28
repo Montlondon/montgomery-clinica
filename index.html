@@ -1567,7 +1567,7 @@ function go(p,el){
     if(el){
       _diagEditandoId=null;
       _diagPacSel=null;
-      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],bagua:[]};
+      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],bagua:[],elementoSintomas:[],pontoSintomas:[]};
       _diagJaSalvo=false;
       document.getElementById('diagPacBusca').value='';
       document.getElementById('diagPacId').value='';
@@ -2694,7 +2694,7 @@ function fecharRxPacLista(){
 let _diagPacSel=null;
 let _diagJaSalvo=false;
 let _diagEditandoId=null; // id do diagnóstico em edição (null = nova avaliação)
-let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],bagua:[]}; // guarda o que foi clicado nesta avaliação + anotações por elemento
+let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],bagua:[],elementoSintomas:[],pontoSintomas:[]}; // guarda o que foi clicado nesta avaliação + anotações por elemento
 
 // Dados (bancoIntegrativoCompleto, CATALOGO_SUPLEMENTOS_INICIAL, sistemasABC) movidos para dados-clinicos.js
 
@@ -3130,6 +3130,28 @@ function togglePonto(nome){
   renderPontosGrid();
   renderDiagPainel();
 }
+function elementoSintomaMarcado(elemento,sintoma){
+  return (_diagSelecoes.elementoSintomas||[]).some(s=>s.elemento===elemento&&s.sintoma===sintoma);
+}
+function toggleElementoSintoma(elemento,sintoma){
+  if(!_diagSelecoes.elementoSintomas)_diagSelecoes.elementoSintomas=[];
+  const i=_diagSelecoes.elementoSintomas.findIndex(s=>s.elemento===elemento&&s.sintoma===sintoma);
+  if(i>=0)_diagSelecoes.elementoSintomas.splice(i,1);
+  else _diagSelecoes.elementoSintomas.push({elemento,sintoma});
+  _diagJaSalvo=false;
+  renderDiagPainel();
+}
+function pontoSintomaMarcado(ponto,sintoma){
+  return (_diagSelecoes.pontoSintomas||[]).some(s=>s.ponto===ponto&&s.sintoma===sintoma);
+}
+function togglePontoSintoma(ponto,sintoma){
+  if(!_diagSelecoes.pontoSintomas)_diagSelecoes.pontoSintomas=[];
+  const i=_diagSelecoes.pontoSintomas.findIndex(s=>s.ponto===ponto&&s.sintoma===sintoma);
+  if(i>=0)_diagSelecoes.pontoSintomas.splice(i,1);
+  else _diagSelecoes.pontoSintomas.push({ponto,sintoma});
+  _diagJaSalvo=false;
+  renderDiagPainel();
+}
 function toggleSistemaAbc(id,m){
   if(!_diagSelecoes.sistemasAbc)_diagSelecoes.sistemasAbc=[];
   const i=_diagSelecoes.sistemasAbc.indexOf(id);
@@ -3222,6 +3244,11 @@ function renderDiagPainel(){
         ${montarTabelaBalance(nome)}
         <p style="margin:9px 0 7px"><strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-2px"><path d="M6.5 17.5 17.5 6.5"/><circle cx="5" cy="19" r="2.2"/><circle cx="19" cy="5" r="2.2"/></svg> Quiropraxia:</strong> ${e.quiro}</p>
         <p><strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-2px"><path d="M6 20C4 14 6 6 16 4c1 6-2 13-10 16Z"/><path d="M7 19c2-4 4-7 8-10"/></svg> Fitoterapia sugerida:</strong> ${e.fito}</p>
+        ${(e.sintomas||[]).length?`<p style="margin-top:9px"><strong>Sinais de desequilíbrio (clique para anotar na ficha):</strong></p>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:5px">${e.sintomas.map(sx=>{
+          const on=elementoSintomaMarcado(nome,sx);
+          return `<span onclick="toggleElementoSintoma('${nome}',${jsq(sx)})" style="cursor:pointer;font-size:10.5px;padding:3px 7px;border-radius:7px;border:1px solid ${on?e.cor:'var(--brd)'};background:${on?e.cor:'var(--cream)'};color:${on?'#fff':'var(--txt)'}">${on?'✓ ':''}${escHtml(sx)}</span>`;
+        }).join('')}</div>`:''}
       </div>
       <div style="margin-top:11px">
         <label style="font-size:12px;font-weight:700;color:${e.cor}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg> Observações clínicas — ${nome}</label>
@@ -3238,6 +3265,11 @@ function renderDiagPainel(){
         <p style="margin-bottom:7px"><strong>Tendão:</strong> ${p.tendao}</p>
         <p style="margin-bottom:7px"><strong>Ajuste indicado:</strong> ${p.quiro}</p>
         <p><strong>Canal energético relacionado:</strong> ${p.canal}</p>
+        ${(p.sintomas||[]).length?`<p style="margin-top:9px"><strong>Sintomas/sinais (clique para anotar na ficha):</strong></p>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:5px">${p.sintomas.map(sx=>{
+          const on=pontoSintomaMarcado(nome,sx);
+          return `<span onclick="togglePontoSintoma('${nome}',${jsq(sx)})" style="cursor:pointer;font-size:10.5px;padding:3px 7px;border-radius:7px;border:1px solid ${on?'var(--pri-d)':'var(--brd)'};background:${on?'var(--pri-d)':'var(--cream)'};color:${on?'#fff':'var(--txt)'}">${on?'✓ ':''}${escHtml(sx)}</span>`;
+        }).join('')}</div>`:''}
       </div>
     </div>`;
   });
@@ -3299,6 +3331,8 @@ function renderDiagPainel(){
   if((_diagSelecoes.suplementos||[]).length)partes.push(`<strong>Suplementos:</strong> ${_diagSelecoes.suplementos.map(s=>nomeCap(s.nome)).join(', ')}`);
   if((_diagSelecoes.auriculo||[]).length)partes.push(`<strong>Auriculoterapia:</strong> ${_diagSelecoes.auriculo.map(id=>auriculoPontosPorId[id]?auriculoPontosPorId[id].nome:id).join(', ')}`);
   if((_diagSelecoes.bagua||[]).length)partes.push(`<strong>Bagua:</strong> ${_diagSelecoes.bagua.map(b=>b.sindrome).join(', ')}`);
+  if((_diagSelecoes.elementoSintomas||[]).length)partes.push(`<strong>Sinais (5 Elementos):</strong> ${_diagSelecoes.elementoSintomas.map(s=>s.sintoma).join(', ')}`);
+  if((_diagSelecoes.pontoSintomas||[]).length)partes.push(`<strong>Sintomas (Pontos do Corpo):</strong> ${_diagSelecoes.pontoSintomas.map(s=>s.sintoma).join(', ')}`);
   const emo=document.getElementById('diagEscalaEmo').value;
   if(emo)partes.push(`<strong>Estado emocional:</strong> ${emo}`);
   resumo.innerHTML=partes.map(p=>`<p style="margin-bottom:5px">${p}</p>`).join('');
@@ -3321,6 +3355,8 @@ function gerarHtmlDiag(diagRec){
   const suplementosSel=diagRec?(diagRec.suplementos||[]):(_diagSelecoes.suplementos||[]);
   const auriculoSel=diagRec?(diagRec.auriculo||[]):(_diagSelecoes.auriculo||[]);
   const baguaSel=diagRec?(diagRec.bagua||[]):(_diagSelecoes.bagua||[]);
+  const elementoSintomasSel=diagRec?(diagRec.elementoSintomas||[]):(_diagSelecoes.elementoSintomas||[]);
+  const pontoSintomasSel=diagRec?(diagRec.pontoSintomas||[]):(_diagSelecoes.pontoSintomas||[]);
   const emo=diagRec?diagRec.escalaEmocional:document.getElementById('diagEscalaEmo').value;
   const emoObs=diagRec?diagRec.emoObs:document.getElementById('diagEmoObs').value;
 
@@ -3328,21 +3364,25 @@ function gerarHtmlDiag(diagRec){
   elementos.forEach(nome=>{
     const e=bancoIntegrativoCompleto.matrizCincoElementos[nome];
     const obs=elementosObs[nome]||'';
+    const sintomasDoElemento=elementoSintomasSel.filter(s=>s.elemento===nome).map(s=>s.sintoma);
     blocos+=`<div style="border-left:4px solid ${e.cor};padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
       <div style="font-size:11.5pt;font-weight:700;color:${e.cor};margin-bottom:5px">${e.titulo}</div>
       <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27"><strong>Psique/Emoções:</strong> ${e.psique}</div>
       <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>Quiropraxia:</strong> ${e.quiro}</div>
       <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>Fitoterapia:</strong> ${e.fito}</div>
+      ${sintomasDoElemento.length?`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>Sinais identificados:</strong> ${sintomasDoElemento.map(escHtml).join(', ')}</div>`:''}
       ${obs?`<div style="font-size:9pt;line-height:1.5;color:#6b6358;margin-top:6px;font-style:italic">Obs.: ${obs}</div>`:''}
     </div>`;
   });
   pontos.forEach(nome=>{
     const p=bancoIntegrativoCompleto.pontosCorpo[nome];
+    const sintomasDoPonto=pontoSintomasSel.filter(s=>s.ponto===nome).map(s=>s.sintoma);
     blocos+=`<div style="border-left:4px solid #1E3A5F;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
       <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">${p.regiao}</div>
       <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27"><strong>Músculo:</strong> ${p.musculo}</div>
       <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>Ajuste indicado:</strong> ${p.quiro}</div>
       <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>Canal energético:</strong> ${p.canal}</div>
+      ${sintomasDoPonto.length?`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>Sintomas identificados:</strong> ${sintomasDoPonto.map(escHtml).join(', ')}</div>`:''}
     </div>`;
   });
   sistemasAbcSel.forEach(id=>{
@@ -3448,7 +3488,7 @@ function fecharDiagPacLista(){
 
 function limparDiagnostico(){
   if(!confirm('Limpar toda a avaliação atual?'))return;
-  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],bagua:[]};
+  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],bagua:[],elementoSintomas:[],pontoSintomas:[]};
   document.getElementById('diagEscalaEmo').value='';
   document.getElementById('diagEmoObs').value='';
   _diagJaSalvo=false;
@@ -3503,6 +3543,8 @@ async function salvarDiagnostico(){
     suplementos:[...(_diagSelecoes.suplementos||[])],
     auriculo:[...(_diagSelecoes.auriculo||[])],
     bagua:[...(_diagSelecoes.bagua||[])],
+    elementoSintomas:[...(_diagSelecoes.elementoSintomas||[])],
+    pontoSintomas:[...(_diagSelecoes.pontoSintomas||[])],
     escalaEmocional:document.getElementById('diagEscalaEmo').value,
     emoObs:document.getElementById('diagEmoObs').value
   };
@@ -3548,7 +3590,7 @@ function editarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],bagua:[...(diag.bagua||[])]};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])]};
   _diagEditandoId=diag.id;
   _diagJaSalvo=false;
   go('diagnostico',null);
@@ -3942,7 +3984,7 @@ function duplicarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],bagua:[...(diag.bagua||[])]};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])]};
   _diagEditandoId=null;
   _diagJaSalvo=false;
   go('diagnostico',null);
