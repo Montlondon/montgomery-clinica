@@ -29,6 +29,10 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 - Resolvido de vez o desalinhamento do rodapé no Android: causa real era a configuração "Tamanho da Exibição" do próprio Android (densidade de tela), que competia com o `zoom:1.1`/depois `font-size:110%` que o CSS aplicava por cima. Removido o ajuste de fonte extra do CSS mobile — agora o site não compete com a configuração de exibição do aparelho, cada usuário controla o tamanho pelo próprio Android sem efeito colateral no layout
 - Diplomas: corrigido bug em que o clique pra abrir a imagem em tamanho maior não funcionava no Android (o navegador bloqueia navegação para links `data:` em nova aba) — agora abre no visualizador de imagem já existente no app
 - **Roda do Bagua — Círculo 1 (Acupuntura), completo e publicado:** visualização circular com os 12 meridianos coloridos por elemento (Wu Xing), boneco do Balance Method sempre no centro (mostra o par Yin/Yang ao clicar num meridiano, indicador de "órgão de plantão" pelo horário, selo com contagem de sistemas já na ficha). Sintomas/síndromes de cada lado Yin/Yang agora são clicáveis — selecionar adiciona à ficha do paciente (salvo no Supabase, aparece no resumo e no PDF impresso), mesmo padrão dos outros módulos.
+- Tabela do Balanço Método: síndromes clicáveis também na "Tabela Completa" (não só na roda do Bagua), lendo/escrevendo o mesmo estado — clicar em qualquer um dos dois lugares atualiza ambos.
+- Recomendação Terapêutica: corrigido travamento ao compartilhar/baixar quando `navigator.share()` falha (ex: autorização do navegador expira enquanto a imagem é gerada) — agora cai automaticamente para download do JPG em vez de só mostrar erro.
+- Balanço Método: coluna "Relação / Lógica" da Tabela Completa agora fica oculta por padrão, atrás de um botão "Mostrar/Ocultar" — informação de consulta ocasional, não precisa ocupar espaço sempre.
+- Auriculoterapia: card agora mostra sempre o desenho da orelha com os 64 pontos (antes só apareciam os pontos filtrados pela busca). Tentei mostrar o nome de cada ponto fixo no desenho e ficou ilegível (101 pares de texto sobrepostos) — solução foi manter os pontos como círculos clicáveis com tooltip nativo; clicar abre nome e detalhes no mesmo painel que a busca já usava.
 
 ## Visão de longo prazo — "Bússola Holográfica" (círculos concêntricos)
 
@@ -44,6 +48,9 @@ A v1 já está no ar: boneco esquemático em traços simples (círculos + linhas
 
 ### 2. Integração Sintoma → Elemento/Meridiano
 Objetivo do Montgomery: clicar no sintoma e o sistema já indicar qual elemento/meridiano equilibrar — unificando "Pontos do Corpo" (quiropraxia), "5 Elementos" (MTC), "Balanço Método (ABC)" e agora "Auriculoterapia" num fluxo só, em vez de seções separadas. Cada uma já guarda uma ponta dessa lógica (`canal` em `pontosCorpo`, `balance` em `matrizCincoElementos`, `pontos` em `sistemasABC`, `indicacoes` em `auriculoPontos`) — o trabalho é cruzar esses dados num único motor de sugestão.
+
+**Pedido recente do Montgomery (28/06):** quer sintomas/desequilíbrios clicáveis dentro dos cards "5 Elementos" e "Pontos do Corpo" (igual já existe em Balanço Método e Bagua), pra ir anotando exatamente a queixa do paciente — visando depois automatizar a sugestão.
+O código pra isso já existe e é reaproveitável (`baguaToggleSindrome`/`baguaSindromeMarcada`, o mesmo padrão usado nas síndromes do ABC). **O que falta é o dado**: hoje `matrizCincoElementos` (5 Elementos) e `pontosCorpo` (Quiropraxia) não têm uma lista de sintomas por item, diferente de `sistemasABC[].sindromes`. Antes de implementar, preciso que o Montgomery passe (ou valide) a lista real de sintomas/desequilíbrios por Elemento e por região do corpo — não vou inventar conteúdo clínico sozinho.
 
 ### 3b. Florais
 Item novo, ainda sem detalhamento — Montgomery vai trazer um resumo de como quer estruturar isso (provavelmente floral indicado por estado emocional/queixa, possivelmente cruzando com a Escala de Orientação Emocional que já existe em Diagnóstico Integrado).
