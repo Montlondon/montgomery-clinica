@@ -3859,9 +3859,10 @@ function gerarRx(){
   document.getElementById('rxPrevC').innerHTML=gerarHtmlRx();
   document.getElementById('rxPrev').style.display='block';
   document.getElementById('rxPrev').scrollIntoView({behavior:'smooth'});
-  // Pré-gera a imagem em segundo plano assim que a prévia aparece, pra
-  // Compartilhar/WhatsApp ficarem instantâneos (ver _rxCanvasPromise).
-  _rxCanvasPromise=capturarRxComoCanvas().catch(()=>null);
+  // Não pré-gera mais a imagem aqui: html2canvas consome CPU na hora que
+  // roda, e isso deixava até o botão WhatsApp (que nem usa imagem) lento,
+  // porque a aba ficava ocupada processando em segundo plano. Compartilhar/
+  // Exportar JPG geram a imagem só quando de fato clicados (obterRxCanvas).
 }
 function imprimirRx(){
   const win=window.open('','_blank','width=460,height=900');
