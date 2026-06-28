@@ -775,8 +775,11 @@ tr:hover td{background:#EEF2F7}
 
   <div class="fc">
     <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5C5 8 4 11 5 15c1 4 4 6 7 6s5-2 6-5c.7-2 .3-4-1-5"/><circle cx="13" cy="11" r="2"/></svg></span>Auriculoterapia</div>
-    <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Mapa completo com os 64 pontos, sempre visível. Busque por queixa/protocolo ou por um ponto específico para destacar só os relevantes na ficha.</p>
-    <div id="auriculoMapaCompleto" style="text-align:center;margin-bottom:14px"></div>
+    <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Mapa completo com os 64 pontos, sempre visível. Clique num ponto do mapa ou da lista pra adicionar/remover da ficha — monte a prescrição direto daqui. Ou busque por queixa/protocolo abaixo.</p>
+    <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;margin-bottom:14px">
+      <div id="auriculoMapaCompleto" style="text-align:center"></div>
+      <div id="auriculoListaPontos" style="flex:1;min-width:220px;max-height:380px;overflow-y:auto"></div>
+    </div>
     <div class="seg" id="auriculoModoSeg">
       <button class="on" data-modo="protocolo" onclick="setAuriculoModo('protocolo')">Por Queixa/Protocolo</button>
       <button data-modo="ponto" onclick="setAuriculoModo('ponto')">Por Ponto</button>
@@ -3015,18 +3018,45 @@ function auriculoBaseSVG(pontosAtivos,tamanho){
   </svg>`;
 }
 
+function auriculoNaFicha(id){
+  return (_diagSelecoes.auriculo||[]).includes(id);
+}
+function toggleAuriculoFichaPonto(id){
+  if(!_diagSelecoes.auriculo)_diagSelecoes.auriculo=[];
+  const i=_diagSelecoes.auriculo.indexOf(id);
+  if(i>=0)_diagSelecoes.auriculo.splice(i,1);
+  else _diagSelecoes.auriculo.push(id);
+  _diagJaSalvo=false;
+  renderAuriculoMapaCompleto();
+  renderDiagPainel();
+}
 function auriculoMapaCompletoSVG(tamanho){
   tamanho=tamanho||340;
   const dots=auriculoPontos.map(p=>{
-    const ativo=_auriculoPreview&&_auriculoPreview.tipo==='ponto'&&_auriculoPreview.id===p.id;
-    return `<circle cx="${p.x}" cy="${p.y}" r="${ativo?6.5:4.5}" fill="${ativo?'#1E3A5F':'#b5651d'}" stroke="#3a2c1c" stroke-width="1" style="cursor:pointer" onclick="selecionarAuriculoPonto('${p.id}')"><title>${escHtml(p.nome)}</title></circle>`;
+    const on=auriculoNaFicha(p.id);
+    return `<circle cx="${p.x}" cy="${p.y}" r="${on?6.5:4.5}" fill="${on?'#1E3A5F':'#b5651d'}" stroke="#3a2c1c" stroke-width="1" style="cursor:pointer" onclick="toggleAuriculoFichaPonto('${p.id}')"><title>${escHtml(p.nome)}</title></circle>`;
   }).join('');
   const base=auriculoBaseSVG([],tamanho);
   return base.replace('</svg>',dots+'</svg>');
 }
+function auriculoRenderListaPontos(){
+  const el=document.getElementById('auriculoListaPontos');
+  if(!el)return;
+  const grupos={};
+  auriculoPontos.forEach(p=>{(grupos[p.grupo]=grupos[p.grupo]||[]).push(p);});
+  el.innerHTML=Object.keys(grupos).sort().map(grupo=>`
+    <div style="font-size:10.5px;font-weight:700;color:var(--txt-l);text-transform:uppercase;letter-spacing:.4px;margin:8px 0 4px">${escHtml(grupo)}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px">
+      ${grupos[grupo].sort((a,b)=>a.nome.localeCompare(b.nome)).map(p=>{
+        const on=auriculoNaFicha(p.id);
+        return `<span onclick="toggleAuriculoFichaPonto('${p.id}')" style="cursor:pointer;font-size:11px;padding:3px 8px;border-radius:7px;border:1px solid ${on?'var(--pri-d)':'var(--brd)'};background:${on?'var(--pri-d)':'var(--cream)'};color:${on?'#fff':'var(--txt)'}">${on?'✓ ':''}${escHtml(p.nome)}</span>`;
+      }).join('')}
+    </div>`).join('');
+}
 function renderAuriculoMapaCompleto(){
   const el=document.getElementById('auriculoMapaCompleto');
   if(!el)return;
+  auriculoRenderListaPontos();
   el.innerHTML=auriculoMapaCompletoSVG(340);
 }
 function setAuriculoModo(modo){
