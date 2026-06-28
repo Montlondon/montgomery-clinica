@@ -2661,6 +2661,11 @@ function expICS(){
 // ===== PRESCRIÇÃO =====
 // Estado do paciente selecionado na prescrição
 let _rxPacSel=null;
+// Canvas da recomendação pré-gerado em segundo plano (ver gerarRx) para que
+// Compartilhar/WhatsApp não precisem esperar o html2canvas no momento do
+// clique - isso evita o NotAllowedError do navigator.share() quando a
+// autorização do toque expira durante a geração da imagem.
+let _rxCanvasPromise=null;
 
 function carregarRxSel(){
   // Só reseta se não houver paciente já selecionado (evita perder seleção ao navegar)
@@ -3841,6 +3846,9 @@ function gerarRx(){
   document.getElementById('rxPrevC').innerHTML=gerarHtmlRx();
   document.getElementById('rxPrev').style.display='block';
   document.getElementById('rxPrev').scrollIntoView({behavior:'smooth'});
+  // Pré-gera a imagem em segundo plano assim que a prévia aparece, pra
+  // Compartilhar/WhatsApp ficarem instantâneos (ver _rxCanvasPromise).
+  _rxCanvasPromise=capturarRxComoCanvas().catch(()=>null);
 }
 function imprimirRx(){
   const win=window.open('','_blank','width=460,height=900');
@@ -4237,13 +4245,23 @@ async function capturarRxComoCanvas(){
   }
 }
 
+// Usa o canvas pré-gerado em gerarRx() se já estiver pronto (compartilhar
+// fica instantâneo); senão gera na hora como antes.
+async function obterRxCanvas(){
+  if(_rxCanvasPromise){
+    const c=await _rxCanvasPromise;
+    if(c)return c;
+  }
+  return await capturarRxComoCanvas();
+}
+
 async function exportarRxJpg(){
   if(!_rxPacSel){toast('⚠️ Selecione um paciente primeiro','#EF6C00');return;}
   const pac=_rxPacSel||{nome:'recomendacao'};
   const nome=(pac.nome).replace(/\s+/g,'_').toLowerCase();
   toast('⏳ Gerando imagem...');
   try{
-    const canvas=await capturarRxComoCanvas();
+    const canvas=await obterRxCanvas();
     const link=document.createElement('a');
     link.download=`recomendacao_${nome}.jpg`;
     link.href=canvas.toDataURL('image/jpeg',0.92);
@@ -4255,13 +4273,15 @@ async function exportarRxJpg(){
   }
 }
 
+// Compartilhar genérico: abre o menu nativo do aparelho, terapeuta escolhe
+// pra quem mandar (esposa, filho, qualquer contato) e em qual app.
 async function compartilharRx(){
   if(!_rxPacSel){toast('⚠️ Selecione um paciente primeiro','#EF6C00');return;}
   const pac=_rxPacSel||{nome:'recomendacao',telefone:''};
   const nome=(pac.nome).replace(/\s+/g,'_').toLowerCase();
   toast('⏳ Preparando...');
   try{
-    const canvas=await capturarRxComoCanvas();
+    const canvas=await obterRxCanvas();
     canvas.toBlob(async blob=>{
       const file=new File([blob],`recomendacao_${nome}.jpg`,{type:'image/jpeg'});
       if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
@@ -4289,9 +4309,29 @@ async function compartilharRx(){
   }
 }
 
-// Botão WhatsApp agora usa o mesmo compartilhamento nativo (envia direto a imagem, sem mensagem de texto separada)
+// Botão WhatsApp: abre direto a conversa do PACIENTE (não pede pra escolher
+// contato) e baixa a imagem pronta pra anexar com um toque. O WhatsApp não
+// permite anexar arquivo automaticamente via link (restrição de segurança
+// deles, não nossa) - por isso são dois passos rápidos em vez de um só.
 async function enviarWhatsApp(){
-  await compartilharRx();
+  if(!_rxPacSel){toast('⚠️ Selecione um paciente primeiro','#EF6C00');return;}
+  const tel=(_rxPacSel.telefone||'').replace(/\D/g,'');
+  if(tel.length<10){toast('⚠️ Este paciente não tem WhatsApp cadastrado','#EF6C00');return;}
+  const nome=(_rxPacSel.nome).replace(/\s+/g,'_').toLowerCase();
+  toast('⏳ Preparando...');
+  try{
+    const canvas=await obterRxCanvas();
+    const link=document.createElement('a');
+    link.download=`recomendacao_${nome}.jpg`;
+    link.href=canvas.toDataURL('image/jpeg',0.92);
+    link.click();
+    const texto=encodeURIComponent(`Olá ${_rxPacSel.nome.split(' ')[0]}! Segue sua recomendação terapêutica 🌿 (a imagem acabou de ser baixada no seu aparelho - toque em anexar 📎 e escolha a mais recente)`);
+    window.open(`https://wa.me/55${tel}?text=${texto}`,'_blank');
+    toast('📸 Imagem baixada — anexe no chat que abriu');
+  }catch(e){
+    console.error('Erro ao preparar WhatsApp:',e);
+    toast(`❌ Erro ao gerar imagem: ${e.message||e}`,'#c62828');
+  }
 }
 
 // ===== CONFIGURAÇÕES =====
