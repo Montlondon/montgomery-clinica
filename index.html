@@ -182,6 +182,7 @@ tr:hover td{background:#EEF2F7}
 .seg button{border:none;background:none;padding:8px 16px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
 .seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
 .tw-zebra tbody tr:nth-child(even) td{background:var(--bg)}
+#abcTabela.abc-logica-off .abc-logica-col{display:none}
 .abc-merid-btn{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:8px 0;font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;text-align:center}
 .abc-merid-btn:hover{background:var(--bg)}
 .abc-merid-btn.on{background:var(--pri-deep);color:#fff;border-color:var(--pri-deep)}
@@ -738,9 +739,10 @@ tr:hover td{background:#EEF2F7}
     </div>
 
     <div id="abcModoTabela">
+      <div style="margin-bottom:8px"><button type="button" class="btn btn-sec btn-sm" id="btnToggleAbcLogica" onclick="toggleAbcLogica()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2.5v2.3M12 19.2v2.3M4.6 4.6l1.6 1.6M17.8 17.8l1.6 1.6M2.5 12h2.3M19.2 12h2.3M4.6 19.4l1.6-1.6M17.8 6.2l1.6-1.6"/></svg></span> Mostrar Relação / Lógica</button></div>
       <div class="tw tw-zebra"><div style="overflow-x:auto">
-        <table>
-          <thead><tr><th>Sistema</th><th>Meridianos do grupo</th><th>Relação / Lógica</th><th>Síndromes (clique para tratar)</th></tr></thead>
+        <table id="abcTabela" class="abc-logica-off">
+          <thead><tr><th>Sistema</th><th>Meridianos do grupo</th><th class="abc-logica-col">Relação / Lógica</th><th>Síndromes (clique para tratar)</th></tr></thead>
           <tbody id="abcTabelaBody"></tbody>
         </table>
       </div></div>
@@ -2730,12 +2732,19 @@ function abcRenderTabela(){
   el.innerHTML=sistemasABC.map(s=>`<tr>
     <td><strong>${s.id}</strong> · ${s.elemento}<br><span style="font-size:10.5px;color:var(--ink-soft)">${s.categoria}</span></td>
     <td>${abcGrupoDisplay(s).join(', ')}</td>
-    <td style="font-size:11.5px;color:var(--ink-soft);max-width:360px">${s.protocolo}</td>
+    <td class="abc-logica-col" style="font-size:11.5px;color:var(--ink-soft);max-width:360px">${s.protocolo}</td>
     <td style="min-width:220px"><div style="display:flex;gap:4px;flex-wrap:wrap">${(s.sindromes||[]).map(sd=>{
       const on=baguaSindromeMarcada(s.id,sd);
       return `<span onclick="baguaToggleSindrome('${s.id}',${jsq(sd)})" style="cursor:pointer;font-size:10.5px;padding:3px 7px;border-radius:7px;border:1px solid ${on?'var(--pri-deep)':'var(--line)'};background:${on?'var(--pri-deep)':'var(--surface)'};color:${on?'#fff':'var(--ink)'}">${on?'✓ ':''}${escHtml(sd)}</span>`;
     }).join('')}</div></td>
   </tr>`).join('');
+}
+function toggleAbcLogica(){
+  const tabela=document.getElementById('abcTabela');
+  const btn=document.getElementById('btnToggleAbcLogica');
+  if(!tabela||!btn)return;
+  const off=tabela.classList.toggle('abc-logica-off');
+  btn.lastChild.textContent=off?' Mostrar Relação / Lógica':' Ocultar Relação / Lógica';
 }
 function abcRenderMeridianoGrid(sel){
   const el=document.getElementById('abcMeridianoGrid');
@@ -4125,7 +4134,12 @@ async function compartilharRx(){
           await navigator.share({files:[file]});
           toast('✅ Compartilhado!');
         }catch(e){
-          if(e.name!=='AbortError')toast('⚠️ Erro ao compartilhar','#EF6C00');
+          if(e.name==='AbortError')return;
+          console.error('Erro ao compartilhar (fallback p/ download):',e);
+          const url=URL.createObjectURL(blob);
+          const a=document.createElement('a');a.href=url;a.download=`recomendacao_${nome}.jpg`;a.click();
+          URL.revokeObjectURL(url);
+          toast(`⚠️ Compartilhamento falhou (${e.name||'erro'}), imagem baixada em vez disso`,'#EF6C00');
         }
       } else {
         const url=URL.createObjectURL(blob);
