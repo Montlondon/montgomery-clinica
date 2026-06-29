@@ -21,8 +21,9 @@ A ideia central é um núcleo visual (como um disco rígido com camadas) onde ca
 - O boneco central do Balance Method (já ativo) é enriquecido com essas informações da quiropraxia, em vez de abrir uma tela separada — tudo no mesmo núcleo central.
 
 ### Círculo 3 — Psicanálise
-- Nós/temas clicáveis: Complexo de Édipo, Mal-estar da Civilização, abusos, controle, psicopatias, culpa, medo, vergonha, e outros temas psicanalíticos relevantes.
+- Nós/temas clicáveis: Complexo de Édipo, Mal-estar da Civilização, abusos, controle, psicopatias, culpa, medo, vergonha, e outros temas psicanalíticos relevantes — conteúdo a extrair da coleção de obras do Freud que o Montgomery vai adicionar ao repositório (ver item "Módulo de Psicanálise" no ROADMAP).
 - Selecionar um tema marca na ficha do paciente, no mesmo padrão dos outros módulos.
+- **Confirmado (30/06): fica como esfera/círculo próprio**, não preso aos nós da Quiropraxia (ver "Atualização 30/06" abaixo) — mas deve **se linkar com os outros módulos (Quiro/Acupuntura/Seitai/Fito) quando um desequilíbrio emocional marcado coincidir** com algo já selecionado neles. É uma extensão do motor de "Sugestões cruzadas" que já existe hoje (`calcularSugestoesCruzadas()` em `index.html`, hoje cruza Elementos/Pontos do Corpo/Sistemas ABC/Auriculoterapia pelo mesmo meridiano/órgão) — quando o conteúdo de Psicanálise estiver pronto, mapear quais temas emocionais correspondem a quais elementos/meridianos/órgãos e incluir no mesmo motor.
 
 ### Círculo 4 — Fitoterapia / Florais / Suplementos
 - Organizado pelos 5 Elementos da MTC (Madeira, Fogo, Terra, Metal, Água).
