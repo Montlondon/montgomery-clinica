@@ -688,7 +688,7 @@ tr:hover td{background:#EEF2F7}
     </div>
   </div>
   <div class="fc no-print" id="rxPrev" style="display:none">
-    <div id="rxPrevC"></div>
+    <div id="rxPrevC" style="overflow-x:auto"></div>
     <div style="display:flex;gap:7px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap">
       <button class="btn btn-sec btn-sm" onclick="document.getElementById('rxPrev').style.display='none'">Fechar</button>
       <button class="btn btn-war btn-sm" onclick="exportarRxJpg()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13" r="3.3"/></svg></span>Exportar JPG</button>
@@ -3569,7 +3569,7 @@ function gerarHtmlDiag(diagRec){
   }
   if(!blocos)blocos='<div style="color:#aaa;font-style:italic;padding:14px;text-align:center">Nenhum item selecionado na avaliação.</div>';
 
-  return`<div style="font-family:'Georgia',serif;max-width:640px;margin:0 auto;background:#FDFAF6;color:#2C2A27;padding:28px 30px;border-radius:14px">
+  return`<div style="font-family:'Georgia',serif;width:420px;margin:0 auto;background:#FDFAF6;color:#2C2A27;padding:24px 26px;border-radius:14px;box-sizing:border-box">
     <table style="width:100%;margin-bottom:20px">
       <tr>
         <td style="vertical-align:middle;width:64px">${logoHtml}</td>
@@ -3611,7 +3611,7 @@ function imprimirDiag(diagId){
   } else if(!_diagPacSel){
     toast('Selecione um paciente primeiro','#EF6C00',"warn");return;
   }
-  const win=window.open('','_blank','width=460,height=900');
+  const win=window.open('','_blank','width=480,height=900');
   win.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Diagnóstico Integrado</title>
   <style>@page{margin:10mm 12mm;size:A4}body{margin:0;padding:12px;background:#fff;font-family:Georgia,serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}</style>
   </head><body>${gerarHtmlDiag(diagRec)}</body></html>`);
@@ -3866,7 +3866,7 @@ function gerarHtmlRx(){
 
   const logoHtml=logo?`<img src="${logo}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid #1E3A5F;margin-right:14px" alt="Logo">`:'<div style="width:64px;height:64px;border-radius:50%;background:#EEF4FA;display:flex;align-items:center;justify-content:center;margin-right:14px"><svg viewBox="0 0 24 24" fill="none" stroke="#1E3A5F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:30px;height:30px"><path d="M6 20C4 14 6 6 16 4c1 6-2 13-10 16Z"/><path d="M7 19c2-4 4-7 8-10"/></svg></div>';
 
-  return`<div style="font-family:'Georgia',serif;max-width:640px;margin:0 auto;background:#FDFAF6;color:#2C2A27;padding:28px 30px;border-radius:14px">
+  return`<div style="font-family:'Georgia',serif;width:420px;margin:0 auto;background:#FDFAF6;color:#2C2A27;padding:24px 26px;border-radius:14px;box-sizing:border-box">
     
     <table style="width:100%;margin-bottom:20px">
       <tr>
@@ -3933,7 +3933,7 @@ function gerarRx(){
   // Exportar JPG geram a imagem só quando de fato clicados (obterRxCanvas).
 }
 function imprimirRx(){
-  const win=window.open('','_blank','width=460,height=900');
+  const win=window.open('','_blank','width=480,height=900');
   win.document.write(`<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8"><title>Recomendação Terapêutica</title>
   <style>@page{margin:10mm 12mm;size:A4}body{margin:0;padding:12px;background:#fff;font-family:Georgia,serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}</style>
   </head><body>${gerarHtmlRx()}</body></html>`);
