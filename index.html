@@ -4470,14 +4470,30 @@ function gerarTextoRxWhatsApp(){
 }
 
 // Botão WhatsApp: abre direto a conversa do PACIENTE (usa o telefone
-// cadastrado) já com o texto da recomendação pronto - formato curto,
-// objetivo e padronizado, igual sempre. Não depende de anexar imagem.
-function enviarWhatsApp(){
+// cadastrado) e baixa a imagem do cartão pra anexar na conversa - o
+// WhatsApp não deixa nenhum site anexar arquivo automaticamente via link
+// (wa.me só aceita texto), então o passo de anexar a imagem que já foi
+// baixada precisa ser manual, igual ao botão Compartilhar quando o
+// compartilhamento nativo não está disponível.
+async function enviarWhatsApp(){
   if(!_rxPacSel){toast('Selecione um paciente primeiro','#EF6C00',"warn");return;}
   const tel=(_rxPacSel.telefone||'').replace(/\D/g,'');
   if(tel.length<10){toast('Este paciente não tem WhatsApp cadastrado','#EF6C00',"warn");return;}
-  const texto=encodeURIComponent(gerarTextoRxWhatsApp());
-  window.open(`https://wa.me/55${tel}?text=${texto}`,'_blank');
+  const nome=(_rxPacSel.nome||'recomendacao').replace(/\s+/g,'_').toLowerCase();
+  toast('Gerando imagem...',null,"relogio");
+  try{
+    const canvas=await obterRxCanvas();
+    const link=document.createElement('a');
+    link.download=`recomendacao_${nome}.jpg`;
+    link.href=canvas.toDataURL('image/jpeg',0.92);
+    link.click();
+    const texto=encodeURIComponent(gerarTextoRxWhatsApp());
+    window.open(`https://wa.me/55${tel}?text=${texto}`,'_blank');
+    toast('Imagem baixada - anexe ela na conversa que abriu',null,"camera");
+  }catch(e){
+    console.error('Erro ao gerar imagem para WhatsApp:',e);
+    toast(`Erro ao gerar imagem: ${e.message||e}`,'#c62828',"erro");
+  }
 }
 
 // ===== CONFIGURAÇÕES =====
