@@ -1628,7 +1628,7 @@ function salvarRasc(auto){
     const st=document.getElementById('saveSt');
     if(st){st.className='sst';st.innerHTML=STAT_ICO_SAVE+' Rascunho salvo automaticamente';}
   } else {
-    toast('💾 Rascunho salvo!');
+    toast('✅ Rascunho salvo!');
   }
 }
 
@@ -2324,7 +2324,7 @@ async function salvarDespesa(ev){
   }
   fecharModalDespesa();
   renderDespesasClinica();renderDespesasPessoal();
-  toast('💾 Lançamento salvo!');
+  toast('✅ Lançamento salvo!');
 }
 async function dDespesa(id){
   if(!confirm('Excluir lançamento?'))return;
@@ -2461,7 +2461,7 @@ async function salvarSuplemento(ev){
     toast('✅ Produto atualizado!');
   } else {
     await dbAdd('suplementos',p);
-    toast('💾 Produto cadastrado!');
+    toast('✅ Produto cadastrado!');
   }
   fecharModalSuplemento();
   renderSuplementos();
@@ -3674,7 +3674,7 @@ async function salvarDiagnostico(){
       _cache['diagnosticos']=diags;
       const btn=document.getElementById('btnSalvarDiag');
       if(btn)btn.innerHTML=SAVE_ICON_HTML+' Salvar Avaliação';
-      toast('💾 Avaliação salva no histórico do paciente!');
+      toast('✅ Avaliação salva no histórico do paciente!');
     }
     _diagJaSalvo=true;
   }catch(e){
@@ -3931,7 +3931,7 @@ async function salvarRxHistorico(){
     _cache['prescricoes']=rxs;
     await supaReq('POST','prescricoes',[{'user_id':'montgomery','dados':rx}]);
     if(_rxSuplementosSel.length)await registrarVendaSuplementos(rx);
-    toast('💾 Recomendação salva no histórico do paciente!');
+    toast('✅ Recomendação salva no histórico do paciente!');
   }
   _rxJaSalvo=true;
 }
