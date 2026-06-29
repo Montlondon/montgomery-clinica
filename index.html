@@ -2692,6 +2692,15 @@ function filtrarRxPac(){
 }
 
 function selecionarRxPac(id,nome,tel){
+  // Sempre confere o telefone direto no cadastro do paciente - chamadores
+  // que reaproveitam um paciente por id (editar/duplicar recomendação,
+  // enviar do Diagnóstico) às vezes não tinham o telefone à mão e passavam
+  // vazio, fazendo o botão WhatsApp achar que o paciente não tinha número
+  // mesmo quando tinha.
+  if(!tel&&id){
+    const pac=gD('pacientes').find(p=>String(p.id)===String(id));
+    if(pac&&pac.telefone)tel=pac.telefone;
+  }
   _rxPacSel={id,nome,telefone:tel};
   _rxJaSalvo=false; // nova seleção = nova recomendação, libera salvamento
   document.getElementById('rxPacBusca').value=nome;
