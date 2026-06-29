@@ -49,15 +49,23 @@ Visão do Montgomery pra evoluir o Bagua: ao invés de só Acupuntura, a roda te
 ### 0. Módulo de Psicanálise — a maior frente do projeto (decidido 30/06)
 Montgomery confirmou: quer o módulo de Psicanálise o mais completo possível — estrutura do aparelho psíquico (id/ego/superego), mecanismos de defesa, "O Mal-Estar na Civilização", e tudo mais que a coleção de Freud trouxer de relevante — tudo clicável, mesmo padrão dos outros módulos (clica → vai pra ficha do paciente → aparece no resumo e no PDF impresso). Ele disse textualmente: "acredito que esta é a parte maior do sistema".
 
-**Fonte:** Montgomery tem a coleção de obras do Freud em PDF (igual fez com as apostilas de Acupuntura/Quiro) — vai adicionar ao repositório pra extração de conteúdo real, sem inventar conceito.
+**Fonte real (30/06):** não foi encontrada uma "coleção do Freud" em PDF nem no Dropbox nem no Google Drive do Montgomery. Em vez disso, achamos algo melhor: **`AAPsicanálise Clínica/` no Google Drive (`G:\My Drive`)** — curso completo "Formação em Psicanálise Clínica", 12 módulos em PDF + pastas "Livros" e "História e Fundamento" por módulo. Fonte estruturada e completa, mesmo padrão de curso já usado em Acupuntura/Quiro.
+
+**Acesso a Drive/Dropbox (30/06):** ambos sincronizam como pastas locais comuns no PC do Montgomery (`G:\My Drive` e `C:\Dropbox`) — leio direto de lá, sem precisar copiar nada pro repositório do projeto antes.
 
 **Plano de execução (mesmo método já validado nas outras frentes):**
-1. Montgomery adiciona os PDFs da coleção Freud ao repositório
-2. Extrair texto (`pdftotext -layout`) e mapear os grandes eixos/categorias presentes na coleção
-3. Montar rascunho de proposta (categorias + conteúdo, igual `PROPOSTA_SINTOMAS.md`) pra aprovação antes de codar
+1. ✅ Módulo 1 lido e rascunhado: `PROPOSTA_PSICANALISE_MODULO1.md` (1ª/2ª Tópica, Fases Psicossexuais + Complexo de Édipo, Mecanismos de Defesa, Pulsões) — aguardando revisão do Montgomery
+2. Ler módulos 2-12 (provavelmente onde está "Mal-estar da Civilização", abusos, psicopatias, neurose x psicose) e ir somando ao rascunho
+3. Montar proposta final consolidada pra aprovação antes de codar
 4. Implementar: estrutura clicável (categorias → conceitos/sintomas), integrada ao Diagnóstico Integrado e ao motor de sugestões cruzadas já existente
 
-**Status:** aguardando Montgomery subir os PDFs da coleção Freud.
+**Status:** Módulo 1 rascunhado, aguardando revisão do Montgomery antes de seguir lendo os módulos 2-12.
+
+### 0b. Quiropraxia — enriquecer com miologia real (achado 30/06)
+Achado no Dropbox local (`C:\Dropbox\IMANDropbox\Músculos\`): PDFs/PPTX de um curso com origem, inserção, inervação e ação de cada músculo dos Membros Superiores e Inferiores (`MEMBROS SUPERIORES 1-3.pdf`, `MEMBROS INFERIORES 1-2`, `CRÂNIO FACE E PESCOÇO.pptx`) — muito mais detalhado que o campo único `musculo` que `pontosCorpo` tem hoje em `dados-clinicos.js`. Pendente: extrair e propor enriquecimento por região (mesmo padrão de sintomas clicáveis).
+
+### 0c. Diagnóstico Integrado — Língua (achado 30/06, precisa de OCR)
+Achado em `C:\Dropbox\IMANDropbox\Linguas\` — são fotos/slides escaneados (não é PDF de texto), vai precisar de OCR pra extrair o conteúdo antes de virar proposta. Faz parte do pedido de "espaço de Pulso e Língua" junto da Auriculoterapia (ver `bagua_visao_prompt.md`).
 
 ### 1. Boneco do Balanço Método — refinar ilustração (v2)
 A v1 já está no ar: boneco esquemático em traços simples (círculos + linhas), funcional, lendo `sistemasABC[].pontos` via `abcBonecoSVG()`. Próximo passo, se quiser: trocar o traço simples por uma ilustração mais anatômica do corpo (braços erguidos), mantendo a mesma lógica de dados.
