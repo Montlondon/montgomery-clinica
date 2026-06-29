@@ -42,6 +42,7 @@ Visão do Montgomery pra evoluir o Bagua: ao invés de só Acupuntura, a roda te
 
 **Status:** Círculo 1 (Acupuntura) pronto. Retomar dizendo só "Bagua" pra seguir com o Círculo 2 (Quiropraxia/Seitai).
 - Meridianos Mágicos: localizados nas páginas 15-19 do `apostila-meq-completa-202320.pdf` (8/4/12 Meridianos Mágicos, Conversão de Meridianos) — ainda não estruturado como dado, texto saiu embaralhado na extração automática e precisa ser conferido com calma página por página antes de virar conteúdo na plataforma.
+- **Alinhamento por desenho (30/06):** Montgomery trouxe um esboço próprio detalhando a evolução do Círculo 1 (núcleo=boneco → 1ª camada=5 Elementos → órgãos/vísceras → síndromes/tratamento) e como Quiropraxia/Psicanálise podem compartilhar os mesmos nós anatômicos em vez de ficarem em círculos isolados — registrado com detalhe em `bagua_visao_prompt.md` (seção "Atualização 30/06"), incluindo pontos a confirmar com ele antes de estruturar. Também: possível rebatismo de "Bagua" pra **"Matriz Vitruviana"**, e pedido novo de um espaço de **Pulso e Língua** ao lado da Auriculoterapia no Diagnóstico Integrado (pulso com tipos clicáveis tipo síndrome; língua com PDFs que ele vai adicionar) — aguardando ele subir o material de língua/pulso, ou autorizar uso de conhecimento geral de MTC onde não houver PDF do curso.
 
 ## Em planejamento
 
