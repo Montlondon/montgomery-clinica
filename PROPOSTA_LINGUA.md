@@ -1,4 +1,4 @@
-# Proposta — Diagnóstico pela Língua (rascunho inicial, 6 de ~130 casos)
+# Proposta — Diagnóstico pela Língua (rascunho em andamento, 14 de ~130 casos)
 
 Fonte: atlas fotográfico de diagnóstico pela língua, encontrado em
 `C:\Dropbox\IMANDropbox\Linguas\` (268 fotos de páginas escaneadas de um
@@ -8,8 +8,9 @@ diretamente).
 
 **Aviso de escala:** são ~268 fotos no total (parte de teoria + ~130
 casos numerados no atlas). Processar tudo isso é um trabalho grande, de
-várias sessões — este rascunho cobre só os 6 primeiros casos do atlas pra
-validar o formato com você antes de eu continuar nos outros ~124.
+várias sessões — este rascunho cobre os casos 134-149 (com lacunas: 135 e
+141 não foram localizados nos arquivos), faltam ainda ~115 casos do atlas
++ a parte de teoria.
 
 ## Formato proposto (igual ao padrão de sintomas clicáveis já usado)
 
@@ -55,12 +56,60 @@ selecionar marca na ficha do paciente, mesmo padrão dos outros módulos.
 - Etiopatogenias: acometimento de Yin por excesso (exacerbação) do calor, retenção de Qi e de sangue. Interiorização (invasão) de umidade-calor no sistema Yang, acometimento de Yin e estase sanguínea.
 - Diagnóstico: interiorização (invasão) da umidade-calor no sistema Yang com acometimento do Yin. Comumente vista em casos de pneumonia, hepatoma e afecções febris.
 
+**142. Língua vermelha com facetas dentárias e fissuras com revestimento fino e branco**
+- Língua: ligeiramente vermelha, tamanho aumentado, com facetas dentárias; na parte central, fissura vertical semelhante a um fosso.
+- Saburra: fina e branca com granulação áspera, espessa e esparsa.
+- Etiopatogenias: acometimento de essências corpóreas por calor intensamente exacerbado, acometimento de Qi por calor de verão. Deficiência do baço com invasão do mesmo pela umidade, deficiência de Yin acompanhada de calor interno, deficiências de Qi e de Yin.
+- Diagnóstico: deficiência intrínseca (constitucional) de Yin, deficiência do baço com invasão (infiltração) do mesmo pela umidade. Comumente vista em casos de bronquiolite crônica, tuberculose pulmonar e outras infecções pulmonares, etc.
+
+**143. Língua vermelha e fissurada com revestimento fino, branco e úmido**
+- Língua: vermelha, fissuras profundas como se estivessem sido cortadas com faca. Os cortes parecem radiações.
+- Saburra: a parte da raiz é fina, branca, escorregadia e úmida, assemelhando-se à superfície descamada.
+- Etiopatogenias: deficiência intrínseca (constitucional) de Yin, secura no estômago com calor maciço, debilidade do sangue com esgotamento dos fluidos corpóreos, deficiência do baço com invasão (infiltração) do mesmo pela umidade.
+- Diagnóstico: deficiência de Yin dos rins, exacerbação (hiperatividade) de fogo do coração. Comumente vista em casos de glossite, febre alta, desidratação e desnutrição.
+
+**144. Língua vermelha e fissurada, com pouco revestimento (saburra)**
+- Língua: ligeiramente vermelha com fissuras verticais semelhantes a cortes de faca.
+- Saburra: rala, de pouca quantidade ou quase inexistente.
+- Etiopatogenias: deficiência intrínseca (constitucional) de Yin, debilidade do sangue com esgotamento (ressecamento) dos fluidos corpóreos, calor maciço retido ameaçando homeostase.
+- Diagnóstico: insuficiência de Yin dos rins, ascensão (subida) do pseudofogo ao segmento superior do corpo. Comumente visto em casos de nefrite crônica, bronquiolite, doenças do sistema digestivo e desnutrição.
+
+**145. Língua vermelha com manchas hemorrágicas e com revestimento fino e branco**
+- Língua: vermelha e com tonalidade escura (em fase de escurecimento). Presença de manchas hemorrágicas de coloração preta em extensa área da ponta da língua, além de apresentar pontos vermelhos.
+- Saburra: fina, branca e úmida.
+- Etiopatogenias: excesso de calor nos órgãos Zang (maciço) e Fu (oco), estagnação e retenção de Qi e de sangue. Invasão do coração pelo calor nocivo, estase e bloqueio de sangue do coração. Invasão do sangue pela umidade-fator febril acompanhada de estase (coagulação) sanguínea.
+- Diagnóstico: presença de calor no sangue e estase sanguínea. Comumente vista em casos de hipertensão arterial, disfunção endócrina e afecções febris.
+
+**146. Língua vermelha com revestimento fino, branco e granulado**
+- Língua: vermelha, fina, mole e com poucos pontos vermelhos.
+- Saburra: branca, seca e fina. Possui granulação áspera semelhante a grão de areia.
+- Etiopatogenias: acometimento de essências corpóreas por calor intensamente exacerbado, acometimento de Qi por calor de verão, deficiência de Yin com depleção de essências corpóreas.
+- Diagnóstico: acometimento de Yin por fogo do coração. Comumente vista em casos de doença neurovascular, insolação, taquiesfigmia e afecções febris.
+
+**147. Língua vermelha e fissurada, com revestimento fino, branco e granulado**
+- Língua: vermelha com pontos vermelhos; na parte central, apresenta fissuras superficiais.
+- Saburra: fina, branca e áspera.
+- Etiopatogenias: secura no estômago com calor maciço, deficiência de Yin com esgotamento dos fluidos corpóreos, acometimento (desgaste) de Yin e de Qi por calor de verão.
+- Diagnóstico: deficiência de Yin e calor no estômago. Comumente vista em casos de gastrite crônica, úlcera gástrica e afecções febris resultantes de doenças infecciosas.
+
+**148. Língua vermelha com revestimento fino, branco, liso e úmido**
+- Língua: ligeiramente vermelha, fina e magra.
+- Saburra: fina, branca, de aspecto sujo, brilhante, lisa e com muita umidade (escorregadia).
+- Etiopatogenias: calor no sistema Yong associado à umidade. Deficiência de Qi e de sangue, deficiência de Yang com excesso (abundância) de umidade. Deficiência de Yin com exacerbação (hiperatividade) de fogo associada à umidade.
+- Diagnóstico: deficiência de Qi e de Yin, persistência da mucosidade-umidade. Comumente vista em casos de síndrome de coreoatetose, bronquiolite crônica agudizada.
+
+**149. Língua vermelha com revestimento branco, escorregadio e pegajoso**
+- Língua: vermelha.
+- Saburra: parte central apresenta-se branca com uma coloração levemente amarelada, de aspecto sujo, muita umidade e escorregadia.
+- Etiopatogenias: agressão pelos fatores patogênicos exógenos com ascensão (subida) de frio-umidade ao segmento superior do organismo, lesão (acometimento) interna com inatividade de Yang do estômago. Presença de frio-umidade ou mucosidade-fluidos corpóreos (Tan-In) que se convertem em calor.
+- Diagnóstico: deficiência de Yang do baço e dos rins, estagnação interna de mucosidade-fluidos corpóreos (Tan-In). Comumente vista em casos de nefrite crônica, gastrite crônica e bronquiolite crônica, etc.
+
 ---
 
 ## Próximos passos
 1. Você confirma se o formato está bom (nome curto + língua/saburra +
    etiopatogenias + diagnóstico, tudo clicável)
-2. Eu continuo lendo o restante do atlas (faltam ~124 casos) e a parte de
+2. Eu continuo lendo o restante do atlas (faltam ~115 casos) e a parte de
    teoria (~140 fotos), em lotes, ao longo das próximas sessões
 3. Juntar tudo num rascunho único, depois desenhar como entra na
    plataforma (espaço de Língua ao lado da Auriculoterapia, conforme já
