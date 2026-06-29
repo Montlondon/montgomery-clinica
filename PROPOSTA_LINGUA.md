@@ -1,4 +1,4 @@
-# Proposta — Diagnóstico pela Língua (rascunho em andamento, 14 de ~130 casos)
+# Proposta — Diagnóstico pela Língua (rascunho em andamento, 19 de ~130 casos)
 
 Fonte: atlas fotográfico de diagnóstico pela língua, encontrado em
 `C:\Dropbox\IMANDropbox\Linguas\` (268 fotos de páginas escaneadas de um
@@ -8,7 +8,7 @@ diretamente).
 
 **Aviso de escala:** são ~268 fotos no total (parte de teoria + ~130
 casos numerados no atlas). Processar tudo isso é um trabalho grande, de
-várias sessões — este rascunho cobre os casos 134-149 (com lacunas: 135 e
+várias sessões — este rascunho cobre os casos 134-154 (com lacunas: 135 e
 141 não foram localizados nos arquivos), faltam ainda ~115 casos do atlas
 + a parte de teoria.
 
@@ -104,12 +104,42 @@ selecionar marca na ficha do paciente, mesmo padrão dos outros módulos.
 - Etiopatogenias: agressão pelos fatores patogênicos exógenos com ascensão (subida) de frio-umidade ao segmento superior do organismo, lesão (acometimento) interna com inatividade de Yang do estômago. Presença de frio-umidade ou mucosidade-fluidos corpóreos (Tan-In) que se convertem em calor.
 - Diagnóstico: deficiência de Yang do baço e dos rins, estagnação interna de mucosidade-fluidos corpóreos (Tan-In). Comumente vista em casos de nefrite crônica, gastrite crônica e bronquiolite crônica, etc.
 
+**150. Língua vermelha com pontos vermelhos e com revestimento branco e pegajoso (língua de estrela vermelha)**
+- Língua: vermelho-escura sem muita evidência (sem chegar a ofuscar).
+- Saburra: nas bordas apresenta coloração avermelhada com protuberâncias em forma de espinhos. Fina, branca, de aspecto sujo e seca.
+- Etiopatogenias: invasão do sangue pelo fator febril-calor ou fator nocivo epidêmico, invasão do coração pelo calor nocivo, retenção de umidade-calor no sistema Xue, estagnação de umidade e acometimento de essências corpóreas (Jin).
+- Diagnóstico: exteriorização de calor do sangue e umidade nociva. Comumente vista em casos de afecções febris resultantes de doenças infecciosas.
+
+**151. Língua vermelha com pontos proeminentes e com revestimento branco, pegajoso e seco (saburra de estrela vermelha)**
+- Língua: vermelho-escura com protuberância em forma de espinhos.
+- Saburra: branca, de aspecto sujo, seca e levemente amarelo-clara.
+- Etiopatogenias: retenção de calor no sistema Yong (nutrição), invasão do sangue pelo fator febril-calor ou fator nocivo epidêmico.
+- Diagnóstico: retenção de umidade-calor no sangue. Comumente vista em casos de infecção urinária, afecções febris resultantes de doenças infecciosas das vias aéreas superiores.
+
+**152. Língua vermelha com pontos vermelhos e com revestimento branco e pegajoso**
+- Língua: levemente avermelhada com nítidos pontos vermelhos em sua superfície.
+- Saburra: branca, de aspecto sujo, fina, granulação fina, de aspecto sujo e denso; a parte da raiz é amarela e de aspecto sujo.
+- Etiopatogenias: agressão pelos fatores patogênicos exógenos com retenção e persistência de vento-frio no organismo, invasão (interiorização) de calor no sistema Yong (de nutrição) e Xue (de sangue). Retenção de umidade-turva e mucosidade-fluidos corpóreos (Tan-In) com estagnação alimentar que se converte em calor.
+- Diagnóstico: presença de umidade-calor no fígado e na vesícula biliar; entretanto, provocando movimento interno de fogo do coração. Comumente vista em casos de infecção nos tratos biliares e afecções febris resultantes de doenças infecciosas.
+
+**153. Língua vermelha com revestimento transparente e destacado em forma de flor**
+- Língua: vermelha, mole e viçosa.
+- Saburra: branca, espessa, de aspecto sujo e algumas vezes descama-se. Os locais descamados tornam-se lisos sem saburra ou apresentam uma coloração branca e transparente.
+- Etiopatogenias: persistência de umidade-turva, depleção de Yin do coração, inatividade de Yang do aquecedor médio, ascensão (subida) de umidade ao segmento superior do corpo, acometimento de Yin por umidade-calor.
+- Diagnóstico: deficiência de Yin com exacerbação do fogo, umidade-calor no aquecedor inferior. Comumente vista em casos de hepatoma, doenças cardiovasculares e neurovasculares.
+
+**154. Língua vermelha, magra, atrofiada e mole, com revestimento destacado e liso e com contorno da língua espessado e de aspecto flutuante (solto)**
+- Língua: vermelha, magra, ressecada, atrofiada, mole e atônica (incapacidade de protrusão).
+- Saburra: lisa e descamada com fissuras na parte central, e aspecto de sujeira flutuante de coloração branco-amarelada nas bordas.
+- Etiopatogenias: acometimento de Yin do estômago e dos rins, retenção de umidade-calor que ainda não se superficializou. Deficiência de Yin com exacerbação (hiperatividade) do fogo.
+- Diagnóstico: mucosidade-turva que se converte em calor, esgotamento com debilidade de Yin do estômago (representa um quadro crítico). Comumente vista em infarto agudo do miocárdio, distúrbios neurovasculares, etc.
+
 ---
 
 ## Próximos passos
 1. Você confirma se o formato está bom (nome curto + língua/saburra +
    etiopatogenias + diagnóstico, tudo clicável)
-2. Eu continuo lendo o restante do atlas (faltam ~115 casos) e a parte de
+2. Eu continuo lendo o restante do atlas (faltam ~111 casos) e a parte de
    teoria (~140 fotos), em lotes, ao longo das próximas sessões
 3. Juntar tudo num rascunho único, depois desenhar como entra na
    plataforma (espaço de Língua ao lado da Auriculoterapia, conforme já
