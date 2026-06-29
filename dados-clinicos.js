@@ -2112,3 +2112,75 @@ const auriculoProtocolos = [
     ]
   }
 ];
+
+// ===== PSICANÁLISE (extraído do Curso de Formação em Psicanálise Clínica,
+// Módulos 1 e 2, psicanaliseclinica.com — conteúdo real do curso do Montgomery,
+// complementado pelo texto original de Freud "O Ego e o Id", 1923) =====
+const psicanaliseTemas = [
+  {
+    categoria:'1ª Tópica (Modelo Topográfico)',
+    intro:'Fase inicial da teoria freudiana — divide a psique por "lugares" (topos): onde cada conteúdo mental fica.',
+    itens:[
+      {nome:'Inconsciente (Ics)',desc:'Conteúdos reprimidos, sem acesso direto à consciência; só emerge de forma distorcida (sonhos, chistes, atos falhos, sintomas). Atemporal, ambivalente (amor e ódio simultâneos), regido pelo princípio do prazer. É a parte mais arcaica do aparelho psíquico.'},
+      {nome:'Pré-consciente (Pcs)',desc:'Fronteira entre Ics e Cs — conteúdos acessíveis, mas não presentes na consciência agora (memórias recuperáveis, sem barreira de recalque). É onde a linguagem se estrutura ("representação da palavra").'},
+      {nome:'Consciente (Cs)',desc:'Percepção, atenção, raciocínio; o que o sujeito pensa agora. Regido pelo princípio da realidade — tolera o desprazer e retarda a satisfação imediata.'}
+    ]
+  },
+  {
+    categoria:'2ª Tópica (Modelo Estrutural)',
+    intro:'A partir de 1923 ("O Ego e o Id"), Freud reorganiza o aparelho psíquico por função/relação entre instâncias, não mais por "lugar". Não substitui a 1ª Tópica — as duas se complementam.',
+    itens:[
+      {nome:'Id',desc:'Instância mais arcaica e primordial — ao nascer, somos apenas Id. Reservatório de impulsos caóticos e irracionais, regido pelo princípio do prazer, todo inconsciente. Não faz planos, não espera, não conhece frustração ou limite da realidade.'},
+      {nome:'Ego',desc:'Surge a partir do Id pela experiência com o mundo externo. Serve a "três senhores" (Id, Superego e realidade externa), mediando suas exigências. Parte consciente (percepção, memória, linguagem), parte inconsciente (mecanismos de defesa). Regido pelo princípio da realidade.'},
+      {nome:'Superego',desc:'Especialização do Ego — herdeiro do Complexo de Édipo. Internaliza proibições e ideais a partir dos pais. Parte consciente (regras morais que sabemos que existem) e parte inconsciente (crenças que cremos "naturais"). Um superego rígido é causa frequente de neuroses, angústias e culpa excessiva.'}
+    ]
+  },
+  {
+    categoria:'Fases Psicossexuais',
+    intro:'Desenvolvimento da libido por zonas erógenas — cada fase com seu ponto de fixação possível, relevante para entender regressões.',
+    itens:[
+      {nome:'Fase oral (0-2 anos)',desc:'Zona erotizada: boca. Primeira forma de relação com o mundo e com o objeto (seio/mamadeira).'},
+      {nome:'Fase anal (2-4 anos)',desc:'Zona erotizada: ânus. Período de controle esfincteriano, relacionado a noções iniciais de poder, retenção e doação.'},
+      {nome:'Fase fálica (4-6 anos)',desc:'Zona erotizada: órgão genital. É quando ocorre o Complexo de Édipo — ver categoria própria.'},
+      {nome:'Período de latência (6 anos até puberdade)',desc:'Interesses sexuais sublimados em cultura, escola e socialização.'},
+      {nome:'Fase genital (puberdade até a morte)',desc:'Zona erotizada externa ao próprio corpo — direcionamento da libido ao objeto de desejo no mundo adulto.'}
+    ]
+  },
+  {
+    categoria:'Complexo de Édipo',
+    intro:'Sub-tema da fase fálica — experimentação dos limites impostos pela micro-sociedade familiar, base de formação do Superego.',
+    itens:[
+      {nome:'Édipo bem-resolvido',desc:'Sujeito ingressa no mundo cultural/social com autonomia psíquica — introjeta a lei e segue adiante.'},
+      {nome:'Édipo mal-resolvido',desc:'Sujeito (adolescente ou adulto) permanece psiquicamente preso à dinâmica dos pais, prejudicando novas experiências afetivas e sociais.'},
+      {nome:'Complexo de Édipo feminino / Electra',desc:'Versão com o pai como objeto desejado e a mãe como rival (termo "Electra" é de Jung; Freud preferiu não usá-lo, mas é citado na literatura).'}
+    ]
+  },
+  {
+    categoria:'Mecanismos de Defesa do Ego',
+    intro:'Operações mentais inconscientes que reduzem tensão psíquica entre Id, Superego e realidade externa. Identificar qual mecanismo está em jogo orienta o manejo clínico.',
+    itens:[
+      {nome:'Recalcamento / Repressão',desc:'Conteúdo intolerável (do Id, censurado pelo Superego) é reprimido inconscientemente pelo Ego. É a "primeira linha de defesa" — quando falha, o afeto retorna como sintoma (retorno do recalcado).'},
+      {nome:'Negação (forclusão)',desc:'Defesa mais arcaica — nega extensivamente a realidade exterior e a substitui por outra realidade. Associada a subjetividades psicóticas.'},
+      {nome:'Renegação / Denegação / Recusa',desc:'Forma parcial de negação — o sujeito sabe que a verdade existe, mas a recusa em parte. Associada a subjetividades perversas.'},
+      {nome:'Formação reativa',desc:'Uma manifestação recalcada (pelo sofrimento que causaria) é substituída por uma reação oposta — ex.: agressividade reprimida expressa como docilidade extrema.'},
+      {nome:'Regressão',desc:'Quando o Ego não suporta uma ameaça, recua a um ponto de fixação infantil (de alguma fase psicossexual), assumindo funcionamento mais primitivo.'},
+      {nome:'Deslocamento',desc:'Impulso (raiva, desejo) que não pode ser direcionado ao objeto original é deslocado a outro objeto mais "seguro" ou acessível.'},
+      {nome:'Conversão orgânica (histeria de conversão)',desc:'Conflito psíquico reprimido busca descarga no corpo — sintoma físico sem causa fisiológica, com correspondente simbólico ao conteúdo recalcado.'},
+      {nome:'Projeção',desc:'Atribui a outra pessoa ou objeto impulsos (agressivos/sexuais) inaceitáveis em si mesmo.'},
+      {nome:'Isolamento',desc:'Isola um pensamento ou comportamento de suas conexões afetivas e associativas, esvaziando-o de carga emocional.'},
+      {nome:'Racionalização',desc:'Elaboração lógica/racional construída para dar sentido a conteúdos que, na verdade, têm origem inconsciente incompreendida.'},
+      {nome:'Sublimação',desc:'Energia pulsional potencialmente destrutiva é redirecionada para uma realização socialmente valorizada — trabalho, arte.'}
+    ]
+  },
+  {
+    categoria:'Pulsões',
+    intro:'Energia psíquica que busca descarga através de um representante (ideia ou afeto) — diferente do instinto, que é biológico e tem objeto fixo.',
+    itens:[
+      {nome:'Pulsões de autoconservação (Ego)',desc:'Busca pela satisfação das necessidades essenciais de sobrevivência — protótipo: a fome.'},
+      {nome:'Pulsões sexuais (Libido)',desc:'Prazer corporal ligado às zonas erógenas (boca, ânus, genitais), não derivado das necessidades de sobrevivência.'},
+      {nome:'Pulsão de Vida (Eros)',desc:'Tendência à ligação, à preservação e à construção — inclui as pulsões sexuais e de autoconservação.'},
+      {nome:'Pulsão de Morte (Tânatos)',desc:'Tendência à descarga total da tensão, à repetição e, em sua face destrutiva, à agressão (voltada a si ou ao outro).'}
+    ]
+  }
+];
+const psicanaliseTemasFlat=psicanaliseTemas.flatMap(c=>c.itens.map(i=>({...i,categoria:c.categoria})));

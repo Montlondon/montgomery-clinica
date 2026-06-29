@@ -808,6 +808,15 @@ tr:hover td{background:#EEF2F7}
   </div>
 
   <div class="fc">
+    <div class="fst" style="font-family:'Lora',serif"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></span>Psicanálise</div>
+    <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Marque os conceitos, mecanismos e estruturas psíquicas identificados nesta avaliação — chegam na ficha do paciente e no PDF impresso. Busque por nome ou palavra-chave.</p>
+    <div class="fg full" style="margin-bottom:12px">
+      <input type="text" id="psicAnaliseBusca" placeholder="Ex: recalcamento, superego, édipo, sublimação, pulsão..." oninput="filtrarPsicanalise()" autocomplete="off">
+    </div>
+    <div id="psicAnaliseConteudo" style="max-height:400px;overflow-y:auto;padding-right:4px"></div>
+  </div>
+
+  <div class="fc">
     <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg></span>Escala de Orientação Emocional</div>
     <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Registro do estado emocional predominante do paciente nesta avaliação.</p>
     <div class="fg full">
@@ -1629,7 +1638,7 @@ function go(p,el){
     if(el){
       _diagEditandoId=null;
       _diagPacSel=null;
-      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],bagua:[],elementoSintomas:[],pontoSintomas:[]};
+      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]};
       _diagJaSalvo=false;
       document.getElementById('diagPacBusca').value='';
       document.getElementById('diagPacId').value='';
@@ -2770,7 +2779,7 @@ function fecharRxPacLista(){
 let _diagPacSel=null;
 let _diagJaSalvo=false;
 let _diagEditandoId=null; // id do diagnóstico em edição (null = nova avaliação)
-let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],bagua:[],elementoSintomas:[],pontoSintomas:[]}; // guarda o que foi clicado nesta avaliação + anotações por elemento
+let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]}; // guarda o que foi clicado nesta avaliação + anotações por elemento
 
 // Dados (bancoIntegrativoCompleto, CATALOGO_SUPLEMENTOS_INICIAL, sistemasABC) movidos para dados-clinicos.js
 
@@ -2782,6 +2791,7 @@ function initDiagnostico(){
   initBalancoABC();
   initBaguaWheel();
   renderAuriculoMapaCompleto();
+  renderPsicanalise();
   if(!document.getElementById('diagDt').value)document.getElementById('diagDt').value=new Date().toISOString().split('T')[0];
   if(!_diagPacSel){
     document.getElementById('diagPacBusca').value='';
@@ -3298,6 +3308,52 @@ function togglePontoSintoma(ponto,sintoma){
   _diagJaSalvo=false;
   renderDiagPainel();
 }
+// ===== PSICANÁLISE =====
+function psicanaliseItemMarcado(categoria,nome){
+  return (_diagSelecoes.psicanalise||[]).some(p=>p.categoria===categoria&&p.nome===nome);
+}
+function togglePsicanalise(categoria,nome){
+  if(!_diagSelecoes.psicanalise)_diagSelecoes.psicanalise=[];
+  const i=_diagSelecoes.psicanalise.findIndex(p=>p.categoria===categoria&&p.nome===nome);
+  if(i>=0)_diagSelecoes.psicanalise.splice(i,1);
+  else _diagSelecoes.psicanalise.push({categoria,nome});
+  _diagJaSalvo=false;
+  renderDiagPainel();
+  renderPsicanalise();
+}
+let _psicAnaliseBusca='';
+function filtrarPsicanalise(){
+  _psicAnaliseBusca=(document.getElementById('psicAnaliseBusca').value||'').toLowerCase();
+  renderPsicanalise();
+}
+function renderPsicanalise(){
+  const cont=document.getElementById('psicAnaliseConteudo');
+  if(!cont)return;
+  const q=_psicAnaliseBusca;
+  let html='';
+  psicanaliseTemas.forEach(cat=>{
+    const itens=q?cat.itens.filter(i=>i.nome.toLowerCase().includes(q)||i.desc.toLowerCase().includes(q)||cat.categoria.toLowerCase().includes(q)):cat.itens;
+    if(!itens.length)return;
+    html+=`<div style="margin-bottom:14px">
+      <div style="font-size:11.5px;font-weight:700;color:var(--pri-d);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--brd)">${escHtml(cat.categoria)}</div>`;
+    itens.forEach(item=>{
+      const on=psicanaliseItemMarcado(cat.categoria,item.nome);
+      html+=`<div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--brd-l,#ede8df)">
+        <button type="button" onclick="togglePsicanalise(${JSON.stringify(cat.categoria)},${JSON.stringify(item.nome)})"
+          style="flex-shrink:0;width:22px;height:22px;border-radius:5px;border:2px solid var(--pri-d);background:${on?'var(--pri-d)':'transparent'};color:${on?'#fff':'var(--pri-d)'};font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s">
+          ${on?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M5 12l5 5L19 7"/></svg>':'+'}
+        </button>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600;color:var(--txt);line-height:1.4">${escHtml(item.nome)}</div>
+          <div style="font-size:11px;color:var(--txt-l);line-height:1.5;margin-top:2px">${escHtml(item.desc)}</div>
+        </div>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  if(!html)html='<div style="color:var(--txt-l);font-style:italic;padding:12px;text-align:center">Nenhum item encontrado.</div>';
+  cont.innerHTML=html;
+}
 function toggleSistemaAbc(id,m){
   if(!_diagSelecoes.sistemasAbc)_diagSelecoes.sistemasAbc=[];
   const i=_diagSelecoes.sistemasAbc.indexOf(id);
@@ -3372,7 +3428,7 @@ function montarTabelaBalance(nomeElemento){
 function renderDiagPainel(){
   const painel=document.getElementById('diagPainel');
   const resumoBox=document.getElementById('diagResumoBox');
-  const temAlgo=_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length||(_diagSelecoes.auriculo||[]).length||(_diagSelecoes.bagua||[]).length;
+  const temAlgo=_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length||(_diagSelecoes.auriculo||[]).length||(_diagSelecoes.bagua||[]).length||(_diagSelecoes.psicanalise||[]).length||(_diagSelecoes.elementoSintomas||[]).length||(_diagSelecoes.pontoSintomas||[]).length;
   if(!temAlgo){painel.style.display='none';resumoBox.style.display='none';return;}
   painel.style.display='block';
   resumoBox.style.display='block';
@@ -3492,6 +3548,7 @@ function renderDiagPainel(){
   if((_diagSelecoes.bagua||[]).length)partes.push(`<strong>Bagua:</strong> ${_diagSelecoes.bagua.map(b=>b.sindrome).join(', ')}`);
   if((_diagSelecoes.elementoSintomas||[]).length)partes.push(`<strong>Sinais (5 Elementos):</strong> ${_diagSelecoes.elementoSintomas.map(s=>s.sintoma).join(', ')}`);
   if((_diagSelecoes.pontoSintomas||[]).length)partes.push(`<strong>Sintomas (Pontos do Corpo):</strong> ${_diagSelecoes.pontoSintomas.map(s=>s.sintoma).join(', ')}`);
+  if((_diagSelecoes.psicanalise||[]).length)partes.push(`<strong>Psicanálise:</strong> ${_diagSelecoes.psicanalise.map(p=>p.nome).join(', ')}`);
   const emo=document.getElementById('diagEscalaEmo').value;
   if(emo)partes.push(`<strong>Estado emocional:</strong> ${emo}`);
   resumo.innerHTML=partes.map(p=>`<p style="margin-bottom:5px">${p}</p>`).join('');
@@ -3516,6 +3573,7 @@ function gerarHtmlDiag(diagRec){
   const baguaSel=diagRec?(diagRec.bagua||[]):(_diagSelecoes.bagua||[]);
   const elementoSintomasSel=diagRec?(diagRec.elementoSintomas||[]):(_diagSelecoes.elementoSintomas||[]);
   const pontoSintomasSel=diagRec?(diagRec.pontoSintomas||[]):(_diagSelecoes.pontoSintomas||[]);
+  const psicAnaliseSel=diagRec?(diagRec.psicanalise||[]):(_diagSelecoes.psicanalise||[]);
   const emo=diagRec?diagRec.escalaEmocional:document.getElementById('diagEscalaEmo').value;
   const emoObs=diagRec?diagRec.emoObs:document.getElementById('diagEmoObs').value;
 
@@ -3571,6 +3629,16 @@ function gerarHtmlDiag(diagRec){
     blocos+=`<div style="border-left:4px solid #1E3A5F;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
       <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">Bagua — Acupuntura</div>
       <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27">${baguaSel.map(b=>`${escHtml(b.sindrome)} (${escHtml(b.meridiano)})`).join(', ')}</div>
+    </div>`;
+  }
+  if(psicAnaliseSel.length){
+    // Agrupa por categoria para o PDF ficar mais organizado
+    const psiGrupos={};
+    psicAnaliseSel.forEach(p=>{(psiGrupos[p.categoria]=psiGrupos[p.categoria]||[]).push(p.nome);});
+    const psiLinhas=Object.entries(psiGrupos).map(([cat,nomes])=>`<div style="margin-bottom:6px"><span style="font-weight:700;color:#5a3e7a">${escHtml(cat)}:</span> ${nomes.map(escHtml).join(', ')}</div>`).join('');
+    blocos+=`<div style="border-left:4px solid #5a3e7a;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
+      <div style="font-size:11.5pt;font-weight:700;color:#5a3e7a;margin-bottom:6px">Psicanálise</div>
+      <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27">${psiLinhas}</div>
     </div>`;
   }
   if(!blocos)blocos='<div style="color:#aaa;font-style:italic;padding:14px;text-align:center">Nenhum item selecionado na avaliação.</div>';
@@ -3647,7 +3715,7 @@ function fecharDiagPacLista(){
 
 function limparDiagnostico(){
   if(!confirm('Limpar toda a avaliação atual?'))return;
-  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],bagua:[],elementoSintomas:[],pontoSintomas:[]};
+  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]};
   document.getElementById('diagEscalaEmo').value='';
   document.getElementById('diagEmoObs').value='';
   _diagJaSalvo=false;
@@ -3704,6 +3772,7 @@ async function salvarDiagnostico(){
     bagua:[...(_diagSelecoes.bagua||[])],
     elementoSintomas:[...(_diagSelecoes.elementoSintomas||[])],
     pontoSintomas:[...(_diagSelecoes.pontoSintomas||[])],
+    psicanalise:[...(_diagSelecoes.psicanalise||[])],
     escalaEmocional:document.getElementById('diagEscalaEmo').value,
     emoObs:document.getElementById('diagEmoObs').value
   };
@@ -3749,7 +3818,7 @@ function editarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])]};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])]};
   _diagEditandoId=diag.id;
   _diagJaSalvo=false;
   go('diagnostico',null);
@@ -4151,7 +4220,7 @@ function duplicarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])]};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])]};
   _diagEditandoId=null;
   _diagJaSalvo=false;
   go('diagnostico',null);
