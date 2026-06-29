@@ -2866,20 +2866,24 @@ function baguaOrgaoAtual(){
   }
   return BAGUA_ORDEM[0];
 }
-function baguaBonecoQuiroSVG(cor){
-  // Mesmo boneco do Balanço Método (abcBonecoSVG), só reduzido pro centro da roda do Bagua
-  return `<g transform="translate(158,140) scale(0.32)" fill="none" stroke="${cor}" stroke-width="6" stroke-linecap="round">
+// Boneco "vazio" (sem sistema selecionado ainda) - mesma estrutura exata do
+// abcBonecoSVG do Balanço Método (cabeça/corpo/4 membros com círculos),
+// só que os 4 círculos ficam ocos/sem rótulo, pra ficar visualmente igual
+// ao boneco do Balanço Método mesmo antes de clicar num meridiano.
+function abcBonecoVazioSVG(){
+  return `<svg class="abc-boneco" viewBox="0 0 200 250" fill="none" stroke="var(--line)" stroke-width="3" stroke-linecap="round">
     <circle cx="100" cy="30" r="14"/>
-    <circle cx="95" cy="28" r="1.4" fill="${cor}" stroke="none"/>
-    <circle cx="105" cy="28" r="1.4" fill="${cor}" stroke="none"/>
-    <line x1="100" y1="30" x2="100" y2="33" stroke-width="6"/>
-    <path d="M95 36q5 4 10 0" stroke-width="6"/>
+    <circle cx="95" cy="28" r="1.4" fill="var(--ink-soft)" stroke="none"/>
+    <circle cx="105" cy="28" r="1.4" fill="var(--ink-soft)" stroke="none"/>
+    <line x1="100" y1="30" x2="100" y2="33" stroke-width="2"/>
+    <path d="M95 36q5 4 10 0" stroke-width="2"/>
     <line x1="100" y1="44" x2="100" y2="140"/>
     <line x1="100" y1="60" x2="40" y2="22"/>
     <line x1="100" y1="60" x2="160" y2="22"/>
     <line x1="100" y1="140" x2="55" y2="228"/>
     <line x1="100" y1="140" x2="145" y2="228"/>
-  </g>`;
+    ${ABC_BONECO_SLOTS.map(([,x,y])=>`<circle cx="${x}" cy="${y}" r="13" fill="var(--surface)" stroke="var(--ink-soft)" stroke-width="2"/>`).join('')}
+  </svg>`;
 }
 function baguaWheelSVG(selecionado){
   const cx=190,cy=190,Rmerid=145;
@@ -2899,7 +2903,8 @@ function baguaWheelSVG(selecionado){
   const totalFicha=(typeof _diagSelecoes!=='undefined'&&_diagSelecoes.sistemasAbc)?_diagSelecoes.sistemasAbc.length:0;
   const sAtual=sistemasABC.find(s=>s.id===orgaoAtual);
   const sCentro=selecionado?sistemasABC.find(s=>s.id===selecionado):null;
-  const bonecoCentro=sCentro?`<svg x="144" y="132" width="92" height="115" viewBox="0 0 200 250" fill="none" stroke="var(--ink-soft)" stroke-width="3" stroke-linecap="round">${abcBonecoInner(sCentro,selecionado)}</svg>`:baguaBonecoQuiroSVG('var(--ink-soft)');
+  const bonecoInner=sCentro?abcBonecoInner(sCentro,selecionado):abcBonecoInner(null,null,true);
+  const bonecoCentro=`<svg x="144" y="132" width="92" height="115" viewBox="0 0 200 250" fill="none" stroke="var(--ink-soft)" stroke-width="3" stroke-linecap="round">${bonecoInner}</svg>`;
   return `<svg viewBox="0 0 380 380" style="width:100%;max-width:380px;display:block;margin:0 auto">
     <circle cx="190" cy="190" r="60" fill="var(--bg)" stroke="var(--line)" stroke-width="1.5"/>
     ${bonecoCentro}
@@ -2908,8 +2913,8 @@ function baguaWheelSVG(selecionado){
   </svg>
   <div style="text-align:center;font-size:10.5px;color:var(--ink-soft);font-family:Inter,sans-serif;margin-top:4px">de plantão: ${orgaoAtual}${sAtual?' · '+BAGUA_HORAS[orgaoAtual]:''}</div>`;
 }
-function abcBonecoInner(s,m){
-  const full=abcBonecoSVG(s,m);
+function abcBonecoInner(s,m,vazio){
+  const full=vazio?abcBonecoVazioSVG():abcBonecoSVG(s,m);
   return full.slice(full.indexOf('>')+1,full.lastIndexOf('</svg>'));
 }
 function baguaSelecionar(id){
