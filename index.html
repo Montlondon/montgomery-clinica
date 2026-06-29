@@ -1357,16 +1357,41 @@ let _cache={};
 
 async function dbGet(tabela,forcar=false){
   if(_cache[tabela]&&!forcar)return _cache[tabela];
-  // Buscar em páginas de 1000 (limite do Supabase)
-  let todos=[];
-  let offset=0;
   const LIMIT=1000;
-  while(true){
-    const r=await supaReq('GET',tabela,null,`?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=${offset}`);
-    const lote=(r||[]).map(row=>row.dados);
-    todos=todos.concat(lote);
-    if(lote.length<LIMIT)break;
-    offset+=LIMIT;
+  // 1ª página já pede a contagem total (Content-Range) pra poder buscar o
+  // resto das páginas em paralelo, em vez de uma atrás da outra - é o que
+  // deixava o carregamento lento em tabelas grandes (pacientes: 4 a 5
+  // páginas esperando a latência de rede 4-5 vezes em sequência).
+  let primeiraPagina=[],total=null;
+  try{
+    const r0=await fetch(`${SUPA_URL}/rest/v1/${tabela}?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=0`,{
+      headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'count=exact'}
+    });
+    if(r0.ok){
+      primeiraPagina=(await r0.json()).map(row=>row.dados);
+      const cr=r0.headers.get('content-range'); // formato "0-999/4321"
+      if(cr&&cr.includes('/')){const n=parseInt(cr.split('/')[1]);if(!isNaN(n))total=n;}
+    }
+  }catch(e){console.error('Erro Supabase ('+tabela+'):',e);}
+  let todos=primeiraPagina;
+  if(total!==null&&total>primeiraPagina.length){
+    const offsets=[];
+    for(let off=LIMIT;off<total;off+=LIMIT)offsets.push(off);
+    const paginas=await Promise.all(offsets.map(off=>
+      supaReq('GET',tabela,null,`?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=${off}`).then(r=>(r||[]).map(row=>row.dados))
+    ));
+    paginas.forEach(p=>{todos=todos.concat(p);});
+  }else if(total===null&&primeiraPagina.length===LIMIT){
+    // Fallback: servidor não devolveu a contagem (cabeçalho ausente) -
+    // mantém a paginação sequencial de antes, só pra esse caso raro.
+    let offset=LIMIT;
+    while(true){
+      const r=await supaReq('GET',tabela,null,`?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=${offset}`);
+      const lote=(r||[]).map(row=>row.dados);
+      todos=todos.concat(lote);
+      if(lote.length<LIMIT)break;
+      offset+=LIMIT;
+    }
   }
   _cache[tabela]=todos;
   return todos;
