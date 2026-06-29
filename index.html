@@ -2943,6 +2943,7 @@ function baguaWheelSVG(selecionado){
   const cx=190,cy=190,Rmerid=145;
   const orgaoAtual=baguaOrgaoAtual();
   let circulos='';
+  let sombras=''; // glow do órgão de plantão, desenhado ANTES dos nós pra ficar por baixo
   BAGUA_ORDEM.forEach((id,i)=>{
     const ang=(-135+i*30)*Math.PI/180; // -135 (em vez de -90) centraliza o bloco do Fogo (4 nós) exatamente no topo
     const x=cx+Rmerid*Math.cos(ang),y=cy+Rmerid*Math.sin(ang);
@@ -2950,9 +2951,12 @@ function baguaWheelSVG(selecionado){
     const cor=ORGAO_ELEMENTO_COR[id]||'var(--pri-deep)';
     const on=selecionado&&(id===selecionado||PAR_ORGANO[selecionado]===id);
     const plantao=id===orgaoAtual;
-    circulos+=`${plantao?`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="25" fill="none" stroke="${cor}" stroke-width="1.5" stroke-dasharray="3,3" opacity=".7"/>`:''}
-      <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="20" fill="${cor}" stroke="${on?'#2C2A27':'#fff'}" stroke-width="${on?3:1.5}" style="cursor:pointer" onclick="baguaSelecionar('${id}')"/>
-      <text x="${x.toFixed(1)}" y="${(y+4).toFixed(1)}" text-anchor="middle" font-size="12.5" font-weight="700" font-family="Inter,sans-serif" fill="#fff" style="cursor:pointer;pointer-events:none">${id}</text>`;
+    if(plantao)sombras+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="34" fill="url(#bgGlow)"/>`;
+    // Etiqueta do horário de cada órgão, sempre visível, um pouco além do nó
+    const xh=cx+(Rmerid+30)*Math.cos(ang),yh=cy+(Rmerid+30)*Math.sin(ang);
+    circulos+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="20" fill="${cor}" stroke="${on?'#2C2A27':'#fff'}" stroke-width="${on?3:1.5}" style="cursor:pointer" onclick="baguaSelecionar('${id}')"/>
+      <text x="${x.toFixed(1)}" y="${(y+4).toFixed(1)}" text-anchor="middle" font-size="12.5" font-weight="700" font-family="Inter,sans-serif" fill="#fff" style="cursor:pointer;pointer-events:none">${id}</text>
+      <text x="${xh.toFixed(1)}" y="${(yh+3).toFixed(1)}" text-anchor="middle" font-size="8" font-weight="${plantao?'700':'500'}" font-family="Inter,sans-serif" fill="${plantao?cor:'var(--ink-soft)'}" style="pointer-events:none">${BAGUA_HORAS[id]}</text>`;
   });
   const totalFicha=(typeof _diagSelecoes!=='undefined'&&_diagSelecoes.sistemasAbc)?_diagSelecoes.sistemasAbc.length:0;
   const sAtual=sistemasABC.find(s=>s.id===orgaoAtual);
@@ -2960,9 +2964,11 @@ function baguaWheelSVG(selecionado){
   const bonecoInner=sCentro?abcBonecoInner(sCentro,selecionado):abcBonecoInner(null,null,true);
   const bonecoCentro=`<svg x="144" y="132" width="92" height="115" viewBox="0 0 200 250" fill="none" stroke="var(--ink-soft)" stroke-width="3" stroke-linecap="round">${bonecoInner}</svg>`;
   return `<svg viewBox="0 0 380 380" style="width:100%;max-width:380px;display:block;margin:0 auto">
+    <defs><radialGradient id="bgGlow"><stop offset="0%" stop-color="var(--pri-deep)" stop-opacity=".35"/><stop offset="100%" stop-color="var(--pri-deep)" stop-opacity="0"/></radialGradient></defs>
     <circle cx="190" cy="190" r="60" fill="var(--bg)" stroke="var(--line)" stroke-width="1.5"/>
     ${bonecoCentro}
     ${totalFicha?`<circle cx="237" cy="143" r="13" fill="var(--pri-deep)"/><text x="237" y="147" text-anchor="middle" font-size="11" font-weight="700" font-family="Inter,sans-serif" fill="#fff">${totalFicha}</text>`:''}
+    ${sombras}
     ${circulos}
   </svg>
   <div style="text-align:center;font-size:10.5px;color:var(--ink-soft);font-family:Inter,sans-serif;margin-top:4px">de plantão: ${orgaoAtual}${sAtual?' · '+BAGUA_HORAS[orgaoAtual]:''}</div>`;
