@@ -45,6 +45,19 @@ Visão do Montgomery pra evoluir o Bagua: ao invés de só Acupuntura, a roda te
 
 ## Em planejamento
 
+### 0. Módulo de Psicanálise — a maior frente do projeto (decidido 30/06)
+Montgomery confirmou: quer o módulo de Psicanálise o mais completo possível — estrutura do aparelho psíquico (id/ego/superego), mecanismos de defesa, "O Mal-Estar na Civilização", e tudo mais que a coleção de Freud trouxer de relevante — tudo clicável, mesmo padrão dos outros módulos (clica → vai pra ficha do paciente → aparece no resumo e no PDF impresso). Ele disse textualmente: "acredito que esta é a parte maior do sistema".
+
+**Fonte:** Montgomery tem a coleção de obras do Freud em PDF (igual fez com as apostilas de Acupuntura/Quiro) — vai adicionar ao repositório pra extração de conteúdo real, sem inventar conceito.
+
+**Plano de execução (mesmo método já validado nas outras frentes):**
+1. Montgomery adiciona os PDFs da coleção Freud ao repositório
+2. Extrair texto (`pdftotext -layout`) e mapear os grandes eixos/categorias presentes na coleção
+3. Montar rascunho de proposta (categorias + conteúdo, igual `PROPOSTA_SINTOMAS.md`) pra aprovação antes de codar
+4. Implementar: estrutura clicável (categorias → conceitos/sintomas), integrada ao Diagnóstico Integrado e ao motor de sugestões cruzadas já existente
+
+**Status:** aguardando Montgomery subir os PDFs da coleção Freud.
+
 ### 1. Boneco do Balanço Método — refinar ilustração (v2)
 A v1 já está no ar: boneco esquemático em traços simples (círculos + linhas), funcional, lendo `sistemasABC[].pontos` via `abcBonecoSVG()`. Próximo passo, se quiser: trocar o traço simples por uma ilustração mais anatômica do corpo (braços erguidos), mantendo a mesma lógica de dados.
 
