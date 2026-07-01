@@ -123,6 +123,36 @@ Status: priorizamos outras frentes primeiro (boneco do Balanço Método etc.) e 
 
 **Próximo passo para implementar:** só entrar com `dados-clinicos.js` e `index.html` — mesmo padrão da Psicanálise, nova seção no Diagnóstico Integrado.
 
+### 5c. Numerologia Cabalística — Calculadora + Mapa de Reencarnações (01/07)
+
+**Pedido do Montgomery:** ferramenta para calcular o perfil numerológico pessoal e o número de reencarnações segundo a Kabbalah.
+
+**Mapa do Montgomery (Hans Decoz, fonte: `Montgomery Numerológico.docx.pdf`):**
+- **Destino (Vida): 7** — o Buscador da Verdade, ser espiritual, mente analítica, "lobo solitário". Pitágoras amava o 7 pelo potencial espiritual.
+- **Expressão (nome): 8** — força, liderança, realizações. "Este é seu estágio de recompensas em sua evolução. Sua vida é uma vida inteira de colheitas."
+- **Desejo (alma): 15/6** — cura, aconselhamento, amor, família. "As habilidades para o aconselhamento e a cura são naturais em você."
+
+**Conexão direta com a Árvore da Vida:**
+| Número | Numerologia | Sefirá | Correspondência |
+|---|---|---|---|
+| 7 (Destino) | Buscador espiritual, arte, natureza | **Netzach** (7ª) | Vênus · Madeira · Hun · busca do sagrado |
+| 8 (Expressão) | Mente, linguagem, estrutura, colheita | **Hod** (8ª) | Mercúrio · Metal · Po · organização |
+| 6 (Desejo/Alma) | Coração, cura, amor, centro | **Tiphereth** (6ª) | Sol · Fogo · Shen · o grande curador |
+
+A alma de Montgomery (Desejo = 6/Tiphereth) quer curar pelo coração. Seu caminho de vida (Destino = 7/Netzach) o leva pela busca espiritual e artística. Sua expressão (8/Hod) é a estrutura e a sistematização que transforma experiência em plataforma.
+
+O 15/6 do Desejo é especialmente rico em Kabbalah: 15 = carta XV do Tarot (O Diabo, Arcano de Capricórnio) — a sombra que precisa ser integrada antes de alcançar Tiphereth. O caminho da letra Ayin (ע) liga exatamente **Tiphereth a Hod** na Árvore, descendo do coração para a mente estruturada — o percurso vivido por Montgomery.
+
+**Reencarnações segundo a Kabbalah (Gilgulim — Lurianic Kabbalah):**
+Na tradição Luriânica (Ari, séc. XVI), as almas passam por gilgulim (rotoações, reencarnações) para completar os tikunim (reparações). O número de gilgulim de uma alma é determinado pelos desequilíbrios não resolvidos nas Sefirot. Uma alma com Destino 7 (Netzach) e Desejo 6 (Tiphereth) já completou os ciclos iniciais de sobrevivência (Malkuth-Yesod) e está nas rodadas superiores — alma madura, em fase de integração e colheita (Expressão 8 como sinal). Em Kabbalah prática, o Zohar menciona que a maioria das almas precisam entre 3 e 7 gilgulim; uma alma no ciclo 8 (Expressão/Hod) está nas últimas rodadas de refinamento antes do retorno à Fonte.
+
+**O que construir (ferramenta):**
+1. **Calculadora de Mapa Numerológico:** entrada (nome completo ao nascer + data de nascimento), saída (Destino/Expressão/Desejo/Dia do nascimento/Personalidade), com interpretação conectada à Sefirá correspondente e à posição na Árvore da Vida
+2. **Mapa de Reencarnações Luriânico:** estima o "estágio do gilgul" a partir dos números, com interpretação de qual Sefirá está em processo de tikun (reparação) nesta vida
+3. **Integração com a Árvore da Vida:** clicar no mapa numérico acende a Sefirá correspondente na Árvore — conexão visual imediata entre números e corpo energético
+
+**Status:** Aguardando abertura de agenda. Retomar dizendo "numerologia" ou "mapa numerológico".
+
 ### 5. Publicar como app nativo na Play Store (TWA) — **BEM FUTURO, sem pressa**
 Empacotar o site como Trusted Web Activity (caminho oficial do Google): gera um `.apk`/`.aab` de verdade, instalável pela Play Store, abrindo sem barra de navegador — visualmente idêntico a um app nativo. Exige conta de desenvolvedor Google Play (taxa única ~US$25) e processo de build/assinatura do pacote. Pré-requisito natural: ter o login (item 4) resolvido antes, já que um app na loja precisa de autenticação real.
 
