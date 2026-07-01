@@ -2181,6 +2181,42 @@ const psicanaliseTemas = [
       {nome:'Pulsão de Vida (Eros)',desc:'Tendência à ligação, à preservação e à construção — inclui as pulsões sexuais e de autoconservação.'},
       {nome:'Pulsão de Morte (Tânatos)',desc:'Tendência à descarga total da tensão, à repetição e, em sua face destrutiva, à agressão (voltada a si ou ao outro).'}
     ]
+  },
+  {
+    categoria:'Luto e Melancolia',
+    intro:'Freud (1917) distingue luto normal (reação saudável à perda) de melancolia (depressão com raiz inconsciente). Referência clínica fundamental para trabalhar perdas, depressão e ambivalência afetiva.',
+    itens:[
+      {nome:'Luto normal (trabalho de luto)',desc:'Reação esperada à perda real de um objeto amado — pessoa, ideal, liberdade. O Ego desinveste lentamente do objeto perdido através da memória e do afeto, até a libido ficar disponível para novos vínculos. Doloroso, mas sem perda permanente do senso de realidade nem rebaixamento do Ego.'},
+      {nome:'Melancolia (depressão)',desc:'A perda não é elaborada — o objeto perdido é introjetado no próprio Ego ("a sombra do objeto recai sobre o Ego"). O sujeito não sabe exatamente o que perdeu, só sente o empobrecimento. Resultado: autoacusação, autodepreciação, "queixar-se é dar queixa" — os insultos dirigidos a si são, na verdade, dirigidos ao objeto perdido/odiado que agora vive dentro.'},
+      {nome:'Ambivalência amor-ódio',desc:'Característica central da melancolia. A relação com o objeto perdido sempre conteve amor e ódio simultâneos (ambivalência). Com a perda, o ódio inconsciente não tem mais destino — volta-se contra o próprio Ego identificado com o objeto. Daí a crueldade da autocrítica melancólica.'},
+      {nome:'Identificação com o objeto perdido',desc:'Mecanismo central da melancolia: em vez de retirar a libido do objeto e transferir a outro (como no luto), o Ego regride e se identifica com o objeto — "o Ego trata a si mesmo como o objeto". É a base narcísica da melancolia: o objeto perdido vive dentro, e o Ego o odeia em si mesmo.'},
+      {nome:'Mania como polo oposto',desc:'A melancolia pode alternar com estados maníacos — não porque a dor acabou, mas porque o investimento libidinal retido durante o episódio melancólico se libera de uma vez. O sujeito maníaco "triunfa" sobre o objeto que o fazia sofrer, mas a luta não está resolvida — o ciclo se repete.'},
+      {nome:'Sentimento de culpa melancólico',desc:'O superego age com crueldade extrema sobre o Ego que incorporou o objeto. O sujeito se acusa de fracasso, inutilidade, maldade — mas ao clínico atento, essas acusações muitas vezes descrevem o próprio objeto perdido. Perguntar ao paciente sobre quem mais se encaixaria nessa descrição pode abrir o inconsciente.'}
+    ]
+  },
+  {
+    categoria:'A Negação (Verneinung)',
+    intro:'Freud (1925) — texto breve e denso. A negação é uma das formas pelo qual o inconsciente se revela: ao negar um conteúdo, o sujeito inconscientemente o confirma. Fundamental para o manejo clínico de resistências.',
+    itens:[
+      {nome:'Negação como resistência ao inconsciente',desc:'"Agora o senhor vai pensar que quero dizer algo ofensivo, mas realmente não tenho essa intenção." — Para Freud, a negação revela o conteúdo recalcado: ao dizer "não é isso", o sujeito anuncia exatamente isso. O clínico aprende a ler o não como o índice do que o inconsciente insiste.'},
+      {nome:'"Isso eu não tinha pensado"',desc:'Freud considera esta frase — dita pelo paciente como negação de uma interpretação — a prova mais forte de que se tocou o inconsciente. "Não há um \'não\' vindo do inconsciente": o inconsciente afirma tudo; a negação é sempre do Ego consciente que recusa o que emerge.'},
+      {nome:'Função intelectual do juízo: afirmar e negar',desc:'O juízo (afirmar/negar) é a forma como a função intelectual processa o que o processo primário (inconsciente) simplesmente apresenta. O "não" intelectual permite ao sujeito distanciar-se do conteúdo sem recalcá-lo totalmente — daí a frase: "com o auxílio da negação, só se revoga uma das consequências da repressão: o conteúdo chega à consciência, mas sem a carga afetiva".'},
+      {nome:'Prova de realidade',desc:'Para existir como "real", algo precisa primeiro ser uma representação interna (percepção internalizada) e depois ser reencontrado no mundo externo (prova de realidade). O que falhou na prova de realidade — que existiu e foi perdido — deixa rastro de "busca". Fundamento teórico do luto: procuramos o que um dia foi real e já não está.'},
+      {nome:'Aceitação intelectual sem levantamento da repressão',desc:'Situação clínica comum: o paciente aceita intelectualmente a interpretação ("sim, faz sentido"), mas nada muda emocionalmente. É porque a negação foi vencida, mas a repressão quanto ao essencial se manteve. A mudança real exige o afeto junto ao insight — não apenas o entendimento racional.'}
+    ]
+  },
+  {
+    categoria:'O Mal-Estar na Civilização',
+    intro:'Freud (1930) — análise da tensão irresolúvel entre os desejos pulsionais do indivíduo e as exigências da vida coletiva. A civilização nos protege, mas nos adoece. Fonte fundamental para compreender sofrimento social, culpa, agressividade e adoecimento psíquico coletivo.',
+    itens:[
+      {nome:'Três fontes de sofrimento humano',desc:'Freud identifica três origens do sofrimento inevitável: (1) o próprio corpo, sujeito a doenças e morte; (2) o mundo externo, com suas forças destrutivas; (3) as relações com os outros seres humanos — "esta última é talvez a mais dolorosa de todas". A terceira fonte é o campo da clínica: o sofrimento que vem dos vínculos.'},
+      {nome:'Princípio do prazer vs. Princípio da realidade',desc:'O indivíduo quer prazer imediato (Id), mas a realidade exige adiamento, renúncia, adaptação. A civilização é construída sobre essa renúncia: o prazer pulsional é sacrificado em troca de segurança e pertencimento coletivo. A neurose surge quando essa renúncia excede o suportável.'},
+      {nome:'Eros x Tânatos na civilização',desc:'A civilização é o projeto de Eros — unir indivíduos em grupos cada vez maiores. Mas Tânatos resiste: a agressividade humana desestabiliza esses laços. A história cultural é a luta entre Eros (que quer unir) e Tânatos (que quer destruir). O resultado desta batalha é o que Freud chama de "mal-estar".'},
+      {nome:'Renúncia pulsional e sentimento de culpa',desc:'Cada renúncia ao instinto agressivo não o elimina — internaliza-o no superego, que o volta contra o próprio Ego como culpa. "Cada nova renúncia aumenta a severidade e a intolerância do superego." Paradoxo: quanto mais virtuoso o sujeito, mais culpado ele se sente. O superego punitivo não é sinal de moralidade sadia — pode ser sintoma.'},
+      {nome:'Narcisismo das pequenas diferenças',desc:'Grupos coesos precisam de um inimigo externo para manter sua coesão interna. Freud observa que as comunidades mais parecidas tendem a rivalizar com mais intensidade — a agressividade entre semelhantes (religiões vizinhas, nações parecidas, irmãos) é proporcional à semelhança, não à diferença. A hostilidade ao "quase igual" é estrutural.'},
+      {nome:'Felicidade impossível / Três estratégias de fuga',desc:'Não há forma de ser plenamente feliz. As pessoas desenvolvem estratégias para reduzir o sofrimento: (1) afastamento (ascetismo, solidão, ioga); (2) intoxicação (álcool, drogas); (3) amor (apostar tudo no vínculo afetivo — o mais perigoso, pois entregamos ao outro o poder de nos destruir). Nenhuma resolve a equação — só a desloca.'},
+      {nome:'Culpa coletiva e o superego cultural',desc:'Freud propõe que as civilizações também desenvolvem um superego — um conjunto de ideais e exigências que pesam coletivamente sobre os indivíduos. Religiões, ideologias, sistemas morais funcionam como superegos culturais, gerando culpa coletiva quando não são cumpridos. O analista pode ler o adoecimento social com as mesmas ferramentas do adoecimento individual.'}
+    ]
   }
 ];
 const psicanaliseTemasFlat=psicanaliseTemas.flatMap(c=>c.itens.map(i=>({...i,categoria:c.categoria})));
