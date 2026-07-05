@@ -256,7 +256,7 @@ Montgomery relata: o financeiro PESSOAL da Clínica (Montgomery OS / app clínic
 
 ---
 ## 🗂️ Tarefa a fazer — organizar o Obsidian Vault (Rota Ordem)
-Montgomery pediu (05/07) que Claude veja e organize o Obsidian dele em `G:\My Drive\Obsidian Vault` (Google Drive). Aplicar a mesma lógica Fibonacci [[fibonacci-em-tudo]]. Fazer quando ele pedir — provável exploração + reestruturação de notas.
+Montgomery pediu (05/07) que Claude veja e organize o Obsidian dele em `G:\My Drive\Obsidian Vault` (Google Drive). NÃO usar o método PARA — Montgomery não se adaptou porque PARA é sistema de GAVETAS/categorias, feito para a mente de quem o criou. A mente do Montgomery funciona por CONEXÃO/rede, não categoria (átomo→planeta→sefirá→órgão). O Obsidian é ideal pra ele PORQUE é baseado em links/grafo. Criar um MÉTODO PRÓPRIO conectivo: notas ligadas por significado ([[ ]]), Árvore da Vida como espinha (áreas=sefirot conectadas pelos caminhos/rotas dos arcanjos), MOCs (mapas de conteúdo vivos), estrutura Fibonacci [[fibonacci-em-tudo]]. O grafo = espelho do cérebro dele. Fazer quando ele pedir (G:\My Drive\Obsidian Vault).
 
 ## 🖥️ Montgomery Code — TRILHA criada
 Currículo completo em espiral Fibonacci: 01_Codigo/Montgomery_Code_TRILHA.md (Módulos 00→21: terminal → Python → Web → nuvem → Java). Pronto para a 1ª aula no próximo "Montgomery here" + Rota Aprender.
