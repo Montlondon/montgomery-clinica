@@ -245,3 +245,11 @@ Montgomery quer a organização em sequência Fibonacci (0·1·2·3·5·8·13·2
 
 ## 🔴 Bug a corrigir (registrado 05/07, NÃO mexer agora) — Financeiro pessoal da Clínica
 Montgomery relata: o financeiro PESSOAL da Clínica (Montgomery OS / app clínica) não está coeso — ele lança alguns dados e eles SOMEM (não persistem). Investigar quando for a hora: provável problema de salvamento (localStorage/Supabase) similar ao que corrigimos no MMObras. Só anotado — organização hoje, correção depois.
+
+---
+## 🆕 Novos projetos/rotas (05/07/2026)
+- 🖥️ **Montgomery Code** — aprender IT/programação do zero (Rota Aprender/Hod-Rafael). Ver [[montgomery-code]].
+- 💰 **Prosperidade** — investir, multiplicar dinheiro (Rota Chesed/Tzadkiel; base: contador 1993).
+- 🇬🇧 **Inglês** — reaprender, reassociando o idioma (trauma de Londres → conquista) na Rota Aprender.
+- 🕊️ **Rota da Vanessa** — ajudar a esposa/prima (1º Sgt PMMG, psicanalista, florais, sinestésica, artista de imagens/vídeos) a ter a IA e o painel dela. Ferramentas visuais (imagem/vídeo) + Claude para a rota de vida.
+- ✉️ **Carta à Anthropic** — proposta de Plano para Casal (00_Nucleo/carta_anthropic_plano_casal.md, PT+EN prontas).
