@@ -20,11 +20,18 @@ As pastas seguem a **sequência de Fibonacci** — do núcleo (0) expandindo em 
 ## 🌀 00_Nucleo/ — identidade e índices mestres
 Biografia (`quem-e-montgomery.md`), índice do universo (`00-MONTGOMERY-UNIVERSE-INDICE.md`), prompts de todos os projetos, palavra-chave mestre `Montgomery`.
 
+## 💻 01_Codigo/ — schemas, protótipos e notas técnicas
+Schemas SQL (diplomas, fitoterapia, suplementos), componentes (.jsx), e `_prompts_notas/` (rascunhos e prompts soltos).
+
 ## 🌳 02_Arvore/ — Árvore da Vida, MTC, anamnese
 `anamnese_montgomery_modelo.md` (blueprint da anamnese), `arvore_vida_correspondencias.md`, `MEQ_METODO_ABC.md` (método ABC minerado), `MEQ_MATERIAIS_INDICE.md`, `bagua_visao_prompt.md`, `Bussola_Holografica_Genesis.md`, propostas de módulos (Língua, Psicanálise, Sintomas), `VISAO_MONTGOMERY.md`, `meta-montgomery-projeto.md`.
 
-## 📚 03_Biblioteca/ — materiais de estudo
-Apostilas e livros: Maciocia, Quiropraxia, Seitai, Acupuntura, Aurículo, MEQ (apostilas + flipcharts + fichas ABC), Fórmulas Chinesas, ventosa. Subpastas: `Freud/` (obra completa), `Imperador Amarelo/`.
+## 📚 03_Biblioteca/ — materiais de estudo (PDFs por tema)
+- `Acupuntura_MTC/` — Maciocia (Les principes), Acupuntura, Fórmulas Chinesas, Diagnóstico Integrado, Seitai
+- `MEQ/` — apostila completa, flipcharts, fichas ABC, contrato, imersões, livro digital
+- `Quiropraxia/` — Apostila de Quiro, Quiropraxia
+- `Auriculoterapia/` — Aurículo, auriculoefetivo (livro), ventosaterapia
+- `Freud/` — obra completa · `Imperador Amarelo/`
 
 ## 🎓 05_Diplomas/ — certificados e documentos pessoais
 Contabilidade, Food Hygiene (UK), francês (Le Mans), Psicanálise, Residência, certificados 2024, Montgomery Numerológico + `CATALOGO_DIPLOMAS.md`.
@@ -34,6 +41,9 @@ CSVs (despesas clínica, financeiro), Tabela de preços, relatório elétrico Ba
 
 ## 🖼️ 13_Midia/ — imagens, logos, exemplos
 Logos das marcas, recomendações-exemplo, Triagrama, escala emocional, cupom.
+
+## 🗄️ 21_Backups/ — backups e arquivos comprimidos
+JSONs de backup (MMObras, Montgomery), .zip (files, obrasV4).
 
 ---
 *Mapa mantido por Claude. Novos materiais entram na pasta Fibonacci correspondente e são catalogados aqui. Próximo nível da espiral: 21 (reservado para expansão).*
