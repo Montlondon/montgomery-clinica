@@ -226,3 +226,15 @@ Expandir `arvore_vida_correspondencias.md` com camada metafísica: gematria, gil
 ---
 ## 🌱 Ideia (05/07/2026) — Falar de ÁTOMOS
 Montgomery: "energia pra mim é vida, é átomo". Conversa/módulo sobre átomos, energia, a unidade da matéria — conecta com sua cosmovisão ("somos todos Um, feitos de átomos e luz") e com a geometria sagrada. Possível camada filosófica/didática na Árvore da Vida ou material próprio. A reforma da casa (do teto ao piso, caixa d'água, elétrica) é a metáfora viva: tudo é energia organizada.
+
+
+---
+## 🔵 Ideias absorvidas do Gemini (MATRIZ-VITRUVIANA) — 05/07/2026
+Diretriz: **Claude é o núcleo.** Sempre que Montgomery usar outra IA (Gemini etc.), Claude revisa o trabalho, extrai o bom e integra aqui. Nada se perde, sem frustração.
+
+O Gemini teve a MESMA visão da Árvore (Coluna Lombar→Rim→Yesod) mas em stack complexa (Python/Streamlit/Firebase/Docker) que dependia do Montgomery virar engenheiro — por isso deu dor de cabeça. Ideias boas dele para o nosso caminho simples:
+- 🌿 **Triagem clínica rápida — 3 perguntas-chave** (entra na anamnese digital)
+- 🌱 **Sugestão automática de suplementos** (conecta armário + dados-clinicos.js + fitoterapia-data.js)
+- 🌱 **"Prompt de Essência"** — perfil do terapeuta (já temos na biografia 00_Nucleo)
+- ✅ **"Lições da Estante"** — biblioteca de estudo (JÁ FEITO: 03_Biblioteca organizada)
+- ⚠️ **ALERTA SEGURANÇA:** a pasta do Gemini tem credenciais Firebase (.json admin SDK) num repo git — risco de vazamento. Ação pendente: tirar do git + revogar chaves no Firebase Console.
