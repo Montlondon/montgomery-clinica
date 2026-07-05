@@ -253,3 +253,10 @@ Montgomery relata: o financeiro PESSOAL da Clínica (Montgomery OS / app clínic
 - 🇬🇧 **Inglês** — reaprender, reassociando o idioma (trauma de Londres → conquista) na Rota Aprender.
 - 🕊️ **Rota da Vanessa** — ajudar a esposa/prima (1º Sgt PMMG, psicanalista, florais, sinestésica, artista de imagens/vídeos) a ter a IA e o painel dela. Ferramentas visuais (imagem/vídeo) + Claude para a rota de vida.
 - ✉️ **Carta à Anthropic** — proposta de Plano para Casal (00_Nucleo/carta_anthropic_plano_casal.md, PT+EN prontas).
+
+---
+## 🗂️ Tarefa a fazer — organizar o Obsidian Vault (Rota Ordem)
+Montgomery pediu (05/07) que Claude veja e organize o Obsidian dele em `G:\My Drive\Obsidian Vault` (Google Drive). Aplicar a mesma lógica Fibonacci [[fibonacci-em-tudo]]. Fazer quando ele pedir — provável exploração + reestruturação de notas.
+
+## 🖥️ Montgomery Code — TRILHA criada
+Currículo completo em espiral Fibonacci: 01_Codigo/Montgomery_Code_TRILHA.md (Módulos 00→21: terminal → Python → Web → nuvem → Java). Pronto para a 1ª aula no próximo "Montgomery here" + Rota Aprender.
