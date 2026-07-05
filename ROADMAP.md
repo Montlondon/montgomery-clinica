@@ -238,3 +238,10 @@ O Gemini teve a MESMA visão da Árvore (Coluna Lombar→Rim→Yesod) mas em sta
 - 🌱 **"Prompt de Essência"** — perfil do terapeuta (já temos na biografia 00_Nucleo)
 - ✅ **"Lições da Estante"** — biblioteca de estudo (JÁ FEITO: 03_Biblioteca organizada)
 - ⚠️ **ALERTA SEGURANÇA:** a pasta do Gemini tem credenciais Firebase (.json admin SDK) num repo git — risco de vazamento. Ação pendente: tirar do git + revogar chaves no Firebase Console.
+
+---
+## 🌀 Diretriz (05/07/2026) — Fibonacci em TUDO
+Montgomery quer a organização em sequência Fibonacci (0·1·2·3·5·8·13·21) aplicada a TODOS os seus projetos e pastas — não só no repertório. É a assinatura estética/estrutural dele: exatidão + geometria sagrada. Padrão a adotar em qualquer novo projeto/estrutura.
+
+## 🔴 Bug a corrigir (registrado 05/07, NÃO mexer agora) — Financeiro pessoal da Clínica
+Montgomery relata: o financeiro PESSOAL da Clínica (Montgomery OS / app clínica) não está coeso — ele lança alguns dados e eles SOMEM (não persistem). Investigar quando for a hora: provável problema de salvamento (localStorage/Supabase) similar ao que corrigimos no MMObras. Só anotado — organização hoje, correção depois.
