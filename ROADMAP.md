@@ -260,3 +260,9 @@ Montgomery pediu (05/07) que Claude veja e organize o Obsidian dele em `G:\My Dr
 
 ## 🖥️ Montgomery Code — TRILHA criada
 Currículo completo em espiral Fibonacci: 01_Codigo/Montgomery_Code_TRILHA.md (Módulos 00→21: terminal → Python → Web → nuvem → Java). Pronto para a 1ª aula no próximo "Montgomery here" + Rota Aprender.
+
+---
+## ⭐ PRIMEIRA TAREFA — dia 09/07/2026 (quando os créditos renovarem)
+**Organizar o Obsidian** (G:\My Drive\Obsidian Vault) com método próprio conectivo (não PARA).
+Ideia do Montgomery: UNIFICAR o repertório do Claude (Files_Claude_repo, todo em Markdown) com o Obsidian — mesmo lugar OU linkar a pasta no vault. Ponte natural: os [[links]] que Claude já usa nas memórias/índices SÃO sintaxe Obsidian, e tudo é .md. Os dois já falam a mesma língua → virar um só "segundo cérebro" conectivo, Árvore da Vida como espinha, Fibonacci na estrutura.
+Créditos do Montgomery renovam ~09/07. Retomar com "Montgomery here" → Rota Ordem.
