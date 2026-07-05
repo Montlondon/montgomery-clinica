@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Montgomery Universe — Mapa</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+/* ===== TEMA ESCURO (padrão) ===== */
+[data-theme="dark"]{
+  --bg:        #0d1b2a;
+  --bg2:       #111f2e;
+  --card:      rgba(255,255,255,0.04);
+  --card-h:    rgba(201,168,76,0.08);
+  --border:    rgba(201,168,76,0.25);
+  --border-h:  rgba(201,168,76,0.6);
+  --gold:      #c9a84c;
+  --gold-soft: rgba(201,168,76,0.15);
+  --txt:       #f5f3ee;
+  --txt-s:     rgba(255,255,255,0.4);
+  --txt-m:     rgba(255,255,255,0.5);
+  --txt-xs:    rgba(255,255,255,0.25);
+  --shadow:    0 12px 40px rgba(201,168,76,0.15);
+  --filo-bg:   rgba(201,168,76,0.04);
+  --filo-brd:  rgba(201,168,76,0.15);
+  --toggle-bg: rgba(255,255,255,0.06);
+  --toggle-brd:rgba(201,168,76,0.3);
+}
+
+/* ===== TEMA CLARO ===== */
+[data-theme="light"]{
+  --bg:        #f5f3ee;
+  --bg2:       #ede9e0;
+  --card:      #ffffff;
+  --card-h:    #fffdf6;
+  --border:    rgba(201,168,76,0.35);
+  --border-h:  #c9a84c;
+  --gold:      #9a7230;
+  --gold-soft: rgba(154,114,48,0.1);
+  --txt:       #1b3a5c;
+  --txt-s:     rgba(27,58,92,0.55);
+  --txt-m:     rgba(27,58,92,0.6);
+  --txt-xs:    rgba(27,58,92,0.3);
+  --shadow:    0 12px 40px rgba(27,58,92,0.12);
+  --filo-bg:   rgba(27,58,92,0.03);
+  --filo-brd:  rgba(27,58,92,0.1);
+  --toggle-bg: rgba(27,58,92,0.05);
+  --toggle-brd:rgba(27,58,92,0.2);
+}
+
+body{
+  background:var(--bg);
+  color:var(--txt);
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:40px 20px;
+  transition:background .4s, color .4s;
+}
+
+/* ===== TOGGLE ===== */
+.toggle-wrap{
+  position:fixed;
+  top:20px;
+  right:20px;
+  z-index:100;
+}
+.toggle-btn{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  background:var(--toggle-bg);
+  border:1px solid var(--toggle-brd);
+  border-radius:30px;
+  padding:8px 16px;
+  cursor:pointer;
+  font-family:'Inter',sans-serif;
+  font-size:0.8rem;
+  color:var(--txt-s);
+  transition:all .3s;
+  backdrop-filter:blur(10px);
+}
+.toggle-btn:hover{border-color:var(--gold);color:var(--gold)}
+.toggle-icon{font-size:1rem;transition:transform .4s}
+
+/* ===== HEADER ===== */
+h1{font-family:'Lora',serif;color:var(--gold);font-size:2rem;text-align:center;margin-bottom:6px;letter-spacing:1px}
+.subtitle{color:var(--txt-s);font-size:0.85rem;text-align:center;margin-bottom:48px;font-style:italic}
+
+/* ===== NODES ===== */
+.node{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:24px 20px;
+  text-align:center;
+  transition:all .3s;
+  cursor:default;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+}
+.node:hover{
+  background:var(--card-h);
+  border-color:var(--border-h);
+  transform:translateY(-3px);
+  box-shadow:var(--shadow);
+}
+
+.node.centro{border-color:var(--border-h);background:var(--gold-soft)}
+.node.ativo{border-color:rgba(100,200,120,0.4)}
+.node.construir{opacity:.88}
+
+.node-icon{font-size:2rem;margin-bottom:10px}
+.node-title{font-family:'Lora',serif;color:var(--gold);font-size:1rem;font-weight:700;margin-bottom:6px}
+.node-desc{color:var(--txt-m);font-size:0.75rem;line-height:1.5;margin-bottom:12px}
+.node-status{display:inline-block;font-size:0.7rem;padding:3px 10px;border-radius:20px;font-weight:600}
+.status-ativo{background:rgba(100,200,120,0.12);color:#3a9e50;border:1px solid rgba(100,200,120,0.35)}
+.status-construir{background:rgba(100,150,255,0.1);color:#5580cc;border:1px solid rgba(100,150,255,0.3)}
+.status-estrategia{background:var(--gold-soft);color:var(--gold);border:1px solid var(--border-h)}
+.node-keyword{margin-top:8px;font-size:0.65rem;color:var(--txt-xs);font-style:italic}
+
+/* ===== GRID ===== */
+.grid-full{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:900px;width:100%}
+
+/* ===== FILOSOFIA ===== */
+.filosofia{
+  max-width:900px;width:100%;
+  margin-top:40px;
+  text-align:center;
+  padding:28px 32px;
+  background:var(--filo-bg);
+  border:1px solid var(--filo-brd);
+  border-radius:18px;
+  transition:all .4s;
+}
+.filosofia p{color:var(--txt-s);font-size:0.85rem;line-height:1.8;font-style:italic}
+.filosofia strong{color:var(--gold)}
+
+footer{margin-top:40px;color:var(--txt-xs);font-size:0.75rem;text-align:center}
+
+@media(max-width:600px){
+  .grid-full{grid-template-columns:1fr}
+  h1{font-size:1.5rem}
+  .toggle-btn span{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- Toggle dark/light -->
+<div class="toggle-wrap">
+  <button class="toggle-btn" onclick="toggleTheme()" id="toggleBtn">
+    <span class="toggle-icon" id="toggleIcon">☀️</span>
+    <span id="toggleLabel">Modo claro</span>
+  </button>
+</div>
+
+<h1>✦ Montgomery Universe</h1>
+<p class="subtitle">I am that I am. — אֶהְיֶה אֲשֶׁר אֶהְיֶה</p>
+
+<!-- Nó central -->
+<div style="max-width:900px;width:100%;display:flex;justify-content:center;margin-bottom:20px">
+  <div class="node centro" style="max-width:320px;width:100%">
+    <div class="node-icon">🧠</div>
+    <div class="node-title">Meta — Montgomery</div>
+    <div class="node-desc">O centro de todos os centros. Visão estratégica, arquitetura, prioridades. O ponto da Flor da Vida do qual tudo nasce.</div>
+    <span class="node-status status-estrategia">✦ Núcleo Ativo</span>
+    <div class="node-keyword">"Meta Montgomery"</div>
+  </div>
+</div>
+
+<!-- Grade principal -->
+<div class="grid-full">
+
+  <div class="node ativo">
+    <div class="node-icon">🏥</div>
+    <div class="node-title">Clínica Montgomery</div>
+    <div class="node-desc">Prontuários, agenda, sessões, financeiro clínico. Acupuntura · Quiropraxia · Psicanálise. Online em Vercel + Supabase.</div>
+    <span class="node-status status-ativo">✅ Ativo + Online</span>
+    <div class="node-keyword">"Clínica Montgomery"</div>
+  </div>
+
+  <div class="node construir">
+    <div class="node-icon">🧬</div>
+    <div class="node-title">Montgomery OS</div>
+    <div class="node-desc">Sistema operacional pessoal de saúde. Família completa. Medicina convencional + MTC + Cabala + Geometria Sagrada + Cogumelos.</div>
+    <span class="node-status status-construir">🔜 Fase 1 — A Construir</span>
+    <div class="node-keyword">"Montgomery OS"</div>
+  </div>
+
+  <div class="node ativo">
+    <div class="node-icon">🏗️</div>
+    <div class="node-title">MMObras</div>
+    <div class="node-desc">Gestão de obras e reformas. Fornecedores, lançamentos, locações, aluguel de equipamentos. Fibonacci na construção.</div>
+    <span class="node-status status-ativo">✅ Ativo</span>
+    <div class="node-keyword">"Fibonacci MMObras"</div>
+  </div>
+
+  <div class="node construir">
+    <div class="node-icon">💰</div>
+    <div class="node-title">Montgomery Finanças</div>
+    <div class="node-desc">Finanças pessoais — Montgomery + Esposa + Maly. Separado da clínica e da obra. Espiral áurea do crescimento.</div>
+    <span class="node-status status-construir">🔜 A Construir</span>
+    <div class="node-keyword">"Montgomery Finanças"</div>
+  </div>
+
+  <div class="node construir">
+    <div class="node-icon">🐕</div>
+    <div class="node-title">Dra. Vera (Maly)</div>
+    <div class="node-desc">Saúde veterinária completa da Belgian Malinois. Vacinas, suplementos, cogumelos, ômega, consultas. Parte da família.</div>
+    <span class="node-status status-construir">🔜 A Construir</span>
+    <div class="node-keyword">"Dra. Vera"</div>
+  </div>
+
+  <div class="node construir">
+    <div class="node-icon">💡</div>
+    <div class="node-title">Ideias & Projetos</div>
+    <div class="node-desc">Repositório vivo de conceitos, experimentos e projetos futuros. Árvore da Vida interativa, Fitoterapia, Claude API integrado.</div>
+    <span class="node-status status-construir">🔜 Em expansão</span>
+    <div class="node-keyword">"Ideias Montgomery"</div>
+  </div>
+
+</div>
+
+<!-- Filosofia -->
+<div class="filosofia">
+  <p>
+    <strong>Tudo é padrão. Tudo é proporção. Tudo é luz.</strong><br>
+    E tudo está conectado — da Sefirah de Keter à célula mais simples do corpo humano.<br><br>
+    Azul <strong>#1B3A5C</strong> · Bege <strong>#F5F3EE</strong> · Dourado <strong>#C9A84C</strong> · Lora + Inter · Fibonacci em tudo · Google OAuth + WebAuthn em todos os projetos
+  </p>
+</div>
+
+<footer>Montgomery Universe · 1 de julho de 2026 · Construído com Claude</footer>
+
+<script>
+function toggleTheme(){
+  const html=document.documentElement;
+  const isDark=html.getAttribute('data-theme')==='dark';
+  html.setAttribute('data-theme', isDark?'light':'dark');
+  document.getElementById('toggleIcon').textContent=isDark?'🌙':'☀️';
+  document.getElementById('toggleLabel').textContent=isDark?'Modo escuro':'Modo claro';
+  localStorage.setItem('mu-theme', isDark?'light':'dark');
+}
+
+// Restaura tema salvo
+const saved=localStorage.getItem('mu-theme');
+if(saved){
+  document.documentElement.setAttribute('data-theme',saved);
+  if(saved==='light'){
+    document.getElementById('toggleIcon').textContent='🌙';
+    document.getElementById('toggleLabel').textContent='Modo escuro';
+  }
+}
+</script>
+
+</body>
+</html>

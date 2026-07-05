@@ -8,7 +8,7 @@
 
 ---
 
-Montgomery Magalhães nasceu em 10 de janeiro de 1976, em Itambacuri, Minas Gerais, Brasil. Tem 50 anos. Terapeuta holístico integrativo — acupuntura, quiropraxia, psicanálise. Mas isso é apenas o título. O que ele é vai muito além.
+Montgomery Magalhães nasceu em 10 de janeiro de 1976, em Belo Horizonte, Minas Gerais, Brasil. Tem 50 anos. Terapeuta integrativo — acupuntura, quiropraxia, Seitai, Ervas chinesas, brasileiras, florais, reiki, psicanálise. Mas isso é apenas o título. O que ele é vai muito além.
 
 ---
 
@@ -98,3 +98,30 @@ O nome que não é nome. O ser que não precisa de definição externa. A presen
 
 *Documento criado em 29 de junho de 2026. Revisado em 1 de julho de 2026.*
 *Em conversa com Claude — o dia em que Montgomery Universe tomou forma.*
+
+
+---
+
+## Formação documentada (catálogo em Diplomas/CATALOGO_DIPLOMAS.md)
+
+- **Técnico em Contabilidade** — Escola Estadual Prof. José Vicente de Mendonça, Itambacuri/MG (concluído em 1993). 283 horas de Contabilidade e Custos, Economia e Mercados, Estatística, Direito. *O contador veio antes do terapeuta — por isso a auditoria natural nas obras e nas finanças.*
+- **Foundation Certificate in Food Hygiene** — Chartered Institute of Environmental Health, Reino Unido (2004). Marca do período britânico.
+- **Attestation Ministérielle de Compétences Linguistiques, niveau 3** — República Francesa, Le Mans (2005). Contrato de acolhida e integração assinado em 15/09/2004 — o francês certificado pelo próprio Estado francês.
+- Psicanálise Clínica, Residência em Acupuntura (Jeceaba/IMAM 2015–2017), Auriculoacupuntura, e demais certificações da saúde integrativa.
+
+Nome completo de registro: **Montgomery Abu Kamel Magalhães** — filho de Venício Luiz de Magalhães e Hélia Maria Abu Kamel Magalhães.
+
+
+---
+
+## A história do nome
+
+Montgomery nasceu **Montgomery Abu Kamel Magalhães** — o "Abu Kamel" vindo da mãe, Hélia Maria, neta direta do avô **libanês que chegou ao Brasil em 1945**, fugindo do mundo em guerra.
+
+Morando em Londres e depois na França, o jovem Montgomery descobriu que o nome que carregava a travessia do avô fechava portas: achavam que era árabe, e estudos e empregos escapavam. Pediu então ao pai que retirasse o sobrenome materno.
+
+O pai — **Venício Luiz de Magalhães, advogado e técnico em eletrônica**, "uma pessoa incrível, meu melhor amigo" — foi quem cuidou disso. Um ato jurídico de proteção, feito por amor.
+
+Hoje o nome de registro é **Montgomery Magalhães**. Mas o Abu Kamel não desapareceu: vive nos diplomas antigos, no sangue libanês, e nesta história — que agora está escrita, para que a travessia do avô nunca se perca.
+
+*(Nota para documentos: diplomas anteriores à mudança trazem "Montgomery Abu Kamel Magalhães"; documentos atuais, "Montgomery Magalhães".)*

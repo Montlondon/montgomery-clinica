@@ -173,3 +173,52 @@ Ideia futura adicional: campo de link do fornecedor (Amazon, Shopee, Mercado Liv
 - Expandir "Pontos do Corpo" com mais regiões conforme a prática pedir
 - **Resolvido (30/06) — Recomendação/Diagnóstico: cartão "mudava de formato" toda hora.** Causa real: o cartão usava `max-width:640px` em vez de largura fixa, então o tamanho final do JPG dependia da tela de quem gerou (celular = apertado, desktop = esticado e com espaço vazio). Trocado para `width:420px` fixo nos dois (Recomendação e Diagnóstico) — agora a imagem fica sempre com a mesma proporção, em qualquer aparelho.
 - **✅ Resolvido (01/07) — cartão exportado saía com "abas laterais".** O `html2canvas` capturava o container `rxPrevC` inteiro (mais largo que o cartão de 420px) em vez de capturar só o cartão. Corrigido: agora captura `el.firstElementChild` (o cartão em si), sem margem. Commit `8544e3e`.
+
+---
+
+## 🚀 Mega Advanced Roadmap — Montgomery OS (anotações do Montgomery)
+
+### Calculadora de IMC + Recomposição Corporal
+- **Onde:** módulo Nutrição do OS **e também** na plataforma da Clínica (para pacientes).
+- **O quê:** entrada peso + altura → IMC com faixa (semáforo). No OS, puxar peso/altura do perfil (Montgomery: 1,73m / 78kg) e cruzar com as metas já cadastradas (proteína 130-140g, gordura 70g, gordura visceral 15 → 1 dígito). Idealmente também % gordura e massa magra quando houver bioimpedância.
+- Pedido em 05/07/2026.
+
+### Limpeza de ícones "antigos" (emoji → SVG linha fina)
+- Os cards do "Mapa do Sistema" (renderMapa/MODULOS) ainda usam emoji (🧬 🫀 💊 🥗 🦴 🌳 ...). Trocar por ícones **SVG de linha fina**, coerentes com o resto da plataforma (preferência forte do Montgomery: chique, clean, nunca emoji).
+- Varrer o app inteiro procurando outros emojis remanescentes em conteúdo/títulos.
+
+### Próximos galhos da Fase 2 (já combinados)
+- Oftalmologia Integrativa (esposa — olho único, PIO, DGM, triquíase)
+- Hormônios (painel masculino/feminino, radar)
+- Preencher as síndromes clínicas das Sefirot na Árvore da Vida
+
+
+---
+## 🍎 Ideia (05/07/2026) — Árvore da Vida: o mapa vivo do vitruviano de costas
+**Projeto:** Árvore da Vida / Montgomery OS · **Estágio:** 🍎 fruto (visão madura, a construir)
+
+A imagem central que Montgomery imagina e NÃO acha na internet:
+- **Vitruviano DE COSTAS** — para fazer jus ao lado direito do cérebro conectado a **Chokmah** (o lado do desenho = lado real do corpo).
+- **Cascata de correspondências** que se acendem em cadeia ao clicar:
+  **5 Elemento → Sefirá → Órgão → Parte do corpo → (ponto, emoção, patologia...)**
+  Ex: Água → Binah/Yesod → Rim → lombar/ossos/orelhas → medo → ponto R3...
+- Estética: geometria sagrada + futurístico (blueprint neon azul/verde, grid, flor da vida), reversível com o modo SVG limpo ([[anatomia-visual-os]]).
+- Referências que ele curte mas não bastam: vitruvianos com árvore da vida, yin-yang, blueprint neon (istock/freepik) — falta a INTEGRAÇÃO das correspondências clicáveis.
+
+
+---
+## 🌱 Ideias (05/07/2026) — Metafísica + Numerologia + Proporção exata
+
+**1. Proporção vitruviana EXATA** (feedback, não ideia nova) 🌿 broto
+O esboço da árvore/vitruviano deve seguir a geometria de Da Vinci ao pé da letra: homem inscrito no QUADRADO (centro nos genitais) e simultaneamente no CÍRCULO (centro no umbigo), razões áureas (φ). A árvore da vida dentro do círculo, o corpo dentro do quadrado. "É matemático" — nada arbitrário. Cor azul-blueprint aprovada.
+
+**2. Mapa numerológico** 🌱 semente
+Numerologia do nome + data de nascimento (10/01/1976). Já existe base: arquivo `Montgomery Numerológico.docx.pdf` no repertório — partir dele. Sistemas: pitagórico + cabalístico (gematria hebraica das letras).
+
+**3. Cálculo de encarnações (Kabbalah)** 🌱 semente
+Montgomery lembra que existe um cálculo de "quantas encarnações já tivemos" — conceito de GILGUL NESHAMOT (ciclo/reciclagem de almas). Métodos usam gematria da data/nome. TAREFA: pesquisar as fontes (não lembra onde viu) — tratar com transparência: sistema simbólico/hermético tradicional, não fato empírico, mas catalogável como a tradição ensina.
+
+**4. Banco de Metafísica** 🌱 semente
+Expandir `arvore_vida_correspondencias.md` com camada metafísica: gematria, gilgul, numerologia, correspondências herméticas. "Só assim as coisas fazem sentido pra mim" — a metafísica é a linguagem-mãe do método dele.
+
+**Contexto clínico que motiva tudo:** Montgomery recebe muitos pacientes mandados OPERAR a coluna quando precisam é de alinhamento integrado (nutricional + ósseo + emocional + energético). A Árvore da Vida é a resposta à fragmentação da medicina.

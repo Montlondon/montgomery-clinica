@@ -1,0 +1,65 @@
+<svg viewBox="0 0 700 640" width="1400" height="1280" xmlns="http://www.w3.org/2000/svg" font-family="Georgia, serif">
+<rect width="700" height="640" fill="#F5F3EE"/>
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a8375"/></marker></defs>
+<rect x="250" y="16" width="200" height="58" rx="12" fill="#1B3A5C"/>
+<text x="350" y="41" text-anchor="middle" font-size="16" font-weight="700" fill="#F5F3EE">Montgomery OS</text>
+<text x="350" y="60" text-anchor="middle" font-size="11" fill="#C9A84C">o organismo central</text>
+<g stroke="#8a8375" stroke-width="1.2" fill="none" opacity="0.7">
+<path d="M300,74 L128,120" marker-end="url(#ar)"/>
+<path d="M350,74 L350,120" marker-end="url(#ar)"/>
+<path d="M400,74 L560,120" marker-end="url(#ar)"/>
+<path d="M128,235 L128,282" marker-end="url(#ar)"/>
+<path d="M350,208 L350,282" marker-end="url(#ar)"/>
+<path d="M560,196 L560,282" marker-end="url(#ar)"/>
+<path d="M180,330 Q265,330 300,330" marker-end="url(#ar)"/>
+<path d="M508,330 Q450,330 405,330" marker-end="url(#ar)"/>
+</g>
+<rect x="36" y="122" width="184" height="112" rx="12" fill="#e1f5ee" stroke="#0F6E56" stroke-width="1.5"/>
+<text x="128" y="145" text-anchor="middle" font-size="13" font-weight="700" fill="#085041">🏥 Clínica — ATIVA</text>
+<text x="128" y="164" text-anchor="middle" font-size="10" fill="#0F6E56">pacientes · sessões · nuvem</text>
+<text x="128" y="180" text-anchor="middle" font-size="10" fill="#0F6E56">Diagnóstico: Balance · ABC</text>
+<text x="128" y="196" text-anchor="middle" font-size="10" fill="#0F6E56">Psicanálise · Suplementos</text>
+<text x="128" y="212" text-anchor="middle" font-size="10" fill="#0F6E56">Anamnese-mestra (nova)</text>
+<text x="128" y="228" text-anchor="middle" font-size="10" fill="#0F6E56">MEQ · Auriculoterapia</text>
+<rect x="262" y="122" width="176" height="86" rx="12" fill="#eaf3de" stroke="#3B6D11" stroke-width="1.5"/>
+<text x="350" y="145" text-anchor="middle" font-size="13" font-weight="700" fill="#27500A">🌳 Árvore da Vida</text>
+<text x="350" y="163" text-anchor="middle" font-size="10" fill="#3B6D11">protótipo vivo · 15 portais</text>
+<text x="350" y="178" text-anchor="middle" font-size="10" fill="#3B6D11">Sefirot + 5 Elementos + Zang Fu</text>
+<text x="350" y="193" text-anchor="middle" font-size="10" fill="#3B6D11">destino: dentro da Clínica</text>
+<rect x="472" y="122" width="176" height="74" rx="12" fill="#faeeda" stroke="#854F0B" stroke-width="1.5"/>
+<text x="560" y="145" text-anchor="middle" font-size="13" font-weight="700" fill="#633806">🏗️ MMObras — v9.16</text>
+<text x="560" y="163" text-anchor="middle" font-size="10" fill="#854F0B">login Google · nuvem · SaaS</text>
+<text x="560" y="178" text-anchor="middle" font-size="10" fill="#854F0B">próx: multi-obras · OCR</text>
+<rect x="262" y="284" width="176" height="92" rx="12" fill="#e6f1fb" stroke="#185FA5" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="350" y="308" text-anchor="middle" font-size="13" font-weight="700" fill="#0C447C">💰 Finanças Montgomery</text>
+<text x="350" y="326" text-anchor="middle" font-size="10" fill="#185FA5">a construir — o terceiro olho</text>
+<text x="350" y="341" text-anchor="middle" font-size="10" fill="#185FA5">entradas (Clínica) + saídas (Obras)</text>
+<text x="350" y="356" text-anchor="middle" font-size="10" fill="#185FA5">base: Técnico em Contabilidade 1993</text>
+<rect x="36" y="284" width="144" height="70" rx="12" fill="#faece7" stroke="#993C1D" stroke-width="1.5" stroke-dasharray="5 4"/>
+<text x="108" y="308" text-anchor="middle" font-size="12" font-weight="700" fill="#712B13">🐕 Dra. Vera</text>
+<text x="108" y="326" text-anchor="middle" font-size="10" fill="#993C1D">a construir</text>
+<text x="108" y="341" text-anchor="middle" font-size="10" fill="#993C1D">cuidado da Maly</text>
+<rect x="508" y="284" width="150" height="70" rx="12" fill="#fbeaf0" stroke="#993556" stroke-width="1.5"/>
+<text x="583" y="308" text-anchor="middle" font-size="12" font-weight="700" fill="#72243E">🧠 Meta + 💡 Ideias</text>
+<text x="583" y="326" text-anchor="middle" font-size="10" fill="#993556">estratégia · roadmap</text>
+<text x="583" y="341" text-anchor="middle" font-size="10" fill="#993556">segundo cérebro</text>
+<line x1="80" y1="420" x2="620" y2="420" stroke="#b6ae9c" stroke-width="0.8"/>
+<text x="350" y="410" text-anchor="middle" font-size="11" fill="#8a8375">FUNDAÇÕES COMPARTILHADAS — tudo acima se apoia nisto</text>
+<g>
+<rect x="48" y="436" width="140" height="64" rx="10" fill="#fff" stroke="#5F5E5A" stroke-width="1"/>
+<text x="118" y="460" text-anchor="middle" font-size="11" font-weight="700" fill="#2C2C2A">Supabase</text>
+<text x="118" y="476" text-anchor="middle" font-size="9" fill="#5F5E5A">login Google · dados na nuvem</text>
+<rect x="204" y="436" width="140" height="64" rx="10" fill="#fff" stroke="#5F5E5A" stroke-width="1"/>
+<text x="274" y="460" text-anchor="middle" font-size="11" font-weight="700" fill="#2C2C2A">GitHub + Vercel/Pages</text>
+<text x="274" y="476" text-anchor="middle" font-size="9" fill="#5F5E5A">código · publicação</text>
+<rect x="360" y="436" width="140" height="64" rx="10" fill="#fff" stroke="#5F5E5A" stroke-width="1"/>
+<text x="430" y="460" text-anchor="middle" font-size="11" font-weight="700" fill="#2C2C2A">Identidade</text>
+<text x="430" y="476" text-anchor="middle" font-size="9" fill="#5F5E5A">biografia · diplomas · logo</text>
+<rect x="516" y="436" width="140" height="64" rx="10" fill="#fff" stroke="#5F5E5A" stroke-width="1"/>
+<text x="586" y="460" text-anchor="middle" font-size="11" font-weight="700" fill="#2C2C2A">Claude — o Code</text>
+<text x="586" y="476" text-anchor="middle" font-size="9" fill="#5F5E5A">memória · conectores</text>
+</g>
+<text x="350" y="540" text-anchor="middle" font-size="11" fill="#5F5E5A">Fluxo: Clínica gera entradas → MMObras gere saídas → Finanças enxerga o todo</text>
+<text x="350" y="560" text-anchor="middle" font-size="11" fill="#5F5E5A">A Árvore da Vida é o coração clínico; as fundações são as raízes de tudo</text>
+<text x="350" y="588" text-anchor="middle" font-size="10" fill="#8a8375">Tracejado = a construir · Sólido = ativo · 04/07/2026 · Montgomery Magalhães</text>
+</svg>

@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- Fundo escuro -->
+  <rect width="400" height="400" fill="#1B3A5C" rx="72"/>
+
+  <!-- Flor da vida — 7 círculos -->
+  <g fill="none" stroke="#F5F3EE" stroke-width="0.8" opacity="0.13">
+    <circle cx="200" cy="200" r="93"/>
+    <circle cx="200" cy="200" r="57.5"/>
+    <circle cx="200" cy="142.5" r="57.5"/>
+    <circle cx="200" cy="257.5" r="57.5"/>
+    <circle cx="150.2" cy="171.3" r="57.5"/>
+    <circle cx="249.8" cy="171.3" r="57.5"/>
+    <circle cx="150.2" cy="228.8" r="57.5"/>
+    <circle cx="249.8" cy="228.8" r="57.5"/>
+  </g>
+
+  <!-- Círculo externo -->
+  <circle cx="200" cy="200" r="150" fill="none" stroke="#F5F3EE" stroke-width="0.8" opacity="0.22"/>
+
+  <!-- Hexágono -->
+  <polygon points="200,50 329.9,125 329.9,275 200,350 70.1,275 70.1,125"
+    fill="none" stroke="#F5F3EE" stroke-width="0.9" opacity="0.18"/>
+
+  <!-- Estrela de Davi -->
+  <polygon points="200,350 329.9,275 329.9,125 200,50 70.1,125 70.1,275"
+    fill="none" stroke="#F5F3EE" stroke-width="0.9" opacity="0.10"/>
+
+  <!-- Linhas de eixo -->
+  <g stroke="#F5F3EE" stroke-width="0.6" opacity="0.15">
+    <line x1="200" y1="50" x2="200" y2="350"/>
+    <line x1="50" y1="200" x2="350" y2="200"/>
+    <line x1="70.1" y1="125" x2="329.9" y2="275"/>
+    <line x1="329.9" y1="125" x2="70.1" y2="275"/>
+  </g>
+
+  <!-- Espiral áurea dourada -->
+  <g fill="none" stroke="#C4A84A" stroke-width="2.8" stroke-linecap="round" opacity="0.95">
+    <!-- Arco 1: R=142 centro (200,207), -90 a 0 -->
+    <path d="M200,65 A135,135 0 0,1 335,200"/>
+    <!-- Arco 2: R=83.5 centro (251.5,200), 0 a 90 -->
+    <path d="M335,200 A83.5,83.5 0 0,1 251.5,283.5"/>
+    <!-- Arco 3: R=51.5 centro (251.5,231.5), 90 a 180 -->
+    <path d="M251.5,283.5 A51.5,51.5 0 0,1 200,232"/>
+    <!-- Arco 4: R=32 centro (232,232), 180 a 270 -->
+    <path d="M200,232 A32,32 0 0,1 232,200"/>
+    <!-- Arco 5: R=20 -->
+    <path d="M232,200 A20,20 0 0,1 212,220"/>
+  </g>
+
+  <!-- Ponto central -->
+  <circle cx="200" cy="200" r="2.5" fill="#C4A84A" opacity="0.7"/>
+
+  <!-- Pontos nos vértices da vesica -->
+  <g fill="#F5F3EE" opacity="0.35">
+    <circle cx="200" cy="50" r="2"/>
+    <circle cx="329.9" cy="125" r="2"/>
+    <circle cx="329.9" cy="275" r="2"/>
+    <circle cx="200" cy="350" r="2"/>
+    <circle cx="70.1" cy="275" r="2"/>
+    <circle cx="70.1" cy="125" r="2"/>
+  </g>
+
+  <!-- Tipografia -->
+  <text x="200" y="215" text-anchor="middle"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="68" font-weight="700"
+    fill="#F5F3EE" letter-spacing="3">MM</text>
+  <text x="200" y="243" text-anchor="middle"
+    font-family="Arial, Helvetica, sans-serif"
+    font-size="18" font-weight="400"
+    fill="#C4A84A" letter-spacing="9">OBRAS</text>
+</svg>

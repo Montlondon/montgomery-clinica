@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Árvore da Vida — Protótipo Clínico · Montgomery</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#06060f;font-family:Georgia,serif;color:#e8d5a3;min-height:100vh}
+h1{text-align:center;font-size:15px;color:#c9a84c;letter-spacing:3px;text-transform:uppercase;padding:18px 0 4px}
+p.sub{text-align:center;font-size:11px;color:#5a5040;margin-bottom:14px;font-style:italic}
+
+.layout{display:flex;gap:0;height:calc(100vh - 70px)}
+
+/* --- COLUNA ESQUERDA: ÁRVORE --- */
+.col-arvore{width:260px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;padding:10px 8px;border-right:1px solid #1a1428;overflow-y:auto}
+.col-arvore svg{width:100%;max-width:240px}
+
+/* --- COLUNA DIREITA: PAINEL --- */
+.col-painel{flex:1;overflow-y:auto;padding:16px 20px;background:#07070e}
+.painel-vazio{display:flex;align-items:center;justify-content:center;height:100%;color:#2a2030;font-size:14px;text-align:center;line-height:1.8}
+.painel-content{display:none}
+.painel-content.ativo{display:block}
+
+/* Header Sefirá */
+.pn-header{border-bottom:1px solid #2a2040;padding-bottom:12px;margin-bottom:14px}
+.pn-title{font-size:22px;font-weight:700;display:flex;align-items:center;gap:10px}
+.pn-hebraico{opacity:.5;font-size:26px}
+.pn-sub{font-size:11px;color:#7a6a5a;margin-top:4px}
+.pn-pilares{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.pn-pilar{display:inline-block;padding:2px 10px;border-radius:12px;font-size:10px;border:1px solid}
+
+/* Blocos */
+.bloco{border-radius:8px;padding:11px 14px;margin-bottom:10px;border-left:4px solid}
+.bloco h3{font-size:10px;text-transform:uppercase;letter-spacing:1px;margin-bottom:9px;opacity:.75}
+.bloco.kab{background:#120e04;border-color:#c9a84c}.bloco.kab h3{color:#c9a84c}
+.bloco.mtc{background:#100608;border-color:#c23a2a}.bloco.mtc h3{color:#c23a2a}
+.bloco.deseq{background:#0c0a18;border-color:#6a4aaa}.bloco.deseq h3{color:#9a6abf}
+.bloco.metas{background:#06100a;border-color:#3a8a4a}.bloco.metas h3{color:#5aaa6a}
+
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px}
+.tag{display:inline-block;padding:3px 9px;border-radius:12px;font-size:10.5px}
+.tag.k{background:#2a1a00;border:1px solid #c9a84c;color:#e8c060}
+.tag.m{background:#2a0806;border:1px solid #c23a2a;color:#e88060}
+.tag.ms{background:#060e18;border:1px solid #3a7aaa;color:#88aadd}
+
+/* Itens clicáveis */
+.items{display:flex;flex-direction:column;gap:5px}
+.item{display:flex;align-items:flex-start;gap:8px;padding:7px 9px;border-radius:7px;border:1px solid #1e1430;cursor:pointer;transition:all .15s;background:#08060f;user-select:none}
+.item:hover{background:#130d20;border-color:#7a4aaa}
+.item.on{background:#160e26;border-color:#9a6abf}
+.item-btn{width:20px;height:20px;border-radius:5px;border:1.5px solid #6a4aaa;background:transparent;color:#6a4aaa;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;transition:all .15s;font-family:sans-serif;line-height:1}
+.item.on .item-btn{background:#7a4aaa;color:#fff;border-color:#9a6abf}
+.item-nome{font-size:12px;color:#c8b890;font-weight:600;line-height:1.3}
+.item-desc{font-size:10px;color:#6a5a4a;margin-top:2px;line-height:1.4}
+
+/* Resumo anamnese */
+.resumo-box{position:sticky;bottom:0;background:#0a0818;border-top:1px solid #2a1a40;padding:10px 14px;margin-top:12px}
+.resumo-titulo{font-size:10px;color:#5a3a8a;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.resumo-lista{font-size:11px;color:#9a7abf;min-height:18px;line-height:1.6}
+.btn-limpar{font-size:10px;color:#5a3a6a;cursor:pointer;margin-left:8px;text-decoration:underline;background:none;border:none;color:#5a3a7a}
+</style>
+</head>
+<body>
+<h1>Árvore da Vida — Protótipo Clínico</h1>
+<p class="sub">Clique em cada Sefirá no mapa · Selecione os desequilíbrios → vão para a anamnese</p>
+
+<div class="layout">
+
+<!-- ===== COLUNA ÁRVORE ===== -->
+<div class="col-arvore">
+<svg viewBox="0 0 200 580" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- GEOMETRIA SAGRADA -->
+  <g opacity="0.07" stroke="#c9a84c" stroke-width="0.7" fill="none">
+    <circle cx="100" cy="290" r="270"/><circle cx="100" cy="290" r="200"/>
+    <circle cx="100" cy="290" r="130"/><circle cx="100" cy="290" r="65"/>
+    <line x1="100" y1="20" x2="100" y2="560"/>
+    <line x1="20" y1="290" x2="180" y2="290"/>
+    <line x1="40" y1="90" x2="160" y2="490"/>
+    <line x1="160" y1="90" x2="40" y2="490"/>
+    <polygon points="100,60 175,400 25,400"/>
+    <polygon points="100,520 175,180 25,180"/>
+  </g>
+
+  <!-- PILARES -->
+  <line x1="100" y1="50" x2="100" y2="530" stroke="#c9a84c" stroke-width="1" stroke-dasharray="4,4" opacity="0.3"/>
+  <line x1="55" y1="120" x2="55" y2="420" stroke="#aa4a3a" stroke-width="0.7" stroke-dasharray="3,4" opacity="0.2"/>
+  <line x1="145" y1="120" x2="145" y2="420" stroke="#4a7abf" stroke-width="0.7" stroke-dasharray="3,4" opacity="0.2"/>
+
+  <!-- CAMINHOS -->
+  <g stroke="#c9a84c" stroke-width="1.3" fill="none" opacity="0.3">
+    <line x1="100" y1="50" x2="55" y2="120"/>
+    <line x1="100" y1="50" x2="145" y2="120"/>
+    <line x1="55" y1="120" x2="145" y2="120"/>
+    <line x1="145" y1="120" x2="145" y2="220"/>
+    <line x1="55" y1="120" x2="55" y2="220"/>
+    <line x1="145" y1="120" x2="55" y2="220"/>
+    <line x1="55" y1="120" x2="145" y2="220"/>
+    <line x1="55" y1="220" x2="145" y2="220"/>
+    <line x1="145" y1="220" x2="100" y2="290"/>
+    <line x1="55" y1="220" x2="100" y2="290"/>
+    <line x1="100" y1="290" x2="55" y2="370"/>
+    <line x1="100" y1="290" x2="145" y2="370"/>
+    <line x1="145" y1="220" x2="55" y2="370"/>
+    <line x1="55" y1="220" x2="145" y2="370"/>
+    <line x1="55" y1="370" x2="145" y2="370"/>
+    <line x1="55" y1="370" x2="100" y2="440"/>
+    <line x1="145" y1="370" x2="100" y2="440"/>
+    <line x1="100" y1="440" x2="100" y2="530"/>
+  </g>
+
+  <!-- SILHUETA COSTAS -->
+  <g fill="none" stroke="#e8d5a3" stroke-width="1.2" opacity="0.12">
+    <ellipse cx="100" cy="50" rx="26" ry="32"/>
+    <path d="M88,80 Q58,92 46,135 L38,250 Q52,278 74,280 L80,380 Q84,450 88,500 L96,540 L100,548 L104,540 L112,500 Q116,450 120,380 L126,280 Q148,278 162,250 L154,135 Q142,92 112,80 Z"/>
+    <path d="M154,135 Q170,150 175,200 Q177,240 164,270"/>
+    <path d="M46,135 Q30,150 25,200 Q23,240 36,270"/>
+    <!-- coluna vertebral -->
+    <line x1="100" y1="80" x2="100" y2="500" stroke-dasharray="3,5" opacity="0.4"/>
+  </g>
+
+  <!-- ====== SEFIROT — clicáveis ====== -->
+
+  <!-- KETHER -->
+  <g class="sefira" onclick="abrirPainel('kether')" style="cursor:pointer">
+    <circle cx="100" cy="28" r="18" fill="#0e0c02" stroke="#f0e8c0" stroke-width="2" id="c-kether"/>
+    <circle cx="100" cy="28" r="23" fill="none" stroke="#f0e8c0" stroke-width="0.6" opacity="0.2" stroke-dasharray="2,3"/>
+    <text x="100" y="22" text-anchor="middle" font-size="8" fill="#f0e8c0" font-family="serif">כתר</text>
+    <text x="100" y="33" text-anchor="middle" font-size="6.5" fill="#c9a84c">Kether</text>
+    <text x="100" y="52" text-anchor="middle" font-size="6" fill="#5a5030">Coroa</text>
+  </g>
+
+  <!-- CHOKMAH -->
+  <g class="sefira" onclick="abrirPainel('chokmah')" style="cursor:pointer">
+    <circle cx="145" cy="120" r="15" fill="#06101e" stroke="#4a7abf" stroke-width="2" id="c-chokmah"/>
+    <text x="145" y="115" text-anchor="middle" font-size="7" fill="#aaccee" font-family="serif">חכמה</text>
+    <text x="145" y="124" text-anchor="middle" font-size="6" fill="#4a7abf">Chokmah</text>
+    <text x="168" y="138" text-anchor="start" font-size="5.5" fill="#2a4a6a">Sabedoria</text>
+  </g>
+
+  <!-- BINAH -->
+  <g class="sefira" onclick="abrirPainel('binah')" style="cursor:pointer">
+    <circle cx="55" cy="120" r="15" fill="#0e0618" stroke="#7a5aaa" stroke-width="2" id="c-binah"/>
+    <text x="55" y="115" text-anchor="middle" font-size="7" fill="#ccaaee" font-family="serif">בינה</text>
+    <text x="55" y="124" text-anchor="middle" font-size="6" fill="#7a5aaa">Binah</text>
+    <text x="32" y="138" text-anchor="end" font-size="5.5" fill="#5a3a8a">Entend.</text>
+  </g>
+
+  <!-- CHESED -->
+  <g class="sefira" onclick="abrirPainel('chesed')" style="cursor:pointer">
+    <circle cx="145" cy="220" r="15" fill="#04120a" stroke="#3a9a5a" stroke-width="2" id="c-chesed"/>
+    <text x="145" y="215" text-anchor="middle" font-size="7" fill="#aaeebb" font-family="serif">חסד</text>
+    <text x="145" y="224" text-anchor="middle" font-size="6" fill="#3a9a5a">Chesed</text>
+    <text x="168" y="238" text-anchor="start" font-size="5.5" fill="#2a6a3a">Miseric.</text>
+  </g>
+
+  <!-- GEBURAH -->
+  <g class="sefira" onclick="abrirPainel('geburah')" style="cursor:pointer">
+    <circle cx="55" cy="220" r="15" fill="#160608" stroke="#aa4a3a" stroke-width="2" id="c-geburah"/>
+    <text x="55" y="215" text-anchor="middle" font-size="7" fill="#eeaaaa" font-family="serif">גבורה</text>
+    <text x="55" y="224" text-anchor="middle" font-size="6" fill="#aa4a3a">Geburah</text>
+    <text x="32" y="238" text-anchor="end" font-size="5.5" fill="#7a2a2a">Rigor</text>
+  </g>
+
+  <!-- TIPHERETH — centro/sol -->
+  <g class="sefira" onclick="abrirPainel('tiphereth')" style="cursor:pointer">
+    <circle cx="100" cy="290" r="21" fill="#1a0e00" stroke="#e8a820" stroke-width="2.5" id="c-tiphereth"/>
+    <circle cx="100" cy="290" r="27" fill="none" stroke="#e8a820" stroke-width="0.7" opacity="0.35" stroke-dasharray="3,3"/>
+    <text x="100" y="285" text-anchor="middle" font-size="7.5" fill="#f0d060" font-family="serif">תפארת</text>
+    <text x="100" y="296" text-anchor="middle" font-size="6.5" fill="#e8a820">Tiphereth</text>
+    <text x="100" y="320" text-anchor="middle" font-size="6" fill="#7a5a10">Beleza · Sol</text>
+  </g>
+
+  <!-- NETZACH -->
+  <g class="sefira" onclick="abrirPainel('netzach')" style="cursor:pointer">
+    <circle cx="145" cy="370" r="15" fill="#120818" stroke="#9a4a8a" stroke-width="2" id="c-netzach"/>
+    <text x="145" y="365" text-anchor="middle" font-size="7" fill="#ddaadd" font-family="serif">נצח</text>
+    <text x="145" y="374" text-anchor="middle" font-size="6" fill="#9a4a8a">Netzach</text>
+    <text x="168" y="388" text-anchor="start" font-size="5.5" fill="#6a2a6a">Vitória</text>
+  </g>
+
+  <!-- HOD -->
+  <g class="sefira" onclick="abrirPainel('hod')" style="cursor:pointer">
+    <circle cx="55" cy="370" r="15" fill="#060c16" stroke="#3a7aaa" stroke-width="2" id="c-hod"/>
+    <text x="55" y="365" text-anchor="middle" font-size="7" fill="#aaccee" font-family="serif">הוד</text>
+    <text x="55" y="374" text-anchor="middle" font-size="6" fill="#3a7aaa">Hod</text>
+    <text x="32" y="388" text-anchor="end" font-size="5.5" fill="#2a5a8a">Esplend.</text>
+  </g>
+
+  <!-- YESOD -->
+  <g class="sefira" onclick="abrirPainel('yesod')" style="cursor:pointer">
+    <circle cx="100" cy="440" r="16" fill="#040e06" stroke="#6a9a5a" stroke-width="2" id="c-yesod"/>
+    <text x="100" y="435" text-anchor="middle" font-size="7" fill="#aaddaa" font-family="serif">יסוד</text>
+    <text x="100" y="445" text-anchor="middle" font-size="6" fill="#6a9a5a">Yesod</text>
+    <text x="100" y="464" text-anchor="middle" font-size="6" fill="#3a6a3a">Fundação</text>
+  </g>
+
+  <!-- MALKUTH -->
+  <g class="sefira" onclick="abrirPainel('malkuth')" style="cursor:pointer">
+    <circle cx="100" cy="530" r="18" fill="#0e0a04" stroke="#9a7a4a" stroke-width="2" id="c-malkuth"/>
+    <circle cx="100" cy="530" r="23" fill="none" stroke="#9a7a4a" stroke-width="0.6" opacity="0.25" stroke-dasharray="2,3"/>
+    <text x="100" y="525" text-anchor="middle" font-size="7.5" fill="#ccaa88" font-family="serif">מלכות</text>
+    <text x="100" y="536" text-anchor="middle" font-size="6" fill="#9a7a4a">Malkuth</text>
+    <text x="100" y="556" text-anchor="middle" font-size="6" fill="#6a5030">Reino · Terra</text>
+  </g>
+
+  <!-- Pilares label -->
+  <text x="10" y="575" font-size="6.5" fill="#7a2a2a" opacity="0.6">Severidade</text>
+  <text x="100" y="575" text-anchor="middle" font-size="6.5" fill="#9a7a30" opacity="0.6">Equilíbrio</text>
+  <text x="190" y="575" text-anchor="end" font-size="6.5" fill="#2a4a7a" opacity="0.6">Misericórdia</text>
+</svg>
+</div><!-- fim col-arvore -->
+
+<!-- ===== COLUNA PAINEL ===== -->
+<div class="col-painel" id="colPainel">
+  <div class="painel-vazio" id="painelVazio">
+    ← Clique em qualquer Sefirá<br>para ver as correspondências clínicas
+  </div>
+
+  <!-- ===== KETHER ===== -->
+  <div class="painel-content" id="p-kether">
+    <div class="pn-header">
+      <div class="pn-title" style="color:#f0e8c0"><span class="pn-hebraico">כתר</span>Kether — Coroa</div>
+      <div class="pn-sub">1ª Sefirá · Pilar do Equilíbrio · O Impulso Primordial</div>
+      <div class="pn-pilares">
+        <span class="pn-pilar" style="color:#c9a84c;border-color:#c9a84c">✦ Além do zodíaco</span>
+        <span class="pn-pilar" style="color:#f0e8c0;border-color:#f0e8c0">Topo da cabeça · Pineal</span>
+      </div>
+    </div>
+    <div class="bloco kab"><h3>Kabbalah</h3>
+      <div class="tags">
+        <span class="tag k">Virtude: Realização / Grande Obra</span>
+        <span class="tag k">Sem vício — unidade pura</span>
+        <span class="tag k">Adam Kadmon: coroa / topo da cabeça</span>
+        <span class="tag k">O ponto de onde tudo emana</span>
+      </div>
+    </div>
+    <div class="bloco mtc"><h3>MTC / Metafísica</h3>
+      <div class="tags">
+        <span class="tag m">Shen — Espírito / Consciência</span>
+        <span class="tag m">Du Mai — Vaso Governador</span>
+        <span class="tag m">DU20 (Baihui) — ponto do vértex</span>
+        <span class="tag ms">Além dos 5 Elementos — pré-natal</span>
+      </div>
+    </div>
+    <div class="bloco metas"><h3>Metafísica — Golden Dawn</h3>
+      <div class="tags">
+        <span class="tag ms">Arcanjo: Metatron — o escriba divino</span>
+        <span class="tag ms">Cor: Branco brilhante puro</span>
+        <span class="tag ms">Tarot: Ases (número 1) — impulso primordial</span>
+        <span class="tag ms">Cristal: Diamante · Quartzo transparente</span>
+        <span class="tag ms">Perfume: Âmbar · Almíscar</span>
+      </div>
+    </div>
+    <div class="bloco deseq"><h3>Desequilíbrios — clique para adicionar</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Kether — Crise de sentido / Nihilismo')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Crise de sentido / Nihilismo</div>
+          <div class="item-desc">Sensação de vazio existencial profundo, desconexão com qualquer propósito</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Kether — Dissociação espiritual')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Dissociação espiritual</div>
+          <div class="item-desc">Paciente se sente "desconectado de si", como se não habitasse o próprio corpo</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Kether — Depressão profunda / Apagamento do Shen')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Depressão profunda / Apagamento do Shen</div>
+          <div class="item-desc">Olhar vazio, ausência de brilho nos olhos, silêncio interior patológico</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Kether — Mania espiritual / Inflação do ego')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Mania espiritual / Inflação do ego</div>
+          <div class="item-desc">Crença de missão divina exclusiva, grandiosidade, desconexão da realidade</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CHOKMAH ===== -->
+  <div class="painel-content" id="p-chokmah">
+    <div class="pn-header">
+      <div class="pn-title" style="color:#4a7abf"><span class="pn-hebraico">חכמה</span>Chokmah — Sabedoria</div>
+      <div class="pn-sub">2ª Sefirá · Pilar da Misericórdia · Hemisfério direito</div>
+      <div class="pn-pilares">
+        <span class="pn-pilar" style="color:#4a7abf;border-color:#4a7abf">⭐ Zodíaco / Estrelas fixas</span>
+        <span class="pn-pilar" style="color:#aaccee;border-color:#2a4a6a">Intuição / Yang primordial</span>
+      </div>
+    </div>
+    <div class="bloco kab"><h3>Kabbalah</h3>
+      <div class="tags">
+        <span class="tag k">Virtude: Sabedoria primordial</span>
+        <span class="tag k">Força Yang / Falo Cósmico</span>
+        <span class="tag k">Hemisfério cerebral direito</span>
+        <span class="tag k">Pai supremo (Abba)</span>
+      </div>
+    </div>
+    <div class="bloco mtc"><h3>MTC / Correspondência</h3>
+      <div class="tags">
+        <span class="tag m">Aspecto Yang do cérebro</span>
+        <span class="tag m">Intuição / Visão global</span>
+        <span class="tag ms">Ponte: Yang do Rim (Ming Men)</span>
+        <span class="tag ms">Du Mai — raiz Yang do corpo</span>
+      </div>
+    </div>
+    <div class="bloco metas"><h3>Metafísica — Golden Dawn</h3>
+      <div class="tags">
+        <span class="tag ms">Arcanjo: Raziel — guardião dos segredos</span>
+        <span class="tag ms">Cor: Cinza pérola · Azul iridescente</span>
+        <span class="tag ms">Tarot: Números 2 · A Sacerdotisa (II)</span>
+        <span class="tag ms">Cristal: Turquesa · Lápis-lazúli</span>
+        <span class="tag ms">Elemento metafísico: Água primordial (Yang)</span>
+      </div>
+    </div>
+    <div class="bloco deseq"><h3>Desequilíbrios — clique para adicionar</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Chokmah — Bloqueio intuitivo / Racionalismo excessivo')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Bloqueio intuitivo / Racionalismo excessivo</div>
+          <div class="item-desc">Incapacidade de confiar no instinto, tudo precisa ser provado, medo do irracional</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Chokmah — Déficit de Yang / Vitalidade apagada')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Déficit de Yang / Vitalidade apagada</div>
+          <div class="item-desc">Frieza, indiferença, perda de ímpeto e iniciativa, corpo sempre frio</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Chokmah — Confusão / Perda de discernimento')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Confusão / Perda de discernimento</div>
+          <div class="item-desc">Dificuldade de decidir, mente nebulosa, pensamentos que não se organizam</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== BINAH ===== -->
+  <div class="painel-content" id="p-binah">
+    <div class="pn-header">
+      <div class="pn-title" style="color:#9a6abf"><span class="pn-hebraico">בינה</span>Binah — Entendimento</div>
+      <div class="pn-sub">3ª Sefirá · Pilar da Severidade · Hemisfério esquerdo</div>
+      <div class="pn-pilares">
+        <span class="pn-pilar" style="color:#7a5aaa;border-color:#7a5aaa">♄ Saturno</span>
+        <span class="pn-pilar" style="color:#ccaaee;border-color:#3a2040">Mãe suprema (Ama) · Yin</span>
+      </div>
+    </div>
+    <div class="bloco kab"><h3>Kabbalah</h3>
+      <div class="tags">
+        <span class="tag k">Virtude: Silêncio</span>
+        <span class="tag k">Vício: Avareza / Contração excessiva</span>
+        <span class="tag k">Hemisfério esquerdo — estrutura, lógica</span>
+        <span class="tag k">Saturno: limite, forma, tempo, luto</span>
+      </div>
+    </div>
+    <div class="bloco mtc"><h3>MTC / Correspondência</h3>
+      <div class="tags">
+        <span class="tag m">Rim / Água (frio, contração, estrutura)</span>
+        <span class="tag m">Yin do Rim — Essência Yin</span>
+        <span class="tag m">Governa: Ossos, medula, cabelo</span>
+        <span class="tag ms">Saturno = inverno = Água = Rim</span>
+      </div>
+    </div>
+    <div class="bloco metas"><h3>Metafísica — Golden Dawn</h3>
+      <div class="tags">
+        <span class="tag ms">Arcanjo: Tzaphkiel — contemplação divina</span>
+        <span class="tag ms">Cor: Preto · Índigo profundo</span>
+        <span class="tag ms">Tarot: Números 3 · A Imperatriz (III)</span>
+        <span class="tag ms">Cristal: Safira negra · Obsidiana</span>
+        <span class="tag ms">Elemento: Saturno — limite, forma, tempo</span>
+      </div>
+    </div>
+    <div class="bloco deseq"><h3>Desequilíbrios — clique para adicionar</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Binah — Melancolia / Tristeza profunda (Saturno)')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Melancolia / Tristeza profunda</div>
+          <div class="item-desc">Peso de Saturno — passado que não passa, rigidez emocional, isolamento</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Binah — Deficiência de Yin do Rim')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Yin do Rim</div>
+          <div class="item-desc">Calor vazio, zumbido, lombalgia, ressecamento, suor noturno</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Binah — Contração / Incapacidade de dar')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Contração / Incapacidade de dar</div>
+          <div class="item-desc">Avareza emocional, autopreservação excessiva, desconfiança crônica</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Binah — Memória e ossatura fragilizadas')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Memória e ossatura fragilizadas</div>
+          <div class="item-desc">Osteoporose, esquecimento, envelhecimento precoce — Rim governa osso e memória</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CHESED ===== -->
+  <div class="painel-content" id="p-chesed">
+    <div class="pn-header">
+      <div class="pn-title" style="color:#3a9a5a"><span class="pn-hebraico">חסד</span>Chesed — Misericórdia</div>
+      <div class="pn-sub">4ª Sefirá · Pilar da Misericórdia · Braço direito</div>
+      <div class="pn-pilares">
+        <span class="pn-pilar" style="color:#3a9a5a;border-color:#3a9a5a">♃ Júpiter</span>
+        <span class="pn-pilar" style="color:#aaeebb;border-color:#1a4a2a">Expansão · Amor · Abundância</span>
+      </div>
+    </div>
+    <div class="bloco kab"><h3>Kabbalah</h3>
+      <div class="tags">
+        <span class="tag k">Virtude: Obediência / Amor incondicional</span>
+        <span class="tag k">Vício: Hipocrisia · Tirania · Gula</span>
+        <span class="tag k">Braço direito — ação de dar</span>
+        <span class="tag k">Júpiter: expansão, benevolência, abundância</span>
+      </div>
+    </div>
+    <div class="bloco mtc"><h3>MTC / Correspondência</h3>
+      <div class="tags">
+        <span class="tag m">Fígado / Madeira (expansão, crescimento)</span>
+        <span class="tag m">Governa: livre fluxo de Qi / Hun (alma etérea)</span>
+        <span class="tag m">Emoção: Ira reprimida / Frustração</span>
+        <span class="tag ms">Júpiter = crescimento = Madeira = Fígado</span>
+      </div>
+    </div>
+    <div class="bloco metas"><h3>Metafísica — Golden Dawn</h3>
+      <div class="tags">
+        <span class="tag ms">Arcanjo: Tzadkiel — justiça e misericórdia</span>
+        <span class="tag ms">Cor: Azul royal · Azul celeste</span>
+        <span class="tag ms">Tarot: Números 4 · O Imperador (IV)</span>
+        <span class="tag ms">Cristal: Safira azul · Lápis-lazúli</span>
+        <span class="tag ms">Virtude expandida: Humildade · Obediência ao bem maior</span>
+      </div>
+    </div>
+    <div class="bloco deseq"><h3>Desequilíbrios — clique para adicionar</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Chesed — Estagnação de Qi do Fígado')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Estagnação de Qi do Fígado</div>
+          <div class="item-desc">Frustração, tensão lateral do tórax, suspiros frequentes, irregularidade menstrual</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Chesed — Incapacidade de receber / Fechamento')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Incapacidade de receber / Fechamento</div>
+          <div class="item-desc">Recusa de ajuda, autonomia rígida, dificuldade de aceitar amor — Chesed bloqueado</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Chesed — Excesso Jupiteriano / Expansão sem limite')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Excesso Jupiteriano / Expansão sem limite</div>
+          <div class="item-desc">Gula, dispersão, projetos que nunca terminam, Yang do Fígado ascendente</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Chesed — Calor do Fígado / Ira')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Calor do Fígado / Ira</div>
+          <div class="item-desc">Raiva explosiva, olhos vermelhos, cefaleia occipital/temporal, gosto amargo</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== GEBURAH ===== -->
+  <div class="painel-content" id="p-geburah">
+    <div class="pn-header">
+      <div class="pn-title" style="color:#cc4a3a"><span class="pn-hebraico">גבורה</span>Geburah — Rigor</div>
+      <div class="pn-sub">5ª Sefirá · Pilar da Severidade · Braço esquerdo</div>
+      <div class="pn-pilares">
+        <span class="pn-pilar" style="color:#aa4a3a;border-color:#aa4a3a">♂ Marte</span>
+        <span class="pn-pilar" style="color:#eeaaaa;border-color:#4a1a1a">Força · Rigor · Coragem</span>
+      </div>
+    </div>
+    <div class="bloco kab"><h3>Kabbalah</h3>
+      <div class="tags">
+        <span class="tag k">Virtude: Energia / Coragem / Discernimento</span>
+        <span class="tag k">Vício: Crueldade · Destruição · Excesso de rigor</span>
+        <span class="tag k">Braço esquerdo — força que corta / julga</span>
+        <span class="tag k">Marte: guerra, ação, fogo, limite pelo corte</span>
+      </div>
+    </div>
+    <div class="bloco mtc"><h3>MTC / Correspondência</h3>
+      <div class="tags">
+        <span class="tag m">Coração / Fogo (Marte = calor/ação)</span>
+        <span class="tag m">Aspecto Shen guerreiro — autodefesa psíquica</span>
+        <span class="tag m">Vesícula Biliar (coragem para decidir / cortar)</span>
+        <span class="tag ms">Marte = Fogo = Yang do Coração</span>
+      </div>
+    </div>
+    <div class="bloco metas"><h3>Metafísica — Golden Dawn</h3>
+      <div class="tags">
+        <span class="tag ms">Arcanjo: Camael — força e guerra sagrada</span>
+        <span class="tag ms">Cor: Vermelho escarlate</span>
+        <span class="tag ms">Tarot: Números 5 · A Torre (XVI)</span>
+        <span class="tag ms">Cristal: Rubi · Granada vermelha</span>
+        <span class="tag ms">Elemento: Marte — corte, limite, destruição criativa</span>
+      </div>
+    </div>
+    <div class="bloco deseq"><h3>Desequilíbrios — clique para adicionar</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Geburah — Crueldade / Rigor excessivo consigo')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Crueldade / Rigor excessivo consigo</div>
+          <div class="item-desc">Autocrítica destruidora, perfeccionismo paralisante, autoagressão</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Geburah — Falta de coragem / Covardia')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Falta de coragem / Covardia</div>
+          <div class="item-desc">Vesícula Biliar deficiente — incapacidade de decidir, medo de agir, submissão</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Geburah — Fogo do Coração / Agressividade')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Fogo do Coração / Agressividade</div>
+          <div class="item-desc">Violência emocional, explosões de raiva, dominação, língua com pontos vermelhos</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Geburah — Yang do Coração excessivo')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Yang do Coração excessivo</div>
+          <div class="item-desc">Taquicardia, hipertensão, agitação sem causa, calor no peito</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TIPHERETH ===== -->
+  <div class="painel-content" id="p-tiphereth">
+    <div class="pn-header">
+      <div class="pn-title" style="color:#e8a820"><span class="pn-hebraico">תפארת</span>Tiphereth — Beleza</div>
+      <div class="pn-sub">6ª Sefirá · Pilar do Equilíbrio · Centro da Árvore</div>
+      <div class="pn-pilares">
+        <span class="pn-pilar" style="color:#e8a820;border-color:#e8a820">☀ Sol</span>
+        <span class="pn-pilar" style="color:#f0d060;border-color:#5a3a00">Coração · Centro de tudo</span>
+        <span class="pn-pilar" style="color:#c9a840;border-color:#3a2800">Mediador entre acima e abaixo</span>
+      </div>
+    </div>
+    <div class="bloco kab"><h3>Kabbalah</h3>
+      <div class="tags">
+        <span class="tag k">Virtude: Devoção à Grande Obra</span>
+        <span class="tag k">Vício: Orgulho / Falso orgulho</span>
+        <span class="tag k">Coração e centro do peito</span>
+        <span class="tag k">Sol: consciência, identidade, propósito</span>
+      </div>
+    </div>
+    <div class="bloco mtc"><h3>MTC</h3>
+      <div class="tags">
+        <span class="tag m">Coração (Xin) — Órgão Yin / Elemento Fogo 🔥</span>
+        <span class="tag m">Governa: Sangue e vasos</span>
+        <span class="tag m">Abriga: Shen (Espírito / Consciência)</span>
+        <span class="tag m">Emoção: Alegria excessiva / Agitação</span>
+        <span class="tag m">Abertura: Língua · Tecido: Vasos</span>
+        <span class="tag ms">Sol = Fogo = Coração (MTC e Kabbalah convergem)</span>
+      </div>
+    </div>
+    <div class="bloco metas"><h3>Metafísica — Golden Dawn</h3>
+      <div class="tags">
+        <span class="tag ms">Arcanjo: Miguel — protetor, guerreiro da luz</span>
+        <span class="tag ms">Cor: Amarelo dourado · Ouro solar</span>
+        <span class="tag ms">Tarot: Números 6 · O Sol (XIX) · A Roda da Fortuna</span>
+        <span class="tag ms">Cristal: Topázio dourado · Citrino · Âmbar</span>
+        <span class="tag ms">Som: Fá (nota do coração) · Mantra: YAM</span>
+        <span class="tag ms">Perfume: Olíbano · Mirra · Rosa</span>
+      </div>
+    </div>
+    <div class="bloco deseq"><h3>Desequilíbrios — clique para adicionar</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Tiphereth — Deficiência de Sangue do Coração')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Sangue do Coração</div>
+          <div class="item-desc">Palpitações, insônia, sonhos agitados, rosto pálido, língua pálida</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Tiphereth — Calor Vazio do Coração / Yin Xu')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Calor Vazio do Coração / Yin Xu</div>
+          <div class="item-desc">Rubor malar, agitação noturna, suor noturno, língua vermelha sem saburra</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Tiphereth — Fogo do Coração')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Fogo do Coração</div>
+          <div class="item-desc">Ansiedade intensa, boca amarga, aftas, urina escura, língua vermelha com espinhos</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Tiphereth — Estagnação de Sangue do Coração')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Estagnação de Sangue do Coração</div>
+          <div class="item-desc">Dor precordial, lábios roxos, sensação de aperto no peito, pulso rugoso</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Tiphereth — Perturbação do Shen')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Perturbação do Shen</div>
+          <div class="item-desc">Ansiedade, insônia profunda, confusão, riso inapropriado, olhar perdido</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Tiphereth — Orgulho / Ego inflado (vício da Sefirá)')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Orgulho / Ego inflado</div>
+          <div class="item-desc">Vício de Tiphereth — dificuldade de se curvar, autossuficiência que isola</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== NETZACH ===== -->
+  <div class="painel-content" id="p-netzach">
+    <div class="pn-header">
+      <div class="pn-title" style="color:#9a4a8a"><span class="pn-hebraico">נצח</span>Netzach — Vitória</div>
+      <div class="pn-sub">7ª Sefirá · Pilar da Misericórdia · Quadril/perna direita</div>
+      <div class="pn-pilares">
+        <span class="pn-pilar" style="color:#9a4a8a;border-color:#9a4a8a">♀ Vênus</span>
+        <span class="pn-pilar" style="color:#ddaadd;border-color:#3a1a3a">Desejo · Beleza · Emoções</span>
+      </div>
+    </div>
+    <div class="bloco kab"><h3>Kabbalah</h3>
+      <div class="tags">
+        <span class="tag k">Virtude: Altruísmo / Amor puro</span>
+        <span class="tag k">Vício: Luxúria · Impureza · Desejo compulsivo</span>
+        <span class="tag k">Perna / quadril direito</span>
+        <span class="tag k">Vênus: beleza, arte, emoções, prazer</span>
+      </div>
+    </div>
+    <div class="bloco mtc"><h3>MTC / Correspondência</h3>
+      <div class="tags">
+        <span class="tag m">Fígado / Madeira (emoções, livre fluxo)</span>
+        <span class="tag m">Hun — Alma Etérea (criatividade, sonhos, desejo)</span>
+        <span class="tag m">Emoção: Ira / Frustração / Desejo não realizado</span>
+        <span class="tag ms">Vênus = sensorial = Hun do Fígado (alma dos desejos)</span>
+      </div>
+    </div>
+    <div class="bloco metas"><h3>Metafísica — Golden Dawn</h3>
+      <div class="tags">
+        <span class="tag ms">Arcanjo: Haniel — graça e beleza divina</span>
+        <span class="tag ms">Cor: Verde esmeralda · Verde vivo</span>
+        <span class="tag ms">Tarot: Números 7 · A Imperatriz (III) · O Carro</span>
+        <span class="tag ms">Cristal: Esmeralda · Malaquita · Quartzo rosa</span>
+        <span class="tag ms">Elemento: Vênus — beleza, arte, desejo, natureza</span>
+      </div>
+    </div>
+    <div class="bloco deseq"><h3>Desequilíbrios — clique para adicionar</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Netzach — Luxúria / Desejo compulsivo')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Luxúria / Desejo compulsivo</div>
+          <div class="item-desc">Dependências afetivas, sexual ou substâncias — Hun sem ancoragem</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Netzach — Estagnação de Qi do Fígado / Frustração emocional')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Estagnação do Fígado / Frustração emocional</div>
+          <div class="item-desc">Emoções que não fluem, criatividade bloqueada, SPM intensa, tensão lateral</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Netzach — Deficiência de Sangue do Fígado')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Sangue do Fígado</div>
+          <div class="item-desc">Sonhos vívidos perturbadores, visão turva, unhas quebradiças, formigamento</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Netzach — Anestesia emocional / Vênus apagada')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Anestesia emocional / Vênus apagada</div>
+          <div class="item-desc">Incapacidade de sentir prazer, apatia afetiva, vida sem cor ou arte</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== HOD ===== -->
+  <div class="painel-content" id="p-hod">
+    <div class="pn-header">
+      <div class="pn-title" style="color:#3a7aaa"><span class="pn-hebraico">הוד</span>Hod — Esplendor</div>
+      <div class="pn-sub">8ª Sefirá · Pilar da Severidade · Quadril/perna esquerda</div>
+      <div class="pn-pilares">
+        <span class="pn-pilar" style="color:#3a7aaa;border-color:#3a7aaa">☿ Mercúrio</span>
+        <span class="pn-pilar" style="color:#aaccee;border-color:#1a2a3a">Mente · Comunicação · Razão</span>
+      </div>
+    </div>
+    <div class="bloco kab"><h3>Kabbalah</h3>
+      <div class="tags">
+        <span class="tag k">Virtude: Veracidade / Honestidade</span>
+        <span class="tag k">Vício: Falsidade · Desonestidade</span>
+        <span class="tag k">Perna / quadril esquerdo</span>
+        <span class="tag k">Mercúrio: linguagem, nervo, intelecto</span>
+      </div>
+    </div>
+    <div class="bloco mtc"><h3>MTC / Correspondência</h3>
+      <div class="tags">
+        <span class="tag m">Pulmão / Metal (comunicação, voz, pele)</span>
+        <span class="tag m">Po — Alma Corpórea (instinto, sensação, reflexo)</span>
+        <span class="tag m">Governa: Qi defensivo · pele · respiro</span>
+        <span class="tag ms">Mercúrio = mente/linguagem = Metal = Pulmão (voz/comunicação)</span>
+      </div>
+    </div>
+    <div class="bloco metas"><h3>Metafísica — Golden Dawn</h3>
+      <div class="tags">
+        <span class="tag ms">Arcanjo: Rafael — cura e viagem</span>
+        <span class="tag ms">Cor: Laranja · Âmbar claro</span>
+        <span class="tag ms">Tarot: Números 8 · A Força (XI) · O Mago (I)</span>
+        <span class="tag ms">Cristal: Ágata · Citrino · Cornerina</span>
+        <span class="tag ms">Elemento: Mercúrio — mente, nervo, comunicação</span>
+      </div>
+    </div>
+    <div class="bloco deseq"><h3>Desequilíbrios — clique para adicionar</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Hod — Falsidade / Dificuldade de dizer a verdade')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Falsidade / Dificuldade de dizer a verdade</div>
+          <div class="item-desc">Vício de Hod — mentira por medo, manipulação verbal, dupla mensagem</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Hod — Deficiência de Qi do Pulmão')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Qi do Pulmão</div>
+          <div class="item-desc">Voz fraca, respiração curta, fadiga ao falar, imunidade baixa, tristeza</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Hod — Ansiedade mental / Ruminação')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Ansiedade mental / Ruminação</div>
+          <div class="item-desc">Pensamento acelerado, insônia por excesso de pensar, tensão no peito</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Hod — Tristeza / Luto não processado')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Tristeza / Luto não processado</div>
+          <div class="item-desc">Emoção do Pulmão — choro sem causa, saudade crônica, dor no peito ao respirar</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== YESOD ===== -->
+  <div class="painel-content" id="p-yesod">
+    <div class="pn-header">
+      <div class="pn-title" style="color:#6a9a5a"><span class="pn-hebraico">יסוד</span>Yesod — Fundação</div>
+      <div class="pn-sub">9ª Sefirá · Pilar do Equilíbrio · Sacro / pelve / órgãos sexuais</div>
+      <div class="pn-pilares">
+        <span class="pn-pilar" style="color:#6a9a5a;border-color:#6a9a5a">☽ Lua</span>
+        <span class="pn-pilar" style="color:#aaddaa;border-color:#1a3a1a">Inconsciente · Sexualidade · Essência</span>
+      </div>
+    </div>
+    <div class="bloco kab"><h3>Kabbalah</h3>
+      <div class="tags">
+        <span class="tag k">Virtude: Independência / Pureza sexual</span>
+        <span class="tag k">Vício: Ociosidade · Preguiça · Impureza</span>
+        <span class="tag k">Sacro, pelve, órgãos reprodutores</span>
+        <span class="tag k">Lua: ciclos, inconsciente, fluidos, instinto</span>
+      </div>
+    </div>
+    <div class="bloco mtc"><h3>MTC / Correspondência</h3>
+      <div class="tags">
+        <span class="tag m">Rim / Água — Essência (Jing) pré-natal</span>
+        <span class="tag m">Governa: reprodução, crescimento, envelhecimento</span>
+        <span class="tag m">Zhi — Vontade / Determinação</span>
+        <span class="tag m">Governa: medula, cérebro, ossos</span>
+        <span class="tag ms">Lua = fluidos = Água = Rim (convergência perfeita)</span>
+      </div>
+    </div>
+    <div class="bloco metas"><h3>Metafísica — Golden Dawn</h3>
+      <div class="tags">
+        <span class="tag ms">Arcanjo: Gabriel — mensageiro e anunciação</span>
+        <span class="tag ms">Cor: Púrpura · Violeta prateado</span>
+        <span class="tag ms">Tarot: Números 9 · A Lua (XVIII) · O Eremita (IX)</span>
+        <span class="tag ms">Cristal: Pedra da Lua · Ametista · Selenita</span>
+        <span class="tag ms">Elemento: Lua / Éter — inconsciente, ciclos, reflexo</span>
+        <span class="tag ms">Som: Si (nota da base) · Mantra: VAM</span>
+      </div>
+    </div>
+    <div class="bloco deseq"><h3>Desequilíbrios — clique para adicionar</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Yesod — Deficiência de Jing / Essência esgotada')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Jing / Essência esgotada</div>
+          <div class="item-desc">Envelhecimento precoce, cabelo branco cedo, perda de memória, infertilidade, lombalgia profunda</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Yesod — Deficiência de Yang do Rim')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Yang do Rim</div>
+          <div class="item-desc">Frieza, edema, diarreia matinal, medo crônico, libido ausente, corpo sempre frio</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Yesod — Trauma sexual / Impureza do inconsciente')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Trauma sexual / Impureza do inconsciente</div>
+          <div class="item-desc">Vício de Yesod — abuso, vergonha do corpo, bloqueio da energia vital na base</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Yesod — Ociosidade / Falta de vontade (Zhi)')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Ociosidade / Falta de vontade</div>
+          <div class="item-desc">Rim governa Zhi (determinação) — sem motivação, procrastinação crônica, paralisia</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Yesod — Medo existencial / Terror')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Medo existencial / Terror</div>
+          <div class="item-desc">Emoção do Rim — medo crônico de fundo, insegurança radical, terror do futuro</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MALKUTH ===== -->
+  <div class="painel-content" id="p-malkuth">
+    <div class="pn-header">
+      <div class="pn-title" style="color:#9a7a4a"><span class="pn-hebraico">מלכות</span>Malkuth — Reino</div>
+      <div class="pn-sub">10ª Sefirá · Pilar do Equilíbrio · Pés / manifestação</div>
+      <div class="pn-pilares">
+        <span class="pn-pilar" style="color:#9a7a4a;border-color:#9a7a4a">⊕ Terra (síntese dos 4 elementos)</span>
+        <span class="pn-pilar" style="color:#ccaa88;border-color:#3a2a10">Manifestação · Corpo físico · Enraizamento</span>
+      </div>
+    </div>
+    <div class="bloco kab"><h3>Kabbalah</h3>
+      <div class="tags">
+        <span class="tag k">Virtude: Discernimento / Enraizamento</span>
+        <span class="tag k">Vício: Inércia · Avareza material</span>
+        <span class="tag k">Pés — contato com a Terra</span>
+        <span class="tag k">Recebe e integra todos os Sefirot acima</span>
+      </div>
+    </div>
+    <div class="bloco mtc"><h3>MTC / Correspondência</h3>
+      <div class="tags">
+        <span class="tag m">Baço / Terra — centro, transformação, nutrição</span>
+        <span class="tag m">Yi — Intenção / Pensamento (governa o centro)</span>
+        <span class="tag m">Governa: músculos, digestão, pensamento</span>
+        <span class="tag m">Convergência: todos os meridianos passam pelos pés (Kin 1, B 67, F 1, R 1)</span>
+        <span class="tag ms">Terra = manifestação = Baço/Estômago = nutrição do físico</span>
+      </div>
+    </div>
+    <div class="bloco metas"><h3>Metafísica — Golden Dawn</h3>
+      <div class="tags">
+        <span class="tag ms">Arcanjo: Sandalphon — guardião da Terra e das preces</span>
+        <span class="tag ms">Cor: Marrom · Citrino · Verde-oliva · Russet · Preto</span>
+        <span class="tag ms">Tarot: Números 10 · O Mundo (XXI) · A Roda da Fortuna</span>
+        <span class="tag ms">Cristal: Jaspe · Obsidiana · Turmalina negra · Hematita</span>
+        <span class="tag ms">Elemento: Terra — síntese dos 4 elementos, manifestação final</span>
+        <span class="tag ms">Som: Dó (nota raiz) · Mantra: LAM</span>
+      </div>
+    </div>
+    <div class="bloco deseq"><h3>Desequilíbrios — clique para adicionar</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Malkuth — Deficiência de Qi do Baço / Desnutrição')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Qi do Baço / Desnutrição</div>
+          <div class="item-desc">Fadiga após comer, músculos flácidos, barriga inchada, fezes moles, falta de centramento</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Malkuth — Inércia / Paralisia na manifestação')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Inércia / Paralisia na manifestação</div>
+          <div class="item-desc">Vício de Malkuth — tudo fica no plano das ideias, nada se concretiza, postergação crônica</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Malkuth — Desconexão com o corpo / Sem raízes')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Desconexão com o corpo / Sem raízes</div>
+          <div class="item-desc">Vida "só na cabeça", instabilidade, não se sente em casa em lugar nenhum</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Malkuth — Umidade / Peso excessivo')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Umidade / Peso excessivo</div>
+          <div class="item-desc">Baço sobrecarregado — peso, inchaço, pensamento lento, cabeça pesada, mente pegajosa</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Malkuth — Avareza material / Apego excessivo')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Avareza material / Apego excessivo</div>
+          <div class="item-desc">Vício de Malkuth — identidade fundada só no ter, medo de perder o conforto</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESUMO ANAMNESE -->
+  <div class="resumo-box" id="resumoBox" style="display:none">
+    <div class="resumo-titulo">→ Adicionado à anamnese <button class="btn-limpar" onclick="limpar()">limpar tudo</button></div>
+    <div class="resumo-lista" id="resumoLista"></div>
+  </div>
+</div><!-- fim col-painel -->
+
+</div><!-- fim layout -->
+
+<script>
+const selecionados=[];
+function abrirPainel(id){
+  document.querySelectorAll('.painel-content').forEach(el=>el.classList.remove('ativo'));
+  document.getElementById('painelVazio').style.display='none';
+  const p=document.getElementById('p-'+id);
+  if(p)p.classList.add('ativo');
+  // destacar sefirá ativa
+  document.querySelectorAll('.sefira circle:first-child').forEach(c=>c.style.opacity='0.7');
+  const c=document.getElementById('c-'+id);
+  if(c){c.style.opacity='1';c.style.filter='drop-shadow(0 0 6px currentColor)';}
+}
+function marcar(el,nome){
+  el.classList.toggle('on');
+  const btn=el.querySelector('.item-btn');
+  const idx=selecionados.indexOf(nome);
+  if(idx>=0){selecionados.splice(idx,1);btn.textContent='+';}
+  else{selecionados.push(nome);btn.innerHTML='✓';}
+  atualizar();
+}
+function atualizar(){
+  const box=document.getElementById('resumoBox');
+  const lista=document.getElementById('resumoLista');
+  if(!selecionados.length){box.style.display='none';return;}
+  box.style.display='block';
+  lista.innerHTML=selecionados.map(s=>`<span style="display:inline-block;background:#1a0e2a;border:1px solid #4a2a6a;border-radius:10px;padding:2px 8px;margin:2px 3px 2px 0;font-size:10px">${s}</span>`).join('');
+}
+function limpar(){
+  selecionados.length=0;
+  document.querySelectorAll('.item.on').forEach(el=>{
+    el.classList.remove('on');
+    el.querySelector('.item-btn').textContent='+';
+  });
+  atualizar();
+}
+</script>
+</body>
+</html>

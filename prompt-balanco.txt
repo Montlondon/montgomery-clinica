@@ -1,0 +1,31 @@
+Na página de Diagnóstico Integrado (seção id="pg-diagnostico"), quero adicionar uma seção de Balanço Método usando o objeto `sistemasABC` que já existe no index.html.
+
+A seção deve ter DOIS modos de visualização alternáveis por abas ou botões segmentados:
+
+---
+
+**MODO 1 — Tabela Completa**
+Exibe os 12 sistemas do `sistemasABC` numa tabela organizada com colunas:
+- Sistema (ex: "ABC 1", "ABC 2"...)
+- Meridianos do grupo (os meridianos que compõem cada sistema)
+- Relação / lógica do sistema (se existir no objeto)
+
+Estilo da tabela: fundo var(--surface), bordas var(--line), cabeçalho com fundo var(--pri-pale) e texto var(--pri-deep), fonte 'Inter', tamanho compacto (12-13px), linhas zebradas suaves.
+
+---
+
+**MODO 2 — Filtro por Meridiano**
+- Um seletor (dropdown ou grid de botões) com os 12 meridianos principais (P, IG, E, BP, C, ID, B, R, PC, TA, VB, F)
+- Quando o usuário seleciona um meridiano afetado, a interface filtra e destaca quais sistemas do `sistemasABC` contêm aquele meridiano
+- Exibe os sistemas relevantes em cards, mostrando: nome do sistema, os outros meridianos do grupo (que serão os meridianos de balanço a tratar), e se possível os pontos-espelho
+
+---
+
+**Integração com o diagnóstico atual:**
+Se a página já identifica um meridiano predominante via queixa/elemento, usar esse valor para pré-selecionar o filtro automaticamente no Modo 2.
+
+---
+
+**CSS:** seguir a paleta nova já aplicada (var(--bg), var(--surface), var(--pri-deep), etc.). Título da seção em 'Lora', serif. Adicionar o div.fio-elementos como separador antes desta seção.
+
+Leia o objeto `sistemasABC` existente no código para entender a estrutura exata antes de construir a interface. Não altere o objeto, apenas leia e exiba.

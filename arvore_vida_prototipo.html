@@ -59,17 +59,62 @@ p.sub{text-align:center;font-size:11px;color:#5a5040;margin-bottom:14px;font-sty
 .resumo-titulo{font-size:10px;color:#5a3a8a;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
 .resumo-lista{font-size:11px;color:#9a7abf;min-height:18px;line-height:1.6}
 .btn-limpar{font-size:10px;color:#5a3a6a;cursor:pointer;margin-left:8px;text-decoration:underline;background:none;border:none;color:#5a3a7a}
+
+/* Barra do paciente + sessões */
+.pac-bar{display:flex;align-items:center;gap:10px;padding:8px 20px 12px;flex-wrap:wrap}
+.pac-bar input{background:#0c0a18;border:1px solid #2a1a40;border-radius:8px;padding:8px 12px;color:#e8d5a3;font-family:Georgia,serif;font-size:13px;outline:none;width:220px}
+.pac-bar input:focus{border-color:#c9a84c}
+.pac-data{font-size:11px;color:#5a5040;font-style:italic}
+.btn-salvar{background:#1a1204;border:1px solid #c9a84c;color:#c9a84c;border-radius:8px;padding:8px 16px;font-family:Georgia,serif;font-size:12px;cursor:pointer;letter-spacing:1px}
+.btn-salvar:hover{background:#2a1e08}
+.sessoes{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.sess-no{width:30px;height:30px;border-radius:50%;border:1.5px solid #4a3a6a;background:#0c0a18;color:#9a7abf;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:Georgia,serif}
+.sess-no:hover{border-color:#c9a84c;color:#c9a84c}
+.sess-no.hoje{border-color:#c9a84c;background:#1a1204;color:#e8c060;width:36px;height:36px}
+
+/* Bolas órgão/víscera */
+.bolas{display:flex;gap:18px;justify-content:center;margin:16px 0}
+.bola{width:96px;height:96px;border-radius:50%;border:2px solid;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;background:#0a0814;transition:all .2s;text-align:center;padding:6px}
+.bola:hover{transform:scale(1.06)}
+.bola.on{box-shadow:0 0 14px currentColor;background:#12101e}
+.bola .b-tipo{font-size:8px;text-transform:uppercase;letter-spacing:1px;opacity:.6}
+.bola .b-nome{font-size:13px;font-weight:700;margin-top:2px}
+.bola .b-cn{font-size:9px;opacity:.5;font-style:italic}
+
+/* Toggle árvore/corpo */
+.vis-toggle{display:flex;gap:0;margin-bottom:8px;border:1px solid #2a1a40;border-radius:20px;overflow:hidden}
+.vis-toggle button{flex:1;background:transparent;border:none;color:#5a5040;font-family:Georgia,serif;font-size:11px;padding:6px 14px;cursor:pointer;letter-spacing:1px}
+.vis-toggle button.on{background:#1a1204;color:#c9a84c}
+#svgCorpo{display:none}
+
+/* Balões livres */
+.balao-row{display:flex;gap:6px;margin-top:8px}
+.balao-row input{flex:1;background:#0c0a18;border:1px solid #2a1a40;border-radius:8px;padding:6px 10px;color:#e8d5a3;font-family:Georgia,serif;font-size:11px;outline:none}
+.balao-row input:focus{border-color:#9a6abf}
+.balao-row button{background:#160e26;border:1px solid #6a4aaa;color:#9a6abf;border-radius:8px;padding:6px 12px;font-size:11px;cursor:pointer;font-family:Georgia,serif}
+.tag-balao{display:inline-block;background:#0a1a14;border:1px solid #3a8a4a;color:#7aba8a;border-radius:10px;padding:2px 8px;margin:2px 3px 2px 0;font-size:10px}
 </style>
 </head>
 <body>
 <h1>Árvore da Vida — Protótipo Clínico</h1>
 <p class="sub">Clique em cada Sefirá no mapa · Selecione os desequilíbrios → vão para a anamnese</p>
 
+<div class="pac-bar">
+  <input id="pacNome" placeholder="Nome do paciente..." oninput="pacMudou()">
+  <span class="pac-data" id="pacData"></span>
+  <button class="btn-salvar" onclick="salvarSessao()">Salvar sessão</button>
+  <div class="sessoes" id="sessoesBar"></div>
+</div>
+
 <div class="layout">
 
 <!-- ===== COLUNA ÁRVORE ===== -->
 <div class="col-arvore">
-<svg viewBox="0 0 200 580" xmlns="http://www.w3.org/2000/svg">
+<div class="vis-toggle">
+  <button class="on" id="tgArvore" onclick="mostrarVis('arvore')">✦ Árvore</button>
+  <button id="tgCorpo" onclick="mostrarVis('corpo')">☥ Corpo</button>
+</div>
+<svg viewBox="0 0 200 580" xmlns="http://www.w3.org/2000/svg" id="svgArvore">
 
   <!-- GEOMETRIA SAGRADA -->
   <g opacity="0.07" stroke="#c9a84c" stroke-width="0.7" fill="none">
@@ -209,6 +254,97 @@ p.sub{text-align:center;font-size:11px;color:#5a5040;margin-bottom:14px;font-sty
   <text x="10" y="575" font-size="6.5" fill="#7a2a2a" opacity="0.6">Severidade</text>
   <text x="100" y="575" text-anchor="middle" font-size="6.5" fill="#9a7a30" opacity="0.6">Equilíbrio</text>
   <text x="190" y="575" text-anchor="end" font-size="6.5" fill="#2a4a7a" opacity="0.6">Misericórdia</text>
+</svg>
+
+<!-- ===== CORPO DE COSTAS — Adam Kadmon ===== -->
+<svg viewBox="0 0 200 580" xmlns="http://www.w3.org/2000/svg" id="svgCorpo">
+
+  <!-- Flor da vida ao fundo -->
+  <g opacity="0.06" stroke="#c9a84c" stroke-width="0.7" fill="none">
+    <circle cx="100" cy="290" r="180"/><circle cx="100" cy="290" r="120"/>
+    <circle cx="100" cy="230" r="120"/><circle cx="100" cy="350" r="120"/>
+    <circle cx="48" cy="260" r="120"/><circle cx="152" cy="260" r="120"/>
+    <circle cx="48" cy="320" r="120"/><circle cx="152" cy="320" r="120"/>
+  </g>
+
+  <!-- Silhueta de costas -->
+  <g fill="none" stroke="#e8d5a3" stroke-width="1.3" opacity="0.28">
+    <ellipse cx="100" cy="52" rx="24" ry="30"/>
+    <path d="M84,86 Q56,98 48,140 L42,255 Q56,282 76,284 L82,300 Q78,390 84,470 L90,545 L96,552 L100,552 L104,552 L110,545 L116,470 Q122,390 118,300 L124,284 Q144,282 158,255 L152,140 Q144,98 116,86 Z"/>
+    <path d="M152,140 Q168,158 172,210 Q174,248 160,275 L150,268"/>
+    <path d="M48,140 Q32,158 28,210 Q26,248 40,275 L50,268"/>
+    <line x1="100" y1="86" x2="100" y2="470" stroke-dasharray="3,5" opacity="0.5"/>
+  </g>
+
+  <!-- Elementos — a ordem do Montgomery (clicáveis) -->
+  <g font-family="Georgia,serif">
+    <g onclick="abrirPainel('el-fogo')" style="cursor:pointer">
+      <rect x="70" y="2" width="60" height="16" rx="8" fill="#160608" stroke="#c23a2a" stroke-width="0.8" opacity="0.9"/>
+      <text x="100" y="13" text-anchor="middle" font-size="7" fill="#e88060">🜂 FOGO</text>
+    </g>
+    <g onclick="abrirPainel('el-madeira')" style="cursor:pointer">
+      <rect x="4" y="136" width="58" height="16" rx="8" fill="#06100a" stroke="#3a8a4a" stroke-width="0.8" opacity="0.9"/>
+      <text x="33" y="147" text-anchor="middle" font-size="6.5" fill="#7aba8a">🜃 MADEIRA</text>
+      <text x="33" y="160" text-anchor="middle" font-size="5" fill="#3a8a4a" opacity="0.7">yang da manhã</text>
+    </g>
+    <g onclick="abrirPainel('el-terra')" style="cursor:pointer">
+      <rect x="140" y="136" width="56" height="16" rx="8" fill="#120e04" stroke="#c9a84c" stroke-width="0.8" opacity="0.9"/>
+      <text x="168" y="147" text-anchor="middle" font-size="7" fill="#e8c060">🜄 TERRA</text>
+    </g>
+    <g onclick="abrirPainel('el-metal')" style="cursor:pointer">
+      <rect x="140" y="406" width="56" height="16" rx="8" fill="#0c0c12" stroke="#8a8a9a" stroke-width="0.8" opacity="0.9"/>
+      <text x="168" y="417" text-anchor="middle" font-size="7" fill="#b8b8c8">🜁 METAL</text>
+    </g>
+    <g onclick="abrirPainel('el-agua')" style="cursor:pointer">
+      <rect x="4" y="406" width="52" height="16" rx="8" fill="#060c16" stroke="#3a7aaa" stroke-width="0.8" opacity="0.9"/>
+      <text x="30" y="417" text-anchor="middle" font-size="7" fill="#88aadd">🜄 ÁGUA</text>
+      <text x="30" y="430" text-anchor="middle" font-size="5" fill="#3a7aaa" opacity="0.7">rins</text>
+    </g>
+  </g>
+
+  <!-- Sefirot no corpo -->
+  <g class="sefira" onclick="abrirPainel('kether')" style="cursor:pointer">
+    <circle cx="100" cy="34" r="13" fill="#0e0c02" stroke="#f0e8c0" stroke-width="2" id="cb-kether"/>
+    <text x="100" y="38" text-anchor="middle" font-size="5.5" fill="#f0e8c0">Kether</text>
+  </g>
+  <g class="sefira" onclick="abrirPainel('chokmah')" style="cursor:pointer">
+    <circle cx="126" cy="58" r="11" fill="#06101e" stroke="#4a7abf" stroke-width="2" id="cb-chokmah"/>
+    <text x="126" y="61" text-anchor="middle" font-size="4.8" fill="#aaccee">Chokmah</text>
+  </g>
+  <g class="sefira" onclick="abrirPainel('binah')" style="cursor:pointer">
+    <circle cx="74" cy="58" r="11" fill="#0e0618" stroke="#7a5aaa" stroke-width="2" id="cb-binah"/>
+    <text x="74" y="61" text-anchor="middle" font-size="5" fill="#ccaaee">Binah</text>
+  </g>
+  <g class="sefira" onclick="abrirPainel('chesed')" style="cursor:pointer">
+    <circle cx="160" cy="185" r="12" fill="#04120a" stroke="#3a9a5a" stroke-width="2" id="cb-chesed"/>
+    <text x="160" y="188" text-anchor="middle" font-size="5" fill="#aaeebb">Chesed</text>
+  </g>
+  <g class="sefira" onclick="abrirPainel('geburah')" style="cursor:pointer">
+    <circle cx="40" cy="185" r="12" fill="#160608" stroke="#aa4a3a" stroke-width="2" id="cb-geburah"/>
+    <text x="40" y="188" text-anchor="middle" font-size="4.8" fill="#eeaaaa">Geburah</text>
+  </g>
+  <g class="sefira" onclick="abrirPainel('tiphereth')" style="cursor:pointer">
+    <circle cx="100" cy="185" r="15" fill="#1a0e00" stroke="#e8a820" stroke-width="2.5" id="cb-tiphereth"/>
+    <text x="100" y="189" text-anchor="middle" font-size="5" fill="#f0d060">Tiphereth</text>
+  </g>
+  <g class="sefira" onclick="abrirPainel('yesod')" style="cursor:pointer">
+    <circle cx="100" cy="295" r="13" fill="#040e06" stroke="#6a9a5a" stroke-width="2" id="cb-yesod"/>
+    <text x="100" y="299" text-anchor="middle" font-size="5" fill="#aaddaa">Yesod</text>
+  </g>
+  <g class="sefira" onclick="abrirPainel('netzach')" style="cursor:pointer">
+    <circle cx="128" cy="395" r="12" fill="#120818" stroke="#9a4a8a" stroke-width="2" id="cb-netzach"/>
+    <text x="128" y="398" text-anchor="middle" font-size="4.8" fill="#ddaadd">Netzach</text>
+  </g>
+  <g class="sefira" onclick="abrirPainel('hod')" style="cursor:pointer">
+    <circle cx="72" cy="395" r="12" fill="#060c16" stroke="#3a7aaa" stroke-width="2" id="cb-hod"/>
+    <text x="72" y="398" text-anchor="middle" font-size="5" fill="#aaccee">Hod</text>
+  </g>
+  <g class="sefira" onclick="abrirPainel('malkuth')" style="cursor:pointer">
+    <circle cx="100" cy="548" r="13" fill="#0e0a04" stroke="#9a7a4a" stroke-width="2" id="cb-malkuth"/>
+    <text x="100" y="552" text-anchor="middle" font-size="5" fill="#ccaa88">Malkuth</text>
+  </g>
+
+  <text x="100" y="575" text-anchor="middle" font-size="6" fill="#5a5040" opacity="0.8">Visão de costas — o lado do desenho é o lado real do corpo</text>
 </svg>
 </div><!-- fim col-arvore -->
 
@@ -851,26 +987,471 @@ p.sub{text-align:center;font-size:11px;color:#5a5040;margin-bottom:14px;font-sty
     </div>
   </div>
 
+  <!-- ===== ELEMENTO: METAL ===== -->
+  <div class="painel-content" id="p-el-metal">
+    <div class="pn-header">
+      <div class="pn-title" style="color:#b8b8c8">🜁 Metal</div>
+      <div class="pn-sub">Perna direita · Outono · Tristeza/Luto · Po (alma corpórea)</div>
+      <div class="pn-pilares">
+        <span class="pn-pilar" style="color:#b8b8c8;border-color:#8a8a9a">Zang: Pulmão (Fei)</span>
+        <span class="pn-pilar" style="color:#b8b8c8;border-color:#8a8a9a">Fu: Intestino Grosso (Dachang)</span>
+      </div>
+    </div>
+    <div class="bolas">
+      <div class="bola" style="color:#b8b8c8;border-color:#8a8a9a" onclick="subAbrir('el-metal','zang',this)">
+        <span class="b-tipo">Zang · Órgão</span><span class="b-nome">Pulmão</span><span class="b-cn">Fei 肺</span>
+      </div>
+      <div class="bola" style="color:#b8b8c8;border-color:#8a8a9a" onclick="subAbrir('el-metal','fu',this)">
+        <span class="b-tipo">Fu · Víscera</span><span class="b-nome">Int. Grosso</span><span class="b-cn">Dachang 大腸</span>
+      </div>
+    </div>
+    <div class="bloco kab"><h3>⚖ Método Balance · Dr. Tan — Metal</h3>
+      <div class="tags">
+        <span class="tag k">🕒 Pico: 03h–07h — oxigenação e evacuação</span>
+        <span class="tag k">Equilibrar o Tai Yin (Pulmão) via Baço-Pâncreas (BP) ou IG no joelho/cotovelo espelhado</span>
+        <span class="tag ms">Quiro: C7-T1 e 1ª/2ª costelas (escalenos)</span>
+        <span class="tag m">Fito: Guaco · Alcaçuz · Eucalipto · Psyllium</span>
+      </div>
+    </div>
+    <div class="bloco mtc" id="sub-el-metal-zang" style="display:none"><h3>Pulmão — desarmonias do órgão</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Metal/Pulmão — Deficiência de Qi do Pulmão')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Qi do Pulmão</div>
+          <div class="item-desc">Falta de ar ao esforço, voz fraca, suor espontâneo, resfriados frequentes, cansaço</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Metal/Pulmão — Deficiência de Yin do Pulmão')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Yin do Pulmão</div>
+          <div class="item-desc">Tosse seca, garganta seca, calor à tarde, suor noturno, voz rouca</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Metal/Pulmão — Invasão de Vento-Frio')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Invasão de Vento-Frio</div>
+          <div class="item-desc">Aversão ao frio, espirros, coriza clara, sem suor, dor de cabeça occipital</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Metal/Pulmão — Invasão de Vento-Calor')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Invasão de Vento-Calor</div>
+          <div class="item-desc">Febre, garganta inflamada, sede, coriza amarela, língua com bordas vermelhas</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Metal/Pulmão — Fleuma-Umidade no Pulmão')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Fleuma-Umidade no Pulmão</div>
+          <div class="item-desc">Tosse com catarro abundante branco, peito cheio, respiração ruidosa</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Metal/Pulmão — Secura no Pulmão')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Secura no Pulmão</div>
+          <div class="item-desc">Pele e nariz secos, tosse seca curta, sede leve — outono seco, luto não chorado</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Metal/Pulmão — Tristeza aprisionada / Po sem asa')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Tristeza aprisionada / Po sem asa</div>
+          <div class="item-desc">Luto não elaborado, suspiros, peito oprimido, dificuldade de soltar o passado</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="bloco deseq" id="sub-el-metal-fu" style="display:none"><h3>Intestino Grosso — desarmonias da víscera</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Metal/IG — Calor-Umidade no Intestino Grosso')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Calor-Umidade no Intestino Grosso</div>
+          <div class="item-desc">Diarreia com urgência, ardor, muco ou sangue, odor forte, calor abdominal</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Metal/IG — Secura no Intestino Grosso')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Secura no Intestino Grosso</div>
+          <div class="item-desc">Constipação com fezes secas, comum em idosos e pós-parto — Yin/fluidos deficientes</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Metal/IG — Frio no Intestino Grosso')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Frio no Intestino Grosso</div>
+          <div class="item-desc">Dor abdominal que melhora com calor, fezes soltas, frio nas extremidades</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Metal/IG — Não soltar / Retenção simbólica')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Não soltar / Retenção simbólica</div>
+          <div class="item-desc">Prisão de ventre emocional — segura mágoas, controla demais, não elimina o velho</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ELEMENTO: ÁGUA ===== -->
+  <div class="painel-content" id="p-el-agua">
+    <div class="pn-header">
+      <div class="pn-title" style="color:#88aadd">🜄 Água</div>
+      <div class="pn-sub">Perna esquerda · Inverno · Medo · Zhi (vontade) · Jing (essência)</div>
+      <div class="pn-pilares">
+        <span class="pn-pilar" style="color:#88aadd;border-color:#3a7aaa">Zang: Rim (Shen)</span>
+        <span class="pn-pilar" style="color:#88aadd;border-color:#3a7aaa">Fu: Bexiga (Pangguang)</span>
+      </div>
+    </div>
+    <div class="bolas">
+      <div class="bola" style="color:#88aadd;border-color:#3a7aaa" onclick="subAbrir('el-agua','zang',this)">
+        <span class="b-tipo">Zang · Órgão</span><span class="b-nome">Rim</span><span class="b-cn">Shen 腎</span>
+      </div>
+      <div class="bola" style="color:#88aadd;border-color:#3a7aaa" onclick="subAbrir('el-agua','fu',this)">
+        <span class="b-tipo">Fu · Víscera</span><span class="b-nome">Bexiga</span><span class="b-cn">Pangguang 膀胱</span>
+      </div>
+    </div>
+    <div class="bloco kab"><h3>⚖ Método Balance · Dr. Tan — Água</h3>
+      <div class="tags">
+        <span class="tag k">🕒 Pico: 15h–19h — filtração renal e consolidação do Jing</span>
+        <span class="tag k">Equilibrar o Shao Yin do Pé (Rim) via Coração (C) ou IG — correspondência anatômica distal</span>
+        <span class="tag ms">Quiro: L5-S1 e sacroilíacas · Piriforme (ciatalgia) · Psoas Maior</span>
+        <span class="tag m">Fito: Cavalinha · Quebra-Pedra · Cordyceps · Ashwagandha</span>
+      </div>
+    </div>
+    <div class="bloco mtc" id="sub-el-agua-zang" style="display:none"><h3>Rim — desarmonias do órgão</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Água/Rim — Deficiência de Yang do Rim')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Yang do Rim</div>
+          <div class="item-desc">Frio na lombar e joelhos, urina clara abundante, libido baixa, apatia, edema</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Água/Rim — Deficiência de Yin do Rim')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Yin do Rim</div>
+          <div class="item-desc">Calor nos 5 centros, suor noturno, zumbido, tontura, insônia, boca seca à noite</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Água/Rim — Deficiência de Jing (Essência)')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Jing (Essência)</div>
+          <div class="item-desc">Envelhecimento precoce, dentes/ossos fracos, memória fraca, infertilidade</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Água/Rim — Rim não recebe o Qi')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Rim não recebe o Qi</div>
+          <div class="item-desc">Inspiração difícil (asma), falta de ar ao esforço — o Rim não ancora a respiração</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Água/Rim — Água transbordando (edema)')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Água transbordando</div>
+          <div class="item-desc">Edema de membros inferiores, urina escassa, peso corporal — Yang não transforma água</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Água/Rim — Medo cristalizado / Zhi congelado')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Medo cristalizado / Zhi congelado</div>
+          <div class="item-desc">Medo de viver, insegurança de base, vontade paralisada, trauma antigo no corpo</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="bloco deseq" id="sub-el-agua-fu" style="display:none"><h3>Bexiga — desarmonias da víscera</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Água/Bexiga — Calor-Umidade na Bexiga')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Calor-Umidade na Bexiga</div>
+          <div class="item-desc">Urgência urinária, ardor, urina escura/turva, cistite de repetição</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Água/Bexiga — Frio-Umidade na Bexiga')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Frio-Umidade na Bexiga</div>
+          <div class="item-desc">Urina frequente clara, peso suprapúbico, piora com frio</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ELEMENTO: MADEIRA ===== -->
+  <div class="painel-content" id="p-el-madeira">
+    <div class="pn-header">
+      <div class="pn-title" style="color:#7aba8a">🜃 Madeira</div>
+      <div class="pn-sub">Braço esquerdo · Primavera · Raiva · Hun (alma etérea) · yang da manhã</div>
+      <div class="pn-pilares">
+        <span class="pn-pilar" style="color:#7aba8a;border-color:#3a8a4a">Zang: Fígado (Gan)</span>
+        <span class="pn-pilar" style="color:#7aba8a;border-color:#3a8a4a">Fu: Vesícula Biliar (Dan)</span>
+      </div>
+    </div>
+    <div class="bolas">
+      <div class="bola" style="color:#7aba8a;border-color:#3a8a4a" onclick="subAbrir('el-madeira','zang',this)">
+        <span class="b-tipo">Zang · Órgão</span><span class="b-nome">Fígado</span><span class="b-cn">Gan 肝</span>
+      </div>
+      <div class="bola" style="color:#7aba8a;border-color:#3a8a4a" onclick="subAbrir('el-madeira','fu',this)">
+        <span class="b-tipo">Fu · Víscera</span><span class="b-nome">Vesícula</span><span class="b-cn">Dan 膽</span>
+      </div>
+    </div>
+    <div class="bloco kab"><h3>⚖ Método Balance · Dr. Tan — Madeira</h3>
+      <div class="tags">
+        <span class="tag k">🕒 Pico: 23h–03h — ancoragem psíquica do Hun</span>
+        <span class="tag k">Equilibrar via Triplo Aquecedor (TR) ou Pericárdio/CS contralateral de membros superiores (Sistemas 1 e 2)</span>
+        <span class="tag ms">Quiro: T8-T10 · Romboide e Trapézio Médio</span>
+        <span class="tag m">Fito: Alcachofra · Cardo Mariano · Boldo · Curcuma</span>
+      </div>
+    </div>
+    <div class="bloco mtc" id="sub-el-madeira-zang" style="display:none"><h3>Fígado — desarmonias do órgão</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Madeira/Fígado — Estagnação do Qi do Fígado')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Estagnação do Qi do Fígado</div>
+          <div class="item-desc">Frustração, suspiros, distensão de hipocôndrio, TPM, nó na garganta, humor oscilante</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Madeira/Fígado — Fogo do Fígado')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Fogo do Fígado</div>
+          <div class="item-desc">Raiva explosiva, face vermelha, olhos vermelhos, gosto amargo, insônia agitada</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Madeira/Fígado — Deficiência de Sangue do Fígado')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Sangue do Fígado</div>
+          <div class="item-desc">Visão turva, unhas quebradiças, formigamento, sonhos vívidos, menstruação escassa</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Madeira/Fígado — Yang do Fígado ascendente')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Yang do Fígado ascendente</div>
+          <div class="item-desc">Cefaleia temporal/vertex, tontura, irritabilidade, pressão alta — sobe como vento</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Madeira/Fígado — Vento do Fígado')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Vento interno do Fígado</div>
+          <div class="item-desc">Tremores, tiques, espasmos, vertigem intensa — o vento agita os galhos</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Madeira/Fígado — Hun sem raiz / Projeto de vida travado')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Hun sem raiz / Projeto travado</div>
+          <div class="item-desc">Sem direção de vida, sonhos que não aterrissam, criatividade represada</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="bloco deseq" id="sub-el-madeira-fu" style="display:none"><h3>Vesícula Biliar — desarmonias da víscera</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Madeira/VB — Calor-Umidade na Vesícula Biliar')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Calor-Umidade na Vesícula Biliar</div>
+          <div class="item-desc">Dor em hipocôndrio direito, gosto amargo, náusea após gordura, icterícia</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Madeira/VB — Deficiência da Vesícula (indecisão)')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência da Vesícula Biliar</div>
+          <div class="item-desc">Indecisão crônica, timidez, falta de coragem para agir, assusta-se fácil</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ELEMENTO: FOGO ===== -->
+  <div class="painel-content" id="p-el-fogo">
+    <div class="pn-header">
+      <div class="pn-title" style="color:#e88060">🜂 Fogo</div>
+      <div class="pn-sub">Topo da cabeça · Verão · Alegria · Shen (espírito-mente)</div>
+      <div class="pn-pilares">
+        <span class="pn-pilar" style="color:#e88060;border-color:#c23a2a">Zang: Coração (Xin)</span>
+        <span class="pn-pilar" style="color:#e88060;border-color:#c23a2a">Fu: Intestino Delgado (Xiaochang)</span>
+        <span class="pn-pilar" style="color:#e88060;border-color:#c23a2a">Ministros: Pericárdio · Triplo Aquecedor</span>
+      </div>
+    </div>
+    <div class="bolas">
+      <div class="bola" style="color:#e88060;border-color:#c23a2a" onclick="subAbrir('el-fogo','zang',this)">
+        <span class="b-tipo">Zang · Órgão</span><span class="b-nome">Coração</span><span class="b-cn">Xin 心</span>
+      </div>
+      <div class="bola" style="color:#e88060;border-color:#c23a2a" onclick="subAbrir('el-fogo','fu',this)">
+        <span class="b-tipo">Fu · Víscera</span><span class="b-nome">Int. Delgado</span><span class="b-cn">Xiaochang 小腸</span>
+      </div>
+    </div>
+    <div class="bloco kab"><h3>⚖ Método Balance · Dr. Tan — Fogo</h3>
+      <div class="tags">
+        <span class="tag k">🕒 Pico: 11h–15h — maior atividade e circulação do Shen</span>
+        <span class="tag k">Equilibrar o Shao Yin (Coração) via Rim (R) ou Bexiga (B), ou tratar via ID espelhando nos membros inferiores</span>
+        <span class="tag ms">Quiro: T1-T4 (inervação cardiopulmonar) · escapulares e peitoral</span>
+        <span class="tag m">Fito: Passiflora · Valeriana · Mulungu · Melissa</span>
+      </div>
+    </div>
+    <div class="bloco mtc" id="sub-el-fogo-zang" style="display:none"><h3>Coração — desarmonias do órgão</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Fogo/Coração — Deficiência de Qi do Coração')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Qi do Coração</div>
+          <div class="item-desc">Palpitações ao esforço, cansaço, suor espontâneo, desânimo</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Fogo/Coração — Deficiência de Yang do Coração')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Yang do Coração</div>
+          <div class="item-desc">Palpitações com frio, mãos frias, opressão no peito, lábios arroxeados</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Fogo/Coração — Deficiência de Sangue do Coração')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Sangue do Coração</div>
+          <div class="item-desc">Insônia para adormecer, memória fraca, ansiedade leve, palidez, sonhos demais</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Fogo/Coração — Deficiência de Yin do Coração')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Yin do Coração</div>
+          <div class="item-desc">Insônia com despertares, agitação noturna, calor no peito, suor noturno</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Fogo/Coração — Fogo do Coração ardente')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Fogo do Coração ardente</div>
+          <div class="item-desc">Agitação intensa, insônia grave, aftas na língua, urina escura, rubor</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Fogo/Coração — Fleuma obstruindo o Shen')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Fleuma obstruindo o Shen</div>
+          <div class="item-desc">Confusão mental, fala desconexa, olhar velado, em casos graves perda de contato</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Fogo/Coração — Shen agitado / Alegria que não pousa')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Shen agitado / Alegria que não pousa</div>
+          <div class="item-desc">Euforia-queda, riso nervoso, coração acelerado por emoção, vulnerável a sustos</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="bloco deseq" id="sub-el-fogo-fu" style="display:none"><h3>Intestino Delgado — desarmonias da víscera</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Fogo/ID — Calor pleno no Intestino Delgado')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Calor pleno no Intestino Delgado</div>
+          <div class="item-desc">Urina escassa e ardente (calor desce do Coração), aftas, agitação, sede</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Fogo/ID — Dor por obstrução do Qi do ID')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Obstrução do Qi do Intestino Delgado</div>
+          <div class="item-desc">Dor abdominal baixa em cólica, distensão, borborigmo — não separa o puro do turvo</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Fogo/ID — Não separa o puro do turvo (discernimento)')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Não separa o puro do turvo</div>
+          <div class="item-desc">Dificuldade de discernir o que serve e o que não serve — em ideias, relações, alimento</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ELEMENTO: TERRA ===== -->
+  <div class="painel-content" id="p-el-terra">
+    <div class="pn-header">
+      <div class="pn-title" style="color:#e8c060">🜄 Terra</div>
+      <div class="pn-sub">Braço direito · Fim de verão · Preocupação/Ruminação · Yi (intenção)</div>
+      <div class="pn-pilares">
+        <span class="pn-pilar" style="color:#e8c060;border-color:#c9a84c">Zang: Baço-Pâncreas (Pi)</span>
+        <span class="pn-pilar" style="color:#e8c060;border-color:#c9a84c">Fu: Estômago (Wei)</span>
+      </div>
+    </div>
+    <div class="bolas">
+      <div class="bola" style="color:#e8c060;border-color:#c9a84c" onclick="subAbrir('el-terra','zang',this)">
+        <span class="b-tipo">Zang · Órgão</span><span class="b-nome">Baço</span><span class="b-cn">Pi 脾</span>
+      </div>
+      <div class="bola" style="color:#e8c060;border-color:#c9a84c" onclick="subAbrir('el-terra','fu',this)">
+        <span class="b-tipo">Fu · Víscera</span><span class="b-nome">Estômago</span><span class="b-cn">Wei 胃</span>
+      </div>
+    </div>
+    <div class="bloco kab"><h3>⚖ Método Balance · Dr. Tan — Terra</h3>
+      <div class="tags">
+        <span class="tag k">🕒 Pico: 07h–11h — ápice da digestão e absorção central</span>
+        <span class="tag k">Equilibrar o Yang Ming (Estômago) via Intestino Grosso (IG) ou Baço através do canal do Pulmão (P) distais</span>
+        <span class="tag ms">Quiro: T5-T7 · transição toracolombar (diafragma)</span>
+        <span class="tag m">Fito: Espinheira Santa · Ginseng · Gengibre · Canela</span>
+      </div>
+    </div>
+    <div class="bloco mtc" id="sub-el-terra-zang" style="display:none"><h3>Baço — desarmonias do órgão</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Terra/Baço — Deficiência de Qi do Baço')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Qi do Baço</div>
+          <div class="item-desc">Cansaço após comer, digestão lenta, fezes amolecidas, pouco apetite, membros pesados</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Terra/Baço — Deficiência de Yang do Baço')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Yang do Baço</div>
+          <div class="item-desc">Como def. de Qi + frio: abdômen frio, diarreia com alimentos não digeridos</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Terra/Baço — Afundamento do Qi do Baço')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Afundamento do Qi do Baço</div>
+          <div class="item-desc">Prolapsos, sensação de peso que desce, hemorroidas, cansaço extremo</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Terra/Baço — Baço não controla o Sangue')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Baço não controla o Sangue</div>
+          <div class="item-desc">Hematomas fáceis, sangramentos, menstruação prolongada</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Terra/Baço — Umidade invadindo o Baço')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Umidade invadindo o Baço</div>
+          <div class="item-desc">Peso no corpo e cabeça, mente pegajosa, inchaço, sem sede, língua com saburra grossa</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Terra/Baço — Ruminação mental / Yi sobrecarregado')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Ruminação mental / Yi sobrecarregado</div>
+          <div class="item-desc">Pensamento em círculos, preocupação com todos, estudo excessivo, não digere a vida</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="bloco deseq" id="sub-el-terra-fu" style="display:none"><h3>Estômago — desarmonias da víscera</h3>
+      <div class="items">
+        <div class="item" onclick="marcar(this,'Terra/Estômago — Fogo do Estômago')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Fogo do Estômago</div>
+          <div class="item-desc">Fome excessiva, queimação, mau hálito, gengivas inflamadas, sede de bebida fria</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Terra/Estômago — Deficiência de Yin do Estômago')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Deficiência de Yin do Estômago</div>
+          <div class="item-desc">Sem apetite mas boca seca, desconforto epigástrico vazio, língua sem saburra no centro</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Terra/Estômago — Estagnação de alimentos')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Estagnação de alimentos</div>
+          <div class="item-desc">Distensão pós-refeição, eructação com odor, náusea — comeu além ou emocionado</div></div>
+        </div>
+        <div class="item" onclick="marcar(this,'Terra/Estômago — Qi do Estômago rebelde')">
+          <div class="item-btn">+</div><div>
+          <div class="item-nome">Qi do Estômago rebelde</div>
+          <div class="item-desc">Náusea, vômito, soluço, refluxo — o Qi sobe quando deveria descer</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- RESUMO ANAMNESE -->
-  <div class="resumo-box" id="resumoBox" style="display:none">
-    <div class="resumo-titulo">→ Adicionado à anamnese <button class="btn-limpar" onclick="limpar()">limpar tudo</button></div>
+  <div class="resumo-box" id="resumoBox">
+    <div class="resumo-titulo">→ Anamnese da sessão <button class="btn-limpar" onclick="limpar()">limpar tudo</button> <button class="btn-limpar" onclick="copiarAnamnese()">copiar</button></div>
     <div class="resumo-lista" id="resumoLista"></div>
+    <div class="balao-row">
+      <input id="balaoTxt" placeholder="Balão livre... ex: R3 obstruído · frio" onkeydown="if(event.key==='Enter')addBalao()">
+      <button onclick="addBalao()">+ balão</button>
+    </div>
   </div>
 </div><!-- fim col-painel -->
 
 </div><!-- fim layout -->
 
 <script>
-const selecionados=[];
+const KEY='arvore_vida_v1';
+let selecionados=[];
+let baloes=[];
+let db;
+try{db=JSON.parse(localStorage.getItem(KEY))||{};}catch(e){db={};}
+if(!db.pacientes)db.pacientes={};
+
+function hoje(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function brData(iso){if(!iso)return'';const p=iso.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
+function save(){localStorage.setItem(KEY,JSON.stringify(db));}
+
 function abrirPainel(id){
   document.querySelectorAll('.painel-content').forEach(el=>el.classList.remove('ativo'));
   document.getElementById('painelVazio').style.display='none';
   const p=document.getElementById('p-'+id);
   if(p)p.classList.add('ativo');
-  // destacar sefirá ativa
-  document.querySelectorAll('.sefira circle:first-child').forEach(c=>c.style.opacity='0.7');
-  const c=document.getElementById('c-'+id);
-  if(c){c.style.opacity='1';c.style.filter='drop-shadow(0 0 6px currentColor)';}
+  document.querySelectorAll('.sefira circle:first-child').forEach(c=>{c.style.opacity='0.7';c.style.filter='none';});
+  ['c-','cb-'].forEach(pre=>{
+    const c=document.getElementById(pre+id);
+    if(c){c.style.opacity='1';c.style.filter='drop-shadow(0 0 6px currentColor)';}
+  });
+}
+function subAbrir(painel,sub,bola){
+  const z=document.getElementById('sub-'+painel+'-zang');
+  const f=document.getElementById('sub-'+painel+'-fu');
+  if(z)z.style.display=sub==='zang'?'block':'none';
+  if(f)f.style.display=sub==='fu'?'block':'none';
+  bola.parentElement.querySelectorAll('.bola').forEach(b=>b.classList.remove('on'));
+  bola.classList.add('on');
+}
+function mostrarVis(v){
+  document.getElementById('svgArvore').style.display=v==='arvore'?'block':'none';
+  document.getElementById('svgCorpo').style.display=v==='corpo'?'block':'none';
+  document.getElementById('tgArvore').classList.toggle('on',v==='arvore');
+  document.getElementById('tgCorpo').classList.toggle('on',v==='corpo');
 }
 function marcar(el,nome){
   el.classList.toggle('on');
@@ -880,21 +1461,80 @@ function marcar(el,nome){
   else{selecionados.push(nome);btn.innerHTML='✓';}
   atualizar();
 }
+function addBalao(){
+  const inp=document.getElementById('balaoTxt');
+  const t=(inp.value||'').trim();
+  if(!t)return;
+  baloes.push(t);
+  inp.value='';
+  atualizar();
+}
 function atualizar(){
-  const box=document.getElementById('resumoBox');
   const lista=document.getElementById('resumoLista');
-  if(!selecionados.length){box.style.display='none';return;}
-  box.style.display='block';
-  lista.innerHTML=selecionados.map(s=>`<span style="display:inline-block;background:#1a0e2a;border:1px solid #4a2a6a;border-radius:10px;padding:2px 8px;margin:2px 3px 2px 0;font-size:10px">${s}</span>`).join('');
+  let h=selecionados.map(s=>`<span style="display:inline-block;background:#1a0e2a;border:1px solid #4a2a6a;border-radius:10px;padding:2px 8px;margin:2px 3px 2px 0;font-size:10px">${s}</span>`).join('');
+  h+=baloes.map((b,i)=>`<span class="tag-balao" onclick="baloes.splice(${i},1);atualizar()" title="clique para remover">💬 ${b}</span>`).join('');
+  lista.innerHTML=h||'<span style="opacity:.4;font-style:italic">Vazio — selecione desequilíbrios ou adicione balões</span>';
 }
 function limpar(){
-  selecionados.length=0;
+  selecionados=[];baloes=[];
   document.querySelectorAll('.item.on').forEach(el=>{
     el.classList.remove('on');
     el.querySelector('.item-btn').textContent='+';
   });
   atualizar();
 }
+function textoAnamnese(){
+  const nome=(document.getElementById('pacNome').value||'').trim()||'(sem nome)';
+  let t='=== ÁRVORE DA VIDA — '+nome+' — '+brData(hoje())+' ===\n';
+  if(selecionados.length)t+='\nDesequilíbrios:\n'+selecionados.map(s=>'• '+s).join('\n')+'\n';
+  if(baloes.length)t+='\nBalões de percepção:\n'+baloes.map(b=>'💬 '+b).join('\n')+'\n';
+  return t;
+}
+function copiarAnamnese(){
+  const t=textoAnamnese();
+  if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>alert('Anamnese copiada!'));
+  else{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove();alert('Anamnese copiada!');}
+}
+function pacMudou(){renderSessoes();}
+function salvarSessao(){
+  const nome=(document.getElementById('pacNome').value||'').trim();
+  if(!nome){alert('Escreva o nome do paciente primeiro');return;}
+  if(!selecionados.length&&!baloes.length){alert('Nada para salvar ainda — selecione desequilíbrios ou adicione balões');return;}
+  if(!db.pacientes[nome])db.pacientes[nome]=[];
+  const sessoes=db.pacientes[nome];
+  const d=hoje();
+  const ix=sessoes.findIndex(s=>s.data===d);
+  const sess={data:d,desequilibrios:selecionados.slice(),baloes:baloes.slice()};
+  if(ix>=0)sessoes[ix]=sess;else sessoes.push(sess);
+  save();renderSessoes();
+  alert('Sessão salva — '+nome+' agora tem '+sessoes.length+' sessão(ões). A árvore cresceu 🌳');
+}
+function carregarSessao(nome,ix){
+  const s=(db.pacientes[nome]||[])[ix];
+  if(!s)return;
+  limpar();
+  selecionados=s.desequilibrios.slice();
+  baloes=(s.baloes||[]).slice();
+  document.querySelectorAll('.item').forEach(el=>{
+    const on=el.getAttribute('onclick')||'';
+    const m=on.match(/marcar\(this,'(.+?)'\)/);
+    if(m&&selecionados.indexOf(m[1])>=0){el.classList.add('on');el.querySelector('.item-btn').innerHTML='✓';}
+  });
+  atualizar();
+}
+function renderSessoes(){
+  const nome=(document.getElementById('pacNome').value||'').trim();
+  const bar=document.getElementById('sessoesBar');
+  const sessoes=db.pacientes[nome]||[];
+  bar.innerHTML=sessoes.map((s,i)=>{
+    const eHoje=s.data===hoje();
+    return `<div class="sess-no${eHoje?' hoje':''}" onclick="carregarSessao('${nome.replace(/'/g,"\\'")}',${i})" title="${brData(s.data)}">${eHoje?'Hoje':'S'+(i+1)}</div>`;
+  }).join('');
+}
+document.getElementById('pacData').textContent=brData(hoje());
+atualizar();
+const nomes=Object.keys(db.pacientes);
+if(nomes.length){document.getElementById('pacNome').value=nomes[nomes.length-1];renderSessoes();}
 </script>
 </body>
 </html>

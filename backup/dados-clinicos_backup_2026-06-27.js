@@ -1,0 +1,2099 @@
+// Dados clínicos estáticos (Diagnóstico Integrado) — extraído de index.html para
+// manter o código da interface separado das tabelas de referência.
+// Carregado via <script src="dados-clinicos.js"> ANTES do script principal,
+// que consome estas constantes globais: bancoIntegrativoCompleto, sistemasABC,
+// CATALOGO_SUPLEMENTOS_INICIAL.
+
+const bancoIntegrativoCompleto = {
+  // Nomes dos 6 sistemas fixos do Dr. Tan, sempre na mesma ordem
+  sistemasBalanceNomes: ['Tai Yang','Shao Yang','Yang Ming','Tai Yin','Shao Yin','Jue Yin'],
+
+  // Matriz de correspondência: para cada meridiano, o par espelhado em cada um dos 6 sistemas
+  matrizSistemasBalance: {
+    'P':  { nome:'Pulmão',            s1:'Baço-Pâncreas (BP)',     s2:'Intestino Grosso (IG)',  s3:'Bexiga (B)',             s4:'Fígado (F)',             s5:'Rins (R)',               s6:'Baço e Coração' },
+    'IG': { nome:'Intestino Grosso',  s1:'Estômago (E)',           s2:'Pulmão (P)',             s3:'Rins (R)',               s4:'Vesícula Biliar (VB)',   s5:'Intestino Delgado (ID)', s6:'Estômago e TR' },
+    'E':  { nome:'Estômago',          s1:'Intestino Grosso (IG)',  s2:'Baço-Pâncreas (BP)',     s3:'Circulação e Sexo (CS)', s4:'Intestino Delgado (ID)', s5:'Triplo Aquecedor (TR)',  s6:'Vesícula e IG' },
+    'BP': { nome:'Baço-Pâncreas',     s1:'Pulmão (P)',             s2:'Estômago (E)',           s3:'Coração (C)',            s4:'Triplo Aquecedor (TR)',  s5:'Intestino Delgado (ID)', s6:'Pulmão e Rins' },
+    'C':  { nome:'Coração',           s1:'Rins (R)',               s2:'Intestino Delgado (ID)', s3:'Baço-Pâncreas (BP)',     s4:'Bexiga (B)',             s5:'Vesícula Biliar (VB)',   s6:'Pulmão e Baço' },
+    'ID': { nome:'Intestino Delgado', s1:'Bexiga (B)',             s2:'Coração (C)',            s3:'Fígado (F)',             s4:'Estômago (E)',           s5:'Baço-Pâncreas (BP)',     s6:'Vesícula e IG' },
+    'B':  { nome:'Bexiga',            s1:'Intestino Delgado (ID)', s2:'Rins (R)',               s3:'Pulmão (P)',             s4:'Coração (C)',            s5:'Fígado (F)',             s6:'Int. Delgado e TR' },
+    'R':  { nome:'Rins',              s1:'Coração (C)',            s2:'Bexiga (B)',             s3:'Intestino Grosso (IG)',  s4:'Circulação e Sexo (CS)', s5:'Pulmão (P)',             s6:'Baço e Fígado' },
+    'CS': { nome:'Circulação e Sexo', s1:'Fígado (F)',             s2:'Triplo Aquecedor (TR)',  s3:'Estômago (E)',           s4:'Rins (R)',               s5:'Vesícula Biliar (VB)',   s6:'Coração e Rins' },
+    'TR': { nome:'Triplo Aquecedor',  s1:'Vesícula Biliar (VB)',   s2:'Circulação e Sexo (CS)', s3:'Baço-Pâncreas (BP)',     s4:'Baço-Pâncreas (BP)',     s5:'Estômago (E)',           s6:'Int. Delgado e B' },
+    'VB': { nome:'Vesícula Biliar',   s1:'Triplo Aquecedor (TR)',  s2:'Fígado (F)',             s3:'Circulação e Sexo (CS)', s4:'Intestino Grosso (IG)',  s5:'Coração (C)',            s6:'Estômago e IG' },
+    'F':  { nome:'Fígado',            s1:'Circulação e Sexo (CS)', s2:'Vesícula Biliar (VB)',   s3:'Intestino Delgado (ID)', s4:'Pulmão (P)',             s5:'Bexiga (B)',             s6:'Rins e Coração' }
+  },
+
+  // Meridianos (siglas) que compõem cada elemento, para puxar a matriz acima
+  meridianosPorElemento: {
+    'Madeira':['F','VB'],
+    'Fogo':['C','ID'],
+    'Terra':['BP','E'],
+    'Metal':['P','IG'],
+    'Água':['R','B']
+  },
+
+  matrizCincoElementos: {
+    'Madeira': {
+      cor:'#2E7D32',icone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 7 10h2.5L6 16h4v5h4v-5h4l-3.5-6H15Z"/></svg>',
+      titulo: 'Elemento Madeira (Fígado / Vesícula Biliar)',
+      relogio: '🕒 Pico: 23:00h às 03:00h • Ancoragem psíquica do Hun.',
+      psique: 'Bloqueios por sentimentos de raiva reprimida, estresse crônico por cenários de injustiça, indignação oculta e severa irritabilidade ou rigidez mental perante a dinâmica familiar.',
+      balance: 'Método Balance: Equilibrar via canais do Triplo Aquecedor (TR) ou Circulação e Sexo/Pericárdio (CS) contralateral de membros superiores (Sistemas 1 e 2 do Dr. Tan).',
+      quiro: 'Subluxações comuns nos segmentos de T8-T10 e espasmo reflexo nos músculos Romboide e Trapézio Médio.',
+      fito: 'Extrato seco de Alcachofra (Cynara scolymus), Cardo Mariano (Silimarina) e Boldo do Chile. Dente-de-leão para drenagem hepática, Hortelã-pimenta para espasmos de vesícula, Curcuma como anti-inflamatório hepático. Indicar Magnésio Dimalato para contraturas.'
+    },
+    'Fogo': {
+      cor:'#c62828',icone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-3.3 0-6-2.4-6-5.8 0-2 1-3.4 1.8-4.6.3 1 1 1.8 1.8 1.8-.3-2.6.6-5.3 3-7 0 2 .8 3 1.8 3.8 1.6 1.3 3.6 3 3.6 6 0 3.4-2.7 5.8-6 5.8Z"/></svg>',
+      titulo: 'Elemento Fogo (Coração / Intestino Delgado)',
+      relogio: '🕒 Pico: 11:00h às 15:00h • Maior atividade e circulação do Shen.',
+      psique: 'Ansiedade generalizada, palpitações por desamparo emocional, euforia defensiva ou angústia existencial com sensação de vazio no peito.',
+      balance: 'Método Balance: Equilibrar o Shao Yin (Coração) utilizando os canais do Rim (R) ou Bexiga (B), ou tratar via Intestino Delgado (ID) espelhando nos membros inferiores.',
+      quiro: 'Fixações mecânicas na região de T1-T4 (inervação cardiopulmonar) gerando dores escapulares e tensão peitoral.',
+      fito: 'Passiflora (Passiflora incarnata), Valeriana officinalis para acalmar o Shen do Coração e Mulungu. Erva-cidreira/Melissa para palpitações ansiosas, Camomila para Shen levemente agitado, Flor de Lótus na tradição clássica. Indicar Magnésio Dimalato.'
+    },
+    'Terra': {
+      cor:'#C47A1E',icone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19 9 7l3 5 2-3 7 10Z"/></svg>',
+      titulo: 'Elemento Terra (Baço-Pâncreas / Estômago)',
+      relogio: '🕒 Pico: 07:00h às 11:00h • Ápice da digestão e absorção central.',
+      psique: 'Ruminação mental obsessiva, pensamentos repetitivos, preocupação crônica por segurança material/familiar e fadiga psíquica.',
+      balance: 'Método Balance: Equilibrar o Yang Ming (Estômago) utilizando o Intestino Grosso (IG) ou Baço através do canal do Pulmão (P) distais.',
+      quiro: 'Fixação articular no nível de T5-T7 e hipomobilidade da transição toracolombar afetando o diafragma.',
+      fito: 'Espinheira Santa (Maytenus ilicifolia) para proteção de mucosa, Ginseng Nacional para tonificação do Qi do Aquecedor Médio e Carqueja. Gengibre para Qi do Aquecedor Médio e digestão fria, Hortelã para distensão, Canela para tonificar o Yang da Terra. Indicar Magnésio Dimalato.'
+    },
+    'Metal': {
+      cor:'#616161',icone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.6l1.8 1.8M16.6 16.6l1.8 1.8M18.4 5.6l-1.8 1.8M7.4 16.6l-1.8 1.8"/></svg>',
+      titulo: 'Elemento Metal (Pulmão / Intestino Grosso)',
+      relogio: '🕒 Pico: 03:00h às 07:00h • Oxigenação celular e evacuação fisiológica.',
+      psique: 'Lutos não elaborados, tristeza crônica profunda, melancolia retida, necessidade neurótica de controle e extrema dificuldade em aceitar perdas ou "desapegar".',
+      balance: 'Método Balance: Equilibrar o Tai Yin (Pulmão) através do canal do Baço-Pâncreas (BP) ou Intestino Grosso (IG) no joelho/cotovelo espelhado.',
+      quiro: 'Subluxações na transição Cervicotorácica (C7-T1) e restrições de mobilidade na primeira e segunda costelas (músculos escalenos).',
+      fito: 'Extrato de Guaco (Mikania glomerata) para expansão do Qi pulmonar, Alcaçuz (Glycyrrhiza glabra) e Cáscara Sagrada. Eucalipto como expectorante, Tomilho para o Qi pulmonar, Psyllium para regulação intestinal suave. Indicar Magnésio Dimalato.'
+    },
+    'Água': {
+      cor:'#1565C0',icone:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c4 5 6 8 6 11a6 6 0 1 1-12 0c0-3 2-6 6-11Z"/></svg>',
+      titulo: 'Elemento Água (Rim / Bexiga)',
+      relogio: '🕒 Pico: 15:00h às 19:00h • Filtração renal e consolidação do Jing ancestral.',
+      psique: 'Insegurança existencial arcaica, fobias, medos profundos de rejeição ou escassez crônica, e esgotamento psíquico por alerta prolongado.',
+      balance: 'Método Balance: Equilibrar o Shao Yin do Pé (Rim) através do canal do Coração (C) ou Intestino Grosso (IG) via correspondência anatômica distal de membros.',
+      quiro: 'Complexo de subluxação L5-S1 (base sagrada) e disfunções Sacroilíacas, tensionando os músculos Piriforme (ciatalgia) e Psoas Maior.',
+      fito: 'Cavalinha (Equisetum arvense) para drenagem, Quebra-Pedra (Phyllanthus niruri) e Chapéu-de-Couro. Cordyceps para tonificação do Jing, Uva-ursi para trato urinário, Ashwagandha como adaptógeno para esgotamento do Jing. Indicar Magnésio Dimalato.'
+    }
+  },
+  pontosCorpo: {
+    'Joelho': { regiao: 'Joelho (Patelar e Lateral)', musculo: 'm. Quadríceps e m. Bíceps Femoral', tendao: 'Tendão Patelar e Trato Iliotibial', quiro: 'Ajuste L4-L5, mobilidade fêmoro-patelar.', canal: 'VB e E',
+      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3v7l7 4v7"/><circle cx="8" cy="11" r="1.7" fill="currentColor" stroke="none"/></svg>' },
+    'Lombar': { regiao: 'Coluna Lombar (L1-L5) e Sacro', musculo: 'm. Quadrado Lombar e m. Piriforme', tendao: 'Fáscia Toracolombar', quiro: 'Correção de báscula de bacia e subluxação L5-S1.', canal: 'B',
+      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v3M9 7h6M12 7v3M8.5 12h7M12 12v3M8 17h8M12 17v3"/></svg>' },
+    'Cervical': { regiao: 'Coluna Cervical (C1-C7)', musculo: 'm. Trapézio Superior e m. Escalenos', tendao: 'Fáscia Cervical Superficial', quiro: 'Ajuste Occipito-Atlantal (C0-C1) para cefaleias e C5-C6.', canal: 'VB e IG',
+      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.5" r="2.3"/><path d="M12 6.8v3M9.7 8.6h4.6M12 9.8v3M9.7 11.6h4.6M12 12.8v3"/></svg>' },
+    'Cotovelo': { regiao: 'Articulação do Cotovelo', musculo: 'm. Supinador e m. Braquiorradial', tendao: 'Tendão Extensor Comum (Epicôndilo)', quiro: 'Restrição da cabeça do rádio e umeroulnar.', canal: 'IG e TR',
+      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5l6 7-2 9"/><path d="M11 12l7-3"/><circle cx="11" cy="12" r="1.7" fill="currentColor" stroke="none"/></svg>' },
+    'Pelve': { regiao: 'Pelve / Bacia', musculo: 'm. Glúteo Médio e m. Iliopsoas', tendao: 'Fáscia Lata e Trato Iliotibial', quiro: 'Correção de báscula pélvica e nivelamento de crista ilíaca.', canal: 'BP e R',
+      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6c0 4.5 1.5 6.5 4 7.5L5.5 20M20 6c0 4.5-1.5 6.5-4 7.5l2.5 6.5"/><path d="M4 6c2.5 2 13.5 2 16 0"/><path d="M9 13.8c2 .8 4 .8 6 0"/></svg>' },
+    'Sacroilíaca': { regiao: 'Articulação Sacroilíaca / Crista Ilíaca', musculo: 'm. Piriforme e m. Glúteo Máximo', tendao: 'Ligamento Sacroilíaco Posterior', quiro: 'Ajuste sacroilíaco e correção de báscula de bacia (ilíaca anteriorizada/posteriorizada).', canal: 'B e VB',
+      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 8 14h8L12 4Z"/><path d="M8 14 5.5 16.5M16 14l2.5 2.5"/><circle cx="5" cy="17.5" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="17.5" r="1.5" fill="currentColor" stroke="none"/></svg>' },
+    'Tornozelo': { regiao: 'Tornozelo e Pé', musculo: 'm. Fibulares e m. Tibial Anterior', tendao: 'Tendão de Aquiles e Ligamento Talofibular', quiro: 'Mobilização talo-crural e correção de entorse.', canal: 'VB e B',
+      icone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v8l-4.5 6.5a1 1 0 0 0 .8 1.5H18a1 1 0 0 0 .9-1.4l-2.4-5.1"/><path d="M10 11h6.5"/></svg>' }
+  }
+};
+
+// ===== CATÁLOGO INICIAL DE SUPLEMENTOS (seed, da planilha "Tabela de preços") =====
+const CATALOGO_SUPLEMENTOS_INICIAL=[{"fornecedor": "Rei Terra", "nome": "AGAR AGAR", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 30.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "AGNUS CASTUS", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 40.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "ALCACHOFRA C/60", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "ALECRIM", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "ALHO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "ANTI ESTRESSE C/60", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "BCAA ULTRA CONCENTRADO 120CAPS 750 MG", "descricao": "1 frasco c/120 caps. De 750 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "BICARBONATO C/60", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 26.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "BIOTINA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 30.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "CÁLCIO DE OSTRA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "CAMOMILA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 30.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "CARDO MARIANO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "CAVALINHA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "CLORETO DE MAGNÉSIO 120 CAPS. 500MG", "descricao": "1 frasco c/120 caps de 500 mg", "preco": 30.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "COEZIMA Q10", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 24.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "COGUMELO DO SOL", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "COGUMELO JUBA DE LEÃO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "CONDRO 1000. 120 CAPS", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 45.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "CORDÍCEPES EXTRATO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 45.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "CREATINA 120 CAPSULAS 750MG", "descricao": "1 frasco c/120 caps. De 750 mg", "preco": 42.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "CURCUMA LONGA 60 CAPS.500MG", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Suprivida", "nome": "DESINFLAN", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Suprivida", "nome": "DES-STRESS COMPOSTO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "DIMALATO DE MAGNESIO 100 CAPS 500 MG", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 33.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "DOLOMITA EM PÓ", "descricao": "1 frasco c/200 grs", "preco": 36.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "ESPINHEIRA SANTA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "GANODERMA REISHI EXTRATO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 45.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "GELEIA REAL", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 63.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "GENGIBRE", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "GINKGO BILOBA CIRCULAÇÃO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "HIALURÔNICO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "IMUNE", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "JUBA DE LEÃO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 40.0, "estoque": 0}, {"fornecedor": "Suprivida", "nome": "KARV-ON CARVÃO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Muwiz", "nome": "LACTASE", "descricao": "1 frasco c/60 caps. de 400 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "LARANJA MORO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 32.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "LAVANDA ALFAZEMA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 40.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "L-CARNITINA", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "LEVEDÃO 240 CAPS. - LEVEDO DE CERVEJA", "descricao": "1 frasco c/240 caps. de 500 mg", "preco": 39.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "LISINA PROLINA GLICINA 120 CAPSULAS 500 MG", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 30.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "MAG 7 120CAPS", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 40.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "MAMAO E AMEIXA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "MELATONINA 30 CAPSULAS", "descricao": "1 frasco c/30 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "MEMORY ACTIVE", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 42.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "MULATEIRO", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 30.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "MULUNGU", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "OLEO DE COCO 60 CAPS. 500 MG", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "OLEO DE COCO 100 CAPS. 1400 MG", "descricao": "1 frasco c/100 caps. de 1400mg", "preco": 54.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "OLEO DE SEMENTE DE ABOBORA 120 CAPS", "descricao": "1 frasco c/120 caps. de 1000 mg", "preco": 54.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "QUEBRA PEDRA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "PYTAIA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 30.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "PRO PLUS 120 500 MG", "descricao": "1 frasco c/120 caps de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "PRÓPOLIS", "descricao": "1 frasco c/120 caps de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "PSYLLIUM 120 CAPS 500MG", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "RESVERATROL 30 ML", "descricao": "1 frasco c/ 30ml", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "SAÚDE FEMININA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 30.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "SENE", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "SPIRULINA 120 CPS 500 MG", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 45.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "TAURINA 120 CAPS 500MG", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "TOP MEGA 3,6,9 HOMEM 120 CAPS 1000MG", "descricao": "1 frasco c/120 caps. de 1000 mg", "preco": 54.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "TRIBULUS TERRESTRIS", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "TRIPTOFANO 60 CAPS 500 MG", "descricao": "1 frasco c/60 caps. De 500 mg", "preco": 30.0, "estoque": 0}, {"fornecedor": "Suprivida", "nome": "TRITUS QUEBRA PEDRA", "descricao": "1 frasco c/60 caps. De 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Fina Vita Store", "nome": "VALERIANA", "descricao": "1 frasco c/60 caps. de 500 mg", "preco": 36.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "VITAMINA A 60 CAPS 500 MG", "descricao": "1 frasco c/60 caps de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "VITAMINA COMPLEXO B 60 CAPS 500mg", "descricao": "1 frasco c/60 caps de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "VITAMINA FOSFORO 60 CAPS.500 MG", "descricao": "1 frasco c/60 caps de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "VITAMINA INOSITOL", "descricao": "1 frasco c/60 caps de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "VITAMINA K2 + VITAMINA D3 60 CAPS 500MG", "descricao": "1 frasco c/60 caps de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "VITAMINA ZINCO 60 CAPS. 500MG", "descricao": "1 frasco c/60 caps de 500 mg", "preco": 27.0, "estoque": 0}, {"fornecedor": "Rei Terra", "nome": "VIVI CAPS 120 CAPS 500 MG", "descricao": "1 frasco c/120 caps. de 500 mg", "preco": 30.0, "estoque": 0}];
+
+// ===== SISTEMAS ABC (Dr. Tan) =====
+const sistemasABC=[
+  {
+    id:'P',elemento:'Pulmão',categoria:'Yin Mão',
+    pontos:{bracoEsquerdo:'P',bracoDireito:'IG',pernaEsquerda:'B',pernaDireita:['BP','F']},
+    sindromes:['dor torácica anterossuperior','dor face anterior/radial do braço, antebraço ou polegar','queixas respiratórias associadas a esse trajeto'],
+    protocolo:'Trajeto cobre tórax anterossuperior, face anterior-radial do braço até o polegar. Sintoma localizado nessa faixa indica P como meridiano afetado (Passo A). Acionar combo Yin Mão (Passo B) e estimular ponto espelho/imagem contralateral no segmento correspondente (Passo C).'
+  },
+  {
+    id:'C',elemento:'Coração',categoria:'Yin Mão',
+    pontos:{bracoEsquerdo:'C',bracoDireito:'ID',pernaEsquerda:'VB',pernaDireita:['R','BP']},
+    sindromes:['dor face medial-posterior do braço/antebraço até dedo mínimo','queixas torácicas/axilares no trajeto'],
+    protocolo:'Trajeto cobre axila e face medial-posterior do braço até o dedo mínimo. Sintoma nesse trajeto sinaliza C como afetado. Combo Yin Mão acionado; estímulo espelho/imagem contralateral conforme segmento afetado.'
+  },
+  {
+    id:'PC',elemento:'Pericárdio',categoria:'Yin Mão',
+    pontos:{bracoEsquerdo:'PC',bracoDireito:'TA',pernaEsquerda:'E',pernaDireita:['F','R']},
+    sindromes:['dor face anterior-medial do braço/antebraço, palma ou dedo médio','queixas torácicas anteriores no trajeto'],
+    protocolo:'Trajeto entre P e C: face anterior-medial do braço, antebraço, palma, dedo médio, tórax anterior. Sintoma nessa faixa indica PC afetado; aciona-se combo Yin Mão com estímulo espelho/imagem no segmento correspondente.'
+  },
+  {
+    id:'IG',elemento:'Intestino Grosso',categoria:'Yang Mão',
+    pontos:{bracoEsquerdo:'IG',bracoDireito:'P',pernaEsquerda:['F','R'],pernaDireita:'E'},
+    sindromes:['dor face posterolateral do braço/antebraço, dorso da mão ou indicador','dor ombro/pescoço/face no trajeto'],
+    protocolo:'Trajeto na face posterolateral do braço/antebraço até o indicador, seguindo a ombro, pescoço e face. Sintoma nesse percurso indica IG afetado; combo Yang Mão acionado, estímulo espelho/imagem no segmento equivalente.'
+  },
+  {
+    id:'ID',elemento:'Intestino Delgado',categoria:'Yang Mão',
+    pontos:{bracoEsquerdo:'ID',bracoDireito:'C',pernaEsquerda:['BP','F'],pernaDireita:'B'},
+    sindromes:['dor face posteromedial do braço/antebraço até dedo mínimo','dor escápula/ombro/pescoço lateral no trajeto'],
+    protocolo:'Trajeto na face posteromedial do braço, escápula, ombro e pescoço lateral até a face. Sintoma nesse trajeto indica ID afetado; combo Yang Mão acionado com estímulo espelho/imagem correspondente.'
+  },
+  {
+    id:'TA',elemento:'Triplo Aquecedor',categoria:'Yang Mão',
+    pontos:{bracoEsquerdo:'TA',bracoDireito:'PC',pernaEsquerda:['R','BP'],pernaDireita:'VB'},
+    sindromes:['dor face posterior média do braço/antebraço','dor ombro/pescoço lateral/têmpora ou orelha no trajeto'],
+    protocolo:'Trajeto na linha média posterior do braço, ombro, pescoço lateral até têmpora/orelha. Sintoma nessa faixa indica TA afetado; combo Yang Mão acionado, estímulo espelho/imagem no segmento equivalente.'
+  },
+  {
+    id:'BP',elemento:'Baço/Pâncreas',categoria:'Yin Pé',
+    pontos:{bracoEsquerdo:['ID','TA'],bracoDireito:['P','C'],pernaEsquerda:'BP',pernaDireita:'E'},
+    sindromes:['dor face medial-anterior da perna/coxa/joelho','queixas abdominais associadas ao trajeto'],
+    protocolo:'Trajeto na face medial-anterior da perna e coxa até o abdômen. Sintoma nesse trajeto indica BA afetado; combo Yin Pé acionado com estímulo espelho/imagem no segmento correspondente.'
+  },
+  {
+    id:'R',elemento:'Rim',categoria:'Yin Pé',
+    pontos:{bracoEsquerdo:['TA','IG'],bracoDireito:['C','PC'],pernaEsquerda:'R',pernaDireita:'B'},
+    sindromes:['dor face posteromedial da perna ou planta do pé','queixas lombossacras/abdômen inferior no trajeto'],
+    protocolo:'Trajeto na face posteromedial da perna, planta do pé, região lombossacra e abdômen inferior. Sintoma nesse percurso indica R afetado; combo Yin Pé acionado, estímulo espelho/imagem no segmento equivalente.'
+  },
+  {
+    id:'F',elemento:'Fígado',categoria:'Yin Pé',
+    pontos:{bracoEsquerdo:['IG','ID'],bracoDireito:['PC','P'],pernaEsquerda:'F',pernaDireita:'VB'},
+    sindromes:['dor face medial-anterior da perna (linha mais anterior que R)','queixas inguinais/hipocôndrio no trajeto'],
+    protocolo:'Trajeto na face medial-anterior da perna, região inguinal e hipocôndrio. Sintoma nesse percurso indica F afetado; combo Yin Pé acionado, estímulo espelho/imagem correspondente.'
+  },
+  {
+    id:'E',elemento:'Estômago',categoria:'Yang Pé',
+    pontos:{bracoEsquerdo:'PC',bracoDireito:'IG',pernaEsquerda:'E',pernaDireita:'BP'},
+    sindromes:['dor face anterior da perna/coxa','queixas faciais ou abdominais anteriores no trajeto'],
+    protocolo:'Trajeto na face, região anterior do tronco/abdômen e face anterior da coxa/perna. Sintoma nesse percurso indica E afetado; combo Yang Pé acionado, estímulo espelho/imagem no segmento equivalente.'
+  },
+  {
+    id:'B',elemento:'Bexiga',categoria:'Yang Pé',
+    pontos:{bracoEsquerdo:'P',bracoDireito:'ID',pernaEsquerda:'B',pernaDireita:'R'},
+    sindromes:['dor face posterior da perna/coxa (linha lateral)','dor coluna ou região occipital no trajeto'],
+    protocolo:'Trajeto na região occipital, coluna e face posterior (lateral) da coxa/perna até o pé. Sintoma nesse percurso indica B afetado; combo Yang Pé acionado, estímulo espelho/imagem correspondente.'
+  },
+  {
+    id:'VB',elemento:'Vesícula Biliar',categoria:'Yang Pé',
+    pontos:{bracoEsquerdo:'C',bracoDireito:'TA',pernaEsquerda:'VB',pernaDireita:'F'},
+    sindromes:['dor face lateral da perna/coxa/quadril','dor têmpora/lateral da cabeça ou flanco no trajeto'],
+    protocolo:'Trajeto na têmpora/lateral da cabeça, flanco, quadril e face lateral da coxa/perna. Sintoma nesse percurso indica VB afetado; combo Yang Pé acionado, estímulo espelho/imagem no segmento equivalente.'
+  }
+];
+
+// ===== AURICULOTERAPIA (extraído do curso/livro do Montgomery, fiel ao conteúdo original) =====
+// Coordenadas (x,y) no viewBox 0 0 320 420 do esquema da orelha (auriculoBaseSVG em index.html)
+const auriculoPontos = [
+  {
+    "id": "anus",
+    "nome": "Ânus",
+    "grupo": "Zonas Correspondentes",
+    "x": 172,
+    "y": 268,
+    "localizacao": "sobre o hélix, na altura da cruz superior do antihélix. Empurrar o hélix para frente para conseguir enxergar a cruz superior mais proeminente.",
+    "estimulo": "palpar ponto reativo e aplicar a semente. Se houver dor aguda, sangrar o ponto.",
+    "indicacoes": "trata patologias do ânus, fissurais anais, hemorroidas, coceira anal, prolapso retal.",
+    "combinacoes": "ponto reto ponto intestino grosso ponto baço ponto san jiao inferior"
+  },
+  {
+    "id": "genital-externo",
+    "nome": "Genital Externo",
+    "grupo": "Zonas Correspondentes",
+    "x": 178,
+    "y": 278,
+    "localizacao": "sobre o hélix, na altura da cruz inferior do antihélix.",
+    "estimulo": "palpar ponto reativo e aplicar a semente. Se houver coceira aguda, sangrar o ponto.",
+    "indicacoes": "trata desequilíbrios na região dos genitais, como processos inflamatórios, problemas dermatológicos e impotência sexual masculina.",
+    "combinacoes": "ponto rim ponto fígado ponto bexiga ponto sanjiao inferior ponto próstata"
+  },
+  {
+    "id": "uretra",
+    "nome": "Uretra",
+    "grupo": "Zonas Correspondentes",
+    "x": 180,
+    "y": 288,
+    "localizacao": "sobre o hélix, na direção do ponto próstata.",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "tratamento de desequilíbrios do trato urinário como enurese noturna, cistite, incontinência urinária, queimação e dor ao urinar.",
+    "combinacoes": "ponto rim ponto fígado ponto bexiga ponto san jiao inferior ponto próstata"
+  },
+  {
+    "id": "reto",
+    "nome": "Reto",
+    "grupo": "Zonas Correspondentes",
+    "x": 182,
+    "y": 296,
+    "localizacao": "sobre o hélix, na direção do ponto intestino grosso.",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "tratamento de patologias do reto como hemorroidas, prolapso retal, incontinência fecal, diarreia...",
+    "combinacoes": "ponto anus ponto intestino grosso ponto baço ponto san jiao inferior"
+  },
+  {
+    "id": "ombro-clavicula",
+    "nome": "Ombro/Clavícula",
+    "grupo": "Zonas Correspondentes",
+    "x": 90,
+    "y": 230,
+    "localizacao": "o ponto clavícula se situa na altura da fossa superior do antitrago na fossa escafoide. O ponto ombro se situa na altura da incisura superior do trago, na fossa escafoide.",
+    "estimulo": "localizar os pontos mais reativos na área, aplicar pares de sementes na parte anterior e posterior da orelha. Podemos realizar sangria no hélix na altura da área reativa.",
+    "indicacoes": "trata desequilíbrios na região do ombro, como ombro congelado, bursite, dificuldade de mobilidade. trata desequilíbrios na parte superior das costas. trata desequilíbrios na região da clavícula.",
+    "combinacoes": "sangria no ápice"
+  },
+  {
+    "id": "cotovelo",
+    "nome": "Cotovelo",
+    "grupo": "Zonas Correspondentes",
+    "x": 85,
+    "y": 190,
+    "localizacao": "acima da região do ombro/clavícula, a partir da linha horizontal traçada na altura da incisura superior do trago, na fossa escafoide.",
+    "estimulo": "localizar os pontos mais reativos na área, aplicar pares de sementes na parte anterior e posterior da orelha. Podemos realizar sangria na hélix, na altura da área reativa.",
+    "indicacoes": "trata desequilíbrios na região do cotovelo, como epicondilite, artrite, trauma...",
+    "combinacoes": "sangria no ápice"
+  },
+  {
+    "id": "punho",
+    "nome": "Punho",
+    "grupo": "Zonas Correspondentes",
+    "x": 80,
+    "y": 150,
+    "localizacao": "entre região do cotovelo e região da alergia, na fossa escafoide.",
+    "estimulo": "localizar os pontos mais reativos na área, aplicar pares de sementes na parte anterior e posterior da orelha. Podemos realizar sangria na hélix, na altura da área reativa.",
+    "indicacoes": "trata desequilíbrios na região do punho, como túnel do carpo, tendinite, entorse….",
+    "combinacoes": "sangria no ápice"
+  },
+  {
+    "id": "falanges",
+    "nome": "Falanges",
+    "grupo": "Zonas Correspondentes",
+    "x": 78,
+    "y": 115,
+    "localizacao": "acima da região da alergia, na fossa escafoide.",
+    "estimulo": "localizar os pontos mais reativos na área, aplicar pares de sementes na parte anterior e posterior da orelha. Podemos realizar sangria na hélix, na altura da área reativa.",
+    "indicacoes": "desequilíbrios na região das falanges, como reumatismo, entorse, formigamento, dermatite, hiperidrose, má circulação….",
+    "combinacoes": "sangria no ápice"
+  },
+  {
+    "id": "regiao-cervical",
+    "nome": "Região Cervical",
+    "grupo": "Zonas Correspondentes",
+    "x": 148,
+    "y": 225,
+    "localizacao": "no primeiro quinto da parte inferior do antihélix.",
+    "estimulo": "localizar os pontos mais reativos na área, aplicar pares de sementes na parte anterior; na parte posterior, aplicar reforço em forma de Y. Podemos realizar sangria no hélix, na altura da área reativa.",
+    "indicacoes": "trata dor cervical devido a má postura, fibromialgia, hérnia de disco, processos degenerativos. trata dores nas costas e nos ombros. trata dormência ou formigamento de membro superior. trata formigamento cervical.",
+    "combinacoes": "sangria no ápice"
+  },
+  {
+    "id": "pescoco-tireoide",
+    "nome": "Pescoço/Tireoide",
+    "grupo": "Zonas Correspondentes",
+    "x": 157,
+    "y": 222,
+    "localizacao": "primeiro quinto da parede interna e inferior do antihélix.",
+    "estimulo": "localizar os pontos mais reativos na área, aplicar pares de sementes na parte anterior e posterior da orelha.",
+    "indicacoes": "trata desequilíbrios na região do pescoço como dor, edemas e inflamações. trata doenças da tireoide, como hipotiroidismo e hipertiroidismo.",
+    "combinacoes": "ponto endócrino ponto hipófise ponto san jiao ponto baço"
+  },
+  {
+    "id": "regiao-toracica",
+    "nome": "Região Torácica",
+    "grupo": "Zonas Correspondentes",
+    "x": 136,
+    "y": 170,
+    "localizacao": "segundo e terceiro quinto da parte inferior do antihélix.",
+    "estimulo": "localizar os pontos mais reativos na área, aplicar pares de sementes na parte anterior e posterior da orelha. Podemos realizar sangria na região para tratamento de processos inflamatórios e aplicar pares de sementes somente na parte posterior.",
+    "indicacoes": "trata dor torácica devido a má postura, torções, processos degenerativos…",
+    "combinacoes": "sangria no ápice"
+  },
+  {
+    "id": "torax",
+    "nome": "Tórax",
+    "grupo": "Zonas Correspondentes",
+    "x": 142,
+    "y": 183,
+    "localizacao": "segundo e terceiro quinto da parede interna e inferior do antihélix.",
+    "estimulo": "localizar os pontos mais reativos na área, aplicar pares de sementes na parte anterior e posterior da orelha. Podemos realizar sangria na altura da área reativa.",
+    "indicacoes": "trata desequilíbrios na região do tórax, como dor no peito, opressão torácica, herpes zoster, neuralgia intercostal, problemas no pulmão…",
+    "combinacoes": "sangria no ápice"
+  },
+  {
+    "id": "regiao-lombar",
+    "nome": "Região Lombar",
+    "grupo": "Zonas Correspondentes",
+    "x": 128,
+    "y": 128,
+    "localizacao": "segundo quinto da parte superior do antihélix.",
+    "estimulo": "localizar os pontos mais reativos na área, aplicar pares de sementes na parte anterior; na parte posterior, aplicar reforço em forma de Y (abarcando região posterior de lombar, sacro, glúteo, ciático e quadril). Podemos realizar sangria na região para tratamento de processos inflamatórios e aplicar reforço em forma de Y somente na parte posterior.",
+    "indicacoes": "trata dor lombar devido a má postura, torções, processos degenerativos…",
+    "combinacoes": "sangria no ápice"
+  },
+  {
+    "id": "regiao-sacral",
+    "nome": "Região Sacral",
+    "grupo": "Zonas Correspondentes",
+    "x": 122,
+    "y": 100,
+    "localizacao": "primeiro quinto da parte superior do antihélix.",
+    "estimulo": "localizar os pontos mais reativos na área, aplicar pares de sementes na parte anterior; na parte posterior, aplicar reforço em forma de Y (abarcando região posterior do sacro, glúteo, ciático e quadril). Podemos realizar sangria na região para tratamento de processos inflamatórios e aplicar reforço em forma de Y somente na parte posterior.",
+    "indicacoes": "trata dor sacral devido a má postura, torções, fraturas…",
+    "combinacoes": "sangria no ápice"
+  },
+  {
+    "id": "abdome",
+    "nome": "Abdome",
+    "grupo": "Zonas Correspondentes",
+    "x": 130,
+    "y": 138,
+    "localizacao": "primeiro e segundo quinto da parede interna e superior do antihélix.",
+    "estimulo": "localizar os pontos mais reativos na área, aplicar pares de sementes na parte anterior e posterior da orelha. Podemos realizar sangria no hélix , na altura da área reativa.",
+    "indicacoes": "trata desequilíbrios na região do abdome, como dor na região, constipação, diarreia, cólicas menstruais, estufamento…",
+    "combinacoes": "pontos das zonas correspondentes"
+  },
+  {
+    "id": "quadril",
+    "nome": "Quadril",
+    "grupo": "Zonas Correspondentes",
+    "x": 118,
+    "y": 108,
+    "localizacao": "no centro da área onde começa a cruz superior do antihélix",
+    "estimulo": "palpar ponto reativo e aplicar a semente na parte anterior; na parte posterior, aplicar reforço em forma de Y (abarcando região posterior do sacro, glúteo, ciático e quadril). Podemos realizar sangria na região para tratamento de processos inflamatórios e aplicar reforço em forma de Y somente na parte posterior.",
+    "indicacoes": "trata desequilíbrios na região do quadril, como bursite e dores no geral. trata dor lombar. trata ciatalgia.",
+    "combinacoes": "sangria no ápice"
+  },
+  {
+    "id": "calcaneo",
+    "nome": "Calcâneo",
+    "grupo": "Zonas Correspondentes",
+    "x": 108,
+    "y": 95,
+    "localizacao": "no canto inferior da cruz superior do antihélix, próximo à fossa triangular.",
+    "estimulo": "palpar ponto reativo e aplicar a semente na parte anterior e posterior da orelha. Podemos realizar sangria na região para tratamento de processos inflamatórios e aplicar a semente somente na parte posterior.",
+    "indicacoes": "trata desequilíbrios na região do calcanhar, como dor no geral, esporão e fascite plantar.",
+    "combinacoes": "sangria no ápice"
+  },
+  {
+    "id": "artelhos",
+    "nome": "Artelhos",
+    "grupo": "Zonas Correspondentes",
+    "x": 100,
+    "y": 82,
+    "localizacao": "no canto superior da cruz superior do antihélix, próximo a fossa escafoide.",
+    "estimulo": "palpar ponto reativo e aplicar a semente na parte anterior e posterior da orelha. Podemos realizar sangria na região para tratamento de processos inflamatórios e aplicar a semente somente na parte posterior.",
+    "indicacoes": "trata desequilíbrios na região do pé, como dor no geral, entorse, edemas, pé gelado, deficiência vascular das extremidades, micose...",
+    "combinacoes": "sangria no ápice"
+  },
+  {
+    "id": "joelho",
+    "nome": "Joelho",
+    "grupo": "Zonas Correspondentes",
+    "x": 113,
+    "y": 90,
+    "localizacao": "no centro da cruz superior do antihélix",
+    "estimulo": "palpar ponto reativo e aplicar a semente na parte anterior e posterior da orelha. Podemos realizar sangria na região para tratamento de processos inflamatórios e aplicar a semente somente na parte posterior.",
+    "indicacoes": "trata desequilíbrios na região do joelho, como dor, entorse, contusão ou artrite.",
+    "combinacoes": "sangria no ápice"
+  },
+  {
+    "id": "tornozelo",
+    "nome": "Tornozelo",
+    "grupo": "Zonas Correspondentes",
+    "x": 105,
+    "y": 100,
+    "localizacao": "entre o ponto joelho e o ponto calcâneo",
+    "estimulo": "palpar ponto reativo e aplicar a semente na parte anterior e posterior da orelha. Podemos realizar sangria na região para tratamento de processos inflamatórios e aplicar a semente somente na parte posterior.",
+    "indicacoes": "trata desequilíbrios na região do tornozelo como dor, entorse, contusão, artrite ou edemas.",
+    "combinacoes": "sangria no ápice"
+  },
+  {
+    "id": "gluteo",
+    "nome": "Glúteo",
+    "grupo": "Zonas Correspondentes",
+    "x": 152,
+    "y": 162,
+    "localizacao": "no primeiro terço da cruz inferior do antihélix",
+    "estimulo": "palpar ponto reativo e aplicar a semente na parte anterior; na parte posterior, aplicar reforço em forma de Y (abarcando região posterior do sacro, glúteo, ciático e quadril). Podemos realizar sangria na região para tratamento de processos inflamatórios e aplicar reforço em forma de Y somente na parte posterior.",
+    "indicacoes": "trata dores na região glútea. trata dor sacral. trata ciatalgia.",
+    "combinacoes": "sangria no ápice"
+  },
+  {
+    "id": "nariz-externo",
+    "nome": "Nariz Externo",
+    "grupo": "Zonas Correspondentes",
+    "x": 108,
+    "y": 218,
+    "localizacao": "no meio da junção entre trago e face.",
+    "estimulo": "aplicar a semente na localização indicada.",
+    "indicacoes": "desequilíbrios na região externa do nariz, como inflamações e espinhas.",
+    "combinacoes": ""
+  },
+  {
+    "id": "nariz-interno",
+    "nome": "Nariz Interno",
+    "grupo": "Zonas Correspondentes",
+    "x": 114,
+    "y": 222,
+    "localizacao": "simetricamente interno ao ponto nariz externo.",
+    "estimulo": "aplicar a semente na localização indicada.",
+    "indicacoes": "desequilíbrios na região interna do nariz, como gripes, sinusites, rinites e sangramentos.",
+    "combinacoes": ""
+  },
+  {
+    "id": "olho",
+    "nome": "Olho",
+    "grupo": "Zonas Correspondentes",
+    "x": 196,
+    "y": 376,
+    "localizacao": "na zona 5 do lóbulo.",
+    "estimulo": "palpar ponto reativo e aplicar a semente na parte anterior e posterior da orelha. Podemos realizar sangria na região para tratamento de processos inflamatórios e aplicar a semente somente na parte posterior.",
+    "indicacoes": "trata desequilíbrios nos olhos como inflamações, conjuntivites e glaucoma.",
+    "combinacoes": "ponto baço ponto endócrino ponto suprarrenal ponto alergia ponto fígado sangria no ápice"
+  },
+  {
+    "id": "lingua",
+    "nome": "Língua",
+    "grupo": "Zonas Correspondentes",
+    "x": 180,
+    "y": 339,
+    "localizacao": "na zona 2 do lóbulo.",
+    "estimulo": "palpar ponto reativo e aplicar a semente na parte anterior e posterior da orelha. Podemos realizar sangria na região para tratamento de processos inflamatórios e aplicar a semente somente na parte posterior.",
+    "indicacoes": "trata desequilíbrios na língua como glossite, úlceras, queimação e fissuras. trata desequilíbrios da boca e lábios, como estomatite e aftas.",
+    "combinacoes": "ponto baço ponto endócrino ponto suprarrenal ponto alergia sangria no ápice ponto coração ponto estômago"
+  },
+  {
+    "id": "maxilar",
+    "nome": "Maxilar",
+    "grupo": "Zonas Correspondentes",
+    "x": 196,
+    "y": 344,
+    "localizacao": "na zona 3 do lóbulo.",
+    "estimulo": "palpar ponto reativo e aplicar a semente na parte anterior e posterior da orelha. Podemos realizar sangria no hélix, na altura da área reativa.",
+    "indicacoes": "trata desequilíbrios na região maxilar, como distúrbios temporomadibulares, bruxismo... trata dor de dente.",
+    "combinacoes": "área neurastenia ponto occipital ponto ansiedade ponto neurastenia ponto shen men ponto subcórtex ponto coração ponto fígado"
+  },
+  {
+    "id": "ouvido-interno",
+    "nome": "Ouvido Interno",
+    "grupo": "Zonas Correspondentes",
+    "x": 180,
+    "y": 381,
+    "localizacao": "na zona 6 do lóbulo.",
+    "estimulo": "palpar ponto reativo e aplicar a semente na parte anterior e posterior da orelha. Podemos realizar sangria no hélix, na altura da área reativa.",
+    "indicacoes": "trata desequilíbrios do ouvido interno como tinido, otite, vertigem e diminuição da audição.",
+    "combinacoes": "ponto baço ponto endócrino ponto suprarrenal ponto alergia sangria no ápice ponto rim ponto fígado ponto san jiao"
+  },
+  {
+    "id": "amidala",
+    "nome": "Amídala",
+    "grupo": "Zonas Correspondentes",
+    "x": 158,
+    "y": 360,
+    "localizacao": "na zona 8 do lóbulo.",
+    "estimulo": "localizar o ponto mais reativo na área e realizar sangria.",
+    "indicacoes": "trata amigdalite. trata faringite.",
+    "combinacoes": "ponto baço ponto endócrino ponto suprarrenal ponto alergia sangria no ápice"
+  },
+  {
+    "id": "traqueia",
+    "nome": "Traqueia",
+    "grupo": "Zonas Correspondentes",
+    "x": 138,
+    "y": 255,
+    "localizacao": "entre o ponto coração e o canal auditivo.",
+    "estimulo": "aplicar a semente na localização indicada.",
+    "indicacoes": "fortalece o sistema respiratório, trata doenças como falta de ar, tosse, rinite, sinusite, gripes, resfriados, bronquite e pneumonia (tanto doenças infecciosas como alérgicas).",
+    "combinacoes": "ponto pulmão ponto brônquios"
+  },
+  {
+    "id": "bronquios",
+    "nome": "Brônquios",
+    "grupo": "Zonas Correspondentes",
+    "x": 128,
+    "y": 260,
+    "localizacao": "no centro do arco desenhando entre os pontos coração e traqueia.",
+    "estimulo": "aplicar a semente na localização indicada.",
+    "indicacoes": "fortalece o sistema respiratório, trata doenças como falta de ar, tosse, rinite, sinusite, gripes, resfriados, bronquite e pneumonia (tanto doenças infecciosas, ou alérgicas).",
+    "combinacoes": "ponto pulmão ponto traqueia"
+  },
+  {
+    "id": "boca",
+    "nome": "Boca",
+    "grupo": "Zonas Correspondentes",
+    "x": 145,
+    "y": 75,
+    "localizacao": "no primeiro terço inferior a raiz do hélix, próximo ao canal auditivo.",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "trata desequilíbrios da cavidade bucal como úlceras bucais, estomatite, gengivite. tratamento do tabagismo. tratamento da compulsão alimentar.",
+    "combinacoes": ""
+  },
+  {
+    "id": "esofago-e-cardia",
+    "nome": "Esôfago E Cárdia",
+    "grupo": "Zonas Correspondentes",
+    "x": 138,
+    "y": 85,
+    "localizacao": "no segundo e terceiro terço inferior da raiz do hélix.",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "descongestiona a cavidade torácica, trata opressão toráxica. trata desequilíbrios do esôfago, como esofagite, refluxo e náusea.",
+    "combinacoes": "ponto intestino delgado ponto estômago"
+  },
+  {
+    "id": "estomago",
+    "nome": "Estômago",
+    "grupo": "Zonas Correspondentes",
+    "x": 128,
+    "y": 95,
+    "localizacao": "ao final da raiz do hélix",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "trata desequilíbrios do estômago trata desequilíbrios do baço, como desequilíbrios digestivos em geral. trata náusea, vômito, eructações, soluços, refluxo. trata gastrite. trata dor de estômago.",
+    "combinacoes": "ponto esôfago/cárdia ponto intestino delgado ponto fígado"
+  },
+  {
+    "id": "intestino-delgado",
+    "nome": "Intestino Delgado",
+    "grupo": "Zonas Correspondentes",
+    "x": 135,
+    "y": 110,
+    "localizacao": "no segunda parte superior a raiz do hélix.",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "trata desequilíbrios do intestino delgado. melhora a digestão. trata diarreia. trata distensão abdominal.",
+    "combinacoes": "ponto esôfago/cárdia ponto estômago ponto baço"
+  },
+  {
+    "id": "intestino-grosso",
+    "nome": "Intestino Grosso",
+    "grupo": "Zonas Correspondentes",
+    "x": 122,
+    "y": 100,
+    "localizacao": "na primeira parte superior a raiz do hélix.",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "trata desequilíbrios do intestino grosso. trata constipação e diarreia.",
+    "combinacoes": "san jiao (para constipação) ponto simpático (para constipação) ponto reto ponto intestino delgado ponto shen men ponto occipital ponto baço (para diarreia)"
+  },
+  {
+    "id": "prostata-ou-uretra",
+    "nome": "Próstata Ou Uretra (na Mulher)",
+    "grupo": "Zonas Correspondentes",
+    "x": 163,
+    "y": 272,
+    "localizacao": "no ângulo superior da concha cimba.",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "trata desequilíbrios na próstata, como hiperplasia e prostatite. trata cistite. trata transtornos da função sexual.",
+    "combinacoes": "ponto san jiao inferior ponto bexiga"
+  },
+  {
+    "id": "bexiga",
+    "nome": "Bexiga",
+    "grupo": "Zonas Correspondentes",
+    "x": 158,
+    "y": 283,
+    "localizacao": "ao lado do ponto próstata.",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "trata problemas urinários como enurese, polaciúria, retenção urinária, incontinência urinária...",
+    "combinacoes": ""
+  },
+  {
+    "id": "vesicula-biliar",
+    "nome": "Vesícula Biliar",
+    "grupo": "Zonas Correspondentes",
+    "x": 152,
+    "y": 148,
+    "localizacao": "ao lado do ponto fígado, entre rim e fígado, na orelha DIREITA.",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "trata sabor amargo na boca. trata dores na região intercostal. trata herpes zoster. trata enxaqueca. trata dor cervical (por conta do trajeto do canal). trata distensão abdominal, azia, refluxo..",
+    "combinacoes": "ponto fígado ponto esôfago e cárdia ponto estômago pontos das zonas correspondentes"
+  },
+  {
+    "id": "linha-ginecologica",
+    "nome": "Linha Ginecológica (pelve, Colo E Útero)",
+    "grupo": "Zonas Correspondentes",
+    "x": 172,
+    "y": 310,
+    "localizacao": "os pontos traçam uma bissetriz que sai do ângulo do encontro da cruz superior com a cruz inferior do antihélix e vai até a parte interna do hélix.",
+    "estimulo": "preencher toda a linha com pares de sementes uma ao lado da outra.",
+    "indicacoes": "trata prostatite. trata desequilíbrios ginecológicos. trata leucorreia. trata cólica menstrual. trata amenorreia. trata endometriose.",
+    "combinacoes": "ponto endócrino ponto hipotálamo ponto fígado ponto rim PONTOS DE AÇÃO ESPECÍFICA"
+  },
+  {
+    "id": "apice",
+    "nome": "Ápice",
+    "grupo": "Ação Específica",
+    "x": 150,
+    "y": 28,
+    "localizacao": "no ponto mais alto do pavilhão auricular. Podemos com um dedo dobrar a orelha para a frente e encontramos o ápice na dobra do hélix.",
+    "estimulo": "realizar sangria em 3 pontos: no ápice, um ponto anterior e um ponto posterior.",
+    "indicacoes": "trata sintomas agudos. alivia dores no geral. tem ação antiinflamatória, antipirética e antialérgica. trata hipertensão. acalma nos casos de ansiedade. trata problemas de pele em geral (coceira, descamação, vermelhidão…).",
+    "combinacoes": "pontos das zonas correspondentes"
+  },
+  {
+    "id": "helix-1-6",
+    "nome": "Helix 1 - 6",
+    "grupo": "Ação Específica",
+    "x": 95,
+    "y": 65,
+    "localizacao": "na região do hélix que começa no tubérculo auricular até o ponto mais baixo do lóbulo da orelha.",
+    "estimulo": "localizar o ponto mais reativo correspondente à área que desejamos tratar. Projetar esse ponto sobre a hélix. Sangrar 3 pontos: o ponto projetado, um ponto acima e um ponto abaixo.",
+    "indicacoes": "alivia dores no geral. tem ação antiinflamatória e antialérgica.",
+    "combinacoes": "pontos das zonas correspondentes"
+  },
+  {
+    "id": "alergia",
+    "nome": "Alergia",
+    "grupo": "Ação Específica",
+    "x": 95,
+    "y": 55,
+    "localizacao": "a 45 graus da linha horizontal traçada a partir da incisura superior do trago, na fossa escafoide.",
+    "estimulo": "localizar o ponto mais reativo na área (ponto de maior sensibilidade ou área com descamação) e aplicar um par de sementes.",
+    "indicacoes": "tem ação antialérgica. tem ação antiinflamatória. tem ação antirreumática. tem ação imunomoduladora.",
+    "combinacoes": "ponto endócrino ponto suprarrenal ponto baço sangria no ápice"
+  },
+  {
+    "id": "hipotensor",
+    "nome": "Hipotensor",
+    "grupo": "Ação Específica",
+    "x": 108,
+    "y": 88,
+    "localizacao": "no canto superior da fossa triangular.",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "trata hipertensão.",
+    "combinacoes": "ponto shen men ponto occipital ponto simpático ponto subcórtex ponto neurastenia área neurastenia ponto ansiedade ponto coração ponto fígado ponto rim"
+  },
+  {
+    "id": "fome",
+    "nome": "Fome",
+    "grupo": "Ação Específica",
+    "x": 100,
+    "y": 205,
+    "localizacao": "no meio de uma linha reta traçada entre ponto nariz externo e suprarrenal. Função: regulação do apetite.",
+    "estimulo": "aplicar a semente na localização indicada.",
+    "indicacoes": "regulação do apetite.",
+    "combinacoes": "ponto endócrino ponto hipófise ponto frontal ponto estômago ponto baço ponto boca PONTOS DO SISTEMA NERVOSO"
+  },
+  {
+    "id": "ciatico",
+    "nome": "Ciático",
+    "grupo": "Sistema Nervoso",
+    "x": 148,
+    "y": 178,
+    "localizacao": "centro da cruz inferior do antihélix.",
+    "estimulo": "palpar ponto reativo e aplicar a semente na parte anterior; na parte posterior, aplicar reforço em forma de Y (abarcando região posterior do sacro, glúteo, ciático e quadril). Podemos realizar sangria na região para tratamento de processos inflamatórios e aplicar reforço em forma de Y somente na parte posterior.",
+    "indicacoes": "trata ciatalgia.",
+    "combinacoes": "sangria no ápice"
+  },
+  {
+    "id": "simpatico",
+    "nome": "Simpático",
+    "grupo": "Sistema Nervoso",
+    "x": 168,
+    "y": 185,
+    "localizacao": "no final interno da cruz inferior do antihélix.",
+    "estimulo": "aplicar a semente encostada na parede interna do hélix.",
+    "indicacoes": "regula a função do sistema nervoso autônomo. trata espasmos gastrointestinais. trata gastrites, úlceras gástricas. trata cólica menstrual. trata enurese infantil. trata dermatite seborreica. trata hiperidrose. trata hipertensão.",
+    "combinacoes": ""
+  },
+  {
+    "id": "shen-men",
+    "nome": "Shen Men",
+    "grupo": "Sistema Nervoso",
+    "x": 122,
+    "y": 118,
+    "localizacao": "próximo ao vértice inferior da fossa triangular..",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "tranquiliza a mente. tem ação analgésica.",
+    "combinacoes": "ponto occipital ponto neurastenia área neurastenia ponto subcórtex ponto ansiedade"
+  },
+  {
+    "id": "temporal",
+    "nome": "Temporal",
+    "grupo": "Sistema Nervoso",
+    "x": 75,
+    "y": 170,
+    "localizacao": "no centro da linha em forma de arco desenhada a partir da borda superior até a borda inferior do antitrago.",
+    "estimulo": "palpar ponto reativo e aplicar a semente na parte anterior e posterior da orelha. Podemos realizar sangria no hélix na altura da área reativa.",
+    "indicacoes": "trata enxaquecas. trata cefaleias temporais.",
+    "combinacoes": "ponto occipital ponto frontal ponto shen men ponto subcórtex ponto fígado sangria no ápice"
+  },
+  {
+    "id": "frontal",
+    "nome": "Frontal",
+    "grupo": "Sistema Nervoso",
+    "x": 188,
+    "y": 310,
+    "localizacao": "no terço próximo à borda inferior do antitrago, na linha em forma de arco desenhada a partir da borda superior até a borda inferior do antitrago.",
+    "estimulo": "palpar ponto reativo e aplicar a semente na parte anterior e posterior da orelha. Podemos realizar sangria no hélix, na altura da área reativa.",
+    "indicacoes": "trata cefaleias frontais. alivia peso na cabeça. melhora concentração. melhora falta de memória. melhora sonolência. fortalece a mente. clareia a visão. ponto de tonificação geral",
+    "combinacoes": "ponto hipófise ponto endócrino ponto rim ponto baço sangria no ápice"
+  },
+  {
+    "id": "occipital",
+    "nome": "Occipital",
+    "grupo": "Sistema Nervoso",
+    "x": 178,
+    "y": 285,
+    "localizacao": "no terço próximo à borda superior do antitrago, na linha em forma de arco desenhada a partir da borda superior até a borda inferior do antitrago.",
+    "estimulo": "palpar ponto reativo e aplicar a semente na parte anterior e posterior da orelha. Podemos realizar sangria no hélix, na altura da área reativa.",
+    "indicacoes": "trata cefaleias occipitais. trata hipertensão. trata vertigem. trata paralisia facial. ponto de sedação geral, trata ansiedade, estresse, pânico, insônia e promove analgesia.",
+    "combinacoes": "ponto subcórtex ponto temporal ponto coração ponto frontal ponto rim ponto shen men ponto fígado ponto neurastenia sangria no ápice área neurastenia ponto ansiedade"
+  },
+  {
+    "id": "area-de-neurastenia",
+    "nome": "Área De Neurastenia",
+    "grupo": "Sistema Nervoso",
+    "x": 185,
+    "y": 295,
+    "localizacao": "área localizada abaixo do ponto ocipital.",
+    "estimulo": "palpar ponto reativo e aplicar a semente na parte anterior e posterior da orelha.",
+    "indicacoes": "acalma a mente, trata ansiedade, estresse, insônia... trata depressão. trata problemas emocionais.",
+    "combinacoes": "ponto neurastenia ponto occipital ponto shen men ponto ansiedade ponto subcórtex ponto coração ponto fígado ponto rim"
+  },
+  {
+    "id": "subcortex",
+    "nome": "Subcórtex",
+    "grupo": "Sistema Nervoso",
+    "x": 182,
+    "y": 300,
+    "localizacao": "centro do triângulo interno do antitrago, próximo à fossa inferior.",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "regula a atividade do córtex cerebral, apoia o tratamento de depressão, ansiedade e estresse. apoia o tratamento de problemas digestivos, como gastrite, vômitos, diarreia e constipação. apoia o tratamento de problemas cardiocirculatórios como hipertensão, arritmias e síndrome de Raynaud.",
+    "combinacoes": "ponto simpático pontos das zonas correspondentes"
+  },
+  {
+    "id": "neurastenia",
+    "nome": "Neurastenia",
+    "grupo": "Sistema Nervoso",
+    "x": 202,
+    "y": 360,
+    "localizacao": "na zona 4 do lóbulo.",
+    "estimulo": "palpar ponto reativo e aplicar a semente na parte anterior e posterior da orelha.",
+    "indicacoes": "acalma a mente, trata ansiedade, depressão e estresse. melhora a qualidade do sono e trata insônia.",
+    "combinacoes": "área neurastenia ponto ocipital ponto ansiedade ponto shen men ponto subcórtex ponto coração ponto fígado ponto rim"
+  },
+  {
+    "id": "ansiedade",
+    "nome": "Ansiedade",
+    "grupo": "Sistema Nervoso",
+    "x": 165,
+    "y": 376,
+    "localizacao": "na zona 7 do lóbulo.",
+    "estimulo": "palpar ponto reativo e aplicar a semente na parte anterior e posterior da orelha.",
+    "indicacoes": "acalma a mente, trata ansiedade, depressão, estresse, nervosismo. melhora a qualidade do sono e trata insônia. utilizar esse ponto para tratamento de vícios em geral (tabagismo, alcoolismo...)",
+    "combinacoes": "área neurastenia ponto neurastenia ponto shen men ponto occipital ponto subcórtex ponto coração ponto fígado PONTOS DO SISTEMA ENDÓCRINO"
+  },
+  {
+    "id": "endocrino",
+    "nome": "Endócrino",
+    "grupo": "Sistema Endócrino",
+    "x": 148,
+    "y": 265,
+    "localizacao": "no assoalho da incisura intertrágica.",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "regula o sistema endócrino. função antialérgica, antiinfecciosa, antiinflamatória e antirreumática. regula o metabolismo. drena a umidade, trata edemas, artrite reumatoide, lúpus eritematoso, cistos.",
+    "combinacoes": "ponto baço ponto suprarrenal ponto alergia sangria no ápice ponto hipófise ponto tireoide ponto san jiao"
+  },
+  {
+    "id": "hipofise",
+    "nome": "Hipófise",
+    "grupo": "Sistema Endócrino",
+    "x": 185,
+    "y": 292,
+    "localizacao": "na crista interna do antitrago, próximo a borda superior do antitrago.",
+    "estimulo": "aplicar a semente na localização indicada.",
+    "indicacoes": "ponto de tonificação geral. controla a atividade da hipófise, trata problemas endócrinos e ginecológicos como amenorreia, menstruação irregular, hemorragia uterina, disfunção erétil…",
+    "combinacoes": "ponto frontal ponto endócrino ponto rim ponto baço ponto fígado pontos das zonas correspondentes"
+  },
+  {
+    "id": "supra-renal",
+    "nome": "Supra-renal",
+    "grupo": "Sistema Endócrino",
+    "x": 112,
+    "y": 232,
+    "localizacao": "na metade inferior da borda do trago na orelha com 1 ápice, e no ápice inferior quando a orelha tem dois ápices.",
+    "estimulo": "aplicar a semente na localização indicada.",
+    "indicacoes": "regulação das funções das glândulas suprarrenais. função antiinflamatória, antialérgica, antirreumática. função imunomoduladora, trata doenças autoimunes. função antipirética. (Realizar sangria no ponto + sangria no ápice para baixar a temperatura.) controla o tônus vasomotor, controla hemorragias e trata hipotensão arterial.",
+    "combinacoes": "ponto baço ponto endócrino ponto alergia sangria no ápice Contraindicação: pacientes com hipertensão arterial descontrolada PONTOS DA MEDICINA CHINESA"
+  },
+  {
+    "id": "coracao",
+    "nome": "Coração",
+    "grupo": "Medicina Chinesa",
+    "x": 155,
+    "y": 245,
+    "localizacao": "puxar levemente a orelha para expor a concha cava e localizar o centro da concha cava da orelha ESQUERDA.",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "acalma a mente, trata desequilíbrios emocionais, ansiedade, insônia, manias... regula atividade cardiovascular, trata doenças como arritmia e hipertensão.",
+    "combinacoes": ""
+  },
+  {
+    "id": "pulmao",
+    "nome": "Pulmão",
+    "grupo": "Medicina Chinesa",
+    "x": 152,
+    "y": 255,
+    "localizacao": "logo abaixo do ponto coração.",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "fortalece o sistema respiratório, trata doenças como falta de ar, tosse, rinite, sinusite, gripes, resfriados, bronquite e pneumonia (tanto doenças infecciosas como alérgicas). tem função imunomoduladora. trata desequilíbrios da pele, dermatites, transpiração espontânea, alopecia.",
+    "combinacoes": ""
+  },
+  {
+    "id": "baco",
+    "nome": "Baço",
+    "grupo": "Medicina Chinesa",
+    "x": 135,
+    "y": 205,
+    "localizacao": "no meio da linha traçada entre ponto estômago até a fossa superior do antitrago, na orelha ESQUERDA.",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "fortalece o baço e o estômago, regula a função digestiva, trata diarreia, distensão, constipação, indigestão, estomatite… trata prolapso retal, do estômago, hemorroidas... tonifica Qi e sangue. controla hemorragia. regula menstruação. fortalece os músculos. tem ação antiinflamatória.",
+    "combinacoes": ""
+  },
+  {
+    "id": "rim",
+    "nome": "Rim",
+    "grupo": "Medicina Chinesa",
+    "x": 160,
+    "y": 210,
+    "localizacao": "abaixo da cruz inferior do antihélix, na direção do início da fossa triangular.",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "fortalece o Rim. trata doenças crônicas. trata dor lombar, dor no joelho. trata doenças auditivas. trata problemas reprodutivos como impotência e amenorreia. nutre o cérebro e os ossos. trata edemas. trata problemas renais.",
+    "combinacoes": ""
+  },
+  {
+    "id": "figado",
+    "nome": "Fígado",
+    "grupo": "Medicina Chinesa",
+    "x": 150,
+    "y": 163,
+    "localizacao": "no canto superior e lateral da concha cimba, na orelha DIREITA.",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "fortalece o fígado e a vesícula, trata doenças hepáticas, trata desequilíbrios digestivos. melhora a circulação de Sangue e Qi, apoiando o tratamento de desequilíbrios ginecológicos, estresse, nervosismo, irritabilidade... fortalece a visão. trata hipertensão. trata dor de cabeça no topo. trata problemas de músculos e tendões. trata vertigem, espasmos, tremores e convulsões.",
+    "combinacoes": ""
+  },
+  {
+    "id": "san-jiao-inferior",
+    "nome": "San Jiao Inferior",
+    "grupo": "Medicina Chinesa",
+    "x": 152,
+    "y": 295,
+    "localizacao": "abaixo do ponto bexiga. Entre o ponto bexiga e intestino grosso.",
+    "estimulo": "palpar ponto reativo e aplicar a semente.",
+    "indicacoes": "trata desequilíbrios na região inferior do abdômen. trata problemas urinários como enurese, polaciúria, retenção urinária, incontinência... trata problemas ginecológicos como endometriose, cólica menstrual, amenorreia… trata desequilíbrios do aparelho reprodutor masculino, como prostatite, hiperplasia...",
+    "combinacoes": "ponto bexiga ponto próstata linha ginecológica ponto rim"
+  },
+  {
+    "id": "san-jiao",
+    "nome": "San Jiao",
+    "grupo": "Medicina Chinesa",
+    "x": 128,
+    "y": 290,
+    "localizacao": "logo abaixo do canal auditivo.",
+    "estimulo": "aplicar a semente na localização indicada.",
+    "indicacoes": "trata desequilíbrios faciais, como neuralgia do trigêmeo, dores maxilares, dores de dente, paralisia facial, espasmos faciais, problemas bucais, rinite, otites... tonifica a função do baço e do estômago, trata constipação, má digestão, distensão abdominal... fortalece o pâncreas, trata diabetes. favorece a formação dos líquidos corporais, trata edemas e problemas urinários. favorece o emagrecimento.",
+    "combinacoes": ""
+  }
+];
+
+const auriculoProtocolos = [
+  {
+    "id": "alivio-da-dor",
+    "titulo": "Alívio Da Dor",
+    "categoria": "",
+    "passos": [
+      "Sangria no ápice.",
+      "Pontos das zonas correspondentes. Estimular o ponto na parte anterior e",
+      "Quando a dor está localizada na parte superior do corpo (região torácica,",
+      "Quando a dor está localizada na parte inferior do corpo (região lombar, sacral e",
+      "Observar se é possível que exista desequilíbrio de um ou mais órgãos segundo"
+    ],
+    "observacoes": [
+      "posterior da orelha. É muito importante localizar o ponto por meio da palpação.",
+      "cervical, cabeça e membros superiores): realizar sangria em 3 pontos da hélix na altura referente ao ponto da respectiva zona correspondente.",
+      "membros inferiores): realizar sangria no próprio ponto da zona correspondente.",
+      "a medicina chinesa. Este protocolo pode ser utilizado para dores agudas e crônicas. O estímulo deve ser realizado sempre na orelha homolateral ao sintoma. Caso o sintoma seja bilateral, realizamos o estímulo nas duas orelhas."
+    ],
+    "pontosIds": [
+      "regiao-toracica",
+      "regiao-lombar",
+      "apice"
+    ]
+  },
+  {
+    "id": "dor-cervical",
+    "titulo": "Dor Cervical",
+    "categoria": "Dor Na Parte Superior Do Corpo",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto região cervical. Estimular o ponto na parte anterior e na parte posterior",
+      "Sangria em 3 pontos da hélix na altura do ponto região cervical."
+    ],
+    "observacoes": [
+      "da orelha aplicar sementes e forma de Y.",
+      "A sangria mais importante é a sangria realizada na hélix. Se for preciso optar por uma das sangrias, escolha sempre a sangria relacionada diretamente à área afetada. Este protocolo pode ser utilizado para qualquer problema músculo-esquelético na região: lesões nos ossos, articulações, músculos, tendões, ligamentos e bursas. O protocolo apresentado pode ser útil para casos onde a dor não é presente, mas onde encontramos sintomas como formigamento, sensação de peso, cansaço, desconforto ou perda da amplitude de movimento."
+    ],
+    "pontosIds": [
+      "regiao-cervical",
+      "apice"
+    ]
+  },
+  {
+    "id": "dor-toracica",
+    "titulo": "Dor Torácica",
+    "categoria": "Dor Na Parte Superior Do Corpo",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto região torácica. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Sangria em 3 pontos da hélix na altura do ponto região torácica.",
+      "Ponto coração e ponto pulmão. A dor torácica pode estar relacionada com esses"
+    ],
+    "observacoes": [
+      "dois órgãos, palpe a região e estimule os pontos caso encontre pontos reativos. A sangria mais importante é a sangria realizada na hélix. Se for preciso optar por uma das sangrias, escolha sempre a sangria relacionada diretamente à área afetada. Este protocolo pode ser utilizado para qualquer problema músculo-esquelético na região: lesões nos ossos, articulações, músculos, tendões, ligamentos e bursas. O protocolo apresentado pode ser útil para casos onde a dor não é presente, mas onde encontramos sintomas como formigamento, sensação de peso, cansaço, desconforto ou perda da amplitude de movimento."
+    ],
+    "pontosIds": [
+      "regiao-toracica",
+      "coracao",
+      "pulmao",
+      "apice"
+    ]
+  },
+  {
+    "id": "dor-no-ombro",
+    "titulo": "Dor No Ombro",
+    "categoria": "Dor Na Parte Superior Do Corpo",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto entre ponto clavícula e ponto ombro. Estimular o ponto na parte anterior",
+      "Sangria em 3 pontos da hélix na altura do ponto selecionado.",
+      "Ponto fígado. A dor no ombro pode estar relacionada com o fígado na medicina"
+    ],
+    "observacoes": [
+      "e posterior da orelha.",
+      "chinesa. A sangria mais importante é a sangria realizada na hélix. Se for preciso optar por uma das sangrias, escolha sempre a sangria relacionada diretamente à área afetada. Este protocolo pode ser utilizado para qualquer problema músculo-esquelético na região: lesões nos ossos, articulações, músculos, tendões, ligamentos e bursas. O protocolo apresentado pode ser útil para casos onde a dor não é presente, mas onde encontramos sintomas como formigamento, sensação de peso, cansaço, desconforto ou perda da amplitude de movimento."
+    ],
+    "pontosIds": [
+      "figado",
+      "apice"
+    ]
+  },
+  {
+    "id": "dor-no-cotovelo",
+    "titulo": "Dor No Cotovelo",
+    "categoria": "Dor Na Parte Superior Do Corpo",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto cotovelo. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Sangria em 3 pontos da hélix na altura do ponto cotovelo."
+    ],
+    "observacoes": [
+      "A sangria mais importante é a sangria realizada na hélix. Se for preciso optar por uma das sangrias, escolha sempre a sangria relacionada diretamente à área afetada. Este protocolo pode ser utilizado para qualquer problema músculo-esquelético na região: lesões nos ossos, articulações, músculos, tendões, ligamentos e bursas. O protocolo apresentado pode ser útil para casos onde a dor não é presente, mas onde encontramos sintomas como formigamento, sensação de peso, cansaço, desconforto ou perda da amplitude de movimento."
+    ],
+    "pontosIds": [
+      "cotovelo",
+      "apice"
+    ]
+  },
+  {
+    "id": "dor-no-ante-braco",
+    "titulo": "Dor No Ante-braço",
+    "categoria": "Dor Na Parte Superior Do Corpo",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto entre ponto cotovelo e ponto punho. Estimular o ponto na parte anterior",
+      "Sangria em 3 pontos da hélix na altura do ponto selecionado."
+    ],
+    "observacoes": [
+      "e posterior da orelha.",
+      "A sangria mais importante é a sangria realizada na hélix. Se for preciso optar por uma das sangrias, escolha sempre a sangria relacionada diretamente à área afetada. Este protocolo pode ser utilizado para qualquer problema músculo-esquelético na região: lesões nos ossos, articulações, músculos, tendões, ligamentos e bursas. O protocolo apresentado pode ser útil para casos onde a dor não é presente, mas onde encontramos sintomas como formigamento, sensação de peso, cansaço, desconforto ou perda da amplitude de movimento."
+    ],
+    "pontosIds": [
+      "cotovelo",
+      "punho",
+      "apice"
+    ]
+  },
+  {
+    "id": "dor-no-punho",
+    "titulo": "Dor No Punho",
+    "categoria": "Dor Na Parte Superior Do Corpo",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto punho. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Sangria em 3 pontos da hélix na altura do ponto punho."
+    ],
+    "observacoes": [
+      "A sangria mais importante é a sangria realizada na hélix. Se for preciso optar por uma das sangrias, escolha sempre a sangria relacionada diretamente à área afetada. Este protocolo pode ser utilizado para qualquer problema músculo-esquelético na região: lesões nos ossos, articulações, músculos, tendões, ligamentos e bursas. O protocolo apresentado pode ser útil para casos onde a dor não é presente, mas onde encontramos sintomas como formigamento, sensação de peso, cansaço, desconforto ou perda da amplitude de movimento."
+    ],
+    "pontosIds": [
+      "punho",
+      "apice"
+    ]
+  },
+  {
+    "id": "dor-na-mao-e-dedos-da-mao",
+    "titulo": "Dor Na Mão E Dedos Da Mão",
+    "categoria": "Dor Na Parte Superior Do Corpo",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto entre ponto punho e ponto falanges. Estimular o ponto na parte anterior",
+      "Sangria em 3 pontos da hélix na altura do ponto selecionado."
+    ],
+    "observacoes": [
+      "e posterior da orelha.",
+      "A sangria mais importante é a sangria realizada na hélix. Se for preciso optar por uma das sangrias, escolha sempre a sangria relacionada diretamente à área afetada. Este protocolo pode ser utilizado para qualquer problema músculo-esquelético na região: lesões nos ossos, articulações, músculos, tendões, ligamentos e bursas. O protocolo apresentado pode ser útil para casos onde a dor não é presente, mas onde encontramos sintomas como formigamento, sensação de peso, cansaço, desconforto ou perda da amplitude de movimento."
+    ],
+    "pontosIds": [
+      "falanges",
+      "punho",
+      "apice"
+    ]
+  },
+  {
+    "id": "dor-lombar",
+    "titulo": "Dor Lombar",
+    "categoria": "Dor Na Parte Inferior Do Corpo",
+    "passos": [
+      "Sangria no ápice.",
+      "Sangria no ponto lombar.",
+      "Estimular os pontos em forma de Y na parte posterior da orelha.",
+      "Ponto Rim. A dor lombar pode estar relacionada com o rim na medicina chinesa."
+    ],
+    "observacoes": [
+      "A sangria mais importante é a sangria realizada no ponto da zona correspondente. Se for preciso optar por uma das sangrias, escolha sempre a sangria relacionada diretamente à área afetada. Este protocolo pode ser utilizado para qualquer problema músculo-esquelético na região: lesões nos ossos, articulações, músculos, tendões, ligamentos e bursas. O protocolo apresentado pode ser útil para casos onde a dor não é presente, mas onde encontramos sintomas como formigamento, sensação de peso, cansaço, desconforto ou perda da amplitude de movimento."
+    ],
+    "pontosIds": [
+      "apice",
+      "rim"
+    ]
+  },
+  {
+    "id": "dor-sacral",
+    "titulo": "Dor Sacral",
+    "categoria": "Dor Na Parte Inferior Do Corpo",
+    "passos": [
+      "Sangria no ápice.",
+      "Sangria no ponto sacro.",
+      "Estimular os pontos em forma de Y na parte posterior da orelha.",
+      "Ponto Rim. A dor sacral pode estar relacionada com o rim na medicina chinesa."
+    ],
+    "observacoes": [
+      "A sangria mais importante é a sangria realizada no ponto da zona correspondente. Se for preciso optar por uma das sangrias, escolha sempre a sangria relacionada diretamente à área afetada. Este protocolo pode ser utilizado para qualquer problema músculo-esquelético na região: lesões nos ossos, articulações, músculos, tendões, ligamentos e bursas. O protocolo apresentado pode ser útil para casos onde a dor não é presente, mas onde encontramos sintomas como formigamento, sensação de peso, cansaço, desconforto ou perda da amplitude de movimento."
+    ],
+    "pontosIds": [
+      "apice",
+      "rim"
+    ]
+  },
+  {
+    "id": "dor-no-quadril",
+    "titulo": "Dor No Quadril",
+    "categoria": "Dor Na Parte Inferior Do Corpo",
+    "passos": [
+      "Sangria no ápice.",
+      "Sangria no ponto quadril.",
+      "Estimular os pontos em forma de Y na parte posterior da orelha."
+    ],
+    "observacoes": [
+      "A sangria mais importante é a sangria realizada no ponto da zona correspondente. Se for preciso optar por uma das sangrias, escolha sempre a sangria relacionada diretamente à área afetada. Este protocolo pode ser utilizado para qualquer problema músculo-esquelético na região: lesões nos ossos, articulações, músculos, tendões, ligamentos e bursas. O protocolo apresentado pode ser útil para casos onde a dor não é presente, mas onde encontramos sintomas como formigamento, sensação de peso, cansaço, desconforto ou perda da amplitude de movimento."
+    ],
+    "pontosIds": [
+      "quadril",
+      "apice"
+    ]
+  },
+  {
+    "id": "dor-na-coxa-parte-da-perna-entre-quadril-e-joelho",
+    "titulo": "Dor Na Coxa - Parte Da Perna Entre Quadril E Joelho",
+    "categoria": "Dor Na Parte Inferior Do Corpo",
+    "passos": [
+      "Sangria no ápice.",
+      "Pesquisar e sangrar os pontos mais sensíveis na parte inferior da cruz superior",
+      "Estimular os pontos na parte posterior da orelha."
+    ],
+    "observacoes": [
+      "(na região de ponto quadril e joelho).",
+      "A sangria mais importante é a sangria realizada no ponto da zona correspondente. Se for preciso optar por uma das sangrias, escolha sempre a sangria relacionada diretamente à área afetada. Este protocolo pode ser utilizado para qualquer problema músculo-esquelético na região: lesões nos ossos, articulações, músculos, tendões, ligamentos e bursas. O protocolo apresentado pode ser útil para casos onde a dor não é presente, mas onde encontramos sintomas como formigamento, sensação de peso, cansaço, desconforto ou perda da amplitude de movimento."
+    ],
+    "pontosIds": [
+      "apice"
+    ]
+  },
+  {
+    "id": "dor-no-joelho",
+    "titulo": "Dor No Joelho",
+    "categoria": "Dor Na Parte Inferior Do Corpo",
+    "passos": [
+      "Sangria no ápice.",
+      "Sangria no ponto joelho.",
+      "Estimular o ponto na parte posterior da orelha.",
+      "Ponto Rim. Problemas no joelho podem estar relacionados com o rim na medicina"
+    ],
+    "observacoes": [
+      "chinesa. A sangria mais importante é a sangria realizada no ponto da zona correspondente. Se for preciso optar por uma das sangrias, escolha sempre a sangria relacionada diretamente à área afetada. Este protocolo pode ser utilizado para qualquer problema músculo-esquelético na região: lesões nos ossos, articulações, músculos, tendões, ligamentos e bursas. O protocolo apresentado pode ser útil para casos onde a dor não é presente, mas onde encontramos sintomas como formigamento, sensação de peso, cansaço, desconforto ou perda da amplitude de movimento."
+    ],
+    "pontosIds": [
+      "joelho",
+      "apice",
+      "rim"
+    ]
+  },
+  {
+    "id": "dor-na-perna-parte-da-perna-entre-joelho-e-tornozelo",
+    "titulo": "Dor Na Perna - Parte Da Perna Entre Joelho E Tornozelo",
+    "categoria": "Dor Na Parte Inferior Do Corpo",
+    "passos": [
+      "Sangria no ápice.",
+      "Pesquisar e sangrar os pontos mais sensíveis na parte superior da cruz superior",
+      "Estimular os pontos na parte posterior da orelha."
+    ],
+    "observacoes": [
+      "(na região de ponto joelho, tornozelo, calcâneo e artelhos).",
+      "A sangria mais importante é a sangria realizada no ponto da zona correspondente. Se for preciso optar por uma das sangrias, escolha sempre a sangria relacionada diretamente à área afetada. Este protocolo pode ser utilizado para qualquer problema músculo-esquelético na região: lesões nos ossos, articulações, músculos, tendões, ligamentos e bursas. O protocolo apresentado pode ser útil para casos onde a dor não é presente, mas onde encontramos sintomas como formigamento, sensação de peso, cansaço, desconforto ou perda da amplitude de movimento."
+    ],
+    "pontosIds": [
+      "apice"
+    ]
+  },
+  {
+    "id": "dor-no-tornozelo",
+    "titulo": "Dor No Tornozelo",
+    "categoria": "Dor Na Parte Inferior Do Corpo",
+    "passos": [
+      "Sangria no ápice.",
+      "Sangria no ponto tornozelo.",
+      "Estimular o ponto na parte posterior da orelha."
+    ],
+    "observacoes": [
+      "A sangria mais importante é a sangria realizada no ponto da zona correspondente. Se for preciso optar por uma das sangrias, escolha sempre a sangria relacionada diretamente à área afetada. Este protocolo pode ser utilizado para qualquer problema músculo-esquelético na região: lesões nos ossos, articulações, músculos, tendões, ligamentos e bursas. O protocolo apresentado pode ser útil para casos onde a dor não é presente, mas onde encontramos sintomas como formigamento, sensação de peso, cansaço, desconforto ou perda da amplitude de movimento."
+    ],
+    "pontosIds": [
+      "tornozelo",
+      "apice"
+    ]
+  },
+  {
+    "id": "dor-na-planta-do-pe",
+    "titulo": "Dor Na Planta Do Pé",
+    "categoria": "Dor Na Parte Inferior Do Corpo",
+    "passos": [
+      "Sangria no ápice.",
+      "Pesquisar e sangrar os pontos mais sensíveis localizados entre ponto artelhos e",
+      "Estimular os pontos na parte posterior da orelha."
+    ],
+    "observacoes": [
+      "ponto calcâneo.",
+      "A sangria mais importante é a sangria realizada no ponto da zona correspondente. Se for preciso optar por uma das sangrias, escolha sempre a sangria relacionada diretamente à área afetada. Este protocolo pode ser utilizado para qualquer problema músculo-esquelético na região: lesões nos ossos, articulações, músculos, tendões, ligamentos e bursas. O protocolo apresentado pode ser útil para casos onde a dor não é presente, mas onde encontramos sintomas como formigamento, sensação de peso, cansaço, desconforto ou perda da amplitude de movimento."
+    ],
+    "pontosIds": [
+      "artelhos",
+      "apice"
+    ]
+  },
+  {
+    "id": "dor-ciatica",
+    "titulo": "Dor Ciática",
+    "categoria": "Dor Na Parte Inferior Do Corpo",
+    "passos": [
+      "Sangria no ápice.",
+      "Sangria no ponto ciático.",
+      "Estimular os pontos em forma de Y na parte posterior da orelha.",
+      "Acrescentar os pontos mais sensíveis localizados na cruz superior da anti-hélix.",
+      "Acrescentar os pontos mais sensíveis localizados na região dos pontos artelhos,"
+    ],
+    "observacoes": [
+      "A sangria mais importante é a sangria realizada no ponto da zona correspondente. Se for preciso optar por uma das sangrias, escolha sempre a sangria relacionada diretamente à área afetada. Para dor na perna:",
+      "Para dor no pé:",
+      "calcâneo e tornozelo."
+    ],
+    "pontosIds": [
+      "artelhos",
+      "ciatico",
+      "apice"
+    ]
+  },
+  {
+    "id": "dores-relacionadas-aos-orgaos-internos",
+    "titulo": "Dores Relacionadas Aos Órgãos Internos",
+    "categoria": "",
+    "passos": [
+      "Pontos das zonas correspondentes.",
+      "Pontos da medicina chinesa correspondente ao órgão afetado.",
+      "Ponto subcórtex.",
+      "Ponto simpático. Esse ponto relaxa os espasmos da musculatura lisa."
+    ],
+    "observacoes": [
+      "Para dores vicerais não é necessária a realização das sangrias, sendo aconselhável de maneira geral o estímulo dos pontos simpático e o ponto subcórtex. O estímulo deve ser realizado sempre na orelha homolateral ao sintoma. Caso o sintoma seja bilateral, realizamos o estímulo nas duas orelhas."
+    ],
+    "pontosIds": [
+      "simpatico",
+      "subcortex"
+    ]
+  },
+  {
+    "id": "dor-no-estomago",
+    "titulo": "Dor No Estômago",
+    "categoria": "",
+    "passos": [
+      "Ponto estômago. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto subcórtex.",
+      "Ponto simpático.",
+      "Acrescentar o ponto abdômen."
+    ],
+    "observacoes": [
+      "Realizamos o estímulo bilateral. Este protocolo pode ser utilizado para má digestão, gastrite e outros problemas estomacais. Para distensão abdominal:"
+    ],
+    "pontosIds": [
+      "simpatico",
+      "subcortex",
+      "estomago"
+    ]
+  },
+  {
+    "id": "azia",
+    "titulo": "Azia",
+    "categoria": "",
+    "passos": [
+      "Ponto esôgafo/cárdia.",
+      "Ponto estômago. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto fígado (lado direito).",
+      "Ponto vesícula biliar (lado direito).",
+      "Ponto subcórtex.",
+      "Ponto simpático."
+    ],
+    "observacoes": [
+      "Realizamos o estímulo bilateral. Do lado direito estimulamos ponto fígado e ponto vesícula biliar."
+    ],
+    "pontosIds": [
+      "vesicula-biliar",
+      "simpatico",
+      "subcortex",
+      "estomago",
+      "figado"
+    ]
+  },
+  {
+    "id": "nausea-vomitos",
+    "titulo": "Náusea / Vômitos",
+    "categoria": "",
+    "passos": [
+      "Ponto esôgafo/cárdia.",
+      "Ponto estômago. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto fígado (lado direito).",
+      "Ponto subcórtex.",
+      "Ponto shen men.",
+      "Ponto occipital. Estimular o ponto na parte anterior e posterior da orelha."
+    ],
+    "observacoes": [
+      "Realizamos o estímulo bilateral. Do lado direito estimulamos ponto fígado. A combinação dos pontos shen men e occipital ajuda a acalmar nosso organismo."
+    ],
+    "pontosIds": [
+      "occipital",
+      "subcortex",
+      "estomago",
+      "shen-men",
+      "figado"
+    ]
+  },
+  {
+    "id": "dor-intestinal-e-constipacao",
+    "titulo": "Dor Intestinal E Constipação",
+    "categoria": "",
+    "passos": [
+      "Ponto intestino grosso.",
+      "San jiao inferior.",
+      "Ponto simpático.",
+      "Ponto subcórtex."
+    ],
+    "observacoes": [
+      "Realizamos o estímulo bilateral."
+    ],
+    "pontosIds": [
+      "san-jiao-inferior",
+      "intestino-grosso",
+      "simpatico",
+      "subcortex"
+    ]
+  },
+  {
+    "id": "diarreia",
+    "titulo": "Diarréia",
+    "categoria": "",
+    "passos": [
+      "Ponto shen men.",
+      "Ponto subcórtex.",
+      "Ponto reto.",
+      "Ponto intestino grosso.",
+      "Ponto baço (lado esquerdo)."
+    ],
+    "observacoes": [
+      "Realizamos o estímulo bilateral. Do lado esquerdo estimulamos ponto baço."
+    ],
+    "pontosIds": [
+      "intestino-grosso",
+      "subcortex",
+      "shen-men",
+      "reto",
+      "baco"
+    ]
+  },
+  {
+    "id": "cistite-uretrite",
+    "titulo": "Cistite / Uretrite",
+    "categoria": "",
+    "passos": [
+      "Ponto uretra.",
+      "Ponto bexiga.",
+      "Ponto próstata.",
+      "Ponto genital externo.",
+      "Ponto rim.",
+      "San jiao inferior.",
+      "Ponto subcórtex.",
+      "Ponto simpático."
+    ],
+    "observacoes": [
+      "Realizamos o estímulo bilateral."
+    ],
+    "pontosIds": [
+      "san-jiao-inferior",
+      "genital-externo",
+      "simpatico",
+      "subcortex",
+      "uretra",
+      "bexiga",
+      "rim"
+    ]
+  },
+  {
+    "id": "enurese-noturna",
+    "titulo": "Enurese Noturna",
+    "categoria": "",
+    "passos": [
+      "Ponto uretra.",
+      "Ponto bexiga.",
+      "Ponto hipófise.",
+      "Ponto rim."
+    ],
+    "observacoes": [
+      "Realizamos o estímulo bilateral."
+    ],
+    "pontosIds": [
+      "hipofise",
+      "uretra",
+      "bexiga",
+      "rim"
+    ]
+  },
+  {
+    "id": "problemas-inflamatorios-infecciosos-alergicos-reumaticos-e-imunologicos",
+    "titulo": "Problemas Inflamatórios, Infecciosos, Alérgicos, Reumáticos E Imunológicos",
+    "categoria": "Alérgicos, Reumáticos E Imunológicos",
+    "passos": [
+      "Realizar sangria no ápice.",
+      "Ponto alergia.",
+      "Ponto endócrino.",
+      "Ponto supra-renal.",
+      "Ponto baço (lado esquerdo).",
+      "Pontos das zonas correspondentes."
+    ],
+    "observacoes": [
+      "O estímulo deve ser realizado sempre na orelha homolateral ao sintoma. Caso o sintoma seja bilateral, realizamos o estímulo nas duas orelhas. O ponto baço deve ser estimulado apenas do lado esquerdo. A combinação dos pontos ápice, baço, supra-renal, endócrino e alergia possui efeito anti-infeccioso, anti-inflamatório, anti-alérgico, anti-reumático e modulador do sistema imune, portanto pode fortalecer nossa imunidade e ser auxílio para o tratamento de doenças auto-imunes."
+    ],
+    "pontosIds": [
+      "supra-renal",
+      "endocrino",
+      "alergia",
+      "apice",
+      "baco"
+    ]
+  },
+  {
+    "id": "dor-de-garganta-rouquidao-faringite-laringite",
+    "titulo": "Dor De Garganta / Rouquidão Faringite / Laringite",
+    "categoria": "Faringite / Laringite",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto san jiao.",
+      "Ponto traqueia.",
+      "Ponto pulmão.",
+      "Ponto boca.",
+      "Ponto endócrino.",
+      "Acrescentar ponto baço, ponto supra-renal e alergia."
+    ],
+    "observacoes": [
+      "Realizamos o estímulo bilateral. Do lado esquerdo estimulamos ponto baço. Para infecções:"
+    ],
+    "pontosIds": [
+      "supra-renal",
+      "endocrino",
+      "traqueia",
+      "san-jiao",
+      "alergia",
+      "pulmao",
+      "apice",
+      "boca",
+      "baco"
+    ]
+  },
+  {
+    "id": "amigdalite",
+    "titulo": "Amigdalite",
+    "categoria": "",
+    "passos": [
+      "Sangria no ápice.",
+      "Sangria no ponto amígdala.",
+      "Ponto pulmão.",
+      "Ponto endócrino.",
+      "Ponto baço (lado esquerdo).",
+      "Ponto supra-renal.",
+      "Ponto alergia."
+    ],
+    "observacoes": [
+      "Realizamos o estímulo bilateral. Do lado esquerdo estimulamos ponto baço."
+    ],
+    "pontosIds": [
+      "supra-renal",
+      "endocrino",
+      "alergia",
+      "pulmao",
+      "apice",
+      "baco"
+    ]
+  },
+  {
+    "id": "rinite-sinusite",
+    "titulo": "Rinite / Sinusite",
+    "categoria": "",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto nariz interno.",
+      "Ponto pulmão.",
+      "Ponto san jiao.",
+      "Ponto frontal. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Acrescentar ponto alergia, ponto baço, ponto supra-renal e ponto"
+    ],
+    "observacoes": [
+      "Realizamos o estímulo bilateral. Para quadros alérgicos:",
+      "endócrino."
+    ],
+    "pontosIds": [
+      "nariz-interno",
+      "supra-renal",
+      "san-jiao",
+      "alergia",
+      "frontal",
+      "pulmao",
+      "apice",
+      "baco"
+    ]
+  },
+  {
+    "id": "falta-de-ar",
+    "titulo": "Falta De Ar",
+    "categoria": "",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto traqueia.",
+      "Ponto brônquio.",
+      "Ponto pulmão.",
+      "Ponto tórax. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto simpático.",
+      "Ponto alergia.",
+      "Ponto endócrino.",
+      "Ponto baço (lado esquerdo).",
+      "Ponto supra-renal."
+    ],
+    "observacoes": [
+      "Realizamos o estímulo bilateral. Do lado esquerdo estimulamos ponto baço."
+    ],
+    "pontosIds": [
+      "supra-renal",
+      "simpatico",
+      "endocrino",
+      "traqueia",
+      "alergia",
+      "pulmao",
+      "torax",
+      "apice",
+      "baco"
+    ]
+  },
+  {
+    "id": "bronquite-asma-tosse",
+    "titulo": "Bronquite / Asma / Tosse",
+    "categoria": "",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto boca.",
+      "Ponto traqueia.",
+      "Ponto brônquio.",
+      "Ponto pulmão.",
+      "Ponto alergia.",
+      "Ponto endócrino.",
+      "Ponto baço (lado esquerdo).",
+      "Ponto supra-renal."
+    ],
+    "observacoes": [
+      "Realizamos o estímulo bilateral. Do lado esquerdo estimulamos ponto baço."
+    ],
+    "pontosIds": [
+      "supra-renal",
+      "endocrino",
+      "traqueia",
+      "alergia",
+      "pulmao",
+      "apice",
+      "boca",
+      "baco"
+    ]
+  },
+  {
+    "id": "pneumonia",
+    "titulo": "Pneumonia",
+    "categoria": "",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto pulmão.",
+      "Ponto tórax. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto simpático.",
+      "Ponto subcótex.",
+      "Ponto alergia.",
+      "Ponto endócrino.",
+      "Ponto baço (lado esquerdo).",
+      "Ponto supra-renal."
+    ],
+    "observacoes": [
+      "Realizamos o estímulo bilateral. Do lado esquerdo estimulamos ponto baço."
+    ],
+    "pontosIds": [
+      "supra-renal",
+      "simpatico",
+      "endocrino",
+      "alergia",
+      "pulmao",
+      "torax",
+      "apice",
+      "baco"
+    ]
+  },
+  {
+    "id": "eczema-dermatite",
+    "titulo": "Eczema / Dermatite",
+    "categoria": "",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto pulmão.",
+      "Ponto fígado (lado direito).",
+      "Sangria referente aos pontos das zonas correspondentes",
+      "Ponto alergia.",
+      "Ponto endócrino.",
+      "Ponto baço (lado esquerdo).",
+      "Ponto supra-renal."
+    ],
+    "observacoes": [
+      "(onde se localizam om sintomas).",
+      "Realizamos o estímulo bilateral. Do lado esquerdo estimulamos ponto baço."
+    ],
+    "pontosIds": [
+      "supra-renal",
+      "endocrino",
+      "alergia",
+      "pulmao",
+      "figado",
+      "apice",
+      "baco"
+    ]
+  },
+  {
+    "id": "colica-menstrual",
+    "titulo": "Cólica Menstrual",
+    "categoria": "",
+    "passos": [
+      "Linha ginecológica.",
+      "San jiao inferior.",
+      "Ponto subcórtex.",
+      "Ponto simpático."
+    ],
+    "observacoes": [
+      "Realizamos o estímulo bilateral."
+    ],
+    "pontosIds": [
+      "san-jiao-inferior",
+      "simpatico",
+      "subcortex"
+    ]
+  },
+  {
+    "id": "problemas-menstruais",
+    "titulo": "Problemas Menstruais",
+    "categoria": "",
+    "passos": [
+      "Ponto hipófise.",
+      "Ponto endócrino.",
+      "Linha ginecológica.",
+      "Ponto san jiao inferior.",
+      "Ponto rim.",
+      "Ponto baço (lado esquerdo).",
+      "Ponto fígado (lado direito)."
+    ],
+    "observacoes": [
+      "O estímulo deve ser bilateral (no lado esquerdo estimular ponto baço, e no lado direito estimular o ponto fígado). Esse protocolo pode ser utilizado para menstruação irregular, síndrome do ovário policístico, miomas, endometriose..."
+    ],
+    "pontosIds": [
+      "san-jiao-inferior",
+      "endocrino",
+      "hipofise",
+      "figado",
+      "baco",
+      "rim"
+    ]
+  },
+  {
+    "id": "dor-de-dente",
+    "titulo": "Dor De Dente",
+    "categoria": "",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto maxilar. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Sangria em 3 pontos da hélix na altura do ponto maxilar.",
+      "Ponto san jiao."
+    ],
+    "observacoes": [
+      "O estímulo deve ser realizado sempre na orelha homolateral ao sintoma. Caso o sintoma seja bilateral, realizamos o estímulo nas duas orelhas."
+    ],
+    "pontosIds": [
+      "san-jiao",
+      "maxilar",
+      "apice"
+    ]
+  },
+  {
+    "id": "dor-maxilar-bruxismo",
+    "titulo": "Dor Maxilar / Bruxismo",
+    "categoria": "",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto maxilar. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Sangria em 3 pontos da hélix na altura do ponto maxilar.",
+      "Ponto fígado (lado direito)."
+    ],
+    "observacoes": [
+      "O estímulo deve ser realizado sempre na orelha homolateral ao sintoma. Caso o sintoma seja bilateral, realizamos o estímulo nas duas orelhas. O ponto fígado deve ser estimulado apenas do lado esquerdo."
+    ],
+    "pontosIds": [
+      "maxilar",
+      "figado",
+      "apice"
+    ]
+  },
+  {
+    "id": "cefaleia-dor-de-cabeca",
+    "titulo": "Cefaléia / Dor De Cabeça",
+    "categoria": "",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto occipital, frontal e temporal. Estimular os pontos na parte anterior",
+      "Sangria em 3 pontos da hélix na altura dos pontos selecionados.",
+      "Ponto subcórtex.",
+      "Ponto simpático."
+    ],
+    "observacoes": [
+      "e posterior da orelha.",
+      "O estímulo deve ser realizado sempre na orelha homolateral ao sintoma. Caso o sintoma seja bilateral, realizamos o estímulo nas duas orelhas."
+    ],
+    "pontosIds": [
+      "simpatico",
+      "occipital",
+      "subcortex",
+      "temporal",
+      "frontal",
+      "apice"
+    ]
+  },
+  {
+    "id": "enxaqueca",
+    "titulo": "Enxaqueca",
+    "categoria": "",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto occipital, frontal e temporal. Estimular os pontos na parte anterior",
+      "Sangria em 3 pontos da hélix na altura dos pontos selecionados.",
+      "Ponto subcórtex.",
+      "Ponto simpático.",
+      "Ponto fígado.",
+      "Acrescentar ponto olho.",
+      "Acrescentar os pontos estômago e esôfago/cárdia."
+    ],
+    "observacoes": [
+      "e posterior da orelha.",
+      "Para dor no olho:",
+      "Para desconfortos digestivos:",
+      "O estímulo deve ser realizado sempre na orelha homolateral ao sintoma. Caso o sintoma seja bilateral, realizamos o estímulo nas duas orelhas. O ponto fígado deve ser estimulado apenas do lado esquerdo."
+    ],
+    "pontosIds": [
+      "simpatico",
+      "occipital",
+      "subcortex",
+      "estomago",
+      "temporal",
+      "frontal",
+      "figado",
+      "apice",
+      "olho"
+    ]
+  },
+  {
+    "id": "neuralgia-do-trigemeo",
+    "titulo": "Neuralgia Do Trigêmeo",
+    "categoria": "",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto entre ponto olho, maxilar e ouvido interno. Estimular o ponto na parte",
+      "Sangria em 3 pontos da hélix na altura dos pontos selecionados.",
+      "Ponto subcórtex.",
+      "Ponto simpático.",
+      "Ponto san jiao."
+    ],
+    "observacoes": [
+      "anterior e posterior da orelha.",
+      "O estímulo deve ser realizado sempre na orelha homolateral ao sintoma. Caso o sintoma seja bilateral, realizamos o estímulo nas duas orelhas."
+    ],
+    "pontosIds": [
+      "ouvido-interno",
+      "simpatico",
+      "subcortex",
+      "san-jiao",
+      "maxilar",
+      "apice",
+      "olho"
+    ]
+  },
+  {
+    "id": "vertigem-tontura-ou-labirintite",
+    "titulo": "Vertigem, Tontura Ou Labirintite",
+    "categoria": "",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto occipital. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto simpático.",
+      "Ponto hipófise.",
+      "Acrescentar ponto ouvido interno.",
+      "Sangria em 3 pontos da hélix na altura do ponto ouvido interno.",
+      "Acrescentar ponto esôgafo/cárdia e estômago."
+    ],
+    "observacoes": [
+      "Para labirintite:",
+      "Para enjoo:",
+      "Realizamos o estímulo bilateral."
+    ],
+    "pontosIds": [
+      "ouvido-interno",
+      "simpatico",
+      "occipital",
+      "estomago",
+      "hipofise",
+      "apice"
+    ]
+  },
+  {
+    "id": "tinido",
+    "titulo": "Tinido",
+    "categoria": "",
+    "passos": [
+      "Ponto ouvido interno. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto temporal. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto san jiao.",
+      "Ponto fígado (lado direito).",
+      "Ponto rim."
+    ],
+    "observacoes": [
+      "O estímulo deve ser realizado sempre na orelha homolateral ao sintoma. Caso o sintoma seja bilateral, realizamos o estímulo nas duas orelhas."
+    ],
+    "pontosIds": [
+      "ouvido-interno",
+      "temporal",
+      "san-jiao",
+      "figado",
+      "rim"
+    ]
+  },
+  {
+    "id": "problemas-oculares",
+    "titulo": "Problemas Oculares",
+    "categoria": "",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto olho. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto occipital. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto simpático.",
+      "Ponto fígado.",
+      "Acrescentar ponto alergia, ponto baço, ponto supra-renal e ponto"
+    ],
+    "observacoes": [
+      "Para inflamações e/ou infecções:",
+      "endócrino. (Esse conjunto de pontos possui função anti-inflamatória e anti- infecciosa). Realizamos o estímulo bilateral. Esse protocolo pode ser utilizado para vista cansada, visão turva, moscas volantes, conjuntivite, glaucoma, fotofobia, uveíte, neurite óptica..."
+    ],
+    "pontosIds": [
+      "supra-renal",
+      "simpatico",
+      "occipital",
+      "alergia",
+      "figado",
+      "apice",
+      "olho",
+      "baco"
+    ]
+  },
+  {
+    "id": "problemas-circulatorios-pontos-ativadores-da-circulacao",
+    "titulo": "Problemas Circulatórios Pontos Ativadores Da Circulação",
+    "categoria": "Pontos Ativadores Da Circulação",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto subcórtex.",
+      "Ponto simpático.",
+      "Pontos das zonas correspondentes.",
+      "Realizar sangria no ápice.",
+      "Ponto hipotensor.",
+      "Ponto shen men.",
+      "Ponto occipital. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto subcórtex.",
+      "Ponto simpático.",
+      "Ponto coração (lado esquerdo).",
+      "Ponto fígado (lado direito)."
+    ],
+    "observacoes": [
+      "Realizamos o estímulo bilateral. Podemos utilizar esses pontos para tratamento de edemas, formigamento, peso e cansaço nos membros, varizes, coloração arroxeada nos dedos dos pés ou mãos. HIPERTENSÃO ARTERIAL      ápice da orelha hipotensor           shen men simpático          fígado (lado dir.) subcórtex coração (lado esq.) occipital",
+      "O estímulo deve ser bilateral (do lado esquerdo estimular ponto coração e do lado direito estimular ponto fígado)."
+    ],
+    "pontosIds": [
+      "hipotensor",
+      "simpatico",
+      "occipital",
+      "subcortex",
+      "shen-men",
+      "coracao",
+      "figado",
+      "apice"
+    ]
+  },
+  {
+    "id": "hipotensao-arterial",
+    "titulo": "Hipotensão Arterial",
+    "categoria": "",
+    "passos": [
+      "Ponto supra-renal.",
+      "Ponto endócrino.",
+      "Ponto hipófise.",
+      "Ponto coração (lado esquerdo).",
+      "Ponto fígado (lado direito).",
+      "Ponto hipertensor."
+    ],
+    "observacoes": [
+      "O estímulo deve ser bilateral (do lado esquerdo estimular ponto coração e do lado direito estimular ponto fígado)."
+    ],
+    "pontosIds": [
+      "supra-renal",
+      "endocrino",
+      "hipofise",
+      "coracao",
+      "figado"
+    ]
+  },
+  {
+    "id": "taquicardia-pontos-redutores-do-ritmo-cardiaco",
+    "titulo": "Taquicardia Pontos Redutores Do Ritmo Cardíaco",
+    "categoria": "Pontos Redutores Do Ritmo Cardíaco",
+    "passos": [
+      "Ponto coração (lado esquerdo).",
+      "Ponto tórax. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto shen men.",
+      "Ponto occipital. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto subcórtex."
+    ],
+    "observacoes": [
+      "O estímulo deve ser bilateral (do lado esquerdo estimular ponto coração)."
+    ],
+    "pontosIds": [
+      "occipital",
+      "subcortex",
+      "shen-men",
+      "coracao",
+      "torax"
+    ]
+  },
+  {
+    "id": "doencas-auto-imunes",
+    "titulo": "Doenças Auto-imunes",
+    "categoria": "",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto alergia.",
+      "Ponto endócrino.",
+      "Ponto supra-renal.",
+      "Ponto baço (lado esquerdo).",
+      "Pontos das zonas correspondentes."
+    ],
+    "observacoes": [
+      "O estímulo deve ser bilateral (estimular ponto baço apenas do lado esquerdo). Esse protocolo pode ser utilizado para lúpus eritematoso, artrite reumatóide, esclerose múltipla, hashimoto, vitiligo... A combinação dos pontos ápice, baço, supra-renal, endócrino e alergia possui efeito anti-infeccioso, anti-inflamatório, anti-alérgico, anti-reumático e modulador do sistema imune, portanto pode fortalecer nossa imunidade e ser auxílio para o tratamento de doenças auto-imunes."
+    ],
+    "pontosIds": [
+      "supra-renal",
+      "endocrino",
+      "alergia",
+      "apice",
+      "baco"
+    ]
+  },
+  {
+    "id": "fortalecimento-do-sistema-imunologico",
+    "titulo": "Fortalecimento Do Sistema Imunológico",
+    "categoria": "",
+    "passos": [
+      "Sangria no ápice.",
+      "Ponto alergia.",
+      "Ponto endócrino.",
+      "Ponto supra-renal.",
+      "Ponto baço (lado esquerdo)."
+    ],
+    "observacoes": [
+      "O estímulo deve ser bilateral (estimular ponto baço apenas do lado esquerdo). A combinação dos pontos ápice, baço, supra-renal, endócrino e alergia possui efeito anti-infeccioso, anti-inflamatório, anti-alérgico, anti-reumático e modulador do sistema imune, portanto pode fortalecer nossa imunidade e ser auxílio para o tratamento de doenças auto-imunes."
+    ],
+    "pontosIds": [
+      "supra-renal",
+      "endocrino",
+      "alergia",
+      "apice",
+      "baco"
+    ]
+  },
+  {
+    "id": "hipertiroidismo",
+    "titulo": "Hipertiroidismo",
+    "categoria": "",
+    "passos": [
+      "Ponto hipófise.",
+      "Ponto endócrino.",
+      "Ponto pescoço/tireoide. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto rim.",
+      "Ponto baço (lado esquerdo)."
+    ],
+    "observacoes": [
+      "O estímulo deve ser bilateral (estimular ponto baço apenas do lado esquerdo). *O protocolo para hipo e hipertiroidismo é o mesmo, pois estes são pontos reguladores do sistema endócrino."
+    ],
+    "pontosIds": [
+      "pescoco-tireoide",
+      "endocrino",
+      "hipofise",
+      "baco",
+      "rim"
+    ]
+  },
+  {
+    "id": "hipotiroidismo",
+    "titulo": "Hipotiroidismo",
+    "categoria": "",
+    "passos": [
+      "Ponto hipófise.",
+      "Ponto endócrino.",
+      "Ponto pescoço/tireoide. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto rim.",
+      "Ponto baço (lado esquerdo)."
+    ],
+    "observacoes": [
+      "O estímulo deve ser bilateral (estimular ponto baço apenas do lado esquerdo). *O protocolo para hipo e hipertiroidismo é o mesmo, pois estes são pontos reguladores do sistema endócrino."
+    ],
+    "pontosIds": [
+      "pescoco-tireoide",
+      "endocrino",
+      "hipofise",
+      "baco",
+      "rim"
+    ]
+  },
+  {
+    "id": "falta-de-energia",
+    "titulo": "Falta De Energia",
+    "categoria": "",
+    "passos": [
+      "Ponto hipófise.",
+      "Ponto frontal. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto endócrino.",
+      "Ponto rim.",
+      "Ponto baço (lado esquerdo)."
+    ],
+    "observacoes": [
+      "O estímulo deve ser bilateral (estimular ponto baço apenas do lado esquerdo)."
+    ],
+    "pontosIds": [
+      "endocrino",
+      "hipofise",
+      "frontal",
+      "baco",
+      "rim"
+    ]
+  },
+  {
+    "id": "problemas-de-ansiedade-estresse-insonia",
+    "titulo": "Problemas De Ansiedade / Estresse / Insônia",
+    "categoria": "Estresse / Insônia",
+    "passos": [
+      "Ponto shen men.",
+      "Ponto occipital. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Área neurastenia. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto neurastenia. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto ansiedade. Estimular o ponto na parte anterior e posterior da orelha.",
+      "Ponto subcórtex."
+    ],
+    "observacoes": [
+      "O estímulo deve ser bilateral. Esse é um conjunto de pontos que acalmam o organismo."
+    ],
+    "pontosIds": [
+      "neurastenia",
+      "occipital",
+      "subcortex",
+      "ansiedade",
+      "shen-men"
+    ]
+  },
+  {
+    "id": "obesidade",
+    "titulo": "Obesidade",
+    "categoria": "",
+    "passos": [
+      "Ponto hipófise.",
+      "Ponto endócrino.",
+      "Ponto simpático.",
+      "Ponto subcórtex.",
+      "Ponto fome.",
+      "Ponto boca.",
+      "Ponto rim.",
+      "Ponto baço (lado esquerdo)."
+    ],
+    "observacoes": [
+      "O estímulo deve ser bilateral (estimular ponto baço apenas do lado esquerdo)."
+    ],
+    "pontosIds": [
+      "simpatico",
+      "subcortex",
+      "endocrino",
+      "hipofise",
+      "boca",
+      "fome",
+      "baco",
+      "rim"
+    ]
+  },
+  {
+    "id": "tabagismo",
+    "titulo": "Tabagismo",
+    "categoria": "",
+    "passos": [
+      "Ponto boca.",
+      "Ponto pulmão.",
+      "Ponto simpático.",
+      "Ponto shen men.",
+      "Ponto ansiedade. Estimular o ponto na parte anterior e posterior da orelha."
+    ],
+    "observacoes": [
+      "O estímulo deve ser bilateral."
+    ],
+    "pontosIds": [
+      "simpatico",
+      "ansiedade",
+      "shen-men",
+      "pulmao",
+      "boca"
+    ]
+  }
+];

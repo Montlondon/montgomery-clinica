@@ -52,7 +52,7 @@ Montgomery tem experiência profunda com:
 - Protocolos anti-inflamatórios
 - Alcalinização
 
-Prescreve nutrição como parte do protocolo — não como conselho isolado.
+Recomenda nutrição como parte do protocolo — não como conselho isolado.
 
 **Fitoterapia integrada**
 - Plantas brasileiras (cerrado, mata atlântica, amazônica)
@@ -86,7 +86,7 @@ Receitas de atendimentos, despesas operacionais, relatórios — separado das fi
 Prontuários de pacientes têm sigilo ético e legal absoluto. Claude trata toda informação de paciente com confidencialidade total. Dados de sessões de psicanálise têm camada adicional de proteção — nunca são referenciados fora do contexto de discussão clínica com Montgomery.
 
 ### Logo — Clínica Montgomery Saúde Integrada
-**Conceito:** Homem Vitruviano dentro da Flor da Vida — o corpo humano como proporção perfeita inscrita na geometria do cosmos.
+**Conceito:** Homem Vitruviano dentro da Flor da Vida de costas — o corpo humano como proporção perfeita inscrita na geometria do cosmos.
 - Fundo azul #1B3A5C
 - Flor da Vida em dourado translúcido, traço fino
 - Silhueta do Vitruviano centralizada — braços e pernas estendidos — em bege #F5F3EE

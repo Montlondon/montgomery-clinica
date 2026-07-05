@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Protótipo — Núcleo Unificado</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Georgia',serif;background:#11151c;color:#e7e2d6;min-height:100vh;padding:20px}
+  .nota{background:#2a2410;border:1px solid #6e5a1f;border-radius:8px;padding:8px 14px;font-family:Arial,sans-serif;font-size:12px;color:#e2c878;text-align:center;margin-bottom:14px}
+  .layout{display:flex;gap:24px;max-width:1300px;margin:0 auto;flex-wrap:wrap;align-items:flex-start}
+  .palco{position:relative;width:760px;max-width:100%}
+  svg{width:100%;display:block}
+  .camada{cursor:pointer;transition:opacity .2s}
+  .camada:hover{opacity:.85}
+  .camada-ring{fill:none;stroke-width:1.3}
+  .painel{position:absolute;background:#1a2030;border:1px solid #3a4356;border-radius:10px;padding:16px 18px;width:230px;font-family:Arial,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.4);display:none}
+  .painel.on{display:block}
+  .painel h3{font-family:Georgia,serif;font-size:15px;margin-bottom:6px;color:#f0ead8}
+  .painel p{font-size:12px;color:#a9aebb;line-height:1.5}
+  .fechar{position:absolute;top:6px;right:8px;cursor:pointer;font-size:14px;color:#7a8090}
+  .sefira-pt{cursor:pointer}
+  .sefira-pt:hover circle{stroke-width:3;filter:brightness(1.3)}
+  .lado{font-family:Arial,sans-serif;font-size:10px;fill:#7a8090}
+
+  .anamnese{flex:1;min-width:340px;background:#161b26;border:1px solid #2a3142;border-radius:12px;padding:20px 22px}
+  .anamnese h2{font-family:Arial,sans-serif;font-size:15px;color:#e2a83f;border-bottom:1px solid #2a3142;padding-bottom:10px;margin-bottom:14px;font-weight:bold}
+  .campo{margin-bottom:10px}
+  .campo label{display:block;font-family:Arial,sans-serif;font-size:11px;color:#7a8090;margin-bottom:4px}
+  .campo input,.campo select{width:100%;background:#0e1219;border:1px solid #2a3142;border-radius:6px;color:#e7e2d6;padding:8px 10px;font-family:Arial,sans-serif;font-size:13px}
+  .linha2{display:flex;gap:10px}
+  .linha2>div{flex:1}
+  .selecoes{margin-top:6px;min-height:20px;font-family:Arial,sans-serif;font-size:12px;color:#8fd6b0}
+  .bloco{background:#161b26;border:1px solid #2a3142;border-radius:12px;padding:18px 20px;margin-top:18px;flex-basis:100%}
+  .bloco h2{font-family:Arial,sans-serif;font-size:15px;color:#e2a83f;margin-bottom:8px}
+  .bloco p{font-family:Arial,sans-serif;font-size:12px;color:#7a8090}
+</style>
+</head>
+<body>
+<div class="nota">Protótipo experimental — vive separado do app real, ainda não conectado ao Supabase. Mock visual pra alinharmos a ideia antes de qualquer decisão.</div>
+
+<div class="layout">
+  <div class="palco">
+    <svg viewBox="0 0 760 800">
+      <circle class="camada camada-ring" data-mod="acu" cx="380" cy="400" r="290" stroke="#b8923f" opacity=".5"/>
+      <circle class="camada camada-ring" data-mod="quiro" cx="380" cy="400" r="245" stroke="#8a93a8" opacity=".4"/>
+      <circle class="camada camada-ring" data-mod="psic" cx="380" cy="400" r="200" stroke="#9c8fe0" opacity=".4"/>
+      <circle class="camada camada-ring" data-mod="fito" cx="380" cy="400" r="155" stroke="#6fae5a" opacity=".4"/>
+
+      <!-- 5 elementos MTC nos cantos, em volta de tudo (não 1:1 com sefirá, é contexto geral) -->
+      <g class="camada" data-mod="elementos" font-family="Georgia,serif" font-size="13">
+        <circle cx="380" cy="55" r="24" fill="none" stroke="#e0524a" stroke-width="1.5"/><text x="380" y="60" text-anchor="middle" fill="#e0524a">Fogo</text>
+        <circle cx="640" cy="220" r="24" fill="none" stroke="#cf9a3f" stroke-width="1.5"/><text x="640" y="225" text-anchor="middle" fill="#cf9a3f">Terra</text>
+        <circle cx="640" cy="600" r="24" fill="none" stroke="#aab0bb" stroke-width="1.5"/><text x="640" y="605" text-anchor="middle" fill="#aab0bb">Metal</text>
+        <circle cx="120" cy="600" r="24" fill="none" stroke="#5a9fd4" stroke-width="1.5"/><text x="120" y="605" text-anchor="middle" fill="#5a9fd4">Água</text>
+        <circle cx="120" cy="220" r="24" fill="none" stroke="#6fae5a" stroke-width="1.5"/><text x="120" y="225" text-anchor="middle" fill="#6fae5a">Madeira</text>
+      </g>
+
+      <text x="380" y="20" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#b8923f" class="camada" data-mod="acu">Acupuntura · Bagua</text>
+      <text x="715" y="400" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#8a93a8" class="camada" data-mod="quiro">Quiropraxia / Seitai</text>
+      <text x="380" y="785" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#6fae5a" class="camada" data-mod="fito">Fitoterapia / Florais</text>
+      <text x="45" y="400" text-anchor="middle" font-family="Georgia,serif" font-size="13" fill="#9c8fe0" class="camada" data-mod="psic">Psicanálise</text>
+
+      <!-- geometria sagrada: retângulo áureo (a/b=1,618) circunscrito por círculo, nosso próprio traço.
+           Proporção real: largura(a)=358, altura(b)=580 → b/a=1,618. Yesod fica exatamente no
+           ponto áureo da altura total da figura (proporção clássica do umbigo no corpo humano). -->
+      <g stroke="#a6913f" stroke-width="1" fill="none" opacity=".5">
+        <rect x="201" y="75" width="358" height="580"/>
+        <circle cx="380" cy="365" r="290"/>
+      </g>
+      <g font-family="Georgia,serif" font-size="12" fill="#a6913f" opacity=".75">
+        <text x="380" y="668" text-anchor="middle">a = 358</text>
+        <text x="572" y="369" text-anchor="middle" transform="rotate(90 572 369)">b = 580</text>
+        <text x="380" y="92" text-anchor="middle" font-size="11">b / a = φ = 1,618</text>
+      </g>
+      <!-- espiral áurea de referência (4 arcos em escala φ), só decorativa -->
+      <path d="M 380,365 A 56,56 0 0 1 436,309 A 90,90 0 0 1 526,365 A 146,146 0 0 1 380,455" stroke="#cfa845" stroke-width="1" fill="none" opacity=".3"/>
+
+      <g stroke="#e7e2d6" stroke-width="3" fill="none" stroke-linecap="round" opacity=".9">
+        <circle cx="380" cy="160" r="28"/>
+        <line x1="380" y1="188" x2="380" y2="440"/>
+        <!-- braços erguidos em diagonal, pose vitruviana -->
+        <line x1="380" y1="230" x2="225" y2="120"/>
+        <line x1="380" y1="230" x2="535" y2="120"/>
+        <!-- pernas abertas alcançando o círculo -->
+        <line x1="380" y1="440" x2="245" y2="655"/>
+        <line x1="380" y1="440" x2="515" y2="655"/>
+      </g>
+
+      <!-- 10 Sefirot em grade real: pilar central x=380, pilar esquerdo x=324, pilar direito x=436;
+           espaçamento vertical regular u=56, com Yesod alinhada ao ponto áureo (y=440) -->
+      <g font-family="Georgia,serif" font-size="10.5">
+        <g class="sefira-pt" data-sef="Kether"><circle cx="380" cy="160" r="20" fill="#11151c" stroke="#cfa845" stroke-width="2"/><text x="380" y="157" text-anchor="middle" fill="#f0ead8">Kether</text><text x="380" y="169" text-anchor="middle" fill="#cfa845" font-size="9">כתר</text><text x="380" y="192" text-anchor="middle" fill="#9aa0ad" font-size="9" font-style="italic">Coroa</text></g>
+        <g class="sefira-pt" data-sef="Binah"><circle cx="324" cy="216" r="20" fill="#11151c" stroke="#3fae8a" stroke-width="2"/><text x="324" y="213" text-anchor="middle" fill="#f0ead8">Binah</text><text x="324" y="225" text-anchor="middle" fill="#3fae8a" font-size="9">בינה</text><text x="324" y="248" text-anchor="middle" fill="#9aa0ad" font-size="9" font-style="italic">Entendimento</text></g>
+        <g class="sefira-pt" data-sef="Chokmah"><circle cx="436" cy="216" r="20" fill="#11151c" stroke="#4f93d6" stroke-width="2"/><text x="436" y="213" text-anchor="middle" fill="#f0ead8">Chokmah</text><text x="436" y="225" text-anchor="middle" fill="#4f93d6" font-size="9">חכמה</text><text x="436" y="248" text-anchor="middle" fill="#9aa0ad" font-size="9" font-style="italic">Sabedoria</text></g>
+        <g class="sefira-pt" data-sef="Geburah"><circle cx="324" cy="272" r="20" fill="#11151c" stroke="#d4694a" stroke-width="2"/><text x="324" y="269" text-anchor="middle" fill="#f0ead8">Geburah</text><text x="324" y="281" text-anchor="middle" fill="#d4694a" font-size="9">גבורה</text><text x="324" y="304" text-anchor="middle" fill="#9aa0ad" font-size="9" font-style="italic">Severidade</text></g>
+        <g class="sefira-pt" data-sef="Chesed"><circle cx="436" cy="272" r="20" fill="#11151c" stroke="#8f87e6" stroke-width="2"/><text x="436" y="269" text-anchor="middle" fill="#f0ead8">Chesed</text><text x="436" y="281" text-anchor="middle" fill="#8f87e6" font-size="9">חסד</text><text x="436" y="304" text-anchor="middle" fill="#9aa0ad" font-size="9" font-style="italic">Misericórdia</text></g>
+        <g class="sefira-pt" data-sef="Tiphereth"><circle cx="380" cy="328" r="22" fill="#11151c" stroke="#e0a83f" stroke-width="2"/><text x="380" y="325" text-anchor="middle" fill="#f0ead8">Tiphereth</text><text x="380" y="337" text-anchor="middle" fill="#e0a83f" font-size="9">תפארת</text><text x="380" y="360" text-anchor="middle" fill="#9aa0ad" font-size="9" font-style="italic">Beleza</text></g>
+        <g class="sefira-pt" data-sef="Hod"><circle cx="324" cy="384" r="20" fill="#11151c" stroke="#d4699a" stroke-width="2"/><text x="324" y="381" text-anchor="middle" fill="#f0ead8">Hod</text><text x="324" y="393" text-anchor="middle" fill="#d4699a" font-size="9">הוד</text><text x="324" y="416" text-anchor="middle" fill="#9aa0ad" font-size="9" font-style="italic">Esplendor</text></g>
+        <g class="sefira-pt" data-sef="Netzach"><circle cx="436" cy="384" r="20" fill="#11151c" stroke="#7fb85a" stroke-width="2"/><text x="436" y="381" text-anchor="middle" fill="#f0ead8">Netzach</text><text x="436" y="393" text-anchor="middle" fill="#7fb85a" font-size="9">נצח</text><text x="436" y="416" text-anchor="middle" fill="#9aa0ad" font-size="9" font-style="italic">Vitória</text></g>
+        <g class="sefira-pt" data-sef="Yesod"><circle cx="380" cy="440" r="20" fill="#11151c" stroke="#aab0bb" stroke-width="2"/><text x="380" y="437" text-anchor="middle" fill="#f0ead8">Yesod</text><text x="380" y="449" text-anchor="middle" fill="#aab0bb" font-size="9">יסוד</text><text x="380" y="472" text-anchor="middle" fill="#9aa0ad" font-size="9" font-style="italic">Fundação · ponto áureo</text></g>
+        <g class="sefira-pt" data-sef="Malkuth"><circle cx="380" cy="655" r="20" fill="#11151c" stroke="#e0524a" stroke-width="2"/><text x="380" y="652" text-anchor="middle" fill="#f0ead8">Malkuth</text><text x="380" y="664" text-anchor="middle" fill="#e0524a" font-size="9">מלכות</text><text x="380" y="687" text-anchor="middle" fill="#9aa0ad" font-size="9" font-style="italic">Reino</text></g>
+      </g>
+
+      <text x="270" y="160" class="lado">B.E.</text><text x="490" y="160" class="lado">B.D.</text>
+    </svg>
+
+    <div class="painel" id="painelMod">
+      <span class="fechar" onclick="fechar('painelMod')">✕</span>
+      <h3 id="painelModTitulo"></h3>
+      <p id="painelModTexto"></p>
+    </div>
+    <div class="painel" id="painelSef">
+      <span class="fechar" onclick="fechar('painelSef')">✕</span>
+      <h3 id="painelSefTitulo"></h3>
+      <p id="painelSefTexto"></p>
+    </div>
+  </div>
+
+  <div class="anamnese">
+    <h2>Anamnese integrada</h2>
+    <div class="linha2">
+      <div class="campo"><label>Nome do paciente</label><input type="text" placeholder="Nome completo" disabled></div>
+      <div class="campo"><label>Nascimento</label><input type="text" placeholder="dd/mm/aaaa" disabled></div>
+    </div>
+    <div class="campo"><label>Queixa principal</label><input type="text" placeholder="Ex: dor lombar" disabled></div>
+    <p class="selecoes" id="resumoSelecao">Clique numa Sefirá, num elemento ou num anel ao lado pra ver o que entraria aqui na ficha do paciente (ainda mock, sem salvar nada).</p>
+  </div>
+
+  <div class="bloco">
+    <h2>Como ler este protótipo</h2>
+    <p>O boneco e as Sefirot ficam sempre visíveis e clicáveis, no centro. Os 4 anéis (Acupuntura, Quiropraxia, Psicanálise, Fitoterapia) e os 5 Elementos nos cantos são "luzes apagadas" — mostram onde cada módulo vai morar, mesmo os que ainda não existem. O painel da direita é o rascunho de como a ficha do paciente reuniria tudo isso, sem precisar trocar de tela. Nada aqui está salvando dados de verdade ainda — é só pra sentirmos a forma antes de virar código de produção.</p>
+  </div>
+</div>
+
+<script>
+const MODULOS={
+  acu:{nome:'Acupuntura · Bagua',texto:'Já existe e funciona na plataforma real (12 meridianos, síndromes clicáveis). Aqui representada como uma camada do núcleo, não reimplementada.'},
+  quiro:{nome:'Quiropraxia / Seitai',texto:'Ainda não construído. Visão: regiões do corpo (cervical, lombar etc.) clicáveis, mostrando vértebras/músculos e sintomas relacionados.'},
+  psic:{nome:'Psicanálise',texto:'Ainda não construído. Visão: temas/conflitos clicáveis (Édipo, culpa, medo, abusos) que se conectam aos outros círculos.'},
+  fito:{nome:'Fitoterapia / Florais',texto:'Parcialmente existente (Suplementos). Visão: núcleo único de ervas, florais e suplementos, organizado pelos 5 Elementos.'},
+  elementos:{nome:'5 Elementos (MTC)',texto:'Ficam ao redor de toda a Árvore, não amarrados a uma Sefirá específica — não existe correspondência tradicional 1 a 1 entre eles. Servem de contexto geral, ligando-se aos meridianos do círculo de Acupuntura.'}
+};
+const SEFIROT={
+  Kether:'Topo da cabeça · Realização (sem vício — unidade pura)',
+  Chokmah:'Hemisfério direito do cérebro · Sabedoria',
+  Binah:'Hemisfério esquerdo do cérebro · Silêncio / Avareza',
+  Chesed:'Braço direito · Obediência / Hipocrisia, tirania',
+  Geburah:'Braço esquerdo · Energia, coragem / Crueldade',
+  Tiphereth:'Coração · Devoção à Grande Obra / Orgulho',
+  Netzach:'Perna direita · Altruísmo / Luxúria',
+  Hod:'Perna esquerda · Veracidade / Falsidade',
+  Yesod:'Quadril/base · Independência / Ociosidade',
+  Malkuth:'Pés · Discernimento / Inércia material'
+};
+document.querySelectorAll('.camada').forEach(el=>{
+  el.addEventListener('click',()=>{
+    const m=MODULOS[el.dataset.mod];
+    document.getElementById('painelModTitulo').textContent=m.nome;
+    document.getElementById('painelModTexto').textContent=m.texto;
+    document.getElementById('painelMod').classList.add('on');
+    document.getElementById('painelMod').style.left='20px';
+    document.getElementById('painelMod').style.top='20px';
+    document.getElementById('resumoSelecao').textContent='Selecionado agora: '+m.nome;
+  });
+});
+document.querySelectorAll('.sefira-pt').forEach(el=>{
+  el.addEventListener('click',()=>{
+    const s=el.dataset.sef;
+    document.getElementById('painelSefTitulo').textContent=s;
+    document.getElementById('painelSefTexto').textContent=SEFIROT[s];
+    document.getElementById('painelSef').classList.add('on');
+    document.getElementById('painelSef').style.right='20px';
+    document.getElementById('painelSef').style.top='20px';
+    document.getElementById('resumoSelecao').textContent='Selecionado agora: Sefirá '+s;
+  });
+});
+function fechar(id){document.getElementById(id).classList.remove('on');}
+</script>
+</body>
+</html>
