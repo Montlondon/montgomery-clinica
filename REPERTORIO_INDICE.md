@@ -1,41 +1,39 @@
-# 🗂️ Repertório Montgomery — Índice Mestre
+# 🗂️ Repertório Montgomery — Índice Mestre (espiral Fibonacci)
 
-*Organizado em 05/07/2026. Este repositório é o `montgomery-clinica` (deploy Vercel). ⚠️ NÃO mover código de produção.*
+*Organizado em 05/07/2026. Este repositório é o `montgomery-clinica` (deploy Vercel). ⚠️ NÃO mover código de produção nem a pasta `os/` (servida online).*
+
+As pastas seguem a **sequência de Fibonacci** — do núcleo (0) expandindo em espiral áurea: 0 · 2 · 3 · 5 · 8 · 13.
 
 ---
 
-## ⚙️ CÓDIGO DE PRODUÇÃO (não mover — faz os apps funcionarem)
-| Arquivo | Função |
+## ⚙️ RAIZ — CÓDIGO DE PRODUÇÃO (intocável)
+| Item | Função |
 |---|---|
 | `index.html` | App da Clínica (online) |
-| `dados-clinicos.js` | Tabelas MTC/Balance/ABC/suplementos (referenciado pelo index) |
+| `dados-clinicos.js` | Tabelas MTC/Balance/ABC/suplementos |
 | `fitoterapia-data.js` | Banco de fitoterapia |
-| `nucleo-prototipo.html` · `arvore_vida_prototipo.html` | Protótipos ativos (Árvore da Vida) |
-| Pastas: `os/` `backup/` `Protótipo/` `obrasV4/` `.git/` `.claude/` | Apps, backups e sistema |
+| `nucleo-prototipo.html` · `arvore_vida_prototipo.html` | Protótipos ativos |
+| `ROADMAP.md` | Roadmap vivo (ideias entram aqui) — acesso rápido na raiz |
+| `REPERTORIO_INDICE.md` | Este mapa |
+| Pastas `os/` `backup/` `Protótipo/` `obrasV4/` `.git/` `.claude/` | Apps servidos, backups, sistema |
 
-## 📚 Biblioteca_Estudo/ (materiais de referência)
-Apostilas e livros: Acupuntura, Aurículo, Quiropraxia, Seitai, Maciocia (Les principes), Fórmulas Chinesas, MEQ (apostila+flipcharts+fichas ABC), auriculoterapia, ventosa, livro Acupuntura Para Todos, contrato MEQ. Fonte para alimentar a Árvore da Vida e a plataforma.
+## 🌀 00_Nucleo/ — identidade e índices mestres
+Biografia (`quem-e-montgomery.md`), índice do universo (`00-MONTGOMERY-UNIVERSE-INDICE.md`), prompts de todos os projetos, palavra-chave mestre `Montgomery`.
 
-## 🎓 Diplomas/ (certificados e documentos pessoais)
-Técnico em Contabilidade, Food Hygiene (UK), francês (Le Mans), Psicanálise, Residência Acupuntura, certificados 2024, Montgomery Numerológico + `CATALOGO_DIPLOMAS.md`.
+## 🌳 02_Arvore/ — Árvore da Vida, MTC, anamnese
+`anamnese_montgomery_modelo.md` (blueprint da anamnese), `arvore_vida_correspondencias.md`, `MEQ_METODO_ABC.md` (método ABC minerado), `MEQ_MATERIAIS_INDICE.md`, `bagua_visao_prompt.md`, `Bussola_Holografica_Genesis.md`, propostas de módulos (Língua, Psicanálise, Sintomas), `VISAO_MONTGOMERY.md`, `meta-montgomery-projeto.md`.
 
-## 📁 Pastas temáticas já existentes
-`Freud/` (obra completa) · `Imperador Amarelo/` · `Logo_marcas/` · `Prompts_Projetos_Biografia_Montgomery/` (biografia + índice mestre do universo)
+## 📚 03_Biblioteca/ — materiais de estudo
+Apostilas e livros: Maciocia, Quiropraxia, Seitai, Acupuntura, Aurículo, MEQ (apostilas + flipcharts + fichas ABC), Fórmulas Chinesas, ventosa. Subpastas: `Freud/` (obra completa), `Imperador Amarelo/`.
 
-## 📄 Documentos de trabalho (.md na raiz — memória viva, acesso rápido)
-- `ROADMAP.md` — roadmap vivo (ideias entram aqui)
-- `anamnese_montgomery_modelo.md` — anamnese oficial (blueprint)
-- `arvore_vida_correspondencias.md` — tabela de correspondências
-- `MEQ_MATERIAIS_INDICE.md` — índice dos materiais MEQ
-- `VISAO_MONTGOMERY.md` · `meta-montgomery-projeto.md` · `Bussola_Holografica_Genesis.md` · `bagua_visao_prompt.md`
-- `PROPOSTA_*.md` (Língua, Psicanálise, Sintomas) — propostas de módulos
-- `Relatorio_Elétrico_Obra_Basement.md` — capacitação Kayky & Vinícius
+## 🎓 05_Diplomas/ — certificados e documentos pessoais
+Contabilidade, Food Hygiene (UK), francês (Le Mans), Psicanálise, Residência, certificados 2024, Montgomery Numerológico + `CATALOGO_DIPLOMAS.md`.
 
-## 💰 Dados e mídias na raiz
-CSVs financeiros, imagens de recomendação (exemplos), Tabela de preços, Triagrama, escala emocional.
+## 💰 08_Financeiro/ — dados e relatórios financeiros
+CSVs (despesas clínica, financeiro), Tabela de preços, relatório elétrico Basement, relatório Jair do Forro, Finanças-Montgomery.
 
-## ⏳ A mover quando fechar os PDFs (estavam abertos em 05/07)
-APOSTILA DE QUIRO · Diagnóstico Integrado · apostila-meq-completa · flipshart2 · flipshart-imersao-1-2 · ficha-de-atendimento-meq · fichasilustradas-ABC → destino: `Biblioteca_Estudo/`
+## 🖼️ 13_Midia/ — imagens, logos, exemplos
+Logos das marcas, recomendações-exemplo, Triagrama, escala emocional, cupom.
 
 ---
-*Mapa mantido por Claude. Ao adicionar material novo, catalogar aqui.*
+*Mapa mantido por Claude. Novos materiais entram na pasta Fibonacci correspondente e são catalogados aqui. Próximo nível da espiral: 21 (reservado para expansão).*
