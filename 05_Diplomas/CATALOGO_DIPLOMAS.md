@@ -51,3 +51,17 @@ Contexto: período de vida na França — francês certificado pelo Estado franc
 - Certificados de 30/01/2024 (4 arquivos PDF na raiz do repositório)
 
 *Última atualização: 04/07/2026 — enviar as próximas imagens que o catálogo cresce.*
+
+---
+
+## 4b. Titre Professionnel — Technicien Supérieur de Support en Informatique 🇫🇷
+| Campo | Dado |
+|---|---|
+| Título | **Technicien Supérieur de Support en Informatique** (Técnico Superior de Suporte em Informática) |
+| Nº | 36884 |
+| Nível | **III** (BTS/DUT — ensino superior técnico francês) · domínio 326r (código NSF) |
+| Emissor | République Française — Ministère chargé de l'Emploi |
+| Obtido | 16/11/2006, por decisão do júri, em **Nantes (44)** |
+| Diretor | Pascal Dulaurier |
+
+Contexto: aprofunda a fase francesa (Le Mans 2004 → Nantes 2006). Montgomery tem **formação técnica superior em TI/suporte informático** — base sólida de computação (redes, sistemas, hardware), embora não em programação/desenvolvimento. Explica sua facilidade com tecnologia.
