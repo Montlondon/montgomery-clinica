@@ -350,7 +350,7 @@ tr:hover td{background:#EEF2F7}
 <div id="loginOverlay">
   <div id="loginBox">
     <div class="login-logo">
-      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='40' fill='%231a2e4a'/%3E%3Ctext x='40' y='52' font-size='36' text-anchor='middle' fill='%23f0d080'%3E✦%3C/text%3E%3C/svg%3E" alt="M">
+      <img id="loginLogoImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80'%3E%3Ccircle cx='40' cy='40' r='40' fill='%231a2e4a'/%3E%3Ctext x='40' y='52' font-size='36' text-anchor='middle' fill='%23f0d080'%3E✦%3C/text%3E%3C/svg%3E" alt="M">
     </div>
     <h2>Montgomery Saúde Integrativa</h2>
     <p>Acesso restrito — área clínica</p>
@@ -527,6 +527,11 @@ async function ativarBiometria(){
 
 // Inicia verificação de auth ao carregar
 window.addEventListener('DOMContentLoaded',()=>{
+  // Usa a logo real da plataforma (config_logo) na tela de login, se já estiver salva no aparelho
+  try{
+    const logoLogin=localStorage.getItem('config_logo');
+    if(logoLogin){const li=document.getElementById('loginLogoImg');if(li)li.src=logoLogin;}
+  }catch(e){}
   initAuth().catch(e=>{
     // Fallback: se SDK falhar (offline), pede senha local
     console.warn('Auth SDK falhou:',e);
