@@ -178,14 +178,14 @@ Ideia futura adicional: campo de link do fornecedor (Amazon, Shopee, Mercado Liv
 
 ## 🚀 Mega Advanced Roadmap — Montgomery OS (anotações do Montgomery)
 
-### Calculadora de IMC + Recomposição Corporal
-- **Onde:** módulo Nutrição do OS **e também** na plataforma da Clínica (para pacientes).
-- **O quê:** entrada peso + altura → IMC com faixa (semáforo). No OS, puxar peso/altura do perfil (Montgomery: 1,73m / 78kg) e cruzar com as metas já cadastradas (proteína 130-140g, gordura 70g, gordura visceral 15 → 1 dígito). Idealmente também % gordura e massa magra quando houver bioimpedância.
-- Pedido em 05/07/2026.
+### Calculadora de IMC + Recomposição Corporal — ✅ FEITO (06/07)
+- OS (Nutrição): IMC + faixa/semáforo + faixa de peso saudável + metas de proteína (1,6–2,0 g/kg) e gordura (0,9 g/kg) computadas do peso; guarda altura por perfil e puxa último peso dos Sinais Vitais.
+- Clínica (Diagnóstico Integrado): IMC + faixa + peso saudável — ferramenta rápida de consulta.
+- Futuro possível: % gordura e massa magra quando houver bioimpedância. (Pedido em 05/07.)
 
-### Limpeza de ícones "antigos" (emoji → SVG linha fina)
-- Os cards do "Mapa do Sistema" (renderMapa/MODULOS) ainda usam emoji (🧬 🫀 💊 🥗 🦴 🌳 ...). Trocar por ícones **SVG de linha fina**, coerentes com o resto da plataforma (preferência forte do Montgomery: chique, clean, nunca emoji).
-- Varrer o app inteiro procurando outros emojis remanescentes em conteúdo/títulos.
+### Limpeza de ícones "antigos" (emoji → SVG linha fina) — ✅ FEITO (06/07)
+- Mapa do Sistema agora usa `MOD_ICON` (24 SVGs de linha fina, dourado) — zero emoji.
+- Pendente menor: varrer o resto do app por emojis remanescentes em outros títulos/conteúdos.
 
 ### Próximos galhos da Fase 2 (já combinados)
 - Oftalmologia Integrativa (esposa — olho único, PIO, DGM, triquíase)
