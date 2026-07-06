@@ -40,6 +40,7 @@ Claude deve aplicar este padrão desde o primeiro commit de qualquer projeto nov
 | **Dra. Vera (Maly)** | `Dra. Vera` | A CONSTRUIR | `dra-vera` (criar) | HTML/JS + localStorage |
 | **Montgomery Code** | `Montgomery Code` | APRENDIZADO (doc criado 06/07) | — (escola de TI, sem repo próprio) | aula viva sobre os apps reais |
 | **Montgomery Investimentos** | `Montgomery Investimentos` | APRENDIZADO (doc criado 06/07) | — (escola de mercado) | educação financeira, não consultoria |
+| **O Código Invisível** | `O Código Invisível` | APRENDIZADO (doc criado 06/07) | — (artes da ordem invisível) | ACIM, Feng Shui, I Ching, Numerologia, presença, Lei da Atração, Sun Tzu |
 | **Meta** | `Meta Montgomery` | ATIVO | — (sessão estratégica) | — |
 | **Ideias & Projetos** | `Ideias Montgomery` | ATIVO | — (repositório de ideias) | — |
 
@@ -55,6 +56,7 @@ Claude deve aplicar este padrão desde o primeiro commit de qualquer projeto nov
 | `montgomery-os-projeto.md` | Montgomery OS — detalhado completo |
 | `montgomery-code-projeto.md` | Montgomery Code — escola de TI (aprender do zero) |
 | `montgomery-investimentos-projeto.md` | Montgomery Investimentos — escola de mercado |
+| `montgomery-codigo-invisivel-projeto.md` | O Código Invisível — artes da ordem invisível |
 | `montgomery-financas-projeto.md` | Montgomery Finanças — detalhado |
 | `meta-montgomery-projeto.md` | Meta Montgomery — estratégia |
 | `PLANO-PROSPERIDADE-MMOBRAS.md` | Plano de prosperidade — MMObras como SaaS |

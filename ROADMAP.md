@@ -284,3 +284,6 @@ Créditos do Montgomery renovam ~09/07. Retomar com "Montgomery here" → Rota O
 - Montgomery sinalizou que virao muitos projetos novos. Manter espaco aberto no Universe para receber cada um no padrao (descricao + instrucoes em 00_Nucleo, entrada no indice mestre, galho no Mapa da Vida e no mapa mental do Whimsical).
 - PENDENTE: Montgomery vai nomear o "mais um projeto" que pediu para anotar agora — aguardando o nome/tema para registrar direito.
 - Correcao de detalhe do altar: a pedra com cristais e uma FONTE de agua (elemento Agua / feng shui — fluxo, movimento, prosperidade), nao so um geodo.
+
+### O "mais um projeto" ganhou nome: O Codigo Invisivel (06/07)
+- O placeholder de projeto futuro + a semente do Projeto Espiritualidade convergiram e ganharam forma: "O Codigo Invisivel" (doc em 00_Nucleo/montgomery-codigo-invisivel-projeto.md). Reune ACIM, Feng Shui, I Ching (aprender do zero), Numerologia, O Poder do Agora/Momento Presente (Tolle), O Poder do Silencio, Abraham Hicks/Lei da Atracao, A Arte da Guerra. Espiritualidade = raiz; O Codigo Invisivel = estudo/pratica.
