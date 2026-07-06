@@ -8,3 +8,13 @@ Mapa mental clicável de toda a vida e todos os projetos do Montgomery, criado e
 Espelha os 10 territórios do `MAPA-DA-VIDA-MONTGOMERY.md`: Corpo e Saúde, Ofício e Cura, Prosperidade e Obra, Aprendizado, Dinheiro Pessoal, Casa e Ambiente, Família e Amores, Travessia e Documentos, Espírito e Sentido, Segundo Cérebro.
 
 Atualizar este mapa sempre que um território novo nascer ou mudar de estado.
+
+---
+
+## Mapa 2 — MMObras: Caminho da Prosperidade (06/07/2026)
+
+As fases Fibonacci do MMObras virando SaaS, clicáveis.
+- **Abrir/editar:** https://whimsical.com/3QQLzRqFUv6k6uSdRQasGd
+- **Embutir:** https://whimsical.com/embed/3QQLzRqFUv6k6uSdRQasGd
+
+Espelha o PLANO-PROSPERIDADE-MMOBRAS.md: do ativo que ja existe ate 500+ assinantes (Fase 13).
