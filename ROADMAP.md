@@ -269,3 +269,8 @@ Créditos do Montgomery renovam ~09/07. Retomar com "Montgomery here" → Rota O
 
 ### Obsidian — grafo com links [[wikilinks]] (adiado, consome creditos)
 - Costurar os documentos do 00_Nucleo com links [[entre colchetes]] para o graph view do Obsidian acender sozinho (mapa mental nativo que cresce). Pedido 06/07; adiado a pedido do Montgomery por consumo de credito. Ver PLANO-ARRUMAR-COMPUTADOR-E-OBSIDIAN.md.
+
+### Tráfego Pago — aprender do meu jeito (interesse do Montgomery, 06/07)
+- Montgomery comprou/renovou um curso de tráfego pago mas não terminou: o método rígido do instrutor "massacrou o cérebro" dele (mesmo padrão da França e do PARA — método de fora que trava, não falha do aluno).
+- O conhecimento NÃO foi perdido: tráfego pago é o caminho para os primeiros 100 clientes do MMObras (Fase 5 do plano de prosperidade) e novos pacientes da Clínica.
+- Plano: aprender tráfego do jeito dele (do zero, por camadas, com metáforas, usando o MMObras real como campo de treino), quando ele quiser. Pode virar uma trilha dentro de Montgomery Code ou um mini-projeto próprio.
