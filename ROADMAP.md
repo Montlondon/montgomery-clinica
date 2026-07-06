@@ -274,3 +274,8 @@ Créditos do Montgomery renovam ~09/07. Retomar com "Montgomery here" → Rota O
 - Montgomery comprou/renovou um curso de tráfego pago mas não terminou: o método rígido do instrutor "massacrou o cérebro" dele (mesmo padrão da França e do PARA — método de fora que trava, não falha do aluno).
 - O conhecimento NÃO foi perdido: tráfego pago é o caminho para os primeiros 100 clientes do MMObras (Fase 5 do plano de prosperidade) e novos pacientes da Clínica.
 - Plano: aprender tráfego do jeito dele (do zero, por camadas, com metáforas, usando o MMObras real como campo de treino), quando ele quiser. Pode virar uma trilha dentro de Montgomery Code ou um mini-projeto próprio.
+
+### Projeto Espiritualidade (futuro) — a raiz debaixo de tudo
+- Montgomery quer, mais adiante, um projeto de espiritualidade. Ideia-chave: para ele, espiritualidade nao e um silo ao lado dos outros — e a raiz que atravessa TODOS (Arvore da Vida, numerologia, 5 elementos, cura). O projeto seria reunir/honrar esse fio de ouro.
+- Elementos possiveis: biblioteca sagrada com anotacoes (Um Curso em Milagres — livro que mais mexeu com a consciencia dele; Biblia; Zohar; hebraico), praticas (Tai Chi, meditacao, o altar de casa), e a sintese/teologia propria dele (como Judaismo + Cristianismo + misticismo + Terra/cristais convergem — "tudo e um").
+- Contexto: altar sincretico em casa (Biblia, Arca da Alianca, Nossa Senhora, cristais, ACIM) + mezuza na porta. A filosofia dele feita de materia. Ver [[user-montgomery-perfil]] e a Arvore da Vida.
