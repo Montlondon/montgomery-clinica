@@ -38,6 +38,8 @@ Claude deve aplicar este padrão desde o primeiro commit de qualquer projeto nov
 | **Montgomery OS** | `Montgomery OS` | NO AR (04/07) — montgomery-clinica.vercel.app/os | fonte: `C:\Montgomery\Clinica\Backup\montgomery-os` → publica em `montgomery-clinica/os/` | HTML/JS + localStorage |
 | **Montgomery Finanças** | `Montgomery Finanças` | A CONSTRUIR | `montgomery-financas` (criar) | HTML/JS + localStorage |
 | **Dra. Vera (Maly)** | `Dra. Vera` | A CONSTRUIR | `dra-vera` (criar) | HTML/JS + localStorage |
+| **Montgomery Code** | `Montgomery Code` | APRENDIZADO (doc criado 06/07) | — (escola de TI, sem repo próprio) | aula viva sobre os apps reais |
+| **Montgomery Investimentos** | `Montgomery Investimentos` | APRENDIZADO (doc criado 06/07) | — (escola de mercado) | educação financeira, não consultoria |
 | **Meta** | `Meta Montgomery` | ATIVO | — (sessão estratégica) | — |
 | **Ideias & Projetos** | `Ideias Montgomery` | ATIVO | — (repositório de ideias) | — |
 
@@ -51,8 +53,12 @@ Claude deve aplicar este padrão desde o primeiro commit de qualquer projeto nov
 | `quem-e-montgomery.md` | Identidade completa — colar em todo projeto |
 | `prompts-todos-projetos.md` | Todos os projetos em um único documento |
 | `montgomery-os-projeto.md` | Montgomery OS — detalhado completo |
+| `montgomery-code-projeto.md` | Montgomery Code — escola de TI (aprender do zero) |
+| `montgomery-investimentos-projeto.md` | Montgomery Investimentos — escola de mercado |
 | `montgomery-financas-projeto.md` | Montgomery Finanças — detalhado |
 | `meta-montgomery-projeto.md` | Meta Montgomery — estratégia |
+| `PLANO-PROSPERIDADE-MMOBRAS.md` | Plano de prosperidade — MMObras como SaaS |
+| `CONVERSA-BUSINESS-MMOBRAS-06-07-2026.md` | Conversa fundadora de business |
 
 ---
 
