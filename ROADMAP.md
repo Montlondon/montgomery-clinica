@@ -290,7 +290,7 @@ Créditos do Montgomery renovam ~09/07. Retomar com "Montgomery here" → Rota O
 
 ---
 
-## Pedidos do Montgomery — 08/07 (executar quando os creditos voltarem)
+## Pedidos do Montgomery — 08/07 — EXECUTADOS 09/07 (Clinica no Vercel + MMObras v9.19 no GitHub Pages)
 
 Diretriz geral: opcao de enviar/compartilhar em JPG em tudo que for possivel ("acho pratico e bonito").
 
@@ -310,3 +310,8 @@ Diretriz geral: opcao de enviar/compartilhar em JPG em tudo que for possivel ("a
 
 ### Codigo Invisivel — nota de acervo (08/07)
 - Wayne Dyer: Montgomery leu "Le Pouvoir de l'Intention" NA FRANCA (em frances) — O Poder da Intencao ja e leitura vivida, nao pendente. Registrar na chave "Vibracao e Manifestacao" do projeto.
+
+### Montgomery OS — visao Kenhub (anotado 09/07)
+- Montgomery: "vou ter todas as terminologias no Montgomery OS, e a parte de anatomia completa. Sempre quis ter um app como o Kenhub."
+- Liga direto aos "bancos anatomicos" do indice mestre (ossos ~206, musculos ~640, esqueleto clicavel com toggle raio-x/SVG) + Base de Conhecimento (terminologia convencional e integrativa, CID-11, tabela de traducao). O Kenhub pessoal = anatomia visual navegavel + terminologia + camada integrativa (meridianos/Sefirot sobre a anatomia) que nenhum Kenhub tem.
+- Construir por camadas Fibonacci quando ele quiser abrir essa frente (comecar pelo esqueleto).
