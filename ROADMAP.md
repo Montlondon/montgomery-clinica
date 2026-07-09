@@ -287,3 +287,26 @@ Créditos do Montgomery renovam ~09/07. Retomar com "Montgomery here" → Rota O
 
 ### O "mais um projeto" ganhou nome: O Codigo Invisivel (06/07)
 - O placeholder de projeto futuro + a semente do Projeto Espiritualidade convergiram e ganharam forma: "O Codigo Invisivel" (doc em 00_Nucleo/montgomery-codigo-invisivel-projeto.md). Reune ACIM, Feng Shui, I Ching (aprender do zero), Numerologia, O Poder do Agora/Momento Presente (Tolle), O Poder do Silencio, Abraham Hicks/Lei da Atracao, A Arte da Guerra. Espiritualidade = raiz; O Codigo Invisivel = estudo/pratica.
+
+---
+
+## Pedidos do Montgomery — 08/07 (executar quando os creditos voltarem)
+
+Diretriz geral: opcao de enviar/compartilhar em JPG em tudo que for possivel ("acho pratico e bonito").
+
+### Clinica — Saude Integrativa
+- **Pacientes:** na tela Editar, adicionar opcao "Enviar em JPG" (ficha do paciente como imagem).
+- **Financeiro / Pro-labore:** opcoes de ordenacao A-Z, Z-A e por data.
+- **Financeiro / Nova despesa pessoal (Recorrente):** adicionar campo de Periodo — data de inicio ate data final (ex.: 6 meses), gerando as parcelas do intervalo.
+- **Recomendacao Terapeutica:** botao de compartilhar ja direto em JPG (hoje gera e depois compartilha; encurtar o caminho).
+- **Diagnostico:** ao abrir um diagnostico (opcao "ver"), incluir botao de encaminhar o PDF.
+- **Agenda (somente Agenda):** trocar o formato do endereco do evento para "Rua Miro Ferreira de Oliveira, 110 Adelaide Bessa, Itambacuri - MG, Brasil" (sem CEP) — teste do Montgomery: ele suspeita que o CEP impede o mapinha do Google de aparecer para o cliente no Google Agenda.
+
+### MMObras
+- **Relatorio:** compartilhar em JPG.
+- **Orcamento:** compartilhar em JPG.
+- **Checklist:** compartilhar em texto.
+- **Comprovantes:** compartilhar e visualizar.
+
+### Codigo Invisivel — nota de acervo (08/07)
+- Wayne Dyer: Montgomery leu "Le Pouvoir de l'Intention" NA FRANCA (em frances) — O Poder da Intencao ja e leitura vivida, nao pendente. Registrar na chave "Vibracao e Manifestacao" do projeto.
