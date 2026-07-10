@@ -584,7 +584,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   <div class="sidebar-footer">
     Montgomery Magalhães<br>Saúde Integrativa<br>
     Itambacuri - MG<br>
-    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v1.1 &middot; 10/07</span>
+    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v1.2 &middot; 10/07</span>
   </div>
 </aside>
 
@@ -2907,10 +2907,11 @@ function abrirGA(s){
   const hi=s.horario?s.horario.replace(':','')+'00':'080000';
   let hf='090000';
   if(s.horario){const[h,m]=s.horario.split(':').map(Number);hf=String((h+1)%24).padStart(2,'0')+String(m).padStart(2,'0')+'00';}
-  // Formato validado pelo Montgomery em 10/07 (foto do evento do Gilson): endereço puro,
-  // sem nome do negócio e sem link extra — o Google resolve sozinho e mostra o quadrante
-  // do mapa com o pino no consultório. Não acrescentar mais nada aqui.
-  const end='Rua Miro Ferreira de Oliveira, 110 - Adelaide Bessa, Itambacuri - MG';
+  // Teste v1.2 (10/07): texto IDÊNTICO ao que o Google grava quando o Montgomery escolhe
+  // a sugestão na mão (copiado da foto do evento do Gilson: "R." abreviado, CEP e Brasil).
+  // A aposta: com a impressão digital exata do Places, o quadrante do mapa acende sozinho,
+  // sem precisar tocar no campo. Se não acender, o caminho definitivo é a API do Calendar.
+  const end='R. Miro Ferreira de Oliveira, 110 - Adelaide Bessa, Itambacuri - MG, 39830-000, Brasil';
   // Título: apenas o nome do paciente, limpo
   const titulo=s.pacienteNome.trim();
   const url='https://calendar.google.com/calendar/render?action=TEMPLATE'+
