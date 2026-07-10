@@ -584,7 +584,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   <div class="sidebar-footer">
     Montgomery Magalhães<br>Saúde Integrativa<br>
     Itambacuri - MG<br>
-    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v1.0 &middot; 10/07</span>
+    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v1.1 &middot; 10/07</span>
   </div>
 </aside>
 
@@ -2907,18 +2907,16 @@ function abrirGA(s){
   const hi=s.horario?s.horario.replace(':','')+'00':'080000';
   let hf='090000';
   if(s.horario){const[h,m]=s.horario.split(':').map(Number);hf=String((h+1)%24).padStart(2,'0')+String(m).padStart(2,'0')+'00';}
-  // Calibração pelo Google Business do consultório (10/07): o local do evento usa o NOME
-  // do negócio + endereço — assim o Calendar resolve pelo Google Places e o quadrante do
-  // mapa cai no portão certo (nº 110), não na casa vizinha. E o link "Como chegar" usa o
-  // Place ID oficial, que crava o alfinete exatamente no consultório.
-  const end='Acupuntura Quiropraxia Seitai Montgomery, Rua Miro Ferreira de Oliveira, 110 - Adelaide Bessa, Itambacuri - MG';
-  const mapaLink='https://www.google.com/maps/search/?api=1&query=Acupuntura+Quiropraxia+Seitai+Montgomery&query_place_id=ChIJBd4Jp7R2swARI_WWCgkFB7U';
+  // Formato validado pelo Montgomery em 10/07 (foto do evento do Gilson): endereço puro,
+  // sem nome do negócio e sem link extra — o Google resolve sozinho e mostra o quadrante
+  // do mapa com o pino no consultório. Não acrescentar mais nada aqui.
+  const end='Rua Miro Ferreira de Oliveira, 110 - Adelaide Bessa, Itambacuri - MG';
   // Título: apenas o nome do paciente, limpo
   const titulo=s.pacienteNome.trim();
   const url='https://calendar.google.com/calendar/render?action=TEMPLATE'+
     '&text='+encodeURIComponent(titulo)+
     '&dates='+data+'T'+hi+'/'+data+'T'+hf+
-    '&details='+encodeURIComponent('Paciente: '+s.pacienteNome+'\nProcedimento: '+(s.procedimentos||'—')+'\nValor: '+fm(s.valor)+'\nStatus: '+s.status+(s.notas?'\nNotas: '+s.notas:'')+'\n\nComo chegar (mapa): '+mapaLink+'\n\n'+cfg('nome'))+
+    '&details='+encodeURIComponent('Paciente: '+s.pacienteNome+'\nProcedimento: '+(s.procedimentos||'—')+'\nValor: '+fm(s.valor)+'\nStatus: '+s.status+(s.notas?'\nNotas: '+s.notas:'')+'\n\n'+cfg('nome'))+
     '&location='+encodeURIComponent(end)+
     '&sf=true&output=xml';
   window.open(url,'_blank');
