@@ -321,3 +321,8 @@ Diretriz geral: opcao de enviar/compartilhar em JPG em tudo que for possivel ("a
 - Financeiro: botoes PDF e JPG (documento com logo da clinica, estilo MMObras) nas abas Clinica e Pessoal — PDF gerado pelo gerador proprio, sem depender de janela de impressao.
 - Recomendacao via WhatsApp: agora envia a IMAGEM com o texto de legenda pelo menu nativo (antes baixava e mandava so texto). No computador mantem o fluxo antigo.
 - Compartilhar imediato: quando a geracao demora e a permissao do toque expira, aparece o botao "Enviar" (overlay Arquivo pronto) — um toque novo abre o menu; nada de download forcado.
+
+### Versionamento visivel da Clinica (10/07) — DISCIPLINA PERMANENTE
+- Rodape da sidebar agora mostra "v1.0 · 10/07" (dourado, estilo MMObras). A contagem formal comeca hoje (a plataforma e madura, mas a numeracao nasce agora).
+- REGRA para todo deploy da Clinica daqui em diante: bump da versao + data no rodape (buscar "v1." no index.html). Igual ao MMObras (linha ~376 la).
+- Futuro: mesmo padrao no Montgomery OS quando fizer sentido.
