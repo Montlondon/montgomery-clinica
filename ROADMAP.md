@@ -315,3 +315,9 @@ Diretriz geral: opcao de enviar/compartilhar em JPG em tudo que for possivel ("a
 - Montgomery: "vou ter todas as terminologias no Montgomery OS, e a parte de anatomia completa. Sempre quis ter um app como o Kenhub."
 - Liga direto aos "bancos anatomicos" do indice mestre (ossos ~206, musculos ~640, esqueleto clicavel com toggle raio-x/SVG) + Base de Conhecimento (terminologia convencional e integrativa, CID-11, tabela de traducao). O Kenhub pessoal = anatomia visual navegavel + terminologia + camada integrativa (meridianos/Sefirot sobre a anatomia) que nenhum Kenhub tem.
 - Construir por camadas Fibonacci quando ele quiser abrir essa frente (comecar pelo esqueleto).
+
+### Pendencias executadas 10/07 (Clinica no ar)
+- BUG DE FUSO da Agenda: sessao do dia 10 aparecia no dia 9 apos as 21h (toISOString converte pra UTC). Corrigido com helper dLocal() em 16 pontos do app (agenda, datas-padrao de formularios, parcelas).
+- Financeiro: botoes PDF e JPG (documento com logo da clinica, estilo MMObras) nas abas Clinica e Pessoal — PDF gerado pelo gerador proprio, sem depender de janela de impressao.
+- Recomendacao via WhatsApp: agora envia a IMAGEM com o texto de legenda pelo menu nativo (antes baixava e mandava so texto). No computador mantem o fluxo antigo.
+- Compartilhar imediato: quando a geracao demora e a permissao do toque expira, aparece o botao "Enviar" (overlay Arquivo pronto) — um toque novo abre o menu; nada de download forcado.
