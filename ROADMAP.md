@@ -326,3 +326,7 @@ Diretriz geral: opcao de enviar/compartilhar em JPG em tudo que for possivel ("a
 - Rodape da sidebar agora mostra "v1.0 · 10/07" (dourado, estilo MMObras). A contagem formal comeca hoje (a plataforma e madura, mas a numeracao nasce agora).
 - REGRA para todo deploy da Clinica daqui em diante: bump da versao + data no rodape (buscar "v1." no index.html). Igual ao MMObras (linha ~376 la).
 - Futuro: mesmo padrao no Montgomery OS quando fizer sentido.
+
+### Agenda — quadrante do mapa 100% automatico (plano B, se a v1.2 nao bastar)
+- v1.2 testa a "impressao digital" exata do Places no campo location (R. abreviado + CEP + Brasil, copiado do evento que o Montgomery validou na foto). Se o quadrante acender sozinho: resolvido.
+- Se NAO acender: o caminho definitivo e criar o evento pela API do Google Calendar (OAuth com escopo calendar via Supabase, que ja autentica com Google) — o evento nasce estruturado, sem abrir a tela de novo evento. Feature maior; planejar quando Montgomery quiser ("top das galaxias").
