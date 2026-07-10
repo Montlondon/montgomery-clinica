@@ -2849,15 +2849,17 @@ function abrirGA(s){
   const hi=s.horario?s.horario.replace(':','')+'00':'080000';
   let hf='090000';
   if(s.horario){const[h,m]=s.horario.split(':').map(Number);hf=String((h+1)%24).padStart(2,'0')+String(m).padStart(2,'0')+'00';}
-  // Endereço SEM CEP e por extenso, só aqui na Agenda: teste do Montgomery (08/07)
-  // — o CEP parecia impedir o mapinha do Google de aparecer pro cliente no evento.
-  const end='Rua Miro Ferreira de Oliveira, 110 Adelaide Bessa, Itambacuri - MG, Brasil';
+  // Endereço no formato canônico do Google Places (hífen antes do bairro) — melhora a
+  // chance do "quadradinho do mapa" aparecer no evento. E, garantido de qualquer jeito,
+  // a descrição leva um link "Como chegar" com as coordenadas exatas da rua (09/07).
+  const end='Rua Miro Ferreira de Oliveira, 110 - Adelaide Bessa, Itambacuri - MG';
+  const mapaLink='https://www.google.com/maps/search/?api=1&query=-18.0379813,-41.6688790';
   // Título: apenas o nome do paciente, limpo
   const titulo=s.pacienteNome.trim();
   const url='https://calendar.google.com/calendar/render?action=TEMPLATE'+
     '&text='+encodeURIComponent(titulo)+
     '&dates='+data+'T'+hi+'/'+data+'T'+hf+
-    '&details='+encodeURIComponent('Paciente: '+s.pacienteNome+'\nProcedimento: '+(s.procedimentos||'—')+'\nValor: '+fm(s.valor)+'\nStatus: '+s.status+(s.notas?'\nNotas: '+s.notas:'')+'\n\n'+cfg('nome'))+
+    '&details='+encodeURIComponent('Paciente: '+s.pacienteNome+'\nProcedimento: '+(s.procedimentos||'—')+'\nValor: '+fm(s.valor)+'\nStatus: '+s.status+(s.notas?'\nNotas: '+s.notas:'')+'\n\nComo chegar (mapa): '+mapaLink+'\n\n'+cfg('nome'))+
     '&location='+encodeURIComponent(end)+
     '&sf=true&output=xml';
   window.open(url,'_blank');
