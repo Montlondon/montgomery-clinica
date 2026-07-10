@@ -2849,11 +2849,12 @@ function abrirGA(s){
   const hi=s.horario?s.horario.replace(':','')+'00':'080000';
   let hf='090000';
   if(s.horario){const[h,m]=s.horario.split(':').map(Number);hf=String((h+1)%24).padStart(2,'0')+String(m).padStart(2,'0')+'00';}
-  // Endereço no formato canônico do Google Places (hífen antes do bairro) — melhora a
-  // chance do "quadradinho do mapa" aparecer no evento. E, garantido de qualquer jeito,
-  // a descrição leva um link "Como chegar" com as coordenadas exatas da rua (09/07).
-  const end='Rua Miro Ferreira de Oliveira, 110 - Adelaide Bessa, Itambacuri - MG';
-  const mapaLink='https://www.google.com/maps/search/?api=1&query=-18.0379813,-41.6688790';
+  // Calibração pelo Google Business do consultório (10/07): o local do evento usa o NOME
+  // do negócio + endereço — assim o Calendar resolve pelo Google Places e o quadrante do
+  // mapa cai no portão certo (nº 110), não na casa vizinha. E o link "Como chegar" usa o
+  // Place ID oficial, que crava o alfinete exatamente no consultório.
+  const end='Acupuntura Quiropraxia Seitai Montgomery, Rua Miro Ferreira de Oliveira, 110 - Adelaide Bessa, Itambacuri - MG';
+  const mapaLink='https://www.google.com/maps/search/?api=1&query=Acupuntura+Quiropraxia+Seitai+Montgomery&query_place_id=ChIJBd4Jp7R2swARI_WWCgkFB7U';
   // Título: apenas o nome do paciente, limpo
   const titulo=s.pacienteNome.trim();
   const url='https://calendar.google.com/calendar/render?action=TEMPLATE'+
