@@ -1175,6 +1175,8 @@ window.addEventListener('DOMContentLoaded',()=>{
       <div class="no-print" style="display:flex;justify-content:flex-end;gap:6px;margin-bottom:10px">
         <button class="btn btn-sec btn-sm" onclick="exportarDespesasCsv('clinica')" title="Exportar Excel"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5a1 1 0 0 0 1 1h5"/><path d="M19 9v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h8z"/><path d="M9 13h6M9 16h6"/></svg></span></button>
         <button class="btn btn-sec btn-sm" onclick="imprimirDespesas('clinica')" title="Imprimir"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg></span></button>
+        <button class="btn btn-sec btn-sm" onclick="compartilharDespesas('clinica','pdf')" title="Compartilhar PDF"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5a1 1 0 0 0 1 1h5"/><path d="M19 9v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h8z"/><path d="M12 12v6m0 0-2.5-2.5M12 18l2.5-2.5"/></svg></span> PDF</button>
+        <button class="btn btn-sec btn-sm" onclick="compartilharDespesas('clinica','jpg')" title="Compartilhar JPG"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg></span> JPG</button>
       </div>
       <div id="listaDespClinica"></div>
       <div style="margin-top:14px"><button class="btn btn-ghost" onclick="abrirModalDespesa('clinica')">+ Nova despesa</button></div>
@@ -1199,6 +1201,8 @@ window.addEventListener('DOMContentLoaded',()=>{
           </select>
           <button class="btn btn-sec btn-sm" onclick="exportarDespesasCsv('pessoal')" title="Exportar Excel"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5a1 1 0 0 0 1 1h5"/><path d="M19 9v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h8z"/><path d="M9 13h6M9 16h6"/></svg></span></button>
           <button class="btn btn-sec btn-sm" onclick="imprimirDespesas('pessoal')" title="Imprimir"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg></span></button>
+          <button class="btn btn-sec btn-sm" onclick="compartilharDespesas('pessoal','pdf')" title="Compartilhar PDF"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5a1 1 0 0 0 1 1h5"/><path d="M19 9v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h8z"/><path d="M12 12v6m0 0-2.5-2.5M12 18l2.5-2.5"/></svg></span> PDF</button>
+          <button class="btn btn-sec btn-sm" onclick="compartilharDespesas('pessoal','jpg')" title="Compartilhar JPG"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg></span> JPG</button>
         </span>
       </h3>
       <div id="listaDespPessoal"></div>
@@ -1863,7 +1867,7 @@ function go(p,el){
       const b1=document.getElementById('btnSalvarRx'),b2=document.getElementById('btnSalvarRxMain');
       if(b1)b1.innerHTML=SAVE_ICON_HTML+' Salvar Recomendação';
       if(b2)b2.innerHTML=SAVE_ICON_HTML+' Salvar Recomendação';
-      document.getElementById('rxDt').value=new Date().toISOString().split('T')[0];
+      document.getElementById('rxDt').value=dLocal(new Date());
       _rxSuplementosSel=[];
       renderRxSupLista();
     }
@@ -2260,7 +2264,7 @@ async function salvarSessao(e){
   }
   _cache['sessoes']=ss;
   e.target.reset();
-  document.getElementById('sData').value=new Date().toISOString().split('T')[0];
+  document.getElementById('sData').value=dLocal(new Date());
   iniciarPS();atuFin();atuDash();
   go('agenda',null);
 }
@@ -2278,7 +2282,7 @@ async function salvarEGoogle(){
   await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':s}]);
   abrirGA(s);toast('Salvo! Abrindo Google Agenda...',null,"ok");
   document.querySelector('#pg-nova-sessao form').reset();
-  document.getElementById('sData').value=new Date().toISOString().split('T')[0];
+  document.getElementById('sData').value=dLocal(new Date());
   iniciarPS();atuFin();atuDash();
 }
 
@@ -2510,7 +2514,7 @@ function exportarVendasSupCsv(){
   const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
   const link=document.createElement('a');
   link.href=URL.createObjectURL(blob);
-  link.download=`vendas_suplementos_${new Date().toISOString().split('T')[0]}.csv`;
+  link.download=`vendas_suplementos_${dLocal(new Date())}.csv`;
   link.click();
   toast('Planilha exportada!',null,"clip");
 }
@@ -2615,7 +2619,7 @@ function abrirModalDespesa(escopo,tipo,editId){
     document.getElementById('despDesc').value=tipo==='receita'?'Pró-labore':'';
     document.getElementById('despCat').value=tipo==='receita'?'Pró-labore':'';
     document.getElementById('despValor').value='';
-    document.getElementById('despData').value=new Date().toISOString().split('T')[0];
+    document.getElementById('despData').value=dLocal(new Date());
     document.getElementById('despRec').value='';
   }
   document.getElementById('despDataFim').value='';
@@ -2654,7 +2658,7 @@ async function salvarDespesa(ev){
         const ultimoDia=new Date(dt.getFullYear(),dt.getMonth()+1,0).getDate();
         dt.setDate(Math.min(dia0,ultimoDia));
         if(dt>fim)break;
-        parcelas.push({...d,id:Date.now()+Math.random()+i,data:dt.toISOString().split('T')[0],
+        parcelas.push({...d,id:Date.now()+Math.random()+i,data:dLocal(dt),
           descricao:d.descricao+' ('+(i+1)+')'});
         if(parcelas.length>=60){toast('Limite de 60 parcelas — período encurtado','#EF6C00',"warn");break;}
       }
@@ -2701,7 +2705,7 @@ function exportarDespesasCsv(escopo){
   const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
   const link=document.createElement('a');
   link.href=URL.createObjectURL(blob);
-  link.download=`despesas_${escopo}_${new Date().toISOString().split('T')[0]}.csv`;
+  link.download=`despesas_${escopo}_${dLocal(new Date())}.csv`;
   link.click();
   toast('Planilha exportada!',null,"clip");
 }
@@ -2726,6 +2730,59 @@ function imprimirDespesas(escopo){
   win.print();
 }
 
+// ===== FINANCEIRO: documento com marca, compartilhável em PDF ou JPG =====
+// (estilo MMObras — logo + cabeçalho + tabela — pedido do Montgomery 10/07)
+function docDespesasHtml(escopo){
+  const lista=gD('despesas').filter(d=>d.escopo===escopo).sort((a,b)=>new Date(a.data)-new Date(b.data));
+  if(!lista.length)return null;
+  const titulo=escopo==='clinica'?'Despesas da Clínica':'Despesas e Pró-labore Pessoal';
+  let totD=0,totR=0;
+  const linhas=lista.map(d=>{
+    const v=Number(d.valor)||0;
+    if(d.tipo==='receita')totR+=v;else totD+=v;
+    return `<tr>
+      <td style="padding:7px 8px;border-bottom:1px solid #eee9df;font-size:12px;white-space:nowrap">${fd(d.data)}</td>
+      <td style="padding:7px 8px;border-bottom:1px solid #eee9df;font-size:12px">${escHtml(d.descricao)}${d.categoria?`<div style="font-size:10px;color:#9a917f">${escHtml(d.categoria)}</div>`:''}</td>
+      <td style="padding:7px 8px;border-bottom:1px solid #eee9df;font-size:12px;text-align:right;font-weight:700;color:${d.tipo==='receita'?'#2d7a4f':'#8A4B2C'};white-space:nowrap">${d.tipo==='receita'?'+ ':'– '}${fm(v)}</td>
+    </tr>`;
+  }).join('');
+  const logo=gC('config_logo')||'13_Midia/Logos/montgomery-clinica.jpg';
+  return `
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px;border-bottom:2px solid #C9A84C;padding-bottom:12px">
+      <img src="${logo}" style="width:74px;height:74px;object-fit:contain;border-radius:12px;background:#fff">
+      <div>
+        <div style="font-family:Lora,Georgia,serif;font-size:19px;font-weight:700;color:#1E3A5F">${titulo}</div>
+        <div style="font-size:11px;color:#9a917f">${escHtml(getCfg().ter||'Montgomery Magalhães')} · ${new Date().toLocaleDateString('pt-BR')}</div>
+      </div>
+    </div>
+    <table style="width:100%;border-collapse:collapse">${linhas}</table>
+    <div style="display:flex;justify-content:flex-end;gap:18px;padding:12px 8px 0;font-size:13px">
+      ${totR?`<div style="color:#2d7a4f;font-weight:700">Receitas: ${fm(totR)}</div>`:''}
+      <div style="color:#8A4B2C;font-weight:700">Despesas: ${fm(totD)}</div>
+      ${totR?`<div style="color:#1E3A5F;font-weight:700">Saldo: ${fm(totR-totD)}</div>`:''}
+    </div>
+    <div style="font-size:10px;color:#b5afa2;margin-top:12px;text-align:center">Documento gerado pela plataforma Montgomery Saúde Integrativa</div>`;
+}
+async function compartilharDespesas(escopo,formato){
+  const html=docDespesasHtml(escopo);
+  if(!html){toast('Nenhum lançamento para compartilhar','#EF6C00',"warn");return;}
+  toast('Gerando '+formato.toUpperCase()+'...',null,"relogio");
+  try{
+    const palco=document.createElement('div');
+    palco.style.cssText='position:fixed;left:-10000px;top:0;width:640px;background:#FDFAF6;padding:20px;font-family:Inter,Arial,sans-serif;color:#2C2A27';
+    palco.innerHTML=html;
+    document.body.appendChild(palco);
+    const canvas=await html2canvas(palco,{scale:2,backgroundColor:'#FDFAF6',useCORS:true,logging:false});
+    document.body.removeChild(palco);
+    const nomeBase='financeiro_'+escopo+'_'+dLocal(new Date());
+    if(formato==='pdf'){
+      await compartilharArquivo(canvasParaPdfBlob(canvas),nomeBase+'.pdf','application/pdf');
+    }else{
+      canvas.toBlob(b=>{if(b)compartilharArquivo(b,nomeBase+'.jpg','image/jpeg');},'image/jpeg',0.92);
+    }
+  }catch(e){console.error(e);toast(`Erro ao gerar: ${e.message||e}`,'#c62828',"erro");}
+}
+
 // ===== SUPLEMENTOS (catálogo / estoque) =====
 // Exporta o catálogo de suplementos como .csv (abre direto no Excel/Google Sheets),
 // pensado pra compartilhar a lista de estoque com quem faz a compra (ex: esposa).
@@ -2738,7 +2795,7 @@ function exportarSuplementosCsv(){
   const blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8'});
   const link=document.createElement('a');
   link.href=URL.createObjectURL(blob);
-  link.download=`suplementos_${new Date().toISOString().split('T')[0]}.csv`;
+  link.download=`suplementos_${dLocal(new Date())}.csv`;
   link.click();
   toast('Planilha exportada!',null,"clip");
 }
@@ -2891,7 +2948,7 @@ function renderSemana(){
   });
   h+='</tr></thead><tbody><tr>';
   dias.forEach(d=>{
-    const ds2=d.toISOString().split('T')[0];
+    const ds2=dLocal(d);
     const sd=ss.filter(s=>s.data===ds2).sort((a,b)=>(a.horario||'').localeCompare(b.horario||''));
     const isH=d.toDateString()===new Date().toDateString();
     h+=`<td style="background:${isH?'#f0fff0':'#fff'};min-height:80px;padding:5px;vertical-align:top;border-right:1px solid var(--brd);border-top:1px solid var(--brd)">`;
@@ -3093,7 +3150,7 @@ function initDiagnostico(){
   initBaguaWheel();
   renderAuriculoMapaCompleto();
   renderPsicanalise();
-  if(!document.getElementById('diagDt').value)document.getElementById('diagDt').value=new Date().toISOString().split('T')[0];
+  if(!document.getElementById('diagDt').value)document.getElementById('diagDt').value=dLocal(new Date());
   if(!_diagPacSel){
     document.getElementById('diagPacBusca').value='';
     document.getElementById('diagPacId').value='';
@@ -4063,7 +4120,7 @@ async function salvarDiagnostico(){
     id:_diagEditandoId||(Date.now()+Math.random()),
     pacienteId:_diagPacSel.id,
     pacienteNome:_diagPacSel.nome,
-    data:document.getElementById('diagDt').value||new Date().toISOString().split('T')[0],
+    data:document.getElementById('diagDt').value||dLocal(new Date()),
     elementos:[..._diagSelecoes.elementos],
     pontos:[..._diagSelecoes.pontos],
     elementosObs:{..._diagSelecoes.elementosObs},
@@ -4340,7 +4397,7 @@ async function salvarRxHistorico(){
   const plantas=coletarRxPlantasDom();
   if(!plantas.length&&!_rxSuplementosSel.length){toast('Adicione ao menos uma planta ou suplemento antes de salvar','#EF6C00',"warn");return;}
   const valorSuplementos=_rxSuplementosSel.reduce((a,i)=>a+i.precoUnit*i.qtd,0);
-  const rx={id:_rxEditandoId||(Date.now()+Math.random()),pacienteId:_rxPacSel.id,pacienteNome:_rxPacSel.nome,data:v('rxDt')||new Date().toISOString().split('T')[0],plantas,suplementos:[..._rxSuplementosSel],valorSuplementos,durGeral:v('rxDurG'),retorno:v('rxRet'),obs:v('rxObs')};
+  const rx={id:_rxEditandoId||(Date.now()+Math.random()),pacienteId:_rxPacSel.id,pacienteNome:_rxPacSel.nome,data:v('rxDt')||dLocal(new Date()),plantas,suplementos:[..._rxSuplementosSel],valorSuplementos,durGeral:v('rxDurG'),retorno:v('rxRet'),obs:v('rxObs')};
   const b1=document.getElementById('btnSalvarRx'),b2=document.getElementById('btnSalvarRxMain');
   if(_rxEditandoId){
     // Atualização real: substitui só este registro (mesmo id), sem criar duplicata
@@ -4529,7 +4586,7 @@ function duplicarDiagHist(diagId,pacId){
   setTimeout(()=>{
     document.getElementById('diagPacBusca').value=_diagPacSel.nome;
     document.getElementById('diagPacId').value=_diagPacSel.id;
-    document.getElementById('diagDt').value=new Date().toISOString().split('T')[0];
+    document.getElementById('diagDt').value=dLocal(new Date());
     document.getElementById('diagEscalaEmo').value=diag.escalaEmocional||'';
     document.getElementById('diagEmoObs').value=diag.emoObs||'';
     const btn=document.getElementById('btnSalvarDiag');
@@ -4667,7 +4724,7 @@ function editarRx(rxId){
   _rxEditandoId=rx.id;
   go('prescricao',null);
   setTimeout(()=>{
-    _preencherFormRx(rx,rx.data||new Date().toISOString().split('T')[0]);
+    _preencherFormRx(rx,rx.data||dLocal(new Date()));
     const b1=document.getElementById('btnSalvarRx'),b2=document.getElementById('btnSalvarRxMain');
     if(b1)b1.innerHTML=EDIT_ICON_HTML+' Salvar Alterações';
     if(b2)b2.innerHTML=EDIT_ICON_HTML+' Salvar Alterações';
@@ -4686,7 +4743,7 @@ function duplicarRx(rxId){
   _rxEditandoId=null;
   go('prescricao',null);
   setTimeout(()=>{
-    _preencherFormRx(rx,new Date().toISOString().split('T')[0]);
+    _preencherFormRx(rx,dLocal(new Date()));
     const b1=document.getElementById('btnSalvarRx'),b2=document.getElementById('btnSalvarRxMain');
     if(b1)b1.innerHTML=SAVE_ICON_HTML+' Salvar Recomendação';
     if(b2)b2.innerHTML=SAVE_ICON_HTML+' Salvar Recomendação';
@@ -4778,22 +4835,49 @@ async function exportarRxJpg(){
 }
 
 // ===== Compartilhamento genérico de arquivo (JPG/PDF) =====
-// Abre o menu nativo do aparelho; se não der, baixa o arquivo.
-async function compartilharArquivo(blob,nomeArq,tipoMime){
-  const file=new File([blob],nomeArq,{type:tipoMime});
-  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-    try{
-      await navigator.share({files:[file]});
-      toast('Compartilhado!',null,"ok");return;
-    }catch(e){
-      if(e.name==='AbortError')return;
-      console.error('Compartilhar falhou, baixando:',e);
-    }
-  }
+// Abre o menu nativo do aparelho. Se a "janela de permissão" do toque tiver
+// expirado durante a geração (causa do antigo "pede pra baixar"), mostra um
+// botão Enviar — o novo toque renova a permissão e o menu abre na hora.
+function baixarBlob(blob,nomeArq){
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');a.href=url;a.download=nomeArq;a.click();
   URL.revokeObjectURL(url);
-  toast('Arquivo baixado (compartilhamento indisponível)','#EF6C00',"camera");
+  toast('Arquivo baixado','#EF6C00',"camera");
+}
+function mostrarEnvioPronto(file,blob,nomeArq,texto){
+  const antigo=document.getElementById('envioPronto');if(antigo)antigo.remove();
+  const ov=document.createElement('div');ov.id='envioPronto';
+  ov.style.cssText='position:fixed;inset:0;background:rgba(20,26,36,.72);z-index:99998;display:flex;align-items:center;justify-content:center;padding:20px';
+  ov.innerHTML='<div style="background:#FDFAF6;border-radius:14px;padding:26px 24px;max-width:300px;width:100%;text-align:center;font-family:Inter,sans-serif;box-shadow:0 18px 60px rgba(0,0,0,.35)">'+
+    '<div style="font-family:Lora,serif;font-size:16px;color:#1E3A5F;margin-bottom:6px">Arquivo pronto</div>'+
+    '<div style="font-size:12px;color:#8A8578;margin-bottom:16px">Toque em Enviar e escolha o app (WhatsApp etc.)</div>'+
+    '<button id="btnEnvioPronto" style="width:100%;margin-bottom:8px;padding:12px;border:none;border-radius:9px;background:#1E3A5F;color:#fff;font-weight:700;font-size:14px;cursor:pointer;font-family:Inter,sans-serif">Enviar</button>'+
+    '<button id="btnEnvioBaixar" style="width:100%;padding:11px;border:1px solid #cfc9bc;border-radius:9px;background:transparent;color:#1E3A5F;font-size:13px;cursor:pointer;font-family:Inter,sans-serif">Baixar</button></div>';
+  document.body.appendChild(ov);
+  document.getElementById('btnEnvioPronto').onclick=async()=>{
+    try{
+      const dados={files:[file]};if(texto)dados.text=texto;
+      await navigator.share(dados);toast('Compartilhado!',null,"ok");
+    }catch(e){if(e.name!=='AbortError'){console.error(e);baixarBlob(blob,nomeArq);}}
+    ov.remove();
+  };
+  document.getElementById('btnEnvioBaixar').onclick=()=>{baixarBlob(blob,nomeArq);ov.remove();};
+  ov.addEventListener('click',e=>{if(e.target===ov)ov.remove();});
+}
+async function compartilharArquivo(blob,nomeArq,tipoMime,texto){
+  const file=new File([blob],nomeArq,{type:tipoMime});
+  if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
+    try{
+      const dados={files:[file]};if(texto)dados.text=texto;
+      await navigator.share(dados);
+      toast('Compartilhado!',null,"ok");return;
+    }catch(e){
+      if(e.name==='AbortError')return;
+      // ativação do toque expirou durante a geração — pede um toque novo, sem baixar
+      mostrarEnvioPronto(file,blob,nomeArq,texto);return;
+    }
+  }
+  baixarBlob(blob,nomeArq);
 }
 
 // Captura qualquer elemento da tela como canvas (fundo branco, nitidez 2x)
@@ -4881,26 +4965,9 @@ async function compartilharRx(){
   toast('Preparando...',null,"relogio");
   try{
     const canvas=await obterRxCanvas();
-    canvas.toBlob(async blob=>{
-      const file=new File([blob],`recomendacao_${nome}.jpg`,{type:'image/jpeg'});
-      if(navigator.share&&navigator.canShare&&navigator.canShare({files:[file]})){
-        try{
-          await navigator.share({files:[file]});
-          toast('Compartilhado!',null,"ok");
-        }catch(e){
-          if(e.name==='AbortError')return;
-          console.error('Erro ao compartilhar (fallback p/ download):',e);
-          const url=URL.createObjectURL(blob);
-          const a=document.createElement('a');a.href=url;a.download=`recomendacao_${nome}.jpg`;a.click();
-          URL.revokeObjectURL(url);
-          toast(`Compartilhamento falhou (${e.name||'erro'}), imagem baixada em vez disso`,'#EF6C00',"warn");
-        }
-      } else {
-        const url=URL.createObjectURL(blob);
-        const a=document.createElement('a');a.href=url;a.download=`recomendacao_${nome}.jpg`;a.click();
-        URL.revokeObjectURL(url);
-        toast('Imagem baixada (compartilhamento não suportado neste dispositivo)','#EF6C00',"camera");
-      }
+    canvas.toBlob(blob=>{
+      if(!blob){toast('Não consegui gerar a imagem','#c62828',"erro");return;}
+      compartilharArquivo(blob,`recomendacao_${nome}.jpg`,'image/jpeg');
     },'image/jpeg',0.92);
   }catch(e){
     console.error('Erro ao compartilhar:',e);
@@ -4957,6 +5024,17 @@ async function enviarWhatsApp(){
   toast('Gerando imagem...',null,"relogio");
   try{
     const canvas=await obterRxCanvas();
+    // Celular com menu de compartilhar: envia a IMAGEM com o texto de legenda —
+    // o terapeuta escolhe WhatsApp e a conversa do paciente, sem baixar nada.
+    const suportaShare=navigator.share&&navigator.canShare&&navigator.canShare({files:[new File([new Blob()],'t.jpg',{type:'image/jpeg'})]});
+    if(suportaShare){
+      canvas.toBlob(blob=>{
+        if(!blob){toast('Não consegui gerar a imagem','#c62828',"erro");return;}
+        compartilharArquivo(blob,`recomendacao_${nome}.jpg`,'image/jpeg',gerarTextoRxWhatsApp());
+      },'image/jpeg',0.92);
+      return;
+    }
+    // Computador (sem menu nativo): mantém o caminho antigo — baixa e abre o wa.me
     const link=document.createElement('a');
     link.download=`recomendacao_${nome}.jpg`;
     link.href=canvas.toDataURL('image/jpeg',0.92);
@@ -5480,11 +5558,13 @@ async function marcarTriagemSel(){
 // ===== HELPERS =====
 const fm=val=>'R$ '+val.toFixed(2).replace('.',',');
 const fd=d=>{if(!d)return'-';const p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];};
+// Data LOCAL em YYYY-MM-DD (nunca toISOString: em UTC-3, depois das 21h pulava pro dia seguinte)
+const dLocal=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 
 // ===== INIT =====
 document.getElementById('dtHoje').textContent=new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-document.getElementById('sData').value=new Date().toISOString().split('T')[0];
-document.getElementById('rxDt').value=new Date().toISOString().split('T')[0];
+document.getElementById('sData').value=dLocal(new Date());
+document.getElementById('rxDt').value=dLocal(new Date());
 document.getElementById('agAno').value=new Date().getFullYear();
 document.getElementById('modP').addEventListener('click',e=>{if(e.target===e.currentTarget)fMod();});
 initDicas();
