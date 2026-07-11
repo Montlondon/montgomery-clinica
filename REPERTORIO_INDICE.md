@@ -18,7 +18,7 @@ As pastas seguem a **sequência de Fibonacci** — do núcleo (0) expandindo em 
 | Pastas `os/` `backup/` `Protótipo/` `obrasV4/` `.git/` `.claude/` | Apps servidos, backups, sistema |
 
 ## 🌀 00_Nucleo/ — identidade e índices mestres
-Biografia (`quem-e-montgomery.md`), índice do universo (`00-MONTGOMERY-UNIVERSE-INDICE.md`), prompts de todos os projetos, palavra-chave mestre `Montgomery`.
+Biografia (`quem-e-montgomery.md`), índice do universo (`00-MONTGOMERY-UNIVERSE-INDICE.md`), prompts de todos os projetos, palavra-chave mestre `Montgomery`, `Suplementos.md` (Plano de Saúde Integrativa e Cronofarmacologia 2026 — plano pessoal; fonte do futuro módulo Cronofarmacologia no OS).
 
 ## 💻 01_Codigo/ — schemas, protótipos e notas técnicas
 Schemas SQL, componentes (.jsx), `prototipos/` (arvore_vida_prototipo.html **ativo** + nucleo-prototipo.html), `_prompts_notas/`.
@@ -29,7 +29,7 @@ Schemas SQL, componentes (.jsx), `prototipos/` (arvore_vida_prototipo.html **ati
 ## 📚 03_Biblioteca/ — materiais de estudo (PDFs por tema)
 - `Acupuntura_MTC/` — Maciocia (Les principes), Acupuntura, Fórmulas Chinesas, Diagnóstico Integrado, Seitai
 - `MEQ/` — apostila completa, flipcharts, fichas ABC, contrato, imersões, livro digital
-- `Quiropraxia/` — Apostila de Quiro, Quiropraxia
+- `Quiropraxia/` — Apostila de Quiro, Quiropraxia, Sistema Nervoso e Subluxações Espinhais (fonte do futuro módulo na área Quiropraxia da Clínica)
 - `Auriculoterapia/` — Aurículo, auriculoefetivo (livro), ventosaterapia
 - `Freud/` — obra completa · `Imperador Amarelo/`
 

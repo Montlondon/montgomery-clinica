@@ -584,7 +584,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   <div class="sidebar-footer">
     Montgomery Magalhães<br>Saúde Integrativa<br>
     Itambacuri - MG<br>
-    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v1.2 &middot; 10/07</span>
+    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v1.3 &middot; 10/07</span>
   </div>
 </aside>
 
@@ -3810,9 +3810,9 @@ function renderDiagPainel(){
           return `<span onclick="toggleElementoSintoma('${nome}',${jsq(sx)})" style="cursor:pointer;font-size:10.5px;padding:3px 7px;border-radius:7px;border:1px solid ${on?e.cor:'var(--brd)'};background:${on?e.cor:'var(--cream)'};color:${on?'#fff':'var(--txt)'}">${on?'✓ ':''}${escHtml(sx)}</span>`;
         }).join('')}</div>`:''}
       </div>
-      <div style="margin-top:11px">
+      <div class="fg" style="margin-top:11px">
         <label style="font-size:12px;font-weight:700;color:${e.cor}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg> Observações clínicas — ${nome}</label>
-        <textarea rows="3" style="width:100%;margin-top:5px" placeholder="Anote achados, intensidade, evolução ou qualquer dado específico deste elemento neste paciente..." oninput="atualizarObsElemento('${nome}',this.value)">${escHtml(obsAtual)}</textarea>
+        <textarea rows="3" placeholder="Anote achados, intensidade, evolução ou qualquer dado específico deste elemento neste paciente..." oninput="atualizarObsElemento('${nome}',this.value)">${escHtml(obsAtual)}</textarea>
       </div>
     </div>`;
   });

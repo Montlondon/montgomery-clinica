@@ -327,6 +327,13 @@ Diretriz geral: opcao de enviar/compartilhar em JPG em tudo que for possivel ("a
 - REGRA para todo deploy da Clinica daqui em diante: bump da versao + data no rodape (buscar "v1." no index.html). Igual ao MMObras (linha ~376 la).
 - Futuro: mesmo padrao no Montgomery OS quando fizer sentido.
 
+### Diagnostico — caixa "Observacoes clinicas" embelezada (10/07) — FEITO (v1.3)
+- A caixa de "Observacoes clinicas — {elemento}" dentro dos cards dos 5 Elementos era um `<textarea>` solto (visual cru do navegador). Envolvida em `class="fg"` (index.html ~3813) — agora herda o mesmo estilo da caixa "Observacoes sobre o estado emocional" (borda, fundo bege #F0EBE0, cantos arredondados, brilho azul no foco, altura minima). Label colorido por elemento preservado.
+
+### AGENDADO — dois modulos a adicionar (pedido 10/07, sem pressa / economizar creditos)
+1. **Cronofarmacologia -> Montgomery OS.** Arquivo-fonte: `00_Nucleo/Suplementos.md` ("Plano de Saude Integrativa e Cronofarmacologia 2026" — plano PESSOAL do Montgomery). Contem: diretrizes de estilo de vida, correlacao viscerossomatica, e o protocolo cronofarmacologico por horario (Manha 08:00 / Almoco 12:00 / Noite 20:00) com doses e justificativas (NAC, Sertralina, Zinco, Omega 3, CoQ10+PQQ, Bacopa/Juba de Leao, Cardo Mariano, caldo de ossos...). Estruturar como modulo no OS (provavelmente junto de Nutricao/Sinais Vitais), com a linha do tempo do dia visual.
+2. **Sistema Nervoso e Subluxacoes Espinhais -> plataforma Clinica, area Quiropraxia.** Arquivo-fonte JA no repertorio: `03_Biblioteca/Quiropraxia/Sistema Nervoso e Subluxacoes Espinhais.md`. Estruturar como os outros modulos (conteudo clicavel -> ficha -> resumo/PDF), ligando aos Pontos do Corpo (raizes nervosas C1-S3 ja mapeadas) e ao Circulo 2 do Bagua (Quiropraxia/Seitai).
+
 ### Agenda — quadrante do mapa 100% automatico (plano B, se a v1.2 nao bastar)
 - v1.2 testa a "impressao digital" exata do Places no campo location (R. abreviado + CEP + Brasil, copiado do evento que o Montgomery validou na foto). Se o quadrante acender sozinho: resolvido.
 - Se NAO acender: o caminho definitivo e criar o evento pela API do Google Calendar (OAuth com escopo calendar via Supabase, que ja autentica com Google) — o evento nasce estruturado, sem abrir a tela de novo evento. Feature maior; planejar quando Montgomery quiser ("top das galaxias").

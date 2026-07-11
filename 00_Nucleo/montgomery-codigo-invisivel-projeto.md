@@ -29,8 +29,17 @@ Diferentes na forma, idênticas na essência: alinhar o ser humano com o padrão
 3. **Espaço e Fluxo** — *Feng Shui* (o Chi correndo pelo ambiente; a fonte de água do altar; a casa como campo de energia — pintura como ritual).
 4. **Tempo e Mudança** — *I Ching*, o Livro das Mutações (**Montgomery quer aprender do zero**): os 64 hexagramas, Yin/Yang, ler o momento e o que está querendo acontecer.
 5. **Número** — *Numerologia* (a linguagem matemática do cosmos; o mapa dele: Destino 7 · Expressão 8 · Alma 6; ponte direta com a Árvore da Vida).
-6. **Vibração e Manifestação** — *Abraham Hicks*, *Lei da Atração* e *Lei da Atração em Ação* (a emoção como bússola, o alinhamento vibracional, a criação deliberada).
-7. **Estratégia e Ação** — *A Arte da Guerra*, de Sun Tzu (**a ler ainda**): vencer sem lutar, conhecer o terreno e a si mesmo, a sabedoria do momento certo. A ação sábia como leitura das forças invisíveis de uma situação.
+6. **Vibração e Manifestação** — *Abraham Hicks*, *Lei da Atração*, *Lei da Atração em Ação* e *O Poder da Intenção* de Wayne Dyer (Montgomery leu na França, em francês: *Le Pouvoir de l'Intention*): a emoção como bússola, o alinhamento vibracional, a intenção como força criadora.
+7. **Estratégia e Ação** — *A Arte da Guerra* (Sun Tzu) e *Os 36 Estratagemas* (a irmã popular chinesa): vencer sem lutar, ler o terreno e a si mesmo, a sabedoria do momento e da manobra. Útil também para o MMObras.
+8. **Caminho e Conduta (raiz chinesa)** — *Tao Te Ching* (Lao Tzu — o Tao, o wu wei, a água que vence sem forçar; é a raiz de onde brotam o I Ching e o Feng Shui) e *Confúcio* (a harmonia pela conduta justa, as relações, o autocultivo).
+
+### Biblioteca viva — o acervo do Montgomery (fonte real)
+Descoberta de 06/07: este projeto vem sendo colecionado pelo Montgomery desde ~2010. Já vive na pasta `Dropbox/Espiritualidade` (e em `Dropbox/livros/Cabalá`, `Dropbox/Kabbalah`, `Dropbox/IMANDropbox/Filosofia`), entre muitos outros:
+- **Já no projeto:** Um Curso em Milagres (o mesmo do altar), O Poder do Agora (Tolle), Quem Somos Nós (filme), The Secret / Lei da Atração.
+- **Somam ao acervo:** As Sete Leis Espirituais (Deepak Chopra), Wayne Dyer, Louise Hay (Você Pode Curar Sua Vida), Napoleon Hill (Pense e Enriqueça), O Homem Mais Rico da Babilônia, Og Mandino, O Poder do Pensamento Positivo.
+- **Energia e prática:** Reiki, Chakras, radiestesia (pêndulos), Agni Yoga, Mãos de Luz, meditação.
+- **Místicos e tradições:** Rumi, Saint-Germain, Allan Kardec (espiritismo), Cabalá (vários), Filosofia Oriental, Wesak.
+Este acervo é a matéria-prima do projeto — fonte do próprio Montgomery, não conteúdo inventado. Ler sob demanda (via conector Dropbox) quando uma trilha pedir.
 
 ### Como Claude ensina (o coração deste projeto)
 - **Do zero e por camadas**, no ritmo dele. Nunca "isso é avançado demais".
