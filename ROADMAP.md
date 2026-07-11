@@ -334,6 +334,12 @@ Diretriz geral: opcao de enviar/compartilhar em JPG em tudo que for possivel ("a
 1. **Cronofarmacologia -> Montgomery OS.** Arquivo-fonte: `00_Nucleo/Suplementos.md` ("Plano de Saude Integrativa e Cronofarmacologia 2026" — plano PESSOAL do Montgomery). Contem: diretrizes de estilo de vida, correlacao viscerossomatica, e o protocolo cronofarmacologico por horario (Manha 08:00 / Almoco 12:00 / Noite 20:00) com doses e justificativas (NAC, Sertralina, Zinco, Omega 3, CoQ10+PQQ, Bacopa/Juba de Leao, Cardo Mariano, caldo de ossos...). Estruturar como modulo no OS (provavelmente junto de Nutricao/Sinais Vitais), com a linha do tempo do dia visual.
 2. **Sistema Nervoso e Subluxacoes Espinhais -> plataforma Clinica, area Quiropraxia.** Arquivo-fonte JA no repertorio: `03_Biblioteca/Quiropraxia/Sistema Nervoso e Subluxacoes Espinhais.md`. Estruturar como os outros modulos (conteudo clicavel -> ficha -> resumo/PDF), ligando aos Pontos do Corpo (raizes nervosas C1-S3 ja mapeadas) e ao Circulo 2 do Bagua (Quiropraxia/Seitai).
 
+### Pulso e Lingua no Diagnostico Integrado — decisao de 10/07
+- **ORDEM CLINICA DEFINIDA pelo Montgomery** (a sequencia em que ele examina): apos a Calculadora IMC vem **1. Pulso -> 2. Lingua -> 3. Orelha (Auriculoterapia)** -> depois 5 Elementos e o resto. Reordenar as secoes do Diagnostico Integrado quando o Pulso entrar.
+- **Pulso (opcao 1 escolhida):** Claude monta o modelo — proposta pronta em `02_Arvore/PROPOSTA_PULSO.md` (28 pulsos classicos + posicoes Cun/Guan/Chi + comportamento na plataforma). Aguardando revisao do Montgomery (3 perguntas no fim do doc) antes de implementar.
+- **Lingua: AGENDADA** — material atual (`C:\Dropbox\IMANDropbox\Linguas\`) sao fotos escaneadas, precisa OCR (pesado). Esperar material mais leve ou fazer OCR quando houver folga de creditos.
+- v1.4 (10/07): caixa "Observacoes clinicas — Auriculoterapia" no card da ficha (auriculoObs: salva, restaura ao editar, sai no PDF).
+
 ### Agenda — quadrante do mapa 100% automatico (plano B, se a v1.2 nao bastar)
 - v1.2 testa a "impressao digital" exata do Places no campo location (R. abreviado + CEP + Brasil, copiado do evento que o Montgomery validou na foto). Se o quadrante acender sozinho: resolvido.
 - Se NAO acender: o caminho definitivo e criar o evento pela API do Google Calendar (OAuth com escopo calendar via Supabase, que ja autentica com Google) — o evento nasce estruturado, sem abrir a tela de novo evento. Feature maior; planejar quando Montgomery quiser ("top das galaxias").
