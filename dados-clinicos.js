@@ -2244,3 +2244,44 @@ const psicanaliseTemas = [
   }
 ];
 const psicanaliseTemasFlat=psicanaliseTemas.flatMap(c=>c.itens.map(i=>({...i,categoria:c.categoria})));
+
+/* ===== PULSOLOGIA MTC — 28 pulsos clássicos (proposta aprovada 10/07, PROPOSTA_PULSO.md) ===== */
+const pulsoPosicoes={
+  'E-cun':{punho:'Esquerdo',pos:'Cun',orgaos:'Coração / Intestino Delgado'},
+  'E-guan':{punho:'Esquerdo',pos:'Guan',orgaos:'Fígado / Vesícula Biliar'},
+  'E-chi':{punho:'Esquerdo',pos:'Chi',orgaos:'Rim Yin (Água)'},
+  'D-cun':{punho:'Direito',pos:'Cun',orgaos:'Pulmão / Intestino Grosso'},
+  'D-guan':{punho:'Direito',pos:'Guan',orgaos:'Baço / Estômago'},
+  'D-chi':{punho:'Direito',pos:'Chi',orgaos:'Rim Yang (Ming Men)'}
+};
+const pulsosMTC=[
+  {id:'fu',nome:'Flutuante',pinyin:'Fu',comum:true,cat:'Profundidade',qualidade:'Sente-se ao toque leve, some ao pressionar',indica:'Invasão externa (Vento); ou Yin deficiente com Yang flutuando'},
+  {id:'chen',nome:'Profundo',pinyin:'Chen',comum:true,cat:'Profundidade',qualidade:'Só aparece na pressão forte',indica:'Padrão interno; estagnação ou deficiência de Yang'},
+  {id:'shu',nome:'Rápido',pinyin:'Shu',comum:true,cat:'Ritmo',qualidade:'Mais de 5 batidas por ciclo respiratório',indica:'Calor'},
+  {id:'chi2',nome:'Lento',pinyin:'Chi',comum:true,cat:'Ritmo',qualidade:'Menos de 4 batidas por ciclo respiratório',indica:'Frio'},
+  {id:'xu',nome:'Vazio',pinyin:'Xu',comum:true,cat:'Força',qualidade:'Sem força nos três níveis',indica:'Deficiência de Qi'},
+  {id:'shi',nome:'Cheio',pinyin:'Shi',comum:true,cat:'Força',qualidade:'Forte nos três níveis',indica:'Padrão de excesso'},
+  {id:'xi',nome:'Fino',pinyin:'Xi',comum:true,cat:'Força',qualidade:'Como um fio, mas nítido',indica:'Deficiência de Sangue ou de Yin'},
+  {id:'ruo',nome:'Fraco',pinyin:'Ruo',comum:true,cat:'Força',qualidade:'Profundo e sem força',indica:'Deficiência de Yang/Qi'},
+  {id:'hua',nome:'Escorregadio',pinyin:'Hua',comum:true,cat:'Forma',qualidade:'Como pérolas rolando num prato',indica:'Umidade, Fleuma, estagnação de alimentos, gravidez'},
+  {id:'se',nome:'Áspero / Rugoso',pinyin:'Se',comum:true,cat:'Forma',qualidade:'Como faca raspando bambu',indica:'Deficiência de Sangue; estagnação de Sangue'},
+  {id:'xian',nome:'Em corda',pinyin:'Xian',comum:true,cat:'Forma',qualidade:'Como corda de violino',indica:'Padrões do Fígado, dor, Fleuma'},
+  {id:'jin',nome:'Tenso',pinyin:'Jin',comum:true,cat:'Forma',qualidade:'Como corda esticada e retorcida',indica:'Frio, dor'},
+  {id:'cu',nome:'Apressado',pinyin:'Cu',comum:false,cat:'Ritmo',qualidade:'Rápido com pausas irregulares',indica:'Calor com estagnação de Qi'},
+  {id:'jie',nome:'Atado',pinyin:'Jie',comum:false,cat:'Ritmo',qualidade:'Lento com pausas irregulares',indica:'Frio com estagnação'},
+  {id:'dai',nome:'Intermitente',pinyin:'Dai',comum:false,cat:'Ritmo',qualidade:'Pausas em intervalos regulares',indica:'Qi dos órgãos esgotado (atenção: Coração)'},
+  {id:'fuoculto',nome:'Escondido',pinyin:'Fu (oculto)',comum:false,cat:'Profundidade',qualidade:'Mais profundo que o Chen, junto ao osso',indica:'Frio interno grave, dor intensa'},
+  {id:'lao',nome:'Firme',pinyin:'Lao',comum:false,cat:'Profundidade',qualidade:'Profundo, grande e forte',indica:'Frio interno com estagnação'},
+  {id:'wei',nome:'Minúsculo',pinyin:'Wei',comum:false,cat:'Força',qualidade:'Quase imperceptível',indica:'Colapso de Qi/Yang'},
+  {id:'da',nome:'Grande',pinyin:'Da',comum:false,cat:'Força',qualidade:'Amplo, largo sob os dedos',indica:'Calor no Estômago/Intestinos'},
+  {id:'hong',nome:'Transbordante',pinyin:'Hong',comum:false,cat:'Força',qualidade:'Cheio na chegada, vazio na saída',indica:'Calor pleno'},
+  {id:'san',nome:'Disperso',pinyin:'San',comum:false,cat:'Força',qualidade:'Sem raiz, some ao pressionar',indica:'Qi do Rim esgotado (quadro grave)'},
+  {id:'ru',nome:'Mole',pinyin:'Ru',comum:false,cat:'Forma',qualidade:'Flutuante e fino, sem força',indica:'Umidade com deficiência de Baço'},
+  {id:'ge',nome:'Couro',pinyin:'Ge',comum:false,cat:'Forma',qualidade:'Como pele de tambor: duro fora, vazio dentro',indica:'Perda de Sangue/essência'},
+  {id:'dong',nome:'Movediço',pinyin:'Dong',comum:false,cat:'Forma',qualidade:'Como feijão saltando, sem raiz',indica:'Dor intensa, choque, susto'},
+  {id:'duan',nome:'Curto',pinyin:'Duan',comum:false,cat:'Forma',qualidade:'Não preenche as três posições',indica:'Deficiência grave de Qi'},
+  {id:'chang',nome:'Longo',pinyin:'Chang',comum:false,cat:'Forma',qualidade:'Ultrapassa as três posições',indica:'Excesso, Calor de Fígado (se suave: constituição forte)'},
+  {id:'ji',nome:'Rápido-agitado',pinyin:'Ji',comum:false,cat:'Ritmo',qualidade:'7 ou mais batidas por ciclo',indica:'Yang extremo, Yin esgotado'},
+  {id:'kou',nome:'Oco',pinyin:'Kou',comum:false,cat:'Forma',qualidade:'Flutuante, vazio no meio (talo de cebolinha)',indica:'Perda aguda de Sangue'}
+];
+const pulsosPorId={};pulsosMTC.forEach(p=>pulsosPorId[p.id]=p);

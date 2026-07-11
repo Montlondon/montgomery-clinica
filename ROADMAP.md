@@ -336,7 +336,8 @@ Diretriz geral: opcao de enviar/compartilhar em JPG em tudo que for possivel ("a
 
 ### Pulso e Lingua no Diagnostico Integrado — decisao de 10/07
 - **ORDEM CLINICA DEFINIDA pelo Montgomery** (a sequencia em que ele examina): apos a Calculadora IMC vem **1. Pulso -> 2. Lingua -> 3. Orelha (Auriculoterapia)** -> depois 5 Elementos e o resto. Reordenar as secoes do Diagnostico Integrado quando o Pulso entrar.
-- **Pulso (opcao 1 escolhida):** Claude monta o modelo — proposta pronta em `02_Arvore/PROPOSTA_PULSO.md` (28 pulsos classicos + posicoes Cun/Guan/Chi + comportamento na plataforma). Aguardando revisao do Montgomery (3 perguntas no fim do doc) antes de implementar.
+- **Pulso — IMPLEMENTADO (v1.5, 10/07):** modelo de `02_Arvore/PROPOSTA_PULSO.md` aprovado pelo Montgomery (punhos clicaveis SIM; 12 comuns como chips + 16 restantes via busca). Dados em `dados-clinicos.js` (`pulsosMTC`/`pulsoPosicoes`). Card entre a busca de paciente e os 5 Elementos; punhos SVG com Cun/Guan/Chi clicaveis; card no resumo com caixa "Observacoes clinicas — Pulso"; salvo no diagnostico (pulso/pulsoPos/pulsoObs), restaurado ao editar, impresso no PDF (primeiro bloco). Fase 2 futura: pulso alimentar o motor de sugestoes cruzadas.
+- **PENDENTE de reordenar:** mover o card da Auriculoterapia (orelha) para logo depois de onde a Lingua vai entrar (ordem clinica: IMC -> Pulso -> Lingua -> Orelha -> 5 Elementos). Fazer quando a Lingua entrar, pra mexer uma vez so.
 - **Lingua: AGENDADA** — material atual (`C:\Dropbox\IMANDropbox\Linguas\`) sao fotos escaneadas, precisa OCR (pesado). Esperar material mais leve ou fazer OCR quando houver folga de creditos.
 - v1.4 (10/07): caixa "Observacoes clinicas — Auriculoterapia" no card da ficha (auriculoObs: salva, restaura ao editar, sai no PDF).
 
