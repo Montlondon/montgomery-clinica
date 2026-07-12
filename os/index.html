@@ -562,6 +562,50 @@ tr:hover td{background:rgba(201,168,76,0.05)}
       <div class="card"><h3>Medicina Chinesa — 5 Elementos</h3><div class="sub">A tradição que liga a metafísica ao corpo e à clínica. Vive na Árvore da Vida e no corpo vitruviano.</div></div>
     </div>
   </div>
+  <div class="bloco">
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="6.3"/><circle cx="12" cy="12" r="9.6"/></svg>A Leitura em 4 Camadas</h2>
+    <p style="font-size:0.78rem;color:var(--cinza);margin-bottom:12px">Regra de ouro: a metafísica não substitui a escuta — ela organiza o que a escuta trouxe. Primeiro o paciente fala; depois a teia. E nunca substitui médico: sintoma físico persistente vai ao médico E entra no mapa.</p>
+    <div class="cards">
+      <div class="card"><h3>1 · Corpo — o que dói</h3><div class="sub">Onde no corpo? Qual órgão, tecido, sentido? Em que estação piora? A tabela das correspondências aponta o elemento.</div></div>
+      <div class="card"><h3>2 · Emoção — o que mora ali</h3><div class="sub">Qual a emoção de desequilíbrio daquele elemento? Às vezes negada ("raiva eu não tenho") — o que se nega, se afirma: material para a Psicanálise.</div></div>
+      <div class="card"><h3>3 · Símbolo — a imagem trazida</h3><div class="sub">"Um nó na garganta", "afogado em trabalho". A palavra escolhida nunca é por acaso — o símbolo é o dialeto do inconsciente e confirma (ou corrige) as camadas 1 e 2.</div></div>
+      <div class="card"><h3>4 · Lei — o padrão que se repete</h3><div class="sub">Qual lei hermética o padrão demonstra? A queixa vira aprendizado: não "por que isso acontece comigo", mas "o que essa lei está me mostrando". A camada da virada.</div></div>
+    </div>
+    <p style="font-size:0.75rem;color:var(--cinza);margin-top:10px">Quatro portas, uma teia: Montgomery entra pelo corpo e pela lei; Vanessa pelo símbolo e pelo floral.</p>
+  </div>
+  <div class="bloco">
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4"/><path d="M18 3l3 3-9 9H9v-3z"/></svg>Mapa Metafísico do Paciente</h2>
+    <p style="font-size:0.78rem;color:var(--cinza);margin-bottom:12px">Documento vivo por pessoa, alimentado a cada sessão. Quando um símbolo muda, a pessoa mudou.</p>
+    <div class="linha">
+      <div class="fg"><label>Perfil</label><select id="mfPerfil" onchange="mfCarregar()"></select></div>
+      <div class="fg"><label>Elemento dominante (constituição)</label><select id="mfDominante"><option value="">—</option><option>Madeira</option><option>Fogo</option><option>Terra</option><option>Metal</option><option>Água</option></select></div>
+      <div class="fg"><label>Elemento em crise (queixa atual)</label><select id="mfCrise"><option value="">—</option><option>Madeira</option><option>Fogo</option><option>Terra</option><option>Metal</option><option>Água</option></select></div>
+    </div>
+    <div class="linha">
+      <div class="fg"><label>Ciclo entre eles</label><input id="mfCiclo" placeholder="geração ou dominância? ex.: Terra não nutre a Água"></div>
+      <div class="fg"><label>Lei em trabalho</label><select id="mfLei"><option value="">—</option><option>Mentalismo</option><option>Correspondência</option><option>Vibração</option><option>Polaridade</option><option>Ritmo</option><option>Causa e Efeito</option><option>Gênero</option></select></div>
+    </div>
+    <div class="fg"><label>Prescrição da teia</label><input id="mfPrescricao" placeholder="floral, cor, sabor a observar, estação de atenção — a escolha final é sempre clínica"></div>
+    <div class="fg"><label>Símbolos recorrentes (o vocabulário-imagem, sessão a sessão)</label>
+      <div style="display:flex;gap:8px">
+        <input id="mfSimbolo" placeholder='ex.: "afogada em trabalho"' style="flex:1">
+        <button class="btn" onclick="mfAddSimbolo()">Adicionar</button>
+      </div>
+      <div id="mfSimbolos" style="margin-top:8px"></div>
+    </div>
+    <button class="btn" onclick="salvarMapaMetafisico()">Salvar mapa</button> <span id="mfMsg" style="font-size:0.8rem;color:var(--azul)"></span>
+  </div>
+  <div class="bloco">
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Exemplo de leitura (paciente fictícia)</h2>
+    <div style="font-size:0.82rem;line-height:1.6">
+      Mulher, 40 anos, "afogada em trabalho", insônia, lombar travada, piora no inverno.<br>
+      <strong>Corpo:</strong> lombar + insônia + inverno → Água (Rim).
+      <strong>Emoção:</strong> medo de faltar dinheiro, herdado da mãe.
+      <strong>Símbolo:</strong> "afogada" — ela mesma escolheu uma palavra de Água; a teia confirmada pela boca da paciente.
+      <strong>Lei:</strong> Mentalismo — o pensamento-raiz "vai faltar" cria a vida em modo escassez.<br>
+      <span style="color:var(--cinza)">Ficha: crise em Água; ciclo: Terra (mãe, preocupação) não nutre a Água. Floral: Aspen ou Mimulus. Trabalho: trocar a raiz "vai faltar" por "eu sustento". Se o símbolo "afogada" um dia virar "nadando", a virada aconteceu.</span>
+    </div>
+  </div>
 </section>
 
 <!-- MAPA DO SISTEMA -->
@@ -655,7 +699,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== ARMAZENAMENTO =====
-const K = {perfis:'mos_perfis', vitais:'mos_vitais', protocolos:'mos_protocolos', exames:'mos_exames', coluna:'mos_coluna', arvore:'mos_arvore', nutricao:'mos_nutricao'};
+const K = {perfis:'mos_perfis', vitais:'mos_vitais', protocolos:'mos_protocolos', exames:'mos_exames', coluna:'mos_coluna', arvore:'mos_arvore', nutricao:'mos_nutricao', metafisica:'mos_metafisica'};
 function ler(k){try{return JSON.parse(localStorage.getItem(k))||[]}catch(e){return[]}}
 function gravar(k,v){localStorage.setItem(k,JSON.stringify(v))}
 function uid(){return 'id'+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
@@ -739,7 +783,7 @@ function renderPerfis(){
   }).join('');
   // selects de perfil em todos os formulários
   const opts=perfis.map(p=>'<option value="'+p.id+'">'+esc(p.nome)+'</option>').join('');
-  ['vtPerfil','prPerfil','exPerfil','nuPerfil','imcPerfil'].forEach(id=>{const s=document.getElementById(id);if(!s)return;const v=s.value;s.innerHTML=opts;if(v)s.value=v;});
+  ['vtPerfil','prPerfil','exPerfil','nuPerfil','imcPerfil','mfPerfil'].forEach(id=>{const s=document.getElementById(id);if(!s)return;const v=s.value;s.innerHTML=opts;if(v)s.value=v;});
   const optsTodos='<option value="">Todos os perfis</option>'+opts;
   ['vtFiltroPerfil','prFiltroPerfil','exFiltroPerfil'].forEach(id=>{const s=document.getElementById(id);const v=s.value;s.innerHTML=optsTodos;if(v)s.value=v;});
 }
@@ -1007,7 +1051,7 @@ function renderExames(){
 // ===== BACKUP =====
 function exportarBackup(){
   const dados={app:'Montgomery OS',versao:'Fase 1',exportadoEm:new Date().toISOString(),
-    perfis:ler(K.perfis),vitais:ler(K.vitais),protocolos:ler(K.protocolos),exames:ler(K.exames),coluna:ler(K.coluna),arvore:ler(K.arvore),nutricao:ler(K.nutricao)};
+    perfis:ler(K.perfis),vitais:ler(K.vitais),protocolos:ler(K.protocolos),exames:ler(K.exames),coluna:ler(K.coluna),arvore:ler(K.arvore),nutricao:ler(K.nutricao),metafisica:mfLerTudo()};
   const blob=new Blob([JSON.stringify(dados,null,2)],{type:'application/json'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
@@ -1026,8 +1070,9 @@ function importarBackup(ev){
       if(!confirm('Importar backup de '+(d.exportadoEm?fmtData(d.exportadoEm.slice(0,16)):'data desconhecida')+'?\nIsto SUBSTITUI os dados atuais deste aparelho.'))return;
       gravar(K.perfis,d.perfis||[]);gravar(K.vitais,d.vitais||[]);
       gravar(K.protocolos,d.protocolos||[]);gravar(K.exames,d.exames||[]);
-      gravar(K.coluna,d.coluna||[]);gravar(K.arvore,d.arvore||[]);gravar(K.nutricao,d.nutricao||[]);
+      gravar(K.coluna,d.coluna||[]);gravar(K.arvore,d.arvore||[]);gravar(K.nutricao,d.nutricao||[]);gravar(K.metafisica,d.metafisica||{});
       document.getElementById('bkMsg').textContent='✓ Backup importado.';
+      mfPerfilAtual=null;
       renderTudo();
     }catch(err){document.getElementById('bkMsg').textContent='Erro: '+err.message;}
   };
@@ -1359,7 +1404,7 @@ document.addEventListener('click',e=>{
 // ===== MAPA DO SISTEMA =====
 const MODULOS=[
   {fase:'Raiz — Metafísica (viva)',itens:[
-    ['','Metafísica','A camada invisível que liga tudo: 7 Leis Herméticas, Kabbalah, 5 Elementos e as correspondências — o Cubo de Metatron como símbolo','vivo','metafisica']]},
+    ['','Metafísica','A camada invisível que liga tudo: 7 Leis Herméticas, Kabbalah, 5 Elementos, a Leitura em 4 Camadas e o Mapa Metafísico do Paciente — o Cubo de Metatron como símbolo','vivo','metafisica']]},
   {fase:'Fase 1 — Fundação (viva ✅)',itens:[
     ['🧬','Identidade & Genética','Perfis da família, histórico, alergias, predisposições','vivo','perfis'],
     ['🫀','Sinais Vitais & Biométricos','Pressão, glicemia, SpO₂, peso, semáforo e evolução','vivo','vitais'],
@@ -1469,6 +1514,57 @@ function renderMetafisica(){
       '<div style="font-weight:600;color:var(--azul);font-size:0.88rem">'+(i+1)+'. '+l[0]+'</div>'+
       '<div style="font-style:italic;color:var(--cinza);font-size:0.78rem;margin:2px 0">"'+l[1]+'"</div>'+
       '<div style="font-size:0.8rem">'+l[2]+'</div></div>').join('');
+  mfCarregar();
+}
+
+// ===== MAPA METAFÍSICO DO PACIENTE (nível 8 do MAPA_METAFISICA.md) =====
+let mfPerfilAtual=null;
+function mfLerTudo(){try{return JSON.parse(localStorage.getItem(K.metafisica))||{}}catch(e){return{}}}
+function mfFicha(pid){return mfLerTudo()[pid]||{dominante:'',crise:'',ciclo:'',lei:'',prescricao:'',simbolos:[]}}
+function mfGravarFicha(pid,f){const t=mfLerTudo();t[pid]=f;gravar(K.metafisica,t)}
+function mfCarregar(force){
+  const sel=document.getElementById('mfPerfil');
+  if(!sel||!sel.value)return;
+  if(!force&&sel.value===mfPerfilAtual)return;
+  mfPerfilAtual=sel.value;
+  const f=mfFicha(sel.value);
+  document.getElementById('mfDominante').value=f.dominante||'';
+  document.getElementById('mfCrise').value=f.crise||'';
+  document.getElementById('mfCiclo').value=f.ciclo||'';
+  document.getElementById('mfLei').value=f.lei||'';
+  document.getElementById('mfPrescricao').value=f.prescricao||'';
+  mfRenderSimbolos(f.simbolos||[]);
+}
+function mfRenderSimbolos(arr){
+  const el=document.getElementById('mfSimbolos');if(!el)return;
+  el.innerHTML=arr.length?arr.map((s,i)=>
+    '<div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(201,168,76,0.15);font-size:0.82rem">'+
+    '<span>"'+esc(s.txt)+'" <span style="color:var(--cinza);font-size:0.72rem">· '+fmtData(s.data)+'</span></span>'+
+    '<button class="btn" style="padding:2px 8px;font-size:0.7rem" onclick="mfDelSimbolo('+i+')">remover</button></div>').join('')
+  :'<div class="vazio" style="padding:8px">Nenhum símbolo registrado ainda. Colecione as imagens que o paciente traz — quando um símbolo muda, a pessoa mudou.</div>';
+}
+function mfAddSimbolo(){
+  const inp=document.getElementById('mfSimbolo'),pid=document.getElementById('mfPerfil').value;
+  const txt=inp.value.trim();if(!txt||!pid)return;
+  const f=mfFicha(pid);f.simbolos=f.simbolos||[];f.simbolos.push({data:hoje(),txt});
+  mfGravarFicha(pid,f);inp.value='';mfRenderSimbolos(f.simbolos);
+}
+function mfDelSimbolo(i){
+  const pid=document.getElementById('mfPerfil').value;if(!pid)return;
+  const f=mfFicha(pid);(f.simbolos||[]).splice(i,1);
+  mfGravarFicha(pid,f);mfRenderSimbolos(f.simbolos);
+}
+function salvarMapaMetafisico(){
+  const pid=document.getElementById('mfPerfil').value;if(!pid)return;
+  const f=mfFicha(pid);
+  f.dominante=document.getElementById('mfDominante').value;
+  f.crise=document.getElementById('mfCrise').value;
+  f.ciclo=document.getElementById('mfCiclo').value.trim();
+  f.lei=document.getElementById('mfLei').value;
+  f.prescricao=document.getElementById('mfPrescricao').value.trim();
+  mfGravarFicha(pid,f);
+  document.getElementById('mfMsg').textContent='✓ Mapa salvo.';
+  setTimeout(()=>document.getElementById('mfMsg').textContent='',1500);
 }
 
 // ===== RENDER GERAL =====
