@@ -574,6 +574,50 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     <p style="font-size:0.75rem;color:var(--cinza);margin-top:10px">Quatro portas, uma teia: Montgomery entra pelo corpo e pela lei; Vanessa pelo símbolo e pelo floral.</p>
   </div>
   <div class="bloco">
+    <style>.mfZona{cursor:pointer;transition:all .25s}.mfZona:hover path,.mfZona:hover circle,.mfZona:hover polygon{fill-opacity:.55}.mfZona.mfAtiva path,.mfZona.mfAtiva circle,.mfZona.mfAtiva polygon{fill-opacity:.6;stroke-width:2.2}</style>
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="7" r="2"/><path d="M12 9v5M12 14l-3 6M12 14l3 6M12 10.5 5 9M12 10.5 19 9"/></svg>O Corpo Vitruviano — porta de entrada</h2>
+    <p style="font-size:0.78rem;color:var(--cinza);margin-bottom:10px">Clique onde dói. O corpo aponta o elemento; o elemento abre a teia inteira.</p>
+    <div style="display:flex;gap:var(--f4);flex-wrap:wrap;align-items:flex-start">
+      <div style="flex:0 0 340px;max-width:100%;margin:0 auto">
+        <svg viewBox="0 0 600 620" style="width:100%;max-width:340px;border-radius:12px;background:radial-gradient(circle at 50% 45%,#0d1a2e 0%,#060b14 100%)">
+          <circle cx="300" cy="300" r="256" fill="none" stroke="#3d7db8" stroke-width="0.8" opacity="0.5"/>
+          <rect x="98" y="98" width="404" height="404" fill="none" stroke="#3d7db8" stroke-width="0.6" opacity="0.3"/>
+          <g id="mfCorpoG" stroke="#9fd8ff" stroke-width="1.4" fill-opacity="0.28">
+            <g class="mfZona" data-el="Fogo" onclick="mfElemento('Fogo')">
+              <circle cx="300" cy="102" r="35" fill="#e06a5a"/>
+            </g>
+            <path d="M252,152 L348,152 L338,332 L262,332 Z" fill="#3d7db8" fill-opacity="0.12" stroke="#9fd8ff"/>
+            <rect x="288" y="132" width="24" height="22" fill="#3d7db8" fill-opacity="0.12" stroke="#9fd8ff"/>
+            <g class="mfZona" data-el="Madeira" onclick="mfElemento('Madeira')">
+              <polygon points="252,158 252,192 76,198 76,166" fill="#5cb87a"/>
+              <circle cx="64" cy="182" r="13" fill="#5cb87a"/>
+            </g>
+            <g class="mfZona" data-el="Terra" onclick="mfElemento('Terra')">
+              <polygon points="348,158 348,192 524,198 524,166" fill="#d9b84a"/>
+              <circle cx="536" cy="182" r="13" fill="#d9b84a"/>
+            </g>
+            <g class="mfZona" data-el="Água" onclick="mfElemento('Água')">
+              <polygon points="262,332 299,338 242,562 198,550" fill="#4a7db8"/>
+              <ellipse cx="214" cy="566" rx="18" ry="10" fill="#4a7db8"/>
+            </g>
+            <g class="mfZona" data-el="Metal" onclick="mfElemento('Metal')">
+              <polygon points="301,338 338,332 402,550 358,562" fill="#cfd8dc"/>
+              <ellipse cx="386" cy="566" rx="18" ry="10" fill="#cfd8dc"/>
+            </g>
+          </g>
+          <g id="mfLabels" font-size="15" fill="#e8f4ff" opacity="0.85" text-anchor="middle" font-family="Lora,serif"></g>
+        </svg>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:8px">
+          <span id="mfVistaTxt" style="font-size:0.68rem;color:var(--cinza)"></span>
+          <button class="btn" style="padding:4px 10px;font-size:0.7rem" onclick="mfToggleVista()">Inverter visão</button>
+        </div>
+      </div>
+      <div style="flex:1;min-width:280px" id="mfCorpoPainel">
+        <div class="vazio">Clique numa região do corpo.<br><br>Visto de costas, o lado do desenho é o lado real do corpo — sem espelhamento. Fogo na cabeça; Madeira no braço esquerdo (a energia yang da manhã entra por ali); Terra no braço direito; Metal na perna direita; Água na perna esquerda.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bloco" id="mfFichaBloco">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-4"/><path d="M18 3l3 3-9 9H9v-3z"/></svg>Mapa Metafísico do Paciente</h2>
     <p style="font-size:0.78rem;color:var(--cinza);margin-bottom:12px">Documento vivo por pessoa, alimentado a cada sessão. Quando um símbolo muda, a pessoa mudou.</p>
     <div class="linha">
@@ -1514,7 +1558,58 @@ function renderMetafisica(){
       '<div style="font-weight:600;color:var(--azul);font-size:0.88rem">'+(i+1)+'. '+l[0]+'</div>'+
       '<div style="font-style:italic;color:var(--cinza);font-size:0.78rem;margin:2px 0">"'+l[1]+'"</div>'+
       '<div style="font-size:0.8rem">'+l[2]+'</div></div>').join('');
+  mfRenderLabels();
   mfCarregar();
+}
+
+// ===== CORPO VITRUVIANO — porta de entrada da teia (nível 8) =====
+const MF_TEIA={
+  'Madeira':{cor:'#5cb87a',zona:'braço esquerdo',orgao:'Fígado',viscera:'Vesícula Biliar',emocao:'Raiva, frustração',virtude:'Visão, decisão, crescimento',estacao:'Primavera',sentido:'Olhos / visão',tecido:'Tendões',corNome:'Verde',sabor:'Ácido',planeta:'Júpiter',floral:'Holly, Impatiens, Willow',lei:'Causa e Efeito'},
+  'Fogo':{cor:'#e06a5a',zona:'cabeça',orgao:'Coração',viscera:'Intestino Delgado',emocao:'Euforia, ansiedade',virtude:'Alegria serena, presença',estacao:'Verão',sentido:'Língua / fala',tecido:'Vasos',corNome:'Vermelho',sabor:'Amargo',planeta:'Sol / Marte',floral:'Agrimony, Vervain',lei:'Vibração'},
+  'Terra':{cor:'#d9b84a',zona:'braço direito',orgao:'Baço-Pâncreas',viscera:'Estômago',emocao:'Preocupação, ruminação',virtude:'Confiança, nutrição, centro',estacao:'Fim de verão (transições)',sentido:'Boca / paladar',tecido:'Músculos',corNome:'Amarelo',sabor:'Doce',planeta:'Saturno',floral:'Red Chestnut, White Chestnut',lei:'Ritmo'},
+  'Metal':{cor:'#cfd8dc',zona:'perna direita',orgao:'Pulmão',viscera:'Intestino Grosso',emocao:'Tristeza, apego',virtude:'Desapego, inspiração',estacao:'Outono',sentido:'Nariz / olfato',tecido:'Pele e pelos',corNome:'Branco',sabor:'Picante',planeta:'Vênus / Mercúrio',floral:'Water Violet, Walnut',lei:'Polaridade'},
+  'Água':{cor:'#4a7db8',zona:'perna esquerda',orgao:'Rim',viscera:'Bexiga',emocao:'Medo, pavor',virtude:'Vontade, sabedoria profunda',estacao:'Inverno',sentido:'Ouvidos / audição',tecido:'Ossos e medula',corNome:'Azul-escuro / preto',sabor:'Salgado',planeta:'Lua / Netuno',floral:'Mimulus, Aspen, Rock Rose',lei:'Mentalismo'}
+};
+let mfVista='costas';
+function mfRenderLabels(){
+  const g=document.getElementById('mfLabels');if(!g)return;
+  const costas=mfVista==='costas';
+  const lab=[['Fogo',300,42],['Madeira',costas?112:488,142],['Terra',costas?488:112,142],['Água',costas?150:450,600],['Metal',costas?450:150,600]];
+  g.innerHTML=lab.map(l=>'<text x="'+l[1]+'" y="'+l[2]+'">'+l[0]+'</text>').join('');
+  const corpo=document.getElementById('mfCorpoG');
+  if(corpo)corpo.setAttribute('transform',costas?'':'translate(600,0) scale(-1,1)');
+  const txt=document.getElementById('mfVistaTxt');
+  if(txt)txt.textContent=costas?'Visão do terapeuta — corpo DE COSTAS: o lado do desenho é o lado real.':'Corpo deitado de frente (decúbito dorsal) — imagem espelhada.';
+}
+function mfToggleVista(){mfVista=mfVista==='costas'?'frente':'costas';mfRenderLabels();}
+function mfElemento(el){
+  const t=MF_TEIA[el];if(!t)return;
+  document.querySelectorAll('.mfZona').forEach(z=>z.classList.toggle('mfAtiva',z.dataset.el===el));
+  const linha=(k,v,origem)=>'<div style="display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid rgba(201,168,76,0.12);font-size:0.8rem">'+
+    '<span style="color:var(--cinza)">'+k+(origem?' <span style="font-size:0.62rem;opacity:0.7">('+origem+')</span>':'')+'</span><span style="text-align:right">'+v+'</span></div>';
+  document.getElementById('mfCorpoPainel').innerHTML=
+    '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'+
+    '<span style="width:16px;height:16px;border-radius:50%;background:'+t.cor+';display:inline-block;box-shadow:0 0 10px '+t.cor+'"></span>'+
+    '<h2 style="font-family:Lora,serif;font-size:1.05rem;color:var(--azul);margin:0">'+el+'</h2>'+
+    '<span style="font-size:0.72rem;color:var(--cinza)">· '+t.zona+' (de costas)</span></div>'+
+    linha('Órgão (yin) / Víscera (yang)',t.orgao+' / '+t.viscera)+
+    linha('Emoção em desequilíbrio',t.emocao)+
+    linha('Virtude em equilíbrio',t.virtude)+
+    linha('Estação',t.estacao)+
+    linha('Sentido / abertura',t.sentido)+
+    linha('Tecido',t.tecido)+
+    linha('Cor · Sabor',t.corNome+' · '+t.sabor)+
+    linha('Planeta',t.planeta,'ocidental')+
+    linha('Floral de Bach',t.floral,'ponte nossa')+
+    linha('Lei Hermética',t.lei,'ponte nossa')+
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">'+
+    '<button class="btn" onclick="mfMarcar(\'mfCrise\',\''+el+'\')">Marcar como elemento em crise</button>'+
+    '<button class="btn" onclick="mfMarcar(\'mfDominante\',\''+el+'\')">Marcar como dominante</button></div>';
+}
+function mfMarcar(campo,el){
+  document.getElementById(campo).value=el;
+  salvarMapaMetafisico();
+  const b=document.getElementById('mfFichaBloco');if(b)b.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 // ===== MAPA METAFÍSICO DO PACIENTE (nível 8 do MAPA_METAFISICA.md) =====
