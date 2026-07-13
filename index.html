@@ -1619,10 +1619,22 @@ const STAT_ICO_SAVE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" 
 const SUPA_URL='https://eltjhrhrtuymejojxyhe.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsdGpocmhydHV5bWVqb2p4eWhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NDUxODcsImV4cCI6MjA5NjAyMTE4N30.cEgQrQ-Svr61s2O9JTLytqHEL8BpPYZWjS6ZCrAop58';
 
+// Retorna o access_token da sessão autenticada (Google login). Sem isso,
+// as chamadas ao PostgREST caem como role "anon" e o RLS bloqueia tudo
+// silenciosamente (200 com 0 linhas) — foi o que derrubou a tela de dados.
+async function supaAuthToken(){
+  try{
+    if(!_supaClient)return SUPA_KEY;
+    const {data:{session}}=await _supaClient.auth.getSession();
+    return session?.access_token||SUPA_KEY;
+  }catch(e){return SUPA_KEY;}
+}
+
 async function supaReq(method,table,body=null,params=''){
+  const token=await supaAuthToken();
   const res=await fetch(`${SUPA_URL}/rest/v1/${table}${params}`,{
     method,
-    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':method==='POST'?'return=minimal':''},
+    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json','Prefer':method==='POST'?'return=minimal':''},
     body:body?JSON.stringify(body):null
   });
   if(!res.ok){const e=await res.text();console.error('Supabase erro:',e);return null;}
@@ -1642,8 +1654,9 @@ async function dbGet(tabela,forcar=false){
   // páginas esperando a latência de rede 4-5 vezes em sequência).
   let primeiraPagina=[],total=null;
   try{
+    const _tok0=await supaAuthToken();
     const r0=await fetch(`${SUPA_URL}/rest/v1/${tabela}?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=0`,{
-      headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Prefer':'count=exact'}
+      headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+_tok0,'Prefer':'count=exact'}
     });
     if(r0.ok){
       primeiraPagina=(await r0.json()).map(row=>row.dados);
