@@ -344,3 +344,74 @@ Diretriz geral: opcao de enviar/compartilhar em JPG em tudo que for possivel ("a
 ### Agenda — quadrante do mapa 100% automatico (plano B, se a v1.2 nao bastar)
 - v1.2 testa a "impressao digital" exata do Places no campo location (R. abreviado + CEP + Brasil, copiado do evento que o Montgomery validou na foto). Se o quadrante acender sozinho: resolvido.
 - Se NAO acender: o caminho definitivo e criar o evento pela API do Google Calendar (OAuth com escopo calendar via Supabase, que ja autentica com Google) — o evento nasce estruturado, sem abrir a tela de novo evento. Feature maior; planejar quando Montgomery quiser ("top das galaxias").
+
+### Vitruviano na geometria sagrada — visao em camadas (13/07/2026)
+Montgomery aprovou a direcao: o Corpo Vitruviano do OS deve ter a FORMA REAL do
+desenho do Da Vinci, DE COSTAS (como ele se ve dentro da Merkabah), e crescer
+por camadas. PRIMEIRO acertar as proporcoes; depois adicionar camadas uma a uma.
+- **Proporcoes (fundacao):** envergadura = altura (quadrado); umbigo = centro do
+  circulo, na proporcao aurea 0,618 da altura; pubis = centro do quadrado (os
+  dois centros NAO coincidem); cabeca = 1/8; ombros = 1/4; membros duplos
+  (pose fantasma) como no original. Tiphereth (Sol) cai no centro do circulo —
+  liga ao "modelo helicoidal do Sol" que Montgomery citou como a raiz da
+  desarmonia (nos criamos a desarmonia quando saimos desse modelo).
+- **Ordem das camadas (definida por ele, 13/07):**
+  1. Arvore da Vida (Sefirot de costas — lado do desenho = lado real)
+  2. 5 Elementos (ja existe: zonas clicaveis)
+  3. Orgaos e visceras de cada elemento
+  4. Pontos ABC
+  5. Meridianos de acupuntura
+  6. Quiropraxia (coluna/raizes nervosas — ligar ao modulo existente)
+  7. Seitai
+  8. Emocoes de cada elemento
+  9. Fitoterapia correspondente para tratamento
+- Estudo visual de proporcoes gerado e aprovado em conversa (13/07):
+  vitruviano_proporcoes_estudo.svg — corpo de costas, Merkabah, circulo+quadrado,
+  Arvore da Vida sobreposta com Tiphereth no centro.
+- Ja aplicado no os/index.html (nao commitado ainda): corpo com coluna/escapulas,
+  Merkabah no fundo, umbigo marcado. Proximo passo: substituir pela versao com
+  proporcoes exatas do estudo + camadas ligaveis (toggle por camada, como a
+  anatomia visual).
+- **Decisoes alinhadas (13/07, segunda rodada):** dois corpos SOBREPOSTOS como na
+  referencia (ativo colorido/clicavel + fantasma como sombra; o botao troca qual
+  esta vivo — costas/frente, resolve a maca e inverte os pontos ABC via dados,
+  nao via desenho); Arvore da Vida como CAMADA LIGAVEL (nao fixa); refinar o
+  estudo visual antes de codificar no OS. Estudo v2 gerado:
+  vitruviano_estudo_v2.svg (fantasma de frente com bracos erguidos — maos caem
+  nos vertices da Merkabah; pernas abertas ate o circulo).
+- **Terceira rodada (13/07):** correcoes do Montgomery sobre o v2 — (a) arvore
+  estava ABAULADA nos bracos: pilares agora perfeitamente verticais (x=230/300/370);
+  (b) fantasma estava invisivel: mais presenca; (c) CORPO DUPLO = MASCULINO
+  (costas, ativo) + FEMININO (frente, par que se alterna) — liga com a Lei do
+  Genero; (d) corpo com formas reais tipo vitruviano, sem rosto (de costas
+  resolve). Inspiracoes absorvidas da arte do Gemini (que e pintura decorativa,
+  nao geometria exata): nome do paciente em arco no topo, selos dos elementos
+  em aneis com glifo, raizes do ser sob Malkuth, elipse da Metafisica em volta
+  de tudo. Estudo v3 gerado: vitruviano_estudo_v3.svg.
+- **Quarta rodada (13/07):** Montgomery aprovou a direcao geral ("nem se compara
+  de tao melhor"). Ajustes: SEM nome do paciente em arco, SEM raizes de arvore
+  sob Malkuth (nao gostou); segundo corpo = COPIA IDENTICA do primeiro (mesmas
+  formas vitruvianas) na segunda pose do Da Vinci (bracos erguidos ~21 graus,
+  pernas abertas ~15 graus, via transform rotate sobre os mesmos paths — dupla
+  exposicao), sem rosto. Corpo duplo masculino/feminino DESCARTADO nesta rodada.
+  Estudo v4 gerado: vitruviano_estudo_v4.svg.
+- **Quinta rodada (13/07) — CORPO DEFINIDO:** Montgomery gerou no Gemini o corpo
+  vitruviano DE COSTAS (musculatura realista, dupla exposicao, linhas azuis
+  #9fd8ff sobre fundo escuro, sem rosto, sem geometria) usando prompt com nossa
+  paleta. Arquivo salvo em os/corpo_vitruviano_costas.jpg (copiado de
+  Desktop\Eu\"Vitruviano de cosas.jpg"). Estrategia hibrida confirmada: imagem
+  Gemini = carne; SVG nosso por cima = geometria exata + camadas clicaveis
+  (as cores dos elementos NAO ficam na imagem — acendem via overlay no clique).
+  Estudo v5 gerado com a imagem embutida + geometria v4 + demo de zona acesa.
+  Proximo: aprovacao do v5 -> implementar no os/index.html.
+- **IMPLEMENTADO no os/index.html (13/07, apos aprovacao do v5.2):** corpo =
+  imagem corpo_vitruviano_costas.jpg (encaixe medido pixel a pixel: maos no
+  quadrado, circulo r=267 pelo compasso de Leonardo, Merkabah recalculada,
+  elipse da Metafisica); zonas clicaveis INVISIVEIS que acendem no toque
+  (incluindo bracos erguidos e pernas abertas da dupla exposicao); selos dos
+  5 elementos (anel+glifo SVG) que trocam de lado com a visao; botao "Arvore
+  da Vida" = primeira camada ligavel (Sefirot nos 3 pilares verticais).
+  Testado no navegador local: clique Madeira acende os dois bracos e abre a
+  teia; inverter visao espelha corpo, zonas e selos. NAO commitado/publicado
+  ainda. Detalhe conhecido: a Arvore nao espelha na visao de frente (ela
+  representa os lados reais); avaliar esconde-la nesse modo.
