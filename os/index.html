@@ -516,7 +516,13 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     <h1>Metafísica — a Raiz</h1>
     <p>A camada invisível que sustenta tudo no OS. "Tudo está ligado." A palavra é criadora; o foco é o leme.</p>
   </div>
-  <div class="bloco" style="display:flex;gap:var(--f4);flex-wrap:wrap;align-items:flex-start">
+  <div class="bloco">
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M17.5 12A5.5 5.5 0 1 1 12 6.5"/><path d="M14.5 12a2.5 2.5 0 1 1-2.5-2.5"/></svg>O Mapa em Fibonacci — anéis da árvore</h2>
+    <p style="font-size:0.78rem;color:var(--cinza);margin-bottom:10px">O mapa da Metafísica cresce como uma árvore: cada anel é um nível. Toque num anel para abrir o nível.</p>
+    <div id="mfFiboNav" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
+    <div id="mfFiboPainel" class="vazio" style="font-size:0.78rem">Escolha um anel acima.</div>
+  </div>
+  <div class="bloco" id="mfBloco1" style="display:flex;gap:var(--f4);flex-wrap:wrap;align-items:flex-start">
     <div style="flex:0 0 320px;max-width:100%;margin:0 auto">
       <svg viewBox="0 0 600 600" style="width:100%;max-width:320px;border-radius:12px">
         <defs>
@@ -554,7 +560,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
       <div id="leisHermeticas"></div>
     </div>
   </div>
-  <div class="bloco">
+  <div class="bloco" id="mfBloco3">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M12 7v4M10.8 12.6 6.2 16.4M13.2 12.6l4.6 3.8M12 11l-5.8 5.4M12 11l5.8 5.4"/></svg>As Tradições-mãe</h2>
     <div class="cards">
       <div class="card"><h3>Hermetismo</h3><div class="sub">As 7 leis do Caibalion — a casa natural: Mentalismo, Vibração, Causa e Efeito. "Que seu sim seja sim."</div></div>
@@ -562,7 +568,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
       <div class="card"><h3>Medicina Chinesa — 5 Elementos</h3><div class="sub">A tradição que liga a metafísica ao corpo e à clínica. Vive na Árvore da Vida e no corpo vitruviano.</div></div>
     </div>
   </div>
-  <div class="bloco">
+  <div class="bloco" id="mfBloco8">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="6.3"/><circle cx="12" cy="12" r="9.6"/></svg>A Leitura em 4 Camadas</h2>
     <p style="font-size:0.78rem;color:var(--cinza);margin-bottom:12px">Regra de ouro: a metafísica não substitui a escuta — ela organiza o que a escuta trouxe. Primeiro o paciente fala; depois a teia. E nunca substitui médico: sintoma físico persistente vai ao médico E entra no mapa.</p>
     <div class="cards">
@@ -573,7 +579,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     </div>
     <p style="font-size:0.75rem;color:var(--cinza);margin-top:10px">Quatro portas, uma teia: Montgomery entra pelo corpo e pela lei; Vanessa pelo símbolo e pelo floral.</p>
   </div>
-  <div class="bloco">
+  <div class="bloco" id="mfBloco5">
     <style>.mfZona{cursor:pointer;transition:all .25s}.mfZona path,.mfZona circle,.mfZona polygon{fill-opacity:0;stroke-opacity:0}.mfZona:hover path,.mfZona:hover circle,.mfZona:hover polygon{fill-opacity:.3;stroke-opacity:.7}.mfZona.mfAtiva path,.mfZona.mfAtiva circle,.mfZona.mfAtiva polygon{fill-opacity:.4;stroke-opacity:1;stroke-width:1.6}</style>
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="7" r="2"/><path d="M12 9v5M12 14l-3 6M12 14l3 6M12 10.5 5 9M12 10.5 19 9"/></svg>O Corpo Vitruviano — porta de entrada</h2>
     <p style="font-size:0.78rem;color:var(--cinza);margin-bottom:10px">Clique onde dói. O corpo aponta o elemento; o elemento abre a teia inteira.</p>
@@ -1580,7 +1586,38 @@ const LEIS_HERMETICAS=[
   ['Causa e Efeito','Toda causa tem seu efeito; acaso é a lei não reconhecida.','Reclamar da falta gera falta; focar em solução gera solução. Que seu sim seja sim.'],
   ['Gênero','O gênero está em tudo: princípio masculino e feminino.','Criar exige os dois: intenção (ativo) e gestação (receptivo). Ecoa o yin/yang dos 5 Elementos.']
 ];
+// ===== ÍNDICE FIBONACCI DA METAFÍSICA (anéis da árvore) =====
+const MF_NIVEIS=[
+  {n:0,titulo:'O Vazio',resumo:'O que é Metafísica aqui: a compreensão dos fenômenos além dos 5 sentidos. A palavra sai impregnada da frequência do que sabemos sobre ela. "Que seu sim seja sim." A palavra é criadora; o foco é o leme.'},
+  {n:1,titulo:'O Princípio',resumo:'A unidade da qual tudo deriva. As 7 Leis Herméticas do Caibalion, a ponte honesta com a ciência (gravidade, átomo, quântica) e o Cubo de Metatron como símbolo visual.',bloco:'mfBloco1'},
+  {n:2,titulo:'Polaridade',resumo:'A dobradiça do mapa: opostos são a mesma régua em graus diferentes. Três tradições descobriram a mesma lei — Hermetismo (Lei 4), Taoismo (yin/yang) e Freud (o que se nega, se afirma). A sombra é o polo não assumido; transmuta-se por grau, não por salto — como os florais: Rock Rose para o pavor, Mimulus para o medo nomeado.'},
+  {n:3,titulo:'As Tradições-mãe',resumo:'As três escolhidas para começar: Hermetismo, Medicina Chinesa / 5 Elementos e Kabbalah / Árvore da Vida. Vedanta, Alquimia e a tradição estelar entram depois, com calma.',bloco:'mfBloco3'},
+  {n:5,titulo:'Correspondências',resumo:'A teia que liga tudo: elemento, órgão, emoção, estação, cor, sabor, planeta, floral e lei. Cada coluna com sua origem declarada — tradição não se mistura com escolha nossa. A porta de entrada visual é o corpo vitruviano.',bloco:'mfBloco5'},
+  {n:8,titulo:'Uso Clínico',resumo:'A Leitura em 4 Camadas (corpo, emoção, símbolo, lei) e o Mapa Metafísico do Paciente — documento vivo por pessoa. Regra de ouro: a metafísica não substitui a escuta, ela organiza o que a escuta trouxe.',bloco:'mfBloco8'},
+  {n:13,titulo:'Biblioteca',resumo:'Quatro estantes: Hermetismo (Caibalion fichado, Tábua de Esmeralda), Medicina Chinesa (Nei Jing, Tao Te Ching), Kabbalah (as 10 Sefirot, Sefer Yetzirah) e Pontes (Freud já no OS, florais de Bach, física para leigos). Regra: só entra livro com intenção real de leitura.'},
+  {n:21,titulo:'O Sonho',resumo:'A Metafísica como camada invisível do OS inteiro: clicar em qualquer coisa — um osso, uma sessão, um floral — e ver suas correspondências. A teia completa, viva. Este anel fica aberto de propósito: sonho não se fecha.'}
+];
+let mfNivelAtivo=null;
+function mfRenderFibo(){
+  const nav=document.getElementById('mfFiboNav');
+  if(!nav||nav.hasChildNodes())return;
+  nav.innerHTML=MF_NIVEIS.map(nv=>
+    '<button class="btn" id="mfFibo'+nv.n+'" onclick="mfNivel('+nv.n+')" '+
+    'style="padding:5px 0;width:'+(34+nv.n*1.5)+'px;font-size:0.78rem;border-radius:50px">'+nv.n+'</button>').join('');
+}
+function mfNivel(n){
+  const nv=MF_NIVEIS.find(x=>x.n===n);if(!nv)return;
+  mfNivelAtivo=n;
+  MF_NIVEIS.forEach(x=>{const b=document.getElementById('mfFibo'+x.n);
+    if(b){b.style.borderColor=x.n===n?'var(--dourado,#c9a84c)':'';b.style.color=x.n===n?'var(--dourado,#c9a84c)':'';}});
+  const p=document.getElementById('mfFiboPainel');
+  p.classList.remove('vazio');
+  p.innerHTML='<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:6px">'+nv.n+' — '+nv.titulo+'</h3>'+
+    '<p style="font-size:0.8rem;line-height:1.55">'+nv.resumo+'</p>'+
+    (nv.bloco?'<button class="btn" style="margin-top:8px;padding:4px 12px;font-size:0.72rem" onclick="document.getElementById(\''+nv.bloco+'\').scrollIntoView({behavior:\'smooth\'})">Ir ao nível na página</button>':'');
+}
 function renderMetafisica(){
+  mfRenderFibo();
   const teia=document.getElementById('mtTeia');
   if(teia&&!teia.hasChildNodes()){
     let linhas='',circ='',pontos='';
