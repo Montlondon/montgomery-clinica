@@ -1490,8 +1490,35 @@ const SEFIROT=[
     frase:'O aqui. O corpo, a terra, o pão — onde toda a árvore finalmente toca o chão e se torna real. Não o fim da descida, mas o lugar onde a luz vira matéria e a Obra se completa.',sind:[]}
 ];
 const CAMINHOS=[['kether','chokmah'],['kether','binah'],['kether','tiphereth'],['chokmah','binah'],['chokmah','tiphereth'],['chokmah','chesed'],['binah','tiphereth'],['binah','geburah'],['chesed','geburah'],['chesed','tiphereth'],['chesed','netzach'],['geburah','tiphereth'],['geburah','hod'],['tiphereth','netzach'],['tiphereth','hod'],['tiphereth','yesod'],['netzach','hod'],['netzach','yesod'],['netzach','malkuth'],['hod','yesod'],['hod','malkuth'],['yesod','malkuth']];
+// As tríades como agrupamento visual: cada grupo clássico da Árvore vira uma aura
+// suave atrás dos nós (a triade que já era dado no SEFIROT agora organiza o desenho).
+const TRIADES=[
+  {nome:'Tríade Suprema',ids:['kether','chokmah','binah'],cor:'#8E7CC3',rot:'sup'},
+  {nome:'Tríade Ética',ids:['chesed','geburah','tiphereth'],cor:'#C9A84C',rot:'eti'},
+  {nome:'Tríade Astral',ids:['netzach','hod','yesod'],cor:'#5A9BD4',rot:'ast'},
+  {nome:'O Reino',ids:['malkuth'],cor:'#8FA98A',rot:'rei'}
+];
 function renderArvoreSVG(){
   const pos=id=>SEFIROT.find(s=>s.id===id);
+  // Auras das tríades (desenhadas primeiro, ficam atrás de caminhos e nós)
+  const auras=TRIADES.map(t=>{
+    const p=t.ids.map(pos);
+    let forma;
+    if(p.length===1){
+      forma='<circle cx="'+p[0].x+'" cy="'+p[0].y+'" r="33" fill="'+t.cor+'" fill-opacity="0.10" stroke="'+t.cor+'" stroke-width="10" stroke-opacity="0.10"/>';
+    }else{
+      const pts=p.map(s=>s.x+','+s.y).join(' ');
+      // traço grosso e arredondado engorda o triângulo e envolve os três nós numa mancha macia
+      forma='<polygon points="'+pts+'" fill="'+t.cor+'" fill-opacity="0.09" stroke="'+t.cor+'" stroke-width="46" stroke-opacity="0.09" stroke-linejoin="round"/>';
+    }
+    // rótulo discreto da tríade, na margem com mais espaço
+    const cy=p.reduce((a,s)=>a+s.y,0)/p.length;
+    let lab;
+    if(t.rot==='sup')lab='<text x="150" y="14" text-anchor="middle" font-family="Lora,serif" font-size="8" font-style="italic" fill="'+t.cor+'" opacity="0.7">'+t.nome+'</text>';
+    else if(t.rot==='rei')lab='<text x="150" y="492" text-anchor="middle" font-family="Lora,serif" font-size="8" font-style="italic" fill="'+t.cor+'" opacity="0.7">'+t.nome+'</text>';
+    else lab='<text transform="rotate(-90 16 '+cy+')" x="16" y="'+cy+'" text-anchor="middle" font-family="Lora,serif" font-size="8" font-style="italic" fill="'+t.cor+'" opacity="0.7">'+t.nome+'</text>';
+    return forma+lab;
+  }).join('');
   const linhas=CAMINHOS.map(([a,b])=>{const p=pos(a),q=pos(b);return '<line x1="'+p.x+'" y1="'+p.y+'" x2="'+q.x+'" y2="'+q.y+'" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>';}).join('');
   const nos=SEFIROT.map(s=>
     '<g class="sefira-no" data-id="'+s.id+'" style="cursor:pointer">'+
@@ -1500,7 +1527,7 @@ function renderArvoreSVG(){
     '<text x="'+s.x+'" y="'+(s.y-1)+'" text-anchor="middle" font-family="Lora,serif" font-size="10" fill="#fff" font-weight="600">'+s.n+'</text>'+
     '<text x="'+s.x+'" y="'+(s.y+9)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" fill="rgba(255,255,255,0.85)">'+s.num+' · '+s.pt.replace(' ☀','')+'</text>'+
     '</g>').join('');
-  document.getElementById('arvoreSVG').innerHTML=linhas+nos;
+  document.getElementById('arvoreSVG').innerHTML=auras+linhas+nos;
 }
 let _sefiraSel='';
 function selSefira(id){
