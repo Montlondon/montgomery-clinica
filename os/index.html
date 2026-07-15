@@ -602,7 +602,13 @@ tr:hover td{background:rgba(201,168,76,0.05)}
   <div class="bloco" id="mfBloco5">
     <style>.mfZona{cursor:pointer;transition:all .25s}.mfZona path,.mfZona circle,.mfZona polygon{fill-opacity:0;stroke-opacity:0}.mfZona:hover path,.mfZona:hover circle,.mfZona:hover polygon{fill-opacity:.3;stroke-opacity:.7}.mfZona.mfAtiva path,.mfZona.mfAtiva circle,.mfZona.mfAtiva polygon{fill-opacity:.4;stroke-opacity:1;stroke-width:1.6}</style>
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="7" r="2"/><path d="M12 9v5M12 14l-3 6M12 14l3 6M12 10.5 5 9M12 10.5 19 9"/></svg>O Corpo Vitruviano — porta de entrada</h2>
-    <p style="font-size:0.78rem;color:var(--cinza);margin-bottom:10px">Clique onde dói. O corpo aponta o elemento; o elemento abre a teia inteira.</p>
+    <p style="font-size:0.78rem;color:var(--cinza);margin-bottom:10px">Clique onde dói. O corpo aponta o elemento; o elemento abre a teia inteira. Ou entre pela palavra — a primeira fibra do anel 21:</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:6px">
+      <input id="mfAcenderInput" list="mfAcenderLista" onfocus="mfFillLista()" onkeydown="if(event.key==='Enter')mfAcender(this.value)" placeholder="digite um órgão, emoção, floral, lei, estação..." style="flex:1;min-width:200px;padding:8px 11px;border:1px solid rgba(27,58,92,0.2);border-radius:8px;font-size:0.82rem;font-family:inherit">
+      <button class="btn" onclick="mfAcender(document.getElementById('mfAcenderInput').value)">Acender a teia</button>
+      <datalist id="mfAcenderLista"></datalist>
+    </div>
+    <div id="mfAcenderMsg" style="font-size:0.74rem;color:var(--cinza);min-height:1em;margin-bottom:10px"></div>
     <div style="display:flex;gap:var(--f4);flex-wrap:wrap;align-items:flex-start">
       <div style="flex:0 0 340px;max-width:100%;margin:0 auto">
         <svg viewBox="0 0 600 660" style="width:100%;max-width:340px;border-radius:12px;background:radial-gradient(circle at 50% 45%,#0d1a2e 0%,#060b14 100%)">
@@ -1747,6 +1753,39 @@ function mfElemento(el){
     '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">'+
     '<button class="btn" onclick="mfMarcar(\'mfCrise\',\''+el+'\')">Marcar como elemento em crise</button>'+
     '<button class="btn" onclick="mfMarcar(\'mfDominante\',\''+el+'\')">Marcar como dominante</button></div>';
+}
+// ===== A TEIA (anel 21) — caminho de volta: de qualquer palavra ao elemento =====
+// mfAcender(termo) e a funcao publica: qualquer modulo futuro (Anatomia, Arvore,
+// uma sessao, um floral) chama isto para acender as correspondencias.
+function mfNorm(s){return (s||'').toString().toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim();}
+let MF_INDICE=null;
+function mfBuildIndice(){
+  if(MF_INDICE)return MF_INDICE;
+  MF_INDICE={};
+  const campos=['orgao','viscera','emocao','virtude','estacao','sentido','tecido','corNome','sabor','planeta','floral','lei'];
+  const add=(t,el)=>{const k=mfNorm(t);if(k&&k.length>=2&&!MF_INDICE[k])MF_INDICE[k]=el;};
+  Object.keys(MF_TEIA).forEach(el=>{
+    add(el,el);
+    campos.forEach(c=>String(MF_TEIA[el][c]||'').split(/[,\/]| e /).forEach(p=>add(p,el)));
+  });
+  return MF_INDICE;
+}
+function mfFillLista(){
+  const dl=document.getElementById('mfAcenderLista');if(!dl||dl.hasChildNodes())return;
+  const termos=new Set();
+  const campos=['orgao','viscera','emocao','estacao','tecido','sentido','sabor','planeta','floral','lei'];
+  Object.keys(MF_TEIA).forEach(el=>{termos.add(el);
+    campos.forEach(c=>String(MF_TEIA[el][c]||'').split(/[,\/]| e /).forEach(p=>{p=p.trim();if(p.length>=2)termos.add(p);}));});
+  dl.innerHTML=Array.from(termos).sort((a,b)=>a.localeCompare(b,'pt')).map(t=>'<option value="'+t+'">').join('');
+}
+function mfAcender(termo){
+  const idx=mfBuildIndice(),k=mfNorm(termo),msg=document.getElementById('mfAcenderMsg');
+  let el=idx[k];
+  if(!el&&k.length>=3){const hit=Object.keys(idx).find(key=>key.split(' ').includes(k)||key.startsWith(k));if(hit)el=idx[hit];}
+  if(!el){if(msg)msg.textContent=termo?('"'+termo+'" ainda não está na teia — ela responde por ora a órgãos, emoções, tecidos, florais, leis, estações, sabores e planetas dos 5 Elementos. A teia cresce.'):'Digite uma palavra para acender a teia.';return;}
+  if(msg)msg.innerHTML='<span style="color:var(--azul)">"'+termo+'" acende <strong>'+el+'</strong>.</span>';
+  mfElemento(el);
+  const p=document.getElementById('mfCorpoPainel');if(p)p.scrollIntoView({behavior:'smooth',block:'center'});
 }
 function mfMarcar(campo,el){
   document.getElementById(campo).value=el;
