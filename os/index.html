@@ -1371,6 +1371,12 @@ function selColRegiao(reg){
     '<p style="font-size:0.75rem;color:var(--cinza);margin-bottom:8px"><b>Músculos-chave:</b> '+esc(d.musculo)+' · <b>Quiro:</b> '+esc(d.quiro)+'</p>'+
     '<p style="font-size:0.72rem;color:var(--cinza);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px">Sinais relacionados (apostila)</p>'+
     '<div style="font-size:0.8rem;line-height:1.7">'+d.sinais.map(s=>'· '+esc(s)).join('<br>')+'</div>'+
+    '<div style="margin-top:11px;padding-top:9px;border-top:1px solid rgba(201,168,76,0.18)">'+
+    '<span style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.4px;color:var(--cinza)">Na teia da Metafísica — pelo tecido</span><br>'+
+    '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:5px;align-items:center">'+
+    mfChip('osso','Água')+mfChip('músculo','Terra')+
+    '<span style="font-size:0.68rem;color:var(--cinza);font-style:italic">o esqueleto é tecido da Água; o músculo, da Terra</span>'+
+    '</div></div>'+
     '<div class="fio"></div>'+
     '<div class="linha">'+
     '<div class="fg"><label>Perfil</label><select id="colPerfil">'+perfis.map(p=>'<option value="'+p.id+'">'+esc(p.nome)+'</option>').join('')+'</select></div>'+
@@ -1823,6 +1829,14 @@ function mfAcender(termo){
     '<span style="color:var(--azul)">"'+termo+'" acende <strong>'+el+'</strong>.</span>';
   mfElemento(el);
   const p=document.getElementById('mfCorpoPainel');if(p)p.scrollIntoView({behavior:'smooth',block:'center'});
+}
+// mfChip(termo,el): o "fio que acende" — qualquer módulo externo (Anatomia, Coluna,
+// uma sessão) pinta um chip clicável que salta pra Metafísica e chama mfAcender.
+function mfChip(termo,el){
+  const cor=(MF_TEIA[el]||{}).cor||'#999';
+  return '<span class="tag" style="cursor:pointer;background:'+cor+'22;color:'+cor+';border:1px solid '+cor+'55" '+
+    'onclick="go(\'metafisica\');setTimeout(function(){mfAcender(\''+termo+'\')},350)" '+
+    'title="Acender '+el+' na teia da Metafísica">'+termo+' → '+el+'</span>';
 }
 function mfMarcar(campo,el){
   document.getElementById(campo).value=el;
