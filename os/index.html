@@ -1498,6 +1498,12 @@ const TRIADES=[
   {nome:'Tríade Astral',ids:['netzach','hod','yesod'],cor:'#5A9BD4',rot:'ast'},
   {nome:'O Reino',ids:['malkuth'],cor:'#8FA98A',rot:'rei'}
 ];
+// Da'at (Conhecimento): a Sefirá OCULTA. Não entra na conta dos dez — é o ponto
+// onde Chokmah (Sabedoria) e Binah (Entendimento) se fundem, no abismo do pilar
+// do meio, sobre o caminho Kether→Tiphereth. Desenhada como "espaço vazio":
+// anel oco tracejado, não uma esfera cheia. Sem elo forçado (honra a regra de ouro).
+const DAAT={x:150,y:158,n:"Da'at",pt:'Conhecimento',
+  frase:'A esfera que não se conta. Onde Sabedoria (Chokmah) e Entendimento (Binah) se encontram e se fundem — não uma décima primeira luz, mas o vazio entre elas: a fenda do abismo por onde o Infinito (Ein Sof) ainda respira dentro da Árvore. Conhecimento que não se acumula, se atravessa. Por isso fica oculta — dez são as esferas; Da\'at é a porta.'};
 function renderArvoreSVG(){
   const pos=id=>SEFIROT.find(s=>s.id===id);
   // Auras das tríades (desenhadas primeiro, ficam atrás de caminhos e nós)
@@ -1527,7 +1533,30 @@ function renderArvoreSVG(){
     '<text x="'+s.x+'" y="'+(s.y-1)+'" text-anchor="middle" font-family="Lora,serif" font-size="10" fill="#fff" font-weight="600">'+s.n+'</text>'+
     '<text x="'+s.x+'" y="'+(s.y+9)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" fill="rgba(255,255,255,0.85)">'+s.num+' · '+s.pt.replace(' ☀','')+'</text>'+
     '</g>').join('');
-  document.getElementById('arvoreSVG').innerHTML=auras+linhas+nos;
+  // Da'at — o anel oco, o espaço vazio no abismo. Sobre os caminhos, clicável.
+  const daat='<g class="daat-no" style="cursor:pointer">'+
+    '<title>Da\'at — Conhecimento (Sefirá oculta)</title>'+
+    '<circle cx="'+DAAT.x+'" cy="'+DAAT.y+'" r="16" fill="rgba(245,243,238,0.55)" stroke="#9A8CB5" stroke-width="1.4" stroke-dasharray="3 3" opacity="0.9"/>'+
+    '<text x="'+DAAT.x+'" y="'+(DAAT.y+1)+'" text-anchor="middle" font-family="Lora,serif" font-size="8.5" font-style="italic" fill="#6E5F8C">'+DAAT.n+'</text>'+
+    '<text x="'+DAAT.x+'" y="'+(DAAT.y+9)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" fill="#8A7BA6">oculta</text>'+
+    '</g>';
+  document.getElementById('arvoreSVG').innerHTML=auras+linhas+nos+daat;
+}
+function selDaat(){
+  document.querySelectorAll('#arvoreSVG .sefira-no circle').forEach(c=>c.setAttribute('stroke','#F5F3EE'));
+  const d=document.querySelector('#arvoreSVG .daat-no circle');
+  if(d)d.setAttribute('stroke','#1B3A5C');
+  document.getElementById('sefiraPainel').innerHTML=
+    '<div style="border-left:4px dashed #9A8CB5;padding-left:var(--f2)">'+
+    '<h2 style="font-family:Lora,serif;color:var(--azul);font-size:1.25rem">'+DAAT.n+' <span style="color:var(--cinza);font-size:0.9rem">— '+DAAT.pt+'</span></h2>'+
+    '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">'+
+      '<span class="tag" style="background:#8E7CC322;color:#6E5F8C;border:1px solid #8E7CC355">Sefirá oculta — fora da conta dos dez</span>'+
+      '<span class="tag tag-dourado" style="cursor:pointer" onclick="selSefira(\'chokmah\')" title="A Sabedoria que se funde em Da\'at">Chokmah →</span>'+
+      '<span class="tag tag-dourado" style="cursor:pointer" onclick="selSefira(\'binah\')" title="O Entendimento que se funde em Da\'at">Binah →</span>'+
+    '</div>'+
+    '<div style="margin-top:12px;padding:11px 14px;border-left:3px dashed #9A8CB5;background:rgba(142,124,195,0.07);border-radius:0 8px 8px 0"><span style="font-size:0.64rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--cinza)">Em nossas palavras — antes de qualquer livro</span><br><span style="font-size:0.9rem;font-family:Lora,serif;font-style:italic;line-height:1.5;color:var(--azul)">'+esc(DAAT.frase)+'</span></div>'+
+    '<p style="font-size:0.78rem;color:var(--cinza);font-style:italic;margin-top:12px;line-height:1.5">Da\'at não recebe registro clínico: não é um lugar do corpo, é a passagem. A contagem principal da Árvore permanece em dez.</p>'+
+    '</div>';
 }
 let _sefiraSel='';
 function selSefira(id){
@@ -1591,6 +1620,7 @@ function renderArvoreTabela(){
     '<tr><td><div class="vazio">Nenhuma observação ainda — clique numa Sefirá e registre a primeira.</div></td></tr>';
 }
 document.addEventListener('click',e=>{
+  if(e.target.closest('#arvoreSVG .daat-no')){selDaat();return;}
   const g=e.target.closest('#arvoreSVG .sefira-no');
   if(g)selSefira(g.dataset.id);
 });
