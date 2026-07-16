@@ -228,6 +228,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     <a data-sec="protocolos" onclick="go('protocolos',this)"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 3.5 3.5 10.5a4.95 4.95 0 1 0 7 7l7-7a4.95 4.95 0 1 0-7-7Z"/><path d="m7 7 7 7"/></svg></span>Protocolos</a>
     <a data-sec="nutricao" onclick="go('nutricao',this)"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8c1.2-3.2 4-4.2 6.2-3.2-1 1.2-1.4 3-1.2 4.4M12 8c-2.6-.2-5.2 1.6-5.2 5.4C6.8 18 9.4 21 12 21s5.2-3 5.2-7.6c0-2-.8-3.6-2.2-4.6"/><path d="M12 8V4.5"/></svg></span>Nutrição</a>
     <a data-sec="exames" onclick="go('exames',this)"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v5l4.5 8.5a2 2 0 0 1-1.8 3H6.3a2 2 0 0 1-1.8-3L9 8Z"/><path d="M7.5 13h9"/></svg></span>Exames</a>
+    <a data-sec="esqueleto" onclick="go('esqueleto',this)"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2.4"/><path d="M12 7.4v3.2M8.5 9l3.5 1.6L15.5 9M9.5 10.8 12 10.6l2.5.2M12 10.6v4.2M10 15l-1.4 4.6M14 15l1.4 4.6"/></svg></span>Anatomia</a>
     <a data-sec="coluna" onclick="go('coluna',this)"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M9 5h6M8.5 8.5h7M8 12h8M8.5 15.5h7M9 19h6"/></svg></span>Coluna &amp; Osteo</a>
     <a data-sec="arvore" onclick="go('arvore',this)"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6"/><circle cx="6" cy="9" r="1.6"/><circle cx="18" cy="9" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="20" r="1.6"/><path d="M12 5.6v4.8M12 13.6v4.8M7.3 9.8 10.7 11M16.7 9.8 13.3 11M7 10.4l4 8M17 10.4l-5 8"/></svg></span>Árvore da Vida</a>
     <a data-sec="metafisica" onclick="go('metafisica',this)"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,3 19.8,7.5 19.8,16.5 12,21 4.2,16.5 4.2,7.5"/><path d="M12 3v9M19.8 16.5 12 12M4.2 16.5 12 12"/></svg></span>Metafísica</a>
@@ -241,7 +242,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
       Ir para a Clínica (pacientes)
     </a>
     <div class="frase">"Tudo é padrão. Tudo é proporção. Tudo é luz."</div>
-    Montgomery OS · Fase 1 — Fundação · v1.2 (coluna → 5 Elementos)<br>
+    <span id="sbVersao">Montgomery OS · Fase 2 — Corpo · v1.6</span><br>
     <a onclick="fazerLogout()" style="color:rgba(226,200,120,0.6);cursor:pointer;padding:4px 0;border:none">Sair</a>
   </div>
 </aside>
@@ -493,6 +494,237 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 3v18h18"/><path d="m7 14 4-5 3 3 5-7"/></svg>Histórico de dor &amp; ajustes</h2>
     <div class="filtros"><select id="colFiltroPerfil" onchange="renderColuna()"></select></div>
     <div class="tbl-wrap"><table id="colTabela"></table></div>
+  </div>
+</section>
+
+<!-- ESQUELETO — O CORPO INTEIRO CLICÁVEL (ossos primeiro: finito, alcançável) -->
+<section class="sec" id="sec-esqueleto">
+  <div class="sec-head">
+    <h1>Anatomia — o corpo por camadas</h1>
+    <p>O mesmo corpo, camada por camada. <b>Ossos</b> (~206, tecido da Água), <b>músculos</b> (~640, tecido da Terra) e <b>tendões &amp; ligamentos</b> (tecido da Madeira), agrupados por região e clicáveis. Clique numa parte para ver o que a habita, a contagem e o fio que a liga à teia. Órgãos e patologias entram como camadas seguintes.</p>
+  </div>
+  <div class="bloco" style="display:flex;gap:var(--f4);flex-wrap:wrap;align-items:flex-start">
+    <div style="flex:0 0 280px;max-width:100%;margin:0 auto;text-align:center">
+      <div style="display:flex;justify-content:center;gap:6px;margin-bottom:8px">
+        <button class="btn btn-p btn-mini" id="skCamOssos" onclick="skCamada('ossos')">Ossos</button>
+        <button class="btn btn-sec btn-mini" id="skCamMusculos" onclick="skCamada('musculos')">Músculos</button>
+        <button class="btn btn-sec btn-mini" id="skCamTendoes" onclick="skCamada('tendoes')">Tendões</button>
+      </div>
+      <div style="display:flex;justify-content:center;gap:6px;margin-bottom:10px">
+        <button class="btn btn-sec btn-mini" id="skBtnSVG" onclick="skModo('svg')">Traço da casa</button>
+        <button class="btn btn-sec btn-mini" id="skBtnRaiox" onclick="skModo('raiox')">Raio-X azul</button>
+      </div>
+      <div id="skWrap" style="border-radius:14px;padding:10px;transition:background 0.3s">
+        <svg viewBox="0 0 200 430" id="esqueletoSVG" style="width:210px;max-width:100%">
+          <style>
+            .sk-reg{cursor:pointer}
+            .sk-reg .f{fill:#E9E2CE;stroke:#9A8F73;stroke-width:0.7;transition:fill 0.2s,stroke 0.2s}
+            .sk-reg .l{fill:none;stroke:#9A8F73;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.2s}
+            .sk-reg .socket{fill:#4a4436;stroke:none}
+            .sk-reg:hover .f{fill:#F3EBD3;stroke:#C9A84C}
+            .sk-reg:hover .l{stroke:#C9A84C}
+            .sk-reg.sel .f{fill:#F6EEBE;stroke:#B8912F;stroke-width:1.1}
+            .sk-reg.sel .l{stroke:#B8912F;stroke-width:2.6}
+            #skWrap.raiox .sk-reg .f{fill:rgba(91,200,245,0.10);stroke:#5BC8F5}
+            #skWrap.raiox .sk-reg .l{stroke:#5BC8F5}
+            #skWrap.raiox .sk-reg .socket{fill:#08202e}
+            #skWrap.raiox .sk-reg:hover .f{fill:rgba(184,236,255,0.18);stroke:#B8ECFF}
+            #skWrap.raiox .sk-reg:hover .l{stroke:#B8ECFF}
+            #skWrap.raiox .sk-reg.sel .f,#skWrap.raiox .sk-reg.sel .l{stroke:#EAF9FF}
+          </style>
+          <!-- CRÂNIO -->
+          <g class="sk-reg" data-reg="Crânio"><title>Crânio (22 ossos)</title>
+            <path class="f" d="M100 6 C85 6 74 17 74 33 C74 42 77 48 81 52 C82 56 84 58 86 59 Q100 64 114 59 C116 58 118 56 119 52 C123 48 126 42 126 33 C126 17 115 6 100 6 Z"/>
+            <ellipse class="socket" cx="89" cy="33" rx="5.5" ry="6.5"/>
+            <ellipse class="socket" cx="111" cy="33" rx="5.5" ry="6.5"/>
+            <path class="f" d="M97 40 L100 52 L103 40 Z"/>
+            <path class="l" d="M89 55 H111"/>
+            <path class="f" d="M85 57 Q100 74 115 57 Q113 66 100 68 Q87 66 85 57 Z"/>
+          </g>
+          <!-- CINTURA ESCAPULAR -->
+          <g class="sk-reg" data-reg="Cintura escapular"><title>Cintura escapular — clavículas e escápulas</title>
+            <path class="l" d="M76 72 Q88 66 98 71"/><path class="l" d="M124 72 Q112 66 102 71"/>
+            <ellipse class="f" cx="72" cy="74" rx="5" ry="4"/><ellipse class="f" cx="128" cy="74" rx="5" ry="4"/>
+          </g>
+          <!-- CAIXA TORÁCICA -->
+          <g class="sk-reg" data-reg="Caixa torácica"><title>Caixa torácica — 12 pares de costelas + esterno</title>
+            <path class="f" d="M97 80 L103 80 L102 120 L100 126 L98 120 Z"/>
+            <path class="l" d="M97 85 Q75 88 79 104"/><path class="l" d="M103 85 Q125 88 121 104"/>
+            <path class="l" d="M97 93 Q71 97 76 116"/><path class="l" d="M103 93 Q129 97 124 116"/>
+            <path class="l" d="M97 101 Q69 106 76 127"/><path class="l" d="M103 101 Q131 106 124 127"/>
+            <path class="l" d="M97 109 Q71 115 80 135"/><path class="l" d="M103 109 Q129 115 120 135"/>
+            <path class="l" d="M97 117 Q75 123 85 141"/><path class="l" d="M103 117 Q125 123 115 141"/>
+          </g>
+          <!-- COLUNA VERTEBRAL -->
+          <g class="sk-reg" data-reg="Coluna vertebral"><title>Coluna vertebral — 26 ossos (clique para o módulo Coluna)</title>
+            <rect class="f" x="96" y="60" width="8" height="4" rx="1.5"/><rect class="f" x="96" y="65" width="8" height="4" rx="1.5"/>
+            <rect class="f" x="96" y="70" width="8" height="4" rx="1.5"/><rect class="f" x="96" y="75" width="8" height="4" rx="1.5"/>
+            <rect class="f" x="95" y="128" width="10" height="5" rx="2"/><rect class="f" x="95" y="136" width="10" height="5" rx="2"/>
+            <rect class="f" x="95" y="144" width="10" height="5" rx="2"/><rect class="f" x="95" y="152" width="10" height="5" rx="2"/>
+            <rect class="f" x="95" y="160" width="10" height="5" rx="2"/>
+          </g>
+          <!-- MEMBROS SUPERIORES -->
+          <g class="sk-reg" data-reg="Membros superiores"><title>Membros superiores — úmero, rádio, ulna, mãos (64 ossos)</title>
+            <path class="f" d="M71 74 C67 74 66 80 68 88 L64 132 C63 138 71 138 72 132 L74 88 C76 82 75 74 71 74 Z"/>
+            <path class="f" d="M129 74 C133 74 134 80 132 88 L136 132 C137 138 129 138 128 132 L126 88 C124 82 125 74 129 74 Z"/>
+            <path class="f" d="M63 140 C60 140 59 146 60 152 L56 194 C55 199 61 199 61 194 L64 152 C66 146 66 140 63 140 Z"/>
+            <path class="l" d="M67 141 L61 195"/>
+            <path class="f" d="M137 140 C140 140 141 146 140 152 L144 194 C145 199 139 199 139 194 L136 152 C134 146 134 140 137 140 Z"/>
+            <path class="l" d="M133 141 L139 195"/>
+            <path class="f" d="M55 196 L62 196 L61 206 L56 206 Z"/>
+            <path class="l" d="M56 206 L52 220 M58 206 L56 222 M60 206 L60 222 M62 206 L64 220"/>
+            <path class="f" d="M138 196 L145 196 L144 206 L139 206 Z"/>
+            <path class="l" d="M144 206 L148 220 M142 206 L144 222 M140 206 L140 222 M138 206 L136 220"/>
+          </g>
+          <!-- CINTURA PÉLVICA -->
+          <g class="sk-reg" data-reg="Cintura pélvica"><title>Cintura pélvica — 2 ossos do quadril + sacro</title>
+            <path class="f" d="M82 168 C72 172 71 188 80 197 C86 203 95 201 98 194 L98 180 C98 176 94 175 92 177 C88 170 86 168 82 168 Z"/>
+            <path class="f" d="M118 168 C128 172 129 188 120 197 C114 203 105 201 102 194 L102 180 C102 176 106 175 108 177 C112 170 114 168 118 168 Z"/>
+          </g>
+          <!-- MEMBROS INFERIORES -->
+          <g class="sk-reg" data-reg="Membros inferiores"><title>Membros inferiores — fêmur, patela, tíbia, fíbula, pés (62 ossos)</title>
+            <path class="f" d="M92 194 C86 194 84 202 87 212 L83 288 C82 296 91 296 91 288 L95 212 C97 204 96 194 92 194 Z"/>
+            <path class="f" d="M108 194 C114 194 116 202 113 212 L117 288 C118 296 109 296 109 288 L105 212 C103 204 104 194 108 194 Z"/>
+            <ellipse class="f" cx="86" cy="300" rx="4.5" ry="5"/><ellipse class="f" cx="114" cy="300" rx="4.5" ry="5"/>
+            <path class="f" d="M84 308 C80 308 79 316 81 324 L79 384 C78 390 86 390 86 384 L88 324 C90 316 88 308 84 308 Z"/>
+            <path class="l" d="M90 310 L88 384"/>
+            <path class="f" d="M116 308 C120 308 121 316 119 324 L121 384 C122 390 114 390 114 384 L112 324 C110 316 112 308 116 308 Z"/>
+            <path class="l" d="M110 310 L112 384"/>
+            <path class="f" d="M79 386 L86 386 L88 396 Q76 402 66 398 Q70 390 79 388 Z"/>
+            <path class="l" d="M66 398 L62 400 M70 399 L67 402 M74 399 L72 403"/>
+            <path class="f" d="M121 386 L114 386 L112 396 Q124 402 134 398 Q130 390 121 388 Z"/>
+            <path class="l" d="M134 398 L138 400 M130 399 L133 402 M126 399 L128 403"/>
+          </g>
+        </svg>
+        <svg viewBox="0 0 200 430" id="musculoSVG" style="width:210px;max-width:100%;display:none">
+          <style>
+            .mus-reg{cursor:pointer}
+            .mus-reg .m{fill:#C46B4E;stroke:#8A3F2C;stroke-width:0.7;transition:fill 0.2s,stroke 0.2s}
+            .mus-reg .ml{fill:none;stroke:#8A3F2C;stroke-width:1.2;stroke-linecap:round}
+            .mus-reg:hover .m{fill:#D98a6d;stroke:#C9A84C}
+            .mus-reg:hover .ml{stroke:#C9A84C}
+            .mus-reg.sel .m{fill:#E39A7C;stroke:#B8912F;stroke-width:1.1}
+            .mus-reg.sel .ml{stroke:#B8912F}
+            #skHeadNeutro{fill:#E9E2CE;stroke:#9A8F73;stroke-width:0.7}
+            #skWrap.raiox .mus-reg .m{fill:rgba(91,200,245,0.12);stroke:#5BC8F5}
+            #skWrap.raiox .mus-reg .ml{stroke:#5BC8F5}
+            #skWrap.raiox .mus-reg:hover .m{fill:rgba(184,236,255,0.20);stroke:#B8ECFF}
+            #skWrap.raiox .mus-reg.sel .m,#skWrap.raiox .mus-reg.sel .ml{stroke:#EAF9FF}
+            #skWrap.raiox #skHeadNeutro{fill:rgba(91,200,245,0.10);stroke:#5BC8F5}
+          </style>
+          <circle id="skHeadNeutro" cx="100" cy="20" r="13"/>
+          <!-- PESCOÇO -->
+          <g class="mus-reg" data-reg="Pescoço"><title>Pescoço — esternocleidomastóideo, escalenos, trapézio</title>
+            <path class="m" d="M94 33 L90 50 L98 50 L99 34 Z"/><path class="m" d="M106 33 L110 50 L102 50 L101 34 Z"/>
+          </g>
+          <!-- OMBRO -->
+          <g class="mus-reg" data-reg="Ombro"><title>Ombro — deltoide</title>
+            <path class="m" d="M84 51 Q70 51 67 66 Q66 73 73 73 Q83 71 87 60 Z"/>
+            <path class="m" d="M116 51 Q130 51 133 66 Q134 73 127 73 Q117 71 113 60 Z"/>
+          </g>
+          <!-- PEITO -->
+          <g class="mus-reg" data-reg="Peito"><title>Peito — peitoral maior e menor, serrátil</title>
+            <path class="m" d="M87 57 Q99 58 99 76 Q90 84 82 77 Q80 65 87 57 Z"/>
+            <path class="m" d="M113 57 Q101 58 101 76 Q110 84 118 77 Q120 65 113 57 Z"/>
+          </g>
+          <!-- BRAÇO -->
+          <g class="mus-reg" data-reg="Braço"><title>Braço — bíceps, braquial, tríceps</title>
+            <path class="m" d="M69 68 Q62 84 65 104 Q71 106 74 100 Q76 84 76 70 Q73 66 69 68 Z"/>
+            <path class="m" d="M131 68 Q138 84 135 104 Q129 106 126 100 Q124 84 124 70 Q127 66 131 68 Z"/>
+          </g>
+          <!-- ANTEBRAÇO -->
+          <g class="mus-reg" data-reg="Antebraço"><title>Antebraço — flexores, extensores, braquiorradial</title>
+            <path class="m" d="M65 106 Q60 126 63 148 Q68 151 72 147 Q74 126 73 108 Q69 104 65 106 Z"/>
+            <path class="m" d="M135 106 Q140 126 137 148 Q132 151 128 147 Q126 126 127 108 Q131 104 135 106 Z"/>
+          </g>
+          <!-- ABDÔMEN -->
+          <g class="mus-reg" data-reg="Abdômen"><title>Abdômen — reto abdominal, oblíquos, transverso</title>
+            <path class="m" d="M85 80 L115 80 L113 130 L100 136 L87 130 Z"/>
+            <path class="ml" d="M100 82 L100 132 M86 96 H114 M87 109 H113 M89 121 H111"/>
+          </g>
+          <!-- QUADRIL E PELVE -->
+          <g class="mus-reg" data-reg="Quadril e pelve"><title>Quadril e pelve — iliopsoas, glúteo médio, tensor da fáscia lata</title>
+            <path class="m" d="M86 131 Q80 147 89 158 L111 158 Q120 147 114 131 Q107 137 100 137 Q93 137 86 131 Z"/>
+          </g>
+          <!-- COXA -->
+          <g class="mus-reg" data-reg="Coxa"><title>Coxa — quadríceps, sartório, adutores, isquiotibiais</title>
+            <path class="m" d="M88 159 Q80 200 85 256 Q94 260 97 254 Q99 200 99 160 Q94 158 88 159 Z"/>
+            <path class="m" d="M112 159 Q120 200 115 256 Q106 260 103 254 Q101 200 101 160 Q106 158 112 159 Z"/>
+          </g>
+          <!-- PERNA -->
+          <g class="mus-reg" data-reg="Perna"><title>Perna — tibial anterior, gastrocnêmio, sóleo, fibulares</title>
+            <path class="m" d="M85 260 Q79 300 83 342 Q81 366 87 376 Q92 372 92 344 Q95 300 95 262 Q90 258 85 260 Z"/>
+            <path class="m" d="M115 260 Q121 300 117 342 Q119 366 113 376 Q108 372 108 344 Q105 300 105 262 Q110 258 115 260 Z"/>
+          </g>
+        </svg>
+        <svg viewBox="0 0 200 430" id="tendaoSVG" style="width:210px;max-width:100%;display:none">
+          <style>
+            .ten-reg{cursor:pointer}
+            .ten-reg .t{fill:none;stroke:#5cb87a;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.2s}
+            .ten-reg .j{fill:#5cb87a;fill-opacity:0.16;stroke:#3E7B4E;stroke-width:0.9;transition:fill-opacity 0.2s,stroke 0.2s}
+            .ten-reg:hover .t{stroke:#C9A84C}
+            .ten-reg:hover .j{fill-opacity:0.3;stroke:#C9A84C}
+            .ten-reg.sel .t{stroke:#2F6B3E;stroke-width:3.2}
+            .ten-reg.sel .j{fill-opacity:0.38;stroke:#2F6B3E}
+            #tenHeadNeutro{fill:#E9E2CE;stroke:#9A8F73;stroke-width:0.7}
+            #skWrap.raiox .ten-reg .t{stroke:#5BC8F5}
+            #skWrap.raiox .ten-reg .j{fill:rgba(91,200,245,0.14);stroke:#5BC8F5}
+            #skWrap.raiox .ten-reg:hover .t,#skWrap.raiox .ten-reg:hover .j{stroke:#B8ECFF}
+            #skWrap.raiox .ten-reg.sel .t,#skWrap.raiox .ten-reg.sel .j{stroke:#EAF9FF}
+            #skWrap.raiox #tenHeadNeutro{fill:rgba(91,200,245,0.10);stroke:#5BC8F5}
+          </style>
+          <circle id="tenHeadNeutro" cx="100" cy="20" r="13"/>
+          <path class="t" style="opacity:0.28" d="M100 33 L100 168"/>
+          <!-- OMBRO — manguito rotador -->
+          <g class="ten-reg" data-reg="Ombro"><title>Ombro — manguito rotador, tendão do bíceps</title>
+            <circle class="j" cx="76" cy="60" r="9"/><circle class="j" cx="124" cy="60" r="9"/>
+            <path class="t" d="M84 52 Q74 58 72 68 M68 60 Q76 62 82 66"/>
+            <path class="t" d="M116 52 Q126 58 128 68 M132 60 Q124 62 118 66"/>
+          </g>
+          <!-- COTOVELO — tendões do bíceps/tríceps -->
+          <g class="ten-reg" data-reg="Cotovelo"><title>Cotovelo — tendão distal do bíceps, epicôndilos</title>
+            <circle class="j" cx="70" cy="104" r="7"/><circle class="j" cx="130" cy="104" r="7"/>
+            <path class="t" d="M70 96 L70 112 M64 104 Q70 106 76 104"/>
+            <path class="t" d="M130 96 L130 112 M124 104 Q130 106 136 104"/>
+          </g>
+          <!-- PUNHO E MÃO — flexores e extensores -->
+          <g class="ten-reg" data-reg="Punho e mão"><title>Punho e mão — tendões flexores e extensores, retináculo</title>
+            <circle class="j" cx="63" cy="150" r="7"/><circle class="j" cx="137" cy="150" r="7"/>
+            <path class="t" d="M60 150 L58 168 M63 150 L63 170 M66 150 L68 168"/>
+            <path class="t" d="M140 150 L142 168 M137 150 L137 170 M134 150 L132 168"/>
+          </g>
+          <!-- COLUNA — ligamentos longitudinais -->
+          <g class="ten-reg" data-reg="Coluna e ligamentos"><title>Coluna — ligamentos longitudinais, amarelo e supraespinhoso</title>
+            <path class="t" d="M96 70 L96 165 M104 70 L104 165"/>
+            <circle class="j" cx="100" cy="118" r="8"/>
+          </g>
+          <!-- QUADRIL — ligamentos e trato iliotibial -->
+          <g class="ten-reg" data-reg="Quadril"><title>Quadril — ligamento iliofemoral, trato iliotibial</title>
+            <circle class="j" cx="88" cy="172" r="8"/><circle class="j" cx="112" cy="172" r="8"/>
+            <path class="t" d="M88 164 Q84 176 90 190 M112 164 Q116 176 110 190"/>
+          </g>
+          <!-- JOELHO — patelar e cruzados -->
+          <g class="ten-reg" data-reg="Joelho"><title>Joelho — tendão patelar, ligamentos cruzados e colaterais</title>
+            <circle class="j" cx="88" cy="256" r="8"/><circle class="j" cx="112" cy="256" r="8"/>
+            <path class="t" d="M88 248 L88 266 M82 256 L94 256"/>
+            <path class="t" d="M112 248 L112 266 M106 256 L118 256"/>
+          </g>
+          <!-- TORNOZELO — tendão de Aquiles -->
+          <g class="ten-reg" data-reg="Tornozelo e pé"><title>Tornozelo e pé — tendão de Aquiles, ligamentos do tarso</title>
+            <circle class="j" cx="87" cy="344" r="7"/><circle class="j" cx="113" cy="344" r="7"/>
+            <path class="t" d="M87 330 L87 358 Q84 366 88 374"/>
+            <path class="t" d="M113 330 L113 358 Q116 366 112 374"/>
+          </g>
+        </svg>
+      </div>
+      <div style="font-size:0.62rem;color:var(--cinza);margin-top:8px;line-height:1.6;text-align:left">
+        <b>Toggle:</b> os dois modos são a mesma placa anatômica desenhada à mão — traço da casa e raio-X azul. É o mais realista que se faz <b>offline e sem serviço pago</b>.<br>
+        <b>Próxima camada (plantada):</b> o corpo 3D que gira de verdade — modelo anatômico rotacionável no navegador. Exige carregar um arquivo pesado; entra quando você quiser dar esse passo. O 3D fotorrealista puro (tipo BioDigital/Zygote) é serviço externo pago e online — fica fora do cofre da família por escolha.
+      </div>
+    </div>
+    <div style="flex:1;min-width:250px">
+      <div id="skPainel"><div class="vazio">Clique numa região do esqueleto para ver os ossos, a contagem e o fio que a liga à teia da Metafísica.</div></div>
+    </div>
   </div>
 </section>
 
@@ -870,6 +1102,11 @@ tr:hover td{background:rgba(201,168,76,0.05)}
   </div>
 </section>
 
+<footer id="appFooter" class="no-print" style="text-align:center;padding:22px 16px 30px;margin-top:10px;border-top:1px solid rgba(201,168,76,0.15);color:var(--cinza);font-size:0.72rem;line-height:1.7">
+  <div style="font-family:Lora,serif;font-style:italic;color:var(--dourado-claro);opacity:0.8;margin-bottom:4px">"Tudo é padrão. Tudo é proporção. Tudo é luz."</div>
+  <span id="appVersion"></span>
+</footer>
+
 </main>
 </div>
 
@@ -879,6 +1116,15 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    MONTGOMERY OS — Fase 1: Fundação
    HTML/JS standalone · localStorage · offline-first
    ============================================================ */
+
+// ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
+const APP_VERSION='v1.6';
+const APP_VERSION_NOTA='anatomia por camadas: ossos + músculos + tendões e ligamentos';
+function carimbarVersao(){
+  const linha='Montgomery OS · Fase 2 — Corpo · '+APP_VERSION+' ('+APP_VERSION_NOTA+')';
+  const rod=document.getElementById('appVersion');if(rod)rod.textContent=linha;
+  const sb=document.getElementById('sbVersao');if(sb)sb.textContent=linha;
+}
 
 // ===== ARMAZENAMENTO =====
 const K = {perfis:'mos_perfis', vitais:'mos_vitais', protocolos:'mos_protocolos', exames:'mos_exames', coluna:'mos_coluna', arvore:'mos_arvore', nutricao:'mos_nutricao', metafisica:'mos_metafisica'};
@@ -2489,8 +2735,185 @@ function salvarMapaMetafisico(){
   setTimeout(()=>document.getElementById('mfMsg').textContent='',1500);
 }
 
+// ===== ESQUELETO — o corpo inteiro clicável (ossos primeiro: finito, alcançável) =====
+// Contagens pelo padrão anatômico clássico (~206 ossos no adulto).
+const SKELETON={
+  'Crânio':{n:22,faixa:'8 do crânio + 14 da face',
+    ossos:['frontal','2 parietais','2 temporais','occipital','esfenoide','etmoide','2 maxilares','2 zigomáticos','2 nasais','2 lacrimais','2 palatinos','2 conchas nasais inferiores','vômer','mandíbula'],
+    nota:'A caixa que guarda o cérebro e sustenta a face. Suturas (não são ossos) travam os 8 ossos cranianos; a mandíbula é o único móvel. Os ossículos do ouvido (martelo, bigorna, estribo — 6 no total) contam à parte.'},
+  'Coluna vertebral':{n:26,faixa:'C1–Cóccix',
+    ossos:['7 cervicais (C1–C7)','12 torácicas (T1–T12)','5 lombares (L1–L5)','sacro (5 fundidas)','cóccix (4 fundidas)'],
+    nota:'O eixo. Cada vértebra tem seu módulo próprio, ligada à raiz da Quiropraxia — inervação, sintomas e ajuste. Sacro e cóccix contam como 1 osso cada no adulto.',link:'coluna'},
+  'Caixa torácica':{n:25,faixa:'12 pares de costelas + esterno',
+    ossos:['7 pares de costelas verdadeiras','3 pares de costelas falsas','2 pares de costelas flutuantes','esterno (manúbrio + corpo + xifoide)'],
+    nota:'O abrigo do coração e dos pulmões. Respira: sobe e desce a cada inspiração. As flutuantes não chegam ao esterno.'},
+  'Cintura escapular':{n:4,faixa:'clavículas + escápulas',
+    ossos:['2 clavículas','2 escápulas (omoplatas)'],
+    nota:'A ponte entre o braço e o tronco. A clavícula é o osso mais frequentemente fraturado; a escápula flutua sobre os músculos das costas.'},
+  'Membros superiores':{n:64,faixa:'braço, antebraço e mãos',
+    ossos:['2 úmeros','2 rádios','2 ulnas','16 do carpo (8 por punho)','10 do metacarpo','28 falanges'],
+    nota:'Do ombro à ponta dos dedos. A mão sozinha tem 27 ossos — quase um terço do corpo em cada par de mãos. Ferramenta fina do fazer.'},
+  'Cintura pélvica':{n:2,faixa:'ossos do quadril',
+    ossos:['2 ossos do quadril (cada um = ílio + ísquio + púbis fundidos)'],
+    nota:'A bacia que recebe o peso do tronco e o passa às pernas. O sacro (contado na coluna) fecha o anel por trás. Báscula e nivelamento pertencem à Coluna & Osteo.'},
+  'Membros inferiores':{n:62,faixa:'coxa, perna e pés',
+    ossos:['2 fêmures','2 patelas','2 tíbias','2 fíbulas','14 do tarso (7 por tornozelo)','10 do metatarso','28 falanges'],
+    nota:'A base e o movimento. O fêmur é o osso mais longo e forte do corpo; o pé, com 26 ossos, é a fundação viva do equilíbrio.'}
+};
+let _skRegiao='';
+function skModo(m){
+  const w=document.getElementById('skWrap');
+  if(m==='raiox'){w.classList.add('raiox');w.style.background='#0A1826';}
+  else{w.classList.remove('raiox');w.style.background='transparent';}
+  document.getElementById('skBtnSVG').classList.toggle('btn-p',m==='svg');
+  document.getElementById('skBtnRaiox').classList.toggle('btn-p',m==='raiox');
+}
+function selSkRegiao(reg){
+  _skRegiao=reg;
+  document.querySelectorAll('#esqueletoSVG .sk-reg').forEach(g=>g.classList.toggle('sel',g.dataset.reg===reg));
+  const d=SKELETON[reg];if(!d)return;
+  document.getElementById('skPainel').innerHTML=
+    '<div style="border:1px solid rgba(201,168,76,0.4);border-radius:10px;padding:var(--f2) var(--f3);background:rgba(201,168,76,0.05)">'+
+    '<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:4px">'+esc(reg)+' '+
+    '<span class="tag tag-dourado">'+d.n+' '+(d.n===1?'osso':'ossos')+'</span></h3>'+
+    '<p style="font-size:0.72rem;color:var(--cinza);margin-bottom:8px">'+esc(d.faixa)+'</p>'+
+    '<p style="font-size:0.72rem;color:var(--cinza);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px">Ossos da região</p>'+
+    '<div style="font-size:0.8rem;line-height:1.7;margin-bottom:10px">'+d.ossos.map(o=>'· '+esc(o)).join('<br>')+'</div>'+
+    '<p style="font-size:0.82rem;line-height:1.6;color:var(--texto,#3a3a3a)">'+esc(d.nota)+'</p>'+
+    (d.link?'<button class="btn btn-sec btn-mini" style="margin-top:8px" onclick="go(\''+d.link+'\')">Abrir módulo Coluna &amp; Osteo →</button>':'')+
+    '<div style="margin-top:11px;padding-top:9px;border-top:1px solid rgba(201,168,76,0.18)">'+
+    '<span style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.4px;color:var(--cinza)">Na teia da Metafísica — pelo tecido</span><br>'+
+    '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:5px;align-items:center">'+
+    mfChip('osso','Água')+
+    '<span style="font-size:0.68rem;color:var(--cinza);font-style:italic">o osso é tecido da Água — governado pelo Rim, guarda a medula e a memória da estrutura</span>'+
+    '</div></div></div>';
+}
+// ----- MIOLOGIA — a camada dos músculos (tecido da Terra: Baço/Estômago) -----
+// Contagens aproximadas por região funcional (o corpo tem ~640 músculos).
+const MUSCULOS={
+  'Pescoço':{n:'~20',faixa:'cabeça e cervical',
+    ossos:['esternocleidomastóideo','escalenos (anterior, médio, posterior)','platisma','trapézio superior','longo do pescoço'],
+    nota:'Giram, flexionam e sustentam a cabeça. O esternocleidomastóideo é o cordão que salta quando você vira o rosto; a tensão crônica aqui puxa cefaleia e a subluxação de C1–C2.'},
+  'Ombro':{n:'~8',faixa:'cintura escapular',
+    ossos:['deltoide (anterior, medial, posterior)','supraespinhal','infraespinhal','redondo maior e menor','subescapular (manguito rotador)'],
+    nota:'O deltoide é a ombreira que ergue o braço; o manguito rotador é o quarteto fino que estabiliza a articulação mais móvel — e mais luxável — do corpo.'},
+  'Peito':{n:'~6',faixa:'tórax anterior',
+    ossos:['peitoral maior','peitoral menor','serrátil anterior','subclávio'],
+    nota:'Empurram e abraçam. O peitoral maior cruza o braço à frente do corpo; o serrátil, em leque nas costelas, cola a escápula ao tronco (sua fraqueza dá a "escápula alada").'},
+  'Braço':{n:'~8',faixa:'braço (úmero)',
+    ossos:['bíceps braquial','braquial','coracobraquial','tríceps braquial'],
+    nota:'O par de forças: bíceps dobra, tríceps estende. É a alavanca do carregar e do empurrar.'},
+  'Antebraço':{n:'~40',faixa:'antebraço e mãos',
+    ossos:['flexores do punho e dedos','extensores do punho e dedos','braquiorradial','pronador e supinador','músculos intrínsecos da mão'],
+    nota:'A caligrafia do corpo — dezenas de músculos finos que fecham a mão, giram a palma e dão a preensão. Muito trabalho fino do terapeuta vive aqui.'},
+  'Abdômen':{n:'~10',faixa:'parede abdominal',
+    ossos:['reto abdominal','oblíquo externo','oblíquo interno','transverso do abdômen','quadrado lombar'],
+    nota:'O cinturão que sustenta as vísceras e a lombar. O transverso é a cinta profunda da respiração e do centro; o quadrado lombar, atrás, é figura constante na lombalgia.'},
+  'Quadril e pelve':{n:'~18',faixa:'quadril e nádegas',
+    ossos:['iliopsoas','glúteo máximo, médio e mínimo','tensor da fáscia lata','piriforme','adutores da coxa'],
+    nota:'A base do andar. O psoas liga a lombar ao fêmur (o "músculo da alma"); o piriforme, quando encurta, aperta o ciático — a cadeia que você acompanha no cóccix e na sacroilíaca.'},
+  'Coxa':{n:'~20',faixa:'coxa (fêmur)',
+    ossos:['quadríceps (reto femoral + 3 vastos)','sartório','grácil','adutores','isquiotibiais (bíceps femoral, semitendíneo, semimembranáceo)'],
+    nota:'A potência da marcha. O quadríceps estende o joelho; os isquiotibiais, atrás, o dobram e freiam — desequilíbrio entre eles é fonte comum de dor no joelho e na bacia.'},
+  'Perna':{n:'~12',faixa:'perna e pés',
+    ossos:['tibial anterior','gastrocnêmio','sóleo','fibulares','extensores e flexores dos dedos'],
+    nota:'A bomba e o equilíbrio. O tríceps sural (gastrocnêmio + sóleo) empurra o passo pelo tendão de Aquiles; o tibial anterior levanta o pé. A fundação viva de que fala o pé no esqueleto.'}
+};
+// ----- TENDÕES & LIGAMENTOS — a camada do movimento (tecido da Madeira: Fígado/Vesícula) -----
+// As cordas que ligam músculo a osso (tendões) e osso a osso (ligamentos).
+const TENDOES={
+  'Ombro':{n:'manguito rotador',faixa:'articulação escapuloumeral',
+    itens:['tendões do manguito rotador (supra e infraespinhal, redondo menor, subescapular)','tendão longo do bíceps','ligamentos glenoumerais'],
+    nota:'A articulação mais móvel do corpo é segurada por tendões finos, não por encaixe ósseo. Por isso luxa e inflama com facilidade — a tendinite do manguito é a queixa clássica de ombro.'},
+  'Cotovelo':{n:'epicôndilos',faixa:'articulação umeroulnar',
+    itens:['tendão distal do bíceps','tendão do tríceps','ligamento colateral medial e lateral','tendões dos epicôndilos'],
+    nota:'Onde nascem as tendinites do esforço repetido: o "cotovelo de tenista" (epicôndilo lateral) e o "de golfista" (medial). Trabalho manual e teclado moram aqui.'},
+  'Punho e mão':{n:'flexores e extensores',faixa:'punho, mão e dedos',
+    itens:['tendões flexores e extensores dos dedos','retináculo dos flexores (túnel do carpo)','ligamentos intercarpais','polias dos dedos'],
+    nota:'Dezenas de cordas longas correm do antebraço aos dedos por dentro do túnel do carpo. Quando o retináculo aperta o nervo mediano, nasce a síndrome do túnel do carpo — a mão que formiga.'},
+  'Coluna e ligamentos':{n:'ligamentos axiais',faixa:'da nuca ao sacro',
+    itens:['ligamento longitudinal anterior e posterior','ligamento amarelo','ligamentos supra e interespinhosos','ligamento nucal'],
+    nota:'A coluna não fica de pé pelo osso, e sim pela malha de ligamentos que amarra vértebra a vértebra. Rigidez e "trave" nas costas são muitas vezes desses tecidos, não do disco.'},
+  'Quadril':{n:'ilio + trato',faixa:'articulação coxofemoral',
+    itens:['ligamento iliofemoral (o mais forte do corpo)','ligamentos pubofemoral e isquiofemoral','trato iliotibial','tendões dos glúteos'],
+    nota:'O ligamento iliofemoral é o mais forte do corpo — sustenta você em pé sem gasto muscular. O trato iliotibial, quando tenso, dói na lateral do joelho de quem corre.'},
+  'Joelho':{n:'patelar + cruzados',faixa:'articulação do joelho',
+    itens:['tendão patelar e do quadríceps','ligamentos cruzados anterior (LCA) e posterior','colaterais medial e lateral','meniscos (fibrocartilagem)'],
+    nota:'A articulação mais lesionada do esporte. O cruzado anterior rompe na torção com pé fixo; o tendão patelar é onde bate o martelinho do reflexo. Estabilidade pura de ligamento.'},
+  'Tornozelo e pé':{n:'Aquiles + tarso',faixa:'tornozelo e pé',
+    itens:['tendão de Aquiles (o mais grosso do corpo)','ligamentos talofibulares (entorse)','fáscia plantar','tendão tibial posterior'],
+    nota:'O Aquiles, o mais grosso do corpo, empurra cada passo. A entorse lateral estira o ligamento talofibular; a fáscia plantar inflamada é a dor no calcanhar dos primeiros passos da manhã.'}
+};
+let _skCamada='ossos';
+function skCamada(c){
+  _skCamada=c;
+  document.getElementById('esqueletoSVG').style.display=(c==='ossos')?'':'none';
+  document.getElementById('musculoSVG').style.display=(c==='musculos')?'':'none';
+  document.getElementById('tendaoSVG').style.display=(c==='tendoes')?'':'none';
+  document.getElementById('skCamOssos').classList.toggle('btn-p',c==='ossos');
+  document.getElementById('skCamOssos').classList.toggle('btn-sec',c!=='ossos');
+  document.getElementById('skCamMusculos').classList.toggle('btn-p',c==='musculos');
+  document.getElementById('skCamMusculos').classList.toggle('btn-sec',c!=='musculos');
+  document.getElementById('skCamTendoes').classList.toggle('btn-p',c==='tendoes');
+  document.getElementById('skCamTendoes').classList.toggle('btn-sec',c!=='tendoes');
+  const alvo=c==='ossos'?'do esqueleto para ver os ossos':c==='musculos'?'do corpo para ver os músculos':'de uma articulação para ver seus tendões e ligamentos';
+  document.getElementById('skPainel').innerHTML='<div class="vazio">Clique numa região '+alvo+
+    ', a contagem e o fio que a liga à teia da Metafísica.</div>';
+  document.querySelectorAll('#esqueletoSVG .sk-reg,#musculoSVG .mus-reg,#tendaoSVG .ten-reg').forEach(g=>g.classList.remove('sel'));
+}
+function selTenRegiao(reg){
+  document.querySelectorAll('#tendaoSVG .ten-reg').forEach(g=>g.classList.toggle('sel',g.dataset.reg===reg));
+  const d=TENDOES[reg];if(!d)return;
+  document.getElementById('skPainel').innerHTML=
+    '<div style="border:1px solid rgba(92,184,122,0.45);border-radius:10px;padding:var(--f2) var(--f3);background:rgba(92,184,122,0.07)">'+
+    '<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:4px">'+esc(reg)+' '+
+    '<span class="tag" style="background:#5cb87a22;color:#2F6B3E;border:1px solid #5cb87a66">'+esc(d.n)+'</span></h3>'+
+    '<p style="font-size:0.72rem;color:var(--cinza);margin-bottom:8px">'+esc(d.faixa)+'</p>'+
+    '<p style="font-size:0.72rem;color:var(--cinza);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px">Tendões e ligamentos da região</p>'+
+    '<div style="font-size:0.8rem;line-height:1.7;margin-bottom:10px">'+d.itens.map(o=>'· '+esc(o)).join('<br>')+'</div>'+
+    '<p style="font-size:0.82rem;line-height:1.6;color:var(--texto,#3a3a3a)">'+esc(d.nota)+'</p>'+
+    '<div style="margin-top:11px;padding-top:9px;border-top:1px solid rgba(92,184,122,0.22)">'+
+    '<span style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.4px;color:var(--cinza)">Na teia da Metafísica — pelo tecido</span><br>'+
+    '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:5px;align-items:center">'+
+    mfChip('tendões','Madeira')+
+    '<span style="font-size:0.68rem;color:var(--cinza);font-style:italic">o tendão é tecido da Madeira — governado pelo Fígado/Vesícula, dá a elasticidade e a amplitude do movimento</span>'+
+    '</div></div></div>';
+}
+function selMusRegiao(reg){
+  document.querySelectorAll('#musculoSVG .mus-reg').forEach(g=>g.classList.toggle('sel',g.dataset.reg===reg));
+  const d=MUSCULOS[reg];if(!d)return;
+  document.getElementById('skPainel').innerHTML=
+    '<div style="border:1px solid rgba(196,107,78,0.4);border-radius:10px;padding:var(--f2) var(--f3);background:rgba(196,107,78,0.06)">'+
+    '<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:4px">'+esc(reg)+' '+
+    '<span class="tag" style="background:#C46B4E22;color:#A34A32;border:1px solid #C46B4E55">'+d.n+' músculos</span></h3>'+
+    '<p style="font-size:0.72rem;color:var(--cinza);margin-bottom:8px">'+esc(d.faixa)+'</p>'+
+    '<p style="font-size:0.72rem;color:var(--cinza);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px">Músculos da região</p>'+
+    '<div style="font-size:0.8rem;line-height:1.7;margin-bottom:10px">'+d.ossos.map(o=>'· '+esc(o)).join('<br>')+'</div>'+
+    '<p style="font-size:0.82rem;line-height:1.6;color:var(--texto,#3a3a3a)">'+esc(d.nota)+'</p>'+
+    '<div style="margin-top:11px;padding-top:9px;border-top:1px solid rgba(196,107,78,0.2)">'+
+    '<span style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.4px;color:var(--cinza)">Na teia da Metafísica — pelo tecido</span><br>'+
+    '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:5px;align-items:center">'+
+    mfChip('músculo','Terra')+
+    '<span style="font-size:0.68rem;color:var(--cinza);font-style:italic">o músculo é tecido da Terra — governado pelo Baço/Estômago, é a carne que move e sustenta</span>'+
+    '</div></div></div>';
+}
+function renderEsqueleto(){
+  const svg=document.getElementById('esqueletoSVG');if(!svg)return;
+  svg.querySelectorAll('.sk-reg').forEach(g=>{
+    if(!g._bound){g._bound=1;g.addEventListener('click',()=>selSkRegiao(g.dataset.reg));}
+  });
+  document.querySelectorAll('#musculoSVG .mus-reg').forEach(g=>{
+    if(!g._bound){g._bound=1;g.addEventListener('click',()=>selMusRegiao(g.dataset.reg));}
+  });
+  document.querySelectorAll('#tendaoSVG .ten-reg').forEach(g=>{
+    if(!g._bound){g._bound=1;g.addEventListener('click',()=>selTenRegiao(g.dataset.reg));}
+  });
+  if(!document.getElementById('skBtnSVG').classList.contains('btn-p')&&
+     !document.getElementById('skBtnRaiox').classList.contains('btn-p'))skModo('svg');
+}
+
 // ===== RENDER GERAL =====
-function renderTudo(){renderPerfis();renderInicio();renderVitais();renderProtocolos();renderCrono();renderExames();renderNutricao();renderColuna();renderArvoreSVG();renderArvoreTabela();renderMapa();renderMetafisica();renderNumerologia();}
+function renderTudo(){renderPerfis();renderInicio();renderVitais();renderProtocolos();renderCrono();renderExames();renderNutricao();renderColuna();renderEsqueleto();renderArvoreSVG();renderArvoreTabela();renderMapa();renderMetafisica();renderNumerologia();}
 
 // ============================================================
 // SISTEMA DE LOGIN — padrão universal Montgomery
@@ -2623,6 +3046,7 @@ function iniciarApp(){
   renderTudo();
 }
 window.addEventListener('DOMContentLoaded',()=>{
+  carimbarVersao();
   initAuth().catch(e=>{
     console.warn('Auth SDK falhou (offline?):',e);
     const s=prompt('Senha de acesso:');
