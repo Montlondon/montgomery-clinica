@@ -1133,7 +1133,9 @@ function mesclarPlanoProtocolos(ev){
   const reader=new FileReader();
   reader.onload=e=>{
     try{
-      const d=JSON.parse(e.target.result);
+      let d;
+      try{d=JSON.parse(e.target.result);}
+      catch(pe){throw new Error('Este arquivo não é um plano .json válido. Escolha o arquivo do plano no formato JSON (ex.: crono_plano_montgomery_2026.json), não um .md ou .txt.');}
       const lista=Array.isArray(d)?d:(d.protocolos||[]);
       if(!lista.length)throw new Error('O arquivo não tem protocolos para carregar.');
       const pid=document.getElementById('cronoPerfil').value;
@@ -1154,7 +1156,7 @@ function mesclarPlanoProtocolos(ev){
       });
       gravar(K.protocolos,protos);
       renderProtocolos();renderInicio();
-      msg.textContent='✓ Plano carregado: '+novos+' item(ns) adicionado(s)'+(pulados?', '+pulados+' já existia(m)':'')+'.';
+      msg.textContent='Plano carregado: '+novos+' item(ns) adicionado(s)'+(pulados?', '+pulados+' já existia(m)':'')+'.';
       setTimeout(()=>msg.textContent='',5000);
     }catch(err){msg.textContent='Erro: '+err.message;}
   };
