@@ -231,6 +231,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     <a data-sec="coluna" onclick="go('coluna',this)"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M9 5h6M8.5 8.5h7M8 12h8M8.5 15.5h7M9 19h6"/></svg></span>Coluna &amp; Osteo</a>
     <a data-sec="arvore" onclick="go('arvore',this)"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.6"/><circle cx="6" cy="9" r="1.6"/><circle cx="18" cy="9" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="20" r="1.6"/><path d="M12 5.6v4.8M12 13.6v4.8M7.3 9.8 10.7 11M16.7 9.8 13.3 11M7 10.4l4 8M17 10.4l-5 8"/></svg></span>Árvore da Vida</a>
     <a data-sec="metafisica" onclick="go('metafisica',this)"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="12,3 19.8,7.5 19.8,16.5 12,21 4.2,16.5 4.2,7.5"/><path d="M12 3v9M19.8 16.5 12 12M4.2 16.5 12 12"/></svg></span>Metafísica</a>
+    <a data-sec="numerologia" onclick="go('numerologia',this)"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8.5 8.5 6v12"/><path d="M14 8.2a2.6 2.6 0 1 1 4.3 1.9L14 18h5"/></svg></span>Numerologia</a>
     <a data-sec="mapa" onclick="go('mapa',this)"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg></span>Mapa do Sistema</a>
     <a data-sec="config" onclick="go('config',this)"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg></span>Backup &amp; Configurações</a>
   </nav>
@@ -759,6 +760,28 @@ tr:hover td{background:rgba(201,168,76,0.05)}
   </div>
 </section>
 
+<!-- NUMEROLOGIA -->
+<section class="sec" id="sec-numerologia">
+  <div class="sec-head">
+    <h1>Numerologia</h1>
+    <p>O nome e a data de nascimento reduzidos a números-chave pelo método pitagórico. Cálculo exato e determinístico — cada resultado mostra de onde veio.</p>
+  </div>
+  <div class="bloco">
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8.5 8.5 6v12"/><path d="M14 8.2a2.6 2.6 0 1 1 4.3 1.9L14 18h5"/></svg>Calcular mapa numerológico</h2>
+    <div class="linha">
+      <div class="fg"><label>Usar um perfil da família</label>
+        <select id="numPerfil" onchange="numPreencherDoPerfil()" style="padding:8px 10px;border:1px solid rgba(27,58,92,0.18);border-radius:8px;font-size:0.85rem;font-family:Inter,sans-serif"></select>
+      </div>
+      <div class="fg"><label>Nome completo (de nascimento)</label><input id="numNome" placeholder="Ex.: Montgomery Magalhães"></div>
+      <div class="fg"><label>Data de nascimento</label><input id="numNasc" type="date"></div>
+    </div>
+    <button class="btn btn-p" onclick="calcularNumerologia()">Calcular</button>
+    <span style="font-size:0.72rem;color:var(--cinza);margin-left:10px">Use o nome de registro — é a vibração que a tradição considera de origem.</span>
+    <div class="msg-ok" id="numMsg"></div>
+  </div>
+  <div id="numResultado"></div>
+</section>
+
 <!-- MAPA DO SISTEMA -->
 <section class="sec" id="sec-mapa">
   <div class="sec-head">
@@ -1189,6 +1212,90 @@ function baixarPlanoProtocolos(){
   URL.revokeObjectURL(url);
   msg.textContent='Plano baixado: '+lista.length+' protocolo(s) exportado(s).';
   setTimeout(()=>msg.textContent='',5000);
+}
+
+// ============================================================
+// NUMEROLOGIA — método pitagórico, determinístico
+// A=J=S=1 · B=K=T=2 · C=L=U=3 · D=M=V=4 · E=N=W=5
+// F=O=X=6 · G=P=Y=7 · H=Q=Z=8 · I=R=9   (Y contado como consoante)
+// Números mestres 11, 22 e 33 não são reduzidos.
+// ============================================================
+const NUM_VOGAIS='AEIOU';
+const NUM_SIGNIFICADOS={
+  1:{t:'O Pioneiro',s:'Liderança, iniciativa, independência e coragem de abrir caminhos. Sombra: ego, teimosia, impaciência.'},
+  2:{t:'O Diplomata',s:'Sensibilidade, cooperação, parceria e intuição. A força do que une. Sombra: dependência, indecisão, medo do conflito.'},
+  3:{t:'O Comunicador',s:'Expressão, criatividade, alegria e a palavra que encanta. Sombra: dispersão, superficialidade, crítica.'},
+  4:{t:'O Construtor',s:'Ordem, trabalho, estrutura e disciplina. Constrói o que dura. Sombra: rigidez, apego ao controle.'},
+  5:{t:'O Livre',s:'Movimento, liberdade, mudança e os sentidos vivos. Sombra: excesso, inconstância, fuga.'},
+  6:{t:'O Cuidador',s:'Amor, família, responsabilidade, harmonia e cura. A vocação de servir. Sombra: controle, sacrifício em excesso.'},
+  7:{t:'O Buscador',s:'Introspecção, análise, espiritualidade e sabedoria interior. Sombra: isolamento, ceticismo, frieza.'},
+  8:{t:'O Realizador',s:'Poder material, gestão, ambição e justiça. Colhe no mundo concreto. Sombra: dominação, apego, dureza.'},
+  9:{t:'O Humanitário',s:'Compaixão, entrega, arte e o encerrar de ciclos com sentido. Sombra: martírio, dispersão, mágoa.'},
+  11:{t:'Mestre Intuitivo',s:'A vibração do 2 elevada: inspiração, iluminação e canal espiritual. Tensão entre o céu e a terra. Alta sensibilidade.'},
+  22:{t:'Mestre Construtor',s:'A vibração do 4 elevada: realizar grandes obras no plano material a serviço de muitos. Potência e responsabilidade.'},
+  33:{t:'Mestre do Amor',s:'A vibração do 6 elevada: cura e serviço pela compaixão incondicional. O professor do coração.'}
+};
+function numLimpar(s){return (s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().replace(/[^A-Z]/g,'');}
+function numValor(ch){return ((ch.charCodeAt(0)-65)%9)+1;}
+function numCadeia(n){const p=[n];while(n>9&&n!==11&&n!==22&&n!==33){n=String(n).split('').reduce((a,d)=>a+(+d),0);p.push(n);}return p;}
+function numSoma(letras){let t=0;for(const ch of letras)t+=numValor(ch);return t;}
+function renderNumerologia(){
+  const sel=document.getElementById('numPerfil');if(!sel)return;const v=sel.value;
+  sel.innerHTML='<option value="">— entrada manual —</option>'+ler(K.perfis).map(p=>'<option value="'+p.id+'">'+esc(p.nome)+'</option>').join('');
+  if(v)sel.value=v;
+}
+function numPreencherDoPerfil(){
+  const id=document.getElementById('numPerfil').value;
+  if(!id)return;
+  const p=ler(K.perfis).find(x=>x.id===id);if(!p)return;
+  document.getElementById('numNome').value=p.nome||'';
+  document.getElementById('numNasc').value=p.nasc||'';
+  calcularNumerologia();
+}
+function numCard(rotulo,num,detalhe,destaque){
+  const info=NUM_SIGNIFICADOS[num]||{t:'',s:''};
+  const mestre=(num===11||num===22||num===33);
+  return '<div style="border:1px solid rgba(27,58,92,'+(destaque?'0.35':'0.14')+');border-radius:12px;padding:16px 18px;'+(destaque?'box-shadow:0 2px 12px rgba(27,58,92,0.08)':'')+'">'+
+    '<div style="display:flex;align-items:baseline;gap:12px">'+
+      '<span style="font-size:2.4rem;font-weight:700;line-height:1;color:#1b3a5c">'+num+'</span>'+
+      '<span><b style="font-size:0.9rem">'+esc(rotulo)+'</b><br><span style="font-size:0.8rem;color:var(--cinza)">'+esc(info.t)+'</span></span>'+
+      (mestre?'<span class="tag tag-azul" style="margin-left:auto">número mestre</span>':'')+
+    '</div>'+
+    '<p style="margin:10px 0 6px;font-size:0.82rem;line-height:1.45">'+esc(info.s)+'</p>'+
+    '<div style="font-size:0.7rem;color:var(--cinza)">'+esc(detalhe)+'</div>'+
+  '</div>';
+}
+function calcularNumerologia(){
+  const msg=document.getElementById('numMsg');
+  const out=document.getElementById('numResultado');
+  const nome=document.getElementById('numNome').value.trim();
+  const nasc=document.getElementById('numNasc').value;
+  const letras=numLimpar(nome);
+  if(!letras){msg.textContent='Erro: informe um nome com letras para calcular.';out.innerHTML='';return;}
+  msg.textContent='';
+  const vogais=[...letras].filter(c=>NUM_VOGAIS.includes(c));
+  const consoantes=[...letras].filter(c=>!NUM_VOGAIS.includes(c));
+  const cadExpr=numCadeia(numSoma(letras));
+  const cadAlma=numCadeia(numSoma(vogais));
+  const cadPers=numCadeia(numSoma(consoantes));
+  let cards=[];
+  if(nasc){
+    const [Y,M,D]=nasc.split('-').map(Number);
+    const rd=numCadeia(D),rm=numCadeia(M),ry=numCadeia(Y);
+    const cadVida=numCadeia(rd.at(-1)+rm.at(-1)+ry.at(-1));
+    const anoAtual=new Date().getFullYear();
+    const cadAno=numCadeia(rd.at(-1)+rm.at(-1)+numCadeia(anoAtual).at(-1));
+    cards.push(numCard('Caminho de Vida',cadVida.at(-1),'dia '+D+'→'+rd.at(-1)+' · mês '+M+'→'+rm.at(-1)+' · ano '+Y+'→'+ry.at(-1)+'  =  '+cadVida.join(' → '),true));
+    cards.push(numCard('Dia Natal',numCadeia(D).at(-1),'dia '+D+'  =  '+numCadeia(D).join(' → ')));
+    cards.push(numCard('Ano Pessoal ('+anoAtual+')',cadAno.at(-1),'ciclo do ano atual  =  '+cadAno.join(' → ')));
+  }
+  cards.push(numCard('Expressão / Destino',cadExpr.at(-1),'todas as letras do nome, soma '+cadExpr[0]+'  =  '+cadExpr.join(' → ')));
+  cards.push(numCard('Motivação / Alma',cadAlma.at(-1),'vogais ('+(vogais.join('')||'—')+'), soma '+cadAlma[0]+'  =  '+cadAlma.join(' → ')));
+  cards.push(numCard('Impressão / Personalidade',cadPers.at(-1),'consoantes, soma '+cadPers[0]+'  =  '+cadPers.join(' → ')));
+  out.innerHTML='<div class="bloco"><h2 style="border:0;padding:0;margin:0 0 4px">Mapa de '+esc(nome)+'</h2>'+
+    (nasc?'':'<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 12px">Adicione a data de nascimento para ver Caminho de Vida, Dia Natal e Ano Pessoal.</p>')+
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:12px">'+cards.join('')+'</div>'+
+    '<p style="font-size:0.72rem;color:var(--cinza);margin-top:16px;line-height:1.5">Método pitagórico. Cada letra vale de 1 a 9; números mestres (11, 22, 33) não se reduzem. A numerologia é uma linguagem simbólica de autoconhecimento — um espelho para reflexão, não uma previsão determinística da vida.</p></div>';
 }
 function renderProtocolos(){
   const fp=document.getElementById('prFiltroPerfil').value,fc=document.getElementById('prFiltroCat').value,fs=document.getElementById('prFiltroStatus').value;
@@ -2217,7 +2324,7 @@ function salvarMapaMetafisico(){
 }
 
 // ===== RENDER GERAL =====
-function renderTudo(){renderPerfis();renderInicio();renderVitais();renderProtocolos();renderCrono();renderExames();renderNutricao();renderColuna();renderArvoreSVG();renderArvoreTabela();renderMapa();renderMetafisica();}
+function renderTudo(){renderPerfis();renderInicio();renderVitais();renderProtocolos();renderCrono();renderExames();renderNutricao();renderColuna();renderArvoreSVG();renderArvoreTabela();renderMapa();renderMetafisica();renderNumerologia();}
 
 // ============================================================
 // SISTEMA DE LOGIN — padrão universal Montgomery
