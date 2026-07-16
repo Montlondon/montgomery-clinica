@@ -764,7 +764,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
 <section class="sec" id="sec-numerologia">
   <div class="sec-head">
     <h1>Numerologia</h1>
-    <p>O nome e a data de nascimento reduzidos a números-chave pelo método pitagórico. Cálculo exato e determinístico — cada resultado mostra de onde veio.</p>
+    <p>O nome e a data de nascimento reduzidos a números-chave pelo método pitagórico. Cálculo exato e determinístico — cada resultado mostra de onde veio. Agora com Desafios, dívidas e lições kármicas, ponte do Caminho de Vida com as Sefirot, e o mapa guardado no perfil.</p>
   </div>
   <div class="bloco">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8.5 8.5 6v12"/><path d="M14 8.2a2.6 2.6 0 1 1 4.3 1.9L14 18h5"/></svg>Calcular mapa numerológico</h2>
@@ -973,6 +973,11 @@ function verPerfil(id){
     '<h3 style="font-size:0.85rem;color:var(--azul);margin:12px 0 6px">Histórico cirúrgico</h3>'+li(p.cirurgias)+
     (p.histFam?'<h3 style="font-size:0.85rem;color:var(--azul);margin:12px 0 6px">Histórico familiar / predisposições</h3><p style="font-size:0.83rem;line-height:1.6;white-space:pre-line">'+esc(p.histFam)+'</p>':'')+
     (p.notas?'<h3 style="font-size:0.85rem;color:var(--azul);margin:12px 0 6px">Notas integrativas</h3><p style="font-size:0.83rem;line-height:1.6;white-space:pre-line">'+esc(p.notas)+'</p>':'')+
+    (p.numerologia?'<h3 style="font-size:0.85rem;color:var(--azul);margin:12px 0 6px">Mapa numerológico <span style="font-weight:400;color:var(--cinza);font-size:0.72rem">· guardado em '+esc(p.numerologia.guardadoEm||'—')+'</span></h3>'+
+      '<div style="display:flex;flex-wrap:wrap;gap:8px;font-size:0.78rem">'+
+      (p.numerologia.vida!=null?'<span class="tag tag-azul">Caminho de Vida '+p.numerologia.vida+'</span>':'')+
+      '<span class="tag">Expressão '+p.numerologia.expr+'</span><span class="tag">Alma '+p.numerologia.alma+'</span><span class="tag">Personalidade '+p.numerologia.pers+'</span></div>'+
+      '<div style="margin-top:8px"><button class="btn btn-sec btn-mini" onclick="numAbrirDoPerfil(\''+p.id+'\')">Abrir na Numerologia</button></div>':'')+
     '<div style="margin-top:16px"><button class="btn btn-sec btn-mini" onclick="editarPerfil(\''+p.id+'\')">Editar</button> '+
     '<button class="btn btn-red btn-mini" onclick="excluirPerfil(\''+p.id+'\')">Excluir</button> '+
     '<button class="btn btn-sec btn-mini" onclick="document.getElementById(\'perfilDetalhe\').innerHTML=\'\'">Fechar</button></div>'+
@@ -1003,7 +1008,7 @@ function salvarPerfil(){
     alerta:document.getElementById('pfAlerta').value.trim(),condicoes:linhas('pfCondicoes'),cirurgias:linhas('pfCirurgias'),
     histFam:document.getElementById('pfHistFam').value.trim(),notas:document.getElementById('pfNotas').value.trim()};
   const ix=perfis.findIndex(p=>p.id===id);
-  if(ix>=0)perfis[ix]=novo;else perfis.push(novo);
+  if(ix>=0){if(perfis[ix].numerologia)novo.numerologia=perfis[ix].numerologia;perfis[ix]=novo;}else perfis.push(novo);
   gravar(K.perfis,perfis);
   document.getElementById('pfMsg').textContent='✓ Perfil salvo.';
   setTimeout(()=>{document.getElementById('pfMsg').textContent='';fecharFormPerfil();},900);
@@ -1235,6 +1240,18 @@ const NUM_SIGNIFICADOS={
   22:{t:'Mestre Construtor',s:'A vibração do 4 elevada: realizar grandes obras no plano material a serviço de muitos. Potência e responsabilidade.'},
   33:{t:'Mestre do Amor',s:'A vibração do 6 elevada: cura e serviço pela compaixão incondicional. O professor do coração.'}
 };
+// Ponte número → Sefirá da Árvore da Vida (aba Mapa Energético).
+// Base clássica: o dígito 1–9 corresponde à esfera de mesmo número no raio que desce
+// (Kether=1 … Yesod=9); Malkuth é o 10. Os mestres não têm esfera própria de número:
+// o 11 é tradicionalmente contado como a 11ª esfera OCULTA — Da'at, o Conhecimento no abismo;
+// 22 e 33 sobem à esfera da sua vibração-base (4→Chesed, 6→Tiphereth). Nota declarada em cada caso.
+const NUM_SEFIRA={
+  1:{id:'kether'},2:{id:'chokmah'},3:{id:'binah'},4:{id:'chesed'},5:{id:'geburah'},
+  6:{id:'tiphereth'},7:{id:'netzach'},8:{id:'hod'},9:{id:'yesod'},10:{id:'malkuth'},
+  11:{id:'daat',daat:true,nota:'O 11 é contado na tradição como a 11ª esfera oculta.'},
+  22:{id:'chesed',nota:'Sem esfera própria — sobe à vibração-base 4.'},
+  33:{id:'tiphereth',nota:'Sem esfera própria — sobe à vibração-base 6.'}
+};
 function numLimpar(s){return (s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().replace(/[^A-Z]/g,'');}
 function numValor(ch){return ((ch.charCodeAt(0)-65)%9)+1;}
 function numCadeia(n){const p=[n];while(n>9&&n!==11&&n!==22&&n!==33){n=String(n).split('').reduce((a,d)=>a+(+d),0);p.push(n);}return p;}
@@ -1252,6 +1269,14 @@ function numPreencherDoPerfil(){
   document.getElementById('numNasc').value=p.nasc||'';
   calcularNumerologia();
 }
+function numAbrirDoPerfil(id){
+  go('numerologia');
+  setTimeout(function(){
+    const sel=document.getElementById('numPerfil');if(!sel)return;
+    sel.value=id;numPreencherDoPerfil();
+    document.getElementById('numResultado').scrollIntoView({behavior:'smooth'});
+  },80);
+}
 function numCard(rotulo,num,detalhe,destaque){
   const info=NUM_SIGNIFICADOS[num]||{t:'',s:''};
   const mestre=(num===11||num===22||num===33);
@@ -1265,37 +1290,110 @@ function numCard(rotulo,num,detalhe,destaque){
     '<div style="font-size:0.7rem;color:var(--cinza)">'+esc(detalhe)+'</div>'+
   '</div>';
 }
+// Reduz a um único dígito, sem preservar mestres (uso dos Desafios).
+function numReduzir1(n){n=Math.abs(n);while(n>9){n=String(n).split('').reduce((a,d)=>a+(+d),0);}return n;}
+// Ponte de um número-chave para a sua Sefirá na Árvore da Vida.
+function numSefiraCard(num){
+  const m=NUM_SEFIRA[num];if(!m)return '';
+  const s=SEFIROT.find(x=>x.id===m.id);
+  const nome=m.daat?"Da'at — Conhecimento":(s?s.n+' — '+s.pt:m.id);
+  const frase=m.daat?"A esfera oculta, fora da conta dos dez, no abismo entre a Coroa e o Coração.":(s?s.frase:'');
+  const irPara=m.daat?"go('arvore');setTimeout(function(){selDaat&&selDaat()},80)":"go('arvore');setTimeout(function(){selSefira('"+m.id+"')},80)";
+  return '<div style="border:1px solid rgba(201,168,76,0.35);border-radius:12px;padding:16px 18px;background:rgba(201,168,76,0.06)">'+
+    '<div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.4px;color:var(--cinza);margin-bottom:6px">Ponte com a Árvore da Vida</div>'+
+    '<b style="font-size:0.95rem;color:#1b3a5c">Caminho de Vida '+num+' &rarr; '+esc(nome)+'</b>'+
+    '<p style="margin:8px 0 6px;font-size:0.8rem;line-height:1.45">'+esc(frase)+'</p>'+
+    (m.nota?'<div style="font-size:0.7rem;color:var(--cinza);margin-bottom:8px">'+esc(m.nota)+'</div>':'')+
+    '<button class="btn btn-sec btn-mini" onclick="'+irPara+'">Abrir a esfera no Mapa Energético</button>'+
+  '</div>';
+}
+let _numMapaAtual=null;
 function calcularNumerologia(){
   const msg=document.getElementById('numMsg');
   const out=document.getElementById('numResultado');
   const nome=document.getElementById('numNome').value.trim();
   const nasc=document.getElementById('numNasc').value;
   const letras=numLimpar(nome);
-  if(!letras){msg.textContent='Erro: informe um nome com letras para calcular.';out.innerHTML='';return;}
+  if(!letras){msg.textContent='Erro: informe um nome com letras para calcular.';out.innerHTML='';_numMapaAtual=null;return;}
   msg.textContent='';
   const vogais=[...letras].filter(c=>NUM_VOGAIS.includes(c));
   const consoantes=[...letras].filter(c=>!NUM_VOGAIS.includes(c));
   const cadExpr=numCadeia(numSoma(letras));
   const cadAlma=numCadeia(numSoma(vogais));
   const cadPers=numCadeia(numSoma(consoantes));
-  let cards=[];
+  let cards=[],extra='',cadVida=null;
   if(nasc){
     const [Y,M,D]=nasc.split('-').map(Number);
     const rd=numCadeia(D),rm=numCadeia(M),ry=numCadeia(Y);
-    const cadVida=numCadeia(rd.at(-1)+rm.at(-1)+ry.at(-1));
+    cadVida=numCadeia(rd.at(-1)+rm.at(-1)+ry.at(-1));
     const anoAtual=new Date().getFullYear();
     const cadAno=numCadeia(rd.at(-1)+rm.at(-1)+numCadeia(anoAtual).at(-1));
     cards.push(numCard('Caminho de Vida',cadVida.at(-1),'dia '+D+'→'+rd.at(-1)+' · mês '+M+'→'+rm.at(-1)+' · ano '+Y+'→'+ry.at(-1)+'  =  '+cadVida.join(' → '),true));
     cards.push(numCard('Dia Natal',numCadeia(D).at(-1),'dia '+D+'  =  '+numCadeia(D).join(' → ')));
     cards.push(numCard('Ano Pessoal ('+anoAtual+')',cadAno.at(-1),'ciclo do ano atual  =  '+cadAno.join(' → ')));
+    // ---- Desafios (subtrações da data, reduzidos a um dígito; 0 é válido) ----
+    const rd1=numReduzir1(D),rm1=numReduzir1(M),ry1=numReduzir1(Y);
+    const des1=Math.abs(rm1-rd1),des2=Math.abs(rd1-ry1),desP=Math.abs(des1-des2);
+    const desCard=(rot,val,det)=>'<div style="border:1px solid rgba(27,58,92,0.14);border-radius:10px;padding:12px 14px">'+
+      '<div style="display:flex;align-items:baseline;gap:10px"><span style="font-size:1.7rem;font-weight:700;color:#1b3a5c;line-height:1">'+val+'</span>'+
+      '<b style="font-size:0.82rem">'+rot+'</b></div>'+
+      '<div style="font-size:0.7rem;color:var(--cinza);margin-top:4px">'+det+'</div></div>';
+    extra+='<div class="bloco"><h2 style="border:0;padding:0;margin:0 0 4px">Desafios</h2>'+
+      '<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 12px">As tensões a atravessar, obtidas pela subtração dos dígitos da data. O <b>0</b> é o desafio do vazio — nenhuma direção fixa, todas em aberto.</p>'+
+      '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">'+
+      desCard('Primeira metade da vida',des1,'|mês '+rm1+' − dia '+rd1+'|')+
+      desCard('Segunda metade da vida',des2,'|dia '+rd1+' − ano '+ry1+'|')+
+      desCard('Desafio principal',desP,'|desafio 1 − desafio 2|')+
+      '</div></div>';
   }
   cards.push(numCard('Expressão / Destino',cadExpr.at(-1),'todas as letras do nome, soma '+cadExpr[0]+'  =  '+cadExpr.join(' → ')));
   cards.push(numCard('Motivação / Alma',cadAlma.at(-1),'vogais ('+(vogais.join('')||'—')+'), soma '+cadAlma[0]+'  =  '+cadAlma.join(' → ')));
   cards.push(numCard('Impressão / Personalidade',cadPers.at(-1),'consoantes, soma '+cadPers[0]+'  =  '+cadPers.join(' → ')));
+  // ---- Dívidas kármicas (13,14,16,19 que aparecem antes da redução) ----
+  const DIVIDAS={13:'O trabalho (13): reaprender o esforço constante, sem atalhos nem preguiça.',14:'A liberdade (14): moderar os excessos dos sentidos e encontrar o meio-termo.',16:'O amor e o ego (16): a queda da torre — reconstruir sobre a humildade, não sobre a vaidade.',19:'A independência (19): aprender a receber e a servir, não só a bastar-se a si mesmo.'};
+  const cadeiasNucleo=[['Caminho de Vida',cadVida],['Expressão',cadExpr],['Alma',cadAlma],['Personalidade',cadPers]].filter(x=>x[1]);
+  const dividas=[];
+  cadeiasNucleo.forEach(([rot,cad])=>cad.forEach(n=>{if(DIVIDAS[n]&&!dividas.some(d=>d.n===n))dividas.push({n,rot,txt:DIVIDAS[n]});}));
+  // ---- Lições kármicas (números de 1 a 9 ausentes no nome) ----
+  const presentes=new Set([...letras].map(numValor));
+  const licoes=[1,2,3,4,5,6,7,8,9].filter(n=>!presentes.has(n));
+  if(dividas.length||licoes.length){
+    extra+='<div class="bloco"><h2 style="border:0;padding:0;margin:0 0 4px">Lições kármicas</h2>';
+    if(dividas.length){
+      extra+='<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 8px">Dívidas kármicas — surgem quando um número-chave passa por 13, 14, 16 ou 19 antes de se reduzir:</p>'+
+        '<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">'+
+        dividas.map(d=>'<div style="border-left:3px solid #C9A84C;padding:6px 12px"><b style="font-size:0.85rem">'+d.n+' <span style="font-weight:400;color:var(--cinza)">(via '+esc(d.rot)+')</span></b><br><span style="font-size:0.8rem;line-height:1.45">'+esc(d.txt)+'</span></div>').join('')+
+        '</div>';
+    }else{
+      extra+='<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 12px">Nenhuma dívida kármica (13, 14, 16, 19) nos números-chave.</p>';
+    }
+    if(licoes.length){
+      extra+='<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 6px">Lições — números de 1 a 9 que <b>não aparecem</b> no nome; qualidades a desenvolver nesta vida:</p>'+
+        '<div style="display:flex;flex-wrap:wrap;gap:8px">'+
+        licoes.map(n=>'<div style="border:1px solid rgba(27,58,92,0.14);border-radius:8px;padding:6px 10px;font-size:0.78rem"><b>'+n+'</b> · '+esc((NUM_SIGNIFICADOS[n]||{}).t||'')+'</div>').join('')+
+        '</div>';
+    }else{
+      extra+='<p style="font-size:0.78rem;color:var(--cinza);margin:0">Todos os números de 1 a 9 estão presentes no nome — nenhuma lição kármica ausente.</p>';
+    }
+    extra+='</div>';
+  }
+  _numMapaAtual={nome,nasc,vida:cadVida?cadVida.at(-1):null,expr:cadExpr.at(-1),alma:cadAlma.at(-1),pers:cadPers.at(-1)};
+  const perfilId=document.getElementById('numPerfil').value;
+  const btnGuardar=perfilId?'<div style="margin-top:14px"><button class="btn btn-p btn-mini" onclick="numGuardarNoPerfil()">Guardar mapa no perfil</button> <span id="numGuardarMsg" style="font-size:0.75rem;color:var(--verde,#2e7d5b);margin-left:8px"></span></div>':'<p style="font-size:0.72rem;color:var(--cinza);margin-top:12px">Escolha um perfil da família acima para poder guardar este mapa nele.</p>';
   out.innerHTML='<div class="bloco"><h2 style="border:0;padding:0;margin:0 0 4px">Mapa de '+esc(nome)+'</h2>'+
-    (nasc?'':'<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 12px">Adicione a data de nascimento para ver Caminho de Vida, Dia Natal e Ano Pessoal.</p>')+
+    (nasc?'':'<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 12px">Adicione a data de nascimento para ver Caminho de Vida, Dia Natal, Ano Pessoal e Desafios.</p>')+
     '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:12px">'+cards.join('')+'</div>'+
-    '<p style="font-size:0.72rem;color:var(--cinza);margin-top:16px;line-height:1.5">Método pitagórico. Cada letra vale de 1 a 9; números mestres (11, 22, 33) não se reduzem. A numerologia é uma linguagem simbólica de autoconhecimento — um espelho para reflexão, não uma previsão determinística da vida.</p></div>';
+    (cadVida?'<div style="margin-top:14px">'+numSefiraCard(cadVida.at(-1))+'</div>':'')+
+    '<p style="font-size:0.72rem;color:var(--cinza);margin-top:16px;line-height:1.5">Método pitagórico. Cada letra vale de 1 a 9; números mestres (11, 22, 33) não se reduzem. A numerologia é uma linguagem simbólica de autoconhecimento — um espelho para reflexão, não uma previsão determinística da vida.</p>'+
+    btnGuardar+'</div>'+extra;
+}
+function numGuardarNoPerfil(){
+  const id=document.getElementById('numPerfil').value;
+  if(!id||!_numMapaAtual){return;}
+  const perfis=ler(K.perfis);const p=perfis.find(x=>x.id===id);if(!p)return;
+  p.numerologia=Object.assign({},_numMapaAtual,{guardadoEm:new Date().toISOString().slice(0,10)});
+  gravar(K.perfis,perfis);
+  const m=document.getElementById('numGuardarMsg');if(m)m.textContent='✓ mapa guardado no perfil de '+p.nome+'.';
 }
 function renderProtocolos(){
   const fp=document.getElementById('prFiltroPerfil').value,fc=document.getElementById('prFiltroCat').value,fs=document.getElementById('prFiltroStatus').value;
