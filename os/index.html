@@ -241,7 +241,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
       Ir para a Clínica (pacientes)
     </a>
     <div class="frase">"Tudo é padrão. Tudo é proporção. Tudo é luz."</div>
-    Montgomery OS · Fase 1 — Fundação · v1.1 (coluna ligada)<br>
+    Montgomery OS · Fase 1 — Fundação · v1.2 (coluna → 5 Elementos)<br>
     <a onclick="fazerLogout()" style="color:rgba(226,200,120,0.6);cursor:pointer;padding:4px 0;border:none">Sair</a>
   </div>
 </aside>
@@ -1712,6 +1712,22 @@ function renderColuna(){
 }
 // ===== VÉRTEBRA CLICÁVEL — ligada à raiz QUIROPRAXIA_REF (dados-clinicos.js, apostila Prof.ª Carmen) =====
 const VERT_REGIAO=v=>v[0]==='C'&&v!=='Cóccix'?'Cervical':v[0]==='T'?'Torácica':v[0]==='L'?'Lombar':'Sacroilíaca';
+// Ponte órgão → 5 Elementos (escolha nossa, camada Metafísica — não vem da apostila).
+// Deriva o Elemento do texto que a própria raiz nomeia (inervação), pela correspondência MTC.
+const MF_ORGAO_ELEMENTO=[
+  {el:'Madeira',re:/f[íi]gado|ves[íi]cula|biliar|olho|ocular/i},
+  {el:'Fogo',re:/cora[çc][ãa]o|intestino delgado|coron[áa]ri|l[íi]ngua/i},
+  {el:'Terra',re:/est[ôo]mago|p[âa]ncreas|ba[çc]o|duodeno|diafragma/i},
+  {el:'Metal',re:/pulm[ãa]o|pulm[õo]es|br[ôo]nqui|pleura|traqueia|nariz|intestino grosso|reto|[âa]nus|prega vocal|corda|faringe|laringe/i},
+  {el:'Água',re:/rim|rins|renal|rena|bexiga|ureter|adrenal|suprarrenal|[óo]rg[ãa]os sexuais|[úu]tero|pr[óo]stata/i}
+];
+function vertElementos(raiz){
+  if(!raiz)return [];
+  const txt=(raiz.inerva||'')+' '+(raiz.nivel||'');
+  const els=[];
+  MF_ORGAO_ELEMENTO.forEach(m=>{if(m.re.test(txt)&&els.indexOf(m.el)<0)els.push(m.el);});
+  return els;
+}
 function selVertebra(vert){
   if(typeof QUIROPRAXIA_REF==='undefined'){selColRegiao(VERT_REGIAO(vert));return;}
   const reg=VERT_REGIAO(vert);
@@ -1737,6 +1753,8 @@ function selVertebra(vert){
       '<p style="font-size:0.72rem;color:var(--cinza);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.4px">Sintomas quando há subluxação</p>'+
       '<p style="font-size:0.8rem;line-height:1.6;margin-bottom:9px">'+esc(raiz.efeito)+'</p>'
       :'<p style="font-size:0.8rem;color:var(--cinza)">Sem quadro de raiz para este nível na apostila.</p>')+
+    (function(){var els=vertElementos(raiz);if(!els.length)return '';
+      return '<div style="margin-bottom:9px;padding-top:2px"><span style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.4px;color:var(--cinza)">Na teia dos 5 Elementos — pelo órgão</span><br><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:5px">'+els.map(function(e){return mfChip((MF_TEIA[e]||{}).orgao||e,e);}).join('')+'</div></div>';})()+
     '<p style="font-size:0.72rem;color:var(--cinza);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.4px">Testes &amp; ajustes da região (apostila)</p>'+
     '<div style="font-size:0.78rem;line-height:1.65;margin-bottom:6px">'+ajustes.map(a=>'· '+esc(a)).join('<br>')+'</div>'+
     (seguranca?'<div style="border:1px solid rgba(165,66,66,0.4);border-radius:8px;padding:8px 11px;background:rgba(165,66,66,0.06);font-size:0.74rem;line-height:1.55;margin-top:8px"><b style="color:#A54242">Segurança antes de manipular cervical alta — '+esc(seguranca.nome)+':</b> '+esc(seguranca.como)+' <b>Positivo:</b> '+esc(seguranca.positivo)+'</div>':'')+
