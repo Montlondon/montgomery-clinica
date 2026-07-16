@@ -1565,6 +1565,21 @@ function mundoDe(id){return MUNDOS.find(m=>m.ids.includes(id));}
 // O hebraico é mais compacto que a transliteração latina (sem descendentes largos),
 // então cabe no centro do círculo; a transliteração desce para a linha de baixo.
 const HEB={kether:'כֶּתֶר',chokmah:'חׇכְמָה',binah:'בִּינָה',chesed:'חֶסֶד',geburah:'גְּבוּרָה',tiphereth:'תִּפְאֶרֶת',netzach:'נֶצַח',hod:'הוֹד',yesod:'יְסוֹד',malkuth:'מַלְכוּת'};
+// A hierarquia celeste de cada Sefirá — e ela habita os 3 Mundos superiores:
+// Nome Divino em ATZILUTH · Arcanjo em BERIAH · Coro angélico em YETZIRAH.
+// Fonte: Cabala Hermética / Golden Dawn (Liber 777) — correspondência declarada.
+const NOMES={
+  kether:{divino:'Eheieh',divinoHeb:'אֶהְיֶה',divinoPt:'"Eu Sou"',arcanjo:'Metatron',coro:'Chayoth ha-Qadesh',coroPt:'as Santas Criaturas Viventes'},
+  chokmah:{divino:'Yah',divinoHeb:'יָהּ',divinoPt:'a força de Deus',arcanjo:'Ratziel',coro:'Auphanim',coroPt:'as Rodas'},
+  binah:{divino:'YHVH Elohim',divinoHeb:'יְהוָה אֱלֹהִים',divinoPt:'o Senhor Deus',arcanjo:'Tzaphkiel',coro:'Aralim',coroPt:'os Tronos'},
+  chesed:{divino:'El',divinoHeb:'אֵל',divinoPt:'Deus (a misericórdia)',arcanjo:'Tzadkiel',coro:'Chashmalim',coroPt:'os Brilhantes'},
+  geburah:{divino:'Elohim Gibor',divinoHeb:'אֱלֹהִים גִּבּוֹר',divinoPt:'Deus Poderoso',arcanjo:'Kamael',coro:'Seraphim',coroPt:'os Serafins, os Ardentes'},
+  tiphereth:{divino:'YHVH Eloah va-Daath',divinoHeb:'יְהוָה אֱלוֹהַּ וָדַעַת',divinoPt:'o Senhor Deus do Conhecimento',arcanjo:'Raphael',coro:'Malachim',coroPt:'os Reis, os Mensageiros'},
+  netzach:{divino:'YHVH Tzabaoth',divinoHeb:'יְהוָה צְבָאוֹת',divinoPt:'Senhor dos Exércitos',arcanjo:'Haniel',coro:'Elohim',coroPt:'os Deuses (Tarshishim)'},
+  hod:{divino:'Elohim Tzabaoth',divinoHeb:'אֱלֹהִים צְבָאוֹת',divinoPt:'Deus dos Exércitos',arcanjo:'Michael',coro:'Beni Elohim',coroPt:'os Filhos de Deus'},
+  yesod:{divino:'Shaddai El Chai',divinoHeb:'שַׁדַּי אֵל חַי',divinoPt:'o Todo-Poderoso Deus Vivo',arcanjo:'Gabriel',coro:'Cherubim',coroPt:'os Querubins, os Fortes'},
+  malkuth:{divino:'Adonai ha-Aretz',divinoHeb:'אֲדֹנָי הָאָרֶץ',divinoPt:'o Senhor da Terra',arcanjo:'Sandalphon',coro:'Ashim',coroPt:'as Almas de Fogo'}
+};
 // Estado do desenho da Árvore: começa em hebraico (o pedido), toggle para o latino.
 let _arvoreHeb=true;
 function toggleArvoreHeb(b){_arvoreHeb=!_arvoreHeb;if(b)b.textContent=_arvoreHeb?'Aא  ver em latino':'אA  ver em hebraico';renderArvoreSVG();}
@@ -1748,6 +1763,14 @@ function selSefira(id){
       '</div>':'')+
     (s.frase?'<div style="margin-top:12px;padding:11px 14px;border-left:3px solid #C9A84C;background:rgba(201,168,76,0.07);border-radius:0 8px 8px 0"><span style="font-size:0.64rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--cinza)">Em nossas palavras — antes de qualquer livro</span><br><span style="font-size:0.9rem;font-family:Lora,serif;font-style:italic;line-height:1.5;color:var(--azul)">'+esc(s.frase)+'</span></div>':'')+
     (function(){var m=mundoDe(s.id);return m?'<div style="margin-top:10px;padding:8px 12px;border-left:3px solid '+m.cor+';background:'+m.cor+'0F;border-radius:0 8px 8px 0"><span style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--cinza)">Mundo · a escada do Nome</span><br><span style="font-size:0.85rem;color:'+m.cor+';font-weight:600">'+m.nome+' — '+m.pt+'</span> <span style="font-family:Lora,serif;font-size:0.95rem;color:'+m.cor+'">'+m.letra+'</span> <span style="font-size:0.72rem;color:var(--cinza)">('+m.letraNome+' de יהוה · '+m.elemento+')</span><br><span style="font-size:0.78rem;color:var(--azul);font-style:italic;line-height:1.45">'+esc(m.sentido)+'</span></div>':'';})()+
+    (function(){var n=NOMES[s.id];if(!n)return'';var cel=function(rot,heb,lat,glosa){return '<div style="margin-bottom:5px"><span style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.4px;color:var(--cinza)">'+rot+'</span><br><span style="font-family:Lora,serif;font-size:0.95rem;color:var(--azul)">'+(heb?heb+' ':'')+'</span><span style="font-size:0.82rem;color:var(--azul);font-weight:600">'+esc(lat)+'</span>'+(glosa?' <span style="font-size:0.72rem;color:var(--cinza)">— '+esc(glosa)+'</span>':'')+'</div>';};
+      return '<div style="margin-top:10px;padding:9px 12px;border-left:3px solid #8E7CC3;background:rgba(142,124,195,0.07);border-radius:0 8px 8px 0">'+
+      '<span style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--cinza)">Hierarquia celeste — nos 3 Mundos superiores</span><br>'+
+      cel('Nome Divino · Atziluth',n.divinoHeb,n.divino,n.divinoPt)+
+      cel('Arcanjo · Beriah','',n.arcanjo,'')+
+      cel('Coro angélico · Yetzirah','',n.coro,n.coroPt)+
+      '<span style="font-size:0.66rem;color:var(--cinza);font-style:italic;line-height:1.4">Cabala Hermética / Golden Dawn (Liber 777) — correspondência da tradição.</span>'+
+      '</div>';})()+
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin-top:12px">'+
     linha('Corpo (Adam Kadmon)',s.corpo)+linha('Planeta',s.planeta)+
     linha('Virtude',s.virtude)+linha('Vício',s.vicio)+
