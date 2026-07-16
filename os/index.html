@@ -337,7 +337,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
   <div class="bloco">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Cronofarmacologia — o dia
       <select id="cronoPerfil" onchange="renderCrono()" style="margin-left:auto;padding:6px 10px;border:1px solid rgba(27,58,92,0.18);border-radius:8px;font-size:0.8rem;font-family:Inter,sans-serif"></select>
-      <button class="btn btn-sec btn-mini" style="margin-left:8px" onclick="document.getElementById('cronoPlanoFile').click()" title="Carregar um plano de cronofarmacologia de um arquivo .json, sem apagar o que já existe">Carregar plano</button>
+      <button class="btn btn-sec btn-mini" style="margin-left:8px" onclick="document.getElementById('cronoPlanoFile').click()" title="Carregar um plano de cronofarmacologia de um arquivo .json — atualiza os itens existentes e adiciona os novos">Carregar plano</button>
+      <button class="btn btn-sec btn-mini" style="margin-left:6px" onclick="baixarPlanoProtocolos()" title="Baixar os protocolos do perfil selecionado como um arquivo .json (backup / molde editável)">Baixar plano</button>
       <input type="file" id="cronoPlanoFile" accept="application/json,.json" class="hidden" onchange="mesclarPlanoProtocolos(event)">
     </h2>
     <div id="cronoTimeline"></div>
@@ -1170,6 +1171,24 @@ function mesclarPlanoProtocolos(ev){
   };
   reader.readAsText(file);
   ev.target.value='';
+}
+function baixarPlanoProtocolos(){
+  const msg=document.getElementById('cronoMsg');
+  const pid=document.getElementById('cronoPerfil').value;
+  if(!pid){msg.textContent='Erro: selecione um perfil antes de baixar o plano.';return;}
+  const lista=ler(K.protocolos).filter(p=>p.perfilId===pid).map(p=>({
+    nome:p.nome,cat:p.cat,horario:p.horario,dose:p.dose,freq:p.freq,
+    ciclo:p.ciclo,custo:p.custo,efic:p.efic,status:p.status,notas:p.notas}));
+  if(!lista.length){msg.textContent='Erro: este perfil não tem protocolos para baixar.';return;}
+  const nome=String(nomePerfil(pid)).toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');
+  const blob=new Blob([JSON.stringify(lista,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='crono_plano_'+(nome||'perfil')+'.json';
+  document.body.appendChild(a);a.click();a.remove();
+  URL.revokeObjectURL(url);
+  msg.textContent='Plano baixado: '+lista.length+' protocolo(s) exportado(s).';
+  setTimeout(()=>msg.textContent='',5000);
 }
 function renderProtocolos(){
   const fp=document.getElementById('prFiltroPerfil').value,fc=document.getElementById('prFiltroCat').value,fs=document.getElementById('prFiltroStatus').value;
