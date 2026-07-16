@@ -241,7 +241,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
       Ir para a Clínica (pacientes)
     </a>
     <div class="frase">"Tudo é padrão. Tudo é proporção. Tudo é luz."</div>
-    Montgomery OS · Fase 1 — Fundação<br>
+    Montgomery OS · Fase 1 — Fundação · v1.1 (coluna ligada)<br>
     <a onclick="fazerLogout()" style="color:rgba(226,200,120,0.6);cursor:pointer;padding:4px 0;border:none">Sair</a>
   </div>
 </aside>
@@ -448,31 +448,33 @@ tr:hover td{background:rgba(201,168,76,0.05)}
 <section class="sec" id="sec-coluna">
   <div class="sec-head">
     <h1>Coluna &amp; Osteoarticular</h1>
-    <p>O eixo do corpo — regiões clicáveis, sinais das raízes nervosas (apostila de Quiropraxia) e registro de dor/ajustes.</p>
+    <p>O eixo do corpo — cada vértebra clicável, ligada à raiz da Quiropraxia: inervação, sintomas de subluxação e ajustes da apostila. Clique no rótulo da região (C1–C7, T1–T12...) para a visão geral.</p>
   </div>
   <div class="bloco" style="display:flex;gap:var(--f3);flex-wrap:wrap">
     <div style="flex:0 0 150px;text-align:center">
       <svg viewBox="0 0 120 350" style="width:130px" id="colunaSVG">
+        <style>.col-vert{cursor:pointer;transition:opacity 0.15s}.col-vert:hover{opacity:0.9}.col-vert.sel{opacity:1;stroke:#1B3A5C;stroke-width:1.5}</style>
         <circle cx="60" cy="18" r="14" fill="none" stroke="#8A8578" stroke-width="1.5"/>
         <g class="col-reg" data-reg="Cervical" style="cursor:pointer">
           <title>Cervical (C1–C7)</title>
-          <g id="reg-Cervical"><rect x="52" y="36" width="16" height="7" rx="3" fill="#C9A84C" opacity="0.55"/><rect x="52" y="45" width="16" height="7" rx="3" fill="#C9A84C" opacity="0.55"/><rect x="52" y="54" width="16" height="7" rx="3" fill="#C9A84C" opacity="0.55"/><rect x="52" y="63" width="16" height="7" rx="3" fill="#C9A84C" opacity="0.55"/><rect x="52" y="72" width="16" height="7" rx="3" fill="#C9A84C" opacity="0.55"/><rect x="52" y="81" width="16" height="7" rx="3" fill="#C9A84C" opacity="0.55"/><rect x="52" y="90" width="16" height="7" rx="3" fill="#C9A84C" opacity="0.55"/></g>
+          <g id="reg-Cervical"><rect class="col-vert" data-vert="C1" x="52" y="36" width="16" height="7" rx="3" fill="#C9A84C" opacity="0.55"><title>C1 (Atlas)</title></rect><rect class="col-vert" data-vert="C2" x="52" y="45" width="16" height="7" rx="3" fill="#C9A84C" opacity="0.55"><title>C2 (Áxis)</title></rect><rect class="col-vert" data-vert="C3" x="52" y="54" width="16" height="7" rx="3" fill="#C9A84C" opacity="0.55"><title>C3</title></rect><rect class="col-vert" data-vert="C4" x="52" y="63" width="16" height="7" rx="3" fill="#C9A84C" opacity="0.55"><title>C4</title></rect><rect class="col-vert" data-vert="C5" x="52" y="72" width="16" height="7" rx="3" fill="#C9A84C" opacity="0.55"><title>C5</title></rect><rect class="col-vert" data-vert="C6" x="52" y="81" width="16" height="7" rx="3" fill="#C9A84C" opacity="0.55"><title>C6</title></rect><rect class="col-vert" data-vert="C7" x="52" y="90" width="16" height="7" rx="3" fill="#C9A84C" opacity="0.55"><title>C7</title></rect></g>
           <text x="88" y="68" font-size="9" fill="#8A8578">C1–C7</text>
         </g>
         <g class="col-reg" data-reg="Torácica" style="cursor:pointer">
           <title>Torácica (T1–T12)</title>
-          <g id="reg-Torácica"><rect x="50" y="100" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"/><rect x="50" y="109.5" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"/><rect x="50" y="119" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"/><rect x="50" y="128.5" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"/><rect x="50" y="138" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"/><rect x="50" y="147.5" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"/><rect x="50" y="157" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"/><rect x="50" y="166.5" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"/><rect x="50" y="176" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"/><rect x="50" y="185.5" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"/><rect x="50" y="195" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"/><rect x="50" y="204.5" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"/></g>
+          <g id="reg-Torácica"><rect class="col-vert" data-vert="T1" x="50" y="100" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"><title>T1</title></rect><rect class="col-vert" data-vert="T2" x="50" y="109.5" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"><title>T2</title></rect><rect class="col-vert" data-vert="T3" x="50" y="119" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"><title>T3</title></rect><rect class="col-vert" data-vert="T4" x="50" y="128.5" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"><title>T4</title></rect><rect class="col-vert" data-vert="T5" x="50" y="138" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"><title>T5</title></rect><rect class="col-vert" data-vert="T6" x="50" y="147.5" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"><title>T6</title></rect><rect class="col-vert" data-vert="T7" x="50" y="157" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"><title>T7</title></rect><rect class="col-vert" data-vert="T8" x="50" y="166.5" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"><title>T8</title></rect><rect class="col-vert" data-vert="T9" x="50" y="176" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"><title>T9</title></rect><rect class="col-vert" data-vert="T10" x="50" y="185.5" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"><title>T10</title></rect><rect class="col-vert" data-vert="T11" x="50" y="195" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"><title>T11</title></rect><rect class="col-vert" data-vert="T12" x="50" y="204.5" width="20" height="7.5" rx="3" fill="#1B3A5C" opacity="0.5"><title>T12</title></rect></g>
           <text x="90" y="158" font-size="9" fill="#8A8578">T1–T12</text>
         </g>
         <g class="col-reg" data-reg="Lombar" style="cursor:pointer">
           <title>Lombar (L1–L5)</title>
-          <g id="reg-Lombar"><rect x="48" y="216" width="24" height="9" rx="3.5" fill="#A54242" opacity="0.5"/><rect x="48" y="227" width="24" height="9" rx="3.5" fill="#A54242" opacity="0.5"/><rect x="48" y="238" width="24" height="9" rx="3.5" fill="#A54242" opacity="0.5"/><rect x="48" y="249" width="24" height="9" rx="3.5" fill="#A54242" opacity="0.5"/><rect x="48" y="260" width="24" height="9" rx="3.5" fill="#A54242" opacity="0.5"/></g>
+          <g id="reg-Lombar"><rect class="col-vert" data-vert="L1" x="48" y="216" width="24" height="9" rx="3.5" fill="#A54242" opacity="0.5"><title>L1</title></rect><rect class="col-vert" data-vert="L2" x="48" y="227" width="24" height="9" rx="3.5" fill="#A54242" opacity="0.5"><title>L2</title></rect><rect class="col-vert" data-vert="L3" x="48" y="238" width="24" height="9" rx="3.5" fill="#A54242" opacity="0.5"><title>L3</title></rect><rect class="col-vert" data-vert="L4" x="48" y="249" width="24" height="9" rx="3.5" fill="#A54242" opacity="0.5"><title>L4</title></rect><rect class="col-vert" data-vert="L5" x="48" y="260" width="24" height="9" rx="3.5" fill="#A54242" opacity="0.5"><title>L5</title></rect></g>
           <text x="92" y="243" font-size="9" fill="#8A8578">L1–L5</text>
         </g>
         <g class="col-reg" data-reg="Sacroilíaca" style="cursor:pointer">
           <title>Sacro / Sacroilíaca</title>
-          <g id="reg-Sacroilíaca"><path d="M46 273 L74 273 L66 300 L60 308 L54 300 Z" fill="#4A7C59" opacity="0.55"/></g>
+          <g id="reg-Sacroilíaca"><path class="col-vert" data-vert="Sacro" d="M46 273 L74 273 L66 300 L60 308 L54 300 Z" fill="#4A7C59" opacity="0.55"><title>Sacro / Sacroilíaca</title></path><ellipse class="col-vert" data-vert="Cóccix" cx="60" cy="316" rx="4.5" ry="6" fill="#4A7C59" opacity="0.55"><title>Cóccix</title></ellipse></g>
           <text x="88" y="290" font-size="9" fill="#8A8578">Sacro</text>
+          <text x="88" y="318" font-size="8" fill="#8A8578">Cóccix</text>
         </g>
       </svg>
     </div>
@@ -866,6 +868,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
 </main>
 </div>
 
+<script src="../dados-clinicos.js"></script>
 <script>
 /* ============================================================
    MONTGOMERY OS — Fase 1: Fundação
@@ -1702,7 +1705,48 @@ function renderColuna(){
       '<td><button class="btn btn-red btn-mini" onclick="excluirColuna(\''+r.id+'\')">×</button></td></tr>').join(''):
     '<tr><td><div class="vazio">Nenhum registro ainda — clique numa região e registre a primeira dor ou ajuste.</div></td></tr>';
 }
+// ===== VÉRTEBRA CLICÁVEL — ligada à raiz QUIROPRAXIA_REF (dados-clinicos.js, apostila Prof.ª Carmen) =====
+const VERT_REGIAO=v=>v[0]==='C'&&v!=='Cóccix'?'Cervical':v[0]==='T'?'Torácica':v[0]==='L'?'Lombar':'Sacroilíaca';
+function selVertebra(vert){
+  if(typeof QUIROPRAXIA_REF==='undefined'){selColRegiao(VERT_REGIAO(vert));return;}
+  const reg=VERT_REGIAO(vert);
+  _colRegiao=reg;
+  document.querySelectorAll('#colunaSVG .col-vert').forEach(el=>el.classList.toggle('sel',el.dataset.vert===vert));
+  const raiz=QUIROPRAXIA_REF.raizes.find(r=>r.nivel===vert||r.nivel.startsWith(vert+' '));
+  const A=QUIROPRAXIA_REF.ajustes||{};
+  let ajustes=[];
+  if(reg==='Cervical'){if(vert==='C1')ajustes=(A['Cervical (Occipito-Atlas)']||[]).concat(A['Cervical (C1-C7)']||[]);else ajustes=A['Cervical (C1-C7)']||[];}
+  else if(reg==='Torácica')ajustes=A['Torácica (T1-T12)']||[];
+  else if(reg==='Lombar')ajustes=A['Lombar (L1-L5)']||[];
+  else ajustes=A['Pelve / Sacroilíaca']||[];
+  const seguranca=reg==='Cervical'?(QUIROPRAXIA_REF.testes||[]).find(t=>t.nome.indexOf('Deklyns')>-1):null;
+  const perfis=ler(K.perfis);
+  document.getElementById('colPainel').innerHTML=
+    '<div style="border:1px solid rgba(201,168,76,0.4);border-radius:10px;padding:var(--f2) var(--f3);background:rgba(201,168,76,0.05)">'+
+    '<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:4px">'+esc(raiz?raiz.nivel:vert)+' <span class="tag tag-dourado">'+reg+'</span></h3>'+
+    '<p style="font-size:0.66rem;color:var(--cinza);font-style:italic;margin-bottom:8px">'+esc(QUIROPRAXIA_REF.fonte)+'</p>'+
+    (raiz?
+      '<p style="font-size:0.72rem;color:var(--cinza);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.4px">Inervação — o que esta raiz alimenta</p>'+
+      '<p style="font-size:0.8rem;line-height:1.6;margin-bottom:9px">'+esc(raiz.inerva)+'</p>'+
+      '<p style="font-size:0.72rem;color:var(--cinza);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.4px">Sintomas quando há subluxação</p>'+
+      '<p style="font-size:0.8rem;line-height:1.6;margin-bottom:9px">'+esc(raiz.efeito)+'</p>'
+      :'<p style="font-size:0.8rem;color:var(--cinza)">Sem quadro de raiz para este nível na apostila.</p>')+
+    '<p style="font-size:0.72rem;color:var(--cinza);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.4px">Testes &amp; ajustes da região (apostila)</p>'+
+    '<div style="font-size:0.78rem;line-height:1.65;margin-bottom:6px">'+ajustes.map(a=>'· '+esc(a)).join('<br>')+'</div>'+
+    (seguranca?'<div style="border:1px solid rgba(165,66,66,0.4);border-radius:8px;padding:8px 11px;background:rgba(165,66,66,0.06);font-size:0.74rem;line-height:1.55;margin-top:8px"><b style="color:#A54242">Segurança antes de manipular cervical alta — '+esc(seguranca.nome)+':</b> '+esc(seguranca.como)+' <b>Positivo:</b> '+esc(seguranca.positivo)+'</div>':'')+
+    '<div class="fio"></div>'+
+    '<div class="linha">'+
+    '<div class="fg"><label>Perfil</label><select id="colPerfil">'+perfis.map(p=>'<option value="'+p.id+'">'+esc(p.nome)+'</option>').join('')+'</select></div>'+
+    '<div class="fg"><label>Tipo</label><select id="colTipo"><option>Dor / queixa</option><option>Ajuste realizado</option><option>Observação</option></select></div>'+
+    '<div class="fg"><label>Dor (0–10)</label><input id="colDor" type="number" min="0" max="10"></div>'+
+    '</div>'+
+    '<div class="fg"><label>Notas (lado, contexto)</label><input id="colNotas" value="'+esc(vert)+' — "></div>'+
+    '<button class="btn btn-p" onclick="salvarColuna()">Registrar em '+esc(vert)+' ('+reg+')</button>'+
+    '<div class="msg-ok" id="colMsg"></div></div>';
+}
 document.addEventListener('click',e=>{
+  const v=e.target.closest('.col-vert');
+  if(v){selVertebra(v.dataset.vert);return;}
   const g=e.target.closest('.col-reg');
   if(g)selColRegiao(g.dataset.reg);
 });
