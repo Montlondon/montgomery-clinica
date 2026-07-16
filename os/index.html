@@ -337,8 +337,11 @@ tr:hover td{background:rgba(201,168,76,0.05)}
   <div class="bloco">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Cronofarmacologia — o dia
       <select id="cronoPerfil" onchange="renderCrono()" style="margin-left:auto;padding:6px 10px;border:1px solid rgba(27,58,92,0.18);border-radius:8px;font-size:0.8rem;font-family:Inter,sans-serif"></select>
+      <button class="btn btn-sec btn-mini" style="margin-left:8px" onclick="document.getElementById('cronoPlanoFile').click()" title="Carregar um plano de cronofarmacologia de um arquivo .json, sem apagar o que já existe">Carregar plano</button>
+      <input type="file" id="cronoPlanoFile" accept="application/json,.json" class="hidden" onchange="mesclarPlanoProtocolos(event)">
     </h2>
     <div id="cronoTimeline"></div>
+    <div class="msg-ok" id="cronoMsg"></div>
   </div>
   <div class="bloco">
     <h2 id="formProtoTitulo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M10.5 3.5 3.5 10.5a4.95 4.95 0 1 0 7 7l7-7a4.95 4.95 0 1 0-7-7Z"/><path d="m7 7 7 7"/></svg>Novo protocolo</h2>
@@ -1119,7 +1122,44 @@ function renderCrono(){
   });
   html+='</div>';
   if(semHorario.length)html+='<p style="font-size:0.75rem;color:var(--cinza);margin-top:12px;font-style:italic">Sem horário fixo: '+semHorario.map(p=>esc(p.nome)).join(', ')+'</p>';
-  document.getElementById('cronoTimeline').innerHTML=algum?html:'<div class="vazio">Nenhum protocolo ativo com horário definido para este perfil. Adicione o horário ao cadastrar/editar um protocolo.</div>';
+  document.getElementById('cronoTimeline').innerHTML=algum?html:'<div class="vazio">Nenhum protocolo ativo com horário definido para este perfil. Adicione o horário ao cadastrar/editar um protocolo — ou use "Carregar plano".</div>';
+}
+// Carrega um plano de cronofarmacologia de um arquivo .json (lista de protocolos)
+// para o perfil selecionado, SEM apagar o que já existe (mescla por nome+horário).
+// Código genérico e público: o plano pessoal vive só no arquivo privado do aparelho.
+function mesclarPlanoProtocolos(ev){
+  const file=ev.target.files[0];if(!file)return;
+  const msg=document.getElementById('cronoMsg');
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const d=JSON.parse(e.target.result);
+      const lista=Array.isArray(d)?d:(d.protocolos||[]);
+      if(!lista.length)throw new Error('O arquivo não tem protocolos para carregar.');
+      const pid=document.getElementById('cronoPerfil').value;
+      if(!pid)throw new Error('Selecione um perfil antes de carregar o plano.');
+      const protos=ler(K.protocolos);
+      const chave=p=>p.perfilId+'|'+String(p.nome||'').toLowerCase().trim()+'|'+(p.horario||'');
+      const existentes=new Set(protos.map(chave));
+      let novos=0,pulados=0;
+      lista.forEach(item=>{
+        const p={id:uid(),perfilId:pid,nome:String(item.nome||'').trim(),
+          cat:item.cat||'Suplemento',horario:item.horario||'',
+          dose:item.dose||'',freq:item.freq||'',ciclo:item.ciclo||'',
+          custo:item.custo||'',efic:item.efic||'',
+          status:item.status||'ativo',notas:item.notas||''};
+        if(!p.nome)return;
+        if(existentes.has(chave(p))){pulados++;return;}
+        existentes.add(chave(p));protos.push(p);novos++;
+      });
+      gravar(K.protocolos,protos);
+      renderProtocolos();renderInicio();
+      msg.textContent='✓ Plano carregado: '+novos+' item(ns) adicionado(s)'+(pulados?', '+pulados+' já existia(m)':'')+'.';
+      setTimeout(()=>msg.textContent='',5000);
+    }catch(err){msg.textContent='Erro: '+err.message;}
+  };
+  reader.readAsText(file);
+  ev.target.value='';
 }
 function renderProtocolos(){
   const fp=document.getElementById('prFiltroPerfil').value,fc=document.getElementById('prFiltroCat').value,fs=document.getElementById('prFiltroStatus').value;
