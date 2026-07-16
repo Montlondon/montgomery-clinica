@@ -1141,22 +1141,30 @@ function mesclarPlanoProtocolos(ev){
       const pid=document.getElementById('cronoPerfil').value;
       if(!pid)throw new Error('Selecione um perfil antes de carregar o plano.');
       const protos=ler(K.protocolos);
-      const chave=p=>p.perfilId+'|'+String(p.nome||'').toLowerCase().trim()+'|'+(p.horario||'');
-      const existentes=new Set(protos.map(chave));
-      let novos=0,pulados=0;
+      // identifica um protocolo pelo perfil + nome, para que editar o .json (dose, horario, status...) atualize o item existente
+      const chave=p=>p.perfilId+'|'+String(p.nome||'').toLowerCase().trim();
+      const indicePorChave={};
+      protos.forEach((p,i)=>{indicePorChave[chave(p)]=i;});
+      let novos=0,atualizados=0;
       lista.forEach(item=>{
-        const p={id:uid(),perfilId:pid,nome:String(item.nome||'').trim(),
-          cat:item.cat||'Suplemento',horario:item.horario||'',
+        const nome=String(item.nome||'').trim();
+        if(!nome)return;
+        const campos={cat:item.cat||'Suplemento',horario:item.horario||'',
           dose:item.dose||'',freq:item.freq||'',ciclo:item.ciclo||'',
           custo:item.custo||'',efic:item.efic||'',
           status:item.status||'ativo',notas:item.notas||''};
-        if(!p.nome)return;
-        if(existentes.has(chave(p))){pulados++;return;}
-        existentes.add(chave(p));protos.push(p);novos++;
+        const k=pid+'|'+nome.toLowerCase();
+        if(indicePorChave[k]!==undefined){
+          protos[indicePorChave[k]]=Object.assign(protos[indicePorChave[k]],{nome:nome},campos);
+          atualizados++;
+        }else{
+          const p=Object.assign({id:uid(),perfilId:pid,nome:nome},campos);
+          indicePorChave[k]=protos.length;protos.push(p);novos++;
+        }
       });
       gravar(K.protocolos,protos);
       renderProtocolos();renderInicio();
-      msg.textContent='Plano carregado: '+novos+' item(ns) adicionado(s)'+(pulados?', '+pulados+' já existia(m)':'')+'.';
+      msg.textContent='Plano carregado: '+novos+' novo(s)'+(atualizados?', '+atualizados+' atualizado(s)':'')+'.';
       setTimeout(()=>msg.textContent='',5000);
     }catch(err){msg.textContent='Erro: '+err.message;}
   };
