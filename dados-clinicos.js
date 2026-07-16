@@ -2285,3 +2285,77 @@ const pulsosMTC=[
   {id:'kou',nome:'Oco',pinyin:'Kou',comum:false,cat:'Forma',qualidade:'Flutuante, vazio no meio (talo de cebolinha)',indica:'Perda aguda de Sangue'}
 ];
 const pulsosPorId={};pulsosMTC.forEach(p=>pulsosPorId[p.id]=p);
+
+// ===== QUIROPRAXIA — Referência de Diagnóstico e Ajuste =====
+// Fonte: apostila "Roteiro de Quiropraxia" — Prof.ª Carmen Fátima Prada de Freitas,
+// complementada com anatomia clássica. Fonte única consumida pelo Diagnóstico Integrado.
+// NÃO substitui diagnóstico médico.
+const QUIROPRAXIA_REF = {
+  fonte: 'Apostila "Roteiro de Quiropraxia" — Prof.ª Carmen Fátima Prada de Freitas',
+
+  // Fundamentos conceituais (apostila, itens 1-3)
+  fundamentos: {
+    historia: 'Desenvolvida por Daniel David Palmer (1878), a partir do atendimento de Harvey Lillard — um ajuste na cervical devolveu-lhe a audição. Em 1902 Palmer inicia o ensino da técnica ("a prática com as mãos") e em 1906 funda, com o filho B.J. Palmer, o Palmer College of Chiropractic.',
+    inteligenciaInata: 'A Quiropraxia divide o cérebro em Inato (mantém o equilíbrio interno do corpo) e Educado (ferramenta do Inato). Saúde, na visão quiroprática, é a Mente Inata modelando o corpo com boa organização. A interferência nervosa que perturba isso chama-se SUBLUXAÇÃO.',
+    complexo: [
+      { comp:'Cinesiopatológico', desc:'Alteração do movimento normal — hiper ou hipomobilidade. Compensação (hiper + hipo = normalidade aparente) é a fase subclínica, com perda do jogo articular.' },
+      { comp:'Neuropatológico', desc:'Função anormal do sistema nervoso: nervos hiperexcitados/hiperativos, com irritação, compressão ou bloqueio das raízes do cabo espinhal.' },
+      { comp:'Miopatológico', desc:'Lei de Hilton — o nervo inerva o músculo, a junta que ele move e a pele sobre sua inserção. Manifesta-se por hipertonia/espasmo (compensação) ou atonia/fraqueza (pressão ou degeneração).' },
+      { comp:'Bioquímico', desc:'A disfunção afeta mecanismos bioquímicos: histamina (dilatação capilar, secreções), prostaglandina (estimula SN e circulação) e cininas (hipotensores).' },
+      { comp:'Histopatológico', desc:'Função anormal do tecido. Hipermobilidade: irritação e inflamação (dor, calor, inchaço). Hipomobilidade: degeneração (dormência, frio, estase, atrofia).' }
+    ]
+  },
+
+  // Quadro de efeitos das raízes nervosas — vértebra por vértebra (apostila, pgs 8, 17, 25)
+  raizes: [
+    { nivel:'C1 (Atlas)', inerva:'Irrigação da cabeça, glândula pituitária, couro cabeludo, ossos da face, cérebro, ouvido interno e médio, sistema nervoso simpático.', efeito:'Dores de cabeça, nervosismo, insônia, resfriados, hipertensão arterial, enxaqueca, esgotamento nervoso, amnésia, cansaço crônico, vertigem.' },
+    { nivel:'C2 (Áxis)', inerva:'Olhos, nervos óticos e auditivos, seios da face, ossos mastóides, língua, porção anterior e posterior superior da cabeça.', efeito:'Problemas sinusais, estrabismo, perda rápida de audição ou visão sem motivo aparente.' },
+    { nivel:'C3', inerva:'Bochechas, ouvido externo, ossos da face, dentes, nervo trifacial.', efeito:'Nevralgias, neurite, acne, eczema.' },
+    { nivel:'C4', inerva:'Nariz, lábios, boca, tuba auditiva (eustáquio).', efeito:'Febre do feno, secreções, perda de audição sem motivo aparente, adenoides.' },
+    { nivel:'C5', inerva:'Cordas vocais, glândulas do pescoço, faringe.', efeito:'Laringite, faringite, rouquidão, dor de garganta, amigdalite.' },
+    { nivel:'C6', inerva:'Músculos do pescoço, ombros, tonsilas palatinas.', efeito:'Rigidez do pescoço, dor no braço superior externo, amigdalites.' },
+    { nivel:'C7', inerva:'Tireoide, bolsas da região dos ombros, cotovelos.', efeito:'Bursites, resfriados, problemas de tireoide.' },
+    { nivel:'T1', inerva:'Esôfago, traqueia, braço abaixo do cotovelo, punhos e dedos.', efeito:'Asma, resfriado, dificuldade respiratória, dor no antebraço e mãos.' },
+    { nivel:'T2', inerva:'Coração, válvulas, envoltórios e artérias coronárias.', efeito:'Alterações funcionais cardíacas, condições do tórax, dor na região superior das costas.' },
+    { nivel:'T3', inerva:'Pulmões, brônquios, pleura, tórax e peito.', efeito:'Bronquite, pleurite, pneumonia.' },
+    { nivel:'T4', inerva:'Vesícula biliar, ducto biliar comum.', efeito:'Condições da vesícula biliar, icterícia, herpes zoster.' },
+    { nivel:'T5', inerva:'Fígado, circulação sanguínea.', efeito:'Condições do fígado, febre, hipertensão arterial, anemia, circulação deficiente, artrite.' },
+    { nivel:'T6', inerva:'Estômago.', efeito:'Problemas gástricos, indigestão, pirose, dispepsia.' },
+    { nivel:'T7', inerva:'Pâncreas, duodeno.', efeito:'Úlcera, gastrite.' },
+    { nivel:'T8', inerva:'Baço e diafragma.', efeito:'Baixa resistência, soluço.' },
+    { nivel:'T9', inerva:'Glândula adrenal e suprarrenal.', efeito:'Alergias, urticárias.' },
+    { nivel:'T10', inerva:'Rins.', efeito:'Problemas renais, endurecimento das artérias, cansaço crônico, nefrite, pielite.' },
+    { nivel:'T11', inerva:'Rins e ureter.', efeito:'Condições da pele: acne, espinhas, eczemas, furúnculos.' },
+    { nivel:'T12', inerva:'Intestino delgado, circulação linfática.', efeito:'Reumatismo, flatulência, alguns casos de esterilidade.' },
+    { nivel:'L1', inerva:'Intestino grosso, anéis inguinais.', efeito:'Ciática, lombalgia, constipação, colite, disenteria, diarreia, alguns tipos de hérnia inguinal.' },
+    { nivel:'L2', inerva:'Apêndice, abdome, região superior das pernas.', efeito:'Ciática, lombalgia, cãibra, dificuldade circulatória, veias varicosas.' },
+    { nivel:'L3', inerva:'Órgãos sexuais, útero, bexiga, joelhos.', efeito:'Ciática, lombalgia, problemas menstruais (dor ou irregularidade), alguns casos de impotência, dor nos joelhos.' },
+    { nivel:'L4', inerva:'Próstata, musculatura lombar, nervo ciático.', efeito:'Ciática, lombalgia, problemas urinários.' },
+    { nivel:'L5', inerva:'Porção inferior das pernas, tornozelos e pés.', efeito:'Ciática, lombalgia, circulação deficiente, câimbras, inchaço e fragilidade das pernas e tornozelos.' },
+    { nivel:'Sacro / Sacroilíaca', inerva:'Articulação sacroilíaca; movimento giroscópico do sacro na marcha.', efeito:'A fixação sacroilíaca inibe a compensação vertebral: força rotatória excessiva na lombar (discopatia, protrusão), escoliose de adaptação, dor no quadril (bursite, artrose), tensão em joelho/tornozelo do mesmo lado.' },
+    { nivel:'Cóccix', inerva:'Reto, ânus.', efeito:'Dor na base da espinha ao sentar, hemorroidas, prurido.' }
+  ],
+
+  // Testes diagnósticos (apostila) — ordem de segurança primeiro
+  testes: [
+    { nome:'Deklyns / Hemodinâmico (SEGURANÇA — fazer ANTES de manipular cervical alta)', regiao:'Artéria vertebral', como:'Segurar a cabeça em extensão com rotação, distendendo a artéria vertebral; aguardar ~30 segundos.', positivo:'Vertigem, nistagmo, náusea ou distúrbio sensorial (isquemia). Se surgir qualquer sintoma: voltar imediatamente à posição neutra e DESCARTAR qualquer manipulação.' },
+    { nome:'Spurling (compressão)', regiao:'Cervical', como:'Paciente sentado, terapeuta atrás; inclinar a cabeça para o lado testado e aplicar compressão pelo topo da cabeça.', positivo:'Dor, formigamento, dormência ou sintoma irradiado para o membro superior — sugere compressão de raiz.' },
+    { nome:'Distração (descompressão)', regiao:'Cervical', como:'Após o Spurling; mãos na nuca e mandíbula realizando descompressão da cervical.', positivo:'Sensação de alívio (oposto ao Spurling) — confirma origem radicular.' },
+    { nome:'Laseg (elevação da perna estendida)', regiao:'Lombar / Ciático', como:'Elevar a perna estendida do paciente em decúbito dorsal.', positivo:'Dor irradiada pela face posterior da perna — sugere comprometimento do nervo ciático / raiz lombar.' },
+    { nome:'Diferenciação Sacroilíaca × Lombalgia', regiao:'Pelve', como:'Comparar o padrão da dor ao longo do dia e ao movimento.', positivo:'Sacroilíaca: dor pela manhã que MELHORA com a atividade, geralmente unilateral, irradia para nádega/coxa posterior (não além do joelho) e virília do mesmo lado. Lombalgia (disco): MELHORA ao levantar e PIORA com a atividade.' },
+    { nome:'Jogo articular (limite / impulso)', regiao:'Todas as regiões', como:'Levar o segmento ao limite do movimento (flexão, extensão, rotação, inclinação lateral) e sentir a presença ou ausência de "jogo de junta".', positivo:'Ausência de jogo articular indica fixação/subluxação naquele segmento — alvo do ajuste.' }
+  ],
+
+  // Manobras de ajuste — resumo consultável por região (passo a passo completo na apostila)
+  ajustes: {
+    'Manobras gerais': ['Medição de MMSS e MMII','Teste geral, teste cervical','Alívio de tensão geral em tornozelos e joelhos','Báscula de bacia, alívio do sacro e dos ilíacos','Alívio dos artelhos','Rolo lombar','Transições tóraco-lombar (sentado 1 e 2, em pé) e cérvico-torácica'],
+    'Cervical (Occipito-Atlas)': ['Testes: rotação PA/AP, inclinação lateral (bilateral no occipito-atlas), flexão, deslize','Ajuste supino: rotação PA, flexão, impulso cranial','Ajuste sentado: contato no occipito, tração com leve flexão, impulso cranial','Ajuste prono: bloqueio contralateral, body drop'],
+    'Cervical (C1-C7)': ['Testes por segmento: rotação PA, extensão, inclinação lateral, flexão + rotação AP','Rotação PA: supino (impulso), sentado, prono (recoil)','Flexão lateral: supino, sentado (a partir de C2), prono','Extensão: supino/sentado (levíssima rotação ao lado do bloqueio), prono','Rotação AP + flexão; extensão longitudinal (tração)'],
+    'Torácica (T1-T12)': ['Testes: ligamento anterior e interespinhal; intervertebrais e costo-transversais','Ajuste interespinhal: prono (body drop cranial), variação torácica alta, supino','Ajuste ligamento anterior','Intervertebrais: inclinação lateral, rotação, extensão (prono/sentado/decúbito lateral, recoil)','Costo-transversais e costovertebral; 1ª costela (única costovertebral testável)'],
+    'Lombar (L1-L5)': ['Testes: flexão, extensão, rotação, inclinação lateral','Flexão: decúbito lateral (joelhos fletidos, impulso em extensão — efeito rechaço), supino (body drop)','Extensão: decúbito lateral, prono e variação, sentado','Rotação e inclinação lateral (decúbito lateral, sentado); ligamento anterior (associar respiração)'],
+    'Pelve / Sacroilíaca': ['Testes S/I superior e inferior (polegar em S2/PSIS, elevar perna do mesmo lado = flexão; lado oposto = extensão)','Ajuste flexão: decúbito lateral (body drop), supino','Ajuste extensão: decúbito lateral (fixação para baixo), variação combinada','Púbis: teste e ajuste na sínfise púbica','Cóccix: mobilização em sentido cranial'],
+    'Extremidades inferiores': ['Pé e tornozelo: metatarso-falange, intermetatarso, deslizes tarsais, cubóide, talo-crural, calcâneo/talus, tíbio-fibular inferior','Joelho: tíbio-fibular superior, patela (movimentação plena), tíbio-femoral (deslize AP/PA, rotação medial/lateral, deslize lateral/medial)','Coxo-femoral: testes (figura do 4, extensão longitudinal, flexão, extensão, rotações), ajustes com body drop e impulso'],
+    'Extremidades superiores': ['Mão: metacarpo-falanges, metacarpo-carpo do polegar, interfalângicos, intermetacarpos','Punho: cilindro proximal e distal (extensão longitudinal, deslize AP/PA, flexão, deslize medial/lateral), piramidal, rádio-ulna (pronação/supinação)','Cotovelo: deslize posterior, extensão longitudinal, pronação, extensão, deslize lateral/medial rádio-ulna no úmero','Ombro: deslizes na cavidade glenóide (lateral/anterior/posterior a 10° e 90°, superior/inferior, rotações)','Acrômioclavicular, esternoclavicular, costoesternal, intercostais, escápula'
+    ]
+  }
+};

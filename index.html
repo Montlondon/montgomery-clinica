@@ -985,6 +985,18 @@ window.addEventListener('DOMContentLoaded',()=>{
     <div id="pontosGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px"></div>
   </div>
 
+  <div class="fc">
+    <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="1.5"/><path d="M12 5.5v13M9.6 8h4.8M9.6 11h4.8M9.6 14h4.8"/><circle cx="12" cy="20" r="1.3"/></svg></span>Quiropraxia — Mapa de Subluxações, Testes e Ajustes</div>
+    <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px" id="quiroFonte">Referência consultável durante o diagnóstico. Clique numa aba para abrir.</p>
+    <div class="seg" id="quiroRefSeg">
+      <button class="on" data-qr="raizes" onclick="setQuiroRef('raizes')">Subluxações (vértebra a vértebra)</button>
+      <button data-qr="testes" onclick="setQuiroRef('testes')">Testes diagnósticos</button>
+      <button data-qr="ajustes" onclick="setQuiroRef('ajustes')">Manobras de ajuste</button>
+      <button data-qr="fundamentos" onclick="setQuiroRef('fundamentos')">Fundamentos</button>
+    </div>
+    <div id="quiroRefConteudo" style="margin-top:12px"></div>
+  </div>
+
   <div class="fio-elementos"></div>
 
   <div class="fc">
@@ -3175,6 +3187,7 @@ function initDiagnostico(){
   renderPulsoCard();
   renderElementosGrid();
   renderPontosGrid();
+  renderQuiroRef();
   renderDiagPainel();
   initBalancoABC();
   initBaguaWheel();
@@ -3716,6 +3729,44 @@ function renderPontosGrid(){
       <div style="font-weight:700;font-size:12.5px;margin-top:4px;color:${ativo?'#fff':'var(--pri-d)'}">${nome}</div>
     </div>`;
   }).join('');
+}
+
+let _quiroRefAba='raizes';
+function setQuiroRef(aba){
+  _quiroRefAba=aba;
+  document.querySelectorAll('#quiroRefSeg button').forEach(b=>b.classList.toggle('on',b.dataset.qr===aba));
+  renderQuiroRef();
+}
+function renderQuiroRef(){
+  const el=document.getElementById('quiroRefConteudo');
+  if(!el||typeof QUIROPRAXIA_REF==='undefined')return;
+  const Q=QUIROPRAXIA_REF, esc=s=>String(s).replace(/</g,'&lt;');
+  const fonteEl=document.getElementById('quiroFonte');
+  if(fonteEl)fonteEl.innerHTML='Referência consultável durante o diagnóstico. Fonte: <em>'+esc(Q.fonte)+'</em>. Não substitui diagnóstico médico.';
+  let h='';
+  if(_quiroRefAba==='raizes'){
+    h='<div class="tw tw-zebra"><div style="overflow-x:auto"><table><thead><tr><th style="white-space:nowrap">Nível</th><th>Área de inervação</th><th>Efeitos possíveis por interferência</th></tr></thead><tbody>'+
+      Q.raizes.map(r=>`<tr><td style="font-weight:700;white-space:nowrap;color:var(--pri-d)">${esc(r.nivel)}</td><td style="font-size:12px">${esc(r.inerva)}</td><td style="font-size:12px">${esc(r.efeito)}</td></tr>`).join('')+
+      '</tbody></table></div></div>';
+  } else if(_quiroRefAba==='testes'){
+    h=Q.testes.map(t=>`<div style="border:1px solid var(--pri-l,#E7EEF5);border-left:3px solid var(--pri);border-radius:8px;padding:11px 13px;margin-bottom:9px">
+      <div style="font-weight:700;color:var(--pri-d);font-size:13px">${esc(t.nome)}</div>
+      <div style="font-size:11px;color:var(--txt-l);margin:2px 0 6px">Região: ${esc(t.regiao)}</div>
+      <div style="font-size:12.5px"><strong>Como:</strong> ${esc(t.como)}</div>
+      <div style="font-size:12.5px;margin-top:3px"><strong>Positivo:</strong> ${esc(t.positivo)}</div></div>`).join('');
+  } else if(_quiroRefAba==='ajustes'){
+    h=Object.keys(Q.ajustes).map(reg=>`<details style="margin-bottom:7px;border:1px solid var(--pri-l,#E7EEF5);border-radius:8px;padding:6px 11px">
+      <summary style="cursor:pointer;font-weight:700;color:var(--pri-d);font-size:13px">${esc(reg)}</summary>
+      <ul style="margin:8px 0 4px;padding-left:18px;font-size:12.5px;line-height:1.6">${Q.ajustes[reg].map(a=>'<li>'+esc(a)+'</li>').join('')}</ul></details>`).join('')+
+      '<p style="font-size:11px;color:var(--txt-l);margin-top:8px">Passo a passo completo (posição do paciente, contatos e impulso) na apostila da Prof.ª Carmen — em 03_Biblioteca/Quiropraxia.</p>';
+  } else if(_quiroRefAba==='fundamentos'){
+    const f=Q.fundamentos;
+    h=`<p style="font-size:12.5px;line-height:1.6"><strong>História.</strong> ${esc(f.historia)}</p>
+      <p style="font-size:12.5px;line-height:1.6;margin-top:9px"><strong>Inteligência Inata.</strong> ${esc(f.inteligenciaInata)}</p>
+      <div style="font-weight:700;color:var(--pri-d);margin:12px 0 6px;font-size:13px">Complexo de Subluxação — 5 componentes</div>`+
+      f.complexo.map(c=>`<div style="margin-bottom:6px;font-size:12.5px"><strong>${esc(c.comp)}:</strong> ${esc(c.desc)}</div>`).join('');
+  }
+  el.innerHTML=h;
 }
 
 function toggleElemento(nome){
