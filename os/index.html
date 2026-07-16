@@ -507,6 +507,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
       <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:8px">
         <button class="btn" style="padding:4px 12px;font-size:0.7rem" onclick="toggleArvoreHeb(this)">Aא  ver em latino</button>
         <button class="btn" style="padding:4px 12px;font-size:0.7rem" onclick="toggleArvorePlanetas(this)">☽  ocultar planetas</button>
+        <button class="btn" style="padding:4px 12px;font-size:0.7rem" onclick="toggleArvoreMundos(this)">יהוה  ver os 4 Mundos</button>
       </div>
     </div>
     <div style="flex:1;min-width:280px" id="sefiraPainel">
@@ -1540,6 +1541,22 @@ const TRIADES=[
   {nome:'Tríade Astral',ids:['netzach','hod','yesod'],cor:'#5A9BD4',rot:'ast'},
   {nome:'O Reino',ids:['malkuth'],cor:'#8FA98A',rot:'rei'}
 ];
+// Os QUATRO MUNDOS — a escada pela qual tudo desce: da centelha à matéria.
+// Cada mundo é uma letra do Nome (YHVH · יהוה); juntos, a descida do Relâmpago.
+// Atribuição clássica (Cabala Hermética / Golden Dawn): Kether=Atziluth;
+// Chokmah+Binah=Beriah; das seis do meio a Yesod=Yetzirah; Malkuth=Assiah.
+// É esta escada que a GESTAÇÃO (o pedido da Vanessa) vai um dia habitar.
+const MUNDOS=[
+  {nome:'Atziluth',pt:'Emanação',heb:'אֲצִילוּת',letra:'י',letraNome:'Yod',elemento:'Fogo',ids:['kether'],y0:20,y1:74,cor:'#B0472F',
+    sentido:'O mundo arquetípico — a centelha pura, antes de qualquer forma. A vontade de ser.'},
+  {nome:'Beriah',pt:'Criação',heb:'בְּרִיאָה',letra:'ה',letraNome:'Heh',elemento:'Água',ids:['chokmah','binah'],y0:80,y1:140,cor:'#2F6DA8',
+    sentido:'O mundo criativo — onde a força ganha contorno. O reino dos arcanjos, o ventre que dá forma.'},
+  {nome:'Yetzirah',pt:'Formação',heb:'יְצִירָה',letra:'ו',letraNome:'Vav',elemento:'Ar',ids:['chesed','geburah','tiphereth','netzach','hod','yesod'],y0:150,y1:416,cor:'#C9A84C',
+    sentido:'O mundo formativo — as emoções e as forças que organizam. O reino dos anjos, a ponte entre céu e terra.'},
+  {nome:'Assiah',pt:'Ação',heb:'עֲשִׂיָּה',letra:'ה',letraNome:'Heh final',elemento:'Terra',ids:['malkuth'],y0:432,y1:482,cor:'#7A5C3A',
+    sentido:'O mundo material — a manifestação, o corpo, a terra sob os pés. Onde o Relâmpago chega ao chão.'}
+];
+function mundoDe(id){return MUNDOS.find(m=>m.ids.includes(id));}
 // Da'at (Conhecimento): a Sefirá OCULTA. Não entra na conta dos dez — é o ponto
 // onde Chokmah (Sabedoria) e Binah (Entendimento) se fundem, no abismo do pilar
 // do meio, sobre o caminho Kether→Tiphereth. Desenhada como "espaço vazio":
@@ -1563,10 +1580,25 @@ const PLANETA_GLIFO={
 };
 let _arvorePlanetas=true;
 function toggleArvorePlanetas(b){_arvorePlanetas=!_arvorePlanetas;if(b)b.textContent=_arvorePlanetas?'☽  ocultar planetas':'☽  ver planetas';renderArvoreSVG();}
+let _arvoreMundos=false; // os 4 Mundos começam ocultos p/ não competir com as tríades
+function toggleArvoreMundos(b){_arvoreMundos=!_arvoreMundos;if(b)b.textContent=_arvoreMundos?'יהוה  ocultar Mundos':'יהוה  ver os 4 Mundos';renderArvoreSVG();}
 const DAAT={x:150,y:158,n:"Da'at",pt:'Conhecimento',heb:'דַּעַת',
   frase:'A esfera que não se conta. Onde Sabedoria (Chokmah) e Entendimento (Binah) se encontram e se fundem — não uma décima primeira luz, mas o vazio entre elas: a fenda do abismo por onde o Infinito (Ein Sof) ainda respira dentro da Árvore. Conhecimento que não se acumula, se atravessa. Por isso fica oculta — dez são as esferas; Da\'at é a porta.'};
 function renderArvoreSVG(){
   const pos=id=>SEFIROT.find(s=>s.id===id);
+  // Os 4 Mundos — faixas horizontais suaves atrás de tudo (só quando ligado).
+  // Cada faixa traz sua letra do Nome (יהוה) à esquerda e o rótulo à direita.
+  let mundos='';
+  if(_arvoreMundos){
+    mundos=MUNDOS.map(m=>{
+      const h=m.y1-m.y0;
+      return '<g><title>'+m.nome+' · '+m.pt+' — letra '+m.letra+' ('+m.letraNome+') · '+m.elemento+'</title>'+
+        '<rect x="6" y="'+m.y0+'" width="288" height="'+h+'" rx="12" fill="'+m.cor+'" fill-opacity="0.06" stroke="'+m.cor+'" stroke-opacity="0.16" stroke-width="0.8"/>'+
+        '<text x="17" y="'+(m.y0+h/2+7)+'" text-anchor="middle" font-family="Lora,serif" font-size="17" fill="'+m.cor+'" opacity="0.5">'+m.letra+'</text>'+
+        '<text x="288" y="'+(m.y0+13)+'" text-anchor="end" font-family="Lora,serif" font-size="8" font-style="italic" fill="'+m.cor+'" opacity="0.72">'+m.nome+' · '+m.pt+'</text>'+
+        '</g>';
+    }).join('');
+  }
   // Auras das tríades (desenhadas primeiro, ficam atrás de caminhos e nós)
   const auras=TRIADES.map(t=>{
     const p=t.ids.map(pos);
@@ -1635,7 +1667,7 @@ function renderArvoreSVG(){
       : '<text x="'+DAAT.x+'" y="'+(DAAT.y+1)+'" text-anchor="middle" font-family="Lora,serif" font-size="8.5" font-style="italic" fill="#6E5F8C">'+DAAT.n+'</text>'+
         '<text x="'+DAAT.x+'" y="'+(DAAT.y+9)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" fill="#8A7BA6">oculta</text>')+
     '</g>';
-  document.getElementById('arvoreSVG').innerHTML=auras+linhas+nos+daat;
+  document.getElementById('arvoreSVG').innerHTML=mundos+auras+linhas+nos+daat;
 }
 function selDaat(){
   if(typeof _resetCaminhos==='function')_resetCaminhos();
@@ -1715,6 +1747,7 @@ function selSefira(id){
       (s.elo?'<span class="tag" style="cursor:pointer;background:'+((MF_TEIA[s.elo]||{}).cor||'#999')+'22;color:'+((MF_TEIA[s.elo]||{}).cor||'#999')+';border:1px solid '+((MF_TEIA[s.elo]||{}).cor||'#999')+'55" onclick="go(\'metafisica\');setTimeout(function(){mfAcender(\''+s.n+'\')},350)" title="Acender este elemento na teia da Metafísica">elo: '+esc(s.elo)+' →</span>':'')+
       '</div>':'')+
     (s.frase?'<div style="margin-top:12px;padding:11px 14px;border-left:3px solid #C9A84C;background:rgba(201,168,76,0.07);border-radius:0 8px 8px 0"><span style="font-size:0.64rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--cinza)">Em nossas palavras — antes de qualquer livro</span><br><span style="font-size:0.9rem;font-family:Lora,serif;font-style:italic;line-height:1.5;color:var(--azul)">'+esc(s.frase)+'</span></div>':'')+
+    (function(){var m=mundoDe(s.id);return m?'<div style="margin-top:10px;padding:8px 12px;border-left:3px solid '+m.cor+';background:'+m.cor+'0F;border-radius:0 8px 8px 0"><span style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--cinza)">Mundo · a escada do Nome</span><br><span style="font-size:0.85rem;color:'+m.cor+';font-weight:600">'+m.nome+' — '+m.pt+'</span> <span style="font-family:Lora,serif;font-size:0.95rem;color:'+m.cor+'">'+m.letra+'</span> <span style="font-size:0.72rem;color:var(--cinza)">('+m.letraNome+' de יהוה · '+m.elemento+')</span><br><span style="font-size:0.78rem;color:var(--azul);font-style:italic;line-height:1.45">'+esc(m.sentido)+'</span></div>':'';})()+
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;margin-top:12px">'+
     linha('Corpo (Adam Kadmon)',s.corpo)+linha('Planeta',s.planeta)+
     linha('Virtude',s.virtude)+linha('Vício',s.vicio)+
