@@ -498,6 +498,9 @@ tr:hover td{background:rgba(201,168,76,0.05)}
         <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#3A6FA5;vertical-align:middle"></span> Misericórdia</span>
         <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#A54242;vertical-align:middle"></span> Severidade</span>
       </div>
+      <div style="display:flex;justify-content:center;margin-top:8px">
+        <button class="btn" style="padding:4px 12px;font-size:0.7rem" onclick="toggleArvoreHeb(this)">Aא  ver em latino</button>
+      </div>
     </div>
     <div style="flex:1;min-width:280px" id="sefiraPainel">
       <div class="vazio">Clique numa Sefirá na árvore ao lado.<br><br>Do topo (Kether, a Coroa) à base (Malkuth, o Reino) — o raio que desce da unidade à manifestação no corpo.</div>
@@ -1502,7 +1505,14 @@ const TRIADES=[
 // onde Chokmah (Sabedoria) e Binah (Entendimento) se fundem, no abismo do pilar
 // do meio, sobre o caminho Kether→Tiphereth. Desenhada como "espaço vazio":
 // anel oco tracejado, não uma esfera cheia. Sem elo forçado (honra a regra de ouro).
-const DAAT={x:150,y:158,n:"Da'at",pt:'Conhecimento',
+// Nomes em hebraico — o pedido do Montgomery: a letra viva dentro do balão.
+// O hebraico é mais compacto que a transliteração latina (sem descendentes largos),
+// então cabe no centro do círculo; a transliteração desce para a linha de baixo.
+const HEB={kether:'כֶּתֶר',chokmah:'חׇכְמָה',binah:'בִּינָה',chesed:'חֶסֶד',geburah:'גְּבוּרָה',tiphereth:'תִּפְאֶרֶת',netzach:'נֶצַח',hod:'הוֹד',yesod:'יְסוֹד',malkuth:'מַלְכוּת'};
+// Estado do desenho da Árvore: começa em hebraico (o pedido), toggle para o latino.
+let _arvoreHeb=true;
+function toggleArvoreHeb(b){_arvoreHeb=!_arvoreHeb;if(b)b.textContent=_arvoreHeb?'Aא  ver em latino':'אA  ver em hebraico';renderArvoreSVG();}
+const DAAT={x:150,y:158,n:"Da'at",pt:'Conhecimento',heb:'דַּעַת',
   frase:'A esfera que não se conta. Onde Sabedoria (Chokmah) e Entendimento (Binah) se encontram e se fundem — não uma décima primeira luz, mas o vazio entre elas: a fenda do abismo por onde o Infinito (Ein Sof) ainda respira dentro da Árvore. Conhecimento que não se acumula, se atravessa. Por isso fica oculta — dez são as esferas; Da\'at é a porta.'};
 function renderArvoreSVG(){
   const pos=id=>SEFIROT.find(s=>s.id===id);
@@ -1526,19 +1536,33 @@ function renderArvoreSVG(){
     return forma+lab;
   }).join('');
   const linhas=CAMINHOS.map(([a,b])=>{const p=pos(a),q=pos(b);return '<line x1="'+p.x+'" y1="'+p.y+'" x2="'+q.x+'" y2="'+q.y+'" stroke="#C9A84C" stroke-width="1" opacity="0.35"/>';}).join('');
-  const nos=SEFIROT.map(s=>
-    '<g class="sefira-no" data-id="'+s.id+'" style="cursor:pointer">'+
-    '<title>'+s.n+' — '+s.pt+'</title>'+
-    '<circle cx="'+s.x+'" cy="'+s.y+'" r="19" fill="'+PILAR[s.pilar]+'" stroke="#F5F3EE" stroke-width="1.5" opacity="0.92"/>'+
-    '<text x="'+s.x+'" y="'+(s.y-1)+'" text-anchor="middle" font-family="Lora,serif" font-size="10" fill="#fff" font-weight="600">'+s.n+'</text>'+
-    '<text x="'+s.x+'" y="'+(s.y+9)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" fill="rgba(255,255,255,0.85)">'+s.num+' · '+s.pt.replace(' ☀','')+'</text>'+
-    '</g>').join('');
+  // Ajuste tipográfico: o nome latino encolhe conforme o comprimento p/ nunca
+  // transbordar o raio 19 (Tiphereth/Geburah eram os que estouravam).
+  const fitLatino=nome=>nome.length<=4?11:nome.length<=6?9.5:nome.length<=8?8:7;
+  const nos=SEFIROT.map(s=>{
+    let miolo;
+    if(_arvoreHeb){
+      // Hebraico grande no centro; transliteração + nº logo abaixo, ainda dentro do balão.
+      miolo='<text x="'+s.x+'" y="'+(s.y+2)+'" text-anchor="middle" font-family="Lora,serif" font-size="14" fill="#fff" font-weight="600">'+HEB[s.id]+'</text>'+
+        '<text x="'+s.x+'" y="'+(s.y+13)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.6" fill="rgba(255,255,255,0.8)">'+s.num+' · '+s.n+'</text>';
+    }else{
+      miolo='<text x="'+s.x+'" y="'+(s.y-1)+'" text-anchor="middle" font-family="Lora,serif" font-size="'+fitLatino(s.n)+'" fill="#fff" font-weight="600">'+s.n+'</text>'+
+        '<text x="'+s.x+'" y="'+(s.y+9)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" fill="rgba(255,255,255,0.85)">'+s.num+' · '+s.pt.replace(' ☀','')+'</text>';
+    }
+    return '<g class="sefira-no" data-id="'+s.id+'" style="cursor:pointer">'+
+      '<title>'+s.n+' ('+HEB[s.id]+') — '+s.pt+'</title>'+
+      '<circle cx="'+s.x+'" cy="'+s.y+'" r="19" fill="'+PILAR[s.pilar]+'" stroke="#F5F3EE" stroke-width="1.5" opacity="0.92"/>'+
+      miolo+'</g>';
+  }).join('');
   // Da'at — o anel oco, o espaço vazio no abismo. Sobre os caminhos, clicável.
   const daat='<g class="daat-no" style="cursor:pointer">'+
     '<title>Da\'at — Conhecimento (Sefirá oculta)</title>'+
     '<circle cx="'+DAAT.x+'" cy="'+DAAT.y+'" r="16" fill="rgba(245,243,238,0.55)" stroke="#9A8CB5" stroke-width="1.4" stroke-dasharray="3 3" opacity="0.9"/>'+
-    '<text x="'+DAAT.x+'" y="'+(DAAT.y+1)+'" text-anchor="middle" font-family="Lora,serif" font-size="8.5" font-style="italic" fill="#6E5F8C">'+DAAT.n+'</text>'+
-    '<text x="'+DAAT.x+'" y="'+(DAAT.y+9)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" fill="#8A7BA6">oculta</text>'+
+    (_arvoreHeb
+      ? '<text x="'+DAAT.x+'" y="'+(DAAT.y+2)+'" text-anchor="middle" font-family="Lora,serif" font-size="11" font-style="italic" fill="#6E5F8C">'+DAAT.heb+'</text>'+
+        '<text x="'+DAAT.x+'" y="'+(DAAT.y+11)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="5" fill="#8A7BA6">Da\'at · oculta</text>'
+      : '<text x="'+DAAT.x+'" y="'+(DAAT.y+1)+'" text-anchor="middle" font-family="Lora,serif" font-size="8.5" font-style="italic" fill="#6E5F8C">'+DAAT.n+'</text>'+
+        '<text x="'+DAAT.x+'" y="'+(DAAT.y+9)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" fill="#8A7BA6">oculta</text>')+
     '</g>';
   document.getElementById('arvoreSVG').innerHTML=auras+linhas+nos+daat;
 }
