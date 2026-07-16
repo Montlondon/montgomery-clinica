@@ -504,8 +504,9 @@ tr:hover td{background:rgba(201,168,76,0.05)}
         <span><span style="color:#3A6FA5;font-weight:700">ה</span> simples · signo+mês</span>
       </div>
       <p style="text-align:center;font-size:0.64rem;color:var(--cinza);font-style:italic;margin-top:4px">Clique numa <strong>letra</strong> do caminho: signo, mês hebraico, planeta e Arcano do Tarô.</p>
-      <div style="display:flex;justify-content:center;margin-top:8px">
+      <div style="display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:8px">
         <button class="btn" style="padding:4px 12px;font-size:0.7rem" onclick="toggleArvoreHeb(this)">Aא  ver em latino</button>
+        <button class="btn" style="padding:4px 12px;font-size:0.7rem" onclick="toggleArvorePlanetas(this)">☽  ocultar planetas</button>
       </div>
     </div>
     <div style="flex:1;min-width:280px" id="sefiraPainel">
@@ -1550,6 +1551,18 @@ const HEB={kether:'כֶּתֶר',chokmah:'חׇכְמָה',binah:'בִּינָה'
 // Estado do desenho da Árvore: começa em hebraico (o pedido), toggle para o latino.
 let _arvoreHeb=true;
 function toggleArvoreHeb(b){_arvoreHeb=!_arvoreHeb;if(b)b.textContent=_arvoreHeb?'Aא  ver em latino':'אA  ver em hebraico';renderArvoreSVG();}
+// Glifo planetário de cada esfera (o dado já vive em SEFIROT.planeta; aqui vira símbolo no desenho).
+// Kether e Chokmah NÃO têm planeta na tradição (Primum Mobile / Zodíaco) — recebem estrela, com honestidade no title.
+// Fonte: atribuições planetárias clássicas das Sefirot (Cabala Hermética / Golden Dawn).
+const PLANETA_GLIFO={
+  kether:{g:'✧',t:'Primum Mobile — além do zodíaco'},
+  chokmah:{g:'✦',t:'Zodíaco · estrelas fixas'},
+  binah:{g:'♄',t:'Saturno'},chesed:{g:'♃',t:'Júpiter'},geburah:{g:'♂',t:'Marte'},
+  tiphereth:{g:'☉',t:'Sol'},netzach:{g:'♀',t:'Vênus'},hod:{g:'☿',t:'Mercúrio'},
+  yesod:{g:'☽',t:'Lua'},malkuth:{g:'⊕',t:'Terra — síntese dos 4 elementos'}
+};
+let _arvorePlanetas=true;
+function toggleArvorePlanetas(b){_arvorePlanetas=!_arvorePlanetas;if(b)b.textContent=_arvorePlanetas?'☽  ocultar planetas':'☽  ver planetas';renderArvoreSVG();}
 const DAAT={x:150,y:158,n:"Da'at",pt:'Conhecimento',heb:'דַּעַת',
   frase:'A esfera que não se conta. Onde Sabedoria (Chokmah) e Entendimento (Binah) se encontram e se fundem — não uma décima primeira luz, mas o vazio entre elas: a fenda do abismo por onde o Infinito (Ein Sof) ainda respira dentro da Árvore. Conhecimento que não se acumula, se atravessa. Por isso fica oculta — dez são as esferas; Da\'at é a porta.'};
 function renderArvoreSVG(){
@@ -1598,10 +1611,19 @@ function renderArvoreSVG(){
       miolo='<text x="'+s.x+'" y="'+(s.y-1)+'" text-anchor="middle" font-family="Lora,serif" font-size="'+fitLatino(s.n)+'" fill="#fff" font-weight="600">'+s.n+'</text>'+
         '<text x="'+s.x+'" y="'+(s.y+9)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="6.5" fill="rgba(255,255,255,0.85)">'+s.num+' · '+s.pt.replace(' ☀','')+'</text>';
     }
+    // Glifo planetário: pequeno selo fora do balão (à direita nos pilares C/D, à esquerda no E).
+    let planeta='';
+    if(_arvorePlanetas&&PLANETA_GLIFO[s.id]){
+      const pg=PLANETA_GLIFO[s.id];
+      const bx=s.x+(s.pilar==='E'?-24:24), by=s.y-13;
+      planeta='<g><title>Planeta — '+pg.t+'</title>'+
+        '<circle cx="'+bx+'" cy="'+by+'" r="7" fill="#F5F3EE" opacity="0.92" stroke="#B8943C" stroke-width="0.8"/>'+
+        '<text x="'+bx+'" y="'+(by+3.2)+'" text-anchor="middle" font-family="Lora,serif" font-size="8.5" fill="#8A6D24">'+pg.g+'</text></g>';
+    }
     return '<g class="sefira-no" data-id="'+s.id+'" style="cursor:pointer">'+
       '<title>'+s.n+' ('+HEB[s.id]+') — '+s.pt+'</title>'+
       '<circle cx="'+s.x+'" cy="'+s.y+'" r="19" fill="'+PILAR[s.pilar]+'" stroke="#F5F3EE" stroke-width="1.5" opacity="0.92"/>'+
-      miolo+'</g>';
+      miolo+planeta+'</g>';
   }).join('');
   // Da'at — o anel oco, o espaço vazio no abismo. Sobre os caminhos, clicável.
   const daat='<g class="daat-no" style="cursor:pointer">'+
