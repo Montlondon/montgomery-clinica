@@ -477,6 +477,11 @@ tr:hover td{background:rgba(201,168,76,0.05)}
           <text x="88" y="318" font-size="8" fill="#8A8578">Cóccix</text>
         </g>
       </svg>
+      <div style="font-size:0.6rem;color:var(--cinza);margin-top:6px;text-align:left;line-height:1.7">
+        <div><span style="width:8px;height:8px;border-radius:50%;background:#3A6FA5;display:inline-block;vertical-align:middle;margin-right:4px"></span>Parassimpático — descanso, digestão</div>
+        <div><span style="width:8px;height:8px;border-radius:50%;background:#4A7C59;display:inline-block;vertical-align:middle;margin-right:4px"></span>Simpático — luta ou fuga</div>
+        <div><span style="width:8px;height:8px;border-radius:50%;background:#5A5650;display:inline-block;vertical-align:middle;margin-right:4px"></span>Cérebro-Espinhal — somático</div>
+      </div>
     </div>
     <div style="flex:1;min-width:250px">
       <h2 style="font-family:Lora,serif;font-size:1rem;color:var(--azul);margin-bottom:10px">Articulações</h2>
@@ -1724,6 +1729,7 @@ function selVertebra(vert){
   document.getElementById('colPainel').innerHTML=
     '<div style="border:1px solid rgba(201,168,76,0.4);border-radius:10px;padding:var(--f2) var(--f3);background:rgba(201,168,76,0.05)">'+
     '<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:4px">'+esc(raiz?raiz.nivel:vert)+' <span class="tag tag-dourado">'+reg+'</span></h3>'+
+    (raiz&&raiz.sistema?(function(){var c={'Simpático':'#4A7C59','Parassimpático':'#3A6FA5','Cérebro-Espinhal':'#5A5650'}[raiz.sistema]||'#5A5650';return '<div style="display:inline-flex;align-items:center;gap:6px;margin-bottom:6px"><span style="width:9px;height:9px;border-radius:50%;background:'+c+';display:inline-block"></span><span style="font-size:0.7rem;color:'+c+';font-weight:600;text-transform:uppercase;letter-spacing:0.4px">'+esc(raiz.sistema)+'</span></div>';})():'')+
     '<p style="font-size:0.66rem;color:var(--cinza);font-style:italic;margin-bottom:8px">'+esc(QUIROPRAXIA_REF.fonte)+'</p>'+
     (raiz?
       '<p style="font-size:0.72rem;color:var(--cinza);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.4px">Inervação — o que esta raiz alimenta</p>'+
