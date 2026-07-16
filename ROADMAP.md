@@ -345,6 +345,16 @@ Diretriz geral: opcao de enviar/compartilhar em JPG em tudo que for possivel ("a
 - v1.2 testa a "impressao digital" exata do Places no campo location (R. abreviado + CEP + Brasil, copiado do evento que o Montgomery validou na foto). Se o quadrante acender sozinho: resolvido.
 - Se NAO acender: o caminho definitivo e criar o evento pela API do Google Calendar (OAuth com escopo calendar via Supabase, que ja autentica com Google) — o evento nasce estruturado, sem abrir a tela de novo evento. Feature maior; planejar quando Montgomery quiser ("top das galaxias").
 
+### 🧠 Ideia (15/07/2026) — "Cérebro Montgomery": companheiro de IA visual que escuta e fala
+**Projeto:** Montgomery OS / Montgomery Code · **Estágio:** 🌱 semente (pedido registrado, aprovado para construir por partes)
+
+Montgomery viu uma propaganda de um programador que "conversa com uma IA" representada por um **cérebro futurista** que dialoga com ele. Quer criar o dele um dia. Respondido com TRANSPARÊNCIA (regra de ouro) — a propaganda são 3 peças montadas, e separei o que é nosso do que tem custo:
+1. **O cérebro visual que reage** (pulsa/acende quando "pensa" ou "fala") — SVG animado no estilo raio-x azul do OS (mesma linhagem da anatomia visual e do Cubo de Metatron). **NOSSO, sem custo, buildável.** É a parte que mais impressiona.
+2. **Voz** (ouvir pelo microfone + responder falando) — **Web Speech API** do navegador. **Real e grátis.**
+3. **A inteligência real por trás** (responder como o Claude) — precisa conectar a uma IA via **chave de API (Anthropic)**, o que **custa por uso + um pouco de montagem técnica**. Único porém honesto; explicar chave/custo sem pegadinha quando chegar a hora.
+
+**Caminho combinado:** começar pela parte que já é nossa — o **cérebro que acende e pulsa** (SVG) — e usar isso como PROJETO DE APRENDIZADO em [[project_montgomery_code]] (aprender programando no que ele ama, não em tutorial seco). A peça 3 (IA real por dentro) fica como degrau futuro com chave/custo. Casa com a "IA própria da Vanessa" e com o espírito de conhecimento vivo. Retomar dizendo "Cérebro Montgomery".
+
 ### Vitruviano na geometria sagrada — visao em camadas (13/07/2026)
 Montgomery aprovou a direcao: o Corpo Vitruviano do OS deve ter a FORMA REAL do
 desenho do Da Vinci, DE COSTAS (como ele se ve dentro da Merkabah), e crescer
