@@ -508,7 +508,12 @@ gente incorpora; o que for tradicional e publico a gente constroi como nosso.**
   Vitruviano com a Arvore vira o indice vivo de tudo (Bussola Holografica).
 
 Plano fatiado em velas (uma janela cada, consumo pequeno-medio):
-1. **Vela 1:** estrutura do modulo + 2-3 meridianos mais usados na clinica
+1. **✅ Vela 1 (FEITA 17/07, v1.8):** `acupuntura-data.js` criado com a tabela dos
+   14 meridianos + gerador de link Deadman + 76 pontos trilingues (Pulmao 11,
+   Intestino Grosso 20, Estomago 45). Card "Acupuntura — Pontos dos Meridianos"
+   no Diagnostico Integrado, entre o Balanco ABC e o Bagua: chips por meridiano
+   (cor do elemento; os sem dados aparecem apagados), busca por nome/indicacao,
+   ficha expansivel por ponto e botao "Ver no Deadman".
 2. **Vela 2:** mais um punhado de meridianos
 3. **Vela 3:** restante dos ~360 pontos + revisao dos links Deadman
 

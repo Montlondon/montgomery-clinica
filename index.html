@@ -584,7 +584,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   <div class="sidebar-footer">
     Montgomery Magalhães<br>Saúde Integrativa<br>
     Itambacuri - MG<br>
-    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v1.7 &middot; 17/07</span>
+    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v1.8 &middot; 17/07</span>
   </div>
 </aside>
 
@@ -1027,6 +1027,16 @@ window.addEventListener('DOMContentLoaded',()=>{
       <div id="abcMeridianoGrid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(48px,1fr));gap:6px;margin-bottom:16px"></div>
       <div id="abcResultados"></div>
     </div>
+  </div>
+
+  <div class="fc">
+    <div class="fst" style="font-family:'Lora',serif"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M12 2l-2 3M12 2l2 3"/><circle cx="12" cy="9" r="1.2" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="1.2" fill="currentColor" stroke="none"/><circle cx="12" cy="19" r="1.2" fill="currentColor" stroke="none"/></svg></span>Acupuntura — Pontos dos Meridianos</div>
+    <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px" id="acuFonte">Base própria trilíngue (código · pinyin · caracteres · tradução). Escolha um meridiano ou busque por nome/indicação. Cada ponto tem o botão "Ver no Deadman" (abre o vídeo, você já logado).</p>
+    <div id="acuMeridianoGrid" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px"></div>
+    <div class="fg full" style="position:relative;margin-bottom:10px">
+      <input type="text" id="acuBusca" placeholder="Ex: hegu, zusanli, dor de dente, tosse, joelho..." oninput="filtrarAcuPontos()" autocomplete="off">
+    </div>
+    <div id="acuResultado" style="max-height:420px;overflow-y:auto"></div>
   </div>
 
   <div class="fc">
@@ -1581,6 +1591,7 @@ window.addEventListener('DOMContentLoaded',()=>{
         continua se chamando window.html2canvas), então nenhum outro trecho do
         código da plataforma precisou ser alterado. -->
 <script src="dados-clinicos.js"></script>
+<script src="acupuntura-data.js"></script>
 <script>
 /*!
  * html2canvas-pro 2.0.4 <https://yorickshan.github.io/html2canvas-pro/>
@@ -3195,6 +3206,7 @@ function initDiagnostico(){
   renderQuiroRef();
   renderDiagPainel();
   initBalancoABC();
+  initAcupuntura();
   initBaguaWheel();
   renderAuriculoMapaCompleto();
   renderPsicanalise();
@@ -3203,6 +3215,58 @@ function initDiagnostico(){
     document.getElementById('diagPacBusca').value='';
     document.getElementById('diagPacId').value='';
   }
+}
+
+// ===== ACUPUNTURA — PONTOS DOS MERIDIANOS (dados em acupuntura-data.js) =====
+let _acuMeridianoSel='IG'; // começa no Intestino Grosso (L.I.-4 é o mais usado)
+function initAcupuntura(){
+  const grid=document.getElementById('acuMeridianoGrid');
+  if(!grid)return;
+  const disponiveis=new Set(ACUPUNTURA_PONTOS.map(p=>p.m));
+  grid.innerHTML=Object.keys(ACUPUNTURA_MERIDIANOS).map(sig=>{
+    const md=ACUPUNTURA_MERIDIANOS[sig], tem=disponiveis.has(sig);
+    return `<button type="button" onclick="${tem?`setAcuMeridiano('${sig}')`:''}" title="${md.nome} — ${md.total} pontos${tem?'':' (próximas velas)'}"
+      style="padding:5px 10px;border-radius:14px;font-size:11.5px;cursor:${tem?'pointer':'default'};opacity:${tem?1:.38};
+      border:1.5px solid ${md.cor};color:${sig===_acuMeridianoSel?'#fff':md.cor};background:${sig===_acuMeridianoSel?md.cor:'transparent'}"
+      id="acuChip_${sig}">${sig} · ${md.nome}</button>`;
+  }).join('');
+  renderAcuPontos(acupunturaPontosDoMeridiano(_acuMeridianoSel));
+}
+function setAcuMeridiano(sig){
+  _acuMeridianoSel=sig;
+  document.getElementById('acuBusca').value='';
+  initAcupuntura();
+}
+function filtrarAcuPontos(){
+  const q=document.getElementById('acuBusca').value.trim().toLowerCase();
+  if(!q){renderAcuPontos(acupunturaPontosDoMeridiano(_acuMeridianoSel));return;}
+  const res=ACUPUNTURA_PONTOS.filter(p=>
+    (p.py+' '+p.pt+' '+p.en+' '+p.ind+' '+p.fn+' '+p.m+'-'+p.n+' '+ACUPUNTURA_MERIDIANOS[p.m].deadman+'-'+p.n).toLowerCase().includes(q));
+  renderAcuPontos(res.slice(0,40),true);
+}
+function renderAcuPontos(lista,busca){
+  const el=document.getElementById('acuResultado');
+  if(!lista.length){el.innerHTML='<p style="font-size:12px;color:var(--txt-l)">Nenhum ponto encontrado. Vela 1 cobre Pulmão, Intestino Grosso e Estômago — os demais meridianos chegam nas próximas velas.</p>';return;}
+  el.innerHTML=lista.map(p=>{
+    const md=ACUPUNTURA_MERIDIANOS[p.m], cod=md.deadman+'-'+p.n;
+    return `<details style="border:1px solid var(--brd);border-left:3px solid ${md.cor};border-radius:7px;padding:7px 11px;margin-bottom:6px;background:var(--cream)">
+      <summary style="cursor:pointer;font-size:12.5px;display:flex;flex-wrap:wrap;gap:8px;align-items:baseline">
+        <strong style="color:${md.cor}">${cod}</strong>
+        <span>${p.py} <span style="font-family:serif">${p.hz}</span></span>
+        <span style="color:var(--txt-l)">"${p.pt}"</span>
+        ${busca?`<span style="font-size:10.5px;color:var(--txt-l)">(${md.nome})</span>`:''}
+      </summary>
+      <div style="font-size:12px;margin-top:7px;line-height:1.55">
+        <div><strong>Inglês:</strong> ${p.en}</div>
+        <div><strong>Localização:</strong> ${p.loc}</div>
+        <div><strong>Funções:</strong> ${p.fn}</div>
+        <div><strong>Indicações:</strong> ${p.ind}</div>
+        <a href="${acupunturaDeadmanURL(p.m,p.n)}" target="_blank" rel="noopener" class="btn btn-sec btn-sm" style="margin-top:7px;display:inline-flex;align-items:center;gap:5px;text-decoration:none">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4 11 13"/><path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6"/></svg>
+          Ver no Deadman</a>
+      </div>
+    </details>`;
+  }).join('');
 }
 
 // ===== BALANÇO MÉTODO — SISTEMAS ABC (leitura de sistemasABC, definido mais abaixo) =====
