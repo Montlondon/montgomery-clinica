@@ -487,6 +487,26 @@ gente incorpora; o que for tradicional e publico a gente constroi como nosso.**
   conteudo do APK de forma organizada. Sem permissao, nao extrair — usar so
   lado a lado.
 
+**Decisoes de 17/07 (segunda rodada, com o Montgomery):**
+- **Nomes em 3 linguas:** cada ponto tera codigo (L.I.-4) + pinyin (Hegu) +
+  caracteres (合谷) + traducao em portugues ("Vale da Uniao") + ingles
+  ("Joining Valley"). Conhecimento tradicional publico — sem conflito de licenca.
+- **Onde entra primeiro (escolha do Montgomery):** Diagnostico Integrado da
+  Clinica, perto do Balanco Metodo/ABC — fluxo clinico natural (ABC identifica o
+  meridiano -> pontos logo ali -> ficha -> resumo/PDF). O motor de sugestoes
+  cruzadas pode passar a sugerir pontos pelo meridiano em foco.
+- **Arquitetura — uma raiz, muitos reflexos:** arquivo unico `acupuntura-data.js`
+  (irmao do dados-clinicos.js) com os ~360 pontos trilingues + link Deadman
+  gerado pela tabela acima. Reflexo 1 = card no Diagnostico; Reflexo 2 = camada
+  visual no OS.
+- **Visao confirmada — pontos clicaveis no Vitruviano:** e a camada 5 da visao
+  em camadas de 13/07 ("Meridianos de acupuntura"). Tecnica ja comprovada
+  (zonas invisiveis que acendem + camadas ligaveis). Contra a densidade dos
+  ~360 pontos: mostrar por meridiano ligado (liga Bexiga -> so os 67 pontos
+  dela acendem, na cor do elemento). Cascata final:
+  Sefira -> Elemento -> Orgao -> Meridiano -> Ponto -> tratamento — o
+  Vitruviano com a Arvore vira o indice vivo de tudo (Bussola Holografica).
+
 Plano fatiado em velas (uma janela cada, consumo pequeno-medio):
 1. **Vela 1:** estrutura do modulo + 2-3 meridianos mais usados na clinica
 2. **Vela 2:** mais um punhado de meridianos
