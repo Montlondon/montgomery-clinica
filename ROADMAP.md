@@ -464,8 +464,23 @@ gente incorpora; o que for tradicional e publico a gente constroi como nosso.**
   comprovado; avaliar Z-Anatomy, atlas 3D open source de corpo inteiro).
 - **A Manual of Acupuncture (Deadman, licenca ativa):** videos/ilustracoes nao
   podem ser copiados. Plano: cada ponto no OS ganha botao "Ver no Deadman" que
-  abre a pagina do ponto em web.amanualofacupuncture.com (ele ja logado, cai
-  direto no video). Verificar na hora se os links por ponto sao estaveis.
+  abre a pagina do ponto (ele ja logado, cai direto no video).
+- **✅ TESTADO E CONFIRMADO (17/07, Montgomery clicou ponto a ponto logado):**
+  padrao de link estavel `https://app.amanualofacupuncture.com/es/point/CODIGO`.
+  Tabela de codigos dos 14 meridianos (a grafia importa!):
+  | Meridiano | Codigo Deadman | | Meridiano | Codigo Deadman |
+  |---|---|---|---|---|
+  | Pulmao | `LU` | | Bexiga | `BL` |
+  | Intestino Grosso | `L.I.` (com pontos!) | | Rim | `KID` |
+  | Estomago | `ST` | | Pericardio | `P` |
+  | Baco | `SP` | | Triplo Aquecedor | `SJ` (nao TB) |
+  | Coracao | `HE` | | Vesicula Biliar | `GB` |
+  | Intestino Delgado | `SI` (sem pontos) | | Figado | `LIV` |
+  | Vaso Concepcao | `REN` | | Vaso Governador | `DU` (nao GV) |
+  Exemplos validados: BL-63, ST-36, SP-6, LU-7, L.I.-4, DU-20, HE-7, KID-3,
+  LIV-3, REN-6, SJ-5, P-6, GB-34, SI-3. Falharam (nao usar): LI, GV, VG, IG,
+  ID, TB, T.B., S.I. — com a tabela acima, o link dos ~360 pontos e gerado
+  automaticamente na Vela 1, sem cadastro manual.
 - **App do amigo (comprado 2017, em portugues, so celular; Montgomery tem o APK):**
   conversar com o amigo e pedir permissao de usar o conteudo (textos/imagens)
   como base da camada em portugues. Com o sim dele, Claude ajuda a extrair o
