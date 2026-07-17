@@ -514,8 +514,12 @@ Plano fatiado em velas (uma janela cada, consumo pequeno-medio):
    no Diagnostico Integrado, entre o Balanco ABC e o Bagua: chips por meridiano
    (cor do elemento; os sem dados aparecem apagados), busca por nome/indicacao,
    ficha expansivel por ponto e botao "Ver no Deadman".
-2. **Vela 2:** mais um punhado de meridianos
-3. **Vela 3:** restante dos ~360 pontos + revisao dos links Deadman
+2. **✅ Vela 2 (FEITA 17/07, v1.9):** +5 meridianos completos — Baço-Pâncreas 21,
+   Coração 9, Intestino Delgado 19, Pericárdio 9, Fígado 14 (+72 pontos = 148).
+   Links Deadman conferidos (CS→P, F→LIV, ID→SI, C→HE, BP→SP).
+3. **Vela 3:** restante dos ~360 pontos (Bexiga 67, Rim 27, Triplo Aquecedor 23,
+   Vesícula Biliar 44, Vaso Concepção 24, Vaso Governador 28 = 213) + revisao
+   final dos links Deadman. Se pesar numa janela só, fatiar em 3a/3b.
 
 Base propria: nome, meridiano, localizacao, funcoes, indicacoes dos pontos =
 conhecimento tradicional publico. Nao fazer tudo numa janela so.
