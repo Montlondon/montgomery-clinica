@@ -829,7 +829,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
         <b>Corpo realista:</b> por trás de todas as camadas está o contorno humano de frente — cabeça, pescoço, ombros, cintura, panturrilhas, pés. Ossos, músculos e vísceras vêm com gradiente e sombra, para lerem como volume e não como figura chapada. É desenho vetorial feito à mão, não fotografia: é o mais realista que se faz <b>offline, dentro do cofre da família e sem serviço pago</b>.<br>
         <b>Toggle:</b> os dois modos são a mesma placa — traço da casa (pele e tecido em cor natural) e raio-X azul (o corpo vira sopro).<br>
         <b>Órgãos — vista de frente:</b> a placa olha o corpo de frente, como você olha o paciente à sua frente. Então o <b>lado esquerdo do desenho é o lado direito do corpo</b> — o Fígado aparece à esquerda da tela porque mora à direita da pessoa. Cada víscera vem pintada na cor do seu Elemento; no raio-X azul tudo vira sopro, e a cor volta no painel ao lado.<br>
-        <b>Meridianos — vista de frente:</b> a mesma regra do espelho — o lado esquerdo da tela é o lado direito do corpo. Os pontos vêm da mesma base da Clínica (361 pontos trilíngues, links Deadman validados); nesta primeira vela acendem <b>Pulmão</b>, <b>Intestino Grosso</b> e <b>Vaso Concepção</b> — os demais meridianos já aparecem nos chips, plantados, e acendem nas próximas velas.<br>
+        <b>Meridianos — vista de frente:</b> a mesma regra do espelho — o lado esquerdo da tela é o lado direito do corpo. Os pontos vêm da mesma base da Clínica (361 pontos trilíngues, links Deadman validados); os <b>12 meridianos de frente</b> já acendem (266 pontos) — só <b>Bexiga</b> e <b>Vaso Governador</b>, que correm nas costas, esperam o toggle frente/costas.<br>
         <b>Próxima camada (plantada):</b> o corpo 3D que gira de verdade — modelo anatômico rotacionável no navegador. Exige carregar um arquivo pesado; entra quando você quiser dar esse passo. O 3D fotorrealista puro (tipo BioDigital/Zygote) é serviço externo pago e online — fica fora do cofre da família por escolha.
       </div>
     </div>
@@ -1313,7 +1313,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v2.0';
+const APP_VERSION='v2.1';
 const APP_VERSION_NOTA='acende os Meridianos — camada de pontos de acupuntura no corpo: P, IG e Vaso Concepção nesta vela, base trilíngue da Clínica com links Deadman';
 function carimbarVersao(){
   const linha='Montgomery OS · Fase 2 — Corpo · '+APP_VERSION+' ('+APP_VERSION_NOTA+')';
@@ -3014,7 +3014,10 @@ const MUSCULOS={
     nota:'A potência da marcha. O quadríceps estende o joelho; os isquiotibiais, atrás, o dobram e freiam — desequilíbrio entre eles é fonte comum de dor no joelho e na bacia.'},
   'Perna':{n:'~12',faixa:'perna e pés',
     ossos:['tibial anterior','gastrocnêmio','sóleo','fibulares','extensores e flexores dos dedos'],
-    nota:'A bomba e o equilíbrio. O tríceps sural (gastrocnêmio + sóleo) empurra o passo pelo tendão de Aquiles; o tibial anterior levanta o pé. A fundação viva de que fala o pé no esqueleto.'}
+    nota:'A bomba e o equilíbrio. O tríceps sural (gastrocnêmio + sóleo) empurra o passo pelo tendão de Aquiles; o tibial anterior levanta o pé. A fundação viva de que fala o pé no esqueleto.'},
+  'Costas':{n:'~30',faixa:'dorso (a placa é de frente — estes moram atrás)',
+    ossos:['trapézio (superior, médio, inferior)','latíssimo do dorso','romboides maior e menor','eretores da espinha','quadrado lombar','glúteos (máximo, médio, mínimo)'],
+    nota:'A parede de trás, onde vive a maior parte do trabalho do terapeuta. O trapézio segura o mundo nos ombros; os eretores sobem a coluna como dois cabos; o quadrado lombar e os glúteos sustentam a lombar e a marcha. Aparecem em desenho quando o corpo ganhar o toggle frente/costas.'}
 };
 // ----- TENDÕES & LIGAMENTOS — a camada do movimento (tecido da Madeira: Fígado/Vesícula) -----
 // As cordas que ligam músculo a osso (tendões) e osso a osso (ligamentos).
@@ -3080,10 +3083,21 @@ const ORGAOS={
 // ----- MERIDIANOS — a camada dos pontos de acupuntura (base da Clínica: acupuntura-data.js) -----
 // Coordenadas no corpo de frente (viewBox 200x430). Vista de frente: o lado
 // esquerdo da tela é o lado DIREITO do corpo. Meridianos bilaterais definem o
-// trajeto do lado da tela esquerda e espelham (x' = 200 - x). Vela 1: P, IG, VC.
+// trajeto do lado da tela esquerda e espelham (x' = 200 - x). Vela 2: os 12 de
+// frente acesos; Bexiga (B) e Vaso Governador (VG) correm nas costas — esperam
+// o toggle frente/costas.
 const MER_TRAJETOS={
   'P':{bilateral:true,pts:[[79,78],[78,72],[69,104],[68,111],[65,148],[63,168],[61,196],[61,202],[60,207],[59,216],[57,226]]},
   'IG':{bilateral:true,pts:[[61,232],[61,228],[62,224],[64,219],[64,212],[65,204],[65,196],[66,186],[66,180],[66,173],[67,160],[68,154],[69,148],[71,116],[70,88],[74,79],[89,60],[90,54],[97,40],[96,36]]},
+  'E':{bilateral:true,pts:[[92,29],[92,31],[92,36],[93,40],[90,45],[87,43],[85,36],[87,15],[93,52],[93,55],[92,58],[90,62],[86,76],[86,82],[85,89],[85,96],[85,103],[85,110],[93,118],[93,124],[93,130],[93,136],[93,142],[93,148],[93,154],[93,160],[93,166],[93,172],[93,178],[93,184],[88,200],[87,240],[86,252],[86,262],[83,298],[82,312],[81,328],[81,342],[80,356],[79,350],[80,386],[76,392],[73,396],[70,399],[67,402]]},
+  'BP':{bilateral:true,pts:[[90,398],[89,396],[88,392],[88,388],[87,384],[88,368],[88,360],[89,344],[89,314],[90,290],[92,262],[92,190],[91,184],[88,166],[88,154],[88,142],[83,118],[82,110],[82,103],[82,96],[80,120]]},
+  'C':{bilateral:true,pts:[[76,84],[74,96],[72,132],[66,176],[65,182],[64,187],[64,193],[62,210],[64,220]]},
+  'ID':{bilateral:true,pts:[[65,222],[65,216],[66,210],[66,204],[66,199],[67,194],[69,172],[73,134],[77,100],[78,88],[80,80],[79,74],[81,70],[84,66],[88,62],[90,54],[91,48],[90,34],[84,28]]},
+  'R':{bilateral:true,pts:[[84,404],[88,396],[89,390],[90,387],[90,384],[90,381],[90,372],[91,368],[91,352],[91,312],[97,188],[97,183],[97,178],[97,172],[97,166],[97,154],[97,146],[97,140],[97,134],[97,128],[97,122],[95,113],[95,106],[95,99],[95,92],[95,85],[95,79]]},
+  'CS':{bilateral:true,pts:[[82,100],[76,90],[70,132],[65,168],[64,178],[63,183],[62,193],[59,212],[58,222]]},
+  'TR':{bilateral:true,pts:[[58,221],[59,214],[60,210],[61,199],[62,192],[63,187],[63,184],[64,180],[66,168],[70,136],[71,130],[73,112],[74,98],[74,80],[77,72],[86,56],[84,42],[83,38],[83,33],[84,27],[85,31],[86,27],[88,24]]},
+  'VB':{bilateral:true,pts:[[86,27],[86,34],[84,24],[83,20],[83,17],[83,15],[83,19],[84,13],[86,11],[87,15],[87,19],[86,46],[88,12],[90,18],[90,12],[91,9],[92,8],[93,8],[94,12],[90,50],[82,66],[78,100],[79,105],[84,130],[80,140],[82,158],[83,172],[83,176],[81,192],[79,200],[80,246],[80,254],[79,292],[78,310],[78,326],[78,330],[79,340],[79,348],[79,356],[77,388],[72,394],[70,397],[68,399],[66,402]]},
+  'F':{bilateral:true,pts:[[86,401],[87,398],[86,394],[88,388],[89,364],[89,354],[90,314],[91,300],[92,268],[92,220],[92,208],[94,192],[86,146],[86,116]]},
   'VC':{bilateral:false,pts:[[100,196],[100,190],[100,183],[100,176],[100,169],[100,162],[100,155],[100,148],[100,141],[100,134],[100,127],[100,120],[100,113],[100,106],[100,100],[100,92],[100,86],[100,80],[100,74],[100,69],[100,65],[100,61],[100,56],[100,48]]}
 };
 let _merLigados=new Set();
@@ -3096,7 +3110,7 @@ function renderMerSel(){
     const b=document.createElement('button');
     b.id='merChip_'+sig;
     b.textContent=sig;
-    b.title=m.nome+' — '+m.elemento+(tem?' ('+m.total+' pontos)':' — plantado, acende na próxima vela');
+    b.title=m.nome+' — '+m.elemento+(tem?' ('+m.total+' pontos)':' — corre nas costas: acende quando o corpo ganhar o toggle frente/costas');
     b.style.cssText='font-size:0.62rem;padding:3px 8px;border-radius:20px;cursor:'+(tem?'pointer':'default')+
       ';border:1px solid '+m.cor+(tem?'':'44')+';background:'+(on?m.cor:'transparent')+
       ';color:'+(on?'#fff':m.cor)+(tem?'':';opacity:0.38')+';transition:all 0.2s';
