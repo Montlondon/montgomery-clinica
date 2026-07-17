@@ -502,7 +502,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
 <section class="sec" id="sec-esqueleto">
   <div class="sec-head">
     <h1>Anatomia — o corpo por camadas</h1>
-    <p>O mesmo corpo, camada por camada. <b>Ossos</b> (~206, tecido da Água), <b>músculos</b> (~640, tecido da Terra), <b>tendões &amp; ligamentos</b> (tecido da Madeira) e agora os <b>órgãos</b> — cada víscera na cor do seu Elemento, do Fígado-Madeira ao Rim-Água. Agrupados por região e clicáveis: clique numa parte para ver o que a habita, a contagem e o fio que a liga à teia. As patologias entram como camada seguinte.</p>
+    <p>O mesmo corpo, camada por camada. <b>Ossos</b> (~206, tecido da Água), <b>músculos</b> (~640, tecido da Terra), <b>tendões &amp; ligamentos</b> (tecido da Madeira) e agora os <b>órgãos</b> — cada víscera na cor do seu Elemento, do Fígado-Madeira ao Rim-Água. E agora os <b>meridianos de acupuntura</b>: ligue um meridiano e só os pontos dele acendem, na cor do Elemento; clique num ponto para abrir a ficha trilíngue. Agrupados por região e clicáveis: clique numa parte para ver o que a habita, a contagem e o fio que a liga à teia. As patologias entram como camada seguinte.</p>
   </div>
   <div class="bloco" style="display:flex;gap:var(--f4);flex-wrap:wrap;align-items:flex-start">
     <div style="flex:0 0 280px;max-width:100%;margin:0 auto;text-align:center">
@@ -511,7 +511,9 @@ tr:hover td{background:rgba(201,168,76,0.05)}
         <button class="btn btn-sec btn-mini" id="skCamMusculos" onclick="skCamada('musculos')">Músculos</button>
         <button class="btn btn-sec btn-mini" id="skCamTendoes" onclick="skCamada('tendoes')">Tendões</button>
         <button class="btn btn-sec btn-mini" id="skCamOrgaos" onclick="skCamada('orgaos')">Órgãos</button>
+        <button class="btn btn-sec btn-mini" id="skCamMeridianos" onclick="skCamada('meridianos')">Meridianos</button>
       </div>
+      <div id="skMerSel" style="display:none;flex-wrap:wrap;justify-content:center;gap:4px;margin-bottom:10px"></div>
       <div style="display:flex;justify-content:center;gap:6px;margin-bottom:10px">
         <button class="btn btn-sec btn-mini" id="skBtnSVG" onclick="skModo('svg')">Traço da casa</button>
         <button class="btn btn-sec btn-mini" id="skBtnRaiox" onclick="skModo('raiox')">Raio-X azul</button>
@@ -810,11 +812,24 @@ tr:hover td{background:rgba(201,168,76,0.05)}
             <path class="ol" style="stroke-width:1.7" d="M93 136 Q107 138 105 143 Q91 144 94 149 Q108 151 102 156"/>
           </g>
         </svg>
+        <svg viewBox="0 0 200 430" id="meridianoSVG" style="width:210px;max-width:100%;display:none">
+          <style>
+            /* Cada meridiano acende na cor do seu Elemento (--mc vem do dado, não da camada). */
+            .mer-traj{fill:none;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round;opacity:0.55}
+            .mer-pt{cursor:pointer;stroke:#fff;stroke-width:0.5;transition:r 0.15s}
+            .mer-pt:hover{stroke:#C9A84C;stroke-width:1.1}
+            .mer-pt.sel{stroke:#B8912F;stroke-width:1.3}
+            #skWrap.raiox .mer-pt{stroke:#0A1826}
+            #skWrap.raiox .mer-pt:hover,#skWrap.raiox .mer-pt.sel{stroke:#EAF9FF}
+          </style>
+          <g id="merCamadaG"></g>
+        </svg>
       </div>
       <div style="font-size:0.62rem;color:var(--cinza);margin-top:8px;line-height:1.6;text-align:left">
         <b>Corpo realista:</b> por trás de todas as camadas está o contorno humano de frente — cabeça, pescoço, ombros, cintura, panturrilhas, pés. Ossos, músculos e vísceras vêm com gradiente e sombra, para lerem como volume e não como figura chapada. É desenho vetorial feito à mão, não fotografia: é o mais realista que se faz <b>offline, dentro do cofre da família e sem serviço pago</b>.<br>
         <b>Toggle:</b> os dois modos são a mesma placa — traço da casa (pele e tecido em cor natural) e raio-X azul (o corpo vira sopro).<br>
         <b>Órgãos — vista de frente:</b> a placa olha o corpo de frente, como você olha o paciente à sua frente. Então o <b>lado esquerdo do desenho é o lado direito do corpo</b> — o Fígado aparece à esquerda da tela porque mora à direita da pessoa. Cada víscera vem pintada na cor do seu Elemento; no raio-X azul tudo vira sopro, e a cor volta no painel ao lado.<br>
+        <b>Meridianos — vista de frente:</b> a mesma regra do espelho — o lado esquerdo da tela é o lado direito do corpo. Os pontos vêm da mesma base da Clínica (361 pontos trilíngues, links Deadman validados); nesta primeira vela acendem <b>Pulmão</b>, <b>Intestino Grosso</b> e <b>Vaso Concepção</b> — os demais meridianos já aparecem nos chips, plantados, e acendem nas próximas velas.<br>
         <b>Próxima camada (plantada):</b> o corpo 3D que gira de verdade — modelo anatômico rotacionável no navegador. Exige carregar um arquivo pesado; entra quando você quiser dar esse passo. O 3D fotorrealista puro (tipo BioDigital/Zygote) é serviço externo pago e online — fica fora do cofre da família por escolha.
       </div>
     </div>
@@ -1290,6 +1305,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
 </div>
 
 <script src="../dados-clinicos.js"></script>
+<script src="../acupuntura-data.js"></script>
 <script>
 /* ============================================================
    MONTGOMERY OS — Fase 1: Fundação
@@ -1297,8 +1313,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v1.9';
-const APP_VERSION_NOTA='acende a aba Espiritualidade — biblioteca viva com o resumo do Imperador Amarelo (Nei Ching)';
+const APP_VERSION='v2.0';
+const APP_VERSION_NOTA='acende os Meridianos — camada de pontos de acupuntura no corpo: P, IG e Vaso Concepção nesta vela, base trilíngue da Clínica com links Deadman';
 function carimbarVersao(){
   const linha='Montgomery OS · Fase 2 — Corpo · '+APP_VERSION+' ('+APP_VERSION_NOTA+')';
   const rod=document.getElementById('appVersion');if(rod)rod.textContent=linha;
@@ -3061,6 +3077,98 @@ const ORGAOS={
     nota:'Víscera-par do Pulmão. Recolhe a água e solta o resto. Na MTC é o órgão do deixar ir — a constipação e o apego moram no mesmo Elemento, e não é coincidência: o Metal inspira e precisa expirar.',
     fio:'víscera do Metal — o que solta o que já serviu; o par físico do desapego'}
 };
+// ----- MERIDIANOS — a camada dos pontos de acupuntura (base da Clínica: acupuntura-data.js) -----
+// Coordenadas no corpo de frente (viewBox 200x430). Vista de frente: o lado
+// esquerdo da tela é o lado DIREITO do corpo. Meridianos bilaterais definem o
+// trajeto do lado da tela esquerda e espelham (x' = 200 - x). Vela 1: P, IG, VC.
+const MER_TRAJETOS={
+  'P':{bilateral:true,pts:[[79,78],[78,72],[69,104],[68,111],[65,148],[63,168],[61,196],[61,202],[60,207],[59,216],[57,226]]},
+  'IG':{bilateral:true,pts:[[61,232],[61,228],[62,224],[64,219],[64,212],[65,204],[65,196],[66,186],[66,180],[66,173],[67,160],[68,154],[69,148],[71,116],[70,88],[74,79],[89,60],[90,54],[97,40],[96,36]]},
+  'VC':{bilateral:false,pts:[[100,196],[100,190],[100,183],[100,176],[100,169],[100,162],[100,155],[100,148],[100,141],[100,134],[100,127],[100,120],[100,113],[100,106],[100,100],[100,92],[100,86],[100,80],[100,74],[100,69],[100,65],[100,61],[100,56],[100,48]]}
+};
+let _merLigados=new Set();
+function merDados(){return (typeof ACUPUNTURA_MERIDIANOS!=='undefined')?ACUPUNTURA_MERIDIANOS:null;}
+function renderMerSel(){
+  const box=document.getElementById('skMerSel');const M=merDados();
+  if(!box||!M||box.childElementCount)return;
+  Object.keys(M).forEach(sig=>{
+    const m=M[sig],tem=!!MER_TRAJETOS[sig],on=_merLigados.has(sig);
+    const b=document.createElement('button');
+    b.id='merChip_'+sig;
+    b.textContent=sig;
+    b.title=m.nome+' — '+m.elemento+(tem?' ('+m.total+' pontos)':' — plantado, acende na próxima vela');
+    b.style.cssText='font-size:0.62rem;padding:3px 8px;border-radius:20px;cursor:'+(tem?'pointer':'default')+
+      ';border:1px solid '+m.cor+(tem?'':'44')+';background:'+(on?m.cor:'transparent')+
+      ';color:'+(on?'#fff':m.cor)+(tem?'':';opacity:0.38')+';transition:all 0.2s';
+    if(tem)b.onclick=()=>toggleMeridiano(sig);
+    box.appendChild(b);
+  });
+}
+function toggleMeridiano(sig){
+  const M=merDados();if(!M)return;
+  if(_merLigados.has(sig))_merLigados.delete(sig);else _merLigados.add(sig);
+  const b=document.getElementById('merChip_'+sig),on=_merLigados.has(sig),m=M[sig];
+  if(b){b.style.background=on?m.cor:'transparent';b.style.color=on?'#fff':m.cor;}
+  desenharMeridianos();
+  if(on){
+    const t=MF_TEIA[m.elemento]||{};
+    document.getElementById('skPainel').innerHTML=
+      '<div style="border:1px solid '+m.cor+'70;border-radius:10px;padding:var(--f2) var(--f3);background:'+m.cor+'10">'+
+      '<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:4px">'+esc(m.nome)+' ('+sig+') '+
+      '<span class="tag" style="background:'+m.cor+'22;color:'+m.cor+';border:1px solid '+m.cor+'66">'+esc(m.elemento)+'</span></h3>'+
+      '<p style="font-size:0.74rem;color:var(--cinza);margin-bottom:6px">'+m.total+' pontos · '+(m.yin?'Yin':'Yang')+
+      (t.emocao?' · emoção: '+esc(t.emocao):'')+'</p>'+
+      '<p style="font-size:0.8rem;line-height:1.6">Meridiano aceso no corpo. Clique num ponto para abrir a ficha trilíngue — nome, localização, funções, indicações e o vídeo no Deadman.</p></div>';
+  }
+}
+function desenharMeridianos(){
+  const g=document.getElementById('merCamadaG');const M=merDados();
+  if(!g||!M)return;
+  g.innerHTML='';
+  const NS='http://www.w3.org/2000/svg';
+  _merLigados.forEach(sig=>{
+    const tr=MER_TRAJETOS[sig];if(!tr)return;
+    const cor=M[sig].cor;
+    const lados=tr.bilateral?[false,true]:[false];
+    lados.forEach(esp=>{
+      const pts=tr.pts.map(p=>[esp?200-p[0]:p[0],p[1]]);
+      const path=document.createElementNS(NS,'path');
+      path.setAttribute('class','mer-traj');
+      path.setAttribute('stroke',cor);
+      path.setAttribute('d','M'+pts.map(p=>p[0]+' '+p[1]).join(' L'));
+      g.appendChild(path);
+      pts.forEach((p,i)=>{
+        const c=document.createElementNS(NS,'circle');
+        c.setAttribute('class','mer-pt');
+        c.setAttribute('cx',p[0]);c.setAttribute('cy',p[1]);c.setAttribute('r',1.9);
+        c.setAttribute('fill',cor);
+        c.dataset.m=sig;c.dataset.n=i+1;
+        const tt=document.createElementNS(NS,'title');
+        tt.textContent=sig+'-'+(i+1);
+        c.appendChild(tt);
+        c.addEventListener('click',()=>selMerPonto(sig,i+1));
+        g.appendChild(c);
+      });
+    });
+  });
+}
+function selMerPonto(sig,n){
+  const M=merDados();if(!M)return;
+  const m=M[sig];
+  const p=(typeof ACUPUNTURA_PONTOS!=='undefined')?ACUPUNTURA_PONTOS.find(x=>x.m===sig&&x.n===n):null;
+  document.querySelectorAll('#meridianoSVG .mer-pt').forEach(c=>
+    c.classList.toggle('sel',c.dataset.m===sig&&+c.dataset.n===n));
+  if(!p)return;
+  const linha=(rot,val)=>val?'<div style="display:flex;gap:6px;font-size:0.76rem;line-height:1.6;margin-bottom:4px"><span style="color:var(--cinza);min-width:82px;flex:none">'+rot+'</span><span>'+esc(val)+'</span></div>':'';
+  document.getElementById('skPainel').innerHTML=
+    '<div style="border:1px solid '+m.cor+'70;border-radius:10px;padding:var(--f2) var(--f3);background:'+m.cor+'10">'+
+    '<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:2px">'+sig+'-'+n+' · '+esc(p.py)+' '+p.hz+
+    ' <span class="tag" style="background:'+m.cor+'22;color:'+m.cor+';border:1px solid '+m.cor+'66">'+esc(m.elemento)+'</span></h3>'+
+    '<p style="font-size:0.76rem;color:var(--cinza);margin-bottom:9px;font-style:italic">'+esc(p.pt)+' · '+esc(p.en)+' · '+esc(m.nome)+'</p>'+
+    linha('Localização',p.loc)+linha('Funções',p.fn)+linha('Indicações',p.ind)+
+    '<a class="btn btn-sec btn-mini" style="margin-top:8px;display:inline-block;text-decoration:none" target="_blank" rel="noopener" href="'+acupunturaDeadmanURL(sig,n)+'">Ver no Deadman →</a>'+
+    '</div>';
+}
 let _skCamada='ossos';
 // Contorno humano de frente (viewBox 200x430): cabeça, tronco, braços e pernas em partes
 // separadas que se sobrepõem — a união lida como um corpo só, e cada parte fica simples de ajustar.
@@ -3088,7 +3196,7 @@ const CORPO_PARTES=[
   'C110 402 102 400 101 394 C101 382 102 368 102 352 C102 330 101 310 101 292 C101 270 100 240 100 220 C100 206 102 198 104 197 Z'
 ];
 function montarSilhueta(){
-  ['esqueletoSVG','musculoSVG','tendaoSVG','orgaoSVG'].forEach(id=>{
+  ['esqueletoSVG','musculoSVG','tendaoSVG','orgaoSVG','meridianoSVG'].forEach(id=>{
     const svg=document.getElementById(id);
     if(!svg||svg.querySelector('.corpo-silhueta'))return;
     const g=document.createElementNS('http://www.w3.org/2000/svg','g');
@@ -3109,6 +3217,11 @@ function skCamada(c){
   document.getElementById('musculoSVG').style.display=(c==='musculos')?'':'none';
   document.getElementById('tendaoSVG').style.display=(c==='tendoes')?'':'none';
   document.getElementById('orgaoSVG').style.display=(c==='orgaos')?'':'none';
+  document.getElementById('meridianoSVG').style.display=(c==='meridianos')?'':'none';
+  document.getElementById('skMerSel').style.display=(c==='meridianos')?'flex':'none';
+  if(c==='meridianos'){renderMerSel();desenharMeridianos();}
+  document.getElementById('skCamMeridianos').classList.toggle('btn-p',c==='meridianos');
+  document.getElementById('skCamMeridianos').classList.toggle('btn-sec',c!=='meridianos');
   document.getElementById('skCamOssos').classList.toggle('btn-p',c==='ossos');
   document.getElementById('skCamOssos').classList.toggle('btn-sec',c!=='ossos');
   document.getElementById('skCamMusculos').classList.toggle('btn-p',c==='musculos');
@@ -3117,11 +3230,15 @@ function skCamada(c){
   document.getElementById('skCamTendoes').classList.toggle('btn-sec',c!=='tendoes');
   document.getElementById('skCamOrgaos').classList.toggle('btn-p',c==='orgaos');
   document.getElementById('skCamOrgaos').classList.toggle('btn-sec',c!=='orgaos');
+  if(c==='meridianos'){
+    document.getElementById('skPainel').innerHTML='<div class="vazio">Ligue um meridiano nos chips acima — só os pontos dele acendem, na cor do Elemento. Depois clique num ponto para abrir a ficha trilíngue com o link do Deadman.</div>';
+  }else{
   const alvo=c==='ossos'?'do esqueleto para ver os ossos':c==='musculos'?'do corpo para ver os músculos':
     c==='tendoes'?'de uma articulação para ver seus tendões e ligamentos':'do tronco para ver o órgão e o Elemento que o governa';
   document.getElementById('skPainel').innerHTML='<div class="vazio">Clique numa região '+alvo+
     ', a contagem e o fio que a liga à teia da Metafísica.</div>';
-  document.querySelectorAll('#esqueletoSVG .sk-reg,#musculoSVG .mus-reg,#tendaoSVG .ten-reg,#orgaoSVG .org-reg').forEach(g=>g.classList.remove('sel'));
+  }
+  document.querySelectorAll('#esqueletoSVG .sk-reg,#musculoSVG .mus-reg,#tendaoSVG .ten-reg,#orgaoSVG .org-reg,#meridianoSVG .mer-pt').forEach(g=>g.classList.remove('sel'));
 }
 function selOrgRegiao(reg){
   document.querySelectorAll('#orgaoSVG .org-reg').forEach(g=>g.classList.toggle('sel',g.dataset.reg===reg));
