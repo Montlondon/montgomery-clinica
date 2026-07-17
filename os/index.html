@@ -516,10 +516,48 @@ tr:hover td{background:rgba(201,168,76,0.05)}
         <button class="btn btn-sec btn-mini" id="skBtnRaiox" onclick="skModo('raiox')">Raio-X azul</button>
       </div>
       <div id="skWrap" style="border-radius:14px;padding:10px;transition:background 0.3s">
+        <svg id="anatDefs" width="0" height="0" style="position:absolute;pointer-events:none" aria-hidden="true">
+          <defs>
+            <linearGradient id="gradPele" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#D2B698"/><stop offset="20%" stop-color="#EBD8C4"/>
+              <stop offset="46%" stop-color="#F7EADB"/><stop offset="74%" stop-color="#E6D0B8"/>
+              <stop offset="100%" stop-color="#CDB093"/>
+            </linearGradient>
+            <linearGradient id="gradOsso" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#C9BB92"/><stop offset="26%" stop-color="#EFE6C8"/>
+              <stop offset="52%" stop-color="#FBF6E6"/><stop offset="78%" stop-color="#E4D9B8"/>
+              <stop offset="100%" stop-color="#BFB086"/>
+            </linearGradient>
+            <linearGradient id="gradMusculo" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#8E3524"/><stop offset="24%" stop-color="#C05F44"/>
+              <stop offset="50%" stop-color="#DC8365"/><stop offset="76%" stop-color="#B84A34"/>
+              <stop offset="100%" stop-color="#83301F"/>
+            </linearGradient>
+            <linearGradient id="gradPeleRx" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#5BC8F5" stop-opacity="0.05"/>
+              <stop offset="50%" stop-color="#B8ECFF" stop-opacity="0.16"/>
+              <stop offset="100%" stop-color="#5BC8F5" stop-opacity="0.05"/>
+            </linearGradient>
+            <filter id="volume" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur in="SourceAlpha" stdDeviation="1.2" result="b"/>
+              <feOffset in="b" dx="0.8" dy="1" result="o"/>
+              <feComponentTransfer in="o" result="s"><feFuncA type="linear" slope="0.32"/></feComponentTransfer>
+              <feMerge><feMergeNode in="s"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <style>
+            /* Sem traço divisório: cada parte tem o próprio gradiente, e a emenda entre
+               braço e tronco some — o corpo lê como um volume só. */
+            .corpo-silhueta{filter:url(#volume)}
+            .corpo-silhueta path{fill:url(#gradPele);stroke:#C0AE8E;stroke-width:0.5;stroke-opacity:0.28}
+            #skWrap.raiox .corpo-silhueta path{fill:url(#gradPeleRx);stroke:#2E7FA6;stroke-opacity:0.75}
+          </style>
+        </svg>
         <svg viewBox="0 0 200 430" id="esqueletoSVG" style="width:210px;max-width:100%">
           <style>
             .sk-reg{cursor:pointer}
-            .sk-reg .f{fill:#E9E2CE;stroke:#9A8F73;stroke-width:0.7;transition:fill 0.2s,stroke 0.2s}
+            .sk-reg{filter:url(#volume)}
+            .sk-reg .f{fill:url(#gradOsso);stroke:#9A8F73;stroke-width:0.7;transition:fill 0.2s,stroke 0.2s}
             .sk-reg .l{fill:none;stroke:#9A8F73;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.2s}
             .sk-reg .socket{fill:#4a4436;stroke:none}
             .sk-reg:hover .f{fill:#F3EBD3;stroke:#C9A84C}
@@ -533,8 +571,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
             #skWrap.raiox .sk-reg:hover .l{stroke:#B8ECFF}
             #skWrap.raiox .sk-reg.sel .f,#skWrap.raiox .sk-reg.sel .l{stroke:#EAF9FF}
           </style>
-          <!-- CRÂNIO -->
-          <g class="sk-reg" data-reg="Crânio"><title>Crânio (22 ossos)</title>
+          <!-- CRÂNIO — reduzido para a proporção real (~7 cabeças no corpo inteiro) -->
+          <g class="sk-reg" data-reg="Crânio" transform="translate(100,5) scale(0.75) translate(-100,-6)"><title>Crânio (22 ossos)</title>
             <path class="f" d="M100 6 C85 6 74 17 74 33 C74 42 77 48 81 52 C82 56 84 58 86 59 Q100 64 114 59 C116 58 118 56 119 52 C123 48 126 42 126 33 C126 17 115 6 100 6 Z"/>
             <ellipse class="socket" cx="89" cy="33" rx="5.5" ry="6.5"/>
             <ellipse class="socket" cx="111" cy="33" rx="5.5" ry="6.5"/>
@@ -600,20 +638,18 @@ tr:hover td{background:rgba(201,168,76,0.05)}
         <svg viewBox="0 0 200 430" id="musculoSVG" style="width:210px;max-width:100%;display:none">
           <style>
             .mus-reg{cursor:pointer}
-            .mus-reg .m{fill:#C46B4E;stroke:#8A3F2C;stroke-width:0.7;transition:fill 0.2s,stroke 0.2s}
+            .mus-reg{filter:url(#volume)}
+            .mus-reg .m{fill:url(#gradMusculo);stroke:#8A3F2C;stroke-width:0.7;transition:fill 0.2s,stroke 0.2s}
             .mus-reg .ml{fill:none;stroke:#8A3F2C;stroke-width:1.2;stroke-linecap:round}
             .mus-reg:hover .m{fill:#D98a6d;stroke:#C9A84C}
             .mus-reg:hover .ml{stroke:#C9A84C}
             .mus-reg.sel .m{fill:#E39A7C;stroke:#B8912F;stroke-width:1.1}
             .mus-reg.sel .ml{stroke:#B8912F}
-            #skHeadNeutro{fill:#E9E2CE;stroke:#9A8F73;stroke-width:0.7}
             #skWrap.raiox .mus-reg .m{fill:rgba(91,200,245,0.12);stroke:#5BC8F5}
             #skWrap.raiox .mus-reg .ml{stroke:#5BC8F5}
             #skWrap.raiox .mus-reg:hover .m{fill:rgba(184,236,255,0.20);stroke:#B8ECFF}
             #skWrap.raiox .mus-reg.sel .m,#skWrap.raiox .mus-reg.sel .ml{stroke:#EAF9FF}
-            #skWrap.raiox #skHeadNeutro{fill:rgba(91,200,245,0.10);stroke:#5BC8F5}
           </style>
-          <circle id="skHeadNeutro" cx="100" cy="20" r="13"/>
           <!-- PESCOÇO -->
           <g class="mus-reg" data-reg="Pescoço"><title>Pescoço — esternocleidomastóideo, escalenos, trapézio</title>
             <path class="m" d="M94 33 L90 50 L98 50 L99 34 Z"/><path class="m" d="M106 33 L110 50 L102 50 L101 34 Z"/>
@@ -667,14 +703,11 @@ tr:hover td{background:rgba(201,168,76,0.05)}
             .ten-reg:hover .j{fill-opacity:0.3;stroke:#C9A84C}
             .ten-reg.sel .t{stroke:#2F6B3E;stroke-width:3.2}
             .ten-reg.sel .j{fill-opacity:0.38;stroke:#2F6B3E}
-            #tenHeadNeutro{fill:#E9E2CE;stroke:#9A8F73;stroke-width:0.7}
             #skWrap.raiox .ten-reg .t{stroke:#5BC8F5}
             #skWrap.raiox .ten-reg .j{fill:rgba(91,200,245,0.14);stroke:#5BC8F5}
             #skWrap.raiox .ten-reg:hover .t,#skWrap.raiox .ten-reg:hover .j{stroke:#B8ECFF}
             #skWrap.raiox .ten-reg.sel .t,#skWrap.raiox .ten-reg.sel .j{stroke:#EAF9FF}
-            #skWrap.raiox #tenHeadNeutro{fill:rgba(91,200,245,0.10);stroke:#5BC8F5}
           </style>
-          <circle id="tenHeadNeutro" cx="100" cy="20" r="13"/>
           <path class="t" style="opacity:0.28" d="M100 33 L100 168"/>
           <!-- OMBRO — manguito rotador -->
           <g class="ten-reg" data-reg="Ombro"><title>Ombro — manguito rotador, tendão do bíceps</title>
@@ -728,20 +761,15 @@ tr:hover td{background:rgba(201,168,76,0.05)}
             .org-reg:hover .ol,.org-reg:hover .oc{stroke:#C9A84C}
             .org-reg.sel .o{fill-opacity:0.62;stroke:#B8912F;stroke-width:1.4}
             .org-reg.sel .ol,.org-reg.sel .oc{stroke:#B8912F}
-            #orgHeadNeutro,#orgSilhueta{fill:#E9E2CE;stroke:#9A8F73;stroke-width:0.7}
-            #orgSilhueta{fill-opacity:0.4}
             #orgDiafragma{fill:none;stroke:#9A8F73;stroke-width:1.1;opacity:0.5}
             #skWrap.raiox .org-reg .o{fill:rgba(91,200,245,0.12);stroke:#5BC8F5}
             #skWrap.raiox .org-reg .ol,#skWrap.raiox .org-reg .oc{stroke:#5BC8F5}
             #skWrap.raiox .org-reg:hover .o{fill:rgba(184,236,255,0.22);stroke:#B8ECFF}
             #skWrap.raiox .org-reg:hover .ol,#skWrap.raiox .org-reg:hover .oc{stroke:#B8ECFF}
             #skWrap.raiox .org-reg.sel .o,#skWrap.raiox .org-reg.sel .ol,#skWrap.raiox .org-reg.sel .oc{stroke:#EAF9FF}
-            #skWrap.raiox #orgHeadNeutro,#skWrap.raiox #orgSilhueta{fill:rgba(91,200,245,0.08);stroke:#5BC8F5}
             #skWrap.raiox #orgDiafragma{stroke:#5BC8F5}
           </style>
-          <circle id="orgHeadNeutro" cx="100" cy="20" r="13"/>
           <!-- VISTA DE FRENTE: o lado esquerdo do desenho é o lado DIREITO do corpo. -->
-          <path id="orgSilhueta" d="M88 34 Q80 38 78 56 L76 92 Q76 122 82 142 L84 172 Q100 179 116 172 L118 142 Q124 122 124 92 L122 56 Q120 38 112 34 Z"/>
           <path id="orgDiafragma" d="M81 94 Q100 102 119 94"/>
           <!-- PULMÕES — Metal (Pulmão / Intestino Grosso) -->
           <g class="org-reg" data-reg="Pulmões" style="--oc:#cfd8dc;--ocs:#7d8d96"><title>Pulmões — Metal: o sopro, o desapego</title>
@@ -783,7 +811,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
         </svg>
       </div>
       <div style="font-size:0.62rem;color:var(--cinza);margin-top:8px;line-height:1.6;text-align:left">
-        <b>Toggle:</b> os dois modos são a mesma placa anatômica desenhada à mão — traço da casa e raio-X azul. É o mais realista que se faz <b>offline e sem serviço pago</b>.<br>
+        <b>Corpo realista:</b> por trás de todas as camadas está o contorno humano de frente — cabeça, pescoço, ombros, cintura, panturrilhas, pés. Ossos, músculos e vísceras vêm com gradiente e sombra, para lerem como volume e não como figura chapada. É desenho vetorial feito à mão, não fotografia: é o mais realista que se faz <b>offline, dentro do cofre da família e sem serviço pago</b>.<br>
+        <b>Toggle:</b> os dois modos são a mesma placa — traço da casa (pele e tecido em cor natural) e raio-X azul (o corpo vira sopro).<br>
         <b>Órgãos — vista de frente:</b> a placa olha o corpo de frente, como você olha o paciente à sua frente. Então o <b>lado esquerdo do desenho é o lado direito do corpo</b> — o Fígado aparece à esquerda da tela porque mora à direita da pessoa. Cada víscera vem pintada na cor do seu Elemento; no raio-X azul tudo vira sopro, e a cor volta no painel ao lado.<br>
         <b>Próxima camada (plantada):</b> o corpo 3D que gira de verdade — modelo anatômico rotacionável no navegador. Exige carregar um arquivo pesado; entra quando você quiser dar esse passo. O 3D fotorrealista puro (tipo BioDigital/Zygote) é serviço externo pago e online — fica fora do cofre da família por escolha.
       </div>
@@ -1184,8 +1213,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v1.7';
-const APP_VERSION_NOTA='anatomia por camadas: ossos + músculos + tendões e ligamentos + órgãos nos 5 Elementos';
+const APP_VERSION='v1.8';
+const APP_VERSION_NOTA='corpo realista: contorno humano, gradientes e sombra sob as quatro camadas da Anatomia';
 function carimbarVersao(){
   const linha='Montgomery OS · Fase 2 — Corpo · '+APP_VERSION+' ('+APP_VERSION_NOTA+')';
   const rod=document.getElementById('appVersion');if(rod)rod.textContent=linha;
@@ -2947,8 +2976,49 @@ const ORGAOS={
     fio:'víscera do Metal — o que solta o que já serviu; o par físico do desapego'}
 };
 let _skCamada='ossos';
+// Contorno humano de frente (viewBox 200x430): cabeça, tronco, braços e pernas em partes
+// separadas que se sobrepõem — a união lida como um corpo só, e cada parte fica simples de ajustar.
+const CORPO_PARTES=[
+  // cabeça e pescoço — largura ~ 1/3 do ombro, altura ~1/7,5 do corpo (proporção adulta real)
+  'M100 5 C90 5 82 13 82 26 C82 36 86 45 91 50 L91 62 Q100 68 109 62 L109 50 C114 45 118 36 118 26 C118 13 110 5 100 5 Z',
+  // tronco: trapézio, ombros, caixa, cintura, quadril
+  'M100 64 C94 64 89 66 84 69 C76 72 70 78 68 86 C66 94 68 100 72 104 C74 112 75 124 77 136 '+
+  'C79 146 80 152 82 158 C79 164 77 172 78 182 C80 192 86 196 92 197 L108 197 '+
+  'C114 196 120 192 122 182 C123 172 121 164 118 158 C120 152 121 146 123 136 '+
+  'C125 124 126 112 128 104 C132 100 134 94 132 86 C130 78 124 72 116 69 C111 66 106 64 100 64 Z',
+  // braço direito da tela (= esquerdo do corpo)
+  'M68 84 C61 88 59 98 60 110 C61 124 63 138 65 150 C63 160 62 172 61 184 '+
+  'C60 196 59 208 58 216 C56 222 57 230 60 234 C64 238 69 236 70 230 '+
+  'C71 220 72 210 73 200 C74 188 76 176 77 164 C78 152 79 140 79 128 C79 112 78 96 75 88 C73 84 71 83 68 84 Z',
+  'M132 84 C139 88 141 98 140 110 C139 124 137 138 135 150 C137 160 138 172 139 184 '+
+  'C140 196 141 208 142 216 C144 222 143 230 140 234 C136 238 131 236 130 230 '+
+  'C129 220 128 210 127 200 C126 188 124 176 123 164 C122 152 121 140 121 128 C121 112 122 96 125 88 C127 84 129 83 132 84 Z',
+  // perna direita da tela (= esquerda do corpo)
+  'M92 197 C86 199 83 208 83 220 C83 238 84 256 85 272 C86 284 87 292 87 300 '+
+  'C86 312 84 326 84 340 C84 356 85 372 86 384 C83 388 82 394 83 398 '+
+  'C90 402 98 400 99 394 C99 382 98 368 98 352 C98 330 99 310 99 292 C99 270 100 240 100 220 C100 206 98 198 96 197 Z',
+  'M108 197 C114 199 117 208 117 220 C117 238 116 256 115 272 C114 284 113 292 113 300 '+
+  'C114 312 116 326 116 340 C116 356 115 372 114 384 C117 388 118 394 117 398 '+
+  'C110 402 102 400 101 394 C101 382 102 368 102 352 C102 330 101 310 101 292 C101 270 100 240 100 220 C100 206 102 198 104 197 Z'
+];
+function montarSilhueta(){
+  ['esqueletoSVG','musculoSVG','tendaoSVG','orgaoSVG'].forEach(id=>{
+    const svg=document.getElementById(id);
+    if(!svg||svg.querySelector('.corpo-silhueta'))return;
+    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
+    g.setAttribute('class','corpo-silhueta');
+    g.setAttribute('aria-hidden','true');
+    CORPO_PARTES.forEach(d=>{
+      const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+      p.setAttribute('d',d);
+      g.appendChild(p);
+    });
+    svg.insertBefore(g,svg.firstChild);
+  });
+}
 function skCamada(c){
   _skCamada=c;
+  montarSilhueta();
   document.getElementById('esqueletoSVG').style.display=(c==='ossos')?'':'none';
   document.getElementById('musculoSVG').style.display=(c==='musculos')?'':'none';
   document.getElementById('tendaoSVG').style.display=(c==='tendoes')?'':'none';
@@ -3030,6 +3100,7 @@ function selMusRegiao(reg){
 }
 function renderEsqueleto(){
   const svg=document.getElementById('esqueletoSVG');if(!svg)return;
+  montarSilhueta();
   svg.querySelectorAll('.sk-reg').forEach(g=>{
     if(!g._bound){g._bound=1;g.addEventListener('click',()=>selSkRegiao(g.dataset.reg));}
   });
