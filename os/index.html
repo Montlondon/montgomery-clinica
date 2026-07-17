@@ -242,7 +242,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
       Ir para a Clínica (pacientes)
     </a>
     <div class="frase">"Tudo é padrão. Tudo é proporção. Tudo é luz."</div>
-    <span id="sbVersao">Montgomery OS · Fase 2 — Corpo · v1.6</span><br>
+    <span id="sbVersao">Montgomery OS · Fase 2 — Corpo · v1.7</span><br>
     <a onclick="fazerLogout()" style="color:rgba(226,200,120,0.6);cursor:pointer;padding:4px 0;border:none">Sair</a>
   </div>
 </aside>
@@ -501,7 +501,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
 <section class="sec" id="sec-esqueleto">
   <div class="sec-head">
     <h1>Anatomia — o corpo por camadas</h1>
-    <p>O mesmo corpo, camada por camada. <b>Ossos</b> (~206, tecido da Água), <b>músculos</b> (~640, tecido da Terra) e <b>tendões &amp; ligamentos</b> (tecido da Madeira), agrupados por região e clicáveis. Clique numa parte para ver o que a habita, a contagem e o fio que a liga à teia. Órgãos e patologias entram como camadas seguintes.</p>
+    <p>O mesmo corpo, camada por camada. <b>Ossos</b> (~206, tecido da Água), <b>músculos</b> (~640, tecido da Terra), <b>tendões &amp; ligamentos</b> (tecido da Madeira) e agora os <b>órgãos</b> — cada víscera na cor do seu Elemento, do Fígado-Madeira ao Rim-Água. Agrupados por região e clicáveis: clique numa parte para ver o que a habita, a contagem e o fio que a liga à teia. As patologias entram como camada seguinte.</p>
   </div>
   <div class="bloco" style="display:flex;gap:var(--f4);flex-wrap:wrap;align-items:flex-start">
     <div style="flex:0 0 280px;max-width:100%;margin:0 auto;text-align:center">
@@ -509,6 +509,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
         <button class="btn btn-p btn-mini" id="skCamOssos" onclick="skCamada('ossos')">Ossos</button>
         <button class="btn btn-sec btn-mini" id="skCamMusculos" onclick="skCamada('musculos')">Músculos</button>
         <button class="btn btn-sec btn-mini" id="skCamTendoes" onclick="skCamada('tendoes')">Tendões</button>
+        <button class="btn btn-sec btn-mini" id="skCamOrgaos" onclick="skCamada('orgaos')">Órgãos</button>
       </div>
       <div style="display:flex;justify-content:center;gap:6px;margin-bottom:10px">
         <button class="btn btn-sec btn-mini" id="skBtnSVG" onclick="skModo('svg')">Traço da casa</button>
@@ -716,9 +717,74 @@ tr:hover td{background:rgba(201,168,76,0.05)}
             <path class="t" d="M113 330 L113 358 Q116 366 112 374"/>
           </g>
         </svg>
+        <svg viewBox="0 0 200 430" id="orgaoSVG" style="width:210px;max-width:100%;display:none">
+          <style>
+            /* Cada órgão carrega a cor do seu Elemento em --oc (preenchimento) e --ocs (traço). */
+            .org-reg{cursor:pointer}
+            .org-reg .o{fill:var(--oc);fill-opacity:0.32;stroke:var(--ocs);stroke-width:0.9;transition:fill-opacity 0.2s,stroke 0.2s}
+            .org-reg .ol{fill:none;stroke:var(--ocs);stroke-width:1.3;stroke-linecap:round;transition:stroke 0.2s}
+            .org-reg .oc{fill:none;stroke:var(--ocs);stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;transition:stroke 0.2s}
+            .org-reg:hover .o{fill-opacity:0.52;stroke:#C9A84C}
+            .org-reg:hover .ol,.org-reg:hover .oc{stroke:#C9A84C}
+            .org-reg.sel .o{fill-opacity:0.62;stroke:#B8912F;stroke-width:1.4}
+            .org-reg.sel .ol,.org-reg.sel .oc{stroke:#B8912F}
+            #orgHeadNeutro,#orgSilhueta{fill:#E9E2CE;stroke:#9A8F73;stroke-width:0.7}
+            #orgSilhueta{fill-opacity:0.4}
+            #orgDiafragma{fill:none;stroke:#9A8F73;stroke-width:1.1;opacity:0.5}
+            #skWrap.raiox .org-reg .o{fill:rgba(91,200,245,0.12);stroke:#5BC8F5}
+            #skWrap.raiox .org-reg .ol,#skWrap.raiox .org-reg .oc{stroke:#5BC8F5}
+            #skWrap.raiox .org-reg:hover .o{fill:rgba(184,236,255,0.22);stroke:#B8ECFF}
+            #skWrap.raiox .org-reg:hover .ol,#skWrap.raiox .org-reg:hover .oc{stroke:#B8ECFF}
+            #skWrap.raiox .org-reg.sel .o,#skWrap.raiox .org-reg.sel .ol,#skWrap.raiox .org-reg.sel .oc{stroke:#EAF9FF}
+            #skWrap.raiox #orgHeadNeutro,#skWrap.raiox #orgSilhueta{fill:rgba(91,200,245,0.08);stroke:#5BC8F5}
+            #skWrap.raiox #orgDiafragma{stroke:#5BC8F5}
+          </style>
+          <circle id="orgHeadNeutro" cx="100" cy="20" r="13"/>
+          <!-- VISTA DE FRENTE: o lado esquerdo do desenho é o lado DIREITO do corpo. -->
+          <path id="orgSilhueta" d="M88 34 Q80 38 78 56 L76 92 Q76 122 82 142 L84 172 Q100 179 116 172 L118 142 Q124 122 124 92 L122 56 Q120 38 112 34 Z"/>
+          <path id="orgDiafragma" d="M81 94 Q100 102 119 94"/>
+          <!-- PULMÕES — Metal (Pulmão / Intestino Grosso) -->
+          <g class="org-reg" data-reg="Pulmões" style="--oc:#cfd8dc;--ocs:#7d8d96"><title>Pulmões — Metal: o sopro, o desapego</title>
+            <path class="o" d="M97 54 Q88 55 84 66 Q81 78 84 92 Q90 95 96 89 L97 56 Z"/>
+            <path class="o" d="M103 54 Q112 55 116 66 Q119 78 116 92 Q110 95 104 89 L103 56 Z"/>
+            <path class="ol" d="M100 40 L100 54 M100 47 Q94 50 92 56 M100 47 Q106 50 108 56"/>
+          </g>
+          <!-- CORAÇÃO — Fogo (Coração / Intestino Delgado) -->
+          <g class="org-reg" data-reg="Coração" style="--oc:#e06a5a;--ocs:#A8483A"><title>Coração — Fogo: o imperador, a alegria serena</title>
+            <path class="o" d="M101 64 Q96 59 93 66 Q91 74 99 83 Q102 86 105 83 Q112 75 110 66 Q107 59 101 64 Z"/>
+            <path class="ol" d="M101 63 Q102 56 99 51"/>
+          </g>
+          <!-- FÍGADO E VESÍCULA — Madeira (lado direito do corpo) -->
+          <g class="org-reg" data-reg="Fígado e Vesícula" style="--oc:#5cb87a;--ocs:#3E7B4E"><title>Fígado e Vesícula Biliar — Madeira: o general que traça os planos</title>
+            <path class="o" d="M80 98 Q79 110 88 115 Q98 116 102 108 L102 99 Q91 96 80 98 Z"/>
+            <ellipse class="o" cx="90" cy="116" rx="2.6" ry="3.4"/>
+          </g>
+          <!-- ESTÔMAGO, BAÇO E PÂNCREAS — Terra (lado esquerdo do corpo) -->
+          <g class="org-reg" data-reg="Estômago, Baço e Pâncreas" style="--oc:#d9b84a;--ocs:#A8862B"><title>Estômago, Baço-Pâncreas — Terra: o centro que nutre</title>
+            <path class="o" d="M106 98 Q114 97 117 104 Q118 114 110 118 Q104 118 104 111 Q104 103 106 98 Z"/>
+            <ellipse class="o" cx="119" cy="101" rx="3.4" ry="4.6"/>
+            <path class="ol" d="M105 109 Q112 106 117 109"/>
+          </g>
+          <!-- RINS E BEXIGA — Água (atrás de tudo, junto à coluna) -->
+          <g class="org-reg" data-reg="Rins e Bexiga" style="--oc:#4a7db8;--ocs:#2F5A8A"><title>Rins e Bexiga — Água: a raiz, a vontade, a essência guardada</title>
+            <path class="o" d="M88 112 Q83 114 83 121 Q83 128 88 129 Q91 128 90 121 Q91 114 88 112 Z"/>
+            <path class="o" d="M112 112 Q117 114 117 121 Q117 128 112 129 Q109 128 110 121 Q109 114 112 112 Z"/>
+            <path class="ol" d="M88 129 Q93 143 97 155 M112 129 Q107 143 103 155"/>
+            <ellipse class="o" cx="100" cy="161" rx="6.2" ry="5.4"/>
+          </g>
+          <!-- INTESTINO GROSSO — víscera do Metal (o moldura que abraça o ventre) -->
+          <g class="org-reg" data-reg="Intestino grosso" style="--oc:#cfd8dc;--ocs:#7d8d96"><title>Intestino grosso — víscera do Metal: o que solta o que já serviu</title>
+            <path class="oc" d="M87 152 L87 132 Q87 128 92 128 L108 128 Q113 128 113 132 L113 150 Q113 156 106 157"/>
+          </g>
+          <!-- INTESTINO DELGADO — víscera do Fogo (separa o puro do impuro) -->
+          <g class="org-reg" data-reg="Intestino delgado" style="--oc:#e06a5a;--ocs:#A8483A"><title>Intestino delgado — víscera do Fogo: separa o puro do impuro</title>
+            <path class="ol" style="stroke-width:1.7" d="M93 136 Q107 138 105 143 Q91 144 94 149 Q108 151 102 156"/>
+          </g>
+        </svg>
       </div>
       <div style="font-size:0.62rem;color:var(--cinza);margin-top:8px;line-height:1.6;text-align:left">
         <b>Toggle:</b> os dois modos são a mesma placa anatômica desenhada à mão — traço da casa e raio-X azul. É o mais realista que se faz <b>offline e sem serviço pago</b>.<br>
+        <b>Órgãos — vista de frente:</b> a placa olha o corpo de frente, como você olha o paciente à sua frente. Então o <b>lado esquerdo do desenho é o lado direito do corpo</b> — o Fígado aparece à esquerda da tela porque mora à direita da pessoa. Cada víscera vem pintada na cor do seu Elemento; no raio-X azul tudo vira sopro, e a cor volta no painel ao lado.<br>
         <b>Próxima camada (plantada):</b> o corpo 3D que gira de verdade — modelo anatômico rotacionável no navegador. Exige carregar um arquivo pesado; entra quando você quiser dar esse passo. O 3D fotorrealista puro (tipo BioDigital/Zygote) é serviço externo pago e online — fica fora do cofre da família por escolha.
       </div>
     </div>
@@ -1118,8 +1184,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v1.6';
-const APP_VERSION_NOTA='anatomia por camadas: ossos + músculos + tendões e ligamentos';
+const APP_VERSION='v1.7';
+const APP_VERSION_NOTA='anatomia por camadas: ossos + músculos + tendões e ligamentos + órgãos nos 5 Elementos';
 function carimbarVersao(){
   const linha='Montgomery OS · Fase 2 — Corpo · '+APP_VERSION+' ('+APP_VERSION_NOTA+')';
   const rod=document.getElementById('appVersion');if(rod)rod.textContent=linha;
@@ -2844,22 +2910,87 @@ const TENDOES={
     itens:['tendão de Aquiles (o mais grosso do corpo)','ligamentos talofibulares (entorse)','fáscia plantar','tendão tibial posterior'],
     nota:'O Aquiles, o mais grosso do corpo, empurra cada passo. A entorse lateral estira o ligamento talofibular; a fáscia plantar inflamada é a dor no calcanhar dos primeiros passos da manhã.'}
 };
+// ----- ÓRGÃOS — a camada das vísceras, cada uma no seu Elemento -----
+// O gênero de cada Elemento — "do Fogo", mas "da Madeira".
+const MF_ARTIGO={'Fogo':'do','Metal':'do','Madeira':'da','Terra':'da','Água':'da'};
+// Aqui a Anatomia encosta na Metafísica: o Zang-Fu da MTC (5 Elementos) sobre o corpo físico.
+// Vista de FRENTE — lado esquerdo do desenho = lado direito do corpo.
+// A coluna 'orgao' usa o mesmo termo do índice da teia (MF_TEIA), pra o chip acender certo.
+const ORGAOS={
+  'Coração':{el:'Fogo',orgao:'Coração',faixa:'mediastino, entre os pulmões',
+    itens:['coração (4 câmaras: 2 átrios, 2 ventrículos)','pericárdio (a bolsa que o veste)','aorta e artérias coronárias','víscera-par: Intestino Delgado'],
+    nota:'O imperador. Bombeia ~5 litros por minuto sem pedir licença. Na MTC guarda o Shen — a consciência e o sono: coração em desequilíbrio dá insônia, agitação e riso sem motivo. A alegria serena é a virtude; a euforia ansiosa, o excesso.',
+    fio:'o Coração rege os vasos e abriga o Shen — aparece na cor do rosto e na fala'},
+  'Pulmões':{el:'Metal',orgao:'Pulmão',faixa:'tórax, dos ápices ao diafragma',
+    itens:['2 pulmões (3 lobos à direita, 2 à esquerda)','brônquios e bronquíolos','~300 milhões de alvéolos','pleura','víscera-par: Intestino Grosso'],
+    nota:'O sopro. Primeiro gesto ao nascer, último ao morrer — a fronteira entre o dentro e o fora. Na MTC governa a pele, os pelos e a defesa (Wei Qi); a tristeza não elaborada se aloja aqui, e o desapego é a virtude que a atravessa.',
+    fio:'o Pulmão rege a pele e o sopro — a respiração é a única função vital que também é voluntária'},
+  'Fígado e Vesícula':{el:'Madeira',orgao:'Fígado',faixa:'hipocôndrio direito, sob as costelas',
+    itens:['fígado (~1,5 kg — a maior víscera)','vesícula biliar','via biliar','víscera-par: Vesícula Biliar'],
+    nota:'O general que traça os planos. Filtra o sangue, guarda o açúcar, desmonta os venenos — e se regenera. Na MTC faz o Qi fluir livre: quando trava, vem a raiva, a frustração e a TPM. Rege os tendões (a camada ao lado) e se abre nos olhos.',
+    fio:'o Fígado rege os tendões e se abre nos olhos — o mesmo Elemento da camada de tendões'},
+  'Estômago, Baço e Pâncreas':{el:'Terra',orgao:'Baço-Pâncreas',faixa:'epigástrio e hipocôndrio esquerdo',
+    itens:['estômago','baço','pâncreas (digestão + insulina)','duodeno','víscera-par: Estômago'],
+    nota:'O centro que nutre. Transforma comida em sangue e Qi — na MTC o Baço-Pâncreas é a raiz do Qi adquirido, o que você constrói depois de nascer (o Rim é o que veio de berço). Rege os músculos e o pensamento: preocupação e ruminação o esgotam.',
+    fio:'o Baço-Pâncreas rege os músculos — o mesmo Elemento da camada muscular'},
+  'Rins e Bexiga':{el:'Água',orgao:'Rim',faixa:'retroperitônio, à altura de T12–L3',
+    itens:['2 rins (~1 milhão de néfrons cada)','adrenais (suprarrenais)','ureteres','bexiga','víscera-par: Bexiga'],
+    nota:'A raiz. Filtram ~180 litros por dia pra devolver quase tudo. Na MTC guardam o Jing — a essência herdada, o capital de nascença que não se repõe: por isso o medo, o susto e o excesso os drenam. Regem os ossos e a medula, e se abrem nos ouvidos.',
+    fio:'o Rim rege os ossos e a medula — o mesmo Elemento da camada óssea; a Água é a raiz de todas'},
+  'Intestino delgado':{el:'Fogo',orgao:'Intestino Delgado',faixa:'~6 metros no ventre',
+    itens:['duodeno','jejuno','íleo','vilosidades (superfície de absorção)'],
+    nota:'Víscera-par do Coração. Onde a comida vira você: quase toda a absorção acontece nestes 6 metros dobrados. Na MTC "separa o puro do impuro" — a mesma tarefa que o Coração faz no plano da consciência, um andar acima.',
+    fio:'víscera do Fogo — separa o puro do impuro, como o Coração faz com o pensamento'},
+  'Intestino grosso':{el:'Metal',orgao:'Intestino Grosso',faixa:'moldura do ventre, do ceco ao reto',
+    itens:['ceco e apêndice','cólon ascendente, transverso e descendente','sigmoide e reto','microbiota (~100 trilhões de habitantes)'],
+    nota:'Víscera-par do Pulmão. Recolhe a água e solta o resto. Na MTC é o órgão do deixar ir — a constipação e o apego moram no mesmo Elemento, e não é coincidência: o Metal inspira e precisa expirar.',
+    fio:'víscera do Metal — o que solta o que já serviu; o par físico do desapego'}
+};
 let _skCamada='ossos';
 function skCamada(c){
   _skCamada=c;
   document.getElementById('esqueletoSVG').style.display=(c==='ossos')?'':'none';
   document.getElementById('musculoSVG').style.display=(c==='musculos')?'':'none';
   document.getElementById('tendaoSVG').style.display=(c==='tendoes')?'':'none';
+  document.getElementById('orgaoSVG').style.display=(c==='orgaos')?'':'none';
   document.getElementById('skCamOssos').classList.toggle('btn-p',c==='ossos');
   document.getElementById('skCamOssos').classList.toggle('btn-sec',c!=='ossos');
   document.getElementById('skCamMusculos').classList.toggle('btn-p',c==='musculos');
   document.getElementById('skCamMusculos').classList.toggle('btn-sec',c!=='musculos');
   document.getElementById('skCamTendoes').classList.toggle('btn-p',c==='tendoes');
   document.getElementById('skCamTendoes').classList.toggle('btn-sec',c!=='tendoes');
-  const alvo=c==='ossos'?'do esqueleto para ver os ossos':c==='musculos'?'do corpo para ver os músculos':'de uma articulação para ver seus tendões e ligamentos';
+  document.getElementById('skCamOrgaos').classList.toggle('btn-p',c==='orgaos');
+  document.getElementById('skCamOrgaos').classList.toggle('btn-sec',c!=='orgaos');
+  const alvo=c==='ossos'?'do esqueleto para ver os ossos':c==='musculos'?'do corpo para ver os músculos':
+    c==='tendoes'?'de uma articulação para ver seus tendões e ligamentos':'do tronco para ver o órgão e o Elemento que o governa';
   document.getElementById('skPainel').innerHTML='<div class="vazio">Clique numa região '+alvo+
     ', a contagem e o fio que a liga à teia da Metafísica.</div>';
-  document.querySelectorAll('#esqueletoSVG .sk-reg,#musculoSVG .mus-reg,#tendaoSVG .ten-reg').forEach(g=>g.classList.remove('sel'));
+  document.querySelectorAll('#esqueletoSVG .sk-reg,#musculoSVG .mus-reg,#tendaoSVG .ten-reg,#orgaoSVG .org-reg').forEach(g=>g.classList.remove('sel'));
+}
+function selOrgRegiao(reg){
+  document.querySelectorAll('#orgaoSVG .org-reg').forEach(g=>g.classList.toggle('sel',g.dataset.reg===reg));
+  const d=ORGAOS[reg];if(!d)return;
+  const t=MF_TEIA[d.el]||{},cor=t.cor||'#999';
+  const linha=(rot,val)=>val?'<div style="display:flex;gap:6px;font-size:0.74rem;line-height:1.6"><span style="color:var(--cinza);min-width:74px">'+rot+'</span><span>'+esc(val)+'</span></div>':'';
+  document.getElementById('skPainel').innerHTML=
+    '<div style="border:1px solid '+cor+'70;border-radius:10px;padding:var(--f2) var(--f3);background:'+cor+'14">'+
+    '<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:4px">'+esc(reg)+' '+
+    '<span class="tag" style="background:'+cor+'22;color:'+cor+';border:1px solid '+cor+'66">'+esc(d.el)+'</span></h3>'+
+    '<p style="font-size:0.72rem;color:var(--cinza);margin-bottom:8px">'+esc(d.faixa)+'</p>'+
+    '<p style="font-size:0.72rem;color:var(--cinza);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px">O que habita a região</p>'+
+    '<div style="font-size:0.8rem;line-height:1.7;margin-bottom:10px">'+d.itens.map(o=>'· '+esc(o)).join('<br>')+'</div>'+
+    '<p style="font-size:0.82rem;line-height:1.6;color:var(--texto,#3a3a3a);margin-bottom:10px">'+esc(d.nota)+'</p>'+
+    '<div style="padding:8px 10px;border-radius:8px;background:'+cor+'12;border:1px solid '+cor+'33;margin-bottom:10px">'+
+    '<p style="font-size:0.68rem;color:var(--cinza);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.4px">As correspondências '+MF_ARTIGO[d.el]+' '+esc(d.el)+'</p>'+
+    linha('Emoção',t.emocao)+linha('Virtude',t.virtude)+linha('Tecido',t.tecido)+
+    linha('Sentido',t.sentido)+linha('Estação',t.estacao)+linha('Sabor',t.sabor)+linha('Floral',t.floral)+
+    '</div>'+
+    '<div style="padding-top:9px;border-top:1px solid '+cor+'33">'+
+    '<span style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.4px;color:var(--cinza)">Na teia da Metafísica — pelo órgão</span><br>'+
+    '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:5px;align-items:center">'+
+    mfChip(d.orgao,d.el)+
+    '<span style="font-size:0.68rem;color:var(--cinza);font-style:italic">'+esc(d.fio)+'</span>'+
+    '</div></div></div>';
 }
 function selTenRegiao(reg){
   document.querySelectorAll('#tendaoSVG .ten-reg').forEach(g=>g.classList.toggle('sel',g.dataset.reg===reg));
@@ -2907,6 +3038,9 @@ function renderEsqueleto(){
   });
   document.querySelectorAll('#tendaoSVG .ten-reg').forEach(g=>{
     if(!g._bound){g._bound=1;g.addEventListener('click',()=>selTenRegiao(g.dataset.reg));}
+  });
+  document.querySelectorAll('#orgaoSVG .org-reg').forEach(g=>{
+    if(!g._bound){g._bound=1;g.addEventListener('click',()=>selOrgRegiao(g.dataset.reg));}
   });
   if(!document.getElementById('skBtnSVG').classList.contains('btn-p')&&
      !document.getElementById('skBtnRaiox').classList.contains('btn-p'))skModo('svg');
