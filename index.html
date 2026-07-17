@@ -584,7 +584,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   <div class="sidebar-footer">
     Montgomery Magalhães<br>Saúde Integrativa<br>
     Itambacuri - MG<br>
-    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v1.6 &middot; 16/07</span>
+    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v1.7 &middot; 17/07</span>
   </div>
 </aside>
 
@@ -963,6 +963,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;margin-bottom:12px">
       <div id="pulsoPunhos" style="text-align:center"></div>
       <div style="flex:1;min-width:220px">
+        <div id="pulsoPosInfo"></div>
         <div style="font-size:11.5px;font-weight:600;color:var(--pri-d);margin-bottom:6px">Pulsos mais comuns (clique para adicionar à ficha)</div>
         <div id="pulsoComuns" style="display:flex;gap:5px;flex-wrap:wrap"></div>
       </div>
@@ -971,6 +972,10 @@ window.addEventListener('DOMContentLoaded',()=>{
       <input type="text" id="pulsoBusca" placeholder="Buscar entre os 28 pulsos: corda, escorregadio, calor, deficiência de sangue..." oninput="filtrarPulso()" onblur="fecharPulsoLista()" autocomplete="off">
       <div id="pulsoLista" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--cream);border:1px solid var(--brd);border-radius:0 0 7px 7px;box-shadow:var(--shadow);z-index:200;max-height:240px;overflow-y:auto"></div>
     </div>
+    <details style="margin-top:10px">
+      <summary style="cursor:pointer;font-size:11.5px;font-weight:600;color:var(--pri-d)">Os 3 níveis de profundidade (como sentir)</summary>
+      <div id="pulsoNiveisBox" style="margin-top:6px"></div>
+    </details>
   </div>
 
   <div class="fc">
@@ -3672,6 +3677,21 @@ function pulsoPunhoSVG(lado){
 function renderPulsoCard(){
   const punhos=document.getElementById('pulsoPunhos');
   if(punhos)punhos.innerHTML=`<div style="display:flex;gap:10px;justify-content:center">${pulsoPunhoSVG('Esquerdo')}${pulsoPunhoSVG('Direito')}</div>`;
+  const posInfo=document.getElementById('pulsoPosInfo');
+  if(posInfo){
+    const sel=(_diagSelecoes.pulsoPos||[]);
+    posInfo.innerHTML=sel.length?sel.map(k=>{
+      const i=pulsoPosicoes[k];if(!i)return '';
+      return `<div style="border:1px solid var(--brd);border-left:3px solid var(--pri);border-radius:7px;padding:8px 10px;margin-bottom:8px;background:var(--cream)">
+        <div style="font-size:12px;font-weight:700;color:var(--pri-d)">${i.pos} — punho ${i.punho.toLowerCase()} · ${i.orgaos}</div>
+        <div style="font-size:11px;color:var(--txt-l);margin:2px 0">Elemento: ${i.elemento}</div>
+        <div style="font-size:11.5px;line-height:1.5"><b>Desarmonias:</b> ${i.desarmonias}</div>
+      </div>`;}).join(''):
+      `<div style="font-size:11px;color:var(--txt-l);margin-bottom:8px">Clique numa posição do punho para ver o órgão correspondente e as desarmonias clássicas.</div>`;
+  }
+  const niveisBox=document.getElementById('pulsoNiveisBox');
+  if(niveisBox&&typeof pulsoNiveis!=='undefined')niveisBox.innerHTML=pulsoNiveis.map(n=>
+    `<div style="font-size:11.5px;line-height:1.5;margin-bottom:5px"><b>${n.nome}</b> — ${n.sente}. <span style="color:var(--txt-l)">${n.indica}</span></div>`).join('');
   const comuns=document.getElementById('pulsoComuns');
   if(comuns)comuns.innerHTML=pulsosMTC.filter(p=>p.comum).map(p=>{
     const on=(_diagSelecoes.pulso||[]).includes(p.id);

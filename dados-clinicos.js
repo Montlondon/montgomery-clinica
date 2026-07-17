@@ -2247,13 +2247,24 @@ const psicanaliseTemasFlat=psicanaliseTemas.flatMap(c=>c.itens.map(i=>({...i,cat
 
 /* ===== PULSOLOGIA MTC — 28 pulsos clássicos (proposta aprovada 10/07, PROPOSTA_PULSO.md) ===== */
 const pulsoPosicoes={
-  'E-cun':{punho:'Esquerdo',pos:'Cun',orgaos:'Coração / Intestino Delgado'},
-  'E-guan':{punho:'Esquerdo',pos:'Guan',orgaos:'Fígado / Vesícula Biliar'},
-  'E-chi':{punho:'Esquerdo',pos:'Chi',orgaos:'Rim Yin (Água)'},
-  'D-cun':{punho:'Direito',pos:'Cun',orgaos:'Pulmão / Intestino Grosso'},
-  'D-guan':{punho:'Direito',pos:'Guan',orgaos:'Baço / Estômago'},
-  'D-chi':{punho:'Direito',pos:'Chi',orgaos:'Rim Yang (Ming Men)'}
+  'E-cun':{punho:'Esquerdo',pos:'Cun',orgaos:'Coração / Intestino Delgado',elemento:'Fogo',
+    desarmonias:'Palpitações, insônia, ansiedade, agitação mental, sonhos abundantes, memória fraca, aftas e ponta da língua vermelha (Fogo do Coração), falar demais ou riso sem motivo'},
+  'E-guan':{punho:'Esquerdo',pos:'Guan',orgaos:'Fígado / Vesícula Biliar',elemento:'Madeira',
+    desarmonias:'Irritabilidade, raiva contida, tensão muscular, dor no hipocôndrio, TPM, enxaqueca temporal, tontura, olhos secos ou vermelhos, suspiros frequentes, indecisão (VB)'},
+  'E-chi':{punho:'Esquerdo',pos:'Chi',orgaos:'Rim Yin (Água)',elemento:'Água',
+    desarmonias:'Calor à tarde/à noite, suor noturno, boca e garganta secas, ondas de calor, lombalgia com sensação de calor, zumbido agudo, insônia da madrugada, ossos fracos'},
+  'D-cun':{punho:'Direito',pos:'Cun',orgaos:'Pulmão / Intestino Grosso',elemento:'Metal',
+    desarmonias:'Tosse, falta de ar, voz fraca, gripes e resfriados frequentes, pele seca, tristeza e luto não elaborado, intestino preso ou diarreia (IG), rinite, suor espontâneo'},
+  'D-guan':{punho:'Direito',pos:'Guan',orgaos:'Baço / Estômago',elemento:'Terra',
+    desarmonias:'Digestão fraca, distensão e sono após comer, pouco apetite, fezes moles, preocupação e pensamento repetitivo, cansaço, membros pesados, Umidade/Fleuma, sabor doce na boca'},
+  'D-chi':{punho:'Direito',pos:'Chi',orgaos:'Rim Yang (Ming Men)',elemento:'Água (Fogo do Portão da Vida)',
+    desarmonias:'Frio na lombar e joelhos, urina clara e abundante, urinar à noite, libido baixa, desânimo profundo, medo, edema de membros inferiores, diarreia de madrugada, infertilidade/frigidez'}
 };
+const pulsoNiveis=[
+  {nome:'Superficial (flutuante)',sente:'Ao toque leve, só encostando a pele',indica:'Yang, exterior — invasões externas (Vento-Frio, Vento-Calor)'},
+  {nome:'Médio',sente:'Com pressão moderada',indica:'Estômago/Baço — o Qi nutritivo; avalia a força da digestão'},
+  {nome:'Profundo',sente:'Pressionando até perto do osso',indica:'Yin, órgãos internos — padrões internos e a raiz da energia'}
+];
 const pulsosMTC=[
   {id:'fu',nome:'Flutuante',pinyin:'Fu',comum:true,cat:'Profundidade',qualidade:'Sente-se ao toque leve, some ao pressionar',indica:'Invasão externa (Vento); ou Yin deficiente com Yang flutuando'},
   {id:'chen',nome:'Profundo',pinyin:'Chen',comum:true,cat:'Profundidade',qualidade:'Só aparece na pressão forte',indica:'Padrão interno; estagnação ou deficiência de Yang'},
