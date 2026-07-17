@@ -31,9 +31,21 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 - **Quiropraxia enriquecida no Diagnóstico Integrado (v1.6, 16/07):** apostila "Roteiro de Quiropraxia" da Prof.ª Carmen Fátima Prada de Freitas estruturada como fonte única em `QUIROPRAXIA_REF` (`dados-clinicos.js`) — mapa de subluxações vértebra a vértebra (C1/Atlas→Cóccix, 26 níveis com inervação + efeitos), 6 testes diagnósticos (Deklyns de segurança primeiro, Spurling, Distração, Laseg, diferenciação sacroilíaca/lombalgia, jogo articular), manobras de ajuste resumidas por 8 regiões, e fundamentos (Palmer, Inteligência Inata, 5 componentes do Complexo de Subluxação). Bloco consultável com 4 abas na tela do Diagnóstico, citando a fonte. Passo a passo completo dos ajustes fica na apostila (Biblioteca), para não pesar o carregamento.
 - **Versionamento visível:** a cada update funcional da plataforma, subir o número de versão no rodapé da sidebar (`v1.6 · 16/07`) no mesmo commit.
 
-## Próximo passo — Senha "Ligar a Coluna do OS"
+## ✅ Concluído — Senha "Ligar a Coluna do OS" (16/07)
 
-- Ligar a coluna do esqueleto clicável do Montgomery OS (Anatomia visual) na MESMA raiz `QUIROPRAXIA_REF`: clicar numa vértebra no raio-x/SVG abre o que ela inerva + sintomas + ajuste, lendo a fonte única que o Diagnóstico da plataforma já usa. Princípio: uma raiz, muitos reflexos — sem duplicar dados nem pesar os sistemas. Casa com a Árvore da Vida e a Metafísica.
+- **FEITO (16/07, OS v1.1–v1.2):** coluna do esqueleto clicável do Montgomery OS ligada à MESMA raiz `QUIROPRAXIA_REF` — vértebra clicável (C1–Cóccix) com inervação, sintomas e ajustes da apostila; camada autonômica (Simpático/Parassimpático/Cérebro-Espinhal) por vértebra com sintomas do quadro IBRAQUI; e chip clicável que liga a vértebra ao Elemento pelo órgão inervado, acendendo os 5 Elementos na Metafísica. Princípio cumprido: uma raiz, muitos reflexos — sem duplicar dados.
+
+## ✅ Sprint 14–17/07 — o que entrou no ar
+
+- **Árvore da Vida enriquecida (14–15/07):** Da'at (a Sefirá oculta no abismo), os 22 caminhos com signos/meses/planetas/Tarô, nome hebraico dentro de cada Sefirá (com toggle), glifo planetário, os 4 Mundos e a escada do Nome (יהוה), e a hierarquia celeste de cada Sefirá.
+- **Cronofarmacologia no OS (16/07) — Senha "Acender o Dia" cumprida:** módulo com o plano pessoal 2026; botão "Carregar plano" (mescla/atualiza protocolos, com validação de JSON) e "Baixar plano" (exporta protocolos do perfil).
+- **Numerologia (16/07) — Senha "Acender os Números" avançada:** novo módulo de cálculo (método pitagórico), Desafios, lições kármicas, ponte com as Sefirot e mapa guardado no perfil.
+- **Quiropraxia na Clínica (16/07, v1.6):** mapa de subluxações C1–Cóccix, testes e ajustes da apostila da Prof.ª Carmen no Diagnóstico (detalhado na seção Concluído acima).
+- **Anatomia do OS por camadas — Senhas "Acender o Esqueleto" e "Acender os Órgãos" cumpridas:** v1.5 esqueleto (ossos + músculos, placa SVG, toggle raio-X, seletor de camada, 16/07), v1.6 Tendões e Ligamentos + rodapé com versão única (16/07), v1.7 camada de Órgãos nos 5 Elementos (17/07), v1.8 placa 2D realista nas quatro camadas (17/07).
+- **Espiritualidade (17/07, OS v1.9):** aba nova — biblioteca viva aberta com o resumo do Imperador Amarelo (Huangdi Neijing). Próximos livros = novo bloco na seção.
+- **Pulso no OS (17/07):** órgãos, elemento e desarmonias por posição + 3 níveis de profundidade.
+- **Deploy do OS consertado (16/07):** remote errado removido; publicar = editar `Files_Claude_repo\os\index.html` + push.
+- **Anatomia 3D real — comprovada e adiada (17/07):** three.js + malha NIH 3D (crânio GLB girável nos 2 modos) funcionou; Montgomery preferiu manter a placa 2D por ora. Receita e tooling guardados para quando quiser retomar.
 - **Roda do Bagua — Círculo 1 (Acupuntura), completo e publicado:** visualização circular com os 12 meridianos coloridos por elemento (Wu Xing), boneco do Balance Method sempre no centro (mostra o par Yin/Yang ao clicar num meridiano, indicador de "órgão de plantão" pelo horário, selo com contagem de sistemas já na ficha). Sintomas/síndromes de cada lado Yin/Yang agora são clicáveis — selecionar adiciona à ficha do paciente (salvo no Supabase, aparece no resumo e no PDF impresso), mesmo padrão dos outros módulos.
 - Tabela do Balanço Método: síndromes clicáveis também na "Tabela Completa" (não só na roda do Bagua), lendo/escrevendo o mesmo estado — clicar em qualquer um dos dois lugares atualiza ambos.
 - Recomendação Terapêutica: corrigido travamento ao compartilhar/baixar quando `navigator.share()` falha (ex: autorização do navegador expira enquanto a imagem é gerada) — agora cai automaticamente para download do JPG em vez de só mostrar erro.
@@ -440,3 +452,30 @@ por camadas. PRIMEIRO acertar as proporcoes; depois adicionar camadas uma a uma.
   teia; inverter visao espelha corpo, zonas e selos. NAO commitado/publicado
   ainda. Detalhe conhecido: a Arvore nao espelha na visao de frente (ela
   representa os lados reais); avaliar esconde-la nesse modo.
+
+## Senha "Acender os Pontos" — camada de Acupuntura no modulo Anatomia (registrado 17/07)
+
+Decisao da conversa de 17/07 sobre os 3 apps de anatomia/acupuntura do Montgomery.
+Principio: **o que e dos outros a gente aponta com links; o que o amigo liberar a
+gente incorpora; o que for tradicional e publico a gente constroi como nosso.**
+
+- **Anatomy Learning (se comprar):** app fechado, nao entra no OS. Usar lado a
+  lado; para 3D dentro do OS o caminho e three.js + modelos abertos (NIH 3D ja
+  comprovado; avaliar Z-Anatomy, atlas 3D open source de corpo inteiro).
+- **A Manual of Acupuncture (Deadman, licenca ativa):** videos/ilustracoes nao
+  podem ser copiados. Plano: cada ponto no OS ganha botao "Ver no Deadman" que
+  abre a pagina do ponto em web.amanualofacupuncture.com (ele ja logado, cai
+  direto no video). Verificar na hora se os links por ponto sao estaveis.
+- **App do amigo (comprado 2017, em portugues, so celular; Montgomery tem o APK):**
+  conversar com o amigo e pedir permissao de usar o conteudo (textos/imagens)
+  como base da camada em portugues. Com o sim dele, Claude ajuda a extrair o
+  conteudo do APK de forma organizada. Sem permissao, nao extrair — usar so
+  lado a lado.
+
+Plano fatiado em velas (uma janela cada, consumo pequeno-medio):
+1. **Vela 1:** estrutura do modulo + 2-3 meridianos mais usados na clinica
+2. **Vela 2:** mais um punhado de meridianos
+3. **Vela 3:** restante dos ~360 pontos + revisao dos links Deadman
+
+Base propria: nome, meridiano, localizacao, funcoes, indicacoes dos pontos =
+conhecimento tradicional publico. Nao fazer tudo numa janela so.
