@@ -361,6 +361,15 @@ Montgomery viu uma propaganda de um programador que "conversa com uma IA" repres
 
 **Caminho combinado:** começar pela parte que já é nossa — o **cérebro que acende e pulsa** (SVG) — e usar isso como PROJETO DE APRENDIZADO em [[project_montgomery_code]] (aprender programando no que ele ama, não em tutorial seco). A peça 3 (IA real por dentro) fica como degrau futuro com chave/custo. Casa com a "IA própria da Vanessa" e com o espírito de conhecimento vivo. Retomar dizendo "Cérebro Montgomery".
 
+### Anatomia do OS — corpo humano mais realista (17/07/2026)
+**Projeto:** Montgomery OS · **Estágio:** semente (registrado após a v1.7 dos Órgãos)
+
+Com as 4 camadas no ar (ossos, músculos, tendões, órgãos nos 5 Elementos — OS v1.7), Montgomery quer, sem pressa, evoluir o DESENHO do corpo para algo mais realista. Caminhos, do mais leve ao mais pesado (transparência de sempre):
+1. **Placa SVG mais rica** — mesma técnica atual, mais detalhe anatômico (contorno do corpo inteiro, sombreamento, proporções finas). Nosso, offline, sem custo.
+2. **Corpo 3D que gira** — modelo anatômico rotacionável no navegador (frente/costas/perfil); resolve também o espelhamento do mapa de costas. Exige carregar arquivo pesado; já plantado como próxima camada no rodapé da Anatomia.
+3. **Fotorrealismo tipo BioDigital/Zygote** — serviço externo pago e online; fica fora do cofre da família por escolha (já explicado e decidido).
+Retomar dizendo algo como "corpo realista" — começar pelo 1 ou 2 conforme o fôlego de créditos.
+
 ### Vitruviano na geometria sagrada — visao em camadas (13/07/2026)
 Montgomery aprovou a direcao: o Corpo Vitruviano do OS deve ter a FORMA REAL do
 desenho do Da Vinci, DE COSTAS (como ele se ve dentro da Merkabah), e crescer
