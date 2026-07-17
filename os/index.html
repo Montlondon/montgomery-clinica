@@ -514,7 +514,11 @@ tr:hover td{background:rgba(201,168,76,0.05)}
         <button class="btn btn-sec btn-mini" id="skCamOrgaos" onclick="skCamada('orgaos')">Órgãos</button>
         <button class="btn btn-sec btn-mini" id="skCamMeridianos" onclick="skCamada('meridianos')">Meridianos</button>
       </div>
-      <div id="skMerSel" style="display:none;flex-wrap:wrap;justify-content:center;gap:4px;margin-bottom:10px"></div>
+      <div id="skMerSel" style="display:none;flex-wrap:wrap;justify-content:center;gap:4px;margin-bottom:8px"></div>
+      <div id="skVistaBox" style="display:none;justify-content:center;gap:6px;margin-bottom:10px">
+        <button class="btn btn-p btn-mini" id="skVistaFrente" onclick="skVista('frente')">Frente</button>
+        <button class="btn btn-sec btn-mini" id="skVistaCostas" onclick="skVista('costas')">Costas</button>
+      </div>
       <div style="display:flex;justify-content:center;gap:6px;margin-bottom:10px">
         <button class="btn btn-sec btn-mini" id="skBtnSVG" onclick="skModo('svg')">Traço da casa</button>
         <button class="btn btn-sec btn-mini" id="skBtnRaiox" onclick="skModo('raiox')">Raio-X azul</button>
@@ -830,7 +834,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
         <b>Corpo realista:</b> por trás de todas as camadas está o contorno humano de frente — cabeça, pescoço, ombros, cintura, panturrilhas, pés. Ossos, músculos e vísceras vêm com gradiente e sombra, para lerem como volume e não como figura chapada. É desenho vetorial feito à mão, não fotografia: é o mais realista que se faz <b>offline, dentro do cofre da família e sem serviço pago</b>.<br>
         <b>Toggle:</b> os dois modos são a mesma placa — traço da casa (pele e tecido em cor natural) e raio-X azul (o corpo vira sopro).<br>
         <b>Órgãos — vista de frente:</b> a placa olha o corpo de frente, como você olha o paciente à sua frente. Então o <b>lado esquerdo do desenho é o lado direito do corpo</b> — o Fígado aparece à esquerda da tela porque mora à direita da pessoa. Cada víscera vem pintada na cor do seu Elemento; no raio-X azul tudo vira sopro, e a cor volta no painel ao lado.<br>
-        <b>Meridianos — vista de frente:</b> a mesma regra do espelho — o lado esquerdo da tela é o lado direito do corpo. Os pontos vêm da mesma base da Clínica (361 pontos trilíngues, links Deadman validados); os <b>12 meridianos de frente</b> já acendem (266 pontos) — só <b>Bexiga</b> e <b>Vaso Governador</b>, que correm nas costas, esperam o toggle frente/costas.<br>
+        <b>Meridianos — frente e costas:</b> de frente vale a regra do espelho — o lado esquerdo da tela é o lado direito do corpo. De <b>costas</b> não há espelho: o lado esquerdo da tela é o próprio lado esquerdo do corpo. Os pontos vêm da mesma base da Clínica (361 pontos trilíngues, links Deadman validados): 12 meridianos de frente e, nas costas, a <b>Bexiga</b> (o mais longo, 67 pontos) e o <b>Vaso Governador</b> subindo a coluna. Os pontos que moram no rosto (B1–B2, VG21–28) só aparecerão quando o corpo ganhar rosto de frente com detalhe.<br>
         <b>Próxima camada (plantada):</b> o corpo 3D que gira de verdade — modelo anatômico rotacionável no navegador. Exige carregar um arquivo pesado; entra quando você quiser dar esse passo. O 3D fotorrealista puro (tipo BioDigital/Zygote) é serviço externo pago e online — fica fora do cofre da família por escolha.
       </div>
     </div>
@@ -1357,7 +1361,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v2.2';
+const APP_VERSION='v2.3';
 const APP_VERSION_NOTA='os 12 meridianos de frente acesos (266 pontos) + Dra. Vera, a veterinária da casa, cuidando da Maly';
 function carimbarVersao(){
   const linha='Montgomery OS · Fase 2 — Corpo · '+APP_VERSION+' ('+APP_VERSION_NOTA+')';
@@ -3127,9 +3131,8 @@ const ORGAOS={
 // ----- MERIDIANOS — a camada dos pontos de acupuntura (base da Clínica: acupuntura-data.js) -----
 // Coordenadas no corpo de frente (viewBox 200x430). Vista de frente: o lado
 // esquerdo da tela é o lado DIREITO do corpo. Meridianos bilaterais definem o
-// trajeto do lado da tela esquerda e espelham (x' = 200 - x). Vela 2: os 12 de
-// frente acesos; Bexiga (B) e Vaso Governador (VG) correm nas costas — esperam
-// o toggle frente/costas.
+// trajeto do lado da tela esquerda e espelham (x' = 200 - x). Bexiga e Vaso
+// Governador correm nas costas — trajetos em MER_TRAJETOS_COSTAS, logo abaixo.
 const MER_TRAJETOS={
   'P':{bilateral:true,pts:[[79,78],[78,72],[69,104],[68,111],[65,148],[63,168],[61,196],[61,202],[60,207],[59,216],[57,226]]},
   'IG':{bilateral:true,pts:[[61,232],[61,228],[62,224],[64,219],[64,212],[65,204],[65,196],[66,186],[66,180],[66,173],[67,160],[68,154],[69,148],[71,116],[70,88],[74,79],[89,60],[90,54],[97,40],[96,36]]},
@@ -3144,21 +3147,56 @@ const MER_TRAJETOS={
   'F':{bilateral:true,pts:[[86,401],[87,398],[86,394],[88,388],[89,364],[89,354],[90,314],[91,300],[92,268],[92,220],[92,208],[94,192],[86,146],[86,116]]},
   'VC':{bilateral:false,pts:[[100,196],[100,190],[100,183],[100,176],[100,169],[100,162],[100,155],[100,148],[100,141],[100,134],[100,127],[100,120],[100,113],[100,106],[100,100],[100,92],[100,86],[100,80],[100,74],[100,69],[100,65],[100,61],[100,56],[100,48]]}
 };
+// Vista de COSTAS — sem espelho: o lado esquerdo da tela é o lado esquerdo do corpo.
+// n0 = número do primeiro ponto desenhado (B1–B2 e VG21–28 moram no rosto e ficam de fora).
+// quebras = depois de quantos pontos o traço levanta o lápis (a Bexiga desce, volta ao alto
+// pela linha externa e desce de novo pela perna — três traços, uma linha de Água).
+const MER_TRAJETOS_COSTAS={
+  'B':{bilateral:true,n0:3,quebras:[38,52],pts:[
+    // B3–B9: couro cabeludo, da testa ao occipital, por cima da coroa
+    [95,14],[94,10],[93,8],[92,7],[92,10],[93,20],[93,34],
+    // B10: nuca
+    [94,55],
+    // B11–B26: linha interna (1,5 cun da coluna), de T1 a L5
+    [93,72],[93,78],[93,84],[93,90],[93,96],[93,102],[93,108],[93,114],[93,120],[93,126],[93,132],[93,138],[93,144],[93,150],[93,156],[93,162],
+    // B27–B35: sacro e forames sacrais
+    [95,168],[95,173],[95,178],[95,183],[97,168],[97,173],[97,178],[97,183],[97,191],
+    // B36–B40: prega glútea, coxa posterior, fossa poplítea (B40)
+    [92,203],[91,240],[90,288],[88,296],[91,300],
+    // B41–B54: volta ao alto — linha externa (3 cun), T2 ao sacro
+    [87,78],[87,84],[87,90],[87,96],[87,102],[87,108],[87,114],[87,120],[87,126],[87,132],[87,138],[87,144],[89,178],[90,192],
+    // B55–B67: panturrilha, tornozelo externo, borda do pé até o dedo mínimo
+    [91,312],[90,326],[90,342],[87,352],[86,366],[86,386],[85,394],[84,391],[83,388],[82,392],[81,396],[80,399],[79,402]]},
+  // VG1–VG20: do cóccix sobe a coluna, nuca, occipital, até Baihui (VG20) na coroa
+  'VG':{bilateral:false,pts:[[100,194],[100,186],[100,176],[100,168],[100,160],[100,148],[100,142],[100,136],[100,124],[100,118],[100,112],[100,100],[100,88],[100,68],[100,58],[100,50],[100,42],[100,30],[100,18],[100,8]]}
+};
 let _merLigados=new Set();
+let _merVista='frente';
+function trajDe(sig){return _merVista==='frente'?MER_TRAJETOS[sig]:MER_TRAJETOS_COSTAS[sig];}
+function skVista(v){
+  _merVista=v;
+  const bf=document.getElementById('skVistaFrente'),bc=document.getElementById('skVistaCostas');
+  bf.classList.toggle('btn-p',v==='frente');bf.classList.toggle('btn-sec',v!=='frente');
+  bc.classList.toggle('btn-p',v==='costas');bc.classList.toggle('btn-sec',v!=='costas');
+  desenharMeridianos();
+  document.getElementById('skPainel').innerHTML='<div class="vazio">'+(v==='costas'
+    ?'Corpo de costas — sem espelho: o lado esquerdo da tela é o lado esquerdo do corpo. Aqui correm a Bexiga (a linha mais longa, dupla, de Água) e o Vaso Governador subindo a coluna.'
+    :'Corpo de frente — o lado esquerdo da tela é o lado direito do corpo. Ligue um meridiano nos chips acima e clique num ponto para abrir a ficha trilíngue.')+'</div>';
+}
 function merDados(){return (typeof ACUPUNTURA_MERIDIANOS!=='undefined')?ACUPUNTURA_MERIDIANOS:null;}
 function renderMerSel(){
   const box=document.getElementById('skMerSel');const M=merDados();
   if(!box||!M||box.childElementCount)return;
   Object.keys(M).forEach(sig=>{
-    const m=M[sig],tem=!!MER_TRAJETOS[sig],on=_merLigados.has(sig);
+    const m=M[sig],costas=!!MER_TRAJETOS_COSTAS[sig],on=_merLigados.has(sig);
     const b=document.createElement('button');
     b.id='merChip_'+sig;
     b.textContent=sig;
-    b.title=m.nome+' — '+m.elemento+(tem?' ('+m.total+' pontos)':' — corre nas costas: acende quando o corpo ganhar o toggle frente/costas');
-    b.style.cssText='font-size:0.62rem;padding:3px 8px;border-radius:20px;cursor:'+(tem?'pointer':'default')+
-      ';border:1px solid '+m.cor+(tem?'':'44')+';background:'+(on?m.cor:'transparent')+
-      ';color:'+(on?'#fff':m.cor)+(tem?'':';opacity:0.38')+';transition:all 0.2s';
-    if(tem)b.onclick=()=>toggleMeridiano(sig);
+    b.title=m.nome+' — '+m.elemento+' ('+m.total+' pontos'+(costas?', corre nas costas':'')+')';
+    b.style.cssText='font-size:0.62rem;padding:3px 8px;border-radius:20px;cursor:pointer'+
+      ';border:1px solid '+m.cor+';background:'+(on?m.cor:'transparent')+
+      ';color:'+(on?'#fff':m.cor)+';transition:all 0.2s';
+    b.onclick=()=>toggleMeridiano(sig);
     box.appendChild(b);
   });
 }
@@ -3167,7 +3205,9 @@ function toggleMeridiano(sig){
   if(_merLigados.has(sig))_merLigados.delete(sig);else _merLigados.add(sig);
   const b=document.getElementById('merChip_'+sig),on=_merLigados.has(sig),m=M[sig];
   if(b){b.style.background=on?m.cor:'transparent';b.style.color=on?'#fff':m.cor;}
-  desenharMeridianos();
+  // Ao acender um meridiano que só existe na outra vista, o corpo vira sozinho
+  if(on&&!trajDe(sig)){skVista(MER_TRAJETOS_COSTAS[sig]?'costas':'frente');}
+  else desenharMeridianos();
   if(on){
     const t=MF_TEIA[m.elemento]||{};
     document.getElementById('skPainel').innerHTML=
@@ -3185,26 +3225,32 @@ function desenharMeridianos(){
   g.innerHTML='';
   const NS='http://www.w3.org/2000/svg';
   _merLigados.forEach(sig=>{
-    const tr=MER_TRAJETOS[sig];if(!tr)return;
-    const cor=M[sig].cor;
+    const tr=trajDe(sig);if(!tr)return;
+    const cor=M[sig].cor,n0=tr.n0||1;
     const lados=tr.bilateral?[false,true]:[false];
     lados.forEach(esp=>{
       const pts=tr.pts.map(p=>[esp?200-p[0]:p[0],p[1]]);
-      const path=document.createElementNS(NS,'path');
-      path.setAttribute('class','mer-traj');
-      path.setAttribute('stroke',cor);
-      path.setAttribute('d','M'+pts.map(p=>p[0]+' '+p[1]).join(' L'));
-      g.appendChild(path);
+      // quebras: o traço levanta o lápis depois desses índices (1-based)
+      const cortes=[0].concat(tr.quebras||[]).concat([pts.length]);
+      for(let s=0;s<cortes.length-1;s++){
+        const seg=pts.slice(cortes[s],cortes[s+1]);
+        const path=document.createElementNS(NS,'path');
+        path.setAttribute('class','mer-traj');
+        path.setAttribute('stroke',cor);
+        path.setAttribute('d','M'+seg.map(p=>p[0]+' '+p[1]).join(' L'));
+        g.appendChild(path);
+      }
       pts.forEach((p,i)=>{
+        const n=n0+i;
         const c=document.createElementNS(NS,'circle');
         c.setAttribute('class','mer-pt');
         c.setAttribute('cx',p[0]);c.setAttribute('cy',p[1]);c.setAttribute('r',1.9);
         c.setAttribute('fill',cor);
-        c.dataset.m=sig;c.dataset.n=i+1;
+        c.dataset.m=sig;c.dataset.n=n;
         const tt=document.createElementNS(NS,'title');
-        tt.textContent=sig+'-'+(i+1);
+        tt.textContent=sig+'-'+n;
         c.appendChild(tt);
-        c.addEventListener('click',()=>selMerPonto(sig,i+1));
+        c.addEventListener('click',()=>selMerPonto(sig,n));
         g.appendChild(c);
       });
     });
@@ -3277,6 +3323,7 @@ function skCamada(c){
   document.getElementById('orgaoSVG').style.display=(c==='orgaos')?'':'none';
   document.getElementById('meridianoSVG').style.display=(c==='meridianos')?'':'none';
   document.getElementById('skMerSel').style.display=(c==='meridianos')?'flex':'none';
+  document.getElementById('skVistaBox').style.display=(c==='meridianos')?'flex':'none';
   if(c==='meridianos'){renderMerSel();desenharMeridianos();}
   document.getElementById('skCamMeridianos').classList.toggle('btn-p',c==='meridianos');
   document.getElementById('skCamMeridianos').classList.toggle('btn-sec',c!=='meridianos');
