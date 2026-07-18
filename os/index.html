@@ -559,6 +559,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
             .corpo-silhueta{filter:url(#volume)}
             .corpo-silhueta path{fill:url(#gradPele);stroke:#C0AE8E;stroke-width:0.5;stroke-opacity:0.28}
             #skWrap.raiox .corpo-silhueta path{fill:url(#gradPeleRx);stroke:#2E7FA6;stroke-opacity:0.75}
+            .corpo-rosto path{fill:none;stroke:#B09A76;stroke-width:0.55;stroke-linecap:round;opacity:0.55}
+            #skWrap.raiox .corpo-rosto path{stroke:#2E7FA6;opacity:0.7}
           </style>
         </svg>
         <svg viewBox="0 0 200 430" id="esqueletoSVG" style="width:210px;max-width:100%">
@@ -1361,8 +1363,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v2.3';
-const APP_VERSION_NOTA='os 12 meridianos de frente acesos (266 pontos) + Dra. Vera, a veterinária da casa, cuidando da Maly';
+const APP_VERSION='v2.4';
+const APP_VERSION_NOTA='o rosto aceso: B1, B2 e VG21–VG28 na face, com traço de olhos, nariz e boca na vista de frente';
 function carimbarVersao(){
   const linha='Montgomery OS · Fase 2 — Corpo · '+APP_VERSION+' ('+APP_VERSION_NOTA+')';
   const rod=document.getElementById('appVersion');if(rod)rod.textContent=linha;
@@ -3145,10 +3147,15 @@ const MER_TRAJETOS={
   'TR':{bilateral:true,pts:[[58,221],[59,214],[60,210],[61,199],[62,192],[63,187],[63,184],[64,180],[66,168],[70,136],[71,130],[73,112],[74,98],[74,80],[77,72],[86,56],[84,42],[83,38],[83,33],[84,27],[85,31],[86,27],[88,24]]},
   'VB':{bilateral:true,pts:[[86,27],[86,34],[84,24],[83,20],[83,17],[83,15],[83,19],[84,13],[86,11],[87,15],[87,19],[86,46],[88,12],[90,18],[90,12],[91,9],[92,8],[93,8],[94,12],[90,50],[82,66],[78,100],[79,105],[84,130],[80,140],[82,158],[83,172],[83,176],[81,192],[79,200],[80,246],[80,254],[79,292],[78,310],[78,326],[78,330],[79,340],[79,348],[79,356],[77,388],[72,394],[70,397],[68,399],[66,402]]},
   'F':{bilateral:true,pts:[[86,401],[87,398],[86,394],[88,388],[89,364],[89,354],[90,314],[91,300],[92,268],[92,220],[92,208],[94,192],[86,146],[86,116]]},
-  'VC':{bilateral:false,pts:[[100,196],[100,190],[100,183],[100,176],[100,169],[100,162],[100,155],[100,148],[100,141],[100,134],[100,127],[100,120],[100,113],[100,106],[100,100],[100,92],[100,86],[100,80],[100,74],[100,69],[100,65],[100,61],[100,56],[100,48]]}
+  'VC':{bilateral:false,pts:[[100,196],[100,190],[100,183],[100,176],[100,169],[100,162],[100,155],[100,148],[100,141],[100,134],[100,127],[100,120],[100,113],[100,106],[100,100],[100,92],[100,86],[100,80],[100,74],[100,69],[100,65],[100,61],[100,56],[100,48]]},
+  // O rosto aceso — os pontos que moram na face e só aparecem de frente:
+  // B1 (Jingming, canto interno do olho) e B2 (Zanzhu, início da sobrancelha);
+  // VG21–VG28: da coroa anterior desce testa, nariz, filtro, lábio, até a gengiva (Yinjiao).
+  'B':{bilateral:true,pts:[[96,28],[95,23]]},
+  'VG':{bilateral:false,n0:21,pts:[[100,7],[100,10],[100,13],[100,16],[100,36],[100,40],[100,42],[100,44]]}
 };
 // Vista de COSTAS — sem espelho: o lado esquerdo da tela é o lado esquerdo do corpo.
-// n0 = número do primeiro ponto desenhado (B1–B2 e VG21–28 moram no rosto e ficam de fora).
+// n0 = número do primeiro ponto desenhado (B1–B2 e VG21–28 moram no rosto — acesos na vista de frente).
 // quebras = depois de quantos pontos o traço levanta o lápis (a Bexiga desce, volta ao alto
 // pela linha externa e desce de novo pela perna — três traços, uma linha de Água).
 const MER_TRAJETOS_COSTAS={
@@ -3178,10 +3185,12 @@ function skVista(v){
   const bf=document.getElementById('skVistaFrente'),bc=document.getElementById('skVistaCostas');
   bf.classList.toggle('btn-p',v==='frente');bf.classList.toggle('btn-sec',v!=='frente');
   bc.classList.toggle('btn-p',v==='costas');bc.classList.toggle('btn-sec',v!=='costas');
+  const rosto=document.querySelector('#meridianoSVG .corpo-rosto');
+  if(rosto)rosto.style.display=(v==='frente')?'':'none';
   desenharMeridianos();
   document.getElementById('skPainel').innerHTML='<div class="vazio">'+(v==='costas'
     ?'Corpo de costas — sem espelho: o lado esquerdo da tela é o lado esquerdo do corpo. Aqui correm a Bexiga (a linha mais longa, dupla, de Água) e o Vaso Governador subindo a coluna.'
-    :'Corpo de frente — o lado esquerdo da tela é o lado direito do corpo. Ligue um meridiano nos chips acima e clique num ponto para abrir a ficha trilíngue.')+'</div>';
+    :'Corpo de frente — o lado esquerdo da tela é o lado direito do corpo. O rosto agora tem traço: B1 no canto do olho, B2 na sobrancelha, e VG21–VG28 descendo da coroa ao lábio. Ligue um meridiano nos chips e clique num ponto para abrir a ficha trilíngue.')+'</div>';
 }
 function merDados(){return (typeof ACUPUNTURA_MERIDIANOS!=='undefined')?ACUPUNTURA_MERIDIANOS:null;}
 function renderMerSel(){
@@ -3192,7 +3201,7 @@ function renderMerSel(){
     const b=document.createElement('button');
     b.id='merChip_'+sig;
     b.textContent=sig;
-    b.title=m.nome+' — '+m.elemento+' ('+m.total+' pontos'+(costas?', corre nas costas':'')+')';
+    b.title=m.nome+' — '+m.elemento+' ('+m.total+' pontos'+(costas?', corre nas costas; os pontos do rosto acendem de frente':'')+')';
     b.style.cssText='font-size:0.62rem;padding:3px 8px;border-radius:20px;cursor:pointer'+
       ';border:1px solid '+m.cor+';background:'+(on?m.cor:'transparent')+
       ';color:'+(on?'#fff':m.cor)+';transition:all 0.2s';
@@ -3299,6 +3308,16 @@ const CORPO_PARTES=[
   'C114 312 116 326 116 340 C116 356 115 372 114 384 C117 388 118 394 117 398 '+
   'C110 402 102 400 101 394 C101 382 102 368 102 352 C102 330 101 310 101 292 C101 270 100 240 100 220 C100 206 102 198 104 197 Z'
 ];
+// O rosto detalhado — traço fino, só na camada dos meridianos e só na vista de frente,
+// para dar morada a B1 (canto do olho), B2 (sobrancelha) e VG24–28 (testa, nariz, lábio).
+const ROSTO_TRACOS=[
+  'M88 22.5 Q92 20.5 96.5 22.5',   // sobrancelha direita do corpo (esquerda da tela)
+  'M103.5 22.5 Q108 20.5 112 22.5',
+  'M89 27.5 Q92.5 25.8 96 27.8 Q92.5 29.4 89 27.5',  // olho
+  'M104 27.8 Q107.5 25.8 111 27.5 Q107.5 29.4 104 27.8',
+  'M99 29 Q98 34 97 35.5 Q100 37.5 103 35.5 Q102 34 101 29', // nariz
+  'M95.5 41.5 Q100 43.5 104.5 41.5' // boca
+];
 function montarSilhueta(){
   ['esqueletoSVG','musculoSVG','tendaoSVG','orgaoSVG','meridianoSVG'].forEach(id=>{
     const svg=document.getElementById(id);
@@ -3312,6 +3331,18 @@ function montarSilhueta(){
       g.appendChild(p);
     });
     svg.insertBefore(g,svg.firstChild);
+    if(id==='meridianoSVG'){
+      const r=document.createElementNS('http://www.w3.org/2000/svg','g');
+      r.setAttribute('class','corpo-rosto');
+      r.setAttribute('aria-hidden','true');
+      ROSTO_TRACOS.forEach(d=>{
+        const p=document.createElementNS('http://www.w3.org/2000/svg','path');
+        p.setAttribute('d',d);
+        r.appendChild(p);
+      });
+      r.style.display=(_merVista==='frente')?'':'none';
+      svg.insertBefore(r,g.nextSibling);
+    }
   });
 }
 function skCamada(c){
