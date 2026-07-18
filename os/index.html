@@ -870,6 +870,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
         <button class="btn" style="padding:4px 12px;font-size:0.7rem" onclick="toggleArvoreHeb(this)">Aא  ver em latino</button>
         <button class="btn" style="padding:4px 12px;font-size:0.7rem" onclick="toggleArvorePlanetas(this)">☽  ocultar planetas</button>
         <button class="btn" style="padding:4px 12px;font-size:0.7rem" onclick="toggleArvoreMundos(this)">יהוה  ver os 4 Mundos</button>
+        <button class="btn" style="padding:4px 12px;font-size:0.7rem;border-color:#B0472F;color:#B0472F" onclick="toggleArvoreGestacao(this)">☽  acender a Gestação</button>
       </div>
     </div>
     <div style="flex:1;min-width:280px" id="sefiraPainel">
@@ -1408,7 +1409,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v2.7';
+const APP_VERSION='v2.8';
 const APP_VERSION_NOTA='a Árvore acesa no Vitruviano: as 10 Sefirot clicáveis como dado vivo — ficha por esfera, elo com os 5 Elementos na teia e salto para o Mapa Energético';
 function carimbarVersao(){
   const linha='Montgomery OS · Fase 2 — Corpo · '+APP_VERSION+' ('+APP_VERSION_NOTA+')';
@@ -2477,6 +2478,80 @@ let _arvoreMundos=false; // os 4 Mundos começam ocultos p/ não competir com as
 function toggleArvoreMundos(b){_arvoreMundos=!_arvoreMundos;if(b)b.textContent=_arvoreMundos?'יהוה  ocultar Mundos':'יהוה  ver os 4 Mundos';renderArvoreSVG();}
 const DAAT={x:150,y:158,n:"Da'at",pt:'Conhecimento',heb:'דַּעַת',
   frase:'A esfera que não se conta. Onde Sabedoria (Chokmah) e Entendimento (Binah) se encontram e se fundem — não uma décima primeira luz, mas o vazio entre elas: a fenda do abismo por onde o Infinito (Ein Sof) ainda respira dentro da Árvore. Conhecimento que não se acumula, se atravessa. Por isso fica oculta — dez são as esferas; Da\'at é a porta.'};
+// ===== A GESTAÇÃO NA ÁRVORE — o pedido da Vanessa (doula há +32 anos) =====
+// PONTE NOSSA, declarada: NÃO existe tabela clássica "9 meses nas Sefirot".
+// O que a tradição dá é o Relâmpago que Desce (a alma descendo Kether→Malkuth
+// como gestação da manifestação) e Yesod = Lua = útero. Sobre essa escada
+// espelhamos os trimestres REAIS (embriologia) — as duas leituras que a
+// Vanessa pediu, juntas. O 4º trimestre (exterogestação) é o método autoral
+// dela: as afirmações são observações clínicas DELA, nomeadas como tal.
+const RELAMPAGO=['kether','chokmah','binah','chesed','geburah','tiphereth','netzach','hod','yesod','malkuth'];
+const GESTACAO={
+  kether:{fase:'Antes da concepção',sem:'o chamado',tri:'',
+    real:'Antes do encontro: os dois corpos ainda separados, cada um carregando metade do código. Nada aconteceu — e tudo já está pronto para acontecer.',
+    simb:'A vontade de ser antes de haver quem seja. Na Coroa, a criança ainda é só desejo — o ponto antes do ponto, o nome que os pais ainda não sonharam.'},
+  chokmah:{fase:'Fecundação',sem:'dia 0',tri:'1º trimestre',
+    real:'O espermatozoide encontra o óvulo: duas metades viram uma célula única, com todo o código genético da vida inteira. A faísca acesa.',
+    simb:'O primeiro relâmpago — a força que jorra sem pensar, o sim que se lança. Sabedoria pura: o impulso masculino primordial que dispara a descida.'},
+  binah:{fase:'Nidação',sem:'semanas 1–4',tri:'1º trimestre',
+    real:'O embrião viaja e se aninha na parede do útero. O corpo da mãe reconhece, acolhe e começa a construir a placenta — a primeira casa.',
+    simb:'O ventre que recebe o relâmpago e lhe dá contorno. Binah é a Grande Mãe: onde a força vira forma, o silêncio fértil que gesta o entendimento.'},
+  chesed:{fase:'Organogênese',sem:'semanas 5–8',tri:'1º trimestre',
+    real:'A fase mais generosa: brotam coração, cérebro, olhos, membros — todos os órgãos ao mesmo tempo. O embrião cresce sem medida.',
+    simb:'A Misericórdia que dá porque transborda. Chesed é a expansão pura — a vida se derramando em todas as direções, criando sem ainda podar.'},
+  geburah:{fase:'A forma se define',sem:'semanas 9–12',tri:'1º trimestre',
+    real:'O corpo poda o excesso (até os dedos se separam por morte celular programada), a forma humana se firma, o batimento fica forte. Fim do 1º trimestre.',
+    simb:'O Rigor que corta para que a vida cresça reta. Sem a poda de Geburah, a expansão de Chesed não vira um corpo — o limite é também um cuidado.'},
+  tiphereth:{fase:'O coração no centro',sem:'semanas 13–20',tri:'2º trimestre',
+    real:'O bebê já é reconhecível, o coração bate audível, e vem o momento-sol: a mãe SENTE os primeiros movimentos. Dois corações em diálogo.',
+    simb:'O Sol interno da Árvore. Em Tiphereth a descida encontra seu centro de harmonia — a beleza de um ser que já é, antes mesmo de nascer.'},
+  netzach:{fase:'Viabilidade',sem:'semanas 21–27',tri:'2º trimestre',
+    real:'Pulmões amadurecendo, peso dobrando, chutes firmes. A partir daqui, com amparo, a vida já consegue insistir fora do ventre.',
+    simb:'A Vitória do impulso que não desiste. Netzach é o desejo de viver em estado bruto — a força que sustenta a criança rumo ao mundo.'},
+  hod:{fase:'Os sentidos se ordenam',sem:'semanas 28–33',tri:'3º trimestre',
+    real:'O sistema nervoso refina: o bebê ouve a voz da mãe, reage à luz, sonha (há sono REM). O cérebro dobra suas conexões.',
+    simb:'O Esplendor que dá nome e estrutura ao impulso. Em Hod a mente se organiza — os sentidos viram linguagem entre o dentro e o fora.'},
+  yesod:{fase:'A lua cheia da espera',sem:'semanas 34–40',tri:'3º trimestre',
+    real:'O bebê vira de cabeça para baixo e encaixa na pelve. Tudo pronto, guardado no escuro da água, aguardando o sinal para descer.',
+    simb:'Yesod É a Lua e o útero da Árvore — a Fundação onde a imagem completa repousa antes de se manifestar. A ponte entre o invisível e o visível.'},
+  malkuth:{fase:'Nascimento',sem:'o parto',tri:'',
+    real:'As contrações, a travessia, o primeiro ar nos pulmões, o primeiro choro. O corpo chega ao mundo e corta-se o cordão — só o físico.',
+    simb:'O Reino: a luz vira matéria, o Relâmpago toca o chão. Não é o fim da descida — é o lugar onde a Obra se torna real e habitável.'}
+};
+const EXTEROGESTACAO={nome:'Exterogestação',sem:'o 4º trimestre · ~12 semanas fora do ventre',cor:'#8E5A7E',
+  real:'O bebê nasce, mas a gestação não termina: fora do ventre ele ainda amadurece o que dentro não coube — o cérebro humano nasce "inacabado" para poder passar pela bacia. O colo, o calor, o cheiro e o peito da mãe são o novo útero.',
+  simb:'Depois de Malkuth, a Árvore não acaba — começa o caminho de volta. A exterogestação é o Reino aprendendo a ser Reino: a manifestação que ainda precisa de ventre externo antes de caminhar sozinha.',
+  metodo:'Este é o território da Vanessa — doula há mais de 32 anos, que criou um método autoral para o 4º trimestre. Nas observações clínicas DELA, quando a exterogestação é respeitada: a mãe se recupera mais rápido, a amamentação flui mais tranquila, o bebê faz sua autorregulação térmica naturalmente, passa por conta própria a mamar de 3 em 3 horas com 3 dias de vida, e a partir da 4ª noite já dorme a noite inteira. São a experiência e o método dela — nomeados aqui como tal, com transparência.'};
+let _arvoreGestacao=false;
+function toggleArvoreGestacao(b){
+  _arvoreGestacao=!_arvoreGestacao;
+  if(b)b.textContent=_arvoreGestacao?'☽  apagar a Gestação':'☽  acender a Gestação';
+  // com a Gestação acesa, a Árvore ganha chão extra p/ a faixa da exterogestação
+  const svg=document.getElementById('arvoreSVG');
+  if(svg)svg.setAttribute('viewBox',_arvoreGestacao?'0 0 300 556':'0 0 300 500');
+  renderArvoreSVG();
+  if(_arvoreGestacao)painelGestacao();
+}
+function painelGestacao(){
+  document.querySelectorAll('#arvoreSVG .sefira-no circle').forEach(c=>c.setAttribute('stroke','#F5F3EE'));
+  const etapa=(id,i)=>{const s=SEFIROT.find(x=>x.id===id),g=GESTACAO[id];
+    return '<div style="display:flex;gap:10px;align-items:baseline;margin-bottom:4px;cursor:pointer" onclick="selSefira(\''+id+'\')" title="Abrir '+s.n+'">'+
+    '<span style="flex:0 0 18px;text-align:center;font-family:Lora,serif;font-size:0.8rem;color:#B0472F;font-weight:700">'+(i+1)+'</span>'+
+    '<span style="font-size:0.82rem;color:var(--azul)"><strong>'+s.n+'</strong> — '+esc(g.fase)+' <span style="color:var(--cinza);font-size:0.72rem">('+esc(g.sem)+(g.tri?' · '+g.tri:'')+')</span></span></div>';};
+  document.getElementById('sefiraPainel').innerHTML=
+    '<div style="border-left:4px solid #B0472F;padding-left:var(--f2)">'+
+    '<h2 style="font-family:Lora,serif;color:var(--azul);font-size:1.25rem">A Gestação na Árvore <span style="color:var(--cinza);font-size:0.9rem">— o Relâmpago que Desce</span></h2>'+
+    '<p style="font-size:0.85rem;font-family:Lora,serif;font-style:italic;color:var(--azul);line-height:1.55;margin-top:8px">Para a Vanessa. A alma desce de Kether a Malkuth como a criança desce da concepção ao nascimento — e a Árvore continua depois do parto, no colo.</p>'+
+    '<div style="margin-top:10px;padding:9px 12px;border-left:3px dashed #B0472F;background:rgba(176,71,47,0.06);border-radius:0 8px 8px 0"><span style="font-size:0.64rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--cinza)">Honestidade de origem — ponte nossa</span><br><span style="font-size:0.78rem;color:var(--azul);line-height:1.5">Não existe tabela antiga ligando os 9 meses às Sefirot. O que a tradição dá é o <strong>Relâmpago que Desce</strong> e <strong>Yesod = Lua = útero</strong>. Espelhar os trimestres reais nessa escada é uma leitura feita em casa — declarada como tal.</span></div>'+
+    '<p style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--cinza);margin:12px 0 6px">As dez estações da descida (clique para abrir cada uma)</p>'+
+    RELAMPAGO.map(etapa).join('')+
+    '<div style="margin-top:12px;padding:11px 14px;border-left:3px solid '+EXTEROGESTACAO.cor+';background:rgba(142,90,126,0.07);border-radius:0 8px 8px 0">'+
+    '<span style="font-size:0.64rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--cinza)">Depois de Malkuth — '+EXTEROGESTACAO.nome+' · '+esc(EXTEROGESTACAO.sem)+'</span><br>'+
+    '<span style="font-size:0.82rem;color:var(--azul);line-height:1.55">'+esc(EXTEROGESTACAO.real)+'</span><br>'+
+    '<span style="font-size:0.82rem;font-family:Lora,serif;font-style:italic;color:'+EXTEROGESTACAO.cor+';line-height:1.55">'+esc(EXTEROGESTACAO.simb)+'</span><br>'+
+    '<span style="font-size:0.78rem;color:var(--azul);line-height:1.55;display:block;margin-top:6px">'+esc(EXTEROGESTACAO.metodo)+'</span>'+
+    '</div></div>';
+}
 function renderArvoreSVG(){
   const pos=id=>SEFIROT.find(s=>s.id===id);
   // Os 4 Mundos — faixas horizontais suaves atrás de tudo (só quando ligado).
@@ -2560,7 +2635,24 @@ function renderArvoreSVG(){
       : '<text x="'+DAAT.x+'" y="'+(DAAT.y+1)+'" text-anchor="middle" font-family="Lora,serif" font-size="8.5" font-style="italic" fill="#6E5F8C">'+DAAT.n+'</text>'+
         '<text x="'+DAAT.x+'" y="'+(DAAT.y+9)+'" text-anchor="middle" font-family="Inter,sans-serif" font-size="5.5" fill="#8A7BA6">oculta</text>')+
     '</g>';
-  document.getElementById('arvoreSVG').innerHTML=mundos+auras+linhas+nos+daat;
+  // A Gestação acesa: o Relâmpago que Desce (zigue-zague Kether→Malkuth),
+  // um selo numerado por estação, e a faixa da exterogestação abaixo de Malkuth.
+  let gestacao='';
+  if(_arvoreGestacao){
+    const pts=RELAMPAGO.map(id=>{const s=pos(id);return s.x+','+s.y;}).join(' ');
+    gestacao='<polyline points="'+pts+'" fill="none" stroke="#B0472F" stroke-width="3.4" opacity="0.28" stroke-linejoin="round" stroke-linecap="round"/>'+
+      '<polyline points="'+pts+'" fill="none" stroke="#E8A15C" stroke-width="1.4" opacity="0.85" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="5 4"><animate attributeName="stroke-dashoffset" from="90" to="0" dur="6s" repeatCount="indefinite"/></polyline>'+
+      RELAMPAGO.map((id,i)=>{const s=pos(id),bx=s.x+(s.pilar==='E'?24:-24),by=s.y+13;
+        return '<g class="gest-no" data-id="'+id+'" style="cursor:pointer"><title>'+(i+1)+'ª estação — '+GESTACAO[id].fase+' ('+GESTACAO[id].sem+')</title>'+
+        '<circle cx="'+bx+'" cy="'+by+'" r="7" fill="#FBF3EC" stroke="#B0472F" stroke-width="0.9" opacity="0.95"/>'+
+        '<text x="'+bx+'" y="'+(by+3)+'" text-anchor="middle" font-family="Lora,serif" font-size="8.5" fill="#B0472F" font-weight="700">'+(i+1)+'</text></g>';}).join('')+
+      '<g class="extero-no" style="cursor:pointer"><title>Exterogestação — o 4º trimestre, o território da Vanessa</title>'+
+      '<rect x="40" y="502" width="220" height="44" rx="12" fill="'+EXTEROGESTACAO.cor+'" fill-opacity="0.10" stroke="'+EXTEROGESTACAO.cor+'" stroke-opacity="0.45" stroke-width="1" stroke-dasharray="4 3"/>'+
+      '<line x1="150" y1="477" x2="150" y2="502" stroke="'+EXTEROGESTACAO.cor+'" stroke-width="1.2" opacity="0.55" stroke-dasharray="3 3"/>'+
+      '<text x="150" y="520" text-anchor="middle" font-family="Lora,serif" font-size="10.5" fill="'+EXTEROGESTACAO.cor+'">Exterogestação · o 4º trimestre</text>'+
+      '<text x="150" y="534" text-anchor="middle" font-family="Inter,sans-serif" font-size="7" font-style="italic" fill="'+EXTEROGESTACAO.cor+'" opacity="0.85">o colo como ventre — o território da Vanessa</text></g>';
+  }
+  document.getElementById('arvoreSVG').innerHTML=mundos+auras+linhas+nos+daat+gestacao;
 }
 function selDaat(){
   if(typeof _resetCaminhos==='function')_resetCaminhos();
@@ -2639,6 +2731,12 @@ function selSefira(id){
       (s.triade?'<span class="tag tag-dourado">'+esc(s.triade)+'</span>':'')+
       (s.elo?'<span class="tag" style="cursor:pointer;background:'+((MF_TEIA[s.elo]||{}).cor||'#999')+'22;color:'+((MF_TEIA[s.elo]||{}).cor||'#999')+';border:1px solid '+((MF_TEIA[s.elo]||{}).cor||'#999')+'55" onclick="go(\'metafisica\');setTimeout(function(){mfAcender(\''+s.n+'\')},350)" title="Acender este elemento na teia da Metafísica">elo: '+esc(s.elo)+' →</span>':'')+
       '</div>':'')+
+    (function(){if(!_arvoreGestacao)return'';var g=GESTACAO[s.id];if(!g)return'';var ix=RELAMPAGO.indexOf(s.id)+1;
+      return '<div style="margin-top:12px;padding:11px 14px;border-left:3px solid #B0472F;background:rgba(176,71,47,0.06);border-radius:0 8px 8px 0">'+
+      '<span style="font-size:0.64rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--cinza)">Gestação · '+ix+'ª estação do Relâmpago — '+esc(g.fase)+' ('+esc(g.sem)+(g.tri?' · '+g.tri:'')+')</span><br>'+
+      '<span style="font-size:0.82rem;color:var(--azul);line-height:1.5"><strong>No corpo:</strong> '+esc(g.real)+'</span><br>'+
+      '<span style="font-size:0.82rem;font-family:Lora,serif;font-style:italic;color:#B0472F;line-height:1.5"><strong>No Relâmpago:</strong> '+esc(g.simb)+'</span><br>'+
+      '<span style="font-size:0.66rem;color:var(--cinza);font-style:italic">Ponte nossa — trimestres reais espelhados na descida da tradição; leitura declarada, não tabela antiga.</span></div>';})()+
     (s.frase?'<div style="margin-top:12px;padding:11px 14px;border-left:3px solid #C9A84C;background:rgba(201,168,76,0.07);border-radius:0 8px 8px 0"><span style="font-size:0.64rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--cinza)">Em nossas palavras — antes de qualquer livro</span><br><span style="font-size:0.9rem;font-family:Lora,serif;font-style:italic;line-height:1.5;color:var(--azul)">'+esc(s.frase)+'</span></div>':'')+
     (function(){var m=mundoDe(s.id);return m?'<div style="margin-top:10px;padding:8px 12px;border-left:3px solid '+m.cor+';background:'+m.cor+'0F;border-radius:0 8px 8px 0"><span style="font-size:0.62rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--cinza)">Mundo · a escada do Nome</span><br><span style="font-size:0.85rem;color:'+m.cor+';font-weight:600">'+m.nome+' — '+m.pt+'</span> <span style="font-family:Lora,serif;font-size:0.95rem;color:'+m.cor+'">'+m.letra+'</span> <span style="font-size:0.72rem;color:var(--cinza)">('+m.letraNome+' de יהוה · '+m.elemento+')</span><br><span style="font-size:0.78rem;color:var(--azul);font-style:italic;line-height:1.45">'+esc(m.sentido)+'</span></div>':'';})()+
     (function(){var n=NOMES[s.id];if(!n)return'';var cel=function(rot,heb,lat,glosa){return '<div style="margin-bottom:5px"><span style="font-size:0.6rem;text-transform:uppercase;letter-spacing:0.4px;color:var(--cinza)">'+rot+'</span><br><span style="font-family:Lora,serif;font-size:0.95rem;color:var(--azul)">'+(heb?heb+' ':'')+'</span><span style="font-size:0.82rem;color:var(--azul);font-weight:600">'+esc(lat)+'</span>'+(glosa?' <span style="font-size:0.72rem;color:var(--cinza)">— '+esc(glosa)+'</span>':'')+'</div>';};
@@ -2690,6 +2788,9 @@ function renderArvoreTabela(){
     '<tr><td><div class="vazio">Nenhuma observação ainda — clique numa Sefirá e registre a primeira.</div></td></tr>';
 }
 document.addEventListener('click',e=>{
+  if(e.target.closest('#arvoreSVG .extero-no')){painelGestacao();return;}
+  const gn=e.target.closest('#arvoreSVG .gest-no');
+  if(gn){selSefira(gn.dataset.id);return;}
   if(e.target.closest('#arvoreSVG .daat-no')){selDaat();return;}
   const g=e.target.closest('#arvoreSVG .sefira-no');
   if(g){selSefira(g.dataset.id);return;}
