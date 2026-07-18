@@ -973,7 +973,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     <p style="font-size:0.75rem;color:var(--cinza);margin-top:10px">Quatro portas, uma teia: Montgomery entra pelo corpo e pela lei; Vanessa pelo símbolo e pelo floral.</p>
   </div>
   <div class="bloco" id="mfBloco5">
-    <style>.mfZona{cursor:pointer;transition:all .25s}.mfZona path,.mfZona circle,.mfZona polygon{fill-opacity:0;stroke-opacity:0}.mfZona:hover path,.mfZona:hover circle,.mfZona:hover polygon{fill-opacity:.3;stroke-opacity:.7}.mfZona.mfAtiva path,.mfZona.mfAtiva circle,.mfZona.mfAtiva polygon{fill-opacity:.4;stroke-opacity:1;stroke-width:1.6}</style>
+    <style>.mfPt{cursor:pointer;stroke:#0d1a2e;stroke-width:0.5;transition:all .15s}.mfPt:hover{stroke:#C9A84C;stroke-width:1.1}.mfPt.sel{stroke:#e0c56e;stroke-width:1.4}.mfPtTraj{fill:none;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;opacity:0.5}
+    .mfZona{cursor:pointer;transition:all .25s}.mfZona path,.mfZona circle,.mfZona polygon{fill-opacity:0;stroke-opacity:0}.mfZona:hover path,.mfZona:hover circle,.mfZona:hover polygon{fill-opacity:.3;stroke-opacity:.7}.mfZona.mfAtiva path,.mfZona.mfAtiva circle,.mfZona.mfAtiva polygon{fill-opacity:.4;stroke-opacity:1;stroke-width:1.6}</style>
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="7" r="2"/><path d="M12 9v5M12 14l-3 6M12 14l3 6M12 10.5 5 9M12 10.5 19 9"/></svg>O Corpo Vitruviano — porta de entrada</h2>
     <p style="font-size:0.78rem;color:var(--cinza);margin-bottom:10px">Clique onde dói. O corpo aponta o elemento; o elemento abre a teia inteira. Ou entre pela palavra — a primeira fibra do anel 21:</p>
     <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:6px">
@@ -1022,6 +1023,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
               <polygon points="302,346 340,336 435,505 385,524 302,524" fill="#cfd8dc" stroke="#cfd8dc"/>
             </g>
             </g>
+            <!-- CAMADA: pontos de acupuntura das costas (Bexiga + Vaso Governador) projetados na pose vitruviana -->
+            <g id="mfPontosG" style="display:none"></g>
           </g>
           <!-- CAMADA: Árvore da Vida (pilares verticais; lado do desenho = lado real do corpo) -->
           <g id="mfArvoreG" style="display:none">
@@ -1055,6 +1058,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:8px">
           <span id="mfVistaTxt" style="font-size:0.68rem;color:var(--cinza)"></span>
           <span style="display:flex;gap:6px">
+            <button class="btn" style="padding:4px 10px;font-size:0.7rem" onclick="mfTogglePontos(this)">Pontos</button>
             <button class="btn" style="padding:4px 10px;font-size:0.7rem" onclick="mfToggleArvore(this)">Árvore da Vida</button>
             <button class="btn" style="padding:4px 10px;font-size:0.7rem" onclick="mfToggleVista()">Inverter visão</button>
           </span>
@@ -1363,8 +1367,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v2.4';
-const APP_VERSION_NOTA='o rosto aceso: B1, B2 e VG21–VG28 na face, com traço de olhos, nariz e boca na vista de frente';
+const APP_VERSION='v2.5';
+const APP_VERSION_NOTA='os pontos no Vitruviano: Bexiga e Vaso Governador acesos no corpo de costas, cada ponto abrindo a ficha trilíngue';
 function carimbarVersao(){
   const linha='Montgomery OS · Fase 2 — Corpo · '+APP_VERSION+' ('+APP_VERSION_NOTA+')';
   const rod=document.getElementById('appVersion');if(rod)rod.textContent=linha;
@@ -2849,6 +2853,69 @@ function mfToggleArvore(btn){
   a.style.display=ligada?'none':'';
   if(btn)btn.classList.toggle('ativo',!ligada);
 }
+// ----- PONTOS NO VITRUVIANO — Bexiga e Vaso Governador projetados na pose vitruviana -----
+// Reusa MER_TRAJETOS_COSTAS (corpo anatômico 200x430) e projeta no corpo do jpg (SVG 600x660).
+// A pose muda as proporções por região: a cabeça vitruviana é menor, o tronco e as pernas mais largos.
+function mfPontoXY(x,y){
+  let sx,vy;
+  if(y<=64){sx=0.55;vy=108+(y-5)*72/59;}
+  else if(y<=197){sx=1.05;vy=182+(y-64)*116/133;}
+  else{sx=1.7-(y-197)*0.7/208;vy=298+(y-197)*207/208;} // as pernas vitruvianas convergem: a escala lateral encolhe descendo
+  return [302+(x-100)*sx,vy];
+}
+function mfDesenharPontos(){
+  const g=document.getElementById('mfPontosG');const M=merDados();
+  if(!g||!M)return;
+  g.innerHTML='';
+  const NS='http://www.w3.org/2000/svg';
+  ['B','VG'].forEach(sig=>{
+    const tr=MER_TRAJETOS_COSTAS[sig];if(!tr)return;
+    const cor=M[sig].cor,n0=tr.n0||1;
+    const lados=tr.bilateral?[false,true]:[false];
+    lados.forEach(esp=>{
+      const pts=tr.pts.map(p=>mfPontoXY(esp?200-p[0]:p[0],p[1]));
+      const cortes=[0].concat(tr.quebras||[]).concat([pts.length]);
+      for(let s=0;s<cortes.length-1;s++){
+        const seg=pts.slice(cortes[s],cortes[s+1]);
+        const path=document.createElementNS(NS,'path');
+        path.setAttribute('class','mfPtTraj');
+        path.setAttribute('stroke',cor);
+        path.setAttribute('d','M'+seg.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' L'));
+        g.appendChild(path);
+      }
+      pts.forEach((p,i)=>{
+        const n=n0+i;
+        const c=document.createElementNS(NS,'circle');
+        c.setAttribute('class','mfPt');
+        c.setAttribute('cx',p[0].toFixed(1));c.setAttribute('cy',p[1].toFixed(1));c.setAttribute('r',3);
+        c.setAttribute('fill',cor);
+        c.dataset.m=sig;c.dataset.n=n;
+        const tt=document.createElementNS(NS,'title');
+        tt.textContent=sig+'-'+n;
+        c.appendChild(tt);
+        c.addEventListener('click',ev=>{ev.stopPropagation();mfFichaPonto(sig,n);});
+        g.appendChild(c);
+      });
+    });
+  });
+}
+function mfTogglePontos(btn){
+  const g=document.getElementById('mfPontosG');if(!g)return;
+  const ligada=g.style.display!=='none';
+  g.style.display=ligada?'none':'';
+  if(btn)btn.classList.toggle('ativo',!ligada);
+  if(!ligada){
+    mfDesenharPontos();
+    document.getElementById('mfCorpoPainel').innerHTML=
+      '<div class="vazio">Os pontos das costas acesos no Vitruviano: a <b>Bexiga</b> (a linha mais longa do corpo, dupla, de Água) e o <b>Vaso Governador</b> subindo a coluna. Clique num ponto para abrir a ficha trilíngue — a mesma da Clínica.</div>';
+  }
+}
+function mfFichaPonto(sig,n){
+  document.querySelectorAll('#mfPontosG .mfPt').forEach(c=>
+    c.classList.toggle('sel',c.dataset.m===sig&&+c.dataset.n===n));
+  const html=merFichaHTML(sig,n);
+  if(html)document.getElementById('mfCorpoPainel').innerHTML=html;
+}
 function mfElemento(el){
   const t=MF_TEIA[el];if(!t)return;
   document.querySelectorAll('.mfZona').forEach(z=>z.classList.toggle('mfAtiva',z.dataset.el===el));
@@ -3265,22 +3332,26 @@ function desenharMeridianos(){
     });
   });
 }
-function selMerPonto(sig,n){
-  const M=merDados();if(!M)return;
+// Ficha trilíngue de um ponto — usada pela camada de meridianos da Anatomia e pelo Vitruviano.
+function merFichaHTML(sig,n){
+  const M=merDados();if(!M)return '';
   const m=M[sig];
   const p=(typeof ACUPUNTURA_PONTOS!=='undefined')?ACUPUNTURA_PONTOS.find(x=>x.m===sig&&x.n===n):null;
-  document.querySelectorAll('#meridianoSVG .mer-pt').forEach(c=>
-    c.classList.toggle('sel',c.dataset.m===sig&&+c.dataset.n===n));
-  if(!p)return;
+  if(!p)return '';
   const linha=(rot,val)=>val?'<div style="display:flex;gap:6px;font-size:0.76rem;line-height:1.6;margin-bottom:4px"><span style="color:var(--cinza);min-width:82px;flex:none">'+rot+'</span><span>'+esc(val)+'</span></div>':'';
-  document.getElementById('skPainel').innerHTML=
-    '<div style="border:1px solid '+m.cor+'70;border-radius:10px;padding:var(--f2) var(--f3);background:'+m.cor+'10">'+
+  return '<div style="border:1px solid '+m.cor+'70;border-radius:10px;padding:var(--f2) var(--f3);background:'+m.cor+'10">'+
     '<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:2px">'+sig+'-'+n+' · '+esc(p.py)+' '+p.hz+
     ' <span class="tag" style="background:'+m.cor+'22;color:'+m.cor+';border:1px solid '+m.cor+'66">'+esc(m.elemento)+'</span></h3>'+
     '<p style="font-size:0.76rem;color:var(--cinza);margin-bottom:9px;font-style:italic">'+esc(p.pt)+' · '+esc(p.en)+' · '+esc(m.nome)+'</p>'+
     linha('Localização',p.loc)+linha('Funções',p.fn)+linha('Indicações',p.ind)+
     '<a class="btn btn-sec btn-mini" style="margin-top:8px;display:inline-block;text-decoration:none" target="_blank" rel="noopener" href="'+acupunturaDeadmanURL(sig,n)+'">Ver no Deadman →</a>'+
     '</div>';
+}
+function selMerPonto(sig,n){
+  document.querySelectorAll('#meridianoSVG .mer-pt').forEach(c=>
+    c.classList.toggle('sel',c.dataset.m===sig&&+c.dataset.n===n));
+  const html=merFichaHTML(sig,n);
+  if(html)document.getElementById('skPainel').innerHTML=html;
 }
 let _skCamada='ossos';
 // Contorno humano de frente (viewBox 200x430): cabeça, tronco, braços e pernas em partes
