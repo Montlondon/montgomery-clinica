@@ -1091,20 +1091,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
                        M300,272 L300,400 M370,345 L300,400 M230,345 L300,400
                        M300,400 L300,505"/>
             </g>
-            <g fill="#0d1a2e" fill-opacity="0.75" stroke="#c9a84c" stroke-width="1.2">
-              <circle cx="300" cy="110" r="13"/><circle cx="370" cy="165" r="13"/><circle cx="230" cy="165" r="13"/>
-              <circle cx="370" cy="235" r="13"/><circle cx="230" cy="235" r="13"/><circle cx="300" cy="272" r="14" stroke="#e0c56e" stroke-width="1.8"/>
-              <circle cx="370" cy="345" r="13"/><circle cx="230" cy="345" r="13"/>
-              <circle cx="300" cy="400" r="13"/><circle cx="300" cy="505" r="13"/>
-            </g>
-            <g font-size="9.5" fill="#e0c56e" text-anchor="middle" font-family="Lora,serif" opacity="0.95">
-              <text x="300" y="94">Keter</text>
-              <text x="409" y="156">Chokmah</text><text x="193" y="156">Binah</text>
-              <text x="407" y="231">Chesed</text><text x="194" y="231">Gevurah</text>
-              <text x="300" y="259">Tiphereth · Sol</text>
-              <text x="409" y="341">Netzach</text><text x="196" y="341">Hod</text>
-              <text x="331" y="404">Yesod</text><text x="334" y="509">Malkuth</text>
-            </g>
+            <!-- As esferas nascem do dado SEFIROT (mfRenderSefirot) — clicáveis, cor do pilar -->
+            <g id="mfSefirotG"></g>
           </g>
           <g id="mfLabels" font-size="13" fill="#e8f4ff" opacity="0.9" text-anchor="middle" font-family="Lora,serif"></g>
         </svg>
@@ -1420,8 +1408,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v2.6';
-const APP_VERSION_NOTA='a Frente do Vitruviano: arte de frente na paleta do OS, braços abertos, e os 12 meridianos da frente acesos na pose vitruviana';
+const APP_VERSION='v2.7';
+const APP_VERSION_NOTA='a Árvore acesa no Vitruviano: as 10 Sefirot clicáveis como dado vivo — ficha por esfera, elo com os 5 Elementos na teia e salto para o Mapa Energético';
 function carimbarVersao(){
   const linha='Montgomery OS · Fase 2 — Corpo · '+APP_VERSION+' ('+APP_VERSION_NOTA+')';
   const rod=document.getElementById('appVersion');if(rod)rod.textContent=linha;
@@ -2914,6 +2902,58 @@ function mfToggleArvore(btn){
   const ligada=a.style.display!=='none';
   a.style.display=ligada?'none':'';
   if(btn)btn.classList.toggle('ativo',!ligada);
+  if(!ligada)mfRenderSefirot();
+}
+// ----- ÁRVORE VIVA NO VITRUVIANO — as 10 Sefirot como dado, não desenho -----
+// Posições na pose vitruviana (de costas: lado do desenho = lado real do corpo).
+const MF_SEF_XY={kether:[300,110],chokmah:[370,165],binah:[230,165],chesed:[370,235],geburah:[230,235],tiphereth:[300,272],netzach:[370,345],hod:[230,345],yesod:[300,400],malkuth:[300,505]};
+function mfRenderSefirot(){
+  const g=document.getElementById('mfSefirotG');
+  if(!g||g.hasChildNodes())return;
+  g.innerHTML=SEFIROT.map(s=>{
+    const xy=MF_SEF_XY[s.id],r=s.id==='tiphereth'?14:13,cor=PILAR[s.pilar];
+    const rotX=s.pilar==='D'?xy[0]+r+4:s.pilar==='E'?xy[0]-r-4:xy[0];
+    const anchor=s.pilar==='D'?'start':s.pilar==='E'?'end':'middle';
+    const rotY=s.pilar==='C'?(s.id==='yesod'||s.id==='malkuth'?xy[1]+r+12:xy[1]-r-6):xy[1]-r+4;
+    const nome=s.id==='tiphereth'?'Tiphereth · Sol':s.n;
+    return '<g class="mfSefNo" data-id="'+s.id+'" style="cursor:pointer" onclick="mfSefira(\''+s.id+'\')">'+
+      '<circle cx="'+xy[0]+'" cy="'+xy[1]+'" r="'+r+'" fill="#0d1a2e" fill-opacity="0.75" stroke="'+cor+'" stroke-width="'+(s.id==='tiphereth'?1.8:1.2)+'"/>'+
+      '<text x="'+xy[0]+'" y="'+(xy[1]+3.5)+'" font-size="8.5" fill="'+cor+'" text-anchor="middle" font-family="Lora,serif">'+s.num+'</text>'+
+      '<text x="'+rotX+'" y="'+rotY+'" font-size="9.5" fill="#e0c56e" text-anchor="'+anchor+'" font-family="Lora,serif" opacity="0.95">'+nome+'</text>'+
+      '<title>'+s.n+' — '+s.pt.replace(' ☀','')+' · '+s.corpo+'</title></g>';
+  }).join('');
+}
+function mfMarcarSefira(id){
+  document.querySelectorAll('#mfSefirotG .mfSefNo circle').forEach(c=>{
+    const sel=c.parentNode.dataset.id===id;
+    c.setAttribute('stroke',sel?'#e8f4ff':PILAR[(SEFIROT.find(s=>s.id===c.parentNode.dataset.id)||{}).pilar]||'#c9a84c');
+    c.setAttribute('stroke-width',sel?2.4:(c.parentNode.dataset.id==='tiphereth'?1.8:1.2));
+  });
+}
+function mfSefira(id){
+  const s=SEFIROT.find(x=>x.id===id);if(!s)return;
+  const a=document.getElementById('mfArvoreG');
+  if(a&&a.style.display==='none'){a.style.display='';mfRenderSefirot();const b=document.querySelector('button[onclick^="mfToggleArvore"]');if(b)b.classList.add('ativo');}
+  mfRenderSefirot();mfMarcarSefira(id);
+  const t=MF_TEIA[s.elo]||{},pilarNome={C:'Pilar Central — Equilíbrio',D:'Pilar da Misericórdia',E:'Pilar da Severidade'}[s.pilar];
+  const linha=(k,v,origem)=>v?'<div style="display:flex;justify-content:space-between;gap:10px;padding:5px 0;border-bottom:1px solid rgba(201,168,76,0.12);font-size:0.8rem">'+
+    '<span style="color:var(--cinza)">'+k+(origem?' <span style="font-size:0.62rem;opacity:0.7">('+origem+')</span>':'')+'</span><span style="text-align:right">'+v+'</span></div>':'';
+  document.getElementById('mfCorpoPainel').innerHTML=
+    '<div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">'+
+    '<span style="width:16px;height:16px;border-radius:50%;background:'+PILAR[s.pilar]+';display:inline-block;box-shadow:0 0 10px '+PILAR[s.pilar]+'"></span>'+
+    '<h2 style="font-family:Lora,serif;font-size:1.05rem;color:var(--azul);margin:0">'+s.num+' · '+s.n+' — '+s.pt.replace(' ☀','')+'</h2></div>'+
+    '<div style="font-size:0.72rem;color:var(--cinza);margin-bottom:8px">'+pilarNome+' · '+s.triade+'</div>'+
+    linha('No corpo (Adam Kadmon)',s.corpo)+
+    linha('Planeta',s.planeta)+
+    linha('Virtude',s.virtude)+
+    linha('Vício / sombra',s.vicio)+
+    linha('Cor',s.cor)+
+    linha('Ponte MTC',s.mtc,s.id==='tiphereth'?'convergência total':'ponte nossa')+
+    '<p style="font-family:Lora,serif;font-size:0.85rem;font-style:italic;color:var(--azul);line-height:1.6;margin:10px 0">'+s.frase+'</p>'+
+    '<div style="display:flex;gap:6px;flex-wrap:wrap">'+
+    (t.cor?'<span class="tag" style="cursor:pointer;background:'+t.cor+'22;color:'+t.cor+';border:1px solid '+t.cor+'55" onclick="mfAcender(\''+s.elo+'\')" title="Acender o elemento-elo na teia">elo: '+s.elo+' →</span>':'')+
+    '<span class="tag tag-dourado" style="cursor:pointer" onclick="go(\'arvore\');setTimeout(function(){selSefira(\''+s.id+'\')},80)" title="Abrir esta Sefirá no Mapa Energético">ver no Mapa Energético →</span>'+
+    '</div>';
 }
 // ----- PONTOS NO VITRUVIANO — Bexiga e Vaso Governador projetados na pose vitruviana -----
 // Reusa MER_TRAJETOS_COSTAS (corpo anatômico 200x430) e projeta no corpo do jpg (SVG 600x660).
@@ -3009,6 +3049,11 @@ function mfElemento(el){
     linha('Planeta',t.planeta,'ocidental')+
     linha('Floral de Bach',t.floral,'ponte nossa')+
     linha('Lei Hermética',t.lei,'ponte nossa')+
+    (function(){const ss=(typeof SEFIROT!=='undefined')?SEFIROT.filter(s=>s.elo===el):[];return ss.length?
+      '<div style="margin-top:10px"><span style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.4px;color:var(--cinza)">Sefirot deste elemento — Kabbalah</span>'+
+      '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:5px">'+ss.map(s=>
+        '<span class="tag" style="cursor:pointer;background:'+PILAR[s.pilar]+'22;color:'+PILAR[s.pilar]+';border:1px solid '+PILAR[s.pilar]+'55" onclick="mfSefira(\''+s.id+'\')" title="'+s.corpo+'">'+s.num+' · '+s.n+'</span>').join('')+
+      '</div></div>':'';})()+
     '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">'+
     '<button class="btn" onclick="mfMarcar(\'mfCrise\',\''+el+'\')">Marcar como elemento em crise</button>'+
     '<button class="btn" onclick="mfMarcar(\'mfDominante\',\''+el+'\')">Marcar como dominante</button></div>';
@@ -3032,7 +3077,7 @@ function mfBuildIndice(){
     if(!s.elo)return;
     const nk=mfNorm(s.n),pk=mfNorm(s.pt.replace(' ☀',''));
     add(s.n,s.elo);add(s.pt.replace(' ☀',''),s.elo);
-    MF_SEFIRA[nk]={sefira:s.n,pt:s.pt.replace(' ☀',''),elo:s.elo};
+    MF_SEFIRA[nk]={id:s.id,sefira:s.n,pt:s.pt.replace(' ☀',''),elo:s.elo};
     if(pk)MF_SEFIRA[pk]=MF_SEFIRA[nk];
   });
   return MF_INDICE;
@@ -3056,6 +3101,12 @@ function mfAcender(termo){
     '<span style="color:var(--azul)">A Sefirá <strong>'+sef.sefira+'</strong> ('+sef.pt+') desce à teia pelo elemento <strong>'+el+'</strong> — Kabbalah e MTC na mesma raiz.</span>':
     '<span style="color:var(--azul)">"'+termo+'" acende <strong>'+el+'</strong>.</span>';
   mfElemento(el);
+  // Se a palavra era uma Sefirá, a Árvore acende no Vitruviano com a esfera destacada.
+  if(sef){
+    const a=document.getElementById('mfArvoreG');
+    if(a&&a.style.display==='none'){a.style.display='';const b=document.querySelector('button[onclick^="mfToggleArvore"]');if(b)b.classList.add('ativo');}
+    mfRenderSefirot();mfMarcarSefira(sef.id);
+  }
   const p=document.getElementById('mfCorpoPainel');if(p)p.scrollIntoView({behavior:'smooth',block:'center'});
 }
 // mfChip(termo,el): o "fio que acende" — qualquer módulo externo (Anatomia, Coluna,
