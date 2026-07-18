@@ -35,6 +35,9 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 - **FEITO (16/07, OS v1.1–v1.2):** coluna do esqueleto clicável do Montgomery OS ligada à MESMA raiz `QUIROPRAXIA_REF` — vértebra clicável (C1–Cóccix) com inervação, sintomas e ajustes da apostila; camada autonômica (Simpático/Parassimpático/Cérebro-Espinhal) por vértebra com sintomas do quadro IBRAQUI; e chip clicável que liga a vértebra ao Elemento pelo órgão inervado, acendendo os 5 Elementos na Metafísica. Princípio cumprido: uma raiz, muitos reflexos — sem duplicar dados.
 
+## Senha "Acender a Frente do Vitruviano" (registrada 18/07)
+Próxima janela: meridianos da frente no Corpo Vitruviano do OS. Vela 1 = arte irmã DE FRENTE (o "Inverter visão" hoje só espelha o jpg de costas) na mesma paleta. Vela 2 = calibrar coordenadas via `mfPontoXY` — tronco/pernas quase direto; os 6 meridianos dos braços (P, IG, C, ID, CS, TR) precisam de rotação para os braços horizontais. Fichas, `merFichaHTML` e `mfDesenharPontos` já prontos — só projeção e arte.
+
 ## ✅ 18/07 — Pontos no Vitruviano (OS v2.5)
 Reflexo da senha "Acender os Pontos" concluído: botão "Pontos" no Corpo Vitruviano (Metafísica) acende Bexiga e Vaso Governador projetados na pose vitruviana de costas (150 pontos clicáveis), cada ponto abrindo a mesma ficha trilíngue da Clínica (`merFichaHTML`, agora compartilhada entre Anatomia e Vitruviano). Projeção por região (cabeça/tronco/pernas) com escala que acompanha a convergência das pernas vitruvianas.
 
