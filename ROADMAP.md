@@ -35,6 +35,9 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 - **FEITO (16/07, OS v1.1–v1.2):** coluna do esqueleto clicável do Montgomery OS ligada à MESMA raiz `QUIROPRAXIA_REF` — vértebra clicável (C1–Cóccix) com inervação, sintomas e ajustes da apostila; camada autonômica (Simpático/Parassimpático/Cérebro-Espinhal) por vértebra com sintomas do quadro IBRAQUI; e chip clicável que liga a vértebra ao Elemento pelo órgão inervado, acendendo os 5 Elementos na Metafísica. Princípio cumprido: uma raiz, muitos reflexos — sem duplicar dados.
 
+## ✅ 18/07 — Pontos no Vitruviano (OS v2.5)
+Reflexo da senha "Acender os Pontos" concluído: botão "Pontos" no Corpo Vitruviano (Metafísica) acende Bexiga e Vaso Governador projetados na pose vitruviana de costas (150 pontos clicáveis), cada ponto abrindo a mesma ficha trilíngue da Clínica (`merFichaHTML`, agora compartilhada entre Anatomia e Vitruviano). Projeção por região (cabeça/tronco/pernas) com escala que acompanha a convergência das pernas vitruvianas.
+
 ## ✅ Sprint 14–17/07 — o que entrou no ar
 
 - **Árvore da Vida enriquecida (14–15/07):** Da'at (a Sefirá oculta no abismo), os 22 caminhos com signos/meses/planetas/Tarô, nome hebraico dentro de cada Sefirá (com toggle), glifo planetário, os 4 Mundos e a escada do Nome (יהוה), e a hierarquia celeste de cada Sefirá.
