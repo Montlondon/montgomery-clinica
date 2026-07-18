@@ -988,7 +988,60 @@ tr:hover td{background:rgba(201,168,76,0.05)}
         <svg viewBox="0 0 600 660" style="width:100%;max-width:340px;border-radius:12px;background:radial-gradient(circle at 50% 45%,#0d1a2e 0%,#060b14 100%)">
           <g id="mfCorpoG">
             <!-- o corpo vitruviano de costas (arte gerada na paleta do OS) -->
-            <image href="corpo_vitruviano_costas.jpg" x="29.3" y="28.6" width="541.5" height="541.5" opacity="0.96"/>
+            <image id="mfCostasImg" href="corpo_vitruviano_costas.jpg" x="29.3" y="28.6" width="541.5" height="541.5" opacity="0.96"/>
+            <!-- o corpo vitruviano DE FRENTE — arte vetorial feita à mão na paleta do OS, braços abertos na horizontal -->
+            <g id="mfFrenteG" style="display:none">
+              <defs>
+                <radialGradient id="mfPeleR" cx="0.5" cy="0.35" r="0.85">
+                  <stop offset="0" stop-color="#e0ba82"/><stop offset="1" stop-color="#7d5a33"/>
+                </radialGradient>
+                <linearGradient id="mfPeleL" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#d6ac72"/><stop offset="1" stop-color="#8a6438"/>
+                </linearGradient>
+              </defs>
+              <!-- o eco duplo de Leonardo: braços erguidos e pernas abertas em traço fantasma -->
+              <g stroke="#c9a84c" stroke-width="1.1" fill="none" opacity="0.26" stroke-linecap="round">
+                <path d="M262,192 L126,110 M126,110 l-10,-5 m10,5 l-4,-11"/>
+                <path d="M338,192 L474,110 M474,110 l10,-5 m-10,5 l4,-11"/>
+                <path d="M286,336 L220,510 M220,510 l-8,9 m8,-9 l-14,3"/>
+                <path d="M314,336 L380,510 M380,510 l8,9 m-8,-9 l14,3"/>
+              </g>
+              <g stroke="#e6c68a" stroke-width="1" stroke-linejoin="round" stroke-linecap="round">
+                <!-- cabelo, cabeça e rosto -->
+                <path d="M277,122 C277,100 323,100 323,122 C316,108 284,108 277,122 Z" fill="#54390f" stroke="none"/>
+                <ellipse cx="300" cy="130" rx="22" ry="26" fill="url(#mfPeleR)"/>
+                <g stroke="#4a3418" stroke-width="1.1" fill="none" opacity="0.75">
+                  <path d="M286,122 q5,-3 9,0 M305,122 q5,-3 9,0"/>
+                  <path d="M289,128 q3,2 6,0 M305,128 q3,2 6,0"/>
+                  <path d="M300,132 l0,8 m-3,2 q3,2 6,0"/>
+                  <path d="M294,148 q6,3 12,0"/>
+                </g>
+                <!-- pescoço e tronco -->
+                <path d="M290,150 C290,166 288,176 281,183 L319,183 C312,176 310,166 310,150 Z" fill="url(#mfPeleL)"/>
+                <path d="M282,182 C268,187 256,190 253,195 C250,201 252,209 260,213 L265,215 C267,232 267,250 263,266 C260,284 264,300 271,314 C276,324 282,332 288,338 L300,343 L312,338 C318,332 324,324 329,314 C336,300 340,284 337,266 C333,250 333,232 335,215 L340,213 C348,209 350,201 347,195 C344,190 332,187 318,182 Z" fill="url(#mfPeleR)"/>
+                <g stroke="#5e4423" stroke-width="1" fill="none" opacity="0.5">
+                  <path d="M262,196 C278,192 292,191 299,192 M338,196 C322,192 308,191 301,192"/>
+                  <path d="M266,214 C278,228 294,230 299,226 M334,214 C322,228 306,230 301,226"/>
+                  <path d="M300,196 L300,266 M287,244 H313 M288,258 H312"/>
+                  <path d="M270,292 C280,298 292,302 299,302 M330,292 C320,298 308,302 301,302"/>
+                  <circle cx="300" cy="272" r="2"/>
+                </g>
+                <!-- lado esquerdo da tela: braço aberto e perna — o direito nasce no espelho -->
+                <g id="mfLadoV">
+                  <path d="M256,187 C226,190 192,194 160,198 L118,201 C104,200 92,201 86,205 C81,208 81,212 86,215 C92,218 104,218 118,216 L160,214 C196,212 230,212 260,214 C253,207 251,197 256,187 Z" fill="url(#mfPeleL)"/>
+                  <g stroke="#5e4423" stroke-width="0.9" fill="none" opacity="0.5">
+                    <path d="M96,206 l-9,-2 M96,210 l-11,0 M96,214 l-9,2"/>
+                    <path d="M160,200 L160,213 M210,199 C216,205 216,209 210,213"/>
+                  </g>
+                  <path d="M288,338 C280,356 277,378 279,398 C280,410 281,418 284,426 C288,442 288,462 285,476 C284,490 284,498 285,506 L277,514 C271,519 273,523 283,523 L296,523 L296,508 C294,470 295,430 294,392 L297,344 Z" fill="url(#mfPeleR)"/>
+                  <g stroke="#5e4423" stroke-width="0.9" fill="none" opacity="0.5">
+                    <circle cx="287" cy="416" r="4"/>
+                    <path d="M287,432 L286,470"/>
+                  </g>
+                </g>
+                <use href="#mfLadoV" transform="translate(600,0) scale(-1,1)"/>
+              </g>
+            </g>
             <!-- geometria por cima do fundo escuro da imagem -->
             <g pointer-events="none">
               <ellipse cx="300" cy="315" rx="292" ry="308" fill="none" stroke="#c9a84c" stroke-width="0.5" opacity="0.22"/>
@@ -1003,8 +1056,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
               <circle cx="300" cy="272" r="3" fill="#c9a84c" opacity="0.85"/>
               <circle cx="300" cy="320" r="2.5" fill="#3d7db8" opacity="0.85"/>
             </g>
-            <!-- zonas clicáveis invisíveis: a cor do elemento acende no toque -->
-            <g stroke-width="1.4">
+            <!-- zonas clicáveis invisíveis: a cor do elemento acende no toque (espelham na vista de frente: o braço esquerdo do corpo vai pra direita da tela) -->
+            <g id="mfZonasG" stroke-width="1.4">
             <g class="mfZona" data-el="Fogo" onclick="mfElemento('Fogo')">
               <circle cx="300" cy="129" r="27" fill="#e06a5a" stroke="#e06a5a"/>
             </g>
@@ -1367,8 +1420,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v2.5';
-const APP_VERSION_NOTA='os pontos no Vitruviano: Bexiga e Vaso Governador acesos no corpo de costas, cada ponto abrindo a ficha trilíngue';
+const APP_VERSION='v2.6';
+const APP_VERSION_NOTA='a Frente do Vitruviano: arte de frente na paleta do OS, braços abertos, e os 12 meridianos da frente acesos na pose vitruviana';
 function carimbarVersao(){
   const linha='Montgomery OS · Fase 2 — Corpo · '+APP_VERSION+' ('+APP_VERSION_NOTA+')';
   const rod=document.getElementById('appVersion');if(rod)rod.textContent=linha;
@@ -2841,12 +2894,21 @@ function mfRenderLabels(){
     mfSelo('Terra',costas?538:62,209,31)+
     mfSelo('Água',costas?170:430,556,31)+
     mfSelo('Metal',costas?430:170,556,31);
-  const corpo=document.getElementById('mfCorpoG');
-  if(corpo)corpo.setAttribute('transform',costas?'':'translate(600,0) scale(-1,1)');
+  // De frente não há mais espelho da foto: a arte de frente entra no lugar do jpg de costas.
+  // Só as zonas dos elementos espelham — o braço esquerdo do corpo passa pra direita da tela.
+  const zonas=document.getElementById('mfZonasG');
+  if(zonas)zonas.setAttribute('transform',costas?'':'translate(600,0) scale(-1,1)');
+  const img=document.getElementById('mfCostasImg');if(img)img.style.display=costas?'':'none';
+  const fr=document.getElementById('mfFrenteG');if(fr)fr.style.display=costas?'none':'';
   const txt=document.getElementById('mfVistaTxt');
-  if(txt)txt.textContent=costas?'Visão do terapeuta — corpo DE COSTAS: o lado do desenho é o lado real.':'Corpo deitado de frente (decúbito dorsal) — imagem espelhada.';
+  if(txt)txt.textContent=costas?'Visão do terapeuta — corpo DE COSTAS: o lado do desenho é o lado real.':'Corpo DE FRENTE — o lado esquerdo do desenho é o lado DIREITO do corpo.';
 }
-function mfToggleVista(){mfVista=mfVista==='costas'?'frente':'costas';mfRenderLabels();}
+function mfToggleVista(){
+  mfVista=mfVista==='costas'?'frente':'costas';
+  mfRenderLabels();
+  const g=document.getElementById('mfPontosG');
+  if(g&&g.style.display!=='none'){mfDesenharPontos();mfPontosPainel();}
+}
 function mfToggleArvore(btn){
   const a=document.getElementById('mfArvoreG');if(!a)return;
   const ligada=a.style.display!=='none';
@@ -2857,6 +2919,13 @@ function mfToggleArvore(btn){
 // Reusa MER_TRAJETOS_COSTAS (corpo anatômico 200x430) e projeta no corpo do jpg (SVG 600x660).
 // A pose muda as proporções por região: a cabeça vitruviana é menor, o tronco e as pernas mais largos.
 function mfPontoXY(x,y){
+  if(x>100){const p=mfPontoXY(200-x,y);return [604-p[0],p[1]];} // simetria: resolve no lado esquerdo e espelha
+  if(x<77&&y>64&&y<240){
+    // BRAÇO: no corpo anatômico ele desce colado ao tronco (eixo ombro→mão (78,70)→(57,228));
+    // no vitruviano abre na horizontal (eixo (253,193)→(103,208)). t corre ao longo do braço, d é o desvio lateral.
+    const t=((x-78)*-21+(y-70)*158)/25405, d=((x-78)*158+(y-70)*21)/159.4;
+    return [250-147*t+d*0.11, 193+15*t+d*1.09];
+  }
   let sx,vy;
   if(y<=64){sx=0.55;vy=108+(y-5)*72/59;}
   else if(y<=197){sx=1.05;vy=182+(y-64)*116/133;}
@@ -2868,8 +2937,11 @@ function mfDesenharPontos(){
   if(!g||!M)return;
   g.innerHTML='';
   const NS='http://www.w3.org/2000/svg';
-  ['B','VG'].forEach(sig=>{
-    const tr=MER_TRAJETOS_COSTAS[sig];if(!tr)return;
+  // De costas: Bexiga + Vaso Governador. De frente: os 12 meridianos da frente + o rosto (B1-B2, VG21-28).
+  const costas=mfVista==='costas';
+  const TAB=costas?MER_TRAJETOS_COSTAS:MER_TRAJETOS;
+  (costas?['B','VG']:Object.keys(MER_TRAJETOS)).forEach(sig=>{
+    const tr=TAB[sig];if(!tr)return;
     const cor=M[sig].cor,n0=tr.n0||1;
     const lados=tr.bilateral?[false,true]:[false];
     lados.forEach(esp=>{
@@ -2904,11 +2976,12 @@ function mfTogglePontos(btn){
   const ligada=g.style.display!=='none';
   g.style.display=ligada?'none':'';
   if(btn)btn.classList.toggle('ativo',!ligada);
-  if(!ligada){
-    mfDesenharPontos();
-    document.getElementById('mfCorpoPainel').innerHTML=
-      '<div class="vazio">Os pontos das costas acesos no Vitruviano: a <b>Bexiga</b> (a linha mais longa do corpo, dupla, de Água) e o <b>Vaso Governador</b> subindo a coluna. Clique num ponto para abrir a ficha trilíngue — a mesma da Clínica.</div>';
-  }
+  if(!ligada){mfDesenharPontos();mfPontosPainel();}
+}
+function mfPontosPainel(){
+  document.getElementById('mfCorpoPainel').innerHTML='<div class="vazio">'+(mfVista==='costas'
+    ?'Os pontos das costas acesos no Vitruviano: a <b>Bexiga</b> (a linha mais longa do corpo, dupla, de Água) e o <b>Vaso Governador</b> subindo a coluna. Clique num ponto para abrir a ficha trilíngue — a mesma da Clínica.'
+    :'Os meridianos da frente acesos no Vitruviano de braços abertos: Pulmão e Coração correndo pelos braços, Estômago e Baço-Pâncreas descendo o tronco, o Vaso Concepção na linha do meio e o rosto com B1-B2 e VG21-28. Clique num ponto para abrir a ficha trilíngue — a mesma da Clínica.')+'</div>';
 }
 function mfFichaPonto(sig,n){
   document.querySelectorAll('#mfPontosG .mfPt').forEach(c=>
@@ -2925,7 +2998,7 @@ function mfElemento(el){
     '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">'+
     '<span style="width:16px;height:16px;border-radius:50%;background:'+t.cor+';display:inline-block;box-shadow:0 0 10px '+t.cor+'"></span>'+
     '<h2 style="font-family:Lora,serif;font-size:1.05rem;color:var(--azul);margin:0">'+el+'</h2>'+
-    '<span style="font-size:0.72rem;color:var(--cinza)">· '+t.zona+' (de costas)</span></div>'+
+    '<span style="font-size:0.72rem;color:var(--cinza)">· '+t.zona+' (de '+mfVista+')</span></div>'+
     linha('Órgão (yin) / Víscera (yang)',t.orgao+' / '+t.viscera)+
     linha('Emoção em desequilíbrio',t.emocao)+
     linha('Virtude em equilíbrio',t.virtude)+
