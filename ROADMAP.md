@@ -35,6 +35,9 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 - **FEITO (16/07, OS v1.1–v1.2):** coluna do esqueleto clicável do Montgomery OS ligada à MESMA raiz `QUIROPRAXIA_REF` — vértebra clicável (C1–Cóccix) com inervação, sintomas e ajustes da apostila; camada autonômica (Simpático/Parassimpático/Cérebro-Espinhal) por vértebra com sintomas do quadro IBRAQUI; e chip clicável que liga a vértebra ao Elemento pelo órgão inervado, acendendo os 5 Elementos na Metafísica. Princípio cumprido: uma raiz, muitos reflexos — sem duplicar dados.
 
+## ✅ 18/07 — Senha "Acender a Árvore" (OS v2.7)
+As 10 Sefirot viraram dado vivo no Vitruviano da Metafísica: esferas renderizadas do dado `SEFIROT` (cor por pilar, número dentro), clicáveis — ficha no painel do corpo (corpo/Adam Kadmon, planeta, virtude/vício, cor, ponte MTC, frase) com chip do elemento-elo que acende a teia e salto "ver no Mapa Energético" (abre a Sefirá lá). Painel de cada elemento ganhou a linha inversa "Sefirot deste elemento". Digitar uma Sefirá em "Acender a teia" agora também liga a camada da Árvore e destaca a esfera. Camada 1 da visão em camadas de 13/07 cumprida — a cascata Sefirá → Elemento → Órgão → Meridiano → Ponto está inteira.
+
 ## Senha "Acender a Frente do Vitruviano" (registrada 18/07)
 Próxima janela: meridianos da frente no Corpo Vitruviano do OS. Vela 1 = arte irmã DE FRENTE (o "Inverter visão" hoje só espelha o jpg de costas) na mesma paleta. Vela 2 = calibrar coordenadas via `mfPontoXY` — tronco/pernas quase direto; os 6 meridianos dos braços (P, IG, C, ID, CS, TR) precisam de rotação para os braços horizontais. Fichas, `merFichaHTML` e `mfDesenharPontos` já prontos — só projeção e arte.
 
