@@ -1099,6 +1099,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
             <button class="btn" style="padding:4px 10px;font-size:0.7rem" onclick="mfToggleVista()">Inverter visão</button>
           </span>
         </div>
+        <!-- chips dos meridianos: você escolhe o que acende no Vitruviano (Todos = tudo aceso) -->
+        <div id="mfMerChips" style="display:none;flex-wrap:wrap;gap:4px;margin-top:6px"></div>
       </div>
       <div style="flex:1;min-width:280px" id="mfCorpoPainel">
         <div class="vazio">Clique numa região do corpo.<br><br>Visto de costas, o lado do desenho é o lado real do corpo — sem espelhamento. Fogo na cabeça; Madeira no braço esquerdo (a energia yang da manhã entra por ali); Terra no braço direito; Metal na perna direita; Água na perna esquerda.</div>
@@ -1470,8 +1472,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v3.1';
-const APP_VERSION_NOTA='o Vitruviano de frente refeito: o corpo azul raio-X da Anatomia projetado na pose de braços abertos — mesma matemática dos pontos, o contorno e os meridianos agora casam';
+const APP_VERSION='v3.2';
+const APP_VERSION_NOTA='chips de meridianos no Vitruviano: você escolhe o que acende — Todos, um só, ou a combinação que a sessão pedir';
 function carimbarVersao(){
   const linha='Montgomery OS · Fase 2 — Corpo · '+APP_VERSION+' ('+APP_VERSION_NOTA+')';
   const rod=document.getElementById('appVersion');if(rod)rod.textContent=linha;
@@ -3211,7 +3213,7 @@ function mfToggleVista(){
   mfVista=mfVista==='costas'?'frente':'costas';
   mfRenderLabels();
   const g=document.getElementById('mfPontosG');
-  if(g&&g.style.display!=='none'){mfDesenharPontos();mfPontosPainel();}
+  if(g&&g.style.display!=='none'){mfDesenharPontos();mfPontosPainel();mfMerChips();}
 }
 function mfToggleArvore(btn){
   const a=document.getElementById('mfArvoreG');if(!a)return;
@@ -3298,6 +3300,7 @@ function mfDesenharPontos(){
   const TAB=costas?MER_TRAJETOS_COSTAS:MER_TRAJETOS;
   (costas?['B','VG']:Object.keys(MER_TRAJETOS)).forEach(sig=>{
     const tr=TAB[sig];if(!tr)return;
+    if(mfMerFiltro.size&&!mfMerFiltro.has(sig))return; // filtro dos chips: vazio = todos acesos
     const cor=M[sig].cor,n0=tr.n0||1;
     const lados=tr.bilateral?[false,true]:[false];
     lados.forEach(esp=>{
@@ -3333,6 +3336,34 @@ function mfTogglePontos(btn){
   g.style.display=ligada?'none':'';
   if(btn)btn.classList.toggle('ativo',!ligada);
   if(!ligada){mfDesenharPontos();mfPontosPainel();}
+  mfMerChips();
+}
+// Chips do Vitruviano: escolher qual meridiano acende. Conjunto vazio = todos.
+let mfMerFiltro=new Set();
+function mfMerChips(){
+  const box=document.getElementById('mfMerChips');const M=merDados();if(!box||!M)return;
+  const g=document.getElementById('mfPontosG');
+  const ligado=g&&g.style.display!=='none';
+  box.style.display=ligado?'flex':'none';
+  if(!ligado)return;
+  box.innerHTML='';
+  const sigs=mfVista==='costas'?['B','VG']:Object.keys(MER_TRAJETOS);
+  const chip=(txt,cor,on,titulo,fn)=>{
+    const b=document.createElement('button');
+    b.textContent=txt;if(titulo)b.title=titulo;
+    b.style.cssText='font-size:0.62rem;padding:3px 8px;border-radius:20px;cursor:pointer'+
+      ';border:1px solid '+cor+';background:'+(on?cor:'transparent')+
+      ';color:'+(on?'#fff':cor)+';transition:all 0.2s';
+    b.onclick=fn;box.appendChild(b);
+  };
+  chip('Todos','#c9a84c',!mfMerFiltro.size,'Acende todos os meridianos da vista',
+    ()=>{mfMerFiltro.clear();mfDesenharPontos();mfMerChips();});
+  sigs.forEach(sig=>{
+    const m=M[sig];if(!m)return;
+    chip(sig,m.cor,mfMerFiltro.has(sig),m.nome+' — '+m.elemento+' ('+m.total+' pontos)',
+      ()=>{if(mfMerFiltro.has(sig))mfMerFiltro.delete(sig);else mfMerFiltro.add(sig);
+           mfDesenharPontos();mfMerChips();});
+  });
 }
 function mfPontosPainel(){
   document.getElementById('mfCorpoPainel').innerHTML='<div class="vazio">'+(mfVista==='costas'
