@@ -584,7 +584,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   <div class="sidebar-footer">
     Montgomery Magalhães<br>Saúde Integrativa<br>
     Itambacuri - MG<br>
-    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v2.0 &middot; 17/07</span>
+    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v2.1 &middot; 19/07</span>
   </div>
 </aside>
 
@@ -1673,9 +1673,37 @@ async function supaReq(method,table,body=null,params=''){
 // Cache local para performance
 let _cache={};
 
+// ===== LAZY-LOAD DE PACIENTES (alívio do egress) =====
+// O que estourava a cota do Supabase era ler os ~4000 pacientes INTEIROS a
+// cada abertura/sincronização — e cada paciente carrega uma FOTO (base64) e às
+// vezes vários EXAMES (imagens base64). Isso são megabytes por paciente.
+// Solução: a LISTA pede ao servidor só os campos leves (texto), NUNCA a foto
+// nem os exames. A foto/exames de UM paciente só são baixados quando você abre
+// ou edita a ficha dele (verPac/editarPac). Os campos pesados ficam de fora.
+const PAC_LIGHT_KEYS=['id','dataCadastro','triagem','nome','email','telefone','nascimento','genero','religiao','profissao','estadoCivil','endereco','cidade','estado','cep','contatoEmerg','telEmerg','queixa','tempoQueixa','intensidade','melhora','piora','tratAnterior','doencas','medicamentos','alergias','cirurgias','histFamiliar','gestante','semanas','sono','horasSono','alimentacao','agua','ativFisica','tipoAtiv','tabagismo','alcool','estresse','obsHabitos','lingua','pulso','meridianos','diagMTC','pontos','obsAcup','postura','regiao','vertebras','amplitude','testes','ajustes','obsQuiro','demandaPsi','estadoEmocional','histEmocional','relacoes','notasPsi','encamPsi','fitoterapia','contraFito','seitaiAval','seitaiTec','obsGeral'];
+// id e triagem preservam o tipo nativo (número/booleano) com ->; o resto vem como texto com ->>
+const PAC_SELECT=PAC_LIGHT_KEYS.map(k=>(k==='id'||k==='triagem'||k==='semanas')?`${k}:dados->${k}`:`${k}:dados->>${k}`).join(',');
+
+// Baixa a ficha COMPLETA de um paciente (com foto e exames) sob demanda e
+// funde no cache leve, pra não baixar de novo na mesma sessão.
+async function fetchPacFull(id){
+  const cached=gD('pacientes').find(x=>String(x.id)===String(id));
+  if(cached&&cached._full)return cached;
+  const r=await supaReq('GET','pacientes',null,`?user_id=eq.montgomery&dados->>id=eq.${id}&select=dados&limit=1`);
+  const full=(r&&r[0]&&r[0].dados)?r[0].dados:null;
+  if(full){
+    if(cached){Object.assign(cached,full);cached._full=true;return cached;}
+    full._full=true;return full;
+  }
+  return cached||null;
+}
+
 async function dbGet(tabela,forcar=false){
   if(_cache[tabela]&&!forcar)return _cache[tabela];
   const LIMIT=1000;
+  const ehPac=(tabela==='pacientes');
+  const selExtra=ehPac?`&select=${PAC_SELECT}`:'';
+  const mapRow=ehPac?(row=>row):(row=>row.dados);
   // 1ª página já pede a contagem total (Content-Range) pra poder buscar o
   // resto das páginas em paralelo, em vez de uma atrás da outra - é o que
   // deixava o carregamento lento em tabelas grandes (pacientes: 4 a 5
@@ -1683,11 +1711,11 @@ async function dbGet(tabela,forcar=false){
   let primeiraPagina=[],total=null;
   try{
     const _tok0=await supaAuthToken();
-    const r0=await fetch(`${SUPA_URL}/rest/v1/${tabela}?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=0`,{
+    const r0=await fetch(`${SUPA_URL}/rest/v1/${tabela}?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=0${selExtra}`,{
       headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+_tok0,'Prefer':'count=exact'}
     });
     if(r0.ok){
-      primeiraPagina=(await r0.json()).map(row=>row.dados);
+      primeiraPagina=(await r0.json()).map(mapRow);
       const cr=r0.headers.get('content-range'); // formato "0-999/4321"
       if(cr&&cr.includes('/')){const n=parseInt(cr.split('/')[1]);if(!isNaN(n))total=n;}
     }
@@ -1697,7 +1725,7 @@ async function dbGet(tabela,forcar=false){
     const offsets=[];
     for(let off=LIMIT;off<total;off+=LIMIT)offsets.push(off);
     const paginas=await Promise.all(offsets.map(off=>
-      supaReq('GET',tabela,null,`?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=${off}`).then(r=>(r||[]).map(row=>row.dados))
+      supaReq('GET',tabela,null,`?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=${off}${selExtra}`).then(r=>(r||[]).map(mapRow))
     ));
     paginas.forEach(p=>{todos=todos.concat(p);});
   }else if(total===null&&primeiraPagina.length===LIMIT){
@@ -1705,8 +1733,8 @@ async function dbGet(tabela,forcar=false){
     // mantém a paginação sequencial de antes, só pra esse caso raro.
     let offset=LIMIT;
     while(true){
-      const r=await supaReq('GET',tabela,null,`?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=${offset}`);
-      const lote=(r||[]).map(row=>row.dados);
+      const r=await supaReq('GET',tabela,null,`?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=${offset}${selExtra}`);
+      const lote=(r||[]).map(mapRow);
       todos=todos.concat(lote);
       if(lote.length<LIMIT)break;
       offset+=LIMIT;
@@ -2160,6 +2188,8 @@ function preencherForm(p){
 async function salvarPac(e){
   e.preventDefault();
   const d=coletarDados();d.id=editId||(Date.now()+Math.random());d.dataCadastro=new Date().toLocaleDateString('pt-BR');d.foto=fotoB64;d.exames=exTemp;
+  // _full só existe em memória (marca que foto/exames já estão carregados); nunca vai pro banco
+  const dSave={...d};delete dSave._full;d._full=true;
   const pacs=gD('pacientes');
   if(editId){
     // Atualizar: editar só este paciente no Supabase
@@ -2167,13 +2197,13 @@ async function salvarPac(e){
     if(idx>=0)pacs[idx]=d;else pacs.push(d);
     _cache['pacientes']=pacs;
     await supaReq('DELETE','pacientes',null,`?dados->>id=eq.${editId}`);
-    await supaReq('POST','pacientes',[{'user_id':'montgomery','dados':d}]);
+    await supaReq('POST','pacientes',[{'user_id':'montgomery','dados':dSave}]);
     toast('Paciente atualizado!',null,"ok");
   } else {
     // Novo: apenas adicionar, sem reescrever a tabela inteira
     pacs.push(d);
     _cache['pacientes']=pacs;
-    await supaReq('POST','pacientes',[{'user_id':'montgomery','dados':d}]);
+    await supaReq('POST','pacientes',[{'user_id':'montgomery','dados':dSave}]);
     toast('Paciente cadastrado!',null,"ok");
   }
   localStorage.removeItem('rascunho');limparForm();
@@ -2215,8 +2245,9 @@ async function delPac(id){
 }
 
 // ===== VER PACIENTE =====
-function verPac(id){
-  const p=gD('pacientes').find(x=>String(x.id)===String(id));if(!p)return;
+async function verPac(id){
+  // Ficha ao clicar: baixa foto + exames deste paciente sob demanda (lazy-load)
+  const p=await fetchPacFull(id);if(!p)return;
   const fH=p.foto?`<img src="${p.foto}">`:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:55%;height:55%;opacity:.55"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6"/></svg>';
   const wa=waUrl(p.telefone);
   const c=(l,val)=>val?`<div class="pi"><strong>${l}</strong><span>${val}</span></div>`:'';
@@ -2245,8 +2276,9 @@ function verPac(id){
   document.getElementById('modP').classList.add('show');
 }
 function fMod(){document.getElementById('modP').classList.remove('show');}
-function editarPac(id){
-  const p=gD('pacientes').find(x=>String(x.id)===String(id));if(!p)return;
+async function editarPac(id){
+  // Ao editar, baixa a ficha completa (foto + exames) deste paciente sob demanda
+  const p=await fetchPacFull(id);if(!p)return;
   editId=p.id;go('novo-paciente',null);
   document.getElementById('fTit').innerHTML=EDIT_ICON_HTML+' '+escHtml(p.nome);
   setTimeout(()=>{
@@ -5451,10 +5483,35 @@ function atuDash(){
 }
 
 // ===== BACKUP =====
-function expJSON(){
-  const d={versao:'5.0',clinica:'Montgomery Magalhães',data:new Date().toISOString(),pacientes:gD('pacientes'),sessoes:gD('sessoes'),config:getCfg()};
+// Busca TODOS os pacientes COMPLETOS (com foto e exames) direto do banco.
+// Usado só no backup — é uma ação pontual e explícita, então baixar tudo aqui
+// é intencional (diferente da lista do dia a dia, que é leve pra poupar cota).
+async function dbGetPacientesFull(){
+  const LIMIT=1000;let todos=[],total=null;
+  const _tok=await supaAuthToken();
+  const r0=await fetch(`${SUPA_URL}/rest/v1/pacientes?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=0&select=dados`,{
+    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+_tok,'Prefer':'count=exact'}
+  });
+  if(r0.ok){
+    todos=(await r0.json()).map(row=>row.dados);
+    const cr=r0.headers.get('content-range');
+    if(cr&&cr.includes('/')){const n=parseInt(cr.split('/')[1]);if(!isNaN(n))total=n;}
+  }
+  if(total!==null&&total>todos.length){
+    const offs=[];for(let off=LIMIT;off<total;off+=LIMIT)offs.push(off);
+    const pags=await Promise.all(offs.map(off=>
+      supaReq('GET','pacientes',null,`?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=${off}&select=dados`).then(r=>(r||[]).map(row=>row.dados))
+    ));
+    pags.forEach(p=>{todos=todos.concat(p);});
+  }
+  return todos;
+}
+async function expJSON(){
+  toast('Preparando backup completo (fotos e exames)…','#1565C0',"upload");
+  const pacsFull=await dbGetPacientesFull();
+  const d={versao:'5.0',clinica:'Montgomery Magalhães',data:new Date().toISOString(),pacientes:pacsFull,sessoes:gD('sessoes'),config:getCfg()};
   dl(JSON.stringify(d,null,2),'montgomery_backup_'+new Date().toISOString().slice(0,10)+'.json','application/json');
-  toast('Backup exportado!',null,"upload");
+  toast('Backup completo exportado! ('+pacsFull.length+' pacientes)',null,"ok");
 }
 function expCSVP(){
   const p=gD('pacientes');if(!p.length){toast('Sem pacientes','#EF6C00',"warn");return;}
@@ -5504,7 +5561,7 @@ function atuInfoSys(){
   const icoSave='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.3 2.3L16 9.5"/></svg>';
   const icoClock='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>';
   document.getElementById('infoSys').innerHTML=`
-    ${icoPac} Pacientes: <strong>${p.length}</strong> (${p.filter(x=>x.foto).length} com foto)<br>
+    ${icoPac} Pacientes: <strong>${p.length}</strong> (${p.filter(x=>x.triagem).length} novos p/ revisar)<br>
     ${icoCal} Sessões registradas: <strong>${s.length}</strong><br>
     ${icoMoney} Total recebido: <strong>${fm(rec)}</strong><br>
     ${icoSave} Tamanho dos dados: <strong>${tam.toFixed(1)} KB</strong> / 5120 KB disponíveis<br>
