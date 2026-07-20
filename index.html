@@ -326,8 +326,7 @@ tr:hover td{background:#EEF2F7}
 /* ===== LOGIN ===== */
 #loginOverlay{position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#0d1b2a 0%,#1a2e4a 50%,#0d1b2a 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:0}
 #loginBox{background:rgba(255,255,255,0.04);border:1px solid rgba(255,215,100,0.2);border-radius:20px;padding:48px 40px 40px;max-width:380px;width:90%;text-align:center;backdrop-filter:blur(20px);box-shadow:0 24px 80px rgba(0,0,0,0.5)}
-#loginBox .login-logo{width:250px;max-width:82%;margin:0 auto 22px;border-radius:16px;background:#fff;overflow:hidden;padding:16px 16px 12px;box-shadow:0 10px 34px rgba(0,0,0,0.3)}
-#loginBox .login-logo img{display:block;width:100%;height:auto}
+#loginBox .login-mark{font-family:'Lora',serif;font-size:2.4rem;letter-spacing:6px;color:#f0d080;margin:0 0 14px;line-height:1;text-shadow:0 2px 18px rgba(240,208,128,0.25);opacity:.92}
 #loginBox h2{font-family:'Lora',serif;color:#f0d080;font-size:1.3rem;margin:0 0 4px}
 #loginBox p{color:rgba(255,255,255,0.5);font-size:0.8rem;margin:0 0 32px}
 .login-btn{width:100%;padding:14px 20px;border-radius:12px;border:none;cursor:pointer;font-size:0.9rem;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;margin-bottom:12px}
@@ -349,9 +348,7 @@ tr:hover td{background:#EEF2F7}
 <!-- ===== TELA DE LOGIN ===== -->
 <div id="loginOverlay">
   <div id="loginBox">
-    <div class="login-logo">
-      <img id="loginLogoImg" src="13_Midia/Logos/montgomery-clinica.jpg" alt="Montgomery Terapias Integradas">
-    </div>
+    <div class="login-mark">五行</div>
     <h2>Montgomery Saúde Integrativa</h2>
     <p>Acesso restrito — área clínica</p>
     <button class="login-btn login-btn-bio hidden" id="btnBio" onclick="loginBiometria()">
