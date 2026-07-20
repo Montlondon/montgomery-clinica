@@ -581,7 +581,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   <div class="sidebar-footer">
     Montgomery Magalhães<br>Saúde Integrativa<br>
     Itambacuri - MG<br>
-    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v2.1 &middot; 19/07</span>
+    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v2.2 &middot; 19/07</span>
   </div>
 </aside>
 
@@ -761,12 +761,15 @@ window.addEventListener('DOMContentLoaded',()=>{
   <div class="page-header"><h1><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6"/></svg></span>Pacientes</h1><button class="btn btn-pri btn-sm" onclick="go('novo-paciente',null)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>Novo</button></div>
   <div class="tw">
     <div class="ttb">
-      <div class="sw"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><input type="text" id="busP" placeholder="Buscar nome, telefone..." oninput="filtrarP()"></div>
+      <div class="sw"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><input type="text" id="busP" placeholder="Buscar nome, telefone..." oninput="filtrarP()" onkeydown="if(event.key==='Enter')buscaGlobalPac()"></div>
       <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <button class="btn btn-sec btn-sm" onclick="buscaGlobalPac()" title="Procurar no banco inteiro, incluindo arquivados"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>Buscar em todos</button>
         <button class="btn btn-sec btn-sm" onclick="ordP('az')">A→Z</button>
         <button class="btn btn-sec btn-sm" onclick="ordP('za')">Z→A</button>
         <button class="btn btn-sec btn-sm" onclick="ordP('novo')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;vertical-align:-3px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></button>
-        <button class="btn btn-sec btn-sm" id="btnFiltroTriagem" onclick="toggleFiltroTriagem()">🆕 Pendentes de triagem (<span id="cntTriagem">0</span>)</button>
+        <button class="btn btn-sec btn-sm" id="btnFiltroTriagem" onclick="toggleFiltroTriagem()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="3.2"/></svg></span>Pendentes de triagem (<span id="cntTriagem">0</span>)</button>
+        <button class="btn btn-sec btn-sm" id="btnVerArq" onclick="toggleVerArquivados()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M10 12h4"/></svg></span>Ver arquivados</button>
+        <span id="pacModoArq" style="display:none;align-items:center;gap:5px;background:#ECEFF1;color:#546E7A;border-radius:5px;padding:2px 8px;font-size:11px;font-weight:700">ARQUIVADOS</span>
         <span style="font-size:12px;color:var(--txt-l)" id="cntP">0</span>
       </div>
     </div>
@@ -1700,6 +1703,9 @@ async function dbGet(tabela,forcar=false){
   const LIMIT=1000;
   const ehPac=(tabela==='pacientes');
   const selExtra=ehPac?`&select=${PAC_SELECT}`:'';
+  // Só carrega pacientes ATIVOS (não arquivados). Os arquivados nem chegam pela
+  // rede no dia a dia — é o que deixa a lista leve mesmo com milhares no banco.
+  const arqFiltro=ehPac?'&or=(dados->>arquivado.is.null,dados->>arquivado.eq.false)':'';
   const mapRow=ehPac?(row=>row):(row=>row.dados);
   // 1ª página já pede a contagem total (Content-Range) pra poder buscar o
   // resto das páginas em paralelo, em vez de uma atrás da outra - é o que
@@ -1708,7 +1714,7 @@ async function dbGet(tabela,forcar=false){
   let primeiraPagina=[],total=null;
   try{
     const _tok0=await supaAuthToken();
-    const r0=await fetch(`${SUPA_URL}/rest/v1/${tabela}?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=0${selExtra}`,{
+    const r0=await fetch(`${SUPA_URL}/rest/v1/${tabela}?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=0${selExtra}${arqFiltro}`,{
       headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+_tok0,'Prefer':'count=exact'}
     });
     if(r0.ok){
@@ -1722,7 +1728,7 @@ async function dbGet(tabela,forcar=false){
     const offsets=[];
     for(let off=LIMIT;off<total;off+=LIMIT)offsets.push(off);
     const paginas=await Promise.all(offsets.map(off=>
-      supaReq('GET',tabela,null,`?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=${off}${selExtra}`).then(r=>(r||[]).map(mapRow))
+      supaReq('GET',tabela,null,`?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=${off}${selExtra}${arqFiltro}`).then(r=>(r||[]).map(mapRow))
     ));
     paginas.forEach(p=>{todos=todos.concat(p);});
   }else if(total===null&&primeiraPagina.length===LIMIT){
@@ -1730,7 +1736,7 @@ async function dbGet(tabela,forcar=false){
     // mantém a paginação sequencial de antes, só pra esse caso raro.
     let offset=LIMIT;
     while(true){
-      const r=await supaReq('GET',tabela,null,`?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=${offset}${selExtra}`);
+      const r=await supaReq('GET',tabela,null,`?user_id=eq.montgomery&order=id.asc&limit=${LIMIT}&offset=${offset}${selExtra}${arqFiltro}`);
       const lote=(r||[]).map(mapRow);
       todos=todos.concat(lote);
       if(lote.length<LIMIT)break;
@@ -1878,6 +1884,145 @@ function showLoading(show){
   el.style.display=show?'flex':'none';
 }
 let fotoB64='',editId=null,exTemp=[],ordP_='az',semOff_=0;
+
+// ===== ARQUIVAR / TRIAGEM =====
+// Arquivar não apaga nada — só marca dados.arquivado=true, e o arquivado some
+// da lista e do dashboard (nem carrega). "Preciso da Maria? Busco e desarquivo."
+let _verArquivados=false;   // false = vendo ativos; true = vendo arquivados
+let _cacheArq=null;         // cache separado dos arquivados (carregado sob demanda)
+
+// Chama a função do banco que vira o campo arquivado só das linhas escolhidas,
+// SEM baixar nem reescrever foto/exames (leve). ids vazio/nulo = todos os ativos.
+async function rpcArquivar(ids,valor){
+  const token=await supaAuthToken();
+  const res=await fetch(`${SUPA_URL}/rest/v1/rpc/arquivar_pacientes`,{
+    method:'POST',
+    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json'},
+    body:JSON.stringify({p_ids:(ids&&ids.length)?ids.map(String):null,p_valor:!!valor})
+  });
+  if(!res.ok){console.error('Erro ao arquivar:',await res.text());return null;}
+  return res.json(); // devolve quantas linhas mudaram
+}
+
+// Carrega a lista LEVE dos arquivados (sob demanda, só quando pede pra ver)
+async function carregarArquivados(forcar){
+  if(_cacheArq&&!forcar)return _cacheArq;
+  _cacheArq=(await supaReq('GET','pacientes',null,`?user_id=eq.montgomery&order=id.asc&dados->>arquivado=eq.true&select=${PAC_SELECT}`))||[];
+  return _cacheArq;
+}
+
+// Fonte da lista conforme o modo (ativos x arquivados)
+function pacsAtual(){return _verArquivados?(_cacheArq||[]):gD('pacientes');}
+
+async function toggleVerArquivados(){
+  _verArquivados=!_verArquivados;
+  _pacPag=0;
+  const btn=document.getElementById('btnVerArq');
+  if(_verArquivados){
+    if(btn){btn.disabled=true;btn.textContent='Carregando…';}
+    await carregarArquivados();
+    if(btn)btn.disabled=false;
+  }
+  atualizarBotaoArq();
+  document.getElementById('busP').value='';
+  renderP();
+}
+function atualizarBotaoArq(){
+  const btn=document.getElementById('btnVerArq');
+  if(btn){btn.classList.toggle('btn-pri',_verArquivados);btn.innerHTML=_verArquivados?ICO_ARQ+' Ver ativos':ICO_ARQ+' Ver arquivados';}
+  const h=document.getElementById('pacModoArq');
+  if(h)h.style.display=_verArquivados?'inline-flex':'none';
+}
+
+// Arquivar / desarquivar os selecionados (checkboxes)
+async function arquivarSel(valor){
+  const ids=[];document.querySelectorAll('.pacCk:checked').forEach(c=>ids.push(c.dataset.id));
+  if(!ids.length){toast('Selecione ao menos um paciente','#EF6C00',"warn");return;}
+  const n=await rpcArquivar(ids,valor);
+  if(n===null){toast('Erro ao arquivar','#c62828',"erro");return;}
+  await aplicarArquivamentoLocal();
+  toast(`${ids.length} ${valor?'arquivado':'desarquivado'}${ids.length!==1?'s':''}!`,null,"ok");
+}
+
+// Arquivar TODOS os ativos de uma vez (o "arquivo a maioria" do Montgomery)
+async function arquivarTodosAtivos(){
+  const total=gD('pacientes').length;
+  if(!total){toast('Não há ativos para arquivar','#EF6C00',"warn");return;}
+  if(!confirm(`Arquivar TODOS os ${total} pacientes ativos?\n\nEles não são apagados — vão para os Arquivados. Depois é só buscar e desarquivar quem você for atender.`))return;
+  const n=await rpcArquivar(null,true);
+  if(n===null){toast('Erro ao arquivar','#c62828',"erro");return;}
+  _cacheArq=null; // força recarregar arquivados na próxima vez
+  _cache['pacientes']=[];
+  renderP();atuDash();
+  toast(`${n} paciente${n!==1?'s':''} arquivado${n!==1?'s':''}! A lista de ativos está limpa.`,null,"ok");
+}
+
+// Depois de arquivar/desarquivar: invalida e recarrega os caches (a lista de
+// ativos é LEVE, então recarregar é barato e sempre 100% consistente).
+async function aplicarArquivamentoLocal(){
+  _cacheArq=null;
+  await dbGet('pacientes',true);
+  if(_verArquivados)await carregarArquivados(true);
+  renderP();atuDash();
+}
+
+// Arquivar/desarquivar UM (usado na ficha e na lista)
+async function toggleArquivarUm(id,valor){
+  const n=await rpcArquivar([id],valor);
+  if(n===null){toast('Erro ao arquivar','#c62828',"erro");return;}
+  fMod();
+  await aplicarArquivamentoLocal();
+  toast(valor?'Paciente arquivado':'Paciente reativado',null,"ok");
+}
+
+// Arquivar/desarquivar a partir da busca global — re-roda a busca pra mostrar o novo estado
+async function toggleArqDaBusca(id,valor){
+  const n=await rpcArquivar([id],valor);
+  if(n===null){toast('Erro ao arquivar','#c62828',"erro");return;}
+  _cacheArq=null;await dbGet('pacientes',true);atuDash();
+  toast(valor?'Paciente arquivado':'Paciente reativado',null,"ok");
+  buscaGlobalPac();
+}
+
+// Busca no BANCO por nome (inclui arquivados) — "vou lá buscar a Maria"
+async function buscarTodosPorNome(termo){
+  termo=(termo||'').trim();
+  if(termo.length<2)return[];
+  const t=encodeURIComponent('*'+termo.replace(/[%*]/g,'')+'*');
+  return (await supaReq('GET','pacientes',null,`?user_id=eq.montgomery&dados->>nome=ilike.${t}&order=dados->>nome.asc&limit=50&select=${PAC_SELECT},arquivado:dados->arquivado`))||[];
+}
+async function buscaGlobalPac(){
+  const termo=document.getElementById('busP').value;
+  const res=await buscarTodosPorNome(termo);
+  const arr=res.map(p=>({...p,arquivado:p.arquivado===true||p.arquivado==='true'}));
+  renderBuscaGlobal(arr,termo);
+}
+function renderBuscaGlobal(arr,termo){
+  const tb=document.getElementById('tabP');if(!tb)return;
+  document.getElementById('cntP').textContent=arr.length;
+  const pb=document.getElementById('pacPagBar');if(pb)pb.style.display='none';
+  if(!arr.length){tb.innerHTML=`<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--txt-l)">Ninguém encontrado com "${escHtml(termo)}" (busquei em ativos e arquivados).</td></tr>`;return;}
+  tb.innerHTML=arr.map(p=>{
+    const wa=waUrl(p.telefone);
+    const waB=wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm">${p.telefone}</a>`:`<span style="color:var(--txt-l)">${p.telefone||'-'}</span>`;
+    const tag=p.arquivado?' <span style="background:#ECEFF1;color:#546E7A;border-radius:4px;padding:1px 6px;font-size:10px;font-weight:700;vertical-align:middle">ARQUIVADO</span>':'';
+    const acaoArq=p.arquivado
+      ?`<button class="btn btn-pri btn-sm" onclick="toggleArqDaBusca('${p.id}',false)" title="Reativar">Desarquivar</button>`
+      :`<button class="btn btn-sec btn-sm" onclick="toggleArqDaBusca('${p.id}',true)" title="Arquivar">Arquivar</button>`;
+    return`<tr>
+      <td style="width:32px"></td>
+      <td><strong>${escHtml(p.nome)}</strong>${tag}</td>
+      <td>${waB}</td>
+      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--txt-l);font-size:12px">${escHtml(p.queixa||'-')}</td>
+      <td style="color:var(--txt-l);font-size:12px;white-space:nowrap">${p.dataCadastro||'-'}</td>
+      <td style="white-space:nowrap;display:flex;gap:4px">
+        <button class="btn btn-inf btn-sm" onclick="verPac('${p.id}')" title="Abrir ficha"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
+        ${acaoArq}
+      </td>
+    </tr>`;
+  }).join('');
+}
+const ICO_ARQ='<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"/><path d="M10 12h4"/></svg></span>';
 let _pacFormDirty=false; // true quando há alteração real não salva no cadastro do paciente aberto
 
 // ===== CONFIG PADRÃO =====
@@ -2229,7 +2374,7 @@ function toggleFiltroTriagem(){
 }
 function filtrarP(){
   const b=document.getElementById('busP').value.toLowerCase();
-  let pacs=gD('pacientes').filter(p=>p.nome.toLowerCase().includes(b)||(p.telefone||'').includes(b)||(p.queixa||'').toLowerCase().includes(b));
+  let pacs=pacsAtual().filter(p=>(p.nome||'').toLowerCase().includes(b)||(p.telefone||'').includes(b)||(p.queixa||'').toLowerCase().includes(b));
   if(_filtroTriagem)pacs=pacs.filter(p=>p.triagem);
   renderP(pacs);
 }
@@ -2268,6 +2413,9 @@ async function verPac(id){
       ${wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8.4 8.4 0 0 1-12.2 7.5L4 20l1.1-4.1a8.4 8.4 0 1 1 15.4-4.4Z"/><path d="M8.5 10.3c0 3.4 2.8 6.2 6.2 6.2"/></svg></span></a>`:''}
       <button class="btn btn-sec btn-sm" onclick="enviarPacJpg('${p.nome.replace(/'/g,"\\'")}')" title="Enviar ficha em JPG"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg></span> JPG</button>
       <button class="btn btn-sec btn-sm" onclick="fMod()">Fechar</button>
+      ${p.arquivado
+        ?`<button class="btn btn-pri btn-sm" onclick="toggleArquivarUm('${p.id}',false)">${ICO_ARQ} Desarquivar</button>`
+        :`<button class="btn btn-sec btn-sm" onclick="toggleArquivarUm('${p.id}',true)">${ICO_ARQ} Arquivar</button>`}
       <button class="btn btn-pri btn-sm" onclick="fMod();editarPac('${p.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span> Editar</button>
     </div>`;
   document.getElementById('modP').classList.add('show');
@@ -5715,12 +5863,18 @@ const PAC_POR_PAG=100;
 function renderP(lista){
   const cntT=document.getElementById('cntTriagem');
   if(cntT)cntT.textContent=gD('pacientes').filter(p=>p.triagem).length;
-  let pacs=lista||gD('pacientes');
+  let pacs=lista||pacsAtual();
   if(!lista&&_filtroTriagem)pacs=pacs.filter(p=>p.triagem);
-  if(ordP_==='az')pacs.sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR'));
-  else if(ordP_==='za')pacs.sort((a,b)=>b.nome.localeCompare(a.nome,'pt-BR'));
+  if(ordP_==='az')pacs.sort((a,b)=>(a.nome||'').localeCompare(b.nome||'','pt-BR'));
+  else if(ordP_==='za')pacs.sort((a,b)=>(b.nome||'').localeCompare(a.nome||'','pt-BR'));
   else pacs.sort((a,b)=>b.id-a.id);
   document.getElementById('cntP').textContent=pacs.length;
+  // Rótulos que dependem do modo (ativos x arquivados)
+  const bArq=document.getElementById('btnArqSel');
+  if(bArq)bArq.innerHTML=ICO_ARQ+(_verArquivados?'Desarquivar selecionados':'Arquivar selecionados');
+  const bTodos=document.getElementById('btnArqTodos');
+  if(bTodos)bTodos.style.display=_verArquivados?'none':'inline-flex';
+  atualizarBotaoArq();
 
   // Paginação
   const totalPags=Math.max(1,Math.ceil(pacs.length/PAC_POR_PAG));
@@ -5762,6 +5916,8 @@ function renderP(lista){
         <button class="btn btn-sec btn-sm" onclick="selPacs(true)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/><path d="M7.5 12l3 3 6-6.5"/></svg></span>Todos desta página</button>
         <button class="btn btn-sec btn-sm" onclick="selPacs(false)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="2.5"/></svg></span>Nenhum</button>
         <button class="btn btn-pri btn-sm" onclick="marcarTriagemSel()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span>Marcar como revisado</button>
+        <button class="btn btn-sec btn-sm" id="btnArqSel" onclick="arquivarSel(!_verArquivados)">${ICO_ARQ}Arquivar selecionados</button>
+        <button class="btn btn-sec btn-sm" id="btnArqTodos" onclick="arquivarTodosAtivos()" title="Manda todos os ativos para os arquivados de uma vez">${ICO_ARQ}Arquivar TODOS os ativos</button>
         <button class="btn btn-dan btn-sm" onclick="delPacsSel()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span> Excluir Selecionados</button>
       </div>
       <button class="dica-x" title="Ocultar" onclick="ocultarBarSelMassa()"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>`;
@@ -5786,7 +5942,8 @@ function renderP(lista){
   const tb=document.getElementById('tabP');
   if(!tb)return;
   if(!pacs.length){
-    tb.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--txt-l)">Nenhum paciente cadastrado.</td></tr>`;
+    const msg=_verArquivados?'Nenhum paciente arquivado.':'Nenhum paciente ativo. Use a busca acima para encontrar e desarquivar quem for atender.';
+    tb.innerHTML=`<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--txt-l)">${msg}</td></tr>`;
     return;
   }
 
@@ -5804,6 +5961,9 @@ function renderP(lista){
       <td style="white-space:nowrap">
         <button class="btn btn-inf btn-sm" onclick="verPac('${p.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span></button>
         <button class="btn btn-sec btn-sm" onclick="editarPac('${p.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span></button>
+        ${_verArquivados
+          ?`<button class="btn btn-pri btn-sm" onclick="toggleArquivarUm('${p.id}',false)" title="Desarquivar (voltar aos ativos)">${ICO_ARQ}</button>`
+          :`<button class="btn btn-sec btn-sm" onclick="toggleArquivarUm('${p.id}',true)" title="Arquivar">${ICO_ARQ}</button>`}
         <button class="btn btn-dan btn-sm" onclick="delPac('${p.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span></button>
       </td>
     </tr>`;
