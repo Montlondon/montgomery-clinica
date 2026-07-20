@@ -581,7 +581,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   <div class="sidebar-footer">
     Montgomery Magalhães<br>Saúde Integrativa<br>
     Itambacuri - MG<br>
-    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v2.2 &middot; 19/07</span>
+    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v2.2.1 &middot; 19/07</span>
   </div>
 </aside>
 
@@ -1904,10 +1904,20 @@ async function rpcArquivar(ids,valor){
   return res.json(); // devolve quantas linhas mudaram
 }
 
-// Carrega a lista LEVE dos arquivados (sob demanda, só quando pede pra ver)
+// Carrega a lista LEVE dos arquivados (sob demanda, só quando pede pra ver).
+// Pagina de 1000 em 1000 porque o PostgREST corta a resposta em 1000 linhas —
+// era por isso que só apareciam 1000 dos ~4000 arquivados.
 async function carregarArquivados(forcar){
   if(_cacheArq&&!forcar)return _cacheArq;
-  _cacheArq=(await supaReq('GET','pacientes',null,`?user_id=eq.montgomery&order=id.asc&dados->>arquivado=eq.true&select=${PAC_SELECT}`))||[];
+  const LIMIT=1000;let todos=[],offset=0;
+  const base=`?user_id=eq.montgomery&order=id.asc&dados->>arquivado=eq.true&select=${PAC_SELECT}`;
+  while(true){
+    const lote=(await supaReq('GET','pacientes',null,`${base}&limit=${LIMIT}&offset=${offset}`))||[];
+    todos=todos.concat(lote);
+    if(lote.length<LIMIT)break;
+    offset+=LIMIT;
+  }
+  _cacheArq=todos;
   return _cacheArq;
 }
 
