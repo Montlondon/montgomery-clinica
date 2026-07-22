@@ -586,7 +586,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   <div class="sidebar-footer">
     Montgomery Magalhães<br>Saúde Integrativa<br>
     Itambacuri - MG<br>
-    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v2.4 &middot; 22/07</span>
+    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v2.5 &middot; 22/07</span>
   </div>
 </aside>
 
@@ -3317,6 +3317,26 @@ async function moverSessao(id,novaData){
   await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':ss[idx]}]);
   atuFin();atuDash();
   toast(`${ss[idx].pacienteNome||'Sessão'} remarcado para ${fd(novaData)}`,null,"ok");
+  snackGoogle(id);                                  // oferece atualizar o Google num clique
+}
+// Snackbar leve: depois de arrastar uma sessão, oferece abrir o Google já com o novo dia.
+// Não cria permissão nem backend — só reaproveita abrirGA (mão única). Some sozinho em 9s.
+function snackGoogle(id){
+  const s=gD('sessoes').find(x=>String(x.id)===String(id));if(!s)return;
+  let sn=document.getElementById('snackGA');
+  if(!sn){
+    sn=document.createElement('div');sn.id='snackGA';sn.className='no-print';
+    sn.style.cssText='position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(140%);z-index:9999;display:flex;align-items:center;gap:12px;background:var(--surface,#fff);border:1px solid var(--line,#e5e0d8);border-left:4px solid var(--pri,#5a8f7b);border-radius:12px;box-shadow:0 8px 28px rgba(0,0,0,.16);padding:11px 13px;max-width:min(92vw,420px);font-size:12.5px;color:var(--ink,#333);transition:transform .35s cubic-bezier(.2,.9,.3,1.2)';
+    document.body.appendChild(sn);
+  }
+  clearTimeout(sn._t);
+  sn.innerHTML=`
+    <span style="width:20px;height:20px;flex-shrink:0;color:var(--pri,#5a8f7b)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span>
+    <div style="flex:1;line-height:1.35">Remarcado para <strong>${fd(s.data)}</strong>.<br><span style="color:var(--ink-soft,#8a8272);font-size:11px">O Google não muda sozinho — atualize com um clique.</span></div>
+    <button class="btn btn-cal btn-sm" style="flex-shrink:0" onclick="abrirGA(gD('sessoes').find(x=>String(x.id)==='${id}'));document.getElementById('snackGA').style.transform='translateX(-50%) translateY(140%)'">Atualizar no Google</button>
+    <button aria-label="Fechar" style="flex-shrink:0;background:none;border:none;cursor:pointer;color:var(--ink-soft,#8a8272);width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center" onclick="document.getElementById('snackGA').style.transform='translateX(-50%) translateY(140%)'"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>`;
+  requestAnimationFrame(()=>{sn.style.transform='translateX(-50%) translateY(0)';});
+  sn._t=setTimeout(()=>{sn.style.transform='translateX(-50%) translateY(140%)';},9000);
 }
 function novoNoDia(data){go('nova-sessao',null);setTimeout(()=>document.getElementById('sData').value=data,100);}
 function verEvento(id){
