@@ -583,7 +583,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   <div class="sidebar-footer">
     Montgomery Magalhães<br>Saúde Integrativa<br>
     Itambacuri - MG<br>
-    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v2.2.1 &middot; 19/07</span>
+    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v2.3 &middot; 22/07</span>
   </div>
 </aside>
 
@@ -2454,18 +2454,75 @@ function iniciarPS(){
   document.getElementById('psBusca').value='';
   document.getElementById('psInfo').style.display='none';
 }
+// Guarda os arquivados encontrados no banco pela busca do agendamento, pra o
+// selPS conseguir achar quem não está na lista de ativos em memória.
+let _psDbCache=[];        // resultados do banco (podem incluir arquivados)
+let _psDbTimer=null;      // debounce da busca no banco (poupa egress)
+let _psDbSeq=0;           // ignora respostas antigas que chegam fora de ordem
+
+// Busca LEVE no banco (id, nome, telefone e o flag arquivado) — nunca foto/exames.
+async function buscarPacPicker(termo){
+  termo=(termo||'').trim();
+  if(termo.length<2)return[];
+  const t=encodeURIComponent('*'+termo.replace(/[%*]/g,'')+'*');
+  const sel='id:dados->id,nome:dados->>nome,telefone:dados->>telefone,arquivado:dados->arquivado';
+  const r=await supaReq('GET','pacientes',null,`?user_id=eq.montgomery&dados->>nome=ilike.${t}&order=dados->>nome.asc&limit=30&select=${sel}`);
+  return (r||[]).map(p=>({...p,arquivado:p.arquivado===true||p.arquivado==='true'}));
+}
+
 function renderPS(pacs){
   const l=document.getElementById('psLista');
   if(!pacs.length){l.innerHTML='<div style="padding:11px;color:var(--txt-l);font-size:13px;text-align:center">Nenhum paciente encontrado</div>';return;}
   l.innerHTML=pacs.map(p=>{
     const fH=p.foto?`<div class="ps-foto"><img src="${p.foto}"></div>`:`<div class="ps-foto"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:55%;height:55%;opacity:.55"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6"/></svg></div>`;
-    return`<div class="ps-item" onclick="selPS('${p.id}')">${fH}<div><span style="font-weight:600">${p.nome}</span><small style="display:block;font-size:11px;color:var(--txt-l)">${p.telefone||'Sem telefone'}</small></div></div>`;
+    const tag=p.arquivado?' <span style="background:#ECEFF1;color:#546E7A;border-radius:4px;padding:1px 6px;font-size:9px;font-weight:700;vertical-align:middle;letter-spacing:.3px">ARQUIVADO</span>':'';
+    return`<div class="ps-item" onclick="selPS('${p.id}')">${fH}<div><span style="font-weight:600">${p.nome}</span>${tag}<small style="display:block;font-size:11px;color:var(--txt-l)">${p.telefone||'Sem telefone'}</small></div></div>`;
   }).join('');
 }
-function filtrarPS(){renderPS(gD('pacientes').filter(p=>p.nome.toLowerCase().includes(document.getElementById('psBusca').value.toLowerCase())));abrirPS();}
+
+// Busca do agendamento: mostra na hora os ativos em memória e, em paralelo,
+// procura no banco (incluindo arquivados) e junta quem faltava. Assim você
+// encontra qualquer paciente sem precisar desarquivar antes.
+function filtrarPS(){
+  const q=document.getElementById('psBusca').value.trim();
+  const ql=q.toLowerCase();
+  const locais=gD('pacientes').filter(p=>p.nome.toLowerCase().includes(ql));
+  renderPS(locais);
+  abrirPS();
+  clearTimeout(_psDbTimer);
+  if(q.length<2){_psDbCache=[];return;}
+  const seq=++_psDbSeq;
+  _psDbTimer=setTimeout(async()=>{
+    const achados=await buscarPacPicker(q);
+    if(seq!==_psDbSeq)return;                 // chegou tarde: já digitaram outra coisa
+    if(document.getElementById('psBusca').value.trim()!==q)return;
+    _psDbCache=achados;
+    const idsLocais=new Set(gD('pacientes').map(p=>String(p.id)));
+    const extras=achados.filter(p=>!idsLocais.has(String(p.id)));
+    renderPS([...gD('pacientes').filter(p=>p.nome.toLowerCase().includes(ql)),...extras]);
+    abrirPS();
+  },350);
+}
 function abrirPS(){document.getElementById('psLista').classList.add('open');}
-function selPS(id){
-  const p=gD('pacientes').find(x=>String(x.id)===String(id));if(!p)return;
+async function selPS(id){
+  let p=gD('pacientes').find(x=>String(x.id)===String(id));
+  // Não está entre os ativos: veio da busca no banco (provavelmente arquivado).
+  if(!p){
+    const doBanco=_psDbCache.find(x=>String(x.id)===String(id));
+    if(!doBanco)return;
+    if(doBanco.arquivado){
+      const inp=document.getElementById('psBusca');
+      if(inp){inp.value='Reativando '+doBanco.nome+'…';inp.disabled=true;}
+      const n=await rpcArquivar([id],false);   // desarquiva sem apagar nada
+      if(inp)inp.disabled=false;
+      if(n===null){toast('Não consegui reativar o paciente','#c62828',"erro");if(inp)inp.value=doBanco.nome;return;}
+      await dbGet('pacientes',true);            // recarrega a lista leve de ativos
+      atuDash();
+      p=gD('pacientes').find(x=>String(x.id)===String(id));
+      toast(doBanco.nome+' reativado — pronto para agendar.',null,"ok");
+    }
+    if(!p)p=doBanco;                            // fallback: usa o que veio do banco
+  }
   document.getElementById('psId').value=id;
   document.getElementById('psBusca').value=p.nome;
   document.getElementById('psLista').classList.remove('open');
