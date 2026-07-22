@@ -137,6 +137,9 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .cal-table{width:100%;border-collapse:collapse;min-width:560px}
 .ev-card{border-radius:4px;padding:3px 5px;margin-bottom:3px;cursor:pointer;font-size:10px;transition:opacity .15s}
 .ev-card:hover{opacity:.8}
+.ev-card[draggable="true"]{cursor:grab}
+.ev-card.ag-dragging{opacity:.4;cursor:grabbing}
+.cal-table td.ag-drop-hover{outline:2px dashed var(--pri);outline-offset:-3px;background:var(--pri-l)!important}
 
 /* TABELAS */
 .tw{background:#FDFAF6;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
@@ -583,7 +586,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   <div class="sidebar-footer">
     Montgomery Magalhães<br>Saúde Integrativa<br>
     Itambacuri - MG<br>
-    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v2.3 &middot; 22/07</span>
+    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v2.4 &middot; 22/07</span>
   </div>
 </aside>
 
@@ -3254,12 +3257,12 @@ function renderSemana(){
     const ds2=dLocal(d);
     const sd=ss.filter(s=>s.data===ds2).sort((a,b)=>(a.horario||'').localeCompare(b.horario||''));
     const isH=d.toDateString()===new Date().toDateString();
-    h+=`<td style="background:${isH?'#f0fff0':'#fff'};min-height:80px;padding:5px;vertical-align:top;border-right:1px solid var(--brd);border-top:1px solid var(--brd)">`;
+    h+=`<td data-dia="${ds2}" ondragover="agDragOver(event)" ondragleave="agDragLeave(event)" ondrop="agDrop(event,'${ds2}')" style="background:${isH?'#f0fff0':'#fff'};min-height:80px;padding:5px;vertical-align:top;border-right:1px solid var(--brd);border-top:1px solid var(--brd)">`;
     if(!sd.length)h+=`<div style="text-align:center;color:#ddd;font-size:10px;padding:14px 2px">—</div>`;
     sd.forEach(s=>{
       const cor=s.status==='pago'?'#2E7D32':s.status==='pendente'?'#EF6C00':'#c62828';
       const bg=s.status==='pago'?'#E8F5E9':s.status==='pendente'?'#FFF3E0':'#FFEBEE';
-      h+=`<div class="ev-card" style="background:${bg};border-left:3px solid ${cor};position:relative">
+      h+=`<div class="ev-card" draggable="true" ondragstart="agDragStart(event,${s.id})" ondragend="agDragEnd(event)" style="background:${bg};border-left:3px solid ${cor};position:relative">
         ${s.horario?`<div style="font-weight:700;color:${cor};font-size:9px">${s.horario}</div>`:''}
         <div style="font-size:10px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px;cursor:pointer" onclick="verEvento(${s.id})">${s.pacienteNome||'—'}</div>
         <div style="display:flex;gap:2px;margin-top:2px">
@@ -3274,6 +3277,46 @@ function renderSemana(){
   });
   h+='</tr></tbody></table>';
   document.getElementById('calSem').innerHTML=h;
+}
+// ===== Arrastar-e-soltar na agenda: remarcar sessão trocando o dia =====
+let _agDragId=null;
+function agDragStart(e,id){
+  _agDragId=id;
+  try{e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',String(id));}catch(_){}
+  const c=e.currentTarget;if(c)c.classList.add('ag-dragging');
+}
+function agDragEnd(e){
+  _agDragId=null;
+  const c=e.currentTarget;if(c)c.classList.remove('ag-dragging');
+  document.querySelectorAll('.cal-table td.ag-drop-hover').forEach(td=>td.classList.remove('ag-drop-hover'));
+}
+function agDragOver(e){
+  e.preventDefault();
+  try{e.dataTransfer.dropEffect='move';}catch(_){}
+  const td=e.currentTarget;if(td)td.classList.add('ag-drop-hover');
+}
+function agDragLeave(e){const td=e.currentTarget;if(td)td.classList.remove('ag-drop-hover');}
+async function agDrop(e,novaData){
+  e.preventDefault();
+  const td=e.currentTarget;if(td)td.classList.remove('ag-drop-hover');
+  const id=_agDragId||parseInt(e.dataTransfer.getData('text/plain'),10);
+  _agDragId=null;
+  if(id)await moverSessao(id,novaData);
+}
+// Troca só o dia da sessão e grava no banco (uma linha só: DELETE + POST),
+// nunca reescreve a tabela inteira. Horário e o resto ficam iguais.
+async function moverSessao(id,novaData){
+  const ss=gD('sessoes');
+  const idx=ss.findIndex(s=>String(s.id)===String(id));
+  if(idx<0)return;
+  if(ss[idx].data===novaData)return;               // soltou no mesmo dia: nada muda
+  ss[idx]={...ss[idx],data:novaData};
+  _cache['sessoes']=ss;
+  renderSemana();renderAg();                        // atualiza a tela na hora
+  await supaReq('DELETE','sessoes',null,`?dados->>id=eq.${id}`);
+  await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':ss[idx]}]);
+  atuFin();atuDash();
+  toast(`${ss[idx].pacienteNome||'Sessão'} remarcado para ${fd(novaData)}`,null,"ok");
 }
 function novoNoDia(data){go('nova-sessao',null);setTimeout(()=>document.getElementById('sData').value=data,100);}
 function verEvento(id){
