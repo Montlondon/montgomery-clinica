@@ -4,6 +4,7 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 ## Concluído
 
+- **Agendamento encontra e desarquiva paciente sozinho (v2.3, 22/07):** na tela **Nova Sessão**, a busca por nome agora procura no banco inteiro (arquivados incluídos), não só nos ativos em memória. Arquivados aparecem na lista com etiqueta discreta "ARQUIVADO"; ao escolher um, o sistema **desarquiva automaticamente** naquele instante (`rpcArquivar([id],false)` + recarga da lista leve) e segue o agendamento — de três passos (ir em Arquivados → desarquivar → agendar) para um só. Busca leve dedicada (só `id`/`nome`/`telefone`, nunca foto/exames) e com debounce de 350ms para poupar egress do Supabase. Funções tocadas: `filtrarPS`, `renderPS`, `selPS` + novos `buscarPacPicker`/`_psDbCache`.
 - Nova estética geral (Lora/Inter, paleta terrosa, fio dos cinco elementos, ícones SVG em toda a plataforma)
 - Aba Clínica/Pessoal no Financeiro (despesas + pró-labore, tabela `despesas` no Supabase)
 - Botão de ocultar/exibir valores no Painel
@@ -534,3 +535,27 @@ Plano fatiado em velas (uma janela cada, consumo pequeno-medio):
 
 Base propria: nome, meridiano, localizacao, funcoes, indicacoes dos pontos =
 conhecimento tradicional publico. Nao fazer tudo numa janela so.
+
+## 🐾 Ideia (20/07/2026) — Pontos de acupuntura da Maly (Maly Care)
+
+No app **Maly Care** (Netlify), criar uma camada de **pontos de acupuntura canina**
+sobre uma **imagem mais realista de um Pastor Belga Malinois** (não esquemático) —
+para atender a própria Maly. Espelha o que já existe na Clínica humana (361 pontos
+nos meridianos), mas com o mapa de acupuntura veterinária do cão.
+Fonte do app: `03_Biblioteca\Maly\deploy\`. Deixado para depois, sem pressa.
+
+## 🐕 Ideia (20/07/2026) — Foto da própria Maly no Maly Care
+
+Futuramente, trocar a patinha (ícone/login) por uma **foto real da Maly** — ela é
+uma Malinois linda, de colete "POLICE K9". Montgomery tem fotos dela. Usar como
+avatar da tela de login e/ou como ícone do app. Por ora está a patinha estilizada
+(azul da marca), já no ar em nimble-raindrop-1ff4fc.netlify.app.
+
+## 🐾 Ideia (20/07/2026) — Fotinha da Maly no cabeçalho da barra lateral
+
+No Maly Care, trocar o avatar "M" do topo da barra lateral (ao lado de "Maly Care",
+`aside .logo .av`) pela **foto redonda da Maly** que já está salva na ficha
+(`db.paciente.foto`). Se não houver foto ainda, cai de volta na patinha. Assim ela
+aparece no cabeçalho, não só na aba Ficha. (Pedido para DEPOIS, não urgente.)
+
+- [ ] **Maly Care** — coco seco (casca) como abrasivo natural na aba Odontologia/Higiene: raspa tártaro nos caninos/molares; oferecer com moderação (gordura da polpa solta o intestino). Ideia do Montgomery em 20/07/2026, vendo a Maly descascar coco. Ensinar a Dra. Vera (IA) sobre isso.
