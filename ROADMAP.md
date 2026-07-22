@@ -2,6 +2,10 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## Planejado — Senha "Ponte com o Google" (sync de dois sentidos)
+
+Integração viva com o Google Calendar via API + login (OAuth), para que remarcar/cancelar na Clínica reflita sozinho no Google (hoje a integração é de mão única: só abre uma tela do Google já preenchida, não sabe qual evento é de qual sessão — por isso remarcar arrastando não atualiza o Google, e o Montgomery ajusta manualmente). **Regra essencial:** a ponte mexe SÓ nas sessões de pacientes criadas na Clínica — nunca nos outros eventos do Google (o Montgomery anota a vida inteira lá). A Clínica só cria/move/cancela eventos que ela mesma criou, guardando o ID do evento como vínculo invisível de cada sessão; sem esse vínculo, não toca. Recomendado escrever numa **agenda Google separada "Clínica/Pacientes"** (cor própria, ligável/desligável) para isolar de vez da agenda pessoal. Trabalho envolvido: autorização Google, guardar o `googleEventId` por sessão, e criar/mover/deletar via API. O próprio comentário do `abrirGA` já aponta a API do Calendar como "o caminho definitivo".
+
 ## Concluído
 
 - **Arrastar-e-soltar na agenda para remarcar (v2.4, 22/07):** na visão semanal da Agenda, cada sessão virou um cartão arrastável e cada dia uma área de soltar — arrastar um paciente de quarta para quinta remarca na hora. Troca só o campo `data` da sessão e grava uma linha só no banco (`DELETE` + `POST`), nunca a tabela inteira; horário e o resto ficam iguais. Destaque visual (borda tracejada) no dia sob o cursor. Funções novas: `agDragStart`/`agDragOver`/`agDragLeave`/`agDrop`/`agDragEnd`/`moverSessao`. Nota: arrastar por toque no celular exige suporte extra (pressionar-e-segurar) — no desktop funciona nativo.
