@@ -566,3 +566,11 @@ No Maly Care, trocar o avatar "M" do topo da barra lateral (ao lado de "Maly Car
 aparece no cabeçalho, não só na aba Ficha. (Pedido para DEPOIS, não urgente.)
 
 - [ ] **Maly Care** — coco seco (casca) como abrasivo natural na aba Odontologia/Higiene: raspa tártaro nos caninos/molares; oferecer com moderação (gordura da polpa solta o intestino). Ideia do Montgomery em 20/07/2026, vendo a Maly descascar coco. Ensinar a Dra. Vera (IA) sobre isso.
+
+## Concluido (25/07/2026) — Montgomery OS v3.4: nasce a aba Montgomery Code
+
+Aba propria **Montgomery Code** no menu do OS (depois da Escola Montgomery IA):
+o caderno vivo do aprendizado, com a **trilha das sete camadas** (1 - A Web, acesa;
+2 - Git & GitHub; seguindo ate APIs/IA) e anotacoes que ficam guardadas no aparelho.
+Usa os proprios sistemas do Montgomery como livro-texto. Secao `sec-code`,
+rota `go('code')`. Fonte: `os/index.html`. No ar na Vercel.
