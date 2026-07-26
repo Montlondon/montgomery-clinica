@@ -2282,7 +2282,7 @@ function renderExames(){
 // ===== BACKUP =====
 function exportarBackup(){
   const dados={app:'Montgomery OS',versao:'Fase 1',exportadoEm:new Date().toISOString(),
-    perfis:ler(K.perfis),vitais:ler(K.vitais),protocolos:ler(K.protocolos),exames:ler(K.exames),coluna:ler(K.coluna),arvore:ler(K.arvore),nutricao:ler(K.nutricao),metafisica:mfLerTudo(),vera:veraLer()};
+    perfis:ler(K.perfis),vitais:ler(K.vitais),protocolos:ler(K.protocolos),exames:ler(K.exames),coluna:ler(K.coluna),arvore:ler(K.arvore),nutricao:ler(K.nutricao),metafisica:mfLerTudo(),vera:veraLer(),code:ler(K.code)};
   const blob=new Blob([JSON.stringify(dados,null,2)],{type:'application/json'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
@@ -2301,7 +2301,7 @@ function importarBackup(ev){
       if(!confirm('Importar backup de '+(d.exportadoEm?fmtData(d.exportadoEm.slice(0,16)):'data desconhecida')+'?\nIsto SUBSTITUI os dados atuais deste aparelho.'))return;
       gravar(K.perfis,d.perfis||[]);gravar(K.vitais,d.vitais||[]);
       gravar(K.protocolos,d.protocolos||[]);gravar(K.exames,d.exames||[]);
-      gravar(K.coluna,d.coluna||[]);gravar(K.arvore,d.arvore||[]);gravar(K.nutricao,d.nutricao||[]);gravar(K.metafisica,d.metafisica||{});gravar(K.vera,d.vera||{ficha:{},registros:[]});
+      gravar(K.coluna,d.coluna||[]);gravar(K.arvore,d.arvore||[]);gravar(K.nutricao,d.nutricao||[]);gravar(K.metafisica,d.metafisica||{});gravar(K.vera,d.vera||{ficha:{},registros:[]});gravar(K.code,d.code||[]);
       document.getElementById('bkMsg').textContent='✓ Backup importado.';
       mfPerfilAtual=null;
       renderTudo();

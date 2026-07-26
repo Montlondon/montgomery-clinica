@@ -587,3 +587,10 @@ e o vocabulario minimo (repositorio, commit, branch, remote/origin).
 comando por comando. Semaforo da camada 1 vira "Acesa" e o da 2, "Onde estamos".
 Passo pequeno pedido a ele: rodar `git log --oneline` e olhar o proprio caminho.
 Proxima: camada 3 — Servidor & nuvem.
+
+## Corrigido (25/07/2026) — caderno do Montgomery Code entrava no Backup
+
+O caderno de anotacoes do Montgomery Code (`mos_code`) estava FORA do
+`exportarBackup`/`importarBackup` da aba Configuracoes: as anotacoes ficariam so
+no aparelho e se perderiam numa troca de computador, mesmo com backup exportado.
+Agora `code` viaja junto no JSON de backup e volta na importacao.
