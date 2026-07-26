@@ -574,3 +574,16 @@ o caderno vivo do aprendizado, com a **trilha das sete camadas** (1 - A Web, ace
 2 - Git & GitHub; seguindo ate APIs/IA) e anotacoes que ficam guardadas no aparelho.
 Usa os proprios sistemas do Montgomery como livro-texto. Secao `sec-code`,
 rota `go('code')`. Fonte: `os/index.html`. No ar na Vercel.
+
+## Concluido (25/07/2026) — Montgomery OS v3.5: camada 2 do Montgomery Code acesa
+
+**Git & GitHub** explicado na aba Montgomery Code, do zero e sem porta trancada:
+o medo que fez o Git nascer (relatorio_final_AGORA_SIM), a metafora do prontuario
+(commit = evolucao que nao se apaga), **as tres mesas** (mesa de trabalho / bandeja
+do `git add` / livro encadernado do `git commit`), a diferenca Git x GitHub,
+`push` e `pull`, os dois comandos que so olham (`git status`, `git log --oneline`)
+e o vocabulario minimo (repositorio, commit, branch, remote/origin).
+**Aula viva:** usa o nosso proprio push da v3.4 (`104e4f6`) como exemplo real,
+comando por comando. Semaforo da camada 1 vira "Acesa" e o da 2, "Onde estamos".
+Passo pequeno pedido a ele: rodar `git log --oneline` e olhar o proprio caminho.
+Proxima: camada 3 — Servidor & nuvem.

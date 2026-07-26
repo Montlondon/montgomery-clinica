@@ -1531,8 +1531,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M4 7l8-5 8 5M4 7v10l8 5 8-5V7"/></svg>A trilha &middot; as sete camadas</h2>
     <p style="color:var(--cinza);font-size:0.9rem;margin-bottom:var(--f3)">Toda casa se levanta do alicerce ao telhado. O código é igual. A gente sobe uma camada por vez &mdash; e cada uma só se apoia na de baixo, já entendida.</p>
     <div class="cards">
-      <div class="card"><h3><span class="semaforo s-verde"></span>1 &middot; A Web</h3><div class="sub">Fundação</div><p style="font-size:0.85rem;color:var(--texto)">HTML (o osso), CSS (a pele), JavaScript (o músculo). Como o navegador lê os três e monta a página.</p><p style="font-size:0.78rem;color:var(--verde);margin-top:8px">Onde estamos.</p></div>
-      <div class="card"><h3><span class="semaforo s-neutro"></span>2 &middot; Git &amp; GitHub</h3><div class="sub">A ferramenta do artesão</div><p style="font-size:0.85rem;color:var(--texto)">Versionar, commit, push. O repositório como a memória do código. Você já usa &mdash; agora vai entender por dentro.</p></div>
+      <div class="card"><h3><span class="semaforo s-verde"></span>1 &middot; A Web</h3><div class="sub">Fundação</div><p style="font-size:0.85rem;color:var(--texto)">HTML (o osso), CSS (a pele), JavaScript (o músculo). Como o navegador lê os três e monta a página.</p><p style="font-size:0.78rem;color:var(--verde);margin-top:8px">Acesa.</p></div>
+      <div class="card"><h3><span class="semaforo s-verde"></span>2 &middot; Git &amp; GitHub</h3><div class="sub">A ferramenta do artesão</div><p style="font-size:0.85rem;color:var(--texto)">Versionar, commit, push. O repositório como a memória do código. Você já usa &mdash; agora vai entender por dentro.</p><p style="font-size:0.78rem;color:var(--verde);margin-top:8px">Onde estamos.</p></div>
       <div class="card"><h3><span class="semaforo s-neutro"></span>3 &middot; Servidor &amp; nuvem</h3><div class="sub">A cozinha</div><p style="font-size:0.85rem;color:var(--texto)">Frente x fundos, o que é uma API, por que a lógica sensível fica no servidor. A cozinha que a Escola já apresentou.</p></div>
       <div class="card"><h3><span class="semaforo s-neutro"></span>4 &middot; Banco de dados</h3><div class="sub">A gaveta</div><p style="font-size:0.85rem;color:var(--texto)">Tabelas, linhas, colunas e o RLS (a regra que protege cada dado por usuário). Ensinado no seu Supabase real.</p></div>
       <div class="card"><h3><span class="semaforo s-neutro"></span>5 &middot; Deploy</h3><div class="sub">A publicação</div><p style="font-size:0.85rem;color:var(--texto)">Como um site vai parar no ar: Vercel, GitHub Pages, domínio, HTTPS. Do seu computador ao mundo.</p></div>
@@ -1540,6 +1540,69 @@ tr:hover td{background:rgba(201,168,76,0.05)}
       <div class="card"><h3><span class="semaforo s-neutro"></span>7 &middot; APIs &amp; IA</h3><div class="sub">A inteligência</div><p style="font-size:0.85rem;color:var(--texto)">Consumir serviços e, mais adiante, a Claude API dentro dos seus próprios apps. O telhado.</p></div>
     </div>
     <p style="font-family:'Lora',serif;font-style:italic;font-size:1.1rem;color:var(--azul);text-align:center;margin:var(--f3) 0 0">Cada resposta abre uma porta &mdash; nunca a tranca.</p>
+  </div>
+
+  <!-- CAMADA 2 · GIT & GITHUB -->
+  <div class="bloco" style="border-color:rgba(74,124,89,0.4)">
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M6 8.5v7M8.5 6.8c4 .6 6.2 2 6.8 4.4"/></svg>Camada 2 &middot; Git &amp; GitHub <span style="font-size:0.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--verde);margin-left:8px">Acesa</span></h2>
+    <p style="color:var(--cinza);font-size:0.9rem;margin-bottom:var(--f3)">Você já usa o Git há meses, sem saber o nome do que faz. Esta camada não te ensina uma coisa nova &mdash; ela acende a luz numa sala onde você já estava andando no escuro.</p>
+
+    <h3 style="color:var(--azul);font-size:1rem;margin:0 0 var(--f2)">O medo que fez o Git nascer</h3>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">Todo mundo que trabalha com arquivos já viveu isto: <em>relatorio.doc</em>, <em>relatorio_v2.doc</em>, <em>relatorio_final.doc</em>, <em>relatorio_final_AGORA_SIM.doc</em>. É o medo de mexer e perder o que estava bom. O Git é a resposta a esse medo: ele guarda <b>todas</b> as versões, para sempre, sem você precisar inventar nome para nenhuma. Você fica livre para mexer &mdash; porque nada se perde.</p>
+
+    <h3 style="color:var(--azul);font-size:1rem;margin:0 0 var(--f2)">A metáfora: o prontuário do paciente</h3>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)">Você conhece isto melhor que ninguém. No prontuário, cada sessão vira uma <b>evolução</b>: data, quem escreveu, o que mudou. E a regra de ouro é que <b>evolução não se apaga</b> &mdash; se errou, você escreve uma nova corrigindo. O histórico inteiro fica de pé.</p>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">O Git é exatamente isso, para o código. Cada <b>commit</b> é uma evolução no prontuário do seu sistema: tem data, tem autor, tem um resumo do que mudou, e fica guardado para sempre. Você pode voltar e ler qualquer sessão de qualquer dia.</p>
+
+    <h3 style="color:var(--azul);font-size:1rem;margin:0 0 var(--f2)">As três mesas</h3>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)">Aqui está a única coisa que confunde todo iniciante &mdash; e que ninguém explica. O arquivo passa por <b>três lugares</b> antes de ficar guardado:</p>
+    <div class="cards" style="margin-bottom:var(--f3)">
+      <div class="card"><h3>1 &middot; A mesa de trabalho</h3><div class="sub">working directory</div><p style="font-size:0.85rem;color:var(--texto)">A pasta no seu computador. Aqui você rabisca, corta, refaz. Nada está guardado ainda. O Git só observa e diz: "este arquivo você mexeu".</p></div>
+      <div class="card"><h3>2 &middot; A bandeja</h3><div class="sub">staging &mdash; o <code style="font-family:'Courier New',monospace;color:var(--dourado)">git add</code></div><p style="font-size:0.85rem;color:var(--texto)">Você escolhe <b>o que</b> entra nesta evolução e põe na bandeja. É por isso que ontem subimos só o <em>index.html</em> e deixamos o resto na mesa: só o que está na bandeja é guardado.</p></div>
+      <div class="card"><h3>3 &middot; O livro encadernado</h3><div class="sub">repositório &mdash; o <code style="font-family:'Courier New',monospace;color:var(--dourado)">git commit</code></div><p style="font-size:0.85rem;color:var(--texto)">O que estava na bandeja vira uma página costurada no livro, com data, autor e título. A partir daqui, não se perde mais.</p></div>
+    </div>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">A bandeja existe justamente para isto: você pode ter dez coisas mexidas na mesa e querer guardar só duas. Sem ela, seria tudo ou nada.</p>
+
+    <h3 style="color:var(--azul);font-size:1rem;margin:0 0 var(--f2)">E o GitHub, então?</h3>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)"><b>Git</b> é a ferramenta que roda no seu computador &mdash; o livro fica na sua estante. <b>GitHub</b> é uma casa na internet onde mora uma <b>cópia</b> desse livro. Duas coisas diferentes, com nomes parecidos, e isso confunde todo mundo. O Git é seu; o GitHub é o cofre fora de casa. Se o seu computador queimar hoje, o livro continua inteiro lá. E é de lá que a Vercel lê para publicar o OS no ar &mdash; ela vigia o GitHub e, cada vez que chega uma página nova, republica o site sozinha.</p>
+    <div class="cards" style="grid-template-columns:1fr 1fr;margin-bottom:var(--f3)">
+      <div class="card"><h3><code style="font-family:'Courier New',monospace;color:var(--dourado)">git push</code></h3><div class="sub">empurrar</div><p style="font-size:0.85rem;color:var(--texto)">Manda as páginas novas do seu livro para a cópia no GitHub. Do seu computador para o mundo.</p></div>
+      <div class="card"><h3><code style="font-family:'Courier New',monospace;color:var(--dourado)">git pull</code></h3><div class="sub">puxar</div><p style="font-size:0.85rem;color:var(--texto)">O contrário: traz para o seu computador as páginas que estão no GitHub e você ainda não tem.</p></div>
+    </div>
+
+    <h3 style="color:var(--azul);font-size:1rem;margin:0 0 var(--f2)">A aula viva: o que fizemos ontem à noite</h3>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)">Esta aba em que você está lendo agora chegou aqui por estes três gestos. Leia devagar &mdash; você vai reconhecer cada um:</p>
+    <div style="background:var(--bege);border:1px solid rgba(27,58,92,0.12);border-radius:11px;padding:var(--f3);font-family:'Courier New',monospace;font-size:0.82rem;line-height:2;overflow-x:auto;margin-bottom:var(--f2)">
+      <div><span style="color:var(--cinza)"># 1. pôr na bandeja só o que eu quero guardar</span></div>
+      <div style="color:var(--azul)">git add os/index.html ROADMAP.md</div>
+      <div style="margin-top:10px"><span style="color:var(--cinza)"># 2. costurar a página no livro, com título</span></div>
+      <div style="color:var(--azul)">git commit -m "OS v3.4 &mdash; nasce a aba Montgomery Code"</div>
+      <div style="margin-top:10px"><span style="color:var(--cinza)"># 3. mandar a página para o cofre na internet</span></div>
+      <div style="color:var(--azul)">git push</div>
+    </div>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">O Git respondeu com um código curto: <code style="font-family:'Courier New',monospace;color:var(--dourado)">104e4f6</code>. Essa é a <b>impressão digital</b> daquela evolução &mdash; única no mundo, gerada a partir do conteúdo exato do que mudou. É o número da sessão no prontuário. Enquanto esse código existir, aquela noite pode ser reaberta.</p>
+
+    <h3 style="color:var(--azul);font-size:1rem;margin:0 0 var(--f2)">Os dois comandos que só olham (e não mudam nada)</h3>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)">Estes você pode rodar mil vezes sem medo. Não alteram nada &mdash; só contam o que está acontecendo. Comece por eles:</p>
+    <div style="background:var(--bege);border:1px solid rgba(27,58,92,0.12);border-radius:11px;padding:var(--f3);font-family:'Courier New',monospace;font-size:0.82rem;line-height:2;overflow-x:auto;margin-bottom:var(--f3)">
+      <div style="color:var(--azul)">git status</div>
+      <div><span style="color:var(--cinza)"># "o que está mexido na mesa? o que já está na bandeja?"</span></div>
+      <div style="color:var(--azul);margin-top:10px">git log --oneline</div>
+      <div><span style="color:var(--cinza)"># o índice do livro: uma linha por evolução, da mais nova para a mais velha</span></div>
+    </div>
+
+    <h3 style="color:var(--azul);font-size:1rem;margin:0 0 var(--f2)">O vocabulário mínimo</h3>
+    <div class="cards" style="margin-bottom:var(--f3)">
+      <div class="card"><h3>repositório</h3><p style="font-size:0.85rem;color:var(--texto)">A pasta do projeto <b>com</b> o livro de histórico dentro. Você tem vários: o do OS, o da Clínica, o do MMObras.</p></div>
+      <div class="card"><h3>commit</h3><p style="font-size:0.85rem;color:var(--texto)">Uma evolução guardada. Como substantivo, é a página; como verbo, é o ato de costurá-la.</p></div>
+      <div class="card"><h3>branch (ramo)</h3><p style="font-size:0.85rem;color:var(--texto)">Uma linha de trabalho. A sua principal se chama <code style="font-family:'Courier New',monospace;color:var(--dourado)">main</code>. Ramos servem para experimentar sem sujar o tronco &mdash; camada para depois.</p></div>
+      <div class="card"><h3>remote (origin)</h3><p style="font-size:0.85rem;color:var(--texto)">O apelido do endereço da cópia na internet. <code style="font-family:'Courier New',monospace;color:var(--dourado)">origin</code> é o nome padrão do seu GitHub.</p></div>
+    </div>
+
+    <div style="border:1px solid rgba(201,168,76,0.4);border-radius:11px;background:rgba(201,168,76,0.06);padding:var(--f3)">
+      <p style="font-size:0.9rem;margin:0 0 8px"><b style="color:var(--dourado)">Um passo seu, pequeno.</b> Quando quiser, abra o terminal na pasta do repositório e rode só <code style="font-family:'Courier New',monospace;color:var(--azul)">git log --oneline</code>. Vai aparecer a lista de todas as noites em que a gente construiu algo juntos. Não é preciso entender nada além disso hoje: é só olhar o seu próprio caminho escrito. Depois me conte o que sentiu, e a gente guarda no caderno abaixo.</p>
+    </div>
+    <p style="font-family:'Lora',serif;font-style:italic;color:var(--cinza);text-align:center;margin-top:var(--f3);font-size:0.9rem">O Git não guarda arquivos &mdash; guarda decisões. É por isso que ele se parece tanto com a memória.</p>
   </div>
 
   <!-- O CADERNO -->
@@ -1611,8 +1674,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v3.4';
-const APP_VERSION_NOTA='nasce a aba Montgomery Code — o caderno vivo da nossa escola: a trilha das 7 camadas (da Web às APIs/IA) e anotações que ficam guardadas';
+const APP_VERSION='v3.5';
+const APP_VERSION_NOTA='acende a camada 2 do Montgomery Code — Git & GitHub explicados pela metáfora do prontuário (as três mesas, commit, push) usando o nosso próprio push como aula viva';
 function carimbarVersao(){
   const linha='Montgomery OS · Fase 2 — Corpo · '+APP_VERSION+' ('+APP_VERSION_NOTA+')';
   const rod=document.getElementById('appVersion');if(rod)rod.textContent=linha;
