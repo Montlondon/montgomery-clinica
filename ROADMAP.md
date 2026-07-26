@@ -594,3 +594,15 @@ O caderno de anotacoes do Montgomery Code (`mos_code`) estava FORA do
 `exportarBackup`/`importarBackup` da aba Configuracoes: as anotacoes ficariam so
 no aparelho e se perderiam numa troca de computador, mesmo com backup exportado.
 Agora `code` viaja junto no JSON de backup e volta na importacao.
+
+## Concluido (25/07/2026) — OS v3.6: a trilha do Montgomery Code virou painel
+
+Os sete cartoes da trilha eram so um desenho — nao havia como "ir" de uma camada a
+outra, so rolar a pagina. Agora cada cartao e uma **porta** (`irCamada(n)`):
+- camada acesa -> desliza (scroll suave) ate o bloco de leitura dela e da um brilho
+  dourado de 1,6s (`.camada-alvo`) para o olho achar onde chegou;
+- **camada 1** -> leva para a aba **Escola** e para na Aula 2 (`#aula-materiais`),
+  porque a aula dela mora lá, nao no Code;
+- camada apagada -> aviso gentil em `#camadaAviso`: "me peca: acende a camada N".
+Adicionado tambem o link "voltar ao mapa das camadas" no pe da camada 2.
+Pedido dele: "como mudo da camada 1 para camada 2" — a porta nao existia.
