@@ -372,8 +372,8 @@ tr:hover td{background:#EEF2F7}
 
 <script>
 // ===== SISTEMA DE LOGIN =====
-const SUPA_URL_AUTH='https://eltjhrhjtuymejojxyhe.supabase.co';
-// chave anon pública (só leitura sem RLS — login protege o app na prática)
+// chave anon pública — não abre nada sozinha: o RLS do banco só libera os dados
+// para sessão autenticada cujo e-mail esteja na allowlist (ver ALLOWED_EMAILS)
 const _ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVsdGpocmhydHV5bWVqb2p4eWhlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NDUxODcsImV4cCI6MjA5NjAyMTE4N30.cEgQrQ-Svr61s2O9JTLytqHEL8BpPYZWjS6ZCrAop58';
 
 const ALLOWED_EMAILS=['montlondon@gmail.com','salavioleta@gmail.com'];
@@ -449,8 +449,15 @@ async function loginBiometria(){
       userVerification:'required'
     }});
     if(assertion){
-      // Biometria OK — concede acesso direto (offline-first, sem Supabase)
-      await entrarNaPlataforma({email:ALLOWED_EMAILS[0],id:'montgomery',bio:true});
+      // A biometria é um atalho para reabrir a sessão do Google já guardada no aparelho.
+      // Sem essa sessão o banco não devolve nada (RLS), então avisa em vez de abrir uma tela vazia.
+      if(!_supaClient)await initAuth();
+      const {data:{session}}=await _supaClient.auth.getSession();
+      if(!session){
+        setMsg('Sua sessão expirou. Entre uma vez com o Google para renovar.');
+        return;
+      }
+      await entrarNaPlataforma({email:session.user.email,id:session.user.id,bio:true});
     }
   }catch(e){
     if(e.name==='NotAllowedError')setMsg('Biometria cancelada ou não reconhecida.');
@@ -535,14 +542,10 @@ window.addEventListener('DOMContentLoaded',()=>{
     if(logoLogin){const li=document.getElementById('loginLogoImg');if(li)li.src=logoLogin;}
   }catch(e){}
   initAuth().catch(e=>{
-    // Fallback: se SDK falhar (offline), pede senha local
+    // Sem sessão não há como ler o banco (o RLS exige token autenticado),
+    // então não existe entrada por senha local — seria uma porta que não leva a lugar nenhum.
     console.warn('Auth SDK falhou:',e);
-    const s=prompt('Senha de acesso:');
-    if(s==='montgomery2026'||s==='Montgomery2026'){
-      document.getElementById('loginOverlay').style.display='none';
-    }else{
-      document.getElementById('loginMsg').textContent='Acesso negado.';
-    }
+    setMsg('Sem conexão com o servidor de login. Verifique a internet e recarregue a página.');
   });
 });
 </script>
@@ -586,7 +589,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   <div class="sidebar-footer">
     Montgomery Magalhães<br>Saúde Integrativa<br>
     Itambacuri - MG<br>
-    <span style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600">v2.5 &middot; 22/07</span>
+    <span class="app-ver" style="color:var(--gold,#C9A84C);letter-spacing:1px;font-weight:600"></span>
   </div>
 </aside>
 
@@ -1530,7 +1533,15 @@ window.addEventListener('DOMContentLoaded',()=>{
   </div>
 </section>
 
+  <footer class="rodape-ver no-print" style="text-align:center;padding:26px 12px 34px;color:var(--muted,#8a8a8a);font-size:12px;letter-spacing:.5px">
+    Montgomery Saúde Integrativa &middot; <span class="app-ver" style="color:var(--gold,#C9A84C);font-weight:600"></span>
+  </footer>
 </main>
+<script>
+// Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
+const APP_VER='v2.6 · 27/07';
+document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
+</script>
 </div>
 
 <!-- BOTTOM NAV MOBILE -->
