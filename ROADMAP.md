@@ -14,7 +14,9 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 - Se nem assim der, o aviso agora tem saída: **Religar a ponte** (`ponteReconectar`) leva ao Google e volta para a mesma tela, em vez de "saia e entre de novo". E avisa uma vez por visita, não a cada pedido.
 - Regra intocada: a Clínica só mexe em evento que ela mesma criou (`gcalId`).
 
-**Falta um passo manual do Montgomery** (não dá para o Claude fazer): pôr as duas variáveis em Supabase → Edge Functions → Secrets: `GOOGLE_CLIENT_ID` e `GOOGLE_CLIENT_SECRET`, os mesmos do aplicativo OAuth no Google Cloud. Sem elas a renovação silenciosa não acontece e o app cai no botão de religar — que já é melhor do que antes.
+**Segredos configurados em 27/07** — `GOOGLE_CLIENT_ID` e `GOOGLE_CLIENT_SECRET` estão em Supabase → Edge Functions → Secrets, postos pelo Montgomery. Conferido chamando a função: ela deixou de responder "não configurados" e passou a responder "refresh_token ausente", que é o esperado num teste seco. Nota do caminho: o segredo antigo do cliente OAuth não podia mais ser revelado pelo Google (só é mostrado no instante em que nasce), então foi criada uma chave nova — a antiga continua ativa e o login não sentiu nada.
+
+Depois disso o Montgomery precisa entrar com o Google **uma vez** para o app guardar a chave de renovação — ela só é entregue no login.
 
 <details><summary>Texto original da senha (histórico)</summary>
 
