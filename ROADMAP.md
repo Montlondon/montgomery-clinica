@@ -12,6 +12,14 @@ Frase-chave para janela nova. Faz duas coisas, nessa ordem:
 
 **Travado esperando o Montgomery** (não o Claude — sem o material dele seria inventar conteúdo clínico): síndromes clínicas das Sefirot, e a estrutura dos Florais.
 
+## Ponte com o Google — causa do 404 encontrada e corrigida (v3.1, 27/07)
+
+O 404 ao escrever no Google **não era** escopo errado nem autorização velha contaminando o token. O `tokeninfo` mostrou o `provider_token` sem escopo nenhum de agenda — só `email profile openid`. O pedido nunca chegava ao Google: o `signInWithOAuth` mandava `queryParams:{prompt:'select_account'}`, e `select_account` só pergunta *qual conta*. Como a Clínica já tinha sido autorizada antes (só e-mail e perfil), o Google pulava a tela de consentimento e devolvia o conjunto de chaves antigo, ignorando os `scopes:` pedidos. Corrigido para `prompt:'consent select_account'`.
+
+Junto caiu o bug que escondia tudo: `gcalReq` transforma 404 em `{_naoExiste:true}` (objeto truthy) e o teste do `alternarPonte` só checava `if(!teste)` — o "não enxergo essa agenda" passava por sucesso e a ponte ligava sorrindo para falhar depois. Agora confere `_naoExiste`.
+
+**Falta:** o Montgomery sair, entrar de novo autorizando a agenda na tela nova do Google, e testar de verdade (agendar, remarcar arrastando, conferir que nenhum evento pessoal foi tocado).
+
 ## 🔑 Senha "Google login" (registrada 27/07/2026)
 
 Frase-chave para janela nova. Destravar e **testar** a Ponte com o Google: guiar o Montgomery no Google Cloud Console (ativar a *Google Calendar API* + escopo `.../auth/calendar.events` na tela de permissão OAuth), depois sair/entrar para o Google pedir a autorização nova, ligar a ponte em Configurações e testar de verdade — agendar, remarcar arrastando, conferir na agenda "Clínica · Pacientes" e, principalmente, conferir que **nenhum evento pessoal foi tocado**. Em seguida, seguir zerando o roadmap.
