@@ -12,6 +12,16 @@ Frase-chave para janela nova. Faz duas coisas, nessa ordem:
 
 **Travado esperando o Montgomery** (não o Claude — sem o material dele seria inventar conteúdo clínico): síndromes clínicas das Sefirot, e a estrutura dos Florais.
 
+## Banco limpo: 217 ids repetidos consertados (27/07)
+
+A correção do `novoId()` fecha a porta, mas não desfaz o estrago antigo. Varredura no Supabase mostrou o tamanho real: **217 ids repetidos** entre 452 registros — e, sem exceção, eram **pessoas DIFERENTES compartilhando o mesmo id**, não cadastros duplicados. Nenhum caso de mesma pessoa duas vezes. Ex.: o id `1780965971400.166` pertencia a quatro pessoas ao mesmo tempo.
+
+Era isso que o Montgomery via: apagar um contato pelo filtro `dados->>id=eq.X` mexia em todos os que dividiam aquele id.
+
+Conserto: **nada foi apagado**. Cada linha repetida (a 2ª em diante de cada grupo, 235 no total) recebeu um id novo via `jsonb_set` + `gen_random_uuid()`. Total de pacientes intacto: 4.101 antes e depois. Ids antigos guardados em `backup_ids_duplicados_2607`. Verificado antes de mexer que nenhuma sessão, diagnóstico, prescrição ou venda apontava para esses ids (zero em todas), então nenhum vínculo se perdeu.
+
+**Ainda em aberto:** 92 nomes aparecem 2x ou mais com ids diferentes — esses sim são candidatos a duplicata real (mesmo contato importado duas vezes), mas podem ter homônimos. Precisa da revisão do Montgomery, um a um, antes de apagar.
+
 ## Nome do paciente sincronizado nos dois sentidos (v3.4, 27/07)
 
 Caso real: "Fabricio Filho De Faustino" era na verdade Fabrício do Nascimento Andrade. Corrigir a ficha não bastava — o nome é **copiado** para dentro de cada sessão, diagnóstico, recomendação e venda no instante em que nascem (cada uma guarda uma foto do nome daquele dia), então a agenda e o Google continuavam com o nome errado para sempre.
