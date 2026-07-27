@@ -49,5 +49,41 @@
 
 ---
 
+## Aula viva 27/07/2026 — API, OAuth e escopo (nasceu da Ponte com o Google)
+
+*Aula que não foi inventada: veio do passo real de ligar a Clínica ao Google Calendar.*
+
+**A metáfora.** Um serviço externo (o Google) é um prédio. A **API** é o balcão de
+atendimento — o lugar onde um programa fala com outro programa, sem gente no meio.
+Antes de deixar a Clínica chegar ao balcão, o Google faz três perguntas:
+
+1. **A porta existe?** — é preciso *ativar a API* no **Google Cloud Console** (o painel
+   de administração, que é outro lugar diferente do Google que você usa no dia a dia).
+   Foi o que fizemos: *Google Calendar API*, projeto **App-Montgomery**, status "Ativadas".
+2. **O dono autoriza?** — é a **tela de permissão OAuth**. OAuth é a ideia mais bonita
+   daqui: o aplicativo **nunca recebe a sua senha**. Ele pede ao Google, e o Google
+   pergunta a você. Você é sempre o dono da chave.
+3. **Autoriza até onde?** — é o **escopo**. `.../auth/calendar.events` é uma chave que
+   abre só a gaveta dos eventos, não a casa inteira. Escopo pequeno é segurança.
+
+**Vocabulário mínimo**
+- **API** — o balcão por onde um programa atende outro programa.
+- **OAuth** — pedir a chave ao dono, em vez de pedir a senha.
+- **Escopo** — até onde a chave abre.
+- **`provider_token`** — a chave temporária que o Google devolve. Vive cerca de 1 hora;
+  por isso a ponte, depois de muito tempo parada, pede login de novo.
+- **Console** — o painel de administração do serviço, separado do produto do usuário.
+
+**A regra que protege a sua vida.** A Clínica escreve numa agenda separada
+("Clínica · Pacientes") e só mexe em evento que ela mesma criou — cada sessão guarda o
+`gcalId` do evento dela. Seus compromissos pessoais ficam intocados. O princípio geral,
+que vale para tudo que a gente construir daqui pra frente:
+**dar ao programa o menor poder que resolve o problema.**
+
+Essa mesma dança de três perguntas se repete no Supabase, na Vercel, em qualquer
+serviço. Aprendeu aqui, entendeu em todos.
+
+---
+
 ## Como começar
 No próximo "Montgomery here" → **Rota Aprender (Hod/Rafael)** → "Módulo 00, aula 1". Um tijolo de cada vez. O menino de Nantes vai reacordar, e o novo Montgomery-programador vai nascer. 🌀

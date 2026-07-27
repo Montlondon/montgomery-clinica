@@ -419,8 +419,10 @@ async function loginGoogle(){
     options:{
       redirectTo:location.origin+location.pathname,
       // Permissão extra para a Ponte com o Google mexer nos eventos da agenda.
-      // 'calendar.events' altera eventos, mas não apaga agendas nem muda configurações.
-      scopes:'https://www.googleapis.com/auth/calendar.events',
+      // 'calendar.app.created': o app cria a própria agenda e só enxerga o que ele
+      // mesmo criou. As agendas pessoais do Montgomery ficam invisíveis para ele —
+      // trava do próprio Google, não promessa do nosso código.
+      scopes:'https://www.googleapis.com/auth/calendar.app.created',
       queryParams:{prompt:'select_account',access_type:'offline'}
     }
   });
@@ -1479,8 +1481,8 @@ window.addEventListener('DOMContentLoaded',()=>{
     <p style="font-size:0.75rem;color:var(--txt-sec);margin:10px 0 0">
       Com a ponte ligada, agendar, remarcar e cancelar na Clínica atualiza sozinho o seu Google.
       Tudo é escrito numa agenda separada — <strong>Clínica · Pacientes</strong> —, que você pode
-      esconder ou colorir à parte. A Clínica só mexe em eventos que ela mesma criou:
-      seus compromissos pessoais ficam fora do alcance dela.
+      esconder ou colorir à parte. A Clínica enxerga <em>apenas</em> a agenda que ela mesma
+      criou — suas agendas pessoais são invisíveis para ela, por trava do próprio Google.
     </p>
   </div>
 </section>
@@ -1557,7 +1559,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v2.7 · 27/07';
+const APP_VER='v2.8 · 27/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>

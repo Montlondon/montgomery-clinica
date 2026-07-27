@@ -642,3 +642,42 @@ outra, so rolar a pagina. Agora cada cartao e uma **porta** (`irCamada(n)`):
 - camada apagada -> aviso gentil em `#camadaAviso`: "me peca: acende a camada N".
 Adicionado tambem o link "voltar ao mapa das camadas" no pe da camada 2.
 Pedido dele: "como mudo da camada 1 para camada 2" — a porta nao existia.
+
+## Aula viva (27/07/2026) — Montgomery Code camada 6: API, OAuth e escopo
+
+Material nascido do passo real de hoje: ligar a Ponte da Clinica com o Google
+Calendar. Guardado como aula porque a dinamica se repete em TODO servico externo
+(Google, Supabase, Vercel, Whatsapp). Detalhe em `01_Codigo/Montgomery_Code_TRILHA.md`.
+
+**As tres perguntas que todo servico faz** antes de deixar um app tocar nos dados:
+1. **A porta existe?** -> ativar a API (Google Cloud Console > Biblioteca).
+   Feito hoje: *Google Calendar API*, projeto **App-Montgomery**, status "Ativadas".
+2. **O dono autoriza?** -> a **tela de permissao OAuth**: o que o usuario ve e aceita.
+3. **Autoriza ate onde?** -> o **escopo** (`.../auth/calendar.events`): a chave que
+   abre so uma porta, nao a casa inteira. Escopo pequeno = seguranca.
+
+**Vocabulario minimo:** API (balcao de atendimento de um programa para outro) /
+OAuth (o app pede a chave ao DONO, nunca a senha) / escopo (ate onde a chave abre) /
+`provider_token` (a chave temporaria que o Google devolve; vive ~1h) / Console (o
+painel de administracao do servico, separado do produto que o usuario usa).
+
+**A regra que protege a agenda pessoal:** a Clinica escreve numa agenda separada
+("Clinica - Pacientes") e so mexe em evento que ela mesma criou (guarda o `gcalId`).
+Principio geral: *dar ao programa o menor poder que resolve o problema*.
+
+## Concluido (27/07/2026) — Clinica v2.8: Ponte com o Google troca de chave
+
+A Calendar API foi ativada (projeto App-Montgomery) e o escopo entrou na tela de
+permissao, mas ligar a ponte deu **403** no `calendarList`. Diagnostico no Console do
+navegador: a chave existia, o Google e que recusava. Motivo de fundo: `calendar.events`
+sabe mexer em eventos, mas **nao sabe criar uma agenda** — e a primeira coisa que a
+ponte faz e criar a "Clinica - Pacientes".
+
+Trocado para **`calendar.app.created`**, que era o escopo certo desde o inicio: o app
+cria a propria agenda secundaria e so enxerga o que ele mesmo criou. Ganho real de
+seguranca — as agendas pessoais do Montgomery ficam **invisiveis** para a Clinica por
+trava do Google, nao por promessa do nosso codigo. O texto da aba Configuracoes foi
+corrigido para dizer a verdade nova.
+
+Passo manual dele: adicionar o escopo em Google Auth Platform > Acesso a dados e
+remover o `calendar.events`, que ficou sem uso. Depois sair e entrar de novo.
