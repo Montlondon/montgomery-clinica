@@ -2,6 +2,12 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## A biometria parou de virar chave órfã (v3.7, 27/07)
+
+Montgomery notou: toda vez que saía e entrava, a plataforma pedia a biometria de novo. A causa era uma linha no `fazerLogout` — sair fazia `localStorage.removeItem(BIO_KEY)`, ou seja, **apagava o cadastro da biometria junto com a sessão**. Dois estragos: o botão "Entrar com Biometria" nunca chegava a aparecer na tela de login (ele só aparece se houver cadastro), então a biometria nunca servia para o que existe — entrar rápido; e cada novo "sim" criava mais uma chave dentro do aparelho (Windows Hello, cofre do celular), enquanto a anterior ficava lá sem dono. Uma chave órfã por volta.
+
+Agora sair encerra **só a sessão** — que é o que de fato abre os dados. O reconhecimento fica guardado, e quem decide removê-lo é ele, no botão **Remover Biometria deste aparelho** (Configurações → Segurança). Os dois botões se revezam: aparece "Ativar" quando não há cadastro, "Remover" quando há — não faz sentido oferecer ativar o que já está ativo. A trava de segurança que já existia continua de pé: a biometria sozinha não abre nada, porque sem sessão válida do Google o `loginBiometria` avisa que a sessão expirou.
+
 ## Senha "Fechar as duas goteiras" — FECHADAS (v3.6, 27/07/2026)
 
 **Goteira 1 — já estava fechada.** Ao abrir o código, o `salvarPac` da edição **já usava `dbGravar`** (PATCH, uma viagem só): a varredura do v3.5 levou esse ponto junto, ao contrário do que a anotação dizia. Conferido também o outro cuidado: quem abre a ficha para editar é o `editarPac`, e ele já baixa a versão completa com `fetchPacFull` antes de preencher o formulário — então a foto e os exames nunca são gravados por cima com a lista leve. Nada a mudar.

@@ -542,6 +542,7 @@ async function entrarNaPlataforma(user){
   }
   // Oculta overlay
   document.getElementById('loginOverlay').style.display='none';
+  atualizarBotoesBio();
   // Recarrega dados após login OAuth
   if(typeof initDB==='function')initDB();
   // Oferece cadastro de biometria após primeiro login Google
@@ -551,7 +552,7 @@ async function entrarNaPlataforma(user){
     if(ok&&!jaTem){
       setTimeout(async()=>{
         const resp=confirm('Deseja ativar login por biometria / reconhecimento facial para entrar mais rápido na próxima vez?');
-        if(resp)await cadastrarBiometria();
+        if(resp){await cadastrarBiometria();atualizarBotoesBio();}
       },2000);
     }
   }
@@ -561,9 +562,38 @@ function setMsg(m){document.getElementById('loginMsg').textContent=m;}
 
 async function fazerLogout(){
   if(!confirm('Sair da plataforma?'))return;
-  localStorage.removeItem(BIO_KEY);
+  // Sair encerra a SESSÃO (é ela que abre os dados), mas não apaga a biometria.
+  // Antes apagava: cada saída jogava fora o cadastro, o botão "Entrar com
+  // Biometria" nunca chegava a aparecer na tela de login, e a chave apagada aqui
+  // continuava existindo dentro do aparelho (Windows Hello, cofre do celular)
+  // sem dono — uma chave órfã a cada volta. O reconhecimento fica guardado; quem
+  // decide removê-lo é o Montgomery, pelo botão em Configurações → Segurança.
+  // A biometria sozinha não abre nada: sem sessão válida do Google ela avisa
+  // que a sessão expirou (ver loginBiometria).
   if(_supaClient)await _supaClient.auth.signOut();
   location.reload();
+}
+
+// A porta de saída da biometria — a única, e escolhida por ele.
+function removerBiometria(){
+  if(!localStorage.getItem(BIO_KEY)){alert('Não há biometria cadastrada neste aparelho.');return;}
+  if(!confirm('Remover a biometria deste aparelho?\n\nVocê continua entrando com o Google normalmente, e pode cadastrar de novo quando quiser.'))return;
+  localStorage.removeItem(BIO_KEY);
+  // O aparelho guarda a chave dele no próprio cofre; aqui só soltamos a nossa ponta.
+  alert('Biometria removida deste aparelho. Para apagar também do cofre do aparelho, use as configurações de senhas/chaves de acesso dele.');
+  atualizarBotoesBio();
+}
+
+// Mostra o botão certo para o estado certo: não faz sentido oferecer "ativar"
+// o que já está ativo, nem "remover" o que não existe.
+function atualizarBotoesBio(){
+  try{
+    const tem=!!localStorage.getItem(BIO_KEY);
+    const rem=document.getElementById('btnRemoverBio');
+    if(rem)rem.style.display=tem?'':'none';
+    const at=document.getElementById('btnAtivarBio');
+    if(at)at.style.display=tem?'none':'';
+  }catch(e){}
 }
 
 async function ativarBiometria(){
@@ -574,6 +604,7 @@ async function ativarBiometria(){
   btn.textContent='Aguarde...';
   const sucesso=await cadastrarBiometria();
   if(sucesso){
+    atualizarBotoesBio();
     btn.innerHTML='<span style="color:#27ae60">✓ Biometria ativada com sucesso!</span>';
     setTimeout(()=>btn.innerHTML='<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/><path d="M8 12c0-2.2 1.8-4 4-4s4 1.8 4 4c0 1.5-.8 2.8-2 3.4"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg></span> Ativar Biometria / Face',3000);
   }else{
@@ -1509,6 +1540,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     <h3 style="margin:0 0 16px;color:var(--txt-sec);font-size:0.9rem">Segurança</h3>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
       <button class="btn btn-sec" onclick="ativarBiometria()" id="btnAtivarBio"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/><path d="M8 12c0-2.2 1.8-4 4-4s4 1.8 4 4c0 1.5-.8 2.8-2 3.4"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg></span> Ativar Biometria / Face</button>
+      <button class="btn btn-sec" id="btnRemoverBio" style="display:none" onclick="removerBiometria()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2"/><path d="M8 12c0-2.2 1.8-4 4-4s4 1.8 4 4c0 1.5-.8 2.8-2 3.4"/><path d="M4 4l16 16"/></svg></span> Remover Biometria deste aparelho</button>
       <button class="btn" style="background:rgba(220,60,60,0.1);color:#c0392b;border-color:rgba(220,60,60,0.2)" onclick="fazerLogout()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg></span> Sair / Trocar conta</button>
     </div>
     <p style="font-size:0.75rem;color:var(--txt-sec);margin:10px 0 0">Biometria usa o sensor do seu dispositivo (impressão digital, Face ID ou Windows Hello) para entrar sem precisar do Google.</p>
@@ -1603,7 +1635,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v3.6 · 27/07';
+const APP_VER='v3.7 · 27/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
