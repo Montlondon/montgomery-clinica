@@ -1568,7 +1568,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v3.2 · 27/07';
+const APP_VER='v3.3 · 27/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2605,14 +2605,17 @@ async function salvarSessao(e){
     window._editSessId=null;
     toast('Sessão atualizada!',null,"ok");
     _cache['sessoes']=ss;
-    pontePush(idEditada);
+    // Com 'await': a ida ao Google devolve o gcalId, e é ele que faz o próximo
+    // arrastar MOVER o evento em vez de criar um segundo. Sem esperar, a troca de
+    // tela recarregava os dados por cima e o código do evento se perdia.
+    await pontePush(idEditada);
   } else {
     const nova={id:Date.now(),...dados};
     ss.push(nova);
     await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':nova}]);
     toast('Sessão registrada!',null,"ok");
     _cache['sessoes']=ss;
-    pontePush(nova.id);
+    await pontePush(nova.id);
   }
   _cache['sessoes']=ss;
   e.target.reset();
@@ -3557,7 +3560,7 @@ async function moverSessao(id,novaData){
   toast(`${ss[idx].pacienteNome||'Sessão'} remarcado para ${fd(novaData)}`,null,"ok");
   // Com a ponte ligada o Google se atualiza sozinho; sem ela, cai no antigo
   // snackbar de um clique (mão única), que segue valendo como plano B.
-  if(ponteAtiva())pontePush(id);
+  if(ponteAtiva())await pontePush(id);
   else snackGoogle(id);
 }
 // Snackbar leve: depois de arrastar uma sessão, oferece abrir o Google já com o novo dia.
