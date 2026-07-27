@@ -1572,7 +1572,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v3.4 · 27/07';
+const APP_VER='v3.5 · 27/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -1806,6 +1806,53 @@ async function dbSet(tabela,lista){
     const rows=lista.slice(i,i+LOTE).map(item=>({'user_id':'montgomery','dados':item}));
     await supaReq('POST',tabela,rows);
   }
+}
+
+// ===== GRAVAR UM REGISTRO SEM ABRIR BURACO =====
+// O costume da casa era APAGAR e GRAVAR DE NOVO (DELETE + POST) para atualizar
+// qualquer coisa. Entre as duas viagens o registro não existia em lugar nenhum:
+// se a rede caísse, o celular dormisse ou a aba fechasse bem ali, o dado sumia
+// sem aviso nenhum — e no caso do paciente sumia a foto e os exames junto.
+// Agora é UMA viagem só (PATCH): ou a troca acontece inteira, ou não acontece.
+// Nunca fica pela metade. É a diferença entre apagar a página do caderno para
+// reescrever e simplesmente passar a caneta por cima da linha errada.
+// Se o registro ainda não existir (nenhuma linha trocada), ele nasce aqui —
+// e mesmo nesse caminho nada é apagado em momento algum.
+// Falhar calado é pior do que falhar. A tela mostra a alteração (ela está no
+// cache local) e o Montgomery iria embora achando que salvou. Este aviso existe
+// para que o "não salvou" apareça na hora, e não semanas depois.
+function avisarFalhaGravacao(tabela){
+  try{toast('Não consegui salvar em "'+tabela+'". Confira sua internet e salve de novo.','#c62828',"erro");}catch(e){}
+}
+
+async function dbGravar(tabela,id,dados){
+  const token=await supaAuthToken();
+  const url=`${SUPA_URL}/rest/v1/${tabela}?user_id=eq.montgomery&dados->>id=eq.${id}`;
+  try{
+    const res=await fetch(url,{
+      method:'PATCH',
+      // return=representation faz o banco devolver as linhas trocadas: é assim
+      // que sabemos se o registro existia mesmo (sem isso a resposta vem vazia).
+      headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+token,'Content-Type':'application/json','Prefer':'return=representation'},
+      body:JSON.stringify({dados})
+    });
+    if(!res.ok){console.error('Supabase PATCH ('+tabela+'):',await res.text());avisarFalhaGravacao(tabela);return false;}
+    const linhas=await res.json();
+    if(linhas&&linhas.length)return true;
+  }catch(e){console.error('Supabase PATCH ('+tabela+'):',e);avisarFalhaGravacao(tabela);return false;}
+  // Zero linhas trocadas quer dizer uma de duas coisas: ou o registro não
+  // existe mesmo, ou o banco recusou a mudança em silêncio (é o jeito do RLS
+  // dizer não — devolve 200 com nada dentro, sem erro). Gravar como novo sem
+  // saber qual das duas seria criar a duplicata que acabamos de exterminar.
+  // Então perguntamos antes. Custa uma leitura mínima e só neste caso raro.
+  const existe=await supaReq('GET',tabela,null,`?user_id=eq.montgomery&dados->>id=eq.${id}&select=id&limit=1`);
+  if(existe&&existe.length){
+    console.error('Supabase: a atualização em '+tabela+' foi recusada (o registro existe e não mudou).');
+    avisarFalhaGravacao(tabela);
+    return false;
+  }
+  // Não existia mesmo — grava como novo. Nada foi apagado em momento algum.
+  return await supaReq('POST',tabela,[{'user_id':'montgomery','dados':dados}]);
 }
 
 // Inserir UM registro sem reescrever a tabela inteira (rápido e seguro)
@@ -2418,8 +2465,7 @@ async function salvarPac(e){
     const idx=pacs.findIndex(x=>String(x.id)===String(editId));
     if(idx>=0)pacs[idx]=d;else pacs.push(d);
     _cache['pacientes']=pacs;
-    await supaReq('DELETE','pacientes',null,`?dados->>id=eq.${editId}`);
-    await supaReq('POST','pacientes',[{'user_id':'montgomery','dados':dSave}]);
+    await dbGravar('pacientes',editId,dSave);
     // Nome corrigido na ficha: leva a correção para a agenda, o histórico e o Google.
     // A ficha já foi gravada acima, então renomearPaciente só cuida das cópias.
     if(nomeAntigo&&d.nome&&nomeAntigo!==d.nome){
@@ -2473,8 +2519,7 @@ async function renomearPaciente(pacId,novoNome){
   if(pac&&pac.nome!==novoNome){
     pac.nome=novoNome;
     const dSave={...pac};delete dSave._full;
-    await supaReq('DELETE','pacientes',null,`?dados->>id=eq.${pacId}`);
-    await supaReq('POST','pacientes',[{'user_id':'montgomery','dados':dSave}]);
+    await dbGravar('pacientes',pacId,dSave);
     mudados++;
   }
 
@@ -2484,8 +2529,7 @@ async function renomearPaciente(pacId,novoNome){
     for(const r of lista){
       if(String(r.pacienteId)!==String(pacId)||r.pacienteNome===novoNome)continue;
       r.pacienteNome=novoNome;
-      await supaReq('DELETE',tab,null,`?dados->>id=eq.${r.id}`);
-      await supaReq('POST',tab,[{'user_id':'montgomery','dados':r}]);
+      await dbGravar(tab,r.id,r);
       mudados++;
       if(tab==='sessoes')sessoesTocadas.push(r.id);
     }
@@ -2693,8 +2737,7 @@ async function salvarSessao(e){
     const idx=ss.findIndex(s=>s.id===window._editSessId);
     if(idx>=0){
       ss[idx]={...ss[idx],...dados};
-      await supaReq('DELETE','sessoes',null,`?dados->>id=eq.${window._editSessId}`);
-      await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':ss[idx]}]);
+      await dbGravar('sessoes',window._editSessId,ss[idx]);
     }
     const idEditada=window._editSessId;
     window._editSessId=null;
@@ -2799,8 +2842,7 @@ async function mPago(id){
   if(idx<0)return;
   ss[idx]={...ss[idx],status:'pago'};
   _cache['sessoes']=ss;
-  await supaReq('DELETE','sessoes',null,`?dados->>id=eq.${id}`);
-  await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':ss[idx]}]);
+  await dbGravar('sessoes',id,ss[idx]);
   atuFin();toast('Pago!',null,"ok");
   pontePush(id);                                    // o status também aparece no evento do Google
 }
@@ -2870,8 +2912,7 @@ async function mPagoSup(id){
   if(idx<0)return;
   lista[idx]={...lista[idx],status:'pago'};
   _cache['vendas_suplementos']=lista;
-  await supaReq('DELETE','vendas_suplementos',null,`?dados->>id=eq.${id}`);
-  await supaReq('POST','vendas_suplementos',[{'user_id':'montgomery','dados':lista[idx]}]);
+  await dbGravar('vendas_suplementos',id,lista[idx]);
   renderVendasSuplementos();atuDash();
   toast('Pago!',null,"ok");
 }
@@ -2889,8 +2930,7 @@ async function dVendaSup(id){
     const p=catalogo.find(x=>String(x.id)===String(item.id));
     if(!p)continue;
     const atualizado={...p,estoque:p.estoque+item.qtd};
-    await supaReq('DELETE','suplementos',null,`?dados->>id=eq.${item.id}`);
-    await supaReq('POST','suplementos',[{'user_id':'montgomery','dados':atualizado}]);
+    await dbGravar('suplementos',item.id,atualizado);
   }
   _cache['suplementos']=catalogo.map(p=>{
     const usado=venda.itens.find(i=>String(i.id)===String(p.id));
@@ -2939,8 +2979,7 @@ async function salvarVendaSup(ev){
     const p=catalogo.find(x=>String(x.id)===pid);
     if(!p)continue;
     const atualizado={...p,estoque:Math.max(0,p.estoque+delta)};
-    await supaReq('DELETE','suplementos',null,`?dados->>id=eq.${pid}`);
-    await supaReq('POST','suplementos',[{'user_id':'montgomery','dados':atualizado}]);
+    await dbGravar('suplementos',pid,atualizado);
   }
   _cache['suplementos']=catalogo.map(p=>{
     const pid=String(p.id);
@@ -2951,8 +2990,7 @@ async function salvarVendaSup(ev){
   });
   const vendaAtualizada={...venda,data,itens:novosItens,valor};
   _cache['vendas_suplementos']=gD('vendas_suplementos').map(x=>String(x.id)===String(id)?vendaAtualizada:x);
-  await supaReq('DELETE','vendas_suplementos',null,`?dados->>id=eq.${id}`);
-  await supaReq('POST','vendas_suplementos',[{'user_id':'montgomery','dados':vendaAtualizada}]);
+  await dbGravar('vendas_suplementos',id,vendaAtualizada);
   fecharModalVendaSup();
   renderVendasSuplementos();renderSuplementos();atuDash();
   toast('Venda atualizada!',null,"ok");
@@ -3094,8 +3132,7 @@ async function salvarDespesa(ev){
   };
   if(editId){
     _cache['despesas']=gD('despesas').map(x=>String(x.id)===String(editId)?d:x);
-    await supaReq('DELETE','despesas',null,`?dados->>id=eq.${editId}`);
-    await supaReq('POST','despesas',[{'user_id':'montgomery','dados':d}]);
+    await dbGravar('despesas',editId,d);
     toast('Lançamento salvo!',null,"ok");
   }else{
     // Recorrente com período: gera um lançamento por mês, da data inicial até a final
@@ -3324,8 +3361,7 @@ async function salvarSuplemento(ev){
   if(id){
     const lista=gD('suplementos').map(x=>String(x.id)===String(id)?p:x);
     _cache['suplementos']=lista;
-    await supaReq('DELETE','suplementos',null,`?dados->>id=eq.${id}`);
-    await supaReq('POST','suplementos',[{'user_id':'montgomery','dados':p}]);
+    await dbGravar('suplementos',id,p);
     toast('Produto atualizado!',null,"ok");
   } else {
     await dbAdd('suplementos',p);
@@ -3456,8 +3492,7 @@ function gcalEvento(s){
 
 // Grava só a linha daquela sessão no banco (nunca a tabela inteira).
 async function gravarSessao(s){
-  await supaReq('DELETE','sessoes',null,`?dados->>id=eq.${s.id}`);
-  await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':s}]);
+  await dbGravar('sessoes',s.id,s);
 }
 
 // Cria ou atualiza o evento da sessão no Google. Silenciosa: se a ponte estiver
@@ -3657,8 +3692,7 @@ async function moverSessao(id,novaData){
   ss[idx]={...ss[idx],data:novaData};
   _cache['sessoes']=ss;
   renderSemana();renderAg();                        // atualiza a tela na hora
-  await supaReq('DELETE','sessoes',null,`?dados->>id=eq.${id}`);
-  await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':ss[idx]}]);
+  await dbGravar('sessoes',id,ss[idx]);
   atuFin();atuDash();
   toast(`${ss[idx].pacienteNome||'Sessão'} remarcado para ${fd(novaData)}`,null,"ok");
   // Com a ponte ligada o Google se atualiza sozinho; sem ela, cai no antigo
@@ -5061,8 +5095,7 @@ async function salvarDiagnostico(){
   try{
     if(_diagEditandoId){
       // Atualização: substitui só este registro (mesmo id), sem afetar os demais
-      await supaReq('DELETE','diagnosticos',null,`?dados->>id=eq.${_diagEditandoId}`);
-      const ok=await supaReq('POST','diagnosticos',[{'user_id':'montgomery','dados':diag}]);
+      const ok=await dbGravar('diagnosticos',_diagEditandoId,diag);
       if(!ok){
         toast('Não foi possível salvar no servidor. Verifique sua conexão e tente novamente.','#c62828',"erro");
         return;
@@ -5330,8 +5363,7 @@ async function salvarRxHistorico(){
     const rxs=gD('prescricoes').filter(r=>String(r.id)!==String(_rxEditandoId));
     rxs.push(rx);
     _cache['prescricoes']=rxs;
-    await supaReq('DELETE','prescricoes',null,`?dados->>id=eq.${_rxEditandoId}`);
-    await supaReq('POST','prescricoes',[{'user_id':'montgomery','dados':rx}]);
+    await dbGravar('prescricoes',_rxEditandoId,rx);
     _rxEditandoId=null;
     if(b1)b1.innerHTML=SAVE_ICON_HTML+' Salvar Recomendação';
     if(b2)b2.innerHTML=SAVE_ICON_HTML+' Salvar Recomendação';
@@ -5356,8 +5388,7 @@ async function registrarVendaSuplementos(rx){
     const p=catalogo.find(x=>String(x.id)===String(usado.id));
     if(!p)continue;
     const atualizado={...p,estoque:Math.max(0,p.estoque-usado.qtd)};
-    await supaReq('DELETE','suplementos',null,`?dados->>id=eq.${usado.id}`);
-    await supaReq('POST','suplementos',[{'user_id':'montgomery','dados':atualizado}]);
+    await dbGravar('suplementos',usado.id,atualizado);
   }
   _cache['suplementos']=catalogo.map(p=>{
     const usado=rx.suplementos.find(s=>String(s.id)===String(p.id));
@@ -6508,8 +6539,7 @@ async function marcarTriagemSel(){
     const p=pacs.find(x=>String(x.id)===String(id));
     if(!p)continue;
     const atualizado={...p,triagem:false};
-    await supaReq('DELETE','pacientes',null,`?dados->>id=eq.${id}`);
-    await supaReq('POST','pacientes',[{'user_id':'montgomery','dados':atualizado}]);
+    await dbGravar('pacientes',id,atualizado);
   }
   _cache['pacientes']=pacs.map(p=>ids.includes(p.id)?{...p,triagem:false}:p);
   renderP();

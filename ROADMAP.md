@@ -12,6 +12,19 @@ Frase-chave para janela nova. Faz duas coisas, nessa ordem:
 
 **Travado esperando o Montgomery** (não o Claude — sem o material dele seria inventar conteúdo clínico): síndromes clínicas das Sefirot, e a estrutura dos Florais.
 
+## Fim do "apaga e grava" — a fragilidade que podia perder dados (v3.5, 27/07)
+
+O costume da casa para atualizar qualquer registro era DELETE + POST: apagar a linha e gravar de novo. Entre as duas viagens o registro **não existia em lugar nenhum**. Rede caindo, celular dormindo ou aba fechando naquele instante = dado perdido, sem erro e sem aviso. No paciente levava a foto e os exames junto. Estavam assim os 17 pontos de atualização do app (paciente, sessão, despesa, suplemento, venda, diagnóstico, prescrição, triagem — e a `renomearPaciente` escrita ontem, que herdou o vício e o repetia dentro de um laço).
+
+Agora existe `dbGravar(tabela,id,dados)`: **uma viagem só**, PATCH. Ou a troca acontece inteira, ou não acontece. Todos os 17 pontos convertidos.
+
+Três cuidados que entraram junto:
+- `Prefer: return=representation` no PATCH, para o banco devolver as linhas trocadas — sem isso a resposta vem vazia e não dá para saber se pegou.
+- **Zero linhas trocadas não vira POST no escuro.** Isso significa "não existe" OU "o RLS recusou em silêncio" (o RLS nega devolvendo 200 com nada dentro, sem erro). Inserir sem saber qual das duas recriaria exatamente a duplicata que acabamos de exterminar. Então confere com uma leitura mínima antes, e só grava como novo se realmente não existir.
+- `avisarFalhaGravacao()`: falhar calado é pior que falhar. A tela mostrava a alteração (está no cache local) e o Montgomery iria embora achando que salvou. Agora o "não salvou" aparece na hora.
+
+Conferido antes de subir: as 9 tabelas têm política RLS `ALL`, que cobre UPDATE.
+
 ## Banco limpo: 217 ids repetidos consertados (27/07)
 
 A correção do `novoId()` fecha a porta, mas não desfaz o estrago antigo. Varredura no Supabase mostrou o tamanho real: **217 ids repetidos** entre 452 registros — e, sem exceção, eram **pessoas DIFERENTES compartilhando o mesmo id**, não cadastros duplicados. Nenhum caso de mesma pessoa duas vezes. Ex.: o id `1780965971400.166` pertencia a quatro pessoas ao mesmo tempo.
