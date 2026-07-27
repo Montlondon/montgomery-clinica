@@ -12,7 +12,21 @@ Frase-chave para janela nova. Faz duas coisas, nessa ordem:
 
 **Travado esperando o Montgomery** (não o Claude — sem o material dele seria inventar conteúdo clínico): síndromes clínicas das Sefirot, e a estrutura dos Florais.
 
-## Planejado — Senha "Ponte com o Google" (sync de dois sentidos)
+## Ponte com o Google — CONSTRUÍDA (v2.7, 27/07), aguardando o passo do Montgomery no Google Cloud
+
+Conferido antes de construir: a ponte **não** existia — só o `abrirGA` (endereço `calendar.google.com/render` pré-preenchido, mão única, sem nenhum vínculo com o evento). Agora existe de verdade, via API do Calendar:
+
+- **Permissão:** o login Google passou a pedir o escopo `calendar.events` (altera eventos; não apaga agendas nem muda configurações). O token de acesso vem no `provider_token` da sessão do Supabase.
+- **Isolamento:** tudo é escrito numa agenda separada **"Clínica · Pacientes"**, criada uma vez só (`garantirAgendaClinica`, id guardado em `localStorage.gcal_agenda_id`). Cada sessão guarda o `gcalId` do evento. **A Clínica só toca em evento que ela mesma criou** — sem `gcalId` salvo, não encosta. Os eventos pessoais ficam fora do alcance por construção.
+- **Interruptor:** botão "Ligar ponte com o Google" em Configurações → seção própria (`alternarPonte`/`renderPonteBotao`, chave `cfg_ponte_google`). Desligada por padrão; com ela desligada nada muda no comportamento antigo.
+- **Ligada em 4 momentos:** agendar e editar (`salvarSessao`), remarcar arrastando (`moverSessao` — com a ponte ligada o Google se atualiza sozinho e o snackbar antigo de um clique não aparece mais; sem ela, o snackbar segue como plano B), marcar como pago (`mPago`, o status aparece no evento) e excluir (`dSess`/`dSessAg`, que cancelam no Google **antes** de apagar a linha, senão o vínculo se perderia).
+- **Robustez:** se o evento foi apagado na mão no Google, o `PATCH` volta 404 e a ponte recria em vez de ficar muda. Se o Google não responde ou a autorização venceu, o app segue funcionando normalmente e avisa para entrar de novo.
+
+**Falta só do lado do Montgomery, no Google Cloud Console:** ativar a **Google Calendar API** e adicionar o escopo `.../auth/calendar.events` na tela de permissão OAuth. Sem isso o Google recusa os pedidos e o botão de ligar a ponte avisa que não conseguiu falar com ele.
+
+**Limite conhecido (a ser resolvido):** o `provider_token` do Google vive ~1 hora e o Supabase não o renova sozinho. Na prática, depois de um tempo parado a ponte pede um login novo. Falta também o sentido **Google → Clínica** (mudar no Google e refletir no app), que exige leitura periódica da agenda.
+
+## Planejado — resto da Senha "Ponte com o Google" (era: sync de dois sentidos)
 
 Integração viva com o Google Calendar via API + login (OAuth), para que remarcar/cancelar na Clínica reflita sozinho no Google (hoje a integração é de mão única: só abre uma tela do Google já preenchida, não sabe qual evento é de qual sessão — por isso remarcar arrastando não atualiza o Google, e o Montgomery ajusta manualmente). **Regra essencial:** a ponte mexe SÓ nas sessões de pacientes criadas na Clínica — nunca nos outros eventos do Google (o Montgomery anota a vida inteira lá). A Clínica só cria/move/cancela eventos que ela mesma criou, guardando o ID do evento como vínculo invisível de cada sessão; sem esse vínculo, não toca. Recomendado escrever numa **agenda Google separada "Clínica/Pacientes"** (cor própria, ligável/desligável) para isolar de vez da agenda pessoal. Trabalho envolvido: autorização Google, guardar o `googleEventId` por sessão, e criar/mover/deletar via API. O próprio comentário do `abrirGA` já aponta a API do Calendar como "o caminho definitivo".
 

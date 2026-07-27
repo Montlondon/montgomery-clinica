@@ -416,7 +416,13 @@ async function loginGoogle(){
   if(!_supaClient)await initAuth();
   const {error}=await _supaClient.auth.signInWithOAuth({
     provider:'google',
-    options:{redirectTo:location.origin+location.pathname,queryParams:{prompt:'select_account'}}
+    options:{
+      redirectTo:location.origin+location.pathname,
+      // Permissão extra para a Ponte com o Google mexer nos eventos da agenda.
+      // 'calendar.events' altera eventos, mas não apaga agendas nem muda configurações.
+      scopes:'https://www.googleapis.com/auth/calendar.events',
+      queryParams:{prompt:'select_account',access_type:'offline'}
+    }
   });
   if(error)setMsg('Erro: '+error.message);
 }
@@ -1465,6 +1471,18 @@ window.addEventListener('DOMContentLoaded',()=>{
     </div>
     <p style="font-size:0.75rem;color:var(--txt-sec);margin:10px 0 0">Biometria usa o sensor do seu dispositivo (impressão digital, Face ID ou Windows Hello) para entrar sem precisar do Google.</p>
   </div>
+  <div style="margin-top:32px;padding-top:24px;border-top:1px solid var(--brd)">
+    <h3 style="margin:0 0 16px;color:var(--txt-sec);font-size:0.9rem">Ponte com o Google</h3>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-sec" id="btnPonte" onclick="alternarPonte()"></button>
+    </div>
+    <p style="font-size:0.75rem;color:var(--txt-sec);margin:10px 0 0">
+      Com a ponte ligada, agendar, remarcar e cancelar na Clínica atualiza sozinho o seu Google.
+      Tudo é escrito numa agenda separada — <strong>Clínica · Pacientes</strong> —, que você pode
+      esconder ou colorir à parte. A Clínica só mexe em eventos que ela mesma criou:
+      seus compromissos pessoais ficam fora do alcance dela.
+    </p>
+  </div>
 </section>
 
 <!-- ===== BACKUP ===== -->
@@ -1539,7 +1557,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v2.6 · 27/07';
+const APP_VER='v2.7 · 27/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2134,7 +2152,7 @@ function go(p,el){
   if(p==='dashboard')atuDash();
   if(p==='backup')atuInfoSys();
   if(p==='agenda')initAgenda();
-  if(p==='configuracoes'){carregarFormConfig();renderDiplomaGerenciarGrid();}
+  if(p==='configuracoes'){carregarFormConfig();renderDiplomaGerenciarGrid();renderPonteBotao();}
   if(p==='sobre')renderSobre();
   if(p==='diagnostico'){
     // Acesso pelo menu lateral (clique real, "el" existe) sempre começa do
@@ -2572,13 +2590,18 @@ async function salvarSessao(e){
       await supaReq('DELETE','sessoes',null,`?dados->>id=eq.${window._editSessId}`);
       await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':ss[idx]}]);
     }
+    const idEditada=window._editSessId;
     window._editSessId=null;
     toast('Sessão atualizada!',null,"ok");
+    _cache['sessoes']=ss;
+    pontePush(idEditada);
   } else {
     const nova={id:Date.now(),...dados};
     ss.push(nova);
     await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':nova}]);
     toast('Sessão registrada!',null,"ok");
+    _cache['sessoes']=ss;
+    pontePush(nova.id);
   }
   _cache['sessoes']=ss;
   e.target.reset();
@@ -2670,9 +2693,11 @@ async function mPago(id){
   await supaReq('DELETE','sessoes',null,`?dados->>id=eq.${id}`);
   await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':ss[idx]}]);
   atuFin();toast('Pago!',null,"ok");
+  pontePush(id);                                    // o status também aparece no evento do Google
 }
 async function dSess(id){
   if(!confirm('Excluir sessão?'))return;
+  await ponteCancelar(gD('sessoes').find(s=>s.id===id));   // tira do Google antes de perder o vínculo
   _cache['sessoes']=gD('sessoes').filter(s=>s.id!==id);
   await supaReq('DELETE','sessoes',null,`?dados->>id=eq.${id}`);
   atuFin();toast('Removida','#c62828',"trash");
@@ -3240,6 +3265,152 @@ function abrirGA(s){
   window.open(url,'_blank');
 }
 
+// ===== PONTE COM O GOOGLE (sync de dois sentidos) =====
+// Regra de ouro: a Clínica só toca em evento que ELA MESMA criou, numa agenda separada
+// só dela. Cada sessão guarda o código do evento (gcalId); sem esse código, não encosta.
+// Os eventos pessoais do Montgomery ficam intocáveis por construção, não por promessa.
+const GCAL_API='https://www.googleapis.com/calendar/v3';
+const GCAL_NOME='Clínica · Pacientes';
+const GCAL_ID_KEY='gcal_agenda_id';
+const GCAL_TZ='America/Sao_Paulo';
+
+function ponteAtiva(){return localStorage.getItem('cfg_ponte_google')==='true';}
+function setPonteAtiva(v){localStorage.setItem('cfg_ponte_google',v?'true':'false');}
+
+// O token de acesso ao Google vem junto da sessão do Supabase (provider_token).
+// Ele vive cerca de 1 hora; quando vence, o jeito honesto é pedir um login novo.
+async function gcalToken(){
+  try{
+    if(!_supaClient)return null;
+    const {data:{session}}=await _supaClient.auth.getSession();
+    return session?.provider_token||null;
+  }catch(e){return null;}
+}
+
+async function gcalReq(method,path,body=null){
+  const tok=await gcalToken();
+  if(!tok){ponteAvisaLogin();return null;}
+  const r=await fetch(GCAL_API+path,{
+    method,
+    headers:{'Authorization':'Bearer '+tok,'Content-Type':'application/json'},
+    body:body?JSON.stringify(body):undefined
+  });
+  if(r.status===401||r.status===403){ponteAvisaLogin();return null;}
+  if(r.status===404)return {_naoExiste:true};
+  if(!r.ok){console.warn('Ponte Google',method,path,r.status);return null;}
+  if(r.status===204)return {};
+  return await r.json();
+}
+
+function ponteAvisaLogin(){
+  toast('A autorização do Google venceu. Saia e entre de novo para religar a ponte.','#EF6C00',"warn");
+}
+
+// Acha (ou cria uma única vez) a agenda separada da Clínica e guarda o id no aparelho.
+async function garantirAgendaClinica(){
+  const salvo=localStorage.getItem(GCAL_ID_KEY);
+  if(salvo)return salvo;
+  const lista=await gcalReq('GET','/users/me/calendarList');
+  if(!lista)return null;
+  const achada=(lista.items||[]).find(c=>c.summary===GCAL_NOME);
+  if(achada){localStorage.setItem(GCAL_ID_KEY,achada.id);return achada.id;}
+  const nova=await gcalReq('POST','/calendars',{summary:GCAL_NOME,timeZone:GCAL_TZ});
+  if(!nova||!nova.id)return null;
+  localStorage.setItem(GCAL_ID_KEY,nova.id);
+  return nova.id;
+}
+
+// Monta o evento a partir da sessão — mesmo conteúdo que o abrirGA já usava.
+function gcalEvento(s){
+  const hi=s.horario||'08:00';
+  const [h,m]=hi.split(':').map(Number);
+  const hf=String((h+1)%24).padStart(2,'0')+':'+String(m).padStart(2,'0');
+  const end='R. Miro Ferreira de Oliveira, 110 - Adelaide Bessa, Itambacuri - MG, 39830-000, Brasil';
+  return {
+    summary:(s.pacienteNome||'Sessão').trim(),
+    location:end,
+    description:'Paciente: '+(s.pacienteNome||'—')+
+      '\nProcedimento: '+(s.procedimentos||'—')+
+      '\nValor: '+fm(s.valor)+
+      '\nStatus: '+(s.status||'—')+
+      (s.notas?'\nNotas: '+s.notas:'')+
+      '\n\nCriado pela Clínica — não editar o código abaixo.\n[clinica:'+s.id+']',
+    start:{dateTime:s.data+'T'+hi+':00',timeZone:GCAL_TZ},
+    end:{dateTime:s.data+'T'+hf+':00',timeZone:GCAL_TZ}
+  };
+}
+
+// Grava só a linha daquela sessão no banco (nunca a tabela inteira).
+async function gravarSessao(s){
+  await supaReq('DELETE','sessoes',null,`?dados->>id=eq.${s.id}`);
+  await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':s}]);
+}
+
+// Cria ou atualiza o evento da sessão no Google. Silenciosa: se a ponte estiver
+// desligada ou o Google não responder, o app segue a vida normalmente.
+async function pontePush(sessaoId){
+  if(!ponteAtiva())return;
+  const ss=gD('sessoes');
+  const idx=ss.findIndex(x=>String(x.id)===String(sessaoId));
+  if(idx<0)return;
+  const s=ss[idx];
+  if(!s.data)return;
+  const ag=await garantirAgendaClinica();
+  if(!ag)return;
+  const corpo=gcalEvento(s);
+  let r;
+  if(s.gcalId){
+    r=await gcalReq('PATCH',`/calendars/${encodeURIComponent(ag)}/events/${encodeURIComponent(s.gcalId)}`,corpo);
+    // O evento sumiu do Google (apagado na mão) — recria em vez de ficar mudo.
+    if(r&&r._naoExiste){delete s.gcalId;r=null;}
+  }
+  if(!s.gcalId){
+    r=await gcalReq('POST',`/calendars/${encodeURIComponent(ag)}/events`,corpo);
+    if(r&&r.id){
+      ss[idx]={...s,gcalId:r.id};
+      _cache['sessoes']=ss;
+      await gravarSessao(ss[idx]);
+    }
+  }
+}
+
+// Cancela no Google o evento daquela sessão — só se a Clínica tiver criado ele.
+async function ponteCancelar(s){
+  if(!ponteAtiva()||!s||!s.gcalId)return;
+  const ag=localStorage.getItem(GCAL_ID_KEY);
+  if(!ag)return;
+  await gcalReq('DELETE',`/calendars/${encodeURIComponent(ag)}/events/${encodeURIComponent(s.gcalId)}`);
+}
+
+// Liga/desliga a ponte pela tela de Configurações.
+async function alternarPonte(){
+  if(ponteAtiva()){
+    setPonteAtiva(false);
+    toast('Ponte com o Google desligada.',null,"ok");
+  }else{
+    setPonteAtiva(true);
+    const ag=await garantirAgendaClinica();
+    if(!ag){
+      setPonteAtiva(false);
+      toast('Não consegui falar com o Google. Saia e entre de novo autorizando a agenda.','#EF6C00',"warn");
+    }else{
+      toast('Ponte ligada! A agenda "'+GCAL_NOME+'" foi criada no seu Google.',null,"ok");
+    }
+  }
+  renderPonteBotao();
+}
+
+function renderPonteBotao(){
+  const b=document.getElementById('btnPonte');
+  if(!b)return;
+  const on=ponteAtiva();
+  const ic='<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>'+
+    (on?'<path d="M9 15l2 2 4-4"/>':'<path d="M12 12v4M12 18h.01"/>')+'</svg></span>';
+  b.innerHTML=ic+(on?' Ponte ligada — desligar':' Ligar ponte com o Google');
+  b.style.borderColor=on?'var(--gold,#C9A84C)':'';
+  b.style.color=on?'var(--gold,#C9A84C)':'';
+}
+
 // ===== AGENDA =====
 function initAgenda(){semOff_=0;renderSemana();renderAg();const h=new Date();document.getElementById('agAno').value=h.getFullYear();}
 function navSem(d){semOff_+=d;renderSemana();}
@@ -3328,7 +3499,10 @@ async function moverSessao(id,novaData){
   await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':ss[idx]}]);
   atuFin();atuDash();
   toast(`${ss[idx].pacienteNome||'Sessão'} remarcado para ${fd(novaData)}`,null,"ok");
-  snackGoogle(id);                                  // oferece atualizar o Google num clique
+  // Com a ponte ligada o Google se atualiza sozinho; sem ela, cai no antigo
+  // snackbar de um clique (mão única), que segue valendo como plano B.
+  if(ponteAtiva())pontePush(id);
+  else snackGoogle(id);
 }
 // Snackbar leve: depois de arrastar uma sessão, oferece abrir o Google já com o novo dia.
 // Não cria permissão nem backend — só reaproveita abrirGA (mão única). Some sozinho em 9s.
@@ -3387,6 +3561,7 @@ function verEvento(id){
 }
 async function dSessAg(id){
   if(!confirm('Excluir este agendamento permanentemente?'))return;
+  await ponteCancelar(gD('sessoes').find(s=>s.id===id));   // tira do Google antes de perder o vínculo
   _cache['sessoes']=gD('sessoes').filter(s=>s.id!==id);
   await supaReq('DELETE','sessoes',null,`?dados->>id=eq.${id}`);
   renderAg();atuFin();atuDash();
