@@ -681,3 +681,21 @@ corrigido para dizer a verdade nova.
 
 Passo manual dele: adicionar o escopo em Google Auth Platform > Acesso a dados e
 remover o `calendar.events`, que ficou sem uso. Depois sair e entrar de novo.
+
+## Concluido (27/07/2026) — Clinica v2.9: a ponte escreve na agenda que ELE ja usa
+
+O v2.8 estava tecnicamente certo e humanamente errado: criava uma agenda nova
+("Clinica - Pacientes"), mas o Montgomery marca os pacientes ha anos na agenda
+**Montgomery Magalhaes**. O `calendar.app.created` e incapaz de tocar em agenda que ja
+existe — e dessa incapacidade que vinha a seguranca dele. Os dois desejos (escrever na
+agenda de sempre / ficar cego para as agendas pessoais) nao cabem na mesma chave.
+
+Escolha dele: **escrever na Montgomery Magalhaes**. Voltamos ao escopo
+`calendar.events` e trocamos o desenho — em vez de criar agenda, a Clinica agora
+**deixa ele escolher** num seletor em Configuracoes qual das suas agendas recebe as
+sessoes (so as que ele pode escrever; feriados e luas ficam de fora). Na primeira vez
+ela chuta a agenda com o nome dele. Quem limita o alcance volta a ser o nosso codigo:
+escreve so na agenda escolhida e so mexe em evento com `gcalId` nosso.
+
+Aprendizado guardado: a chave mais fechada nem sempre e a certa — a certa e a que
+cabe na vida de quem usa.
