@@ -12,6 +12,31 @@ Frase-chave para janela nova. Faz duas coisas, nessa ordem:
 
 **Travado esperando o Montgomery** (não o Claude — sem o material dele seria inventar conteúdo clínico): síndromes clínicas das Sefirot, e a estrutura dos Florais.
 
+## Nome do paciente sincronizado nos dois sentidos (v3.4, 27/07)
+
+Caso real: "Fabricio Filho De Faustino" era na verdade Fabrício do Nascimento Andrade. Corrigir a ficha não bastava — o nome é **copiado** para dentro de cada sessão, diagnóstico, recomendação e venda no instante em que nascem (cada uma guarda uma foto do nome daquele dia), então a agenda e o Google continuavam com o nome errado para sempre.
+
+Agora existe `renomearPaciente(pacId, novoNome)`, a única porta por onde o nome se corrige. Ela: (1) regrava a ficha — buscando a versão COMPLETA com `fetchPacFull`, senão a lista leve gravaria por cima e apagaria a foto; (2) varre `sessoes`, `diagnosticos`, `prescricoes` e `vendas_suplementos` atrás de todas as cópias pelo `pacienteId`, que é o fio que liga tudo; (3) chama `pontePush` nas sessões alteradas, reescrevendo o título dos eventos no Google.
+
+Duas portas de entrada, os dois sentidos que o Montgomery pediu:
+- **Plataforma → agenda:** editar o nome na ficha e salvar dispara a correção sozinho (`salvarPac` compara o nome antigo com o novo).
+- **Agenda → plataforma:** botão **Corrigir nome** no cartão da sessão, na agenda.
+
+## Duplicação de cadastros — causa raiz corrigida (v3.4, 27/07)
+
+Montgomery notou um contato duplicando ao criar e ao apagar. Duas causas, as duas reais:
+
+1. **O id não era único.** Todo cadastro nascia com `Date.now()+Math.random()`. Parece único, mas não é: num número do tamanho de `Date.now()` (1,7 trilhão) o computador só guarda casas decimais de 0,000244 em 0,000244 — sobram ~4 mil valores possíveis dentro do mesmo milissegundo. Pelo paradoxo do aniversário, dá colisão depois de umas 80 criações; importando contatos aos milhares é certeza. Dois registros com o MESMO id: apagar um pelo filtro `dados->>id=eq.X` mexia no outro, e a lista mostrava a mesma pessoa duas vezes. Agora existe `novoId()` — tempo + contador que nunca repete + sorteio, em texto (`t...`). Trocado nos 9 lugares que geravam id (paciente, exame, despesa, parcela, suplemento, catálogo, diagnóstico, receita, importação de vCard).
+2. **`salvarPac` sem trava.** É assíncrono (espera o Supabase). Dois cliques no Salvar — ou clique + Enter — entravam duas vezes com `editId` ainda vazio, e cada entrada criava um paciente novo. Agora tem trava `_salvandoPac`.
+
+Ids antigos (numéricos) continuam funcionando; só os novos mudam de formato.
+
+**Ainda em aberto:** no caminho de edição, `salvarPac` faz DELETE e depois POST. Se a rede cair no meio, o paciente some. Trocar por PATCH ou por upsert.
+
+## Ponte com o Google — acabamento da tela (v3.4, 27/07)
+
+Os escritos estavam pesados e o seletor de agenda cru. Agora: selo "Ligada/Desligada" ao lado do título, uma linha curta explicando, botão "Desligar ponte" em vez da frase comprida, e o seletor com rótulo "Agenda de destino" e caixa com borda/respiro. Nome da agenda passou a ser escapado (`escHtml`).
+
 ## Ponte com o Google — FUNCIONANDO (v3.3, 27/07)
 
 Testada na prática: sessão criada aparece no Google, e arrastar na Clínica move o evento lá. Agenda escolhida: a principal (`montlondon@gmail.com`, a "Montgomery Magalhães"). Foram **quatro** causas empilhadas, cada uma escondendo a seguinte:

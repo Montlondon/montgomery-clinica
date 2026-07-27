@@ -1483,14 +1483,18 @@ window.addEventListener('DOMContentLoaded',()=>{
     <p style="font-size:0.75rem;color:var(--txt-sec);margin:10px 0 0">Biometria usa o sensor do seu dispositivo (impressão digital, Face ID ou Windows Hello) para entrar sem precisar do Google.</p>
   </div>
   <div style="margin-top:32px;padding-top:24px;border-top:1px solid var(--brd)">
-    <h3 style="margin:0 0 16px;color:var(--txt-sec);font-size:0.9rem">Ponte com o Google</h3>
+    <h3 style="margin:0 0 4px;color:var(--txt-sec);font-size:0.9rem">Ponte com o Google
+      <span id="ponteStatus" style="margin-left:8px;font-size:0.68rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--brd);border-radius:20px;padding:2px 9px;vertical-align:1px"></span>
+    </h3>
+    <p style="font-size:0.78rem;color:var(--txt-l);margin:0 0 14px;max-width:520px">
+      Agendar, remarcar e cancelar na Clínica atualiza sozinho o seu Google.
+    </p>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
       <button class="btn btn-sec" id="btnPonte" onclick="alternarPonte()"></button>
     </div>
-    <div id="ponteAgendaBox" class="hidden" style="margin-top:14px"></div>
-    <p style="font-size:0.75rem;color:var(--txt-sec);margin:10px 0 0">
-      Com a ponte ligada, agendar, remarcar e cancelar na Clínica atualiza sozinho o seu Google.
-      A Clínica escreve <strong>só na agenda escolhida acima</strong> e só mexe em evento
+    <div id="ponteAgendaBox" class="hidden" style="margin-top:16px"></div>
+    <p style="font-size:0.72rem;color:var(--txt-l);margin:16px 0 0;max-width:520px;line-height:1.6">
+      A Clínica escreve <strong>só na agenda escolhida</strong> e só mexe em evento
       que ela mesma criou. Seus outros compromissos ficam fora do alcance dela.
     </p>
   </div>
@@ -1568,7 +1572,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v3.3 · 27/07';
+const APP_VER='v3.4 · 27/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -1818,6 +1822,17 @@ async function syncTudo(){
   if(document.getElementById('pg-dashboard'))atuDash();
   if(document.getElementById('pg-financeiro'))atuFin();
 }
+
+// ===== ID ÚNICO DE VERDADE =====
+// O antigo `Date.now()+Math.random()` PARECIA único, mas não era. Em um número
+// do tamanho de Date.now() (1,7 trilhão) o computador só consegue guardar casas
+// decimais de 0,000244 em 0,000244 — sobram ~4 mil valores possíveis dentro do
+// mesmo milissegundo. Criando contatos (ou importando aos milhares), dois
+// registros nasciam com o MESMO id. Daí a duplicação: apagar um pelo id mexia
+// no outro, e a lista mostrava a mesma pessoa duas vezes.
+// Agora: tempo + um contador que nunca repete + sorteio, tudo em texto.
+let _seqId=0;
+function novoId(){return 't'+Date.now().toString(36)+'_'+(_seqId++).toString(36)+'_'+Math.random().toString(36).slice(2,8);}
 
 // Compatibilidade: versões síncronas usam cache
 const gD=k=>_cache[k]||[];
@@ -2329,7 +2344,7 @@ function addExames(inp){
   Array.from(inp.files).forEach(f=>{
     if(f.size>5*1024*1024){toast(''+f.name+' > 5MB','#EF6C00',"warn");return;}
     const r=new FileReader();
-    r.onload=e=>{exTemp.push({id:Date.now()+Math.random(),nome:f.name,data:e.target.result});renderEx();mudou();};
+    r.onload=e=>{exTemp.push({id:novoId(),nome:f.name,data:e.target.result});renderEx();mudou();};
     r.readAsDataURL(f);
   });
   inp.value='';
@@ -2382,12 +2397,22 @@ function preencherForm(p){
 }
 
 // ===== SALVAR PACIENTE =====
+let _salvandoPac=false;
 async function salvarPac(e){
   e.preventDefault();
-  const d=coletarDados();d.id=editId||(Date.now()+Math.random());d.dataCadastro=new Date().toLocaleDateString('pt-BR');d.foto=fotoB64;d.exames=exTemp;
+  // Trava: o Salvar é assíncrono (espera o Supabase responder). Dois cliques
+  // seguidos — ou o clique mais o Enter — entravam aqui duas vezes com editId
+  // ainda vazio, e cada entrada criava UM paciente novo. Eram os dois iguais.
+  if(_salvandoPac)return;
+  _salvandoPac=true;
+  try{
+  const d=coletarDados();d.id=editId||novoId();d.dataCadastro=new Date().toLocaleDateString('pt-BR');d.foto=fotoB64;d.exames=exTemp;
   // _full só existe em memória (marca que foto/exames já estão carregados); nunca vai pro banco
   const dSave={...d};delete dSave._full;d._full=true;
   const pacs=gD('pacientes');
+  // Guardar o nome que estava valendo ANTES de gravar: se ele mudou, a agenda,
+  // os diagnósticos, as recomendações e o Google precisam saber (renomearPaciente).
+  const nomeAntigo=editId?(pacs.find(x=>String(x.id)===String(editId))||{}).nome:null;
   if(editId){
     // Atualizar: editar só este paciente no Supabase
     const idx=pacs.findIndex(x=>String(x.id)===String(editId));
@@ -2395,7 +2420,14 @@ async function salvarPac(e){
     _cache['pacientes']=pacs;
     await supaReq('DELETE','pacientes',null,`?dados->>id=eq.${editId}`);
     await supaReq('POST','pacientes',[{'user_id':'montgomery','dados':dSave}]);
-    toast('Paciente atualizado!',null,"ok");
+    // Nome corrigido na ficha: leva a correção para a agenda, o histórico e o Google.
+    // A ficha já foi gravada acima, então renomearPaciente só cuida das cópias.
+    if(nomeAntigo&&d.nome&&nomeAntigo!==d.nome){
+      const n=await renomearPaciente(editId,d.nome);
+      toast('Nome corrigido também em '+n+(n===1?' registro':' registros')+' (agenda, histórico e Google).',null,"edit");
+    }else{
+      toast('Paciente atualizado!',null,"ok");
+    }
   } else {
     // Novo: apenas adicionar, sem reescrever a tabela inteira
     pacs.push(d);
@@ -2406,6 +2438,7 @@ async function salvarPac(e){
   localStorage.removeItem('rascunho');limparForm();
   renderP();atuDash();
   go('pacientes',null);
+  }finally{_salvandoPac=false;}
 }
 function limparForm(){
   document.getElementById('fPac').reset();remFoto();fotoB64='';editId=null;exTemp=[];
@@ -2415,6 +2448,68 @@ function limparForm(){
   document.getElementById('saveSt').className='sst unsaved';
   document.getElementById('saveSt').innerHTML=STAT_ICO_UNSAVED+' Não salvo';
   document.getElementById('waBtn').style.display='none';renderEx();
+}
+
+// ===== CORRIGIR O NOME DO PACIENTE EM TODA A PLATAFORMA =====
+// O nome do paciente é COPIADO para dentro de cada sessão, diagnóstico,
+// recomendação e venda no instante em que elas nascem — cada uma guarda uma
+// foto do nome daquele dia. Por isso corrigir só a ficha deixava a agenda (e o
+// Google junto) chamando a pessoa pelo nome errado para sempre.
+// Esta é a única porta por onde o nome se corrige. Ela vai atrás de todas as
+// cópias pelo pacienteId, que é o fio que liga tudo, e reescreve no Google os
+// eventos das sessões que mudaram.
+const TABELAS_COM_NOME_PAC=['sessoes','diagnosticos','prescricoes','vendas_suplementos'];
+
+async function renomearPaciente(pacId,novoNome){
+  novoNome=String(novoNome||'').trim();
+  if(!pacId||!novoNome)return 0;
+  let mudados=0;
+  const sessoesTocadas=[];
+
+  // 1) A ficha do paciente — a fonte da verdade.
+  // Busca a ficha COMPLETA: a lista do dia a dia é leve (sem foto nem exames),
+  // e regravar a versão leve por cima apagaria a foto do paciente.
+  const pac=await fetchPacFull(pacId);
+  if(pac&&pac.nome!==novoNome){
+    pac.nome=novoNome;
+    const dSave={...pac};delete dSave._full;
+    await supaReq('DELETE','pacientes',null,`?dados->>id=eq.${pacId}`);
+    await supaReq('POST','pacientes',[{'user_id':'montgomery','dados':dSave}]);
+    mudados++;
+  }
+
+  // 2) Todas as cópias do nome espalhadas pelo sistema.
+  for(const tab of TABELAS_COM_NOME_PAC){
+    const lista=await dbGet(tab);
+    for(const r of lista){
+      if(String(r.pacienteId)!==String(pacId)||r.pacienteNome===novoNome)continue;
+      r.pacienteNome=novoNome;
+      await supaReq('DELETE',tab,null,`?dados->>id=eq.${r.id}`);
+      await supaReq('POST',tab,[{'user_id':'montgomery','dados':r}]);
+      mudados++;
+      if(tab==='sessoes')sessoesTocadas.push(r.id);
+    }
+  }
+
+  // 3) No Google o nome é o título do evento — reescrever lá também.
+  // pontePush já se cala sozinho se a ponte estiver desligada.
+  for(const sid of sessoesTocadas)await pontePush(sid);
+
+  return mudados;
+}
+
+// Porta de entrada pela agenda: pergunta o nome certo e corrige em tudo.
+async function corrigirNomePaciente(pacId,nomeAtual){
+  if(!pacId){toast('Esta sessão não está ligada a uma ficha de paciente.','#EF6C00',"warn");return;}
+  const novo=prompt('Nome correto do paciente:\n\nMuda de uma vez na ficha, na agenda, nos diagnósticos, nas recomendações e no Google.',nomeAtual||'');
+  if(novo===null)return;
+  const limpo=novo.trim();
+  if(!limpo){toast('O nome não pode ficar vazio.','#EF6C00',"warn");return;}
+  if(limpo===nomeAtual){toast('O nome já era esse.',null,"ok");return;}
+  const n=await renomearPaciente(pacId,limpo);
+  fMod();
+  renderAg();renderP();atuDash();atuFin();
+  toast('Nome corrigido em '+n+(n===1?' registro.':' registros.'),null,"ok");
 }
 
 // ===== RENDER PACIENTES =====
@@ -2988,7 +3083,7 @@ async function salvarDespesa(ev){
   ev.preventDefault();
   const editId=v('despEditId');
   const d={
-    id:editId?(gD('despesas').find(x=>String(x.id)===String(editId))?.id??editId):Date.now()+Math.random(),
+    id:editId?(gD('despesas').find(x=>String(x.id)===String(editId))?.id??editId):novoId(),
     escopo:v('despEscopo'),
     tipo:v('despTipo'),
     descricao:v('despDesc'),
@@ -3015,7 +3110,7 @@ async function salvarDespesa(ev){
         const ultimoDia=new Date(dt.getFullYear(),dt.getMonth()+1,0).getDate();
         dt.setDate(Math.min(dia0,ultimoDia));
         if(dt>fim)break;
-        parcelas.push({...d,id:Date.now()+Math.random()+i,data:dLocal(dt),
+        parcelas.push({...d,id:novoId(),data:dLocal(dt),
           descricao:d.descricao+' ('+(i+1)+')'});
         if(parcelas.length>=60){toast('Limite de 60 parcelas — período encurtado','#EF6C00',"warn");break;}
       }
@@ -3219,7 +3314,7 @@ async function salvarSuplemento(ev){
   ev.preventDefault();
   const id=v('supId');
   const p={
-    id:id||(Date.now()+Math.random()),
+    id:id||(novoId()),
     nome:v('supNome'),
     fornecedor:v('supFornecedor'),
     descricao:v('supDescricao'),
@@ -3248,7 +3343,7 @@ async function dSuplemento(id){
 }
 async function importarCatalogoInicial(){
   if(!confirm('Importar os 71 produtos da planilha inicial para o catálogo?'))return;
-  const itens=CATALOGO_SUPLEMENTOS_INICIAL.map(p=>({id:Date.now()+Math.random(),...p}));
+  const itens=CATALOGO_SUPLEMENTOS_INICIAL.map(p=>({id:novoId(),...p}));
   for(const item of itens){
     await dbAdd('suplementos',item);
   }
@@ -3447,9 +3542,11 @@ async function renderSeletorAgenda(){
       '<strong>agenda principal</strong> do Google. Para escolher outra, o app precisa da permissão de ler a lista de agendas.</p>';
     return;
   }
-  box.innerHTML='<label style="display:block;font-size:0.75rem;color:var(--txt-sec);margin:0 0 5px">Escrever as sessões nesta agenda</label>'+
-    '<select id="ponteAgendaSel" onchange="escolherAgenda(this.value)" style="max-width:340px">'+
-    items.map(c=>'<option value="'+c.id+'"'+(c.id===sel?' selected':'')+'>'+(c.summary||c.id)+'</option>').join('')+
+  box.innerHTML='<label for="ponteAgendaSel" style="display:block;font-size:0.72rem;letter-spacing:.02em;text-transform:uppercase;color:var(--txt-l);margin:0 0 6px">Agenda de destino</label>'+
+    '<select id="ponteAgendaSel" onchange="escolherAgenda(this.value)" '+
+    'style="width:100%;max-width:320px;padding:9px 12px;border:1px solid var(--brd);border-radius:8px;'+
+    'background:var(--card,#fff);color:var(--txt);font-size:0.85rem;font-family:inherit">'+
+    items.map(c=>'<option value="'+c.id+'"'+(c.id===sel?' selected':'')+'>'+escHtml(c.summary||c.id)+'</option>').join('')+
     '</select>';
 }
 
@@ -3464,7 +3561,13 @@ function renderPonteBotao(){
   const on=ponteAtiva();
   const ic='<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>'+
     (on?'<path d="M9 15l2 2 4-4"/>':'<path d="M12 12v4M12 18h.01"/>')+'</svg></span>';
-  b.innerHTML=ic+(on?' Ponte ligada — desligar':' Ligar ponte com o Google');
+  b.innerHTML=ic+(on?' Desligar ponte':' Ligar ponte com o Google');
+  const st=document.getElementById('ponteStatus');
+  if(st){
+    st.textContent=on?'Ligada':'Desligada';
+    st.style.color=on?'var(--gold,#C9A84C)':'var(--txt-l)';
+    st.style.borderColor=on?'var(--gold,#C9A84C)':'var(--brd)';
+  }
   b.style.borderColor=on?'var(--gold,#C9A84C)':'';
   b.style.color=on?'var(--gold,#C9A84C)':'';
   renderSeletorAgenda();
@@ -3612,6 +3715,7 @@ function verEvento(id){
       ${wa!=='#'?`<a href="${wa}" target="_blank" class="btn btn-wa btn-sm"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8.4 8.4 0 0 1-12.2 7.5L4 20l1.1-4.1a8.4 8.4 0 1 1 15.4-4.4Z"/><path d="M8.5 10.3c0 3.4 2.8 6.2 6.2 6.2"/></svg></span> WhatsApp</a>`:''}
       <button class="btn btn-cal btn-sm" onclick="abrirGA(gD('sessoes').find(x=>x.id===${s.id}))"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span> Agenda</button>
       ${s.status==='pendente'?`<button class="btn btn-pri btn-sm" onclick="mPago(${s.id});fMod();renderAg()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Pago</button>`:''}
+      ${s.pacienteId?`<button class="btn btn-sec btn-sm" onclick="corrigirNomePaciente(${escHtml(jsq(s.pacienteId))},${escHtml(jsq(s.pacienteNome))})" title="Corrigir o nome do paciente na ficha, na agenda e no Google"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L10 16l-4 1 1-4Z"/><path d="M4 21h16"/></svg></span> Corrigir nome</button>`:''}
       <button class="btn btn-war btn-sm" onclick="fMod();editarSessao(${s.id})"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span> Editar</button>
       <button class="btn btn-dan btn-sm" onclick="fMod();dSessAg(${s.id})"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span> Deletar</button>
       <button class="btn btn-sec btn-sm" onclick="fMod()">Fechar</button>
@@ -4933,7 +5037,7 @@ async function salvarDiagComProtecao(btn){
 async function salvarDiagnostico(){
   if(!_diagPacSel)return;
   const diag={
-    id:_diagEditandoId||(Date.now()+Math.random()),
+    id:_diagEditandoId||(novoId()),
     pacienteId:_diagPacSel.id,
     pacienteNome:_diagPacSel.nome,
     data:document.getElementById('diagDt').value||dLocal(new Date()),
@@ -5217,7 +5321,7 @@ async function salvarRxHistorico(){
   const plantas=coletarRxPlantasDom();
   if(!plantas.length&&!_rxSuplementosSel.length){toast('Adicione ao menos uma planta ou suplemento antes de salvar','#EF6C00',"warn");return;}
   const valorSuplementos=_rxSuplementosSel.reduce((a,i)=>a+i.precoUnit*i.qtd,0);
-  const rx={id:_rxEditandoId||(Date.now()+Math.random()),pacienteId:_rxPacSel.id,pacienteNome:_rxPacSel.nome,data:v('rxDt')||dLocal(new Date()),plantas,suplementos:[..._rxSuplementosSel],valorSuplementos,durGeral:v('rxDurG'),retorno:v('rxRet'),obs:v('rxObs')};
+  const rx={id:_rxEditandoId||(novoId()),pacienteId:_rxPacSel.id,pacienteNome:_rxPacSel.nome,data:v('rxDt')||dLocal(new Date()),plantas,suplementos:[..._rxSuplementosSel],valorSuplementos,durGeral:v('rxDurG'),retorno:v('rxRet'),obs:v('rxObs')};
   const b1=document.getElementById('btnSalvarRx'),b2=document.getElementById('btnSalvarRxMain');
   if(_rxEditandoId){
     // Atualização real: substitui só este registro (mesmo id), sem criar duplicata
@@ -5260,7 +5364,7 @@ async function registrarVendaSuplementos(rx){
     return usado?{...p,estoque:Math.max(0,p.estoque-usado.qtd)}:p;
   });
   const venda={
-    id:Date.now()+Math.random(),
+    id:novoId(),
     pacienteId:rx.pacienteId,
     pacienteNome:rx.pacienteNome,
     recomendacaoId:rx.id,
@@ -6201,7 +6305,7 @@ async function impVCF(){
   let erros=0;
 
   // Montar objetos
-  const novos=sel.map(c=>({id:Date.now()+Math.random(),dataCadastro:new Date().toLocaleDateString('pt-BR'),triagem:true,foto:'',exames:[],nome:c.nome,email:c.email||'',telefone:c.telefone||'',queixa:'',doencas:'',medicamentos:'',alergias:'',nascimento:'',genero:'',religiao:'',profissao:'',estadoCivil:'',endereco:'',cidade:'',estado:'',cep:'',contatoEmerg:'',telEmerg:'',tempoQueixa:'',intensidade:'',melhora:'',piora:'',tratAnterior:'',cirurgias:'',histFamiliar:'',gestante:'',semanas:'',sono:'',horasSono:'',alimentacao:'',agua:'',ativFisica:'',tipoAtiv:'',tabagismo:'',alcool:'',estresse:'',obsHabitos:'',lingua:'',pulso:'',meridianos:'',diagMTC:'',pontos:'',obsAcup:'',postura:'',regiao:'',vertebras:'',amplitude:'',testes:'',ajustes:'',obsQuiro:'',demandaPsi:'',estadoEmocional:'',histEmocional:'',relacoes:'',notasPsi:'',encamPsi:'',fitoterapia:'',contraFito:'',seitaiAval:'',seitaiTec:'',obsGeral:''}));
+  const novos=sel.map(c=>({id:novoId(),dataCadastro:new Date().toLocaleDateString('pt-BR'),triagem:true,foto:'',exames:[],nome:c.nome,email:c.email||'',telefone:c.telefone||'',queixa:'',doencas:'',medicamentos:'',alergias:'',nascimento:'',genero:'',religiao:'',profissao:'',estadoCivil:'',endereco:'',cidade:'',estado:'',cep:'',contatoEmerg:'',telEmerg:'',tempoQueixa:'',intensidade:'',melhora:'',piora:'',tratAnterior:'',cirurgias:'',histFamiliar:'',gestante:'',semanas:'',sono:'',horasSono:'',alimentacao:'',agua:'',ativFisica:'',tipoAtiv:'',tabagismo:'',alcool:'',estresse:'',obsHabitos:'',lingua:'',pulso:'',meridianos:'',diagMTC:'',pontos:'',obsAcup:'',postura:'',regiao:'',vertebras:'',amplitude:'',testes:'',ajustes:'',obsQuiro:'',demandaPsi:'',estadoEmocional:'',histEmocional:'',relacoes:'',notasPsi:'',encamPsi:'',fitoterapia:'',contraFito:'',seitaiAval:'',seitaiTec:'',obsGeral:''}));
 
   // Inserir em lotes direto no Supabase
   for(let i=0;i<novos.length;i+=LOTE_INSERT){
