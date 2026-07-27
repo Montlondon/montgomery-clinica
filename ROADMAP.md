@@ -12,6 +12,16 @@ Frase-chave para janela nova. Faz duas coisas, nessa ordem:
 
 **Travado esperando o Montgomery** (não o Claude — sem o material dele seria inventar conteúdo clínico): síndromes clínicas das Sefirot, e a estrutura dos Florais.
 
+## 🔑 Senha "Google login" (registrada 27/07/2026)
+
+Frase-chave para janela nova. Destravar e **testar** a Ponte com o Google: guiar o Montgomery no Google Cloud Console (ativar a *Google Calendar API* + escopo `.../auth/calendar.events` na tela de permissão OAuth), depois sair/entrar para o Google pedir a autorização nova, ligar a ponte em Configurações e testar de verdade — agendar, remarcar arrastando, conferir na agenda "Clínica · Pacientes" e, principalmente, conferir que **nenhum evento pessoal foi tocado**. Em seguida, seguir zerando o roadmap.
+
+## Segurança da Clínica — ENCERRADA (27/07). Não reabrir como pendência.
+
+Levantamento e conserto completos: RLS conferida nas 10 tabelas (política `clinica_allowlist_full_access`), provedor Google ligado, teste real de acesso anônimo devolvendo `[]`, alçapão da senha local removido, `search_path` da `arquivar_pacientes` corrigido, e **cadastro de novos usuários fechado** (`disable_signup: true` — as contas do Montgomery e da Vanessa já existiam, ninguém ficou trancado fora; para dar acesso a uma terceira pessoa no futuro, religar a chave enquanto ela entra pela primeira vez **e** pôr o e-mail dela em `ALLOWED_EMAILS`).
+
+O advisor de segurança saiu de 2 avisos para 1. O que sobrou — **"Leaked Password Protection Disabled"** — é **recurso do plano Pro**, indisponível no plano gratuito, e ficou **sem alvo**: essa proteção confere senhas na hora do cadastro, e depois que o cadastro por e-mail foi fechado não existe mais nenhuma senha no sistema (o acesso é por Google). É um alerta sem risco real, não uma tarefa aberta.
+
 ## Ponte com o Google — CONSTRUÍDA (v2.7, 27/07), aguardando o passo do Montgomery no Google Cloud
 
 Conferido antes de construir: a ponte **não** existia — só o `abrirGA` (endereço `calendar.google.com/render` pré-preenchido, mão única, sem nenhum vínculo com o evento). Agora existe de verdade, via API do Calendar:
