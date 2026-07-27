@@ -379,6 +379,33 @@ const _ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZi
 const ALLOWED_EMAILS=['montlondon@gmail.com','salavioleta@gmail.com'];
 let _supaClient=null;
 
+// ===== A CHAVE DO GOOGLE, GUARDADA ANTES DE EVAPORAR =====
+// O Google entrega duas chaves no login: uma que abre a porta por ~1 hora
+// (provider_token) e outra que serve para pedir uma chave nova sem incomodar
+// ninguém (provider_refresh_token). O Supabase entrega as duas UMA vez, no
+// instante do login, e não guarda nem renova nenhuma delas: quando ele renova a
+// própria sessão dele, o provider_token some (vira nulo) — e a Ponte cai no meio
+// do dia sem motivo aparente. Por isso copiamos as duas assim que aparecem.
+const GCAL_TOK_KEY='gcal_token';
+const GCAL_REF_KEY='gcal_refresh';
+const GCAL_EXP_KEY='gcal_token_exp';
+// O Google não diz quando o token vence; na prática é 1h. Usamos 55 minutos
+// para trocar a chave antes de ela morrer, e não depois de a porta bater.
+const GCAL_TOK_VIDA=55*60*1000;
+
+function guardarTokenGoogle(session){
+  try{
+    if(!session)return;
+    if(session.provider_token){
+      localStorage.setItem(GCAL_TOK_KEY,session.provider_token);
+      localStorage.setItem(GCAL_EXP_KEY,String(Date.now()+GCAL_TOK_VIDA));
+    }
+    // O refresh_token só vem no login com consentimento (access_type=offline).
+    // Nas visitas seguintes ele não vem de novo — então nunca sobrescrever com vazio.
+    if(session.provider_refresh_token)localStorage.setItem(GCAL_REF_KEY,session.provider_refresh_token);
+  }catch(e){}
+}
+
 // Carrega SDK do Supabase dinamicamente
 async function carregarSupabaseSDK(){
   return new Promise((resolve,reject)=>{
@@ -398,14 +425,18 @@ async function initAuth(){
     _ANON,
     {auth:{redirectTo:location.origin+location.pathname,persistSession:true,autoRefreshToken:true}}
   );
+  // Toda vez que a sessão muda (login, volta do Google, renovação), copiamos a
+  // chave do Google para o nosso bolso antes que o Supabase a deixe cair.
+  _supaClient.auth.onAuthStateChange((_ev,sess)=>{guardarTokenGoogle(sess);});
   // Verifica se já tem sessão ativa
   const {data:{session}}=await _supaClient.auth.getSession();
   if(session&&ALLOWED_EMAILS.includes(session.user.email)){
+    guardarTokenGoogle(session);
     await entrarNaPlataforma(session.user);return;
   }
   // Verifica retorno OAuth (hash na URL)
   const {data:{session:s2}}=await _supaClient.auth.getSession();
-  if(s2){await entrarNaPlataforma(s2.user);return;}
+  if(s2){guardarTokenGoogle(s2);await entrarNaPlataforma(s2.user);return;}
   // Mostra login — verifica se tem biometria cadastrada
   verificarBiometriaDisponivel();
 }
@@ -1572,7 +1603,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v3.5 · 27/07';
+const APP_VER='v3.6 · 27/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -3421,26 +3452,75 @@ const GCAL_TZ='America/Sao_Paulo';
 function ponteAtiva(){return localStorage.getItem('cfg_ponte_google')==='true';}
 function setPonteAtiva(v){localStorage.setItem('cfg_ponte_google',v?'true':'false');}
 
-// O token de acesso ao Google vem junto da sessão do Supabase (provider_token).
-// Ele vive cerca de 1 hora; quando vence, o jeito honesto é pedir um login novo.
+// A chave de acesso ao Google vive ~1 hora. Antes, quando vencia, a Ponte
+// simplesmente parava e pedia login novo — o Montgomery voltava do almoço e a
+// agenda tinha desligado sozinha. Agora existe a chave de renovação
+// (provider_refresh_token), guardada no login: com ela dá para pedir uma chave
+// nova ao Google sem incomodar ninguém. A troca acontece numa função no
+// servidor (google-token-refresh) porque ela exige o segredo do aplicativo, e
+// segredo não mora dentro de página que qualquer um abre.
+const GCAL_REFRESH_FN=SUPA_URL+'/functions/v1/google-token-refresh';
+let _gcalRenovando=null; // uma renovação por vez, mesmo com vários pedidos juntos
+
+async function gcalRenovarToken(){
+  const ref=localStorage.getItem(GCAL_REF_KEY);
+  if(!ref)return null;
+  if(_gcalRenovando)return _gcalRenovando; // já tem uma a caminho: espera essa
+  _gcalRenovando=(async()=>{
+    try{
+      const r=await fetch(GCAL_REFRESH_FN,{
+        method:'POST',
+        headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+await supaAuthToken()},
+        body:JSON.stringify({refresh_token:ref})
+      });
+      if(!r.ok){console.warn('Renovação do token Google falhou:',r.status);return null;}
+      const j=await r.json();
+      if(!j||!j.access_token)return null;
+      localStorage.setItem(GCAL_TOK_KEY,j.access_token);
+      // O Google devolve quanto tempo a chave dura (expires_in, em segundos);
+      // tiramos 5 minutos de margem para trocar antes de a porta bater.
+      const vida=(j.expires_in?j.expires_in*1000:GCAL_TOK_VIDA)-5*60*1000;
+      localStorage.setItem(GCAL_EXP_KEY,String(Date.now()+Math.max(vida,60*1000)));
+      return j.access_token;
+    }catch(e){console.warn('Renovação do token Google falhou:',e);return null;}
+    finally{_gcalRenovando=null;}
+  })();
+  return _gcalRenovando;
+}
+
 async function gcalToken(){
   try{
-    if(!_supaClient)return null;
+    const tok=localStorage.getItem(GCAL_TOK_KEY);
+    const exp=parseInt(localStorage.getItem(GCAL_EXP_KEY)||'0');
+    if(tok&&exp>Date.now())return tok;           // ainda válida
+    const novo=await gcalRenovarToken();          // vencida: pede uma nova
+    if(novo)return novo;
+    // Sem renovação possível — último recurso: a chave que veio na sessão de agora.
+    if(!_supaClient)return tok||null;
     const {data:{session}}=await _supaClient.auth.getSession();
-    return session?.provider_token||null;
+    if(session&&session.provider_token){guardarTokenGoogle(session);return session.provider_token;}
+    return null;
   }catch(e){return null;}
 }
 
 // silencioso: para pedidos opcionais, em que um "não autorizo" do Google é resposta
 // esperada e não motivo de alarme para o Montgomery.
 async function gcalReq(method,path,body=null,silencioso=false){
-  const tok=await gcalToken();
+  let tok=await gcalToken();
   if(!tok){if(!silencioso)ponteAvisaLogin();return null;}
-  const r=await fetch(GCAL_API+path,{
+  const chamar=t=>fetch(GCAL_API+path,{
     method,
-    headers:{'Authorization':'Bearer '+tok,'Content-Type':'application/json'},
+    headers:{'Authorization':'Bearer '+t,'Content-Type':'application/json'},
     body:body?JSON.stringify(body):undefined
   });
+  let r=await chamar(tok);
+  // 401 = a chave venceu antes da hora que calculamos. Tenta renovar UMA vez e
+  // refaz o mesmo pedido; só desiste (e avisa) se nem assim for.
+  if(r.status===401){
+    localStorage.removeItem(GCAL_TOK_KEY);localStorage.removeItem(GCAL_EXP_KEY);
+    const novo=await gcalRenovarToken();
+    if(novo)r=await chamar(novo);
+  }
   if(r.status===401||r.status===403){if(!silencioso)ponteAvisaLogin();return null;}
   if(r.status===404)return {_naoExiste:true};
   if(!r.ok){console.warn('Ponte Google',method,path,r.status);return null;}
@@ -3448,8 +3528,32 @@ async function gcalReq(method,path,body=null,silencioso=false){
   return await r.json();
 }
 
+// Religar sem sair do app: leva ao Google e volta exatamente para esta tela.
+async function ponteReconectar(){
+  try{
+    if(!_supaClient)await initAuth();
+    await _supaClient.auth.signInWithOAuth({
+      provider:'google',
+      options:{
+        redirectTo:location.origin+location.pathname,
+        scopes:'https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar.calendarlist.readonly',
+        // 'consent' de novo de propósito: é o que faz o Google devolver a chave
+        // de renovação. Sem ela voltaríamos a cair de hora em hora.
+        queryParams:{prompt:'consent',access_type:'offline'}
+      }
+    });
+  }catch(e){toast('Não consegui religar a ponte agora.','#c62828',"erro");}
+}
+
+// Avisa uma vez por visita — não adianta repetir o mesmo aviso a cada pedido.
+let _ponteAvisou=false;
 function ponteAvisaLogin(){
-  toast('A autorização do Google venceu. Saia e entre de novo para religar a ponte.','#EF6C00',"warn");
+  if(_ponteAvisou)return;
+  _ponteAvisou=true;
+  toast('A autorização do Google venceu.','#EF6C00',"warn");
+  setTimeout(()=>{
+    if(confirm('A autorização do Google venceu e não consegui renovar sozinho.\n\nReligar a ponte agora? (leva ao Google e volta para esta tela)'))ponteReconectar();
+  },300);
 }
 
 // A agenda onde a ponte escreve é ESCOLHIDA pelo Montgomery, não inventada por nós:

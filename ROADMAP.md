@@ -2,6 +2,28 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## Senha "Fechar as duas goteiras" — FECHADAS (v3.6, 27/07/2026)
+
+**Goteira 1 — já estava fechada.** Ao abrir o código, o `salvarPac` da edição **já usava `dbGravar`** (PATCH, uma viagem só): a varredura do v3.5 levou esse ponto junto, ao contrário do que a anotação dizia. Conferido também o outro cuidado: quem abre a ficha para editar é o `editarPac`, e ele já baixa a versão completa com `fetchPacFull` antes de preencher o formulário — então a foto e os exames nunca são gravados por cima com a lista leve. Nada a mudar.
+
+**Goteira 2 — fechada.** A Ponte caía de hora em hora porque o `provider_token` do Google vive ~1h e o Supabase não o renova (pior: quando o Supabase renova a sessão dele, o `provider_token` vira nulo). Agora:
+- A chave e a **chave de renovação** (`provider_refresh_token`) são copiadas para o nosso bolso no instante do login (`guardarTokenGoogle`, chamada no `onAuthStateChange` e nas duas entradas do `initAuth`). O refresh token só vem no login com consentimento, então ele nunca é sobrescrito com vazio.
+- `gcalToken()` usa a chave guardada enquanto ela vale, e pede uma nova antes de vencer (margem de 5 min).
+- `gcalReq()` que leva 401 renova **uma vez** e refaz o mesmo pedido; o Montgomery não vê nada.
+- A troca acontece na função de servidor `google-token-refresh` (Supabase Edge Function, já publicada), porque ela exige o segredo do aplicativo — e segredo não mora dentro de página que qualquer um abre.
+- Se nem assim der, o aviso agora tem saída: **Religar a ponte** (`ponteReconectar`) leva ao Google e volta para a mesma tela, em vez de "saia e entre de novo". E avisa uma vez por visita, não a cada pedido.
+- Regra intocada: a Clínica só mexe em evento que ela mesma criou (`gcalId`).
+
+**Falta um passo manual do Montgomery** (não dá para o Claude fazer): pôr as duas variáveis em Supabase → Edge Functions → Secrets: `GOOGLE_CLIENT_ID` e `GOOGLE_CLIENT_SECRET`, os mesmos do aplicativo OAuth no Google Cloud. Sem elas a renovação silenciosa não acontece e o app cai no botão de religar — que já é melhor do que antes.
+
+<details><summary>Texto original da senha (histórico)</summary>
+
+**1. `salvarPac` na edição ainda faz DELETE + POST.** É o último resto do "apaga e grava" — a varredura de 27/07 converteu 17 pontos para `dbGravar` (PATCH), mas o caminho de EDIÇÃO do paciente ficou de fora. Se a rede cair entre as duas viagens, o paciente some com foto e exames. Trocar por `dbGravar` (PATCH, `Prefer: return=representation`), respeitando o cuidado já estabelecido: **zero linhas trocadas NÃO vira POST no escuro** (pode ser RLS negando em silêncio com 200 vazio) — conferir com leitura mínima antes. Cuidado extra deste caso: buscar a versão COMPLETA com `fetchPacFull` antes de gravar, senão a lista leve grava por cima e apaga a foto (mesma armadilha que a `renomearPaciente` já resolveu).
+
+**2. `provider_token` do Google vence em ~1h sem renovação.** O Supabase não renova o token do provedor sozinho. Na prática, depois de um tempo parado a Ponte falha e pede login novo. Caminhos a avaliar na janela: guardar o `provider_refresh_token` da sessão OAuth e trocar por um access token novo quando `gcalReq` devolver 401, ou detectar o 401 e refazer o `signInWithOAuth` silenciosamente. Regra que não muda: a Clínica só toca em evento que ela mesma criou (`gcalId`); evento pessoal do Montgomery nunca.
+
+</details>
+
 ## 🔑 Senha "Login google roadmap em dia" (registrada 27/07/2026)
 
 Frase-chave para janela nova. Faz duas coisas, nessa ordem:
