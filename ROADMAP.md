@@ -12,6 +12,17 @@ Frase-chave para janela nova. Faz duas coisas, nessa ordem:
 
 **Travado esperando o Montgomery** (não o Claude — sem o material dele seria inventar conteúdo clínico): síndromes clínicas das Sefirot, e a estrutura dos Florais.
 
+## Ponte com o Google — FUNCIONANDO (v3.3, 27/07)
+
+Testada na prática: sessão criada aparece no Google, e arrastar na Clínica move o evento lá. Agenda escolhida: a principal (`montlondon@gmail.com`, a "Montgomery Magalhães"). Foram **quatro** causas empilhadas, cada uma escondendo a seguinte:
+
+1. **`prompt:'select_account'`** no `signInWithOAuth` — o Google pulava a tela de consentimento e devolvia o token da autorização antiga, ignorando os `scopes:`. Corrigido para `prompt:'consent select_account'` (v3.1).
+2. **Nenhum escopo salvo** em Google Auth Platform → Acesso a dados. Tinham sido adicionados, mas faltou clicar em **Salvar** no rodapé da página depois do "Atualizar" do painel — são dois botões em dois lugares. Sem isso o Google não tem o que oferecer e recusa em silêncio, sem erro.
+3. **O teste de ligação pedia `/calendars/primary`** — endpoint que `calendar.events` não cobre (ele abre os EVENTOS de uma agenda, não a ficha dela). Dava 403 mesmo com o token correto. Agora testa por `/users/me/calendarList` (v3.2). O mesmo teste também tratava 404 como sucesso, porque `gcalReq` devolve `{_naoExiste:true}`, objeto truthy.
+4. **`pontePush` sem `await`** ao salvar e ao arrastar: a troca de tela recarregava as sessões por cima antes de o `gcalId` ser gravado, e sem esse código o arrastar seguinte criava um segundo evento em vez de mover o primeiro (v3.3).
+
+**Ainda em aberto:** o sentido Google → Clínica não existe (mão única), e o `provider_token` vive ~1h sem renovação do Supabase.
+
 ## Ponte com o Google — causa do 404 encontrada e corrigida (v3.1, 27/07)
 
 O 404 ao escrever no Google **não era** escopo errado nem autorização velha contaminando o token. O `tokeninfo` mostrou o `provider_token` sem escopo nenhum de agenda — só `email profile openid`. O pedido nunca chegava ao Google: o `signInWithOAuth` mandava `queryParams:{prompt:'select_account'}`, e `select_account` só pergunta *qual conta*. Como a Clínica já tinha sido autorizada antes (só e-mail e perfil), o Google pulava a tela de consentimento e devolvia o conjunto de chaves antigo, ignorando os `scopes:` pedidos. Corrigido para `prompt:'consent select_account'`.
