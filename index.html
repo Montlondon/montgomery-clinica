@@ -425,7 +425,10 @@ async function loginGoogle(){
       // alcança agendas criadas pelo próprio app. O preço é que esta chave enxerga
       // todas as agendas dele — quem limita é o nosso código: a ponte escreve apenas
       // na agenda escolhida em Configurações e só mexe em evento com gcalId nosso.
-      scopes:'https://www.googleapis.com/auth/calendar.events',
+      // Duas chaves, porque o Google separa as duas coisas: 'calendar.events' ESCREVE
+      // nos eventos; 'calendar.calendarlist.readonly' apenas LÊ os nomes das agendas,
+      // para o seletor de Configurações poder mostrá-las. A segunda não escreve nada.
+      scopes:'https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/calendar.calendarlist.readonly',
       queryParams:{prompt:'select_account',access_type:'offline'}
     }
   });
@@ -1562,7 +1565,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v2.9 · 27/07';
+const APP_VER='v3.0 · 27/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -3318,8 +3321,8 @@ function ponteAvisaLogin(){
 function agendaEscolhida(){return localStorage.getItem(GCAL_ID_KEY)||'';}
 
 // Só as agendas em que ele pode escrever — as de leitura (feriados, luas) não servem.
-async function listarAgendasGoogle(){
-  const lista=await gcalReq('GET','/users/me/calendarList');
+async function listarAgendasGoogle(silencioso=false){
+  const lista=await gcalReq('GET','/users/me/calendarList',null,silencioso);
   if(!lista)return null;
   return (lista.items||[]).filter(c=>c.accessRole==='owner'||c.accessRole==='writer');
 }
@@ -3398,17 +3401,22 @@ async function alternarPonte(){
     setPonteAtiva(false);
     toast('Ponte com o Google desligada.',null,"ok");
   }else{
-    const items=await listarAgendasGoogle();
-    if(!items||!items.length){
+    // Antes de tudo: a chave de escrita funciona? É ela que a ponte usa de verdade.
+    const teste=await gcalReq('GET','/calendars/primary',null,true);
+    if(!teste){
       toast('Não consegui falar com o Google. Saia e entre de novo autorizando a agenda.','#EF6C00',"warn");
       renderPonteBotao();return;
     }
+    // Ler a LISTA de agendas é um luxo (só para o seletor). Se o Google recusar,
+    // a ponte funciona igual escrevendo na agenda principal — que é a dele.
+    const items=await listarAgendasGoogle(true);
     if(!agendaEscolhida()){
-      const chute=agendaProvavel(items);
-      if(chute)localStorage.setItem(GCAL_ID_KEY,chute.id);
+      const chute=items&&items.length?agendaProvavel(items):null;
+      localStorage.setItem(GCAL_ID_KEY,chute?chute.id:'primary');
     }
     setPonteAtiva(true);
-    const nome=(items.find(c=>c.id===agendaEscolhida())||{}).summary||'sua agenda';
+    const esc=agendaEscolhida();
+    const nome=(items||[]).find(c=>c.id===esc)?.summary||teste.summary||'sua agenda principal';
     toast('Ponte ligada! As sessões vão para a agenda "'+nome+'".',null,"ok");
   }
   renderPonteBotao();
@@ -3419,10 +3427,15 @@ async function renderSeletorAgenda(){
   const box=document.getElementById('ponteAgendaBox');
   if(!box)return;
   if(!ponteAtiva()){box.classList.add('hidden');return;}
-  const items=await listarAgendasGoogle();
-  if(!items||!items.length){box.classList.add('hidden');return;}
+  const items=await listarAgendasGoogle(true);
   const sel=agendaEscolhida();
   box.classList.remove('hidden');
+  if(!items||!items.length){
+    // Sem a chave de leitura da lista, mostramos a verdade em vez de uma caixa vazia.
+    box.innerHTML='<p style="font-size:0.75rem;color:var(--txt-sec);margin:0">As sessões vão para a sua '+
+      '<strong>agenda principal</strong> do Google. Para escolher outra, o app precisa da permissão de ler a lista de agendas.</p>';
+    return;
+  }
   box.innerHTML='<label style="display:block;font-size:0.75rem;color:var(--txt-sec);margin:0 0 5px">Escrever as sessões nesta agenda</label>'+
     '<select id="ponteAgendaSel" onchange="escolherAgenda(this.value)" style="max-width:340px">'+
     items.map(c=>'<option value="'+c.id+'"'+(c.id===sel?' selected':'')+'>'+(c.summary||c.id)+'</option>').join('')+

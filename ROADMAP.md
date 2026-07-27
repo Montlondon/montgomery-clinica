@@ -699,3 +699,17 @@ escreve so na agenda escolhida e so mexe em evento com `gcalId` nosso.
 
 Aprendizado guardado: a chave mais fechada nem sempre e a certa — a certa e a que
 cabe na vida de quem usa.
+
+## Concluido (27/07/2026) — Clinica v3.0: a ponte para de depender do luxo
+
+O 403 do `calendarList` persistiu mesmo com `calendar.events`: o Google separa
+ESCREVER em eventos de LER a lista de agendas — sao chaves diferentes. O seletor de
+agenda dependia da segunda e derrubava a ponte inteira quando ela faltava.
+
+Dois consertos: (1) pedimos tambem `calendar.calendarlist.readonly`, que so le nomes;
+(2) e, principalmente, o teste de "a ponte funciona?" passou a usar a chave que a ponte
+realmente usa (`GET /calendars/primary`), nao a da lista. Sem a lista, a ponte liga
+igual e escreve na **agenda principal** — que e a "Montgomery Magalhaes" dele —, e o
+seletor explica em vez de sumir.
+
+Licao de projeto: nao deixar um recurso essencial morrer por causa de um enfeite.
