@@ -1635,7 +1635,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v3.7 · 27/07';
+const APP_VER='v3.8 · 27/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -3713,16 +3713,57 @@ async function renderSeletorAgenda(){
       '<strong>agenda principal</strong> do Google. Para escolher outra, o app precisa da permissão de ler a lista de agendas.</p>';
     return;
   }
-  box.innerHTML='<label for="ponteAgendaSel" style="display:block;font-size:0.72rem;letter-spacing:.02em;text-transform:uppercase;color:var(--txt-l);margin:0 0 6px">Agenda de destino</label>'+
-    '<select id="ponteAgendaSel" onchange="escolherAgenda(this.value)" '+
-    'style="width:100%;max-width:320px;padding:9px 12px;border:1px solid var(--brd);border-radius:8px;'+
-    'background:var(--card,#fff);color:var(--txt);font-size:0.85rem;font-family:inherit">'+
-    items.map(c=>'<option value="'+c.id+'"'+(c.id===sel?' selected':'')+'>'+escHtml(c.summary||c.id)+'</option>').join('')+
-    '</select>';
+  // Lista feita em casa, e não um <select> comum, por um motivo simples: a caixa
+  // fechada de um <select> a página pinta; a lista que se abre quem desenha é o
+  // sistema operacional, e nenhum navegador deixa a página tocar nela. Era de lá
+  // que vinham a fonte estranha e o azul do Windows, no meio de uma tela que é
+  // toda em outra letra. Aqui a lista é nossa: mesma fonte, mesmo dourado.
+  const atual=items.find(c=>c.id===sel)||items[0];
+  box.innerHTML='<label style="display:block;font-size:0.72rem;letter-spacing:.02em;text-transform:uppercase;color:var(--txt-l);margin:0 0 6px">Agenda de destino</label>'+
+    '<div id="ponteDD" style="position:relative;width:100%;max-width:320px">'+
+      '<button type="button" id="ponteDDBtn" onclick="ponteDDAbrir(event)" '+
+        'style="width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;'+
+        'padding:9px 12px;border:1px solid var(--brd);border-radius:8px;background:var(--surface,#fff);'+
+        'color:var(--txt);font-size:0.85rem;font-family:inherit;text-align:left;cursor:pointer">'+
+        '<span id="ponteDDTxt">'+escHtml(atual.summary||atual.id)+'</span>'+
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex:none;opacity:.55"><path d="M6 9l6 6 6-6"/></svg>'+
+      '</button>'+
+      '<div id="ponteDDLista" style="display:none;position:absolute;z-index:60;top:calc(100% + 4px);left:0;right:0;'+
+        'background:var(--surface,#fff);border:1px solid var(--brd);border-radius:8px;overflow:hidden;'+
+        'box-shadow:0 8px 24px rgba(0,0,0,.12);max-height:260px;overflow-y:auto">'+
+        items.map(c=>{
+          const marcada=c.id===sel;
+          return '<button type="button" onclick="escolherAgenda(\''+escHtml(c.id).replace(/'/g,"\\'")+'\')" '+
+            'onmouseover="this.style.background=\'var(--beige,#F0EBE0)\'" onmouseout="this.style.background=\''+(marcada?'var(--beige,#F0EBE0)':'transparent')+'\'" '+
+            'style="display:flex;align-items:center;gap:8px;width:100%;padding:9px 12px;border:0;'+
+            'background:'+(marcada?'var(--beige,#F0EBE0)':'transparent')+';color:var(--txt);font-family:inherit;'+
+            'font-size:0.85rem;text-align:left;cursor:pointer">'+
+            '<span style="flex:none;width:14px;color:var(--gold,#C9A84C)">'+(marcada?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>':'')+'</span>'+
+            escHtml(c.summary||c.id)+'</button>';
+        }).join('')+
+      '</div>'+
+    '</div>';
+}
+
+// Abre e fecha a lista. Clicar em qualquer outro lugar da tela fecha — é o que
+// todo mundo espera de uma lista aberta, e evita deixá-la esquecida na tela.
+function ponteDDAbrir(ev){
+  if(ev)ev.stopPropagation();
+  const l=document.getElementById('ponteDDLista');
+  if(!l)return;
+  const abrindo=l.style.display==='none';
+  l.style.display=abrindo?'block':'none';
+  if(abrindo)setTimeout(()=>document.addEventListener('click',ponteDDFechar,{once:true}),0);
+}
+function ponteDDFechar(){
+  const l=document.getElementById('ponteDDLista');
+  if(l)l.style.display='none';
 }
 
 function escolherAgenda(id){
   localStorage.setItem(GCAL_ID_KEY,id);
+  ponteDDFechar();
+  renderSeletorAgenda();
   toast('Pronto. As próximas sessões vão para essa agenda.',null,"ok");
 }
 

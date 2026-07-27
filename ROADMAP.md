@@ -2,6 +2,10 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## A lista de agendas virou nossa (v3.8, 27/07)
+
+Montgomery viu que a caixinha "Agenda de destino" abria com outra letra e o azul do Windows, destoando de toda a tela. A caixa **fechada** de um `<select>` a página pinta; a lista que se **abre** quem desenha é o sistema operacional, e nenhum navegador deixa a página tocar nela — não era falta de CSS, era um limite do próprio navegador. Trocado por uma lista feita em casa (botão + painel), com a fonte da plataforma, o dourado da casa marcando a agenda escolhida e fechamento ao clicar fora.
+
 ## A biometria parou de virar chave órfã (v3.7, 27/07)
 
 Montgomery notou: toda vez que saía e entrava, a plataforma pedia a biometria de novo. A causa era uma linha no `fazerLogout` — sair fazia `localStorage.removeItem(BIO_KEY)`, ou seja, **apagava o cadastro da biometria junto com a sessão**. Dois estragos: o botão "Entrar com Biometria" nunca chegava a aparecer na tela de login (ele só aparece se houver cadastro), então a biometria nunca servia para o que existe — entrar rápido; e cada novo "sim" criava mais uma chave dentro do aparelho (Windows Hello, cofre do celular), enquanto a anterior ficava lá sem dono. Uma chave órfã por volta.
