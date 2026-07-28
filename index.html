@@ -2164,12 +2164,22 @@ async function toggleArqDaBusca(id,valor){
   buscaGlobalPac();
 }
 
+// Tira acento e baixa a caixa — o mesmo que a coluna busca_nome faz no banco.
+// Sem isso, "Fabricio" nunca encontrava "Fabrício".
+function semAcento(s){
+  return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+}
+// Termo pronto para o filtro like da coluna busca_nome
+function termoBusca(termo){
+  return encodeURIComponent('*'+semAcento(termo).replace(/[%*]/g,'')+'*');
+}
+
 // Busca no BANCO por nome (inclui arquivados) — "vou lá buscar a Maria"
 async function buscarTodosPorNome(termo){
   termo=(termo||'').trim();
   if(termo.length<2)return[];
-  const t=encodeURIComponent('*'+termo.replace(/[%*]/g,'')+'*');
-  return (await supaReq('GET','pacientes',null,`?user_id=eq.montgomery&dados->>nome=ilike.${t}&order=dados->>nome.asc&limit=50&select=${PAC_SELECT},arquivado:dados->arquivado`))||[];
+  const t=termoBusca(termo);
+  return (await supaReq('GET','pacientes',null,`?user_id=eq.montgomery&busca_nome=like.${t}&order=dados->>nome.asc&limit=50&select=${PAC_SELECT},arquivado:dados->arquivado`))||[];
 }
 async function buscaGlobalPac(){
   const termo=document.getElementById('busP').value;
@@ -2709,9 +2719,9 @@ let _psDbSeq=0;           // ignora respostas antigas que chegam fora de ordem
 async function buscarPacPicker(termo){
   termo=(termo||'').trim();
   if(termo.length<2)return[];
-  const t=encodeURIComponent('*'+termo.replace(/[%*]/g,'')+'*');
+  const t=termoBusca(termo);
   const sel='id:dados->id,nome:dados->>nome,telefone:dados->>telefone,arquivado:dados->arquivado';
-  const r=await supaReq('GET','pacientes',null,`?user_id=eq.montgomery&dados->>nome=ilike.${t}&order=dados->>nome.asc&limit=30&select=${sel}`);
+  const r=await supaReq('GET','pacientes',null,`?user_id=eq.montgomery&busca_nome=like.${t}&order=dados->>nome.asc&limit=30&select=${sel}`);
   return (r||[]).map(p=>({...p,arquivado:p.arquivado===true||p.arquivado==='true'}));
 }
 
