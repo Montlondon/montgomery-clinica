@@ -88,6 +88,10 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .cx-resumo{font-weight:500;font-size:11.5px;color:var(--txt-l);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-left:8px;min-width:0}
 .fc.cx-aberta .cx-resumo{display:none}
 .cx-corpo{display:none}
+/* O que foi selecionado mora dentro da própria caixa, sem virar caixa de novo */
+.cx-sel{border-top:1px dashed var(--brd);padding-top:12px}
+.cx-sel .fc{box-shadow:none;background:transparent;padding:0 0 0 11px;border-radius:0;margin-bottom:12px}
+.cx-sel .fc .fst{font-size:12.5px;border-bottom-width:1px;padding-bottom:5px;margin-bottom:8px}
 .fc.cx-aberta .cx-corpo{display:block}
 @media print{.cx-corpo{display:block!important}.cx-seta,.cx-resumo{display:none!important}}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px}
@@ -4154,6 +4158,32 @@ function prepararCaixasDiag(){
   });
   atualizarResumoCaixas();
 }
+// Entrega o que foi selecionado (e a anotação) DENTRO da caixa da ferramenta,
+// no fim do corpo dela — em vez de lá embaixo, num painel único e distante.
+// Antes de trocar, guarda onde estava o cursor e o texto ainda não digitado,
+// para não arrancar a anotação da mão dele enquanto escreve.
+function entregarNaCaixa(chave,html){
+  const fc=document.querySelector(`#pg-diagnostico .fc[data-cx="${chave}"]`);
+  if(!fc)return;
+  const corpo=fc.querySelector(':scope > .cx-corpo')||fc;
+  let sel=corpo.querySelector(':scope > .cx-sel');
+  if(!html){if(sel)sel.remove();return;}
+  if(!sel){
+    sel=document.createElement('div');
+    sel.className='cx-sel';
+    sel.style.marginTop='14px';
+    corpo.appendChild(sel);
+  }
+  const ativo=document.activeElement;
+  const escrevendo=ativo&&sel.contains(ativo)&&ativo.tagName==='TEXTAREA';
+  const marca=escrevendo?[...sel.querySelectorAll('textarea')].indexOf(ativo):-1;
+  const pos=escrevendo?ativo.selectionStart:0;
+  sel.innerHTML=html;
+  if(marca>=0){
+    const volta=sel.querySelectorAll('textarea')[marca];
+    if(volta){volta.focus();try{volta.setSelectionRange(pos,pos);}catch(e){}}
+  }
+}
 // O título da caixa fechada conta o que tem dentro
 function atualizarResumoCaixas(){
   document.querySelectorAll('#pg-diagnostico .fc[data-cx]').forEach(fc=>{
@@ -5063,14 +5093,18 @@ function montarTabelaBalance(nomeElemento){
 function renderDiagPainel(){
   const painel=document.getElementById('diagPainel');
   const resumoBox=document.getElementById('diagResumoBox');
-  const temAlgo=(_diagSelecoes.pulso||[]).length||(_diagSelecoes.pulsoPos||[]).length||_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length||(_diagSelecoes.auriculo||[]).length||(_diagSelecoes.bagua||[]).length||(_diagSelecoes.psicanalise||[]).length||(_diagSelecoes.elementoSintomas||[]).length||(_diagSelecoes.pontoSintomas||[]).length;
+  const temAlgo=pulsoChaves().length||_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length||(_diagSelecoes.auriculo||[]).length||(_diagSelecoes.bagua||[]).length||(_diagSelecoes.psicanalise||[]).length||(_diagSelecoes.elementoSintomas||[]).length||(_diagSelecoes.pontoSintomas||[]).length;
   atualizarResumoCaixas();   // os títulos das caixas fechadas contam o que mudou
-  if(!temAlgo){painel.style.display='none';resumoBox.style.display='none';return;}
+  if(!temAlgo){
+    // Avaliação limpa: as caixas também esvaziam, senão sobra resto de antes
+    ['pulso','elementos','pontos','abc','sup','auriculo','bagua'].forEach(k=>entregarNaCaixa(k,''));
+    painel.style.display='none';resumoBox.style.display='none';return;
+  }
   painel.style.display='block';
   resumoBox.style.display='block';
 
   let html='';
-  if((_diagSelecoes.pulso||[]).length||(_diagSelecoes.pulsoPos||[]).length){
+  if(pulsoChaves().length){
     // Cada posição com os pulsos DELA embaixo — o resumo passa a dizer o que é de onde
     html+=`<div class="fc" style="border-left:5px solid var(--pri-deep)">
       <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 3 12 2.5-8 1.5 2h5"/></svg></span>Pulso</div>
@@ -5091,6 +5125,7 @@ function renderDiagPainel(){
       </div>
     </div>`;
   }
+  const hPulso=html;html='';
   _diagSelecoes.elementos.forEach(nome=>{
     const e=bancoIntegrativoCompleto.matrizCincoElementos[nome];
     const obsAtual=_diagSelecoes.elementosObs[nome]||'';
@@ -5115,6 +5150,7 @@ function renderDiagPainel(){
       </div>
     </div>`;
   });
+  const hElementos=html;html='';
   _diagSelecoes.pontos.forEach(nome=>{
     const p=bancoIntegrativoCompleto.pontosCorpo[nome];
     html+=`<div class="fc" style="border-left:5px solid var(--pri)">
@@ -5132,6 +5168,7 @@ function renderDiagPainel(){
       </div>
     </div>`;
   });
+  const hPontos=html;html='';
   (_diagSelecoes.sistemasAbc||[]).forEach(id=>{
     const s=sistemasABC.find(x=>x.id===id);
     if(!s)return;
@@ -5142,6 +5179,7 @@ function renderDiagPainel(){
       <div style="font-size:11.5px;color:var(--ink-soft);line-height:1.5;margin-top:6px">${s.protocolo}</div>
     </div>`;
   });
+  const hAbc=html;html='';
   if((_diagSelecoes.suplementos||[]).length){
     const totalSup=_diagSelecoes.suplementos.reduce((a,s)=>a+s.precoUnit*s.qtd,0);
     html+=`<div class="fc" style="border-left:5px solid var(--pri-deep)">
@@ -5155,6 +5193,7 @@ function renderDiagPainel(){
       <div style="text-align:right;font-size:13px;font-weight:700;color:var(--pri-d);margin-top:8px">Total Suplementos: ${fm(totalSup)}</div>
     </div>`;
   }
+  const hSup=html;html='';
   if((_diagSelecoes.auriculo||[]).length){
     const pontosFicha=_diagSelecoes.auriculo.map(id=>auriculoPontosPorId[id]).filter(Boolean);
     html+=`<div class="fc" style="border-left:5px solid var(--pri-deep)">
@@ -5174,6 +5213,7 @@ function renderDiagPainel(){
       </div>
     </div>`;
   }
+  const hAuriculo=html;html='';
   if((_diagSelecoes.bagua||[]).length){
     html+=`<div class="fc" style="border-left:5px solid var(--pri-deep)">
       <div class="fst" style="font-family:'Lora',serif"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9"/></svg></span>Bagua — Acupuntura</div>
@@ -5183,6 +5223,7 @@ function renderDiagPainel(){
       </div>`).join('')}
     </div>`;
   }
+  const hBagua=html;html='';
   const sugestoes=calcularSugestoesCruzadas();
   if(sugestoes.length){
     html+=`<div class="fc" style="border-left:5px solid var(--pri);background:var(--pri-l)">
@@ -5196,6 +5237,16 @@ function renderDiagPainel(){
       </div>`).join('')}
     </div>`;
   }
+  // Cada bloco vai morar DENTRO da sua caixa — ferramenta, o que foi
+  // selecionado e a anotação, nessa ordem. No painel de baixo fica só o que
+  // não é de nenhuma ferramenta sozinha: as sugestões cruzadas.
+  entregarNaCaixa('pulso',hPulso);
+  entregarNaCaixa('elementos',hElementos);
+  entregarNaCaixa('pontos',hPontos);
+  entregarNaCaixa('abc',hAbc);
+  entregarNaCaixa('sup',hSup);
+  entregarNaCaixa('auriculo',hAuriculo);
+  entregarNaCaixa('bagua',hBagua);
   painel.innerHTML=html;
 
   // Resumo compacto
