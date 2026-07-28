@@ -2,6 +2,68 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## Senha "Acender as Mãos" — CUMPRIDA (v4.0, 27/07/2026)
+
+A quiropraxia deixou de ser só coluna. A caixa "Quiropraxia — Mapa de Subluxações, Testes e Ajustes" ganhou uma aba nova, **"Membros (mãos, pés, braços e pernas)"**, com **45 articulações** organizadas em 7 grupos: dedos das mãos e mão, punho e antebraço, cotovelo, ombro, dedos dos pés (artelhos) e antepé, pé e tornozelo, e joelho/quadril.
+
+Cada articulação traz o que a mão precisa saber na hora: os **movimentos a testar** (deslize AP/PA, lateral/medial, rotação, extensão longitudinal…) e o **passo a passo** — onde vai a mão de apoio, onde vai a mão ativa, posição do paciente, e se o ajuste é impulso, recoil ou body drop. A regra geral fica no pé da aba: testar o jogo de junta e, na ausência dele, impulsionar no sentido do bloqueio.
+
+**Tudo saiu da apostila dele** — "Roteiro de Quiropraxia", Prof.ª Carmen Fátima Prada de Freitas, páginas 33 a 49 (extremidades inferiores e superiores). Nada foi inventado nem completado por fora. O que os dados não carregam são as fotos das posições; para isso a aba aponta para a apostila em `03_Biblioteca/Quiropraxia`.
+
+Os dados moram em `QUIROPRAXIA_REF.membros` (`dados-clinicos.js`) e a aba é renderizada por `renderQuiroRef()`, no mesmo padrão de `<details>` dos ajustes.
+
+**Fila que continua, na ordem combinada:** registro da sessão do dia + resumo na chegada do paciente → Árvore e Vitruviano compartilhados entre OS e Clínica (**extrair, nunca copiar**) → a teia diagnóstica.
+
+**Duas perguntas ainda em aberto da v3.9:** alguma caixa do Diagnóstico deve vir **sempre aberta** (a Pulsologia?), e se o quadro **"Pulso geral (os dois punhos)"** faz sentido na prática dele ou deve sair.
+
+<details><summary>Texto original da senha (histórico)</summary>
+
+### 🔑 Senha "Acender as Mãos" (registrada 27/07/2026)
+
+Frase-chave para janela nova. **É janela de execução** — é a primeira da fila já combinada. Ao ouvir **"Acender as Mãos"**, ir direto ao trabalho: completar a quiropraxia com o que falta — **dedos das mãos, dedos dos pés, mãos, pés, braço e antebraço**. Hoje a Clínica tem a coluna (C1–Cóccix, ligada à `QUIROPRAXIA_REF`) e a caixa "Quiropraxia — Mapa de Subluxações, Testes e Ajustes" no Diagnóstico, mas os membros não estão mapeados. Mexer em `renderQuiroRef()` e nas abas de `#quiroRefSeg`; a caixa é a de chave `quiroref` no motor de caixas.
+
+Regra que não muda: **o conteúdo clínico vem do Montgomery, nunca inventado** — se faltar material, perguntar em vez de preencher.
+
+Depois desta, na ordem: registro da sessão do dia + resumo na chegada do paciente → Árvore e Vitruviano compartilhados entre OS e Clínica (**extrair, nunca copiar**) → a teia diagnóstica.
+
+Duas perguntas em aberto da v3.9, para checar com ele: alguma caixa do Diagnóstico deve vir **sempre aberta** (a Pulsologia?), e se o quadro **"Pulso geral (os dois punhos)"** faz sentido na prática dele ou deve sair.
+
+</details>
+
+## Senha "Acender as Caixas" — as 3 velas acesas (v3.9, 27/07)
+
+**1. A busca acha com e sem acento.** "Fabricio" agora encontra "Fabrício". A normalização (minúsculo, sem acento) virou uma **coluna gerada no banco** — `busca_nome`, com índice —, não um filtro na página: a Clínica continua sem baixar lista nenhuma para procurar, que era a regra por causa da cota de egress. Vale nos dois lugares que buscam paciente (a busca global e o seletor).
+
+**2. As caixas do Diagnóstico abrem e fecham — e cada uma carrega tudo dela dentro.** As 11 ferramentas chegam **fechadas** — a tela que era um rolo interminável agora cabe numa olhada. O título da caixa fechada conta o que tem dentro ("Pulso — Pulsologia (MTC) · 2 posições · 3 pulsos"), e a Clínica **lembra** quais ele deixou abertas. Cada caixa é reconhecida por um elemento que só existe dentro dela, então renomear um título não perde o que ficou guardado. Na impressão tudo abre sozinho. Nada de conteúdo foi tocado — foi mudança de endereço: o que já estava na caixa passou a morar numa gaveta abaixo do título.
+
+E a queixa de fundo caiu junto: **o que foi selecionado e a anotação saíram do painel único lá embaixo e foram para dentro da caixa da própria ferramenta**, na ordem ferramenta → seleção → anotação. Ele marcava o elemento em cima e escrevia a observação a três telas de distância; agora as duas coisas estão no mesmo lugar. No painel de baixo ficou só o que não é de ferramenta nenhuma: as sugestões cruzadas. Cuidado que entrou junto — se ele estiver escrevendo quando a tela se redesenha, o foco e a posição do cursor voltam para onde estavam, então a anotação não é arrancada da mão dele no meio da frase.
+
+**3. O pulso passou a saber onde está.** Era o defeito de raiz: `pulsoPos` (onde há alteração) e `pulso` (quais tipos) eram **duas listas que não se conheciam**. A tela não sabia dizer qual posição estava cheia e qual estava vazia, e no papel saía "posições: Cun esq., Chi dir." e, embaixo, os pulsos todos juntos — sem dizer qual era de onde.
+
+Agora a verdade é uma só: `pulsoPorPos` — um registro por posição (`{"E-cun":["fu","chen"]}`). As duas listas antigas continuam existindo como **espelho recalculado**, então tudo que já lia pulso/posição (salvar, imprimir, resumo) segue funcionando sem reescrita. Na tela, cada posição virou um **quadro com tudo dela dentro**: o órgão, as desarmonias clássicas, as fichinhas dos 28 pulsos e a busca — a opção "a" que ele escolheu. O círculo do punho mostra **quantos pulsos aquela posição já tem**. Desmarcar a posição leva os pulsos dela junto, avisando antes. E o resumo impresso agora diz o que é de onde: *"Cun esq.: Flutuante, Profundo · Chi dir.: Rápido"*.
+
+Cuidado que entrou junto: **avaliação antiga não perde nada.** Quem foi salvo com as duas listas soltas é migrado na hora de reabrir ou imprimir — as posições marcadas voltam, e os pulsos que não têm dono vão para um quadro **"Pulso geral (os dois punhos)"**, que também serve para o que se sente no pulso inteiro sem localizar.
+
+Testado no navegador antes de subir: registro por posição, espelhos, badge no punho, desmarcar levando os pulsos junto, resumo, papel e migração do formato antigo.
+
+**Fila que a senha deixou combinada, na ordem:** quiropraxia completa (dedos das mãos, dedos dos pés, mãos, pés, braço, antebraço) → registro da sessão do dia + resumo na chegada do paciente → Árvore e Vitruviano compartilhados entre OS e Clínica (**extrair, nunca copiar**) → a teia diagnóstica.
+
+<details><summary>Texto original da senha (histórico)</summary>
+
+## 🔑 Senha "Acender as Caixas" (registrada 27/07/2026)
+
+Frase-chave para janela nova. **É janela de execução, não de desenho** — o desenho já foi feito e combinado na janela que fechou o Diagnóstico usável. Ao ouvir **"Acender as Caixas"**, ir direto ao trabalho, nesta ordem:
+
+**1. Busca de paciente sem acento** (primeiro, é pequeno e dói hoje). "Fabricio" tem que achar "Fabrício". Coluna de busca normalizada (minúsculo, sem acento) no **banco** Supabase — nunca na página, por causa da cota de egress. As duas funções que buscam são `buscarTodosPorNome()` e `buscarPacPicker()` no `index.html`, ambas com `dados->>nome=ilike`.
+
+**2. As caixas com toggle** no Diagnóstico. Todas **fechadas** ao abrir; a Clínica **lembra** como ele deixou da última vez. Título da caixa fechada mostra um resumo curto ("Pulsologia · 2 posições"). Cada caixa carrega tudo dela dentro — ferramenta, o que foi selecionado e a anotação, nessa ordem. Isso resolve de uma vez três queixas dele: falta de toggle, anotação longe dos 5 Elementos, e terapia que aparece longe.
+
+**3. Pulso por posição.** Hoje `_diagSelecoes.pulsoPos` (lista de posições) e `_diagSelecoes.pulso` (lista de tipos) são duas listas que não se conhecem — por isso a tela não sabe qual posição está cheia e qual está vazia. Passa a ser um registro por posição: `{ "E-cun": ["shi","shu"], "D-chi": ["xu","chen"] }`. Os 28 pulsos continuam a mesma base; as fichinhas e a busca aparecem **dentro de cada quadro de posição** (escolha dele, opção "a"). Desmarcar a posição leva os pulsos dela junto. Corrigir também o resumo impresso (`renderDiagPainel`, bloco por volta da linha 5055).
+
+Depois disso, na ordem: quiropraxia completa (dedos das mãos, dedos dos pés, mãos, pés, braço, antebraço) → registro da sessão do dia + resumo na chegada do paciente → Árvore e Vitruviano compartilhados entre OS e Clínica (**extrair, nunca copiar**) → a teia diagnóstica.
+
+</details>
+
 ## A lista de agendas virou nossa (v3.8, 27/07)
 
 Montgomery viu que a caixinha "Agenda de destino" abria com outra letra e o azul do Windows, destoando de toda a tela. A caixa **fechada** de um `<select>` a página pinta; a lista que se **abre** quem desenha é o sistema operacional, e nenhum navegador deixa a página tocar nela — não era falta de CSS, era um limite do próprio navegador. Trocado por uma lista feita em casa (botão + painel), com a fonte da plataforma, o dourado da casa marcando a agenda escolhida e fechamento ao clicar fora.

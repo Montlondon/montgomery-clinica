@@ -2368,5 +2368,291 @@ const QUIROPRAXIA_REF = {
     'Extremidades inferiores': ['Pé e tornozelo: metatarso-falange, intermetatarso, deslizes tarsais, cubóide, talo-crural, calcâneo/talus, tíbio-fibular inferior','Joelho: tíbio-fibular superior, patela (movimentação plena), tíbio-femoral (deslize AP/PA, rotação medial/lateral, deslize lateral/medial)','Coxo-femoral: testes (figura do 4, extensão longitudinal, flexão, extensão, rotações), ajustes com body drop e impulso'],
     'Extremidades superiores': ['Mão: metacarpo-falanges, metacarpo-carpo do polegar, interfalângicos, intermetacarpos','Punho: cilindro proximal e distal (extensão longitudinal, deslize AP/PA, flexão, deslize medial/lateral), piramidal, rádio-ulna (pronação/supinação)','Cotovelo: deslize posterior, extensão longitudinal, pronação, extensão, deslize lateral/medial rádio-ulna no úmero','Ombro: deslizes na cavidade glenóide (lateral/anterior/posterior a 10° e 90°, superior/inferior, rotações)','Acrômioclavicular, esternoclavicular, costoesternal, intercostais, escápula'
     ]
-  }
+  },
+
+  // Membros — testes e ajustes articulação por articulação (apostila, pgs 33-49)
+  membros: [
+    {
+      grupo: 'Dedos das mãos e mão',
+      nota: 'Pinça da mão ativa move o segmento distal; a mão auxiliar estabiliza o proximal. Testar o jogo de junta e, achada a fixação, impulsionar no sentido do bloqueio.',
+      itens: [
+        { art:'Metacarpo-falanges · Metacarpo-carpo do polegar · Interfalângicos', movimentos:'Rotação interna/externa · Deslize AP/PA · Deslize lateral/medial · Extensão longitudinal', passos:[
+          'Mão ativa: polegar e indicador em pinça mobilizam o segmento DISTAL desejado.',
+          'Mão auxiliar estabiliza o segmento PROXIMAL.',
+          'Testar o jogo de junta no movimento desejado.',
+          'Adicionar IMPULSO quando localizada a fixação.'
+        ]},
+        { art:'Intermetacarpos — rotação', movimentos:'Movimentos em 8', passos:[
+          'Mão de apoio estabiliza o punho.',
+          'Mão ativa realiza movimentos em 8.'
+        ]},
+        { art:'Intermetacarpos — deslize AP/PA', movimentos:'Deslize AP/PA', passos:[
+          'Polegares na palma, demais dedos no dorso da mão.',
+          'Testar o deslize AP/PA.',
+          'Adicionar IMPULSO se houver restrição.'
+        ]}
+      ]
+    },
+    {
+      grupo: 'Punho e antebraço',
+      nota: 'Cilindro proximal = fileira de carpos junto ao rádio-ulna; cilindro distal = fileira junto aos metacarpos.',
+      itens: [
+        { art:'Cilindro proximal — extensão longitudinal', movimentos:'Extensão longitudinal', passos:[
+          'Gume interno da mão ativa no cilindro proximal.',
+          'Mão de apoio estabiliza o cotovelo em 90°.',
+          'Testar a extensão longitudinal do punho.',
+          'IMPULSO se houver restrição.'
+        ]},
+        { art:'Cilindro proximal — deslize AP/PA', movimentos:'Deslize AP/PA', passos:[
+          'Gume interno da mão ativa no cilindro proximal.',
+          'Gume interno da mão de apoio no rádio/ulna, estabilizando.',
+          'Testar os movimentos de AP/PA.',
+          'IMPULSO se houver restrição.'
+        ]},
+        { art:'Cilindro proximal — flexão', movimentos:'Flexão', passos:[
+          'Palma da mão do paciente para cima.',
+          'Polegar nos ossos do cilindro proximal.',
+          'Testar o movimento de flexão.',
+          'IMPULSO se encontrada a restrição.'
+        ]},
+        { art:'Cilindro distal — extensão', movimentos:'Extensão', passos:[
+          'Palma da mão do paciente para baixo.',
+          'Polegar nos ossos do cilindro distal.',
+          'Testar o movimento de extensão.',
+          'IMPULSO se encontrada a restrição.'
+        ]},
+        { art:'Cilindros proximal e distal — deslize medial/lateral', movimentos:'Deslize medial e lateral', passos:[
+          'Indicadores laterais ao segmento testado.',
+          'Testar os movimentos de deslize medial e lateral.',
+          'IMPULSO se encontrada a restrição.'
+        ]},
+        { art:'Piramidal — extensão longitudinal', movimentos:'Extensão longitudinal', passos:[
+          'Aperto de mão com a mão ativa.',
+          'Escorregar o indicador até a junta ulna–piramidal.',
+          'Mão de apoio estabiliza o rádio-ulna.',
+          'Leve desvio radial; testar a extensão longitudinal.',
+          'IMPULSO se encontrada a restrição.'
+        ]},
+        { art:'Piramidal — deslize AP/PA', movimentos:'Deslize AP/PA', passos:[
+          'Braço do paciente apoiado no joelho do terapeuta.',
+          'Segurar o piramidal entre o polegar e o indicador.',
+          'Testar o deslize AP/PA.',
+          'IMPULSO se encontrada a restrição.'
+        ]},
+        { art:'Piramidal — deslize medial', movimentos:'Deslize medial', passos:[
+          'Indicador no piramidal, fazendo o deslize medial.',
+          'Testar o jogo de junta.',
+          'Limite somente para DESVIO MEDIAL; IMPULSO.'
+        ]},
+        { art:'Rádio-ulna — deslize AP/PA', movimentos:'Deslize AP/PA', passos:[
+          'Braço do paciente apoiado pelo cotovelo no joelho do terapeuta.',
+          'Polegares anteriores e indicadores posteriores no rádio-ulna.',
+          'Testar os movimentos de deslize AP/PA.',
+          'IMPULSO se encontrada a restrição.'
+        ]},
+        { art:'Rádio-ulna — pronação e supinação', movimentos:'Pronação · Supinação', passos:[
+          'Braço do paciente apoiado pelo cotovelo no joelho do terapeuta.',
+          'Polegares e indicadores no rádio-ulna.',
+          'Testar o movimento de pronação; depois o de supinação.',
+          'IMPULSO se encontrada a restrição.'
+        ]}
+      ]
+    },
+    {
+      grupo: 'Braço — cotovelo (rádio-ulna no úmero)',
+      itens: [
+        { art:'Deslize posterior', movimentos:'Deslize posterior', passos:[
+          'Paciente supino com o cotovelo apoiado na mesa.',
+          'Mão ativa apoiada na palma da mão do paciente.',
+          'Mão de apoio acompanha o movimento do cotovelo.',
+          'Pressionar para sentir o deslize posterior.',
+          'BODY DROP se encontrada a restrição.'
+        ]},
+        { art:'Extensão longitudinal', movimentos:'Extensão longitudinal', passos:[
+          'Paciente em pé com o cotovelo fletido.',
+          'Mão de apoio na porção distal do úmero.',
+          'Mão ativa segura a porção distal do rádio-ulna.',
+          'Testar a extensão longitudinal.',
+          'IMPULSO se encontrada a restrição.'
+        ]},
+        { art:'Pronação (rotação interna)', movimentos:'Pronação', passos:[
+          'Paciente em pé com o cotovelo fletido.',
+          'Mão de apoio no punho, produzindo pronação do braço com leve flexão de cotovelo.',
+          'Mão ativa com o polegar na cabeça do rádio.',
+          'Testar a pronação; IMPULSO se encontrada a restrição.'
+        ]},
+        { art:'Extensão', movimentos:'Extensão', passos:[
+          'Paciente em pé com o cotovelo fletido.',
+          'Mão de apoio no terço distal do rádio-ulna.',
+          'Mão ativa com polegar e indicador no olécrano.',
+          'Testar a extensão; IMPULSO se encontrada a restrição.'
+        ]},
+        { art:'Deslize lateral/medial', movimentos:'Deslize lateral · medial', passos:[
+          'Paciente em pé, cotovelo estendido e seguro pela axila do terapeuta.',
+          'Gumes internos das mãos seguram o rádio-ulna.',
+          'Leve flexão de cotovelo; testar o deslize lateral/medial.',
+          'IMPULSO se encontrada a restrição.'
+        ]}
+      ]
+    },
+    {
+      grupo: 'Braço — ombro (úmero na cavidade glenóide)',
+      itens: [
+        { art:'Deslize lateral ou anterior', movimentos:'Deslize lateral · anterior', passos:[
+          'Paciente supino.',
+          'Mão ativa encaixa o mais alto possível no úmero.',
+          'Mão auxiliar guia e estabiliza o braço pelo cotovelo.',
+          'Testar o jogo de junta nos deslizes lateral e anterior.',
+          'IMPULSO no sentido onde for encontrada a restrição.'
+        ]},
+        { art:'Deslize posterior a 10° e a 90°', movimentos:'Deslize posterior', passos:[
+          'Paciente supino com o braço dobrado.',
+          'Mão de apoio acomoda o ombro; mão ativa apoia no cotovelo.',
+          'Testar o deslize posterior na angulação (10° ou 90°).',
+          'BODY DROP se encontrada a restrição.',
+          'Variação: paciente em pé ou sentado, mão direcionada ao ombro, terapeuta posterior com as mãos no cotovelo e o esterno estabilizando a escápula — IMPULSO.'
+        ]},
+        { art:'Deslize superior', movimentos:'Deslize superior', passos:[
+          'Paciente supino, braço dobrado e apoiado no ombro do terapeuta em 90°.',
+          'Gumes internos das mãos segurando o úmero.',
+          'Movimento para lateral / posterior / superior.',
+          'IMPULSO SUPERIOR se encontrada a restrição.'
+        ]},
+        { art:'Deslize inferior', movimentos:'Deslize inferior', passos:[
+          'Paciente supino, braço dobrado e apoiado no ombro do terapeuta em 45°.',
+          'Gumes internos das mãos segurando o úmero.',
+          'Movimento para lateral / posterior / inferior.',
+          'IMPULSO INFERIOR se encontrada a restrição.'
+        ]},
+        { art:'Rotação externa', movimentos:'Rotação externa', passos:[
+          'Paciente supino, braço aberto e antebraço apoiado na coxa do terapeuta.',
+          'Antebraço do terapeuta apoiado no antebraço do paciente.',
+          'Gumes internos das mãos no úmero, o mais alto possível.',
+          'Testar a rotação externa; IMPULSO se encontrada a restrição.'
+        ]},
+        { art:'Rotação interna', movimentos:'Rotação interna', passos:[
+          'Paciente sentado ou em pé.',
+          'Mãos do terapeuta no antebraço do paciente.',
+          'Tração com rotação interna; testar o movimento.',
+          'IMPULSO se encontrada a restrição.'
+        ]},
+        { art:'Movimentos gerais do úmero', movimentos:'Todos os sentidos', passos:[
+          'Paciente prono com o braço solto em abertura de 90°.',
+          'Terapeuta na lateral prende o braço do paciente entre as pernas.',
+          'Gumes internos abraçando o úmero o mais alto possível.',
+          'Movimentos em todos os sentidos possíveis; IMPULSO se encontrada a restrição.'
+        ]}
+      ]
+    },
+    {
+      grupo: 'Dedos dos pés (artelhos) e antepé',
+      nota: 'No hálux, tanto no teste quanto no ajuste, a mão de apoio abarca o polegar e o médio da mão ativa.',
+      itens: [
+        { art:'Metatarso-falange proximal · Interfalangeais', movimentos:'Extensão longitudinal · Deslize lateral-medial · Deslize dorso-plantar · Rotação interna-externa', passos:[
+          'Polegar e médio da mão de apoio estabilizam os metatarsos correspondentes.',
+          'Polegar e médio curvados (em garra) da mão ativa posicionam no segmento desejado (falange proximal, média ou distal).',
+          'Testar o movimento desejado.',
+          'Na ausência de jogo articular, IMPULSO NO SENTIDO DO BLOQUEIO.'
+        ]},
+        { art:'Intermetatarso — deslize dorso-plantar', movimentos:'Deslize AP/PA', passos:[
+          'Polegares na porção plantar, demais dedos na porção dorsal.',
+          'Deslize AP/PA: teste seguido de ajuste, se necessário.'
+        ]},
+        { art:'Intermetatarso — rotação', movimentos:'Rotação', passos:[
+          'Mãos espalmadas lateralmente, conduzindo a rotação.'
+        ]},
+        { art:'Intermetatarso — manobra geral em 8', movimentos:'Manobra em 8', passos:[
+          'Polegar da mão ativa na área plantar; demais dedos na área dorsal.',
+          'Mão de apoio estabiliza o calcanhar.'
+        ]}
+      ]
+    },
+    {
+      grupo: 'Pé e tornozelo',
+      itens: [
+        { art:'Metatarso-cuneiformes · Cuneiformes-navicular · Navicular-talus — deslize dorso-plantar (AP)', movimentos:'Deslize AP', passos:[
+          'TESTE: indicadores, médios e anulares da mão ativa no segmento desejado; polegares na planta do pé mantendo o alinhamento; forçar o movimento AP sentindo o jogo de junta.',
+          'AJUSTE: médio da mão ativa no segmento desejado, reforço com a mão de apoio, flexão dorsal e IMPULSO axial.'
+        ]},
+        { art:'Mesmos segmentos — deslize planto-dorsal (PA)', movimentos:'Deslize PA', passos:[
+          'TESTE: pressão plantar com o polegar em cada articulação; forçar o movimento PA sentindo o jogo de junta; a mão de apoio na região dorsal auxilia a flexão plantar.',
+          'AJUSTE (paciente em pé, com apoio): joelho fletido com o pé ao lado do outro joelho; polegar duplo na articulação desejada; movimentos lentos para relaxar; RECOIL — realizar o deslize PA evitando a dorsiflexão.',
+          'AJUSTE (paciente prono): joelho a 45°, tornozelo a 90°; com os polegares sobrepostos testar a movimentação PA e adicionar IMPULSO se necessário.'
+        ]},
+        { art:'Cubóide', movimentos:'Jogo articular · Cisalhamento', passos:[
+          'TESTE: polegar na porção plantar do cubóide, indicador na porção dorsal; testar a presença de jogo articular.',
+          'AJUSTE: polegar na porção plantar, gume interno da mão na porção dorsal; dedos da mão de apoio no metatarso desejado; ajuste por rotação inversa (ação de cisalhamento).'
+        ]},
+        { art:'Talo-crural — extensão longitudinal', movimentos:'Extensão longitudinal', passos:[
+          'Parte interna da coxa do paciente apoiada nas costas do terapeuta.',
+          'Gumes internos das mãos testam a extensão da articulação talo-crural.',
+          'Adicionar IMPULSO se houver restrição de movimento.'
+        ]},
+        { art:'Calcâneo / talus — deslizes lateral-medial e medial-lateral', movimentos:'Deslize lateral · medial', passos:[
+          'Apoiar o calcâneo com os dedos: internamente para desvio LATERAL, externamente para desvio MEDIAL.',
+          'Testar a presença de jogo articular.',
+          'IMPULSO por uma tapa com a outra mão sobre os dedos, forçando o movimento desejado.'
+        ]},
+        { art:'Tíbio-fibular inferior — deslize AP/PA', movimentos:'Deslize AP/PA', passos:[
+          'Paciente em decúbito lateral, perna levemente fletida.',
+          'Polegares e indicadores no maléolo externo.',
+          'Testar os movimentos de AP/PA.',
+          'Havendo restrição, IMPULSO com o polegar duplo ou com os indicadores.'
+        ]}
+      ]
+    },
+    {
+      grupo: 'Perna — joelho e quadril',
+      itens: [
+        { art:'Tíbio-fibular superior — deslize AP/PA', movimentos:'Deslize AP/PA', passos:[
+          'SUPINO: joelho do paciente fletido, terapeuta sentado sobre o pé do paciente; indicador e polegar na fíbula testam o movimento AP/PA; impulso se houver restrição.',
+          'PRONO (lesão contralateral): indicador da mão ativa na articulação tíbio-fibular superior com reforço do médio; flexionar o joelho com a mão de apoio; IMPULSO.'
+        ]},
+        { art:'Patela — movimentação plena', movimentos:'Todos os movimentos possíveis', passos:[
+          'Gumes internos das mãos guiam todos os movimentos possíveis.',
+          'Adicionar IMPULSO se houver restrição de movimento.'
+        ]},
+        { art:'Tíbio-femoral — deslize AP/PA', movimentos:'Deslize AP/PA', passos:[
+          'SUPINO (AP): perna fletida a 90° sobre a coxa do terapeuta; gume interno da mão ativa na linha do platô tibial com reforço da mão de apoio; testar o deslize AP e impulsionar se houver restrição.',
+          'PRONO (PA): perna flexionada a 90° apoiada no ombro do terapeuta; gume externo das mãos na fossa poplítea forçando a tíbia no deslize PA; IMPULSO se houver restrição.'
+        ]},
+        { art:'Tíbio-femoral — rotação medial/lateral', movimentos:'Rotação interna · externa', passos:[
+          'PREFERENCIAL (supino): perna flexionada a 90° na perna do terapeuta; abarcar a tíbia com o gume interno da mão na linha do platô; rotação interna ou externa com movimentos circulares no sentido desejado.',
+          'VARIAÇÃO 1 (específica): encaixar o joelho do terapeuta na porção interna do joelho do paciente forrado com toalha; o paciente segura a toalha forçando o fêmur em sua direção; enlaçar a tíbia com os antebraços, remover a folga do movimento rotacional e IMPULSO.',
+          'Rotação lateral: trabalhar do lado oposto. Rotação medial: trabalhar do mesmo lado.',
+          'VARIAÇÃO 2 (geral): segurar a tíbia com as duas mãos pelo terço distal e forçar os pés na rotação desejada; IMPULSO axial + rotacional.'
+        ]},
+        { art:'Tíbio-femoral — deslize lateral/medial', movimentos:'Deslize lateral · medial', passos:[
+          'Paciente supino, tornozelo seguro entre as pernas do terapeuta.',
+          'Gumes internos das mãos no platô tibial.',
+          'Pequena flexão de joelho; testar o jogo de junta nos sentidos lateral e medial.',
+          'Adicionar IMPULSO se necessário.'
+        ]},
+        { art:'Coxo-femoral — testes', movimentos:'Figura do 4 · Extensão longitudinal · Flexão · Extensão · Rotação externa e interna', passos:[
+          'Percorrer os seis testes e localizar o sentido bloqueado antes de escolher o ajuste.'
+        ]},
+        { art:'Coxo-femoral — manobra geral', movimentos:'Tração do fêmur', passos:[
+          'Paciente em decúbito lateral, em posição neutra (evitar rotação lombar).',
+          'Joelho do terapeuta na fossa poplítea formada pelo joelho dobrado do paciente.',
+          'Mão de apoio estabiliza o ombro; mão ativa invertida no grande trocanter.',
+          'Esticar o joelho até quase tocar o chão, produzindo tração no fêmur; BODY DROP.'
+        ]},
+        { art:'Coxo-femoral — extensão', movimentos:'Extensão', passos:[
+          'SUPINO: mão de apoio flexiona a perna oposta ao bloqueio; mão ativa no terço proximal do fêmur, o mais próximo possível do trocanter maior; limite e IMPULSO de extensão com a mão ativa.',
+          'PRONO: mão ativa no grande trocanter, mão de apoio lateral ao joelho (fletido ou não); promover a extensão coxo-femoral e IMPULSO.'
+        ]},
+        { art:'Coxo-femoral — rotação externa/interna', movimentos:'Rotação externa · interna', passos:[
+          'Paciente prono.',
+          'Mão ativa no grande trocanter; mão de apoio conduz o movimento pelo tornozelo.',
+          'Levar ao limite do movimento desejado (externo ou interno); BODY DROP.'
+        ]},
+        { art:'Coxo-femoral — extensão longitudinal', movimentos:'Extensão longitudinal', passos:[
+          'Paciente supino, a perna neutra apoiada levemente fletida no joelho do terapeuta.',
+          'Gumes internos das mãos do terapeuta seguram o tornozelo.',
+          'Testar o jogo de junta na extensão longitudinal; a partir da posição de teste, limite e IMPULSO.',
+          'Pode-se associar rotação externa ou interna.'
+        ]}
+      ]
+    }
+  ]
 };

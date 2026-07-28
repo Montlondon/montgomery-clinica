@@ -80,6 +80,20 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 /* FORMS */
 .fc{background:#FDFAF6;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
 .fst{font-size:13.5px;font-weight:700;color:var(--pri-d);margin-bottom:12px;padding-bottom:7px;border-bottom:2px solid var(--pri-l);display:flex;align-items:center;gap:6px}
+/* Caixas que abrem e fecham (Diagnóstico) — fechadas ao chegar, e a Clínica lembra */
+.fst.cx-cab{cursor:pointer;user-select:none;margin-bottom:0;padding-bottom:9px}
+.fc.cx-aberta .fst.cx-cab{margin-bottom:12px}
+.cx-seta{width:14px;height:14px;flex:0 0 14px;margin-left:auto;transition:transform .18s ease;color:var(--pri-d);opacity:.7}
+.fc.cx-aberta .cx-seta{transform:rotate(90deg)}
+.cx-resumo{font-weight:500;font-size:11.5px;color:var(--txt-l);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-left:8px;min-width:0}
+.fc.cx-aberta .cx-resumo{display:none}
+.cx-corpo{display:none}
+/* O que foi selecionado mora dentro da própria caixa, sem virar caixa de novo */
+.cx-sel{border-top:1px dashed var(--brd);padding-top:12px}
+.cx-sel .fc{box-shadow:none;background:transparent;padding:0 0 0 11px;border-radius:0;margin-bottom:12px}
+.cx-sel .fc .fst{font-size:12.5px;border-bottom-width:1px;padding-bottom:5px;margin-bottom:8px}
+.fc.cx-aberta .cx-corpo{display:block}
+@media print{.cx-corpo{display:block!important}.cx-seta,.cx-resumo{display:none!important}}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px}
 .fr.full{grid-template-columns:1fr}.fr.tri{grid-template-columns:1fr 1fr 1fr}
 .fg{display:flex;flex-direction:column;min-width:0}
@@ -1046,18 +1060,12 @@ window.addEventListener('DOMContentLoaded',()=>{
 
   <div class="fc">
     <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 3 12 2.5-8 1.5 2h5"/></svg></span>Pulso — Pulsologia (MTC)</div>
-    <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Toque nas posições Cun · Guan · Chi dos punhos para marcar onde há alteração, e clique nos tipos de pulso encontrados. Os demais pulsos ficam na busca abaixo.</p>
+    <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Toque numa posição Cun · Guan · Chi do punho: ela abre o quadro dela ao lado, com o órgão, as desarmonias clássicas e a busca entre os 28 pulsos — o que você marcar fica <b>naquela posição</b>. O número no círculo diz quantos pulsos ela já tem.</p>
     <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;margin-bottom:12px">
       <div id="pulsoPunhos" style="text-align:center"></div>
       <div style="flex:1;min-width:220px">
         <div id="pulsoPosInfo"></div>
-        <div style="font-size:11.5px;font-weight:600;color:var(--pri-d);margin-bottom:6px">Pulsos mais comuns (clique para adicionar à ficha)</div>
-        <div id="pulsoComuns" style="display:flex;gap:5px;flex-wrap:wrap"></div>
       </div>
-    </div>
-    <div class="fg full" style="position:relative">
-      <input type="text" id="pulsoBusca" placeholder="Buscar entre os 28 pulsos: corda, escorregadio, calor, deficiência de sangue..." oninput="filtrarPulso()" onblur="fecharPulsoLista()" autocomplete="off">
-      <div id="pulsoLista" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--cream);border:1px solid var(--brd);border-radius:0 0 7px 7px;box-shadow:var(--shadow);z-index:200;max-height:240px;overflow-y:auto"></div>
     </div>
     <details style="margin-top:10px">
       <summary style="cursor:pointer;font-size:11.5px;font-weight:600;color:var(--pri-d)">Os 3 níveis de profundidade (como sentir)</summary>
@@ -1082,6 +1090,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px" id="quiroFonte">Referência consultável durante o diagnóstico. Clique numa aba para abrir.</p>
     <div class="seg" id="quiroRefSeg">
       <button class="on" data-qr="raizes" onclick="setQuiroRef('raizes')">Subluxações (vértebra a vértebra)</button>
+      <button data-qr="membros" onclick="setQuiroRef('membros')">Membros (mãos, pés, braços e pernas)</button>
       <button data-qr="testes" onclick="setQuiroRef('testes')">Testes diagnósticos</button>
       <button data-qr="ajustes" onclick="setQuiroRef('ajustes')">Manobras de ajuste</button>
       <button data-qr="fundamentos" onclick="setQuiroRef('fundamentos')">Fundamentos</button>
@@ -1635,7 +1644,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v3.8 · 27/07';
+const APP_VER='v4.0 · 27/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2164,12 +2173,22 @@ async function toggleArqDaBusca(id,valor){
   buscaGlobalPac();
 }
 
+// Tira acento e baixa a caixa — o mesmo que a coluna busca_nome faz no banco.
+// Sem isso, "Fabricio" nunca encontrava "Fabrício".
+function semAcento(s){
+  return (s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+}
+// Termo pronto para o filtro like da coluna busca_nome
+function termoBusca(termo){
+  return encodeURIComponent('*'+semAcento(termo).replace(/[%*]/g,'')+'*');
+}
+
 // Busca no BANCO por nome (inclui arquivados) — "vou lá buscar a Maria"
 async function buscarTodosPorNome(termo){
   termo=(termo||'').trim();
   if(termo.length<2)return[];
-  const t=encodeURIComponent('*'+termo.replace(/[%*]/g,'')+'*');
-  return (await supaReq('GET','pacientes',null,`?user_id=eq.montgomery&dados->>nome=ilike.${t}&order=dados->>nome.asc&limit=50&select=${PAC_SELECT},arquivado:dados->arquivado`))||[];
+  const t=termoBusca(termo);
+  return (await supaReq('GET','pacientes',null,`?user_id=eq.montgomery&busca_nome=like.${t}&order=dados->>nome.asc&limit=50&select=${PAC_SELECT},arquivado:dados->arquivado`))||[];
 }
 async function buscaGlobalPac(){
   const termo=document.getElementById('busP').value;
@@ -2298,7 +2317,7 @@ function go(p,el){
     if(el){
       _diagEditandoId=null;
       _diagPacSel=null;
-      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]};
+      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]};
       _diagJaSalvo=false;
       document.getElementById('diagPacBusca').value='';
       document.getElementById('diagPacId').value='';
@@ -2709,9 +2728,9 @@ let _psDbSeq=0;           // ignora respostas antigas que chegam fora de ordem
 async function buscarPacPicker(termo){
   termo=(termo||'').trim();
   if(termo.length<2)return[];
-  const t=encodeURIComponent('*'+termo.replace(/[%*]/g,'')+'*');
+  const t=termoBusca(termo);
   const sel='id:dados->id,nome:dados->>nome,telefone:dados->>telefone,arquivado:dados->arquivado';
-  const r=await supaReq('GET','pacientes',null,`?user_id=eq.montgomery&dados->>nome=ilike.${t}&order=dados->>nome.asc&limit=30&select=${sel}`);
+  const r=await supaReq('GET','pacientes',null,`?user_id=eq.montgomery&busca_nome=like.${t}&order=dados->>nome.asc&limit=30&select=${sel}`);
   return (r||[]).map(p=>({...p,arquivado:p.arquivado===true||p.arquivado==='true'}));
 }
 
@@ -4063,12 +4082,122 @@ function fecharRxPacLista(){
 let _diagPacSel=null;
 let _diagJaSalvo=false;
 let _diagEditandoId=null; // id do diagnóstico em edição (null = nova avaliação)
-let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]}; // guarda o que foi clicado nesta avaliação + anotações por elemento
+let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]}; // guarda o que foi clicado nesta avaliação + anotações por elemento
 
 // Dados (bancoIntegrativoCompleto, CATALOGO_SUPLEMENTOS_INICIAL, sistemasABC) movidos para dados-clinicos.js
 
 
+/* ===== As caixas do Diagnóstico abrem e fecham =====
+   A tela do Diagnóstico é longa: dez ferramentas empilhadas, e ele rola tudo
+   toda vez para chegar na que quer. Agora cada caixa chega FECHADA, mostrando
+   no próprio título um resumo curto do que tem dentro ("Pulsologia · 2 posições"),
+   e a Clínica lembra quais ele deixou abertas da última vez.
+   Cada caixa é reconhecida por um elemento que só existe dentro dela — assim
+   renomear um título não perde o que ficou guardado. */
+const CX_ABERTAS_KEY='diagCaixasAbertas';
+const CX_DIAG=[
+  {k:'pulso',    el:'pulsoPunhos',        resumo:()=>{
+    const pos=(_diagSelecoes.pulsoPos||[]).length, tp=(_diagSelecoes.pulso||[]).length;
+    if(!pos&&!tp)return'';
+    const a=pos?pos+(pos>1?' posições':' posição'):'';
+    const b=tp?tp+(tp>1?' pulsos':' pulso'):'';
+    return[a,b].filter(Boolean).join(' · ');
+  }},
+  {k:'elementos',el:'elementosGrid',      resumo:()=>cxConta((_diagSelecoes.elementos||[]).length,'elemento','elementos')},
+  {k:'pontos',   el:'pontosGrid',         resumo:()=>cxConta((_diagSelecoes.pontos||[]).length,'ponto','pontos')},
+  {k:'quiroref', el:'quiroRefConteudo',   resumo:()=>'referência'},
+  {k:'abc',      el:'abcTabelaBody',      resumo:()=>cxConta((_diagSelecoes.sistemasAbc||[]).length,'sistema','sistemas')},
+  {k:'acu',      el:'acuResultado',       resumo:()=>'referência'},
+  {k:'bagua',    el:'baguaWheel',         resumo:()=>cxConta((_diagSelecoes.bagua||[]).length,'síndrome','síndromes')},
+  {k:'sup',      el:'diagSupBusca',       resumo:()=>cxConta((_diagSelecoes.suplementos||[]).length,'suplemento','suplementos')},
+  {k:'auriculo', el:'auriculoMapaCompleto',resumo:()=>cxConta((_diagSelecoes.auriculo||[]).length,'ponto','pontos')},
+  {k:'psic',     el:'psicAnaliseConteudo',resumo:()=>cxConta((_diagSelecoes.psicanalise||[]).length,'conceito','conceitos')},
+  {k:'emo',      el:'diagEscalaEmo',      resumo:()=>{
+    const s=document.getElementById('diagEscalaEmo');
+    return (s&&s.value)?(s.options[s.selectedIndex].text||'').trim():'';
+  }}
+];
+function cxConta(n,um,varios){return n?n+' '+(n>1?varios:um):'';}
+
+const CX_SETA='<svg class="cx-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
+let _cxPreparadas=false;
+
+function cxAbertasSalvas(){
+  try{return JSON.parse(localStorage.getItem(CX_ABERTAS_KEY))||[];}catch(e){return[];}
+}
+function cxGuardar(){
+  const abertas=[...document.querySelectorAll('#pg-diagnostico .fc.cx-aberta')].map(fc=>fc.dataset.cx).filter(Boolean);
+  try{localStorage.setItem(CX_ABERTAS_KEY,JSON.stringify(abertas));}catch(e){}
+}
+function cxToggle(fc){
+  fc.classList.toggle('cx-aberta');
+  cxGuardar();
+  atualizarResumoCaixas();
+}
+function prepararCaixasDiag(){
+  if(_cxPreparadas)return;
+  _cxPreparadas=true;
+  const abertas=cxAbertasSalvas();
+  document.querySelectorAll('#pg-diagnostico .fc').forEach(fc=>{
+    const cab=fc.firstElementChild;
+    if(!cab||!cab.classList.contains('fst'))return;   // cartão sem título não vira caixa
+    if(fc.id==='diagResumoBox')return;                // o resumo final fica sempre aberto
+    const achado=CX_DIAG.find(c=>fc.querySelector('#'+c.el));
+    fc.dataset.cx=achado?achado.k:(cab.textContent||'').trim().slice(0,24);
+    // tudo que vem depois do título passa a morar dentro do corpo
+    const corpo=document.createElement('div');
+    corpo.className='cx-corpo';
+    while(cab.nextSibling)corpo.appendChild(cab.nextSibling);
+    fc.appendChild(corpo);
+    cab.classList.add('cx-cab');
+    cab.setAttribute('role','button');
+    cab.setAttribute('tabindex','0');
+    cab.insertAdjacentHTML('beforeend','<span class="cx-resumo"></span>'+CX_SETA);
+    cab.addEventListener('click',()=>cxToggle(fc));
+    cab.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();cxToggle(fc);}});
+    if(abertas.includes(fc.dataset.cx))fc.classList.add('cx-aberta');
+  });
+  atualizarResumoCaixas();
+}
+// Entrega o que foi selecionado (e a anotação) DENTRO da caixa da ferramenta,
+// no fim do corpo dela — em vez de lá embaixo, num painel único e distante.
+// Antes de trocar, guarda onde estava o cursor e o texto ainda não digitado,
+// para não arrancar a anotação da mão dele enquanto escreve.
+function entregarNaCaixa(chave,html){
+  const fc=document.querySelector(`#pg-diagnostico .fc[data-cx="${chave}"]`);
+  if(!fc)return;
+  const corpo=fc.querySelector(':scope > .cx-corpo')||fc;
+  let sel=corpo.querySelector(':scope > .cx-sel');
+  if(!html){if(sel)sel.remove();return;}
+  if(!sel){
+    sel=document.createElement('div');
+    sel.className='cx-sel';
+    sel.style.marginTop='14px';
+    corpo.appendChild(sel);
+  }
+  const ativo=document.activeElement;
+  const escrevendo=ativo&&sel.contains(ativo)&&ativo.tagName==='TEXTAREA';
+  const marca=escrevendo?[...sel.querySelectorAll('textarea')].indexOf(ativo):-1;
+  const pos=escrevendo?ativo.selectionStart:0;
+  sel.innerHTML=html;
+  if(marca>=0){
+    const volta=sel.querySelectorAll('textarea')[marca];
+    if(volta){volta.focus();try{volta.setSelectionRange(pos,pos);}catch(e){}}
+  }
+}
+// O título da caixa fechada conta o que tem dentro
+function atualizarResumoCaixas(){
+  document.querySelectorAll('#pg-diagnostico .fc[data-cx]').forEach(fc=>{
+    const alvo=fc.querySelector('.cx-resumo');if(!alvo)return;
+    const c=CX_DIAG.find(x=>x.k===fc.dataset.cx);
+    let txt='';
+    try{txt=c?(c.resumo()||''):'';}catch(e){txt='';}
+    alvo.textContent=txt;
+  });
+}
+
 function initDiagnostico(){
+  prepararCaixasDiag();
   renderPulsoCard();
   renderElementosGrid();
   renderPontosGrid();
@@ -4586,7 +4715,48 @@ function removerAuriculoFicha(id){
   renderDiagPainel();
 }
 
-/* ===== PULSO — Pulsologia MTC ===== */
+/* ===== PULSO — Pulsologia MTC =====
+   Antes eram duas listas que não se conheciam: pulsoPos (onde há alteração) e
+   pulso (quais tipos), lado a lado sem ligação. A tela não sabia dizer qual
+   posição estava cheia e qual estava vazia — e no papel saía "posições: Cun esq.,
+   Chi dir." e, embaixo, os pulsos todos juntos, sem dizer qual era de onde.
+
+   Agora a verdade é UMA só: _diagSelecoes.pulsoPorPos, um registro por posição
+   ({ "E-cun": ["shi","shu"] }). As duas listas antigas continuam existindo, mas
+   como espelho — recalculadas por sincPulso() a cada mudança. Assim tudo que já
+   lia pulso/pulsoPos (salvar, imprimir, resumo) continua funcionando igual.
+   'geral' é a posição de quem sente o pulso como um todo, sem localizar. */
+const PULSO_ORDEM=['geral','E-cun','E-guan','E-chi','D-cun','D-guan','D-chi'];
+function pulsoChaves(){
+  const r=_diagSelecoes.pulsoPorPos||{};
+  return PULSO_ORDEM.filter(k=>r[k]).concat(Object.keys(r).filter(k=>!PULSO_ORDEM.includes(k)));
+}
+// Recalcula os espelhos a partir do registro por posição
+function sincPulso(){
+  const r=_diagSelecoes.pulsoPorPos||(_diagSelecoes.pulsoPorPos={});
+  _diagSelecoes.pulsoPos=pulsoChaves().filter(k=>k!=='geral');
+  const vistos=[];
+  pulsoChaves().forEach(k=>(r[k]||[]).forEach(id=>{if(!vistos.includes(id))vistos.push(id);}));
+  _diagSelecoes.pulso=vistos;
+}
+// Avaliação antiga (só as duas listas soltas) vira o registro novo sem perder nada:
+// as posições marcadas voltam vazias e os pulsos que não têm dono vão para 'geral'.
+function pulsoMigrar(diag){
+  if(diag&&diag.pulsoPorPos)return JSON.parse(JSON.stringify(diag.pulsoPorPos));
+  const r={};
+  ((diag&&diag.pulsoPos)||[]).forEach(k=>r[k]=[]);
+  const soltos=(diag&&diag.pulso)||[];
+  if(soltos.length)r['geral']=[...soltos];
+  return r;
+}
+function pulsoTitulo(key){
+  if(key==='geral')return{tit:'Pulso geral — os dois punhos',sub:'Para o que se sente no pulso inteiro, sem localizar numa posição.'};
+  const i=pulsoPosicoes[key];
+  if(!i)return{tit:key,sub:''};
+  return{tit:`${i.pos} — punho ${i.punho.toLowerCase()} · ${i.orgaos}`,
+         sub:`Elemento: ${i.elemento}`,desarmonias:i.desarmonias};
+}
+
 function pulsoPunhoSVG(lado){
   // Antebraço estilizado com as 3 posições da artéria radial. Cun=perto da mão.
   const pref=lado==='Esquerdo'?'E':'D';
@@ -4594,11 +4764,15 @@ function pulsoPunhoSVG(lado){
   let circ='';
   ['cun','guan','chi'].forEach(p=>{
     const key=pref+'-'+p;
-    const on=(_diagSelecoes.pulsoPos||[]).includes(key);
+    const reg=(_diagSelecoes.pulsoPorPos||{})[key];
+    const on=!!reg;
+    const n=reg?reg.length:0;   // quantos pulsos essa posição já tem
     const info=pulsoPosicoes[key];
-    circ+=`<g onclick="togglePulsoPos('${key}')" style="cursor:pointer"><title>${info.pos} — ${info.orgaos}</title>
+    circ+=`<g onclick="togglePulsoPos('${key}')" style="cursor:pointer"><title>${info.pos} — ${info.orgaos}${on?` (${n} pulso${n===1?'':'s'})`:''}</title>
       <circle cx="50" cy="${posY[p]}" r="11" fill="${on?'var(--pri)':'var(--cream)'}" stroke="var(--pri)" stroke-width="2"/>
-      <text x="50" y="${posY[p]+3.5}" text-anchor="middle" font-size="8.5" font-weight="700" fill="${on?'#fff':'var(--pri-d)'}">${info.pos}</text></g>`;
+      <text x="50" y="${posY[p]+3.5}" text-anchor="middle" font-size="8.5" font-weight="700" fill="${on?'#fff':'var(--pri-d)'}">${info.pos}</text>
+      ${n?`<circle cx="63" cy="${posY[p]-8}" r="7" fill="var(--pri-deep)"/><text x="63" y="${posY[p]-5.4}" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">${n}</text>`:''}
+      ${on&&!n?`<circle cx="63" cy="${posY[p]-8}" r="7" fill="none" stroke="var(--pri-deep)" stroke-width="1.5" stroke-dasharray="2 2"/>`:''}</g>`;
   });
   return `<svg viewBox="0 0 100 150" width="86" height="129" style="overflow:visible">
     <path d="M32 128 C30 90 33 55 38 26 Q50 12 62 26 C67 55 70 90 68 128 Q50 138 32 128Z" fill="#F0EBE0" stroke="var(--brd)" stroke-width="1.5"/>
@@ -4607,58 +4781,96 @@ function pulsoPunhoSVG(lado){
     <text x="50" y="148" text-anchor="middle" font-size="9" font-weight="600" fill="var(--txt-l)">${lado}</text>
   </svg>`;
 }
+// Um quadro por posição: o que ela significa, os pulsos comuns, a busca entre
+// os 28 e as fichinhas do que já foi marcado — tudo DENTRO da posição.
+function pulsoQuadro(key){
+  const t=pulsoTitulo(key);
+  const marcados=(_diagSelecoes.pulsoPorPos||{})[key]||[];
+  const chips=pulsosMTC.filter(p=>p.comum).map(p=>{
+    const on=marcados.includes(p.id);
+    return `<span onclick="togglePulsoNaPos('${key}','${p.id}')" title="${escHtml(p.qualidade)} — ${escHtml(p.indica)}" style="cursor:pointer;font-size:11px;padding:4px 9px;border-radius:8px;border:1.5px solid var(--pri);background:${on?'var(--pri)':'var(--cream)'};color:${on?'#fff':'var(--pri-d)'};font-weight:600">${on?'✓ ':''}${p.nome} <span style="font-weight:400;font-style:italic">${p.pinyin}</span></span>`;
+  }).join('');
+  const fichas=marcados.map(id=>{
+    const p=pulsosPorId[id];if(!p)return'';
+    return `<div class="linha-fin" style="padding:5px 0">
+      <div class="info"><div class="desc">${p.nome} <em style="font-weight:400">${p.pinyin}</em></div><div class="det">${escHtml(p.qualidade)} → ${escHtml(p.indica)}</div></div>
+      <button type="button" class="btn btn-dan btn-sm" onclick="togglePulsoNaPos('${key}','${p.id}')" title="Tirar deste ponto"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
+    </div>`;}).join('');
+  return `<div style="border:1px solid var(--brd);border-left:3px solid var(--pri);border-radius:7px;padding:10px 11px;margin-bottom:10px;background:var(--cream)">
+    <div style="display:flex;align-items:flex-start;gap:8px">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:700;color:var(--pri-d)">${t.tit}</div>
+        <div style="font-size:11px;color:var(--txt-l);margin:2px 0">${t.sub}</div>
+      </div>
+      <button type="button" class="btn btn-sec btn-sm" onclick="togglePulsoPos('${key}')" title="Tirar esta posição da avaliação (leva os pulsos dela junto)"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
+    </div>
+    ${t.desarmonias?`<div style="font-size:11.5px;line-height:1.5;margin-bottom:8px"><b>Desarmonias:</b> ${t.desarmonias}</div>`:''}
+    <div style="font-size:11px;font-weight:600;color:var(--pri-d);margin:8px 0 5px">Pulsos mais comuns — clique para marcar nesta posição</div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">${chips}</div>
+    <div class="fg full" style="position:relative">
+      <input type="text" id="pbq_${key}" placeholder="Buscar entre os 28 pulsos para esta posição..." oninput="filtrarPulsoPos('${key}')" onblur="fecharPulsoLista('${key}')" autocomplete="off" style="font-size:12px">
+      <div id="pbl_${key}" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--cream);border:1px solid var(--brd);border-radius:0 0 7px 7px;box-shadow:var(--shadow);z-index:200;max-height:240px;overflow-y:auto"></div>
+    </div>
+    ${fichas?`<div style="margin-top:8px">${fichas}</div>`
+            :`<div style="font-size:11px;color:var(--txt-l);margin-top:8px;font-style:italic">Nenhum pulso marcado nesta posição ainda.</div>`}
+  </div>`;
+}
 function renderPulsoCard(){
+  sincPulso();
   const punhos=document.getElementById('pulsoPunhos');
-  if(punhos)punhos.innerHTML=`<div style="display:flex;gap:10px;justify-content:center">${pulsoPunhoSVG('Esquerdo')}${pulsoPunhoSVG('Direito')}</div>`;
+  if(punhos)punhos.innerHTML=`<div style="display:flex;gap:10px;justify-content:center">${pulsoPunhoSVG('Esquerdo')}${pulsoPunhoSVG('Direito')}</div>
+    <div style="margin-top:8px"><button type="button" class="btn btn-sec btn-sm" onclick="togglePulsoPos('geral')">${(_diagSelecoes.pulsoPorPos||{})['geral']?'Tirar o pulso geral':'+ Pulso geral (sem posição)'}</button></div>`;
   const posInfo=document.getElementById('pulsoPosInfo');
   if(posInfo){
-    const sel=(_diagSelecoes.pulsoPos||[]);
-    posInfo.innerHTML=sel.length?sel.map(k=>{
-      const i=pulsoPosicoes[k];if(!i)return '';
-      return `<div style="border:1px solid var(--brd);border-left:3px solid var(--pri);border-radius:7px;padding:8px 10px;margin-bottom:8px;background:var(--cream)">
-        <div style="font-size:12px;font-weight:700;color:var(--pri-d)">${i.pos} — punho ${i.punho.toLowerCase()} · ${i.orgaos}</div>
-        <div style="font-size:11px;color:var(--txt-l);margin:2px 0">Elemento: ${i.elemento}</div>
-        <div style="font-size:11.5px;line-height:1.5"><b>Desarmonias:</b> ${i.desarmonias}</div>
-      </div>`;}).join(''):
-      `<div style="font-size:11px;color:var(--txt-l);margin-bottom:8px">Clique numa posição do punho para ver o órgão correspondente e as desarmonias clássicas.</div>`;
+    const chaves=pulsoChaves();
+    posInfo.innerHTML=chaves.length?chaves.map(pulsoQuadro).join(''):
+      `<div style="font-size:11px;color:var(--txt-l);margin-bottom:8px">Toque numa posição do punho para abrir o quadro dela — o órgão, as desarmonias clássicas e os pulsos que você sentiu ali.</div>`;
   }
   const niveisBox=document.getElementById('pulsoNiveisBox');
   if(niveisBox&&typeof pulsoNiveis!=='undefined')niveisBox.innerHTML=pulsoNiveis.map(n=>
     `<div style="font-size:11.5px;line-height:1.5;margin-bottom:5px"><b>${n.nome}</b> — ${n.sente}. <span style="color:var(--txt-l)">${n.indica}</span></div>`).join('');
-  const comuns=document.getElementById('pulsoComuns');
-  if(comuns)comuns.innerHTML=pulsosMTC.filter(p=>p.comum).map(p=>{
-    const on=(_diagSelecoes.pulso||[]).includes(p.id);
-    return `<span onclick="togglePulso('${p.id}')" title="${escHtml(p.qualidade)} — ${escHtml(p.indica)}" style="cursor:pointer;font-size:11px;padding:4px 9px;border-radius:8px;border:1.5px solid var(--pri);background:${on?'var(--pri)':'var(--cream)'};color:${on?'#fff':'var(--pri-d)'};font-weight:600">${on?'✓ ':''}${p.nome} <span style="font-weight:400;font-style:italic">${p.pinyin}</span></span>`;
-  }).join('');
 }
+// Marcar a posição abre o quadro dela; desmarcar leva os pulsos dela junto
 function togglePulsoPos(key){
-  if(!_diagSelecoes.pulsoPos)_diagSelecoes.pulsoPos=[];
-  const i=_diagSelecoes.pulsoPos.indexOf(key);
-  if(i>=0)_diagSelecoes.pulsoPos.splice(i,1);else _diagSelecoes.pulsoPos.push(key);
-  _diagJaSalvo=false;renderPulsoCard();renderDiagPainel();
+  const r=_diagSelecoes.pulsoPorPos||(_diagSelecoes.pulsoPorPos={});
+  if(r[key]){
+    const n=r[key].length;
+    if(n&&!confirm(`Tirar esta posição vai levar junto ${n} pulso${n===1?'':'s'} marcado${n===1?'':'s'} nela. Continuar?`))return;
+    delete r[key];
+  }else r[key]=[];
+  _diagJaSalvo=false;sincPulso();renderPulsoCard();renderDiagPainel();
 }
-function togglePulso(id){
-  if(!_diagSelecoes.pulso)_diagSelecoes.pulso=[];
-  const i=_diagSelecoes.pulso.indexOf(id);
-  if(i>=0)_diagSelecoes.pulso.splice(i,1);else _diagSelecoes.pulso.push(id);
-  _diagJaSalvo=false;renderPulsoCard();renderDiagPainel();
+function togglePulsoNaPos(key,id){
+  const r=_diagSelecoes.pulsoPorPos||(_diagSelecoes.pulsoPorPos={});
+  if(!r[key])r[key]=[];
+  const i=r[key].indexOf(id);
+  if(i>=0)r[key].splice(i,1);else r[key].push(id);
+  _diagJaSalvo=false;sincPulso();renderPulsoCard();renderDiagPainel();
 }
 function atualizarObsPulso(valor){_diagSelecoes.pulsoObs=valor;}
-function filtrarPulso(){
-  const q=document.getElementById('pulsoBusca').value.trim().toLowerCase();
-  const lista=document.getElementById('pulsoLista');
+function filtrarPulsoPos(key){
+  const inp=document.getElementById('pbq_'+key),lista=document.getElementById('pbl_'+key);
+  if(!inp||!lista)return;
+  const q=semAcento(inp.value.trim());
   if(!q){lista.style.display='none';return;}
-  const res=pulsosMTC.filter(p=>(p.nome+' '+p.pinyin+' '+p.cat+' '+p.qualidade+' '+p.indica).toLowerCase().includes(q)).slice(0,10);
+  const marcados=(_diagSelecoes.pulsoPorPos||{})[key]||[];
+  const res=pulsosMTC.filter(p=>semAcento(p.nome+' '+p.pinyin+' '+p.cat+' '+p.qualidade+' '+p.indica).includes(q)).slice(0,10);
   if(!res.length){lista.style.display='none';return;}
   lista.innerHTML=res.map(p=>{
-    const on=(_diagSelecoes.pulso||[]).includes(p.id);
-    return `<div onmousedown="togglePulso('${p.id}');document.getElementById('pulsoBusca').value='';fecharPulsoLista()" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--brd);font-size:12.5px;${on?'background:var(--pri-l)':''}">
+    const on=marcados.includes(p.id);
+    return `<div onmousedown="togglePulsoNaPos('${key}','${p.id}')" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--brd);font-size:12.5px;${on?'background:var(--pri-l)':''}">
       <strong>${on?'✓ ':''}${p.nome}</strong> <em style="color:var(--txt-l)">${p.pinyin} · ${p.cat}</em><br>
       <span style="font-size:11px;color:var(--txt-l)">${escHtml(p.qualidade)} → ${escHtml(p.indica)}</span></div>`;
   }).join('');
   lista.style.display='block';
 }
-function fecharPulsoLista(){setTimeout(()=>{const l=document.getElementById('pulsoLista');if(l)l.style.display='none';},180);}
+function fecharPulsoLista(key){setTimeout(()=>{const l=document.getElementById(key?'pbl_'+key:'pulsoLista');if(l)l.style.display='none';},180);}
+// Tirar um pulso de todas as posições (usado pelo resumo lá embaixo)
+function togglePulso(id){
+  const r=_diagSelecoes.pulsoPorPos||{};
+  Object.keys(r).forEach(k=>{const i=r[k].indexOf(id);if(i>=0)r[k].splice(i,1);});
+  _diagJaSalvo=false;sincPulso();renderPulsoCard();renderDiagPainel();
+}
 
 function renderElementosGrid(){
   const el=document.getElementById('elementosGrid');
@@ -4701,6 +4913,16 @@ function renderQuiroRef(){
     h='<div class="tw tw-zebra"><div style="overflow-x:auto"><table><thead><tr><th style="white-space:nowrap">Nível</th><th>Área de inervação</th><th>Efeitos possíveis por interferência</th></tr></thead><tbody>'+
       Q.raizes.map(r=>`<tr><td style="font-weight:700;white-space:nowrap;color:var(--pri-d)">${esc(r.nivel)}</td><td style="font-size:12px">${esc(r.inerva)}</td><td style="font-size:12px">${esc(r.efeito)}</td></tr>`).join('')+
       '</tbody></table></div></div>';
+  } else if(_quiroRefAba==='membros'){
+    h=(Q.membros||[]).map(g=>`<details style="margin-bottom:7px;border:1px solid var(--pri-l,#E7EEF5);border-radius:8px;padding:6px 11px">
+      <summary style="cursor:pointer;font-weight:700;color:var(--pri-d);font-size:13px">${esc(g.grupo)}</summary>
+      ${g.nota?`<div style="font-size:11.5px;color:var(--txt-l);margin:7px 0 2px;line-height:1.5">${esc(g.nota)}</div>`:''}
+      ${g.itens.map(it=>`<div style="border-left:3px solid var(--pri);padding:7px 0 7px 10px;margin:9px 0">
+        <div style="font-weight:700;font-size:12.5px;color:var(--pri-d)">${esc(it.art)}</div>
+        <div style="font-size:11px;color:var(--txt-l);margin:2px 0 4px">${esc(it.movimentos)}</div>
+        <ul style="margin:0;padding-left:17px;font-size:12.5px;line-height:1.6">${it.passos.map(p=>'<li>'+esc(p)+'</li>').join('')}</ul>
+      </div>`).join('')}</details>`).join('')+
+      '<p style="font-size:11px;color:var(--txt-l);margin-top:8px">Regra geral dos membros: testar o jogo de junta e, na ausência dele, impulsionar no sentido do bloqueio. Fotos e posições completas na apostila da Prof.ª Carmen — em 03_Biblioteca/Quiropraxia.</p>';
   } else if(_quiroRefAba==='testes'){
     h=Q.testes.map(t=>`<div style="border:1px solid var(--pri-l,#E7EEF5);border-left:3px solid var(--pri);border-radius:8px;padding:11px 13px;margin-bottom:9px">
       <div style="font-weight:700;color:var(--pri-d);font-size:13px">${esc(t.nome)}</div>
@@ -4882,21 +5104,31 @@ function montarTabelaBalance(nomeElemento){
 function renderDiagPainel(){
   const painel=document.getElementById('diagPainel');
   const resumoBox=document.getElementById('diagResumoBox');
-  const temAlgo=(_diagSelecoes.pulso||[]).length||(_diagSelecoes.pulsoPos||[]).length||_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length||(_diagSelecoes.auriculo||[]).length||(_diagSelecoes.bagua||[]).length||(_diagSelecoes.psicanalise||[]).length||(_diagSelecoes.elementoSintomas||[]).length||(_diagSelecoes.pontoSintomas||[]).length;
-  if(!temAlgo){painel.style.display='none';resumoBox.style.display='none';return;}
+  const temAlgo=pulsoChaves().length||_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length||(_diagSelecoes.auriculo||[]).length||(_diagSelecoes.bagua||[]).length||(_diagSelecoes.psicanalise||[]).length||(_diagSelecoes.elementoSintomas||[]).length||(_diagSelecoes.pontoSintomas||[]).length;
+  atualizarResumoCaixas();   // os títulos das caixas fechadas contam o que mudou
+  if(!temAlgo){
+    // Avaliação limpa: as caixas também esvaziam, senão sobra resto de antes
+    ['pulso','elementos','pontos','abc','sup','auriculo','bagua'].forEach(k=>entregarNaCaixa(k,''));
+    painel.style.display='none';resumoBox.style.display='none';return;
+  }
   painel.style.display='block';
   resumoBox.style.display='block';
 
   let html='';
-  if((_diagSelecoes.pulso||[]).length||(_diagSelecoes.pulsoPos||[]).length){
-    const posTxt=(_diagSelecoes.pulsoPos||[]).map(k=>{const i=pulsoPosicoes[k];return i?`${i.pos} ${i.punho==='Esquerdo'?'esq.':'dir.'} (${i.orgaos})`:k;}).join(' · ');
+  if(pulsoChaves().length){
+    // Cada posição com os pulsos DELA embaixo — o resumo passa a dizer o que é de onde
     html+=`<div class="fc" style="border-left:5px solid var(--pri-deep)">
       <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 3 12 2.5-8 1.5 2h5"/></svg></span>Pulso</div>
-      ${posTxt?`<p style="font-size:12px;color:var(--txt-l);margin-bottom:7px"><strong>Posições alteradas:</strong> ${posTxt}</p>`:''}
-      ${(_diagSelecoes.pulso||[]).map(id=>{const p=pulsosPorId[id];if(!p)return '';
-        return `<div class="linha-fin" style="padding:5px 0">
-          <div class="info"><div class="desc">${p.nome} <em style="font-weight:400">${p.pinyin}</em></div><div class="det">${escHtml(p.qualidade)} → ${escHtml(p.indica)}</div></div>
-          <button type="button" class="btn btn-dan btn-sm" onclick="togglePulso('${p.id}')"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
+      ${pulsoChaves().map(k=>{
+        const t=pulsoTitulo(k),ids=(_diagSelecoes.pulsoPorPos||{})[k]||[];
+        return `<div style="margin-bottom:9px">
+          <div style="font-size:12px;font-weight:700;color:var(--pri-d)">${t.tit}</div>
+          ${ids.length?ids.map(id=>{const p=pulsosPorId[id];if(!p)return '';
+            return `<div class="linha-fin" style="padding:5px 0">
+              <div class="info"><div class="desc">${p.nome} <em style="font-weight:400">${p.pinyin}</em></div><div class="det">${escHtml(p.qualidade)} → ${escHtml(p.indica)}</div></div>
+              <button type="button" class="btn btn-dan btn-sm" onclick="togglePulsoNaPos('${k}','${p.id}')"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
+            </div>`;}).join('')
+          :`<div style="font-size:11px;color:var(--txt-l);font-style:italic">Posição marcada, sem pulso registrado.</div>`}
         </div>`;}).join('')}
       <div class="fg" style="margin-top:11px">
         <label style="font-size:12px;font-weight:700;color:var(--pri-deep)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg> Observações clínicas — Pulso</label>
@@ -4904,6 +5136,7 @@ function renderDiagPainel(){
       </div>
     </div>`;
   }
+  const hPulso=html;html='';
   _diagSelecoes.elementos.forEach(nome=>{
     const e=bancoIntegrativoCompleto.matrizCincoElementos[nome];
     const obsAtual=_diagSelecoes.elementosObs[nome]||'';
@@ -4928,6 +5161,7 @@ function renderDiagPainel(){
       </div>
     </div>`;
   });
+  const hElementos=html;html='';
   _diagSelecoes.pontos.forEach(nome=>{
     const p=bancoIntegrativoCompleto.pontosCorpo[nome];
     html+=`<div class="fc" style="border-left:5px solid var(--pri)">
@@ -4945,6 +5179,7 @@ function renderDiagPainel(){
       </div>
     </div>`;
   });
+  const hPontos=html;html='';
   (_diagSelecoes.sistemasAbc||[]).forEach(id=>{
     const s=sistemasABC.find(x=>x.id===id);
     if(!s)return;
@@ -4955,6 +5190,7 @@ function renderDiagPainel(){
       <div style="font-size:11.5px;color:var(--ink-soft);line-height:1.5;margin-top:6px">${s.protocolo}</div>
     </div>`;
   });
+  const hAbc=html;html='';
   if((_diagSelecoes.suplementos||[]).length){
     const totalSup=_diagSelecoes.suplementos.reduce((a,s)=>a+s.precoUnit*s.qtd,0);
     html+=`<div class="fc" style="border-left:5px solid var(--pri-deep)">
@@ -4968,6 +5204,7 @@ function renderDiagPainel(){
       <div style="text-align:right;font-size:13px;font-weight:700;color:var(--pri-d);margin-top:8px">Total Suplementos: ${fm(totalSup)}</div>
     </div>`;
   }
+  const hSup=html;html='';
   if((_diagSelecoes.auriculo||[]).length){
     const pontosFicha=_diagSelecoes.auriculo.map(id=>auriculoPontosPorId[id]).filter(Boolean);
     html+=`<div class="fc" style="border-left:5px solid var(--pri-deep)">
@@ -4987,6 +5224,7 @@ function renderDiagPainel(){
       </div>
     </div>`;
   }
+  const hAuriculo=html;html='';
   if((_diagSelecoes.bagua||[]).length){
     html+=`<div class="fc" style="border-left:5px solid var(--pri-deep)">
       <div class="fst" style="font-family:'Lora',serif"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9"/></svg></span>Bagua — Acupuntura</div>
@@ -4996,6 +5234,7 @@ function renderDiagPainel(){
       </div>`).join('')}
     </div>`;
   }
+  const hBagua=html;html='';
   const sugestoes=calcularSugestoesCruzadas();
   if(sugestoes.length){
     html+=`<div class="fc" style="border-left:5px solid var(--pri);background:var(--pri-l)">
@@ -5009,6 +5248,16 @@ function renderDiagPainel(){
       </div>`).join('')}
     </div>`;
   }
+  // Cada bloco vai morar DENTRO da sua caixa — ferramenta, o que foi
+  // selecionado e a anotação, nessa ordem. No painel de baixo fica só o que
+  // não é de nenhuma ferramenta sozinha: as sugestões cruzadas.
+  entregarNaCaixa('pulso',hPulso);
+  entregarNaCaixa('elementos',hElementos);
+  entregarNaCaixa('pontos',hPontos);
+  entregarNaCaixa('abc',hAbc);
+  entregarNaCaixa('sup',hSup);
+  entregarNaCaixa('auriculo',hAuriculo);
+  entregarNaCaixa('bagua',hBagua);
   painel.innerHTML=html;
 
   // Resumo compacto
@@ -5018,7 +5267,14 @@ function renderDiagPainel(){
   if(_diagSelecoes.pontos.length)partes.push(`<strong>Pontos:</strong> ${_diagSelecoes.pontos.join(', ')}`);
   if((_diagSelecoes.sistemasAbc||[]).length)partes.push(`<strong>Sistemas ABC:</strong> ${_diagSelecoes.sistemasAbc.join(', ')}`);
   if((_diagSelecoes.suplementos||[]).length)partes.push(`<strong>Suplementos:</strong> ${_diagSelecoes.suplementos.map(s=>nomeCap(s.nome)).join(', ')}`);
-  if((_diagSelecoes.pulso||[]).length)partes.push(`<strong>Pulso:</strong> ${_diagSelecoes.pulso.map(id=>pulsosPorId[id]?pulsosPorId[id].nome:id).join(', ')}${(_diagSelecoes.pulsoPos||[]).length?' — posições: '+_diagSelecoes.pulsoPos.map(k=>pulsoPosicoes[k]?pulsoPosicoes[k].pos+' '+(pulsoPosicoes[k].punho==='Esquerdo'?'esq.':'dir.'):k).join(', '):''}`);
+  // Pulso em uma linha, mas dizendo o que é de onde: "Cun esq.: Corda, Rápido · Chi dir.: Fraco"
+  if(pulsoChaves().length)partes.push(`<strong>Pulso:</strong> ${pulsoChaves().map(k=>{
+    const ids=(_diagSelecoes.pulsoPorPos||{})[k]||[];
+    const i=pulsoPosicoes[k];
+    const onde=k==='geral'?'geral':(i?i.pos+' '+(i.punho==='Esquerdo'?'esq.':'dir.'):k);
+    const quais=ids.map(id=>pulsosPorId[id]?pulsosPorId[id].nome:id).join(', ');
+    return `${onde}: ${quais||'—'}`;
+  }).join(' · ')}`);
   if((_diagSelecoes.auriculo||[]).length)partes.push(`<strong>Auriculoterapia:</strong> ${_diagSelecoes.auriculo.map(id=>auriculoPontosPorId[id]?auriculoPontosPorId[id].nome:id).join(', ')}`);
   if((_diagSelecoes.bagua||[]).length)partes.push(`<strong>Bagua:</strong> ${_diagSelecoes.bagua.map(b=>b.sindrome).join(', ')}`);
   if((_diagSelecoes.elementoSintomas||[]).length)partes.push(`<strong>Sinais (5 Elementos):</strong> ${_diagSelecoes.elementoSintomas.map(s=>s.sintoma).join(', ')}`);
@@ -5055,14 +5311,24 @@ function gerarHtmlDiag(diagRec){
   const pulsoSel=diagRec?(diagRec.pulso||[]):(_diagSelecoes.pulso||[]);
   const pulsoPosSel=diagRec?(diagRec.pulsoPos||[]):(_diagSelecoes.pulsoPos||[]);
   const pulsoObs=diagRec?(diagRec.pulsoObs||''):(_diagSelecoes.pulsoObs||'');
+  // No papel também: cada posição com os pulsos dela embaixo. Avaliação antiga
+  // (só as duas listas soltas) é migrada na hora de imprimir, então nada some.
+  const pulsoReg=diagRec?pulsoMigrar(diagRec):(_diagSelecoes.pulsoPorPos||{});
+  const pulsoOrdem=PULSO_ORDEM.filter(k=>pulsoReg[k]).concat(Object.keys(pulsoReg).filter(k=>!PULSO_ORDEM.includes(k)));
 
   let blocos='';
-  if(pulsoSel.length||pulsoPosSel.length){
-    const posTxt=pulsoPosSel.map(k=>{const i=pulsoPosicoes[k];return i?`${i.pos} ${i.punho==='Esquerdo'?'esq.':'dir.'} (${i.orgaos})`:k;}).join(' · ');
+  if(pulsoOrdem.length){
     blocos+=`<div style="border-left:4px solid #1E3A5F;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
       <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">Pulso</div>
-      ${posTxt?`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27"><strong>Posições alteradas:</strong> ${posTxt}</div>`:''}
-      ${pulsoSel.map(id=>{const p=pulsosPorId[id];return p?`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>${p.nome} (${p.pinyin}):</strong> ${escHtml(p.qualidade)} → ${escHtml(p.indica)}</div>`:'';}).join('')}
+      ${pulsoOrdem.map(k=>{
+        const i=pulsoPosicoes[k],ids=pulsoReg[k]||[];
+        const onde=k==='geral'?'Pulso geral (os dois punhos)'
+                  :(i?`${i.pos} ${i.punho==='Esquerdo'?'esq.':'dir.'} (${i.orgaos})`:k);
+        return `<div style="margin-top:5px">
+          <div style="font-size:9.5pt;font-weight:700;color:#1E3A5F">${onde}</div>
+          ${ids.length?ids.map(id=>{const p=pulsosPorId[id];return p?`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-left:10px"><strong>${p.nome} (${p.pinyin}):</strong> ${escHtml(p.qualidade)} → ${escHtml(p.indica)}</div>`:'';}).join('')
+                     :`<div style="font-size:9pt;color:#6b675e;margin-left:10px;font-style:italic">posição marcada, sem pulso registrado</div>`}
+        </div>`;}).join('')}
       ${pulsoObs?`<div style="font-size:9pt;line-height:1.5;color:#5a4a1e;background:#FFF8E1;border-radius:6px;padding:6px 9px;margin-top:5px"><strong>Obs.:</strong> ${escHtml(pulsoObs)}</div>`:''}
     </div>`;
   }
@@ -5204,7 +5470,7 @@ function fecharDiagPacLista(){
 
 function limparDiagnostico(){
   if(!confirm('Limpar toda a avaliação atual?'))return;
-  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]};
+  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]};
   document.getElementById('diagEscalaEmo').value='';
   document.getElementById('diagEmoObs').value='';
   _diagJaSalvo=false;
@@ -5261,6 +5527,7 @@ async function salvarDiagnostico(){
     auriculoObs:_diagSelecoes.auriculoObs||'',
     pulso:[...(_diagSelecoes.pulso||[])],
     pulsoPos:[...(_diagSelecoes.pulsoPos||[])],
+    pulsoPorPos:JSON.parse(JSON.stringify(_diagSelecoes.pulsoPorPos||{})),
     pulsoObs:_diagSelecoes.pulsoObs||'',
     bagua:[...(_diagSelecoes.bagua||[])],
     elementoSintomas:[...(_diagSelecoes.elementoSintomas||[])],
@@ -5310,7 +5577,7 @@ function editarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])]};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])]};
   _diagEditandoId=diag.id;
   _diagJaSalvo=false;
   go('diagnostico',null);
@@ -5711,7 +5978,7 @@ function duplicarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])]};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])]};
   _diagEditandoId=null;
   _diagJaSalvo=false;
   go('diagnostico',null);
