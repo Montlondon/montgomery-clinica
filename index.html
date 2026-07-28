@@ -1056,18 +1056,12 @@ window.addEventListener('DOMContentLoaded',()=>{
 
   <div class="fc">
     <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 3 12 2.5-8 1.5 2h5"/></svg></span>Pulso — Pulsologia (MTC)</div>
-    <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Toque nas posições Cun · Guan · Chi dos punhos para marcar onde há alteração, e clique nos tipos de pulso encontrados. Os demais pulsos ficam na busca abaixo.</p>
+    <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Toque numa posição Cun · Guan · Chi do punho: ela abre o quadro dela ao lado, com o órgão, as desarmonias clássicas e a busca entre os 28 pulsos — o que você marcar fica <b>naquela posição</b>. O número no círculo diz quantos pulsos ela já tem.</p>
     <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;margin-bottom:12px">
       <div id="pulsoPunhos" style="text-align:center"></div>
       <div style="flex:1;min-width:220px">
         <div id="pulsoPosInfo"></div>
-        <div style="font-size:11.5px;font-weight:600;color:var(--pri-d);margin-bottom:6px">Pulsos mais comuns (clique para adicionar à ficha)</div>
-        <div id="pulsoComuns" style="display:flex;gap:5px;flex-wrap:wrap"></div>
       </div>
-    </div>
-    <div class="fg full" style="position:relative">
-      <input type="text" id="pulsoBusca" placeholder="Buscar entre os 28 pulsos: corda, escorregadio, calor, deficiência de sangue..." oninput="filtrarPulso()" onblur="fecharPulsoLista()" autocomplete="off">
-      <div id="pulsoLista" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--cream);border:1px solid var(--brd);border-radius:0 0 7px 7px;box-shadow:var(--shadow);z-index:200;max-height:240px;overflow-y:auto"></div>
     </div>
     <details style="margin-top:10px">
       <summary style="cursor:pointer;font-size:11.5px;font-weight:600;color:var(--pri-d)">Os 3 níveis de profundidade (como sentir)</summary>
@@ -2318,7 +2312,7 @@ function go(p,el){
     if(el){
       _diagEditandoId=null;
       _diagPacSel=null;
-      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]};
+      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]};
       _diagJaSalvo=false;
       document.getElementById('diagPacBusca').value='';
       document.getElementById('diagPacId').value='';
@@ -4083,7 +4077,7 @@ function fecharRxPacLista(){
 let _diagPacSel=null;
 let _diagJaSalvo=false;
 let _diagEditandoId=null; // id do diagnóstico em edição (null = nova avaliação)
-let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]}; // guarda o que foi clicado nesta avaliação + anotações por elemento
+let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]}; // guarda o que foi clicado nesta avaliação + anotações por elemento
 
 // Dados (bancoIntegrativoCompleto, CATALOGO_SUPLEMENTOS_INICIAL, sistemasABC) movidos para dados-clinicos.js
 
@@ -4690,7 +4684,48 @@ function removerAuriculoFicha(id){
   renderDiagPainel();
 }
 
-/* ===== PULSO — Pulsologia MTC ===== */
+/* ===== PULSO — Pulsologia MTC =====
+   Antes eram duas listas que não se conheciam: pulsoPos (onde há alteração) e
+   pulso (quais tipos), lado a lado sem ligação. A tela não sabia dizer qual
+   posição estava cheia e qual estava vazia — e no papel saía "posições: Cun esq.,
+   Chi dir." e, embaixo, os pulsos todos juntos, sem dizer qual era de onde.
+
+   Agora a verdade é UMA só: _diagSelecoes.pulsoPorPos, um registro por posição
+   ({ "E-cun": ["shi","shu"] }). As duas listas antigas continuam existindo, mas
+   como espelho — recalculadas por sincPulso() a cada mudança. Assim tudo que já
+   lia pulso/pulsoPos (salvar, imprimir, resumo) continua funcionando igual.
+   'geral' é a posição de quem sente o pulso como um todo, sem localizar. */
+const PULSO_ORDEM=['geral','E-cun','E-guan','E-chi','D-cun','D-guan','D-chi'];
+function pulsoChaves(){
+  const r=_diagSelecoes.pulsoPorPos||{};
+  return PULSO_ORDEM.filter(k=>r[k]).concat(Object.keys(r).filter(k=>!PULSO_ORDEM.includes(k)));
+}
+// Recalcula os espelhos a partir do registro por posição
+function sincPulso(){
+  const r=_diagSelecoes.pulsoPorPos||(_diagSelecoes.pulsoPorPos={});
+  _diagSelecoes.pulsoPos=pulsoChaves().filter(k=>k!=='geral');
+  const vistos=[];
+  pulsoChaves().forEach(k=>(r[k]||[]).forEach(id=>{if(!vistos.includes(id))vistos.push(id);}));
+  _diagSelecoes.pulso=vistos;
+}
+// Avaliação antiga (só as duas listas soltas) vira o registro novo sem perder nada:
+// as posições marcadas voltam vazias e os pulsos que não têm dono vão para 'geral'.
+function pulsoMigrar(diag){
+  if(diag&&diag.pulsoPorPos)return JSON.parse(JSON.stringify(diag.pulsoPorPos));
+  const r={};
+  ((diag&&diag.pulsoPos)||[]).forEach(k=>r[k]=[]);
+  const soltos=(diag&&diag.pulso)||[];
+  if(soltos.length)r['geral']=[...soltos];
+  return r;
+}
+function pulsoTitulo(key){
+  if(key==='geral')return{tit:'Pulso geral — os dois punhos',sub:'Para o que se sente no pulso inteiro, sem localizar numa posição.'};
+  const i=pulsoPosicoes[key];
+  if(!i)return{tit:key,sub:''};
+  return{tit:`${i.pos} — punho ${i.punho.toLowerCase()} · ${i.orgaos}`,
+         sub:`Elemento: ${i.elemento}`,desarmonias:i.desarmonias};
+}
+
 function pulsoPunhoSVG(lado){
   // Antebraço estilizado com as 3 posições da artéria radial. Cun=perto da mão.
   const pref=lado==='Esquerdo'?'E':'D';
@@ -4698,11 +4733,15 @@ function pulsoPunhoSVG(lado){
   let circ='';
   ['cun','guan','chi'].forEach(p=>{
     const key=pref+'-'+p;
-    const on=(_diagSelecoes.pulsoPos||[]).includes(key);
+    const reg=(_diagSelecoes.pulsoPorPos||{})[key];
+    const on=!!reg;
+    const n=reg?reg.length:0;   // quantos pulsos essa posição já tem
     const info=pulsoPosicoes[key];
-    circ+=`<g onclick="togglePulsoPos('${key}')" style="cursor:pointer"><title>${info.pos} — ${info.orgaos}</title>
+    circ+=`<g onclick="togglePulsoPos('${key}')" style="cursor:pointer"><title>${info.pos} — ${info.orgaos}${on?` (${n} pulso${n===1?'':'s'})`:''}</title>
       <circle cx="50" cy="${posY[p]}" r="11" fill="${on?'var(--pri)':'var(--cream)'}" stroke="var(--pri)" stroke-width="2"/>
-      <text x="50" y="${posY[p]+3.5}" text-anchor="middle" font-size="8.5" font-weight="700" fill="${on?'#fff':'var(--pri-d)'}">${info.pos}</text></g>`;
+      <text x="50" y="${posY[p]+3.5}" text-anchor="middle" font-size="8.5" font-weight="700" fill="${on?'#fff':'var(--pri-d)'}">${info.pos}</text>
+      ${n?`<circle cx="63" cy="${posY[p]-8}" r="7" fill="var(--pri-deep)"/><text x="63" y="${posY[p]-5.4}" text-anchor="middle" font-size="8" font-weight="700" fill="#fff">${n}</text>`:''}
+      ${on&&!n?`<circle cx="63" cy="${posY[p]-8}" r="7" fill="none" stroke="var(--pri-deep)" stroke-width="1.5" stroke-dasharray="2 2"/>`:''}</g>`;
   });
   return `<svg viewBox="0 0 100 150" width="86" height="129" style="overflow:visible">
     <path d="M32 128 C30 90 33 55 38 26 Q50 12 62 26 C67 55 70 90 68 128 Q50 138 32 128Z" fill="#F0EBE0" stroke="var(--brd)" stroke-width="1.5"/>
@@ -4711,58 +4750,96 @@ function pulsoPunhoSVG(lado){
     <text x="50" y="148" text-anchor="middle" font-size="9" font-weight="600" fill="var(--txt-l)">${lado}</text>
   </svg>`;
 }
+// Um quadro por posição: o que ela significa, os pulsos comuns, a busca entre
+// os 28 e as fichinhas do que já foi marcado — tudo DENTRO da posição.
+function pulsoQuadro(key){
+  const t=pulsoTitulo(key);
+  const marcados=(_diagSelecoes.pulsoPorPos||{})[key]||[];
+  const chips=pulsosMTC.filter(p=>p.comum).map(p=>{
+    const on=marcados.includes(p.id);
+    return `<span onclick="togglePulsoNaPos('${key}','${p.id}')" title="${escHtml(p.qualidade)} — ${escHtml(p.indica)}" style="cursor:pointer;font-size:11px;padding:4px 9px;border-radius:8px;border:1.5px solid var(--pri);background:${on?'var(--pri)':'var(--cream)'};color:${on?'#fff':'var(--pri-d)'};font-weight:600">${on?'✓ ':''}${p.nome} <span style="font-weight:400;font-style:italic">${p.pinyin}</span></span>`;
+  }).join('');
+  const fichas=marcados.map(id=>{
+    const p=pulsosPorId[id];if(!p)return'';
+    return `<div class="linha-fin" style="padding:5px 0">
+      <div class="info"><div class="desc">${p.nome} <em style="font-weight:400">${p.pinyin}</em></div><div class="det">${escHtml(p.qualidade)} → ${escHtml(p.indica)}</div></div>
+      <button type="button" class="btn btn-dan btn-sm" onclick="togglePulsoNaPos('${key}','${p.id}')" title="Tirar deste ponto"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
+    </div>`;}).join('');
+  return `<div style="border:1px solid var(--brd);border-left:3px solid var(--pri);border-radius:7px;padding:10px 11px;margin-bottom:10px;background:var(--cream)">
+    <div style="display:flex;align-items:flex-start;gap:8px">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:700;color:var(--pri-d)">${t.tit}</div>
+        <div style="font-size:11px;color:var(--txt-l);margin:2px 0">${t.sub}</div>
+      </div>
+      <button type="button" class="btn btn-sec btn-sm" onclick="togglePulsoPos('${key}')" title="Tirar esta posição da avaliação (leva os pulsos dela junto)"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
+    </div>
+    ${t.desarmonias?`<div style="font-size:11.5px;line-height:1.5;margin-bottom:8px"><b>Desarmonias:</b> ${t.desarmonias}</div>`:''}
+    <div style="font-size:11px;font-weight:600;color:var(--pri-d);margin:8px 0 5px">Pulsos mais comuns — clique para marcar nesta posição</div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px">${chips}</div>
+    <div class="fg full" style="position:relative">
+      <input type="text" id="pbq_${key}" placeholder="Buscar entre os 28 pulsos para esta posição..." oninput="filtrarPulsoPos('${key}')" onblur="fecharPulsoLista('${key}')" autocomplete="off" style="font-size:12px">
+      <div id="pbl_${key}" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--cream);border:1px solid var(--brd);border-radius:0 0 7px 7px;box-shadow:var(--shadow);z-index:200;max-height:240px;overflow-y:auto"></div>
+    </div>
+    ${fichas?`<div style="margin-top:8px">${fichas}</div>`
+            :`<div style="font-size:11px;color:var(--txt-l);margin-top:8px;font-style:italic">Nenhum pulso marcado nesta posição ainda.</div>`}
+  </div>`;
+}
 function renderPulsoCard(){
+  sincPulso();
   const punhos=document.getElementById('pulsoPunhos');
-  if(punhos)punhos.innerHTML=`<div style="display:flex;gap:10px;justify-content:center">${pulsoPunhoSVG('Esquerdo')}${pulsoPunhoSVG('Direito')}</div>`;
+  if(punhos)punhos.innerHTML=`<div style="display:flex;gap:10px;justify-content:center">${pulsoPunhoSVG('Esquerdo')}${pulsoPunhoSVG('Direito')}</div>
+    <div style="margin-top:8px"><button type="button" class="btn btn-sec btn-sm" onclick="togglePulsoPos('geral')">${(_diagSelecoes.pulsoPorPos||{})['geral']?'Tirar o pulso geral':'+ Pulso geral (sem posição)'}</button></div>`;
   const posInfo=document.getElementById('pulsoPosInfo');
   if(posInfo){
-    const sel=(_diagSelecoes.pulsoPos||[]);
-    posInfo.innerHTML=sel.length?sel.map(k=>{
-      const i=pulsoPosicoes[k];if(!i)return '';
-      return `<div style="border:1px solid var(--brd);border-left:3px solid var(--pri);border-radius:7px;padding:8px 10px;margin-bottom:8px;background:var(--cream)">
-        <div style="font-size:12px;font-weight:700;color:var(--pri-d)">${i.pos} — punho ${i.punho.toLowerCase()} · ${i.orgaos}</div>
-        <div style="font-size:11px;color:var(--txt-l);margin:2px 0">Elemento: ${i.elemento}</div>
-        <div style="font-size:11.5px;line-height:1.5"><b>Desarmonias:</b> ${i.desarmonias}</div>
-      </div>`;}).join(''):
-      `<div style="font-size:11px;color:var(--txt-l);margin-bottom:8px">Clique numa posição do punho para ver o órgão correspondente e as desarmonias clássicas.</div>`;
+    const chaves=pulsoChaves();
+    posInfo.innerHTML=chaves.length?chaves.map(pulsoQuadro).join(''):
+      `<div style="font-size:11px;color:var(--txt-l);margin-bottom:8px">Toque numa posição do punho para abrir o quadro dela — o órgão, as desarmonias clássicas e os pulsos que você sentiu ali.</div>`;
   }
   const niveisBox=document.getElementById('pulsoNiveisBox');
   if(niveisBox&&typeof pulsoNiveis!=='undefined')niveisBox.innerHTML=pulsoNiveis.map(n=>
     `<div style="font-size:11.5px;line-height:1.5;margin-bottom:5px"><b>${n.nome}</b> — ${n.sente}. <span style="color:var(--txt-l)">${n.indica}</span></div>`).join('');
-  const comuns=document.getElementById('pulsoComuns');
-  if(comuns)comuns.innerHTML=pulsosMTC.filter(p=>p.comum).map(p=>{
-    const on=(_diagSelecoes.pulso||[]).includes(p.id);
-    return `<span onclick="togglePulso('${p.id}')" title="${escHtml(p.qualidade)} — ${escHtml(p.indica)}" style="cursor:pointer;font-size:11px;padding:4px 9px;border-radius:8px;border:1.5px solid var(--pri);background:${on?'var(--pri)':'var(--cream)'};color:${on?'#fff':'var(--pri-d)'};font-weight:600">${on?'✓ ':''}${p.nome} <span style="font-weight:400;font-style:italic">${p.pinyin}</span></span>`;
-  }).join('');
 }
+// Marcar a posição abre o quadro dela; desmarcar leva os pulsos dela junto
 function togglePulsoPos(key){
-  if(!_diagSelecoes.pulsoPos)_diagSelecoes.pulsoPos=[];
-  const i=_diagSelecoes.pulsoPos.indexOf(key);
-  if(i>=0)_diagSelecoes.pulsoPos.splice(i,1);else _diagSelecoes.pulsoPos.push(key);
-  _diagJaSalvo=false;renderPulsoCard();renderDiagPainel();
+  const r=_diagSelecoes.pulsoPorPos||(_diagSelecoes.pulsoPorPos={});
+  if(r[key]){
+    const n=r[key].length;
+    if(n&&!confirm(`Tirar esta posição vai levar junto ${n} pulso${n===1?'':'s'} marcado${n===1?'':'s'} nela. Continuar?`))return;
+    delete r[key];
+  }else r[key]=[];
+  _diagJaSalvo=false;sincPulso();renderPulsoCard();renderDiagPainel();
 }
-function togglePulso(id){
-  if(!_diagSelecoes.pulso)_diagSelecoes.pulso=[];
-  const i=_diagSelecoes.pulso.indexOf(id);
-  if(i>=0)_diagSelecoes.pulso.splice(i,1);else _diagSelecoes.pulso.push(id);
-  _diagJaSalvo=false;renderPulsoCard();renderDiagPainel();
+function togglePulsoNaPos(key,id){
+  const r=_diagSelecoes.pulsoPorPos||(_diagSelecoes.pulsoPorPos={});
+  if(!r[key])r[key]=[];
+  const i=r[key].indexOf(id);
+  if(i>=0)r[key].splice(i,1);else r[key].push(id);
+  _diagJaSalvo=false;sincPulso();renderPulsoCard();renderDiagPainel();
 }
 function atualizarObsPulso(valor){_diagSelecoes.pulsoObs=valor;}
-function filtrarPulso(){
-  const q=document.getElementById('pulsoBusca').value.trim().toLowerCase();
-  const lista=document.getElementById('pulsoLista');
+function filtrarPulsoPos(key){
+  const inp=document.getElementById('pbq_'+key),lista=document.getElementById('pbl_'+key);
+  if(!inp||!lista)return;
+  const q=semAcento(inp.value.trim());
   if(!q){lista.style.display='none';return;}
-  const res=pulsosMTC.filter(p=>(p.nome+' '+p.pinyin+' '+p.cat+' '+p.qualidade+' '+p.indica).toLowerCase().includes(q)).slice(0,10);
+  const marcados=(_diagSelecoes.pulsoPorPos||{})[key]||[];
+  const res=pulsosMTC.filter(p=>semAcento(p.nome+' '+p.pinyin+' '+p.cat+' '+p.qualidade+' '+p.indica).includes(q)).slice(0,10);
   if(!res.length){lista.style.display='none';return;}
   lista.innerHTML=res.map(p=>{
-    const on=(_diagSelecoes.pulso||[]).includes(p.id);
-    return `<div onmousedown="togglePulso('${p.id}');document.getElementById('pulsoBusca').value='';fecharPulsoLista()" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--brd);font-size:12.5px;${on?'background:var(--pri-l)':''}">
+    const on=marcados.includes(p.id);
+    return `<div onmousedown="togglePulsoNaPos('${key}','${p.id}')" style="padding:8px 12px;cursor:pointer;border-bottom:1px solid var(--brd);font-size:12.5px;${on?'background:var(--pri-l)':''}">
       <strong>${on?'✓ ':''}${p.nome}</strong> <em style="color:var(--txt-l)">${p.pinyin} · ${p.cat}</em><br>
       <span style="font-size:11px;color:var(--txt-l)">${escHtml(p.qualidade)} → ${escHtml(p.indica)}</span></div>`;
   }).join('');
   lista.style.display='block';
 }
-function fecharPulsoLista(){setTimeout(()=>{const l=document.getElementById('pulsoLista');if(l)l.style.display='none';},180);}
+function fecharPulsoLista(key){setTimeout(()=>{const l=document.getElementById(key?'pbl_'+key:'pulsoLista');if(l)l.style.display='none';},180);}
+// Tirar um pulso de todas as posições (usado pelo resumo lá embaixo)
+function togglePulso(id){
+  const r=_diagSelecoes.pulsoPorPos||{};
+  Object.keys(r).forEach(k=>{const i=r[k].indexOf(id);if(i>=0)r[k].splice(i,1);});
+  _diagJaSalvo=false;sincPulso();renderPulsoCard();renderDiagPainel();
+}
 
 function renderElementosGrid(){
   const el=document.getElementById('elementosGrid');
@@ -4994,14 +5071,19 @@ function renderDiagPainel(){
 
   let html='';
   if((_diagSelecoes.pulso||[]).length||(_diagSelecoes.pulsoPos||[]).length){
-    const posTxt=(_diagSelecoes.pulsoPos||[]).map(k=>{const i=pulsoPosicoes[k];return i?`${i.pos} ${i.punho==='Esquerdo'?'esq.':'dir.'} (${i.orgaos})`:k;}).join(' · ');
+    // Cada posição com os pulsos DELA embaixo — o resumo passa a dizer o que é de onde
     html+=`<div class="fc" style="border-left:5px solid var(--pri-deep)">
       <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 3 12 2.5-8 1.5 2h5"/></svg></span>Pulso</div>
-      ${posTxt?`<p style="font-size:12px;color:var(--txt-l);margin-bottom:7px"><strong>Posições alteradas:</strong> ${posTxt}</p>`:''}
-      ${(_diagSelecoes.pulso||[]).map(id=>{const p=pulsosPorId[id];if(!p)return '';
-        return `<div class="linha-fin" style="padding:5px 0">
-          <div class="info"><div class="desc">${p.nome} <em style="font-weight:400">${p.pinyin}</em></div><div class="det">${escHtml(p.qualidade)} → ${escHtml(p.indica)}</div></div>
-          <button type="button" class="btn btn-dan btn-sm" onclick="togglePulso('${p.id}')"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
+      ${pulsoChaves().map(k=>{
+        const t=pulsoTitulo(k),ids=(_diagSelecoes.pulsoPorPos||{})[k]||[];
+        return `<div style="margin-bottom:9px">
+          <div style="font-size:12px;font-weight:700;color:var(--pri-d)">${t.tit}</div>
+          ${ids.length?ids.map(id=>{const p=pulsosPorId[id];if(!p)return '';
+            return `<div class="linha-fin" style="padding:5px 0">
+              <div class="info"><div class="desc">${p.nome} <em style="font-weight:400">${p.pinyin}</em></div><div class="det">${escHtml(p.qualidade)} → ${escHtml(p.indica)}</div></div>
+              <button type="button" class="btn btn-dan btn-sm" onclick="togglePulsoNaPos('${k}','${p.id}')"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
+            </div>`;}).join('')
+          :`<div style="font-size:11px;color:var(--txt-l);font-style:italic">Posição marcada, sem pulso registrado.</div>`}
         </div>`;}).join('')}
       <div class="fg" style="margin-top:11px">
         <label style="font-size:12px;font-weight:700;color:var(--pri-deep)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg> Observações clínicas — Pulso</label>
@@ -5123,7 +5205,14 @@ function renderDiagPainel(){
   if(_diagSelecoes.pontos.length)partes.push(`<strong>Pontos:</strong> ${_diagSelecoes.pontos.join(', ')}`);
   if((_diagSelecoes.sistemasAbc||[]).length)partes.push(`<strong>Sistemas ABC:</strong> ${_diagSelecoes.sistemasAbc.join(', ')}`);
   if((_diagSelecoes.suplementos||[]).length)partes.push(`<strong>Suplementos:</strong> ${_diagSelecoes.suplementos.map(s=>nomeCap(s.nome)).join(', ')}`);
-  if((_diagSelecoes.pulso||[]).length)partes.push(`<strong>Pulso:</strong> ${_diagSelecoes.pulso.map(id=>pulsosPorId[id]?pulsosPorId[id].nome:id).join(', ')}${(_diagSelecoes.pulsoPos||[]).length?' — posições: '+_diagSelecoes.pulsoPos.map(k=>pulsoPosicoes[k]?pulsoPosicoes[k].pos+' '+(pulsoPosicoes[k].punho==='Esquerdo'?'esq.':'dir.'):k).join(', '):''}`);
+  // Pulso em uma linha, mas dizendo o que é de onde: "Cun esq.: Corda, Rápido · Chi dir.: Fraco"
+  if(pulsoChaves().length)partes.push(`<strong>Pulso:</strong> ${pulsoChaves().map(k=>{
+    const ids=(_diagSelecoes.pulsoPorPos||{})[k]||[];
+    const i=pulsoPosicoes[k];
+    const onde=k==='geral'?'geral':(i?i.pos+' '+(i.punho==='Esquerdo'?'esq.':'dir.'):k);
+    const quais=ids.map(id=>pulsosPorId[id]?pulsosPorId[id].nome:id).join(', ');
+    return `${onde}: ${quais||'—'}`;
+  }).join(' · ')}`);
   if((_diagSelecoes.auriculo||[]).length)partes.push(`<strong>Auriculoterapia:</strong> ${_diagSelecoes.auriculo.map(id=>auriculoPontosPorId[id]?auriculoPontosPorId[id].nome:id).join(', ')}`);
   if((_diagSelecoes.bagua||[]).length)partes.push(`<strong>Bagua:</strong> ${_diagSelecoes.bagua.map(b=>b.sindrome).join(', ')}`);
   if((_diagSelecoes.elementoSintomas||[]).length)partes.push(`<strong>Sinais (5 Elementos):</strong> ${_diagSelecoes.elementoSintomas.map(s=>s.sintoma).join(', ')}`);
@@ -5160,14 +5249,24 @@ function gerarHtmlDiag(diagRec){
   const pulsoSel=diagRec?(diagRec.pulso||[]):(_diagSelecoes.pulso||[]);
   const pulsoPosSel=diagRec?(diagRec.pulsoPos||[]):(_diagSelecoes.pulsoPos||[]);
   const pulsoObs=diagRec?(diagRec.pulsoObs||''):(_diagSelecoes.pulsoObs||'');
+  // No papel também: cada posição com os pulsos dela embaixo. Avaliação antiga
+  // (só as duas listas soltas) é migrada na hora de imprimir, então nada some.
+  const pulsoReg=diagRec?pulsoMigrar(diagRec):(_diagSelecoes.pulsoPorPos||{});
+  const pulsoOrdem=PULSO_ORDEM.filter(k=>pulsoReg[k]).concat(Object.keys(pulsoReg).filter(k=>!PULSO_ORDEM.includes(k)));
 
   let blocos='';
-  if(pulsoSel.length||pulsoPosSel.length){
-    const posTxt=pulsoPosSel.map(k=>{const i=pulsoPosicoes[k];return i?`${i.pos} ${i.punho==='Esquerdo'?'esq.':'dir.'} (${i.orgaos})`:k;}).join(' · ');
+  if(pulsoOrdem.length){
     blocos+=`<div style="border-left:4px solid #1E3A5F;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
       <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">Pulso</div>
-      ${posTxt?`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27"><strong>Posições alteradas:</strong> ${posTxt}</div>`:''}
-      ${pulsoSel.map(id=>{const p=pulsosPorId[id];return p?`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>${p.nome} (${p.pinyin}):</strong> ${escHtml(p.qualidade)} → ${escHtml(p.indica)}</div>`:'';}).join('')}
+      ${pulsoOrdem.map(k=>{
+        const i=pulsoPosicoes[k],ids=pulsoReg[k]||[];
+        const onde=k==='geral'?'Pulso geral (os dois punhos)'
+                  :(i?`${i.pos} ${i.punho==='Esquerdo'?'esq.':'dir.'} (${i.orgaos})`:k);
+        return `<div style="margin-top:5px">
+          <div style="font-size:9.5pt;font-weight:700;color:#1E3A5F">${onde}</div>
+          ${ids.length?ids.map(id=>{const p=pulsosPorId[id];return p?`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-left:10px"><strong>${p.nome} (${p.pinyin}):</strong> ${escHtml(p.qualidade)} → ${escHtml(p.indica)}</div>`:'';}).join('')
+                     :`<div style="font-size:9pt;color:#6b675e;margin-left:10px;font-style:italic">posição marcada, sem pulso registrado</div>`}
+        </div>`;}).join('')}
       ${pulsoObs?`<div style="font-size:9pt;line-height:1.5;color:#5a4a1e;background:#FFF8E1;border-radius:6px;padding:6px 9px;margin-top:5px"><strong>Obs.:</strong> ${escHtml(pulsoObs)}</div>`:''}
     </div>`;
   }
@@ -5309,7 +5408,7 @@ function fecharDiagPacLista(){
 
 function limparDiagnostico(){
   if(!confirm('Limpar toda a avaliação atual?'))return;
-  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]};
+  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]};
   document.getElementById('diagEscalaEmo').value='';
   document.getElementById('diagEmoObs').value='';
   _diagJaSalvo=false;
@@ -5366,6 +5465,7 @@ async function salvarDiagnostico(){
     auriculoObs:_diagSelecoes.auriculoObs||'',
     pulso:[...(_diagSelecoes.pulso||[])],
     pulsoPos:[...(_diagSelecoes.pulsoPos||[])],
+    pulsoPorPos:JSON.parse(JSON.stringify(_diagSelecoes.pulsoPorPos||{})),
     pulsoObs:_diagSelecoes.pulsoObs||'',
     bagua:[...(_diagSelecoes.bagua||[])],
     elementoSintomas:[...(_diagSelecoes.elementoSintomas||[])],
@@ -5415,7 +5515,7 @@ function editarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])]};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])]};
   _diagEditandoId=diag.id;
   _diagJaSalvo=false;
   go('diagnostico',null);
@@ -5816,7 +5916,7 @@ function duplicarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])]};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])]};
   _diagEditandoId=null;
   _diagJaSalvo=false;
   go('diagnostico',null);
