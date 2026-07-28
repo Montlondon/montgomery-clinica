@@ -1657,7 +1657,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v4.3 · 27/07';
+const APP_VER='v4.4 · 27/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2332,7 +2332,7 @@ function go(p,el){
     if(el){
       _diagEditandoId=null;
       _diagPacSel=null;
-      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]};
+      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:''};
       _diagJaSalvo=false;
       document.getElementById('diagPacBusca').value='';
       document.getElementById('diagPacId').value='';
@@ -4155,7 +4155,7 @@ function fecharRxPacLista(){
 let _diagPacSel=null;
 let _diagJaSalvo=false;
 let _diagEditandoId=null; // id do diagnóstico em edição (null = nova avaliação)
-let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]}; // guarda o que foi clicado nesta avaliação + anotações por elemento
+let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:''}; // guarda o que foi clicado nesta avaliação + anotações por elemento
 
 // Dados (bancoIntegrativoCompleto, CATALOGO_SUPLEMENTOS_INICIAL, sistemasABC) movidos para dados-clinicos.js
 
@@ -4178,7 +4178,7 @@ const CX_DIAG=[
   }},
   {k:'elementos',el:'elementosGrid',      resumo:()=>cxConta((_diagSelecoes.elementos||[]).length,'elemento','elementos')},
   {k:'pontos',   el:'pontosGrid',         resumo:()=>cxConta((_diagSelecoes.pontos||[]).length,'ponto','pontos')},
-  {k:'quiroref', el:'quiroRefConteudo',   resumo:()=>'referência'},
+  {k:'quiroref', el:'quiroRefConteudo',   resumo:()=>cxConta((_diagSelecoes.quiro||[]).length,'ajuste','ajustes')||'referência'},
   {k:'abc',      el:'abcTabelaBody',      resumo:()=>cxConta((_diagSelecoes.sistemasAbc||[]).length,'sistema','sistemas')},
   {k:'acu',      el:'acuResultado',       resumo:()=>'referência'},
   {k:'bagua',    el:'baguaWheel',         resumo:()=>cxConta((_diagSelecoes.bagua||[]).length,'síndrome','síndromes')},
@@ -4981,6 +4981,28 @@ function renderPontosGrid(){
   }).join('');
 }
 
+// ===== QUIROPRAXIA — marcar o que foi ajustado neste encontro =====
+// A aba de referência deixou de ser só leitura: cada articulação dos Membros e
+// cada ajuste da coluna pode ser marcado, e o que for marcado entra na
+// avaliação daquele dia (junto com pulso, elementos, pontos e os demais).
+function quiroMarcado(grupo,art){
+  return (_diagSelecoes.quiro||[]).some(q=>q.grupo===grupo&&q.art===art);
+}
+function toggleQuiro(grupo,art){
+  if(!_diagSelecoes.quiro)_diagSelecoes.quiro=[];
+  const i=_diagSelecoes.quiro.findIndex(q=>q.grupo===grupo&&q.art===art);
+  if(i>=0)_diagSelecoes.quiro.splice(i,1);
+  else _diagSelecoes.quiro.push({grupo,art});
+  _diagJaSalvo=false;
+  renderQuiroRef();
+  renderDiagPainel();
+}
+function atualizarObsQuiro(v){_diagSelecoes.quiroObs=v;_diagJaSalvo=false;}
+// O botão de marcar/desmarcar, igual nas duas abas
+function btnQuiro(grupo,art,on){
+  return `<button type="button" class="btn ${on?'btn-pri':'btn-sec'} btn-sm" style="flex-shrink:0;padding:2px 9px;font-size:10.5px" onclick="toggleQuiro(${jsq(grupo)},${jsq(art)})">${on?'marcado':'+ marcar'}</button>`;
+}
+
 let _quiroRefAba='raizes';
 function setQuiroRef(aba){
   _quiroRefAba=aba;
@@ -5002,11 +5024,16 @@ function renderQuiroRef(){
     h=(Q.membros||[]).map(g=>`<details style="margin-bottom:7px;border:1px solid var(--pri-l,#E7EEF5);border-radius:8px;padding:6px 11px">
       <summary style="cursor:pointer;font-weight:700;color:var(--pri-d);font-size:13px">${esc(g.grupo)}</summary>
       ${g.nota?`<div style="font-size:11.5px;color:var(--txt-l);margin:7px 0 2px;line-height:1.5">${esc(g.nota)}</div>`:''}
-      ${g.itens.map(it=>`<div style="border-left:3px solid var(--pri);padding:7px 0 7px 10px;margin:9px 0">
-        <div style="font-weight:700;font-size:12.5px;color:var(--pri-d)">${esc(it.art)}</div>
+      ${g.itens.map(it=>{
+        const on=quiroMarcado(g.grupo,it.art);
+        return `<div style="border-left:3px solid ${on?'var(--pri-deep)':'var(--pri)'};padding:7px 0 7px 10px;margin:9px 0;background:${on?'var(--pri-l)':'transparent'};border-radius:0 6px 6px 0">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+          <div style="font-weight:700;font-size:12.5px;color:var(--pri-d)">${esc(it.art)}</div>
+          ${btnQuiro(g.grupo,it.art,on)}
+        </div>
         <div style="font-size:11px;color:var(--txt-l);margin:2px 0 4px">${esc(it.movimentos)}</div>
         <ul style="margin:0;padding-left:17px;font-size:12.5px;line-height:1.6">${it.passos.map(p=>'<li>'+esc(p)+'</li>').join('')}</ul>
-      </div>`).join('')}</details>`).join('')+
+      </div>`;}).join('')}</details>`).join('')+
       '<p style="font-size:11px;color:var(--txt-l);margin-top:8px">Regra geral dos membros: testar o jogo de junta e, na ausência dele, impulsionar no sentido do bloqueio. Fotos e posições completas na apostila da Prof.ª Carmen — em 03_Biblioteca/Quiropraxia.</p>';
   } else if(_quiroRefAba==='testes'){
     h=Q.testes.map(t=>`<div style="border:1px solid var(--pri-l,#E7EEF5);border-left:3px solid var(--pri);border-radius:8px;padding:11px 13px;margin-bottom:9px">
@@ -5017,7 +5044,11 @@ function renderQuiroRef(){
   } else if(_quiroRefAba==='ajustes'){
     h=Object.keys(Q.ajustes).map(reg=>`<details style="margin-bottom:7px;border:1px solid var(--pri-l,#E7EEF5);border-radius:8px;padding:6px 11px">
       <summary style="cursor:pointer;font-weight:700;color:var(--pri-d);font-size:13px">${esc(reg)}</summary>
-      <ul style="margin:8px 0 4px;padding-left:18px;font-size:12.5px;line-height:1.6">${Q.ajustes[reg].map(a=>'<li>'+esc(a)+'</li>').join('')}</ul></details>`).join('')+
+      <div style="margin:8px 0 4px">${Q.ajustes[reg].map(a=>{
+        const on=quiroMarcado(reg,a);
+        return `<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:5px 7px;border-radius:6px;background:${on?'var(--pri-l)':'transparent'}">
+          <div style="font-size:12.5px;line-height:1.6">${esc(a)}</div>${btnQuiro(reg,a,on)}
+        </div>`;}).join('')}</div></details>`).join('')+
       '<p style="font-size:11px;color:var(--txt-l);margin-top:8px">Passo a passo completo (posição do paciente, contatos e impulso) na apostila da Prof.ª Carmen — em 03_Biblioteca/Quiropraxia.</p>';
   } else if(_quiroRefAba==='fundamentos'){
     const f=Q.fundamentos;
@@ -5189,11 +5220,11 @@ function montarTabelaBalance(nomeElemento){
 function renderDiagPainel(){
   const painel=document.getElementById('diagPainel');
   const resumoBox=document.getElementById('diagResumoBox');
-  const temAlgo=pulsoChaves().length||_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length||(_diagSelecoes.auriculo||[]).length||(_diagSelecoes.bagua||[]).length||(_diagSelecoes.psicanalise||[]).length||(_diagSelecoes.elementoSintomas||[]).length||(_diagSelecoes.pontoSintomas||[]).length;
+  const temAlgo=pulsoChaves().length||_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length||(_diagSelecoes.auriculo||[]).length||(_diagSelecoes.bagua||[]).length||(_diagSelecoes.psicanalise||[]).length||(_diagSelecoes.elementoSintomas||[]).length||(_diagSelecoes.pontoSintomas||[]).length||(_diagSelecoes.quiro||[]).length;
   atualizarResumoCaixas();   // os títulos das caixas fechadas contam o que mudou
   if(!temAlgo){
     // Avaliação limpa: as caixas também esvaziam, senão sobra resto de antes
-    ['pulso','elementos','pontos','abc','sup','auriculo','bagua'].forEach(k=>entregarNaCaixa(k,''));
+    ['pulso','elementos','pontos','abc','sup','auriculo','bagua','quiroref'].forEach(k=>entregarNaCaixa(k,''));
     painel.style.display='none';resumoBox.style.display='none';return;
   }
   painel.style.display='block';
@@ -5320,6 +5351,20 @@ function renderDiagPainel(){
     </div>`;
   }
   const hBagua=html;html='';
+  if((_diagSelecoes.quiro||[]).length){
+    html+=`<div class="fc" style="border-left:5px solid var(--pri-deep)">
+      <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 17.5 17.5 6.5"/><circle cx="5" cy="19" r="2.2"/><circle cx="19" cy="5" r="2.2"/></svg></span>Ajustado neste encontro</div>
+      ${_diagSelecoes.quiro.map(q=>`<div class="linha-fin" style="padding:5px 0">
+        <div class="info"><div class="desc">${escHtml(q.art)}</div><div class="det">${escHtml(q.grupo)}</div></div>
+        <button type="button" class="btn btn-dan btn-sm" onclick="toggleQuiro(${jsq(q.grupo)},${jsq(q.art)})"><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
+      </div>`).join('')}
+      <div class="fg" style="margin-top:11px">
+        <label style="font-size:12px;font-weight:700;color:var(--pri-deep)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg> Observações clínicas — Quiropraxia</label>
+        <textarea rows="3" placeholder="Lado (direito/esquerdo), o que estava fixado, como respondeu ao impulso, evolução entre sessões..." oninput="atualizarObsQuiro(this.value)">${escHtml(_diagSelecoes.quiroObs||'')}</textarea>
+      </div>
+    </div>`;
+  }
+  const hQuiro=html;html='';
   const sugestoes=calcularSugestoesCruzadas();
   if(sugestoes.length){
     html+=`<div class="fc" style="border-left:5px solid var(--pri);background:var(--pri-l)">
@@ -5343,6 +5388,7 @@ function renderDiagPainel(){
   entregarNaCaixa('sup',hSup);
   entregarNaCaixa('auriculo',hAuriculo);
   entregarNaCaixa('bagua',hBagua);
+  entregarNaCaixa('quiroref',hQuiro);
   painel.innerHTML=html;
 
   // Resumo compacto
@@ -5365,6 +5411,7 @@ function renderDiagPainel(){
   if((_diagSelecoes.elementoSintomas||[]).length)partes.push(`<strong>Sinais (5 Elementos):</strong> ${_diagSelecoes.elementoSintomas.map(s=>s.sintoma).join(', ')}`);
   if((_diagSelecoes.pontoSintomas||[]).length)partes.push(`<strong>Sintomas (Pontos do Corpo):</strong> ${_diagSelecoes.pontoSintomas.map(s=>s.sintoma).join(', ')}`);
   if((_diagSelecoes.psicanalise||[]).length)partes.push(`<strong>Psicanálise:</strong> ${_diagSelecoes.psicanalise.map(p=>p.nome).join(', ')}`);
+  if((_diagSelecoes.quiro||[]).length)partes.push(`<strong>Quiropraxia (ajustado):</strong> ${_diagSelecoes.quiro.map(q=>escHtml(q.art)).join(', ')}`);
   const emo=document.getElementById('diagEscalaEmo').value;
   if(emo)partes.push(`<strong>Estado emocional:</strong> ${emo}`);
   resumo.innerHTML=partes.map(p=>`<p style="margin-bottom:5px">${p}</p>`).join('');
@@ -5481,6 +5528,18 @@ function gerarHtmlDiag(diagRec){
       <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27">${psiLinhas}</div>
     </div>`;
   }
+  const quiroSel=diagRec?(diagRec.quiro||[]):(_diagSelecoes.quiro||[]);
+  const quiroObsPapel=diagRec?(diagRec.quiroObs||''):(_diagSelecoes.quiroObs||'');
+  if(quiroSel.length){
+    const gr={};
+    quiroSel.forEach(q=>{(gr[q.grupo]=gr[q.grupo]||[]).push(q.art);});
+    blocos+=`<div style="border-left:4px solid #1E3A5F;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
+      <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">Quiropraxia — ajustado neste encontro</div>
+      ${Object.entries(gr).map(([g,arts])=>`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>${escHtml(g)}:</strong> ${arts.map(escHtml).join(' · ')}</div>`).join('')}
+      ${quiroObsPapel?`<div style="font-size:9pt;line-height:1.5;color:#5a4a1e;background:#FFF8E1;border-radius:6px;padding:6px 9px;margin-top:5px"><strong>Obs.:</strong> ${escHtml(quiroObsPapel)}</div>`:''}
+    </div>`;
+  }
+
   // Memória da sessão também no papel — é o que conta o encontro em si
   const memPapel=[
     ['O que foi feito',diagRec?diagRec.sessaoFeito:vMem('diagSessaoFeito')],
@@ -5568,7 +5627,7 @@ function fecharDiagPacLista(){
 
 function limparDiagnostico(){
   if(!confirm('Limpar toda a avaliação atual?'))return;
-  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]};
+  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:''};
   document.getElementById('diagEscalaEmo').value='';
   document.getElementById('diagEmoObs').value='';
   limparMemSessao();
@@ -5632,6 +5691,8 @@ async function salvarDiagnostico(){
     elementoSintomas:[...(_diagSelecoes.elementoSintomas||[])],
     pontoSintomas:[...(_diagSelecoes.pontoSintomas||[])],
     psicanalise:[...(_diagSelecoes.psicanalise||[])],
+    quiro:[...(_diagSelecoes.quiro||[])],
+    quiroObs:_diagSelecoes.quiroObs||'',
     escalaEmocional:document.getElementById('diagEscalaEmo').value,
     emoObs:document.getElementById('diagEmoObs').value,
     // Memória da sessão — o que fica deste encontro para a próxima chegada
@@ -5680,7 +5741,7 @@ function editarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])]};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])],quiro:[...(diag.quiro||[])],quiroObs:diag.quiroObs||''};
   _diagEditandoId=diag.id;
   _diagJaSalvo=false;
   go('diagnostico',null);
@@ -6038,7 +6099,8 @@ function htmlUltimoEncontro(diag,opts){
   const marcas=[
     ...(diag.elementos||[]).map(n=>tag(n,'var(--pri-l)')),
     ...(diag.pontos||[]).map(n=>tag(n,'#E3F2FD')),
-    ...(diag.sistemasAbc||[]).map(id=>tag('ABC '+id,'var(--pri-pale)','var(--pri-deep)'))
+    ...(diag.sistemasAbc||[]).map(id=>tag('ABC '+id,'var(--pri-pale)','var(--pri-deep)')),
+    ...(diag.quiro||[]).map(q=>tag(q.art,'#EDE7F6','#4527A0'))
   ].join('');
   const linha=(rot,txt)=>txt?`<div style="margin-top:8px;font-size:12.5px;line-height:1.6"><strong style="color:var(--pri-deep)">${rot}:</strong> ${escHtml(txt)}</div>`:'';
   const anotacoes=linha('Foi feito',diag.sessaoFeito)+linha('Reagiu',diag.sessaoReacao)+linha('Para hoje',diag.sessaoProx);
@@ -6103,6 +6165,7 @@ async function carregarDiagHistPac(pacId){
         ${d.elementos.map(nome=>`<span style="display:inline-block;background:var(--pri-l);border-radius:4px;padding:2px 7px;margin:2px;font-size:11px">${nome}${d.elementosObs&&d.elementosObs[nome]?' <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:10px;height:10px;vertical-align:-1px"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>':''}</span>`).join('')}
         ${d.pontos.map(nome=>`<span style="display:inline-block;background:#E3F2FD;border-radius:4px;padding:2px 7px;margin:2px;font-size:11px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px;vertical-align:-1.5px"><path d="M6.5 17.5 17.5 6.5"/><circle cx="5" cy="19" r="2.2"/><circle cx="19" cy="5" r="2.2"/></svg> ${nome}</span>`).join('')}
         ${(d.sistemasAbc||[]).map(id=>`<span style="display:inline-block;background:var(--pri-pale);color:var(--pri-deep);border-radius:4px;padding:2px 7px;margin:2px;font-size:11px;font-weight:600">ABC ${id}</span>`).join('')}
+        ${(d.quiro||[]).map(q=>`<span style="display:inline-block;background:#EDE7F6;color:#4527A0;border-radius:4px;padding:2px 7px;margin:2px;font-size:11px">${escHtml(q.art)}</span>`).join('')}
       </div>
       ${d.escalaEmocional?`<div style="font-size:11.5px;color:var(--txt-l);margin-top:5px">Estado emocional: ${d.escalaEmocional}</div>`:''}
       ${d.sessaoFeito?`<div style="font-size:12px;color:var(--txt);margin-top:6px;line-height:1.6"><strong style="color:var(--pri-deep)">Foi feito:</strong> ${escHtml(d.sessaoFeito)}</div>`:''}
@@ -6208,6 +6271,14 @@ function montarHtmlDiagnostico(diag){
     html+=bloco('#5a3e7a','<span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3 3 0 0 0 7 18a3 3 0 0 0 5-1 3 3 0 0 0 5 1 3 3 0 0 0 2-5.2A3 3 0 0 0 18 7a3 3 0 0 0-3-3 3 3 0 0 0-3 1 3 3 0 0 0-3-1Z"/></svg></span>Psicanálise',corpo);
   }
 
+  // --- Quiropraxia: o que foi ajustado naquele encontro ---
+  if((diag.quiro||[]).length){
+    const grupos={};
+    diag.quiro.forEach(q=>{(grupos[q.grupo]=grupos[q.grupo]||[]).push(q.art);});
+    const corpo=Object.entries(grupos).map(([g,arts])=>`<div style="margin-bottom:6px"><strong>${escHtml(g)}:</strong> ${arts.map(escHtml).join(' · ')}</div>`).join('')+obsBox(diag.quiroObs);
+    html+=bloco('var(--pri-deep)','<span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 17.5 17.5 6.5"/><circle cx="5" cy="19" r="2.2"/><circle cx="19" cy="5" r="2.2"/></svg></span>Quiropraxia — ajustado neste encontro',corpo);
+  }
+
   // --- Estado emocional ---
   if(diag.escalaEmocional){
     html+=bloco('var(--pri)','<span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg></span>Estado emocional',
@@ -6252,7 +6323,7 @@ function duplicarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])]};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])],quiro:[...(diag.quiro||[])],quiroObs:diag.quiroObs||''};
   _diagEditandoId=null;
   _diagJaSalvo=false;
   go('diagnostico',null);
