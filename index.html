@@ -80,6 +80,16 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 /* FORMS */
 .fc{background:#FDFAF6;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
 .fst{font-size:13.5px;font-weight:700;color:var(--pri-d);margin-bottom:12px;padding-bottom:7px;border-bottom:2px solid var(--pri-l);display:flex;align-items:center;gap:6px}
+/* Caixas que abrem e fecham (Diagnóstico) — fechadas ao chegar, e a Clínica lembra */
+.fst.cx-cab{cursor:pointer;user-select:none;margin-bottom:0;padding-bottom:9px}
+.fc.cx-aberta .fst.cx-cab{margin-bottom:12px}
+.cx-seta{width:14px;height:14px;flex:0 0 14px;margin-left:auto;transition:transform .18s ease;color:var(--pri-d);opacity:.7}
+.fc.cx-aberta .cx-seta{transform:rotate(90deg)}
+.cx-resumo{font-weight:500;font-size:11.5px;color:var(--txt-l);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-left:8px;min-width:0}
+.fc.cx-aberta .cx-resumo{display:none}
+.cx-corpo{display:none}
+.fc.cx-aberta .cx-corpo{display:block}
+@media print{.cx-corpo{display:block!important}.cx-seta,.cx-resumo{display:none!important}}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px}
 .fr.full{grid-template-columns:1fr}.fr.tri{grid-template-columns:1fr 1fr 1fr}
 .fg{display:flex;flex-direction:column;min-width:0}
@@ -4078,7 +4088,91 @@ let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],supleme
 // Dados (bancoIntegrativoCompleto, CATALOGO_SUPLEMENTOS_INICIAL, sistemasABC) movidos para dados-clinicos.js
 
 
+/* ===== As caixas do Diagnóstico abrem e fecham =====
+   A tela do Diagnóstico é longa: dez ferramentas empilhadas, e ele rola tudo
+   toda vez para chegar na que quer. Agora cada caixa chega FECHADA, mostrando
+   no próprio título um resumo curto do que tem dentro ("Pulsologia · 2 posições"),
+   e a Clínica lembra quais ele deixou abertas da última vez.
+   Cada caixa é reconhecida por um elemento que só existe dentro dela — assim
+   renomear um título não perde o que ficou guardado. */
+const CX_ABERTAS_KEY='diagCaixasAbertas';
+const CX_DIAG=[
+  {k:'pulso',    el:'pulsoPunhos',        resumo:()=>{
+    const pos=(_diagSelecoes.pulsoPos||[]).length, tp=(_diagSelecoes.pulso||[]).length;
+    if(!pos&&!tp)return'';
+    const a=pos?pos+(pos>1?' posições':' posição'):'';
+    const b=tp?tp+(tp>1?' pulsos':' pulso'):'';
+    return[a,b].filter(Boolean).join(' · ');
+  }},
+  {k:'elementos',el:'elementosGrid',      resumo:()=>cxConta((_diagSelecoes.elementos||[]).length,'elemento','elementos')},
+  {k:'pontos',   el:'pontosGrid',         resumo:()=>cxConta((_diagSelecoes.pontos||[]).length,'ponto','pontos')},
+  {k:'quiroref', el:'quiroRefConteudo',   resumo:()=>'referência'},
+  {k:'abc',      el:'abcTabelaBody',      resumo:()=>cxConta((_diagSelecoes.sistemasAbc||[]).length,'sistema','sistemas')},
+  {k:'acu',      el:'acuResultado',       resumo:()=>'referência'},
+  {k:'bagua',    el:'baguaWheel',         resumo:()=>cxConta((_diagSelecoes.bagua||[]).length,'síndrome','síndromes')},
+  {k:'sup',      el:'diagSupBusca',       resumo:()=>cxConta((_diagSelecoes.suplementos||[]).length,'suplemento','suplementos')},
+  {k:'auriculo', el:'auriculoMapaCompleto',resumo:()=>cxConta((_diagSelecoes.auriculo||[]).length,'ponto','pontos')},
+  {k:'psic',     el:'psicAnaliseConteudo',resumo:()=>cxConta((_diagSelecoes.psicanalise||[]).length,'conceito','conceitos')},
+  {k:'emo',      el:'diagEscalaEmo',      resumo:()=>{
+    const s=document.getElementById('diagEscalaEmo');
+    return (s&&s.value)?(s.options[s.selectedIndex].text||'').trim():'';
+  }}
+];
+function cxConta(n,um,varios){return n?n+' '+(n>1?varios:um):'';}
+
+const CX_SETA='<svg class="cx-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
+let _cxPreparadas=false;
+
+function cxAbertasSalvas(){
+  try{return JSON.parse(localStorage.getItem(CX_ABERTAS_KEY))||[];}catch(e){return[];}
+}
+function cxGuardar(){
+  const abertas=[...document.querySelectorAll('#pg-diagnostico .fc.cx-aberta')].map(fc=>fc.dataset.cx).filter(Boolean);
+  try{localStorage.setItem(CX_ABERTAS_KEY,JSON.stringify(abertas));}catch(e){}
+}
+function cxToggle(fc){
+  fc.classList.toggle('cx-aberta');
+  cxGuardar();
+  atualizarResumoCaixas();
+}
+function prepararCaixasDiag(){
+  if(_cxPreparadas)return;
+  _cxPreparadas=true;
+  const abertas=cxAbertasSalvas();
+  document.querySelectorAll('#pg-diagnostico .fc').forEach(fc=>{
+    const cab=fc.firstElementChild;
+    if(!cab||!cab.classList.contains('fst'))return;   // cartão sem título não vira caixa
+    if(fc.id==='diagResumoBox')return;                // o resumo final fica sempre aberto
+    const achado=CX_DIAG.find(c=>fc.querySelector('#'+c.el));
+    fc.dataset.cx=achado?achado.k:(cab.textContent||'').trim().slice(0,24);
+    // tudo que vem depois do título passa a morar dentro do corpo
+    const corpo=document.createElement('div');
+    corpo.className='cx-corpo';
+    while(cab.nextSibling)corpo.appendChild(cab.nextSibling);
+    fc.appendChild(corpo);
+    cab.classList.add('cx-cab');
+    cab.setAttribute('role','button');
+    cab.setAttribute('tabindex','0');
+    cab.insertAdjacentHTML('beforeend','<span class="cx-resumo"></span>'+CX_SETA);
+    cab.addEventListener('click',()=>cxToggle(fc));
+    cab.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();cxToggle(fc);}});
+    if(abertas.includes(fc.dataset.cx))fc.classList.add('cx-aberta');
+  });
+  atualizarResumoCaixas();
+}
+// O título da caixa fechada conta o que tem dentro
+function atualizarResumoCaixas(){
+  document.querySelectorAll('#pg-diagnostico .fc[data-cx]').forEach(fc=>{
+    const alvo=fc.querySelector('.cx-resumo');if(!alvo)return;
+    const c=CX_DIAG.find(x=>x.k===fc.dataset.cx);
+    let txt='';
+    try{txt=c?(c.resumo()||''):'';}catch(e){txt='';}
+    alvo.textContent=txt;
+  });
+}
+
 function initDiagnostico(){
+  prepararCaixasDiag();
   renderPulsoCard();
   renderElementosGrid();
   renderPontosGrid();
@@ -4893,6 +4987,7 @@ function renderDiagPainel(){
   const painel=document.getElementById('diagPainel');
   const resumoBox=document.getElementById('diagResumoBox');
   const temAlgo=(_diagSelecoes.pulso||[]).length||(_diagSelecoes.pulsoPos||[]).length||_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length||(_diagSelecoes.auriculo||[]).length||(_diagSelecoes.bagua||[]).length||(_diagSelecoes.psicanalise||[]).length||(_diagSelecoes.elementoSintomas||[]).length||(_diagSelecoes.pontoSintomas||[]).length;
+  atualizarResumoCaixas();   // os títulos das caixas fechadas contam o que mudou
   if(!temAlgo){painel.style.display='none';resumoBox.style.display='none';return;}
   painel.style.display='block';
   resumoBox.style.display='block';
