@@ -2,6 +2,24 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## Senha "Acender as Caixas" — as 3 velas acesas (v3.9, 27/07)
+
+**1. A busca acha com e sem acento.** "Fabricio" agora encontra "Fabrício". A normalização (minúsculo, sem acento) virou uma **coluna gerada no banco** — `busca_nome`, com índice —, não um filtro na página: a Clínica continua sem baixar lista nenhuma para procurar, que era a regra por causa da cota de egress. Vale nos dois lugares que buscam paciente (a busca global e o seletor).
+
+**2. As caixas do Diagnóstico abrem e fecham.** As 11 ferramentas chegam **fechadas** — a tela que era um rolo interminável agora cabe numa olhada. O título da caixa fechada conta o que tem dentro ("Pulso — Pulsologia (MTC) · 2 posições · 3 pulsos"), e a Clínica **lembra** quais ele deixou abertas. Cada caixa é reconhecida por um elemento que só existe dentro dela, então renomear um título não perde o que ficou guardado. Na impressão tudo abre sozinho. Nada de conteúdo foi tocado — foi mudança de endereço: o que já estava na caixa passou a morar numa gaveta abaixo do título.
+
+**3. O pulso passou a saber onde está.** Era o defeito de raiz: `pulsoPos` (onde há alteração) e `pulso` (quais tipos) eram **duas listas que não se conheciam**. A tela não sabia dizer qual posição estava cheia e qual estava vazia, e no papel saía "posições: Cun esq., Chi dir." e, embaixo, os pulsos todos juntos — sem dizer qual era de onde.
+
+Agora a verdade é uma só: `pulsoPorPos` — um registro por posição (`{"E-cun":["fu","chen"]}`). As duas listas antigas continuam existindo como **espelho recalculado**, então tudo que já lia pulso/posição (salvar, imprimir, resumo) segue funcionando sem reescrita. Na tela, cada posição virou um **quadro com tudo dela dentro**: o órgão, as desarmonias clássicas, as fichinhas dos 28 pulsos e a busca — a opção "a" que ele escolheu. O círculo do punho mostra **quantos pulsos aquela posição já tem**. Desmarcar a posição leva os pulsos dela junto, avisando antes. E o resumo impresso agora diz o que é de onde: *"Cun esq.: Flutuante, Profundo · Chi dir.: Rápido"*.
+
+Cuidado que entrou junto: **avaliação antiga não perde nada.** Quem foi salvo com as duas listas soltas é migrado na hora de reabrir ou imprimir — as posições marcadas voltam, e os pulsos que não têm dono vão para um quadro **"Pulso geral (os dois punhos)"**, que também serve para o que se sente no pulso inteiro sem localizar.
+
+Testado no navegador antes de subir: registro por posição, espelhos, badge no punho, desmarcar levando os pulsos junto, resumo, papel e migração do formato antigo.
+
+**Fila que a senha deixou combinada, na ordem:** quiropraxia completa (dedos das mãos, dedos dos pés, mãos, pés, braço, antebraço) → registro da sessão do dia + resumo na chegada do paciente → Árvore e Vitruviano compartilhados entre OS e Clínica (**extrair, nunca copiar**) → a teia diagnóstica.
+
+<details><summary>Texto original da senha (histórico)</summary>
+
 ## 🔑 Senha "Acender as Caixas" (registrada 27/07/2026)
 
 Frase-chave para janela nova. **É janela de execução, não de desenho** — o desenho já foi feito e combinado na janela que fechou o Diagnóstico usável. Ao ouvir **"Acender as Caixas"**, ir direto ao trabalho, nesta ordem:
@@ -13,6 +31,8 @@ Frase-chave para janela nova. **É janela de execução, não de desenho** — o
 **3. Pulso por posição.** Hoje `_diagSelecoes.pulsoPos` (lista de posições) e `_diagSelecoes.pulso` (lista de tipos) são duas listas que não se conhecem — por isso a tela não sabe qual posição está cheia e qual está vazia. Passa a ser um registro por posição: `{ "E-cun": ["shi","shu"], "D-chi": ["xu","chen"] }`. Os 28 pulsos continuam a mesma base; as fichinhas e a busca aparecem **dentro de cada quadro de posição** (escolha dele, opção "a"). Desmarcar a posição leva os pulsos dela junto. Corrigir também o resumo impresso (`renderDiagPainel`, bloco por volta da linha 5055).
 
 Depois disso, na ordem: quiropraxia completa (dedos das mãos, dedos dos pés, mãos, pés, braço, antebraço) → registro da sessão do dia + resumo na chegada do paciente → Árvore e Vitruviano compartilhados entre OS e Clínica (**extrair, nunca copiar**) → a teia diagnóstica.
+
+</details>
 
 ## A lista de agendas virou nossa (v3.8, 27/07)
 
