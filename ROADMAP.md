@@ -2,6 +2,18 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## 🔑 Senha "Acender as Caixas" (registrada 27/07/2026)
+
+Frase-chave para janela nova. **É janela de execução, não de desenho** — o desenho já foi feito e combinado na janela que fechou o Diagnóstico usável. Ao ouvir **"Acender as Caixas"**, ir direto ao trabalho, nesta ordem:
+
+**1. Busca de paciente sem acento** (primeiro, é pequeno e dói hoje). "Fabricio" tem que achar "Fabrício". Coluna de busca normalizada (minúsculo, sem acento) no **banco** Supabase — nunca na página, por causa da cota de egress. As duas funções que buscam são `buscarTodosPorNome()` e `buscarPacPicker()` no `index.html`, ambas com `dados->>nome=ilike`.
+
+**2. As caixas com toggle** no Diagnóstico. Todas **fechadas** ao abrir; a Clínica **lembra** como ele deixou da última vez. Título da caixa fechada mostra um resumo curto ("Pulsologia · 2 posições"). Cada caixa carrega tudo dela dentro — ferramenta, o que foi selecionado e a anotação, nessa ordem. Isso resolve de uma vez três queixas dele: falta de toggle, anotação longe dos 5 Elementos, e terapia que aparece longe.
+
+**3. Pulso por posição.** Hoje `_diagSelecoes.pulsoPos` (lista de posições) e `_diagSelecoes.pulso` (lista de tipos) são duas listas que não se conhecem — por isso a tela não sabe qual posição está cheia e qual está vazia. Passa a ser um registro por posição: `{ "E-cun": ["shi","shu"], "D-chi": ["xu","chen"] }`. Os 28 pulsos continuam a mesma base; as fichinhas e a busca aparecem **dentro de cada quadro de posição** (escolha dele, opção "a"). Desmarcar a posição leva os pulsos dela junto. Corrigir também o resumo impresso (`renderDiagPainel`, bloco por volta da linha 5055).
+
+Depois disso, na ordem: quiropraxia completa (dedos das mãos, dedos dos pés, mãos, pés, braço, antebraço) → registro da sessão do dia + resumo na chegada do paciente → Árvore e Vitruviano compartilhados entre OS e Clínica (**extrair, nunca copiar**) → a teia diagnóstica.
+
 ## A lista de agendas virou nossa (v3.8, 27/07)
 
 Montgomery viu que a caixinha "Agenda de destino" abria com outra letra e o azul do Windows, destoando de toda a tela. A caixa **fechada** de um `<select>` a página pinta; a lista que se **abre** quem desenha é o sistema operacional, e nenhum navegador deixa a página tocar nela — não era falta de CSS, era um limite do próprio navegador. Trocado por uma lista feita em casa (botão + painel), com a fonte da plataforma, o dourado da casa marcando a agenda escolhida e fechamento ao clicar fora.
