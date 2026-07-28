@@ -2,6 +2,16 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## Senha "Acender a Agenda Cheia" — a agenda que enxerga a vida inteira (27/07/2026)
+
+Nasceu do desejo do Montgomery de ter "o próprio Google Agenda dentro da plataforma".
+
+**Descartado por decisão dele:** embutir o Google Agenda num `iframe`. "Se não conversa com a Clínica não faz sentido" — seria uma janela morta, mostrando inclusive a vida pessoal, sem poder arrastar uma sessão ali dentro.
+
+**O caminho escolhido:** a vista semanal da Clínica passa a mostrar **também** os compromissos do Google, em cinza claro e só de leitura, ao lado das sessões. Assim a semana mostra os buracos de verdade — onde tem paciente e onde tem a vida — e ao marcar alguém a Clínica sabe avisar que o horário já está ocupado. É o sentido Google→Clínica, que ainda faltava na ponte (hoje ela só escreve).
+
+**Depois disso, o destino final:** os dois sentidos completos — mexeu no Google, muda na Clínica. Sempre sob a regra de ouro: a Clínica lê os eventos pessoais para não atropelá-los, mas **nunca** escreve neles; só toca no que ela mesma criou (etiqueta `clinicaId` + carimbo `[clinica:ID]`).
+
 ## Duplicata na agenda do Google — RESOLVIDA (v4.2, 27/07/2026)
 
 Ao criar um agendamento e depois mudar a data, o Google ficava com **dois** eventos: o novo no dia certo e o antigo, órfão, no dia errado. A causa: quando a sessão não tinha o código do evento guardado (`gcalId`) — porque nasceu pelo botão "Salvar e abrir Google Agenda", que abria o Google na mão, ou porque o código se perdeu — a ponte criava um evento novo em vez de mover o que já existia, e ninguém apagava o primeiro.
