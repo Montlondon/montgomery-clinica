@@ -2,7 +2,23 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
-## 🔑 Senha "Acender as Mãos" (registrada 27/07/2026)
+## Senha "Acender as Mãos" — CUMPRIDA (v4.0, 27/07/2026)
+
+A quiropraxia deixou de ser só coluna. A caixa "Quiropraxia — Mapa de Subluxações, Testes e Ajustes" ganhou uma aba nova, **"Membros (mãos, pés, braços e pernas)"**, com **45 articulações** organizadas em 7 grupos: dedos das mãos e mão, punho e antebraço, cotovelo, ombro, dedos dos pés (artelhos) e antepé, pé e tornozelo, e joelho/quadril.
+
+Cada articulação traz o que a mão precisa saber na hora: os **movimentos a testar** (deslize AP/PA, lateral/medial, rotação, extensão longitudinal…) e o **passo a passo** — onde vai a mão de apoio, onde vai a mão ativa, posição do paciente, e se o ajuste é impulso, recoil ou body drop. A regra geral fica no pé da aba: testar o jogo de junta e, na ausência dele, impulsionar no sentido do bloqueio.
+
+**Tudo saiu da apostila dele** — "Roteiro de Quiropraxia", Prof.ª Carmen Fátima Prada de Freitas, páginas 33 a 49 (extremidades inferiores e superiores). Nada foi inventado nem completado por fora. O que os dados não carregam são as fotos das posições; para isso a aba aponta para a apostila em `03_Biblioteca/Quiropraxia`.
+
+Os dados moram em `QUIROPRAXIA_REF.membros` (`dados-clinicos.js`) e a aba é renderizada por `renderQuiroRef()`, no mesmo padrão de `<details>` dos ajustes.
+
+**Fila que continua, na ordem combinada:** registro da sessão do dia + resumo na chegada do paciente → Árvore e Vitruviano compartilhados entre OS e Clínica (**extrair, nunca copiar**) → a teia diagnóstica.
+
+**Duas perguntas ainda em aberto da v3.9:** alguma caixa do Diagnóstico deve vir **sempre aberta** (a Pulsologia?), e se o quadro **"Pulso geral (os dois punhos)"** faz sentido na prática dele ou deve sair.
+
+<details><summary>Texto original da senha (histórico)</summary>
+
+### 🔑 Senha "Acender as Mãos" (registrada 27/07/2026)
 
 Frase-chave para janela nova. **É janela de execução** — é a primeira da fila já combinada. Ao ouvir **"Acender as Mãos"**, ir direto ao trabalho: completar a quiropraxia com o que falta — **dedos das mãos, dedos dos pés, mãos, pés, braço e antebraço**. Hoje a Clínica tem a coluna (C1–Cóccix, ligada à `QUIROPRAXIA_REF`) e a caixa "Quiropraxia — Mapa de Subluxações, Testes e Ajustes" no Diagnóstico, mas os membros não estão mapeados. Mexer em `renderQuiroRef()` e nas abas de `#quiroRefSeg`; a caixa é a de chave `quiroref` no motor de caixas.
 
@@ -11,6 +27,8 @@ Regra que não muda: **o conteúdo clínico vem do Montgomery, nunca inventado**
 Depois desta, na ordem: registro da sessão do dia + resumo na chegada do paciente → Árvore e Vitruviano compartilhados entre OS e Clínica (**extrair, nunca copiar**) → a teia diagnóstica.
 
 Duas perguntas em aberto da v3.9, para checar com ele: alguma caixa do Diagnóstico deve vir **sempre aberta** (a Pulsologia?), e se o quadro **"Pulso geral (os dois punhos)"** faz sentido na prática dele ou deve sair.
+
+</details>
 
 ## Senha "Acender as Caixas" — as 3 velas acesas (v3.9, 27/07)
 

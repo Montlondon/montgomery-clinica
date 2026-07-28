@@ -1090,6 +1090,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px" id="quiroFonte">Referência consultável durante o diagnóstico. Clique numa aba para abrir.</p>
     <div class="seg" id="quiroRefSeg">
       <button class="on" data-qr="raizes" onclick="setQuiroRef('raizes')">Subluxações (vértebra a vértebra)</button>
+      <button data-qr="membros" onclick="setQuiroRef('membros')">Membros (mãos, pés, braços e pernas)</button>
       <button data-qr="testes" onclick="setQuiroRef('testes')">Testes diagnósticos</button>
       <button data-qr="ajustes" onclick="setQuiroRef('ajustes')">Manobras de ajuste</button>
       <button data-qr="fundamentos" onclick="setQuiroRef('fundamentos')">Fundamentos</button>
@@ -1643,7 +1644,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v3.9 · 27/07';
+const APP_VER='v4.0 · 27/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -4912,6 +4913,16 @@ function renderQuiroRef(){
     h='<div class="tw tw-zebra"><div style="overflow-x:auto"><table><thead><tr><th style="white-space:nowrap">Nível</th><th>Área de inervação</th><th>Efeitos possíveis por interferência</th></tr></thead><tbody>'+
       Q.raizes.map(r=>`<tr><td style="font-weight:700;white-space:nowrap;color:var(--pri-d)">${esc(r.nivel)}</td><td style="font-size:12px">${esc(r.inerva)}</td><td style="font-size:12px">${esc(r.efeito)}</td></tr>`).join('')+
       '</tbody></table></div></div>';
+  } else if(_quiroRefAba==='membros'){
+    h=(Q.membros||[]).map(g=>`<details style="margin-bottom:7px;border:1px solid var(--pri-l,#E7EEF5);border-radius:8px;padding:6px 11px">
+      <summary style="cursor:pointer;font-weight:700;color:var(--pri-d);font-size:13px">${esc(g.grupo)}</summary>
+      ${g.nota?`<div style="font-size:11.5px;color:var(--txt-l);margin:7px 0 2px;line-height:1.5">${esc(g.nota)}</div>`:''}
+      ${g.itens.map(it=>`<div style="border-left:3px solid var(--pri);padding:7px 0 7px 10px;margin:9px 0">
+        <div style="font-weight:700;font-size:12.5px;color:var(--pri-d)">${esc(it.art)}</div>
+        <div style="font-size:11px;color:var(--txt-l);margin:2px 0 4px">${esc(it.movimentos)}</div>
+        <ul style="margin:0;padding-left:17px;font-size:12.5px;line-height:1.6">${it.passos.map(p=>'<li>'+esc(p)+'</li>').join('')}</ul>
+      </div>`).join('')}</details>`).join('')+
+      '<p style="font-size:11px;color:var(--txt-l);margin-top:8px">Regra geral dos membros: testar o jogo de junta e, na ausência dele, impulsionar no sentido do bloqueio. Fotos e posições completas na apostila da Prof.ª Carmen — em 03_Biblioteca/Quiropraxia.</p>';
   } else if(_quiroRefAba==='testes'){
     h=Q.testes.map(t=>`<div style="border:1px solid var(--pri-l,#E7EEF5);border-left:3px solid var(--pri);border-radius:8px;padding:11px 13px;margin-bottom:9px">
       <div style="font-weight:700;color:var(--pri-d);font-size:13px">${esc(t.nome)}</div>
