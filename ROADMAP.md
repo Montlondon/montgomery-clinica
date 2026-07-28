@@ -2,6 +2,20 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## 🔑 Senha "Acender a Memória da Sessão" (registrada 27/07/2026)
+
+Frase-chave para janela nova. **É janela de execução** — é a próxima da fila combinada. Ao ouvir **"Acender a Memória da Sessão"**, ir direto ao trabalho, que são duas metades da mesma coisa:
+
+**1. Guardar a sessão do dia.** Ao terminar um diagnóstico, a Clínica registra a sessão daquele encontro — data, o que foi avaliado, o que foi tratado, a anotação. Não é sobrescrever a ficha: é empilhar encontros, para que exista uma linha do tempo do paciente.
+
+**2. O resumo na chegada.** Quando o paciente chega e ele abre a ficha, o **resumo do último encontro aparece diante dos olhos** — sem ter que caçar. É a queixa nº 1 da lista que ele trouxe de um dia de atendimento real: chegar no paciente já sabendo onde parou.
+
+Regras da casa que valem aqui: conteúdo clínico vem dele, nunca inventado; ícones SVG de linha fina, nunca emoji; acentos corretos no texto visível; subir a versão no rodapé; registrar no ROADMAP; e **nada de ler tabela inteira do Supabase** — a cota é por egress, então o resumo tem que vir enxuto (uma linha por sessão, ficha completa só ao clicar).
+
+Depois desta, na ordem: Árvore e Vitruviano compartilhados entre OS e Clínica (**extrair, nunca copiar**) → a teia diagnóstica.
+
+Duas perguntas ainda em aberto da v3.9: alguma caixa do Diagnóstico deve vir **sempre aberta** (a Pulsologia?), e se o quadro **"Pulso geral (os dois punhos)"** faz sentido na prática dele ou deve sair.
+
 ## Senha "Acender as Mãos" — CUMPRIDA (v4.0, 27/07/2026)
 
 A quiropraxia deixou de ser só coluna. A caixa "Quiropraxia — Mapa de Subluxações, Testes e Ajustes" ganhou uma aba nova, **"Membros (mãos, pés, braços e pernas)"**, com **45 articulações** organizadas em 7 grupos: dedos das mãos e mão, punho e antebraço, cotovelo, ombro, dedos dos pés (artelhos) e antepé, pé e tornozelo, e joelho/quadril.
