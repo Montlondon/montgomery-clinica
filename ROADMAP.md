@@ -2,6 +2,16 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## Sessões numeradas e o "Ver" completo (v4.3, 27/07/2026)
+
+Nasceu de uma frase dele olhando a v4.1: *"atendi o João hoje, então teria o resumo de hoje; quando ele voltar eu abro a sessão 01 e vejo o que foi realizado, ou vejo cada lugar que adicionei diagnóstico"*. Faltavam duas coisas para isso ser verdade.
+
+**1. As sessões passaram a ter número.** Cada encontro de um paciente ganha seu lugar na história — **Sessão 01** é a mais antiga, e daí em diante. O número aparece no histórico de diagnósticos (como selo ao lado da data), no título do "Ver", na faixa "Último encontro" (*"Sessão 03, 27/07/2026"*) e no papel impresso. O número é calculado na hora pela ordem das datas (`sessoesDoPac` / `numeroDaSessao`), não fica gravado — assim ele se corrige sozinho se uma avaliação antiga for apagada ou tiver a data ajustada.
+
+**2. O "Ver" passou a mostrar cada lugar marcado.** Antes, abrir uma avaliação salva mostrava só elementos, pontos e sistemas ABC — pulso, aurículo, bagua, psicanálise, suplementos e os sinais/sintomas clicados simplesmente não apareciam, embora estivessem salvos. Agora `montarHtmlDiagnostico` percorre tudo, na mesma ordem das caixas do Diagnóstico: **pulso posição por posição** (com as observações), **cinco elementos** com os sinais identificados naquele dia, **pontos do corpo** com os sintomas, **sistemas ABC**, **suplementos** com total, **auriculoterapia** com a orelha desenhada como ficou, **bagua**, **psicanálise** agrupada por categoria, **estado emocional** e a **memória da sessão**.
+
+A memória da sessão também entrou no PDF/impressão, que antes parava no estado emocional.
+
 ## Senha "Acender a Memória da Sessão" — CUMPRIDA (v4.1, 27/07/2026)
 
 A Clínica passou a lembrar. Duas metades, as duas no ar.
