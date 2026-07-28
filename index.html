@@ -1657,7 +1657,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v4.2 · 27/07';
+const APP_VER='v4.3 · 27/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -5481,6 +5481,18 @@ function gerarHtmlDiag(diagRec){
       <div style="font-size:9.5pt;line-height:1.6;color:#2C2A27">${psiLinhas}</div>
     </div>`;
   }
+  // Memória da sessão também no papel — é o que conta o encontro em si
+  const memPapel=[
+    ['O que foi feito',diagRec?diagRec.sessaoFeito:vMem('diagSessaoFeito')],
+    ['Como reagiu',diagRec?diagRec.sessaoReacao:vMem('diagSessaoReacao')],
+    ['Para o próximo encontro',diagRec?diagRec.sessaoProx:vMem('diagSessaoProx')]
+  ].filter(x=>x[1]);
+  if(memPapel.length){
+    blocos+=`<div style="border-left:4px solid #1E3A5F;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
+      <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">Memória da sessão</div>
+      ${memPapel.map(x=>`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>${x[0]}:</strong> ${escHtml(x[1])}</div>`).join('')}
+    </div>`;
+  }
   if(!blocos)blocos='<div style="color:#aaa;font-style:italic;padding:14px;text-align:center">Nenhum item selecionado na avaliação.</div>';
 
   return`<div style="font-family:'Georgia',serif;width:420px;margin:0 auto;background:#FDFAF6;color:#2C2A27;padding:24px 26px;border-radius:14px;box-sizing:border-box">
@@ -5507,7 +5519,7 @@ function gerarHtmlDiag(diagRec){
       </tr>
     </table>
     <div style="text-align:center;margin-bottom:18px">
-      <span style="display:inline-block;background:#1E3A5F;color:#fff;font-size:10pt;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:7px 22px;border-radius:20px">Diagnóstico Integrado</span>
+      <span style="display:inline-block;background:#1E3A5F;color:#fff;font-size:10pt;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;padding:7px 22px;border-radius:20px">Diagnóstico Integrado${diagRec?' · '+rotuloSessao(diagRec):''}</span>
     </div>
     ${blocos}
     ${emo?`<div style="background:#FFF8E1;border-radius:8px;padding:12px 16px;font-size:9.5pt;margin-top:6px;margin-bottom:6px;border-left:3px solid #C47A1E;color:#5a4a1e;line-height:1.5"><strong>Estado emocional:</strong> ${emo}${emoObs?'<br>'+emoObs:''}</div>`:''}
@@ -5974,6 +5986,24 @@ async function carregarRxHistPac(pacId){
 // por egress, então a chegada tem que ser de graça.
 const ICO_MEMORIA='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-2.5px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>';
 
+// As sessões de um paciente em ordem de acontecimento: a mais antiga é a 01.
+// É essa ordem que dá o número de cada encontro.
+function sessoesDoPac(pacId){
+  return (gD('diagnosticos')||[])
+    .filter(d=>String(d.pacienteId)===String(pacId)&&d.data)
+    .sort((a,b)=>String(a.data).localeCompare(String(b.data))||String(a.id).localeCompare(String(b.id)));
+}
+// "Sessão 01", "Sessão 07" — o lugar daquele encontro na história do paciente
+function numeroDaSessao(diag){
+  if(!diag||!diag.pacienteId)return 0;
+  const i=sessoesDoPac(diag.pacienteId).findIndex(d=>String(d.id)===String(diag.id));
+  return i<0?0:i+1;
+}
+function rotuloSessao(diag){
+  const n=numeroDaSessao(diag);
+  return n?'Sessão '+String(n).padStart(2,'0'):'Sessão';
+}
+
 function ultimoEncontroDoPac(pacId,ignorarId){
   if(!pacId)return null;
   const doPac=(gD('diagnosticos')||[]).filter(d=>
@@ -6019,7 +6049,7 @@ function htmlUltimoEncontro(diag,opts){
     ?`<button type="button" class="btn btn-sec btn-sm" onclick="verDiagHist('${diag.id}')" style="flex-shrink:0"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span> Ver tudo</button>`:'';
   return `<div class="fc" style="border-left:4px solid var(--pri-deep);background:var(--beige)">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
-      <strong style="color:var(--pri-deep);font-size:13.5px;font-family:'Lora',serif">${ICO_MEMORIA} Último encontro — ${fd(diag.data)} <span style="font-weight:400;color:var(--txt-l);font-size:12px">(${haQuantoTempo(diag.data)})</span></strong>
+      <strong style="color:var(--pri-deep);font-size:13.5px;font-family:'Lora',serif">${ICO_MEMORIA} Último encontro — ${rotuloSessao(diag)}, ${fd(diag.data)} <span style="font-weight:400;color:var(--txt-l);font-size:12px">(${haQuantoTempo(diag.data)})</span></strong>
       ${botao}
     </div>
     ${marcas?`<div style="margin-top:7px">${marcas}</div>`:''}
@@ -6061,7 +6091,7 @@ async function carregarDiagHistPac(pacId){
   el.innerHTML=doPac.map(d=>`
     <div style="background:var(--beige);border-radius:8px;padding:12px;margin-bottom:10px;border-left:3px solid var(--pri)">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;flex-wrap:wrap;gap:6px">
-        <strong style="color:var(--pri-d);font-size:13px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><path d="M7 12h2l1.5-3 2 6 1.5-3H17"/></svg> ${fd(d.data)}</strong>
+        <strong style="color:var(--pri-d);font-size:13px"><span style="display:inline-block;background:var(--pri-deep);color:#fff;border-radius:5px;padding:2px 8px;font-size:11px;letter-spacing:.4px;margin-right:6px">${rotuloSessao(d).toUpperCase()}</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><circle cx="12" cy="12" r="9"/><path d="M7 12h2l1.5-3 2 6 1.5-3H17"/></svg> ${fd(d.data)}</strong>
         <div style="display:flex;gap:6px">
           <button type="button" class="btn btn-sec btn-sm" onclick="verDiagHist('${d.id}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span> Ver</button>
           <button type="button" class="btn btn-sec btn-sm" onclick="editarDiagHist('${d.id}','${pacId}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></span> Editar</button>
@@ -6081,60 +6111,118 @@ async function carregarDiagHistPac(pacId){
 }
 
 // Monta o HTML de leitura (somente exibição) de uma avaliação salva — usado
-// no modal "Ver" do histórico do paciente.
+// no modal "Ver" do histórico do paciente. Mostra TODOS os lugares onde algo
+// foi marcado naquele encontro, na mesma ordem das caixas do Diagnóstico:
+// pulso, elementos, pontos, ABC, suplementos, aurículo, bagua, psicanálise,
+// estado emocional e a memória da sessão.
 function montarHtmlDiagnostico(diag){
+  const bloco=(cor,titulo,corpo)=>`<div class="fc" style="border-left:5px solid ${cor}">
+    <div class="fst" style="color:${cor}">${titulo}</div>
+    <div style="font-size:12.5px;line-height:1.7">${corpo}</div>
+  </div>`;
+  const obsBox=txt=>txt?`<p style="margin-top:9px;background:var(--pri-l);padding:8px;border-radius:6px"><strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg> Observações:</strong> ${escHtml(txt)}</p>`:'';
   let html='';
+
+  // --- Pulso, posição por posição (avaliação antiga é migrada na hora) ---
+  const pulsoReg=pulsoMigrar(diag);
+  const pulsoOrdem=PULSO_ORDEM.filter(k=>pulsoReg[k]).concat(Object.keys(pulsoReg).filter(k=>!PULSO_ORDEM.includes(k)));
+  if(pulsoOrdem.length){
+    const corpo=pulsoOrdem.map(k=>{
+      const i=pulsoPosicoes[k],ids=pulsoReg[k]||[];
+      const onde=k==='geral'?'Pulso geral — os dois punhos'
+                :(i?`${i.pos} — punho ${i.punho.toLowerCase()} · ${i.orgaos}`:k);
+      const quais=ids.length
+        ?ids.map(id=>{const p=pulsosPorId[id];return p?`<div style="margin-left:11px"><strong>${escHtml(p.nome)}</strong> <em style="color:var(--txt-l)">${escHtml(p.pinyin)}</em> — ${escHtml(p.qualidade)} → ${escHtml(p.indica)}</div>`:'';}).join('')
+        :'<div style="margin-left:11px;color:var(--txt-l);font-style:italic">posição marcada, sem pulso registrado</div>';
+      return `<div style="margin-bottom:8px"><div style="font-weight:700;color:var(--pri-d)">${escHtml(onde)}</div>${quais}</div>`;
+    }).join('');
+    html+=bloco('var(--pri-deep)','<span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 3 12 2.5-8 1.5 2h5"/></svg></span>Pulso',corpo+obsBox(diag.pulsoObs));
+  }
+
+  // --- Cinco Elementos, com os sinais que foram clicados naquele dia ---
   (diag.elementos||[]).forEach(nome=>{
     const e=bancoIntegrativoCompleto.matrizCincoElementos[nome];
     if(!e)return;
-    const obs=(diag.elementosObs&&diag.elementosObs[nome])||'';
-    html+=`<div class="fc" style="border-left:5px solid ${e.cor}">
-      <div class="fst" style="color:${e.cor}"><span style="display:inline-flex;width:16px;height:16px;vertical-align:-3px">${e.icone}</span> ${e.titulo}</div>
-      <div style="font-size:12.5px;line-height:1.7">
-        <p style="margin-bottom:7px"><strong>${e.relogio}</strong></p>
-        <p style="margin-bottom:7px"><strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-2px"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3.2 3.2 0 0 0 7 18a3 3 0 0 0 5 1.8V6"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3.2 3.2 0 0 1 17 18a3 3 0 0 1-5 1.8"/></svg> Psique/Emoções:</strong> ${e.psique}</p>
-        <p style="margin:9px 0 7px"><strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-2px"><path d="M6.5 17.5 17.5 6.5"/><circle cx="5" cy="19" r="2.2"/><circle cx="19" cy="5" r="2.2"/></svg> Quiropraxia:</strong> ${e.quiro}</p>
-        <p><strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-2px"><path d="M6 20C4 14 6 6 16 4c1 6-2 13-10 16Z"/><path d="M7 19c2-4 4-7 8-10"/></svg> Fitoterapia sugerida:</strong> ${e.fito}</p>
-        ${obs?`<p style="margin-top:9px;background:var(--pri-l);padding:8px;border-radius:6px"><strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg> Observações:</strong> ${escHtml(obs)}</p>`:''}
-      </div>
-    </div>`;
+    const sinais=(diag.elementoSintomas||[]).filter(s=>s.elemento===nome).map(s=>s.sintoma);
+    const corpo=`<p style="margin-bottom:7px"><strong>${e.relogio}</strong></p>
+      <p style="margin-bottom:7px"><strong>Psique/Emoções:</strong> ${e.psique}</p>
+      <p style="margin-bottom:7px"><strong>Quiropraxia:</strong> ${e.quiro}</p>
+      <p><strong>Fitoterapia sugerida:</strong> ${e.fito}</p>
+      ${sinais.length?`<p style="margin-top:9px"><strong>Sinais identificados:</strong> ${sinais.map(escHtml).join(', ')}</p>`:''}
+      ${obsBox((diag.elementosObs&&diag.elementosObs[nome])||'')}`;
+    html+=bloco(e.cor,`<span style="display:inline-flex;width:16px;height:16px;vertical-align:-3px">${e.icone}</span> ${e.titulo}`,corpo);
   });
+
+  // --- Pontos do corpo, com os sintomas marcados ---
   (diag.pontos||[]).forEach(nome=>{
     const p=bancoIntegrativoCompleto.pontosCorpo[nome];
     if(!p)return;
-    html+=`<div class="fc" style="border-left:5px solid var(--pri)">
-      <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.6"/><path d="M11.3 7v3.5l-2.2 2v3M12.7 10.5V14l2.2 2v3"/><circle cx="9" cy="13" r="1.2"/><circle cx="15" cy="16.5" r="1.2"/></svg></span>${p.regiao}</div>
-      <div style="font-size:12.5px;line-height:1.7">
-        <p style="margin-bottom:7px"><strong>Músculo:</strong> ${p.musculo}</p>
-        <p style="margin-bottom:7px"><strong>Tendão:</strong> ${p.tendao}</p>
-        <p style="margin-bottom:7px"><strong>Ajuste indicado:</strong> ${p.quiro}</p>
-        <p><strong>Canal energético relacionado:</strong> ${p.canal}</p>
-      </div>
-    </div>`;
+    const sintomas=(diag.pontoSintomas||[]).filter(s=>s.ponto===nome).map(s=>s.sintoma);
+    const corpo=`<p style="margin-bottom:7px"><strong>Músculo:</strong> ${p.musculo}</p>
+      <p style="margin-bottom:7px"><strong>Tendão:</strong> ${p.tendao}</p>
+      <p style="margin-bottom:7px"><strong>Ajuste indicado:</strong> ${p.quiro}</p>
+      <p><strong>Canal energético relacionado:</strong> ${p.canal}</p>
+      ${sintomas.length?`<p style="margin-top:9px"><strong>Sintomas identificados:</strong> ${sintomas.map(escHtml).join(', ')}</p>`:''}`;
+    html+=bloco('var(--pri)',`<span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.6"/><path d="M11.3 7v3.5l-2.2 2v3M12.7 10.5V14l2.2 2v3"/><circle cx="9" cy="13" r="1.2"/><circle cx="15" cy="16.5" r="1.2"/></svg></span>${p.regiao}`,corpo);
   });
+
+  // --- Sistemas ABC (Balance) ---
   (diag.sistemasAbc||[]).forEach(id=>{
     const s=sistemasABC.find(x=>x.id===id);
     if(!s)return;
-    html+=`<div class="fc" style="border-left:5px solid var(--pri-deep)">
-      <div class="fst" style="font-family:'Lora',serif">Sistema ${s.id} — ${s.elemento}</div>
-      <div style="font-size:11px;color:var(--ink-soft);margin-bottom:8px">${s.categoria}</div>
-      <div style="font-size:12.5px;line-height:1.7"><strong>Meridianos do grupo:</strong> ${abcGrupoDisplay(s).join(', ')}</div>
-      <div style="font-size:11.5px;color:var(--ink-soft);line-height:1.5;margin-top:6px">${s.protocolo}</div>
-    </div>`;
+    const corpo=`<div style="font-size:11px;color:var(--ink-soft);margin-bottom:8px">${s.categoria}</div>
+      <strong>Meridianos do grupo:</strong> ${abcGrupoDisplay(s).join(', ')}
+      <div style="font-size:11.5px;color:var(--ink-soft);line-height:1.5;margin-top:6px">${s.protocolo}</div>`;
+    html+=bloco('var(--pri-deep)',`Sistema ${s.id} — ${s.elemento}`,corpo);
   });
-  if(diag.escalaEmocional){
-    html+=`<div class="fc"><div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg></span>Estado emocional</div><p style="font-size:12.5px">${escHtml(diag.escalaEmocional)}${diag.emoObs?'<br><span style="color:var(--txt-l)">'+escHtml(diag.emoObs)+'</span>':''}</p></div>`;
+
+  // --- Suplementos indicados naquele encontro ---
+  if((diag.suplementos||[]).length){
+    const total=diag.suplementos.reduce((a,s)=>a+s.precoUnit*s.qtd,0);
+    const corpo=diag.suplementos.map(s=>`<div>${s.qtd}x ${escHtml(nomeCap(s.nome))} — ${fm(s.precoUnit*s.qtd)}</div>`).join('')
+      +`<div style="margin-top:7px;font-weight:700;color:var(--pri-d)">Total: ${fm(total)}</div>`;
+    html+=bloco('var(--pri-deep)','<span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v4l2 2v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-2Z"/><path d="M9 3h6M9 12h6"/></svg></span>Suplementos',corpo);
   }
+
+  // --- Auriculoterapia, com a orelha marcada como ficou no dia ---
+  if((diag.auriculo||[]).length){
+    const pts=diag.auriculo.map(id=>auriculoPontosPorId[id]).filter(Boolean);
+    const corpo=`<div style="display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start">
+        <div>${auriculoBaseSVG(pts,150)}</div>
+        <div style="flex:1;min-width:180px">${pts.map(p=>`<div style="padding:3px 0"><strong>${escHtml(p.nome)}</strong> <span style="color:var(--txt-l);font-size:11.5px">${escHtml(p.grupo)}</span></div>`).join('')}</div>
+      </div>${obsBox(diag.auriculoObs)}`;
+    html+=bloco('var(--pri-deep)','<span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5C5 8 4 11 5 15c1 4 4 6 7 6s5-2 6-5c.7-2 .3-4-1-5"/><circle cx="13" cy="11" r="2"/></svg></span>Auriculoterapia',corpo);
+  }
+
+  // --- Bagua ---
+  if((diag.bagua||[]).length){
+    const corpo=diag.bagua.map(b=>`<div style="padding:3px 0"><strong>${escHtml(b.sindrome)}</strong> <span style="color:var(--txt-l);font-size:11.5px">Meridiano ${escHtml(b.meridiano)}</span></div>`).join('');
+    html+=bloco('var(--pri-deep)','<span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9"/></svg></span>Bagua — Acupuntura',corpo);
+  }
+
+  // --- Psicanálise, agrupada por categoria ---
+  if((diag.psicanalise||[]).length){
+    const grupos={};
+    diag.psicanalise.forEach(p=>{(grupos[p.categoria]=grupos[p.categoria]||[]).push(p.nome);});
+    const corpo=Object.entries(grupos).map(([cat,nomes])=>`<div style="margin-bottom:5px"><strong>${escHtml(cat)}:</strong> ${nomes.map(escHtml).join(', ')}</div>`).join('');
+    html+=bloco('#5a3e7a','<span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3 3 0 0 0 7 18a3 3 0 0 0 5-1 3 3 0 0 0 5 1 3 3 0 0 0 2-5.2A3 3 0 0 0 18 7a3 3 0 0 0-3-3 3 3 0 0 0-3 1 3 3 0 0 0-3-1Z"/></svg></span>Psicanálise',corpo);
+  }
+
+  // --- Estado emocional ---
+  if(diag.escalaEmocional){
+    html+=bloco('var(--pri)','<span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg></span>Estado emocional',
+      escHtml(diag.escalaEmocional)+(diag.emoObs?'<br><span style="color:var(--txt-l)">'+escHtml(diag.emoObs)+'</span>':''));
+  }
+
+  // --- Memória da sessão: o que foi feito, como reagiu, o que ficou para depois ---
   const mem=[['O que foi feito',diag.sessaoFeito],['Como reagiu',diag.sessaoReacao],['Para o próximo encontro',diag.sessaoProx]]
     .filter(x=>x[1])
     .map(x=>`<p style="margin-bottom:7px"><strong>${x[0]}:</strong> ${escHtml(x[1])}</p>`).join('');
   if(mem){
-    html+=`<div class="fc" style="border-left:5px solid var(--pri-deep)">
-      <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span>Memória da sessão</div>
-      <div style="font-size:12.5px;line-height:1.7">${mem}</div>
-    </div>`;
+    html+=bloco('var(--pri-deep)','<span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span>Memória da sessão',mem);
   }
-  return html||'<p style="color:var(--txt-l);font-size:13px">Nenhum elemento ou ponto registrado nesta avaliação.</p>';
+
+  return html||'<p style="color:var(--txt-l);font-size:13px">Nada foi marcado nesta avaliação.</p>';
 }
 
 // "Ver" — leitura rápida da avaliação, sem entrar em modo de edição.
@@ -6142,8 +6230,8 @@ function verDiagHist(diagId){
   const diag=gD('diagnosticos').find(d=>String(d.id)===String(diagId));
   if(!diag)return;
   document.getElementById('modC').innerHTML=`
-    <h3 style="color:var(--pri-d);margin-bottom:4px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;vertical-align:-3px"><circle cx="12" cy="12" r="9"/><path d="M7 12h2l1.5-3 2 6 1.5-3H17"/></svg> Diagnóstico de ${fd(diag.data)}</h3>
-    <div style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Paciente: ${escHtml(diag.pacienteNome)}</div>
+    <h3 style="color:var(--pri-d);margin-bottom:4px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;vertical-align:-3px"><circle cx="12" cy="12" r="9"/><path d="M7 12h2l1.5-3 2 6 1.5-3H17"/></svg> ${rotuloSessao(diag)} — ${fd(diag.data)}</h3>
+    <div style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Paciente: ${escHtml(diag.pacienteNome)} · ${haQuantoTempo(diag.data)}</div>
     ${montarHtmlDiagnostico(diag)}
     <div style="display:flex;gap:7px;justify-content:flex-end;margin-top:13px">
       <button class="btn btn-sec btn-sm" onclick="fMod()">Fechar</button>
