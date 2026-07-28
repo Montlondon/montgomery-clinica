@@ -1657,7 +1657,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v4.1 · 27/07';
+const APP_VER='v4.2 · 27/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2875,7 +2875,11 @@ async function salvarEGoogle(){
   const ss=gD('sessoes');ss.push(s);
   _cache['sessoes']=ss;
   await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':s}]);
-  abrirGA(s);toast('Salvo! Abrindo Google Agenda...',null,"ok");
+  // Com a ponte ligada, quem escreve no Google é a ponte — assim o evento nasce
+  // com o código guardado na sessão. O caminho antigo (abrir o Google na mão)
+  // criava um evento que a Clínica não reconhecia depois: era o começo da duplicata.
+  if(ponteAtiva()){await pontePush(s.id);toast('Salvo e marcado no Google!',null,"ok");}
+  else{abrirGA(s);toast('Salvo! Abrindo Google Agenda...',null,"ok");}
   document.querySelector('#pg-nova-sessao form').reset();
   document.getElementById('sData').value=dLocal(new Date());
   iniciarPS();atuFin();atuDash();
@@ -3661,8 +3665,36 @@ function gcalEvento(s){
       (s.notas?'\nNotas: '+s.notas:'')+
       '\n\nCriado pela Clínica — não editar o código abaixo.\n[clinica:'+s.id+']',
     start:{dateTime:s.data+'T'+hi+':00',timeZone:GCAL_TZ},
-    end:{dateTime:s.data+'T'+hf+':00',timeZone:GCAL_TZ}
+    end:{dateTime:s.data+'T'+hf+':00',timeZone:GCAL_TZ},
+    // A etiqueta invisível: o Google guarda o número da sessão dentro do próprio
+    // evento. É por ela que a ponte reconhece um evento antigo como sendo DESTA
+    // sessão — mesmo quando o código dele se perdeu do lado de cá.
+    extendedProperties:{private:{clinicaId:String(s.id)}}
   };
+}
+
+// Procura no Google um evento que já pertença a esta sessão. Primeiro pela
+// etiqueta invisível (exata); se não achar, pelo carimbo [clinica:ID] que a
+// Clínica sempre escreveu no fim da descrição — é assim que os eventos criados
+// antes desta versão também são reconhecidos. Devolve a lista de ids achados.
+async function gcalAcharEventos(ag,sessaoId){
+  const achados=[];
+  const vistos=new Set();
+  const juntar=r=>{
+    (r&&r.items||[]).forEach(ev=>{
+      if(!ev.id||ev.status==='cancelled'||vistos.has(ev.id))return;
+      // No caminho da busca por texto o Google devolve qualquer coisa parecida:
+      // só aceitamos quem tem o carimbo exato desta sessão.
+      const marca='[clinica:'+sessaoId+']';
+      const temEtiqueta=ev.extendedProperties&&ev.extendedProperties.private&&String(ev.extendedProperties.private.clinicaId)===String(sessaoId);
+      if(!temEtiqueta&&!((ev.description||'').includes(marca)))return;
+      vistos.add(ev.id);achados.push(ev.id);
+    });
+  };
+  const base=`/calendars/${encodeURIComponent(ag)}/events`;
+  juntar(await gcalReq('GET',`${base}?maxResults=10&showDeleted=false&privateExtendedProperty=${encodeURIComponent('clinicaId='+sessaoId)}`,null,true));
+  juntar(await gcalReq('GET',`${base}?maxResults=10&showDeleted=false&q=${encodeURIComponent('[clinica:'+sessaoId+']')}`,null,true));
+  return achados;
 }
 
 // Grava só a linha daquela sessão no banco (nunca a tabela inteira).
@@ -3689,7 +3721,22 @@ async function pontePush(sessaoId){
     if(r&&r._naoExiste){delete s.gcalId;r=null;}
   }
   if(!s.gcalId){
-    r=await gcalReq('POST',`/calendars/${encodeURIComponent(ag)}/events`,corpo);
+    // Antes de criar QUALQUER evento novo, pergunta ao Google se esta sessão já
+    // não tem um evento por lá. Era exatamente aqui que nascia a duplicata: sem
+    // o código do lado de cá, a ponte criava um segundo evento e o primeiro
+    // ficava órfão no dia antigo, sem ninguém para apagá-lo.
+    const orfaos=await gcalAcharEventos(ag,s.id);
+    if(orfaos.length){
+      // Adota o primeiro (move para a nova data) e apaga os irmãos repetidos —
+      // inclusive os que já tinham sobrado de antes desta correção.
+      const adotado=orfaos[0];
+      r=await gcalReq('PATCH',`/calendars/${encodeURIComponent(ag)}/events/${encodeURIComponent(adotado)}`,corpo);
+      for(const extra of orfaos.slice(1)){
+        await gcalReq('DELETE',`/calendars/${encodeURIComponent(ag)}/events/${encodeURIComponent(extra)}`,null,true);
+      }
+      if(r&&!r._naoExiste)r={id:adotado};else r=null;
+    }
+    if(!r)r=await gcalReq('POST',`/calendars/${encodeURIComponent(ag)}/events`,corpo);
     if(r&&r.id){
       ss[idx]={...s,gcalId:r.id};
       _cache['sessoes']=ss;
@@ -3700,10 +3747,16 @@ async function pontePush(sessaoId){
 
 // Cancela no Google o evento daquela sessão — só se a Clínica tiver criado ele.
 async function ponteCancelar(s){
-  if(!ponteAtiva()||!s||!s.gcalId)return;
+  if(!ponteAtiva()||!s)return;
   const ag=localStorage.getItem(GCAL_ID_KEY);
   if(!ag)return;
-  await gcalReq('DELETE',`/calendars/${encodeURIComponent(ag)}/events/${encodeURIComponent(s.gcalId)}`);
+  if(s.gcalId)await gcalReq('DELETE',`/calendars/${encodeURIComponent(ag)}/events/${encodeURIComponent(s.gcalId)}`);
+  // Varre também qualquer evento órfão desta mesma sessão (sobra das duplicatas
+  // antigas). Só apaga o que traz o carimbo dela — nada pessoal é tocado.
+  for(const id of await gcalAcharEventos(ag,s.id)){
+    if(id===s.gcalId)continue;
+    await gcalReq('DELETE',`/calendars/${encodeURIComponent(ag)}/events/${encodeURIComponent(id)}`,null,true);
+  }
 }
 
 // Liga/desliga a ponte pela tela de Configurações.
