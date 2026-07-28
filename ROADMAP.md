@@ -2,6 +2,16 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## 🔑 Senha "Acender as Mãos" (registrada 27/07/2026)
+
+Frase-chave para janela nova. **É janela de execução** — é a primeira da fila já combinada. Ao ouvir **"Acender as Mãos"**, ir direto ao trabalho: completar a quiropraxia com o que falta — **dedos das mãos, dedos dos pés, mãos, pés, braço e antebraço**. Hoje a Clínica tem a coluna (C1–Cóccix, ligada à `QUIROPRAXIA_REF`) e a caixa "Quiropraxia — Mapa de Subluxações, Testes e Ajustes" no Diagnóstico, mas os membros não estão mapeados. Mexer em `renderQuiroRef()` e nas abas de `#quiroRefSeg`; a caixa é a de chave `quiroref` no motor de caixas.
+
+Regra que não muda: **o conteúdo clínico vem do Montgomery, nunca inventado** — se faltar material, perguntar em vez de preencher.
+
+Depois desta, na ordem: registro da sessão do dia + resumo na chegada do paciente → Árvore e Vitruviano compartilhados entre OS e Clínica (**extrair, nunca copiar**) → a teia diagnóstica.
+
+Duas perguntas em aberto da v3.9, para checar com ele: alguma caixa do Diagnóstico deve vir **sempre aberta** (a Pulsologia?), e se o quadro **"Pulso geral (os dois punhos)"** faz sentido na prática dele ou deve sair.
+
 ## Senha "Acender as Caixas" — as 3 velas acesas (v3.9, 27/07)
 
 **1. A busca acha com e sem acento.** "Fabricio" agora encontra "Fabrício". A normalização (minúsculo, sem acento) virou uma **coluna gerada no banco** — `busca_nome`, com índice —, não um filtro na página: a Clínica continua sem baixar lista nenhuma para procurar, que era a regra por causa da cota de egress. Vale nos dois lugares que buscam paciente (a busca global e o seletor).
