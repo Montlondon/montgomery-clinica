@@ -14,7 +14,7 @@ Regras da casa que valem aqui: conteúdo clínico vem dele, nunca inventado; íc
 
 Depois desta, na ordem: Árvore e Vitruviano compartilhados entre OS e Clínica (**extrair, nunca copiar**) → a teia diagnóstica.
 
-Duas perguntas ainda em aberto da v3.9: alguma caixa do Diagnóstico deve vir **sempre aberta** (a Pulsologia?), e se o quadro **"Pulso geral (os dois punhos)"** faz sentido na prática dele ou deve sair.
+As duas perguntas da v3.9 estão **respondidas** (27/07): o Diagnóstico fica **como está** — todas as caixas chegam fechadas, nenhuma sempre aberta — e o quadro **"Pulso geral (os dois punhos)" fica**. Ele vai testar na prática antes de decidir mexer. Não perguntar de novo.
 
 ## Senha "Acender as Mãos" — CUMPRIDA (v4.0, 27/07/2026)
 
