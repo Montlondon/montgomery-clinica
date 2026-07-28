@@ -814,3 +814,120 @@ igual e escreve na **agenda principal** — que e a "Montgomery Magalhaes" dele 
 seletor explica em vez de sumir.
 
 Licao de projeto: nao deixar um recurso essencial morrer por causa de um enfeite.
+
+
+## Ideia (27/07/2026) — A aba Diagnostico vista por quem atende de verdade
+
+O Montgomery atendeu na quinta e trouxe seis correcoes de uso. Nenhuma e enfeite:
+todas nascem de ele estar com o paciente na frente e a tela nao acompanhar o gesto.
+Registradas aqui antes de qualquer codigo, para escolher a ordem com calma.
+
+1. **Resumo da ultima sessao, no comeco.** Ao terminar um diagnostico, guardar um
+   registro de sessao. Quando o paciente chega, o resumo do ultimo encontro aparece
+   diante dos olhos dele — sem ele ter que caçar na ficha.
+
+2. **Toggle em cada setor.** Pulsologia, 5 Elementos, terapias, Psicanalise, Quiropraxia:
+   cada bloco abre quando ele vai atuar e fecha quando terminou. A pagina Diagnostico
+   fica limpa em vez de ser um rolo infinito.
+
+3. **A anotacao mora embaixo do que ela anota.** Hoje a caixa de anotacoes dos 5
+   Elementos nao fica logo abaixo dos 5 Elementos, e ele se perdeu na propria tela.
+   Regra geral: anotacao sempre colada ao setor de onde nasceu.
+
+4. **Pulsologia com lado e qualidade juntos.** Hoje ele marca a posicao (Guan esquerdo =
+   Figado) e marca o tipo (Cheio, Vazio), mas os dois nao se amarram: a tela nao diz
+   QUAL posicao esta cheia e QUAL esta vazia. Precisa registrar por posicao —
+   ex.: Guan esquerdo / Figado / Cheio **e** Chi direito / Rim / Vazio, ao mesmo tempo.
+
+5. **As terapias escolhidas ficam onde foram escolhidas.** Hoje ele seleciona a caixa da
+   terapia e o resultado aparece longe. Tem que ficar logo abaixo.
+
+6. **Quiropraxia tem mais corpo.** Faltam dedos das maos, dedos dos pes, maos, pes,
+   braco e antebraco.
+
+7. **O resumo final tem que ser a teia, nao a lista.** Hoje ele resume tudo em blocos.
+   Com o paciente na frente, o que ele precisa ver e a corrente: aquele dedo -> aquele
+   meridiano -> aquele orgao -> aquela emocao -> aquela Sefirot -> aquela lei da
+   Metafisica. O resumo devia mostrar o fio, nao as contas soltas.
+
+Frase dele que resume o pedido: nao e falta de informacao na tela, e falta de a tela
+pensar junto no momento do atendimento.
+
+### Adendos da mesma conversa (27/07/2026)
+
+8. **Busca de paciente sem acento.** Buscar "Fabricio" tem que achar "Fabrício" e
+   vice-versa. Hoje o Postgres compara letra a letra e "i" != "í". Conserto: coluna de
+   busca normalizada (minusculo, sem acento) no banco — nao na pagina, para nao gastar
+   egress. Pequeno e doi HOJE: fazer primeiro.
+
+9. **Arvore e Vitruviano na Clinica.** Hoje so existem no Montgomery OS. NAO copiar:
+   copia vira duas verdades que divergem (ja aconteceu com clinica_DO_AR.html e com o
+   MMObras). Extrair para um arquivo unico que OS e Clinica carregam. E tambem o
+   primeiro "andar" do predio, e a teia depende disso — se a Arvore for copia, a
+   corrente dedo->meridiano->orgao->emocao->Sefirot teria que ser escrita duas vezes.
+
+10. **App instalavel separado do OS.** Ja funciona: os dois manifestos existem e tem
+    escopos distintos ("/" e "/os/"), entao o Windows trata como dois programas. Falta
+    so ele instalar pelo menu do Chrome. Se o Chrome nao oferecer instalacao automatica,
+    falta um service worker — meia hora, e da de brinde abrir sem internet.
+
+**Ordem combinada:** 8 → toggles/caixas → pulso por posicao (busca dentro de cada
+quadro) → quiropraxia completa → registro de sessao → 9 → a teia (janela propria,
+arquitetura antes do codigo).
+
+**Regra que ele deu para a teia:** as ligacoes tem que vir DELE, nao do Claude. Claude
+constroi onde as ligacoes moram e como percorre-las; o Montgomery escreve ou confirma
+cada uma. A tela precisa dizer a origem (classico / observado por ele). Inventar
+correspondencia de MTC com cara de autoridade, na frente de um paciente, e a pior coisa
+que este projeto pode produzir.
+
+### Senha "Acender as Caixas" (registrada 27/07/2026)
+
+Janela nova de **execucao** (o desenho ja esta feito, nao reabrir a conversa). "Caixas" =
+as caixas recolhiveis (toggle) da aba **Diagnostico** da Clinica — cada setor vira um
+bloco que abre para atuar e fecha para deixar a tela limpa. Nao tem relacao com caixas de
+texto da plataforma nem com os quadros do prototipo da Arvore.
+
+Ordem da janela:
+
+1. **Busca de paciente sem acento** + **endereco proprio para o Montgomery OS**
+   (os dois pequenos, vao juntos).
+2. **As caixas com toggle** no Diagnostico — todas fechadas ao abrir, a Clinica lembra
+   como ele deixou, titulo mostra resumo curto ("Pulsologia - 2 posicoes"), e cada caixa
+   carrega tudo dela dentro: ferramenta, selecao e anotacao, nessa ordem.
+3. **Pulso por posicao** — as qualidades passam a morar DENTRO do quadro de cada posicao,
+   com a busca dos 28 dentro de cada quadro tambem.
+
+Depois: quiropraxia completa -> registro de sessao + resumo na chegada -> Arvore e
+Vitruviano num arquivo so servindo OS e Clinica -> a teia.
+
+## Concluido (27/07/2026) — Arrumacao: tudo passou a morar no lugar certo
+
+A pasta de codigo antiga (`Files_Claude`) e o deposito da Area de Trabalho
+(`Vrav Claude`) foram esvaziados e os arquivos levados para dentro do repositorio, na
+organizacao Fibonacci:
+
+- `MAPA_METAFISICA.md` -> **00_Nucleo/** (ao lado do Mapa da Vida; sao os dois mapas de
+  mais alto nivel, e a Metafisica e a raiz que liga tudo no OS)
+- `metatron_cube.svg` -> **13_Midia/**
+- MMObras v7, v9.16 (do ar) e v9.17 (guardado) + `obra_pintura_adames.html`
+  -> **21_Backups/MMObras/**
+- Clinica antiga de 28/06 -> **21_Backups/Clinica/clinica_2026-06-28.html**
+- `escola_montgomery_ia.html` -> **01_Codigo/prototipos/**
+- nota do Gemini -> **01_Codigo/_prompts_notas/**
+- `index.html` solto: descartado — era duplicata exata (mesmo hash) do v9.16
+
+A memoria do Claude tambem mudou de casa: os 66 arquivos estavam sob o projeto
+`Files_Claude` e as janelas novas abrem em `Files_Claude_repo`, entao toda janela nova
+comecava cega — foi exatamente o que aconteceu com a senha "Acender as Caixas". Copiados
+e conferidos no lugar certo. O historico das 68 conversas foi mantido de proposito: foi
+nele que a senha "Renovar" foi recuperada hoje.
+
+**Susto do dia, que virou licao:** por um momento pareceu que o `MAPA_METAFISICA.md`
+tinha sido apagado em definitivo — e ele nao estava em backup nenhum, nem no git, nem na
+nuvem. Estava so movido. A regra de negacao contra apagar pastas inteiras, no
+`.claude/settings.json`, **funcionou como devia** e continua de pe. Regra nova: antes de
+apagar qualquer pasta, conferir arquivo por arquivo se existe copia no repositorio.
+
+Pendencia menor: a pasta vazia `Files_Claude` ficou presa ("device or resource busy") por
+uma sessao antiga do Claude aberta nela. Sai quando essa janela fechar.
