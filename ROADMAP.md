@@ -2,6 +2,18 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## Duplicata na agenda do Google — RESOLVIDA (v4.2, 27/07/2026)
+
+Ao criar um agendamento e depois mudar a data, o Google ficava com **dois** eventos: o novo no dia certo e o antigo, órfão, no dia errado. A causa: quando a sessão não tinha o código do evento guardado (`gcalId`) — porque nasceu pelo botão "Salvar e abrir Google Agenda", que abria o Google na mão, ou porque o código se perdeu — a ponte criava um evento novo em vez de mover o que já existia, e ninguém apagava o primeiro.
+
+Três consertos:
+
+1. **Etiqueta invisível no evento.** Todo evento criado pela Clínica passa a levar `extendedProperties.private.clinicaId` com o número da sessão.
+2. **Perguntar antes de criar.** Sem `gcalId`, a ponte agora procura no Google (pela etiqueta e, para os eventos antigos, pelo carimbo `[clinica:ID]` na descrição). Se achar, **adota** o evento existente e o move para a nova data; irmãos repetidos são apagados. Só cria um evento novo se realmente não houver nenhum.
+3. **"Salvar e abrir Google Agenda"** com a ponte ligada passa a marcar direto pela ponte, sem abrir o Google na mão — o evento já nasce reconhecível. Sem ponte, o caminho antigo continua valendo.
+
+A exclusão de agendamento também varre e apaga os órfãos daquela sessão. Nenhum evento pessoal é tocado: só o que traz o carimbo da Clínica.
+
 ## Senha "Acender a Memória da Sessão" — CUMPRIDA (v4.1, 27/07/2026)
 
 A Clínica passou a lembrar. Duas metades, as duas no ar.
