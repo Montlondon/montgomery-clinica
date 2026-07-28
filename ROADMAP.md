@@ -23,6 +23,14 @@ Três consertos:
 3. **"Salvar e abrir Google Agenda"** com a ponte ligada passa a marcar direto pela ponte, sem abrir o Google na mão — o evento já nasce reconhecível. Sem ponte, o caminho antigo continua valendo.
 
 A exclusão de agendamento também varre e apaga os órfãos daquela sessão. Nenhum evento pessoal é tocado: só o que traz o carimbo da Clínica.
+## Quiropraxia que escreve na sessão (v4.4, 27/07/2026)
+
+Ele viu na prática: *"na quiropraxia não tem como adicionar dedos, pés, mãos — só as anotações dos membros"*. A aba Membros da v4.0 trouxe as 45 articulações da apostila, mas era **só leitura** — dava para consultar o teste e o passo a passo, não para registrar que aquele punho foi ajustado hoje.
+
+Agora cada articulação dos **Membros** e cada ajuste da **coluna** tem um botão **"+ marcar"**. O que for marcado vira parte da avaliação daquele dia, como já acontecia com elementos, pontos, aurículo e bagua: aparece agrupado dentro da própria caixa da Quiropraxia (com um campo de observações clínicas), entra no resumo, no histórico do paciente, na faixa "Último encontro", no "Ver" e no papel impresso. O título da caixa fechada passou a contar — *"3 ajustes"* em vez de *"referência"*.
+
+Guardado em `quiro` (lista de `{grupo, art}`) e `quiroObs` dentro da avaliação. **O lado — direito ou esquerdo — vai no campo de observações**, não há um seletor próprio ainda; se na prática incomodar, é a próxima volta nessa tela.
+
 ## Sessões numeradas e o "Ver" completo (v4.3, 27/07/2026)
 
 Nasceu de uma frase dele olhando a v4.1: *"atendi o João hoje, então teria o resumo de hoje; quando ele voltar eu abro a sessão 01 e vejo o que foi realizado, ou vejo cada lugar que adicionei diagnóstico"*. Faltavam duas coisas para isso ser verdade.
