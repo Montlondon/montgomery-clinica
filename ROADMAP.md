@@ -2,7 +2,23 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
-## 🔑 Senha "Acender a Memória da Sessão" (registrada 27/07/2026)
+## Senha "Acender a Memória da Sessão" — CUMPRIDA (v4.1, 27/07/2026)
+
+A Clínica passou a lembrar. Duas metades, as duas no ar.
+
+**1. Guardar a sessão do dia.** O Diagnóstico Integrado ganhou a caixa **"Memória da sessão"**, logo antes do resumo final, com três campos: *o que foi feito no atendimento*, *como o paciente reagiu* e *para o próximo encontro*. Eles são salvos dentro da própria avaliação (`sessaoFeito`, `sessaoReacao`, `sessaoProx`), então cada encontro continua sendo um registro próprio — a linha do tempo do paciente empilha, nada é sobrescrito. Ao **duplicar** uma avaliação antiga, a memória nasce vazia de propósito: o encontro é novo.
+
+**2. O resumo na chegada.** Uma faixa **"Último encontro"** aparece em três lugares: no **Diagnóstico**, assim que o paciente é escolhido; na **ficha aberta para editar**, acima de tudo; e no **cartão "Ver paciente"**. Ela traz a data e há quanto tempo foi ("há 15 dias", "ontem"), as marcas daquele dia (elementos, pontos, sistemas ABC), as três anotações e o estado emocional — com um botão *Ver tudo* para a avaliação completa. Se for a primeira vez com aquele paciente, a faixa diz isso em vez de ficar vazia. Em modo de edição de uma avaliação antiga, a faixa mostra a **anterior a ela**, nunca ela mesma.
+
+**Custo zero de banco.** A faixa lê apenas o cache de diagnósticos que já chega no login — nenhuma consulta nova ao Supabase, respeitando a cota por egress.
+
+O histórico de diagnósticos do paciente e o modal "Ver" também passaram a mostrar a memória da sessão.
+
+**Fila que continua, na ordem combinada:** Árvore e Vitruviano compartilhados entre OS e Clínica (**extrair, nunca copiar**) → a teia diagnóstica.
+
+<details><summary>Texto original da senha (histórico)</summary>
+
+### 🔑 Senha "Acender a Memória da Sessão" (registrada 27/07/2026)
 
 Frase-chave para janela nova. **É janela de execução** — é a próxima da fila combinada. Ao ouvir **"Acender a Memória da Sessão"**, ir direto ao trabalho, que são duas metades da mesma coisa:
 
@@ -15,6 +31,8 @@ Regras da casa que valem aqui: conteúdo clínico vem dele, nunca inventado; íc
 Depois desta, na ordem: Árvore e Vitruviano compartilhados entre OS e Clínica (**extrair, nunca copiar**) → a teia diagnóstica.
 
 As duas perguntas da v3.9 estão **respondidas** (27/07): o Diagnóstico fica **como está** — todas as caixas chegam fechadas, nenhuma sempre aberta — e o quadro **"Pulso geral (os dois punhos)" fica**. Ele vai testar na prática antes de decidir mexer. Não perguntar de novo.
+
+</details>
 
 ## Senha "Acender as Mãos" — CUMPRIDA (v4.0, 27/07/2026)
 

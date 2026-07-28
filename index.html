@@ -725,6 +725,8 @@ window.addEventListener('DOMContentLoaded',()=>{
       <button class="btn btn-pri btn-sm" onclick="document.getElementById('fPac').dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}))"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></span> Salvar</button>
     </div>
   </div>
+  <!-- Memória da sessão: o resumo do último encontro na chegada do paciente -->
+  <div id="ultEncontro" class="no-print" style="display:none"></div>
   <div class="fc">
     <div class="foto-area">
       <div class="foto-ring" onclick="document.getElementById('fotoInp').click()">
@@ -1058,6 +1060,9 @@ window.addEventListener('DOMContentLoaded',()=>{
     </div>
   </div>
 
+  <!-- Memória da sessão: o último encontro aparece assim que o paciente é escolhido -->
+  <div id="diagUltEncontro" class="no-print" style="display:none"></div>
+
   <div class="fc">
     <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-6 3 12 2.5-8 1.5 2h5"/></svg></span>Pulso — Pulsologia (MTC)</div>
     <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Toque numa posição Cun · Guan · Chi do punho: ela abre o quadro dela ao lado, com o órgão, as desarmonias clássicas e a busca entre os 28 pulsos — o que você marcar fica <b>naquela posição</b>. O número no círculo diz quantos pulsos ela já tem.</p>
@@ -1223,6 +1228,14 @@ window.addEventListener('DOMContentLoaded',()=>{
       </select>
     </div>
     <div class="fg full" style="margin-top:10px"><label>Observações sobre o estado emocional</label><textarea id="diagEmoObs" rows="2"></textarea></div>
+  </div>
+
+  <div class="fc">
+    <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span>Memória da sessão</div>
+    <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">O que fica deste encontro. Na próxima chegada deste paciente, isto aparece diante dos seus olhos antes do atendimento.</p>
+    <div class="fr full"><div class="fg"><label>O que foi feito no atendimento</label><textarea id="diagSessaoFeito" rows="3" placeholder="Ajustes, pontos agulhados, técnicas, orientações dadas..." oninput="memSessaoMudou()"></textarea></div></div>
+    <div class="fr full"><div class="fg"><label>Como o paciente reagiu</label><textarea id="diagSessaoReacao" rows="2" placeholder="O que ele sentiu durante e ao final da sessão..." oninput="memSessaoMudou()"></textarea></div></div>
+    <div class="fr full"><div class="fg"><label>Para o próximo encontro</label><textarea id="diagSessaoProx" rows="2" placeholder="O que retomar, o que observar, o que ainda falta tratar..." oninput="memSessaoMudou()"></textarea></div></div>
   </div>
 
   <div class="fc" id="diagResumoBox" style="display:none">
@@ -1644,7 +1657,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v4.0 · 27/07';
+const APP_VER='v4.1 · 27/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2301,6 +2314,8 @@ function go(p,el){
     popularRxSupSel();
     carregarRxSel();
   }
+  // A faixa do último encontro segue sempre a ficha que está aberta de fato
+  if(p==='novo-paciente')renderUltEncontro(editId);
   if(p==='financeiro'){atuFin();initFinScope();}
   if(p==='suplementos')renderSuplementos();
   if(p==='pacientes')renderP();
@@ -2324,6 +2339,8 @@ function go(p,el){
       document.getElementById('diagDt').value='';
       document.getElementById('diagEscalaEmo').value='';
       document.getElementById('diagEmoObs').value='';
+      limparMemSessao();
+      renderDiagUltEncontro();
       const b=document.getElementById('btnSalvarDiag');
       if(b)b.innerHTML=SAVE_ICON_HTML+' Salvar Avaliação';
     }
@@ -2576,6 +2593,7 @@ function limparForm(){
   document.getElementById('saveSt').className='sst unsaved';
   document.getElementById('saveSt').innerHTML=STAT_ICO_UNSAVED+' Não salvo';
   document.getElementById('waBtn').style.display='none';renderEx();
+  renderUltEncontro(null);
 }
 
 // ===== CORRIGIR O NOME DO PACIENTE EM TODA A PLATAFORMA =====
@@ -2679,6 +2697,7 @@ async function verPac(id){
       ${p.telefone?`<p><a href="${wa}" target="_blank" style="color:#25D366;font-weight:600;text-decoration:none"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8.4 8.4 0 0 1-12.2 7.5L4 20l1.1-4.1a8.4 8.4 0 1 1 15.4-4.4Z"/><path d="M8.5 10.3c0 3.4 2.8 6.2 6.2 6.2"/></svg></span> ${p.telefone}</a></p>`:''}
       ${p.email?`<p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><rect x="3.5" y="5" width="17" height="14" rx="1.6"/><path d="M4 6.5l8 6 8-6"/></svg> ${p.email}</p>`:''}${p.profissao?`<p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;vertical-align:-2px"><rect x="3" y="7.5" width="18" height="12" rx="1.6"/><path d="M8 7.5V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1.5M3 12.5h18"/></svg> ${p.profissao}</p>`:''}
     </div></div>
+    ${htmlUltimoEncontro(ultimoEncontroDoPac(p.id),{})}
     ${p.queixa?`<div class="psec"><h4><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M12 11v6M9 14h6"/></svg></span>Queixa</h4><p style="font-size:12px">${p.queixa}</p><div class="pgrid" style="margin-top:6px">${c('Tempo',p.tempoQueixa)}${c('Intensidade',p.intensidade)}</div></div>`:''}
     ${p.doencas||p.medicamentos?`<div class="psec"><h4><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 21V9l7-5 7 5v12"/><path d="M9 21v-6h6v6"/><path d="M12 7v3M10.5 8.5h3"/></svg></span>Histórico</h4><div class="pgrid">${c('Doenças',p.doencas)}${c('Medicamentos',p.medicamentos)}${c('Alergias',p.alergias)}</div></div>`:''}
     ${p.pontos||p.diagMTC?`<div class="psec"><h4><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 7 4-14 2 7h6"/></svg></span>Acupuntura</h4><div class="pgrid">${c('Diagnóstico',p.diagMTC)}${c('Pontos',p.pontos)}</div></div>`:''}
@@ -2704,6 +2723,7 @@ async function editarPac(id){
   document.getElementById('fTit').innerHTML=EDIT_ICON_HTML+' '+escHtml(p.nome);
   setTimeout(()=>{
     preencherForm(p);
+    renderUltEncontro(p.id);
     toast('Editando paciente','#1565C0',"edit");
     _pacFormDirty=false;
     document.getElementById('saveSt').className='sst saved';
@@ -4115,8 +4135,20 @@ const CX_DIAG=[
   {k:'emo',      el:'diagEscalaEmo',      resumo:()=>{
     const s=document.getElementById('diagEscalaEmo');
     return (s&&s.value)?(s.options[s.selectedIndex].text||'').trim():'';
-  }}
+  }},
+  {k:'memoria',  el:'diagSessaoFeito',    resumo:()=>cxConta(MEM_CAMPOS.filter(id=>vMem(id)).length,'anotação','anotações')}
 ];
+// Os três campos da Memória da sessão, na ordem em que aparecem na caixa
+const MEM_CAMPOS=['diagSessaoFeito','diagSessaoReacao','diagSessaoProx'];
+const vMem=id=>{const e=document.getElementById(id);return e?e.value.trim():'';};
+function memSessaoMudou(){_diagJaSalvo=false;atualizarResumoCaixas();}
+function limparMemSessao(){MEM_CAMPOS.forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});}
+function preencherMemSessao(diag){
+  const e1=document.getElementById('diagSessaoFeito'),e2=document.getElementById('diagSessaoReacao'),e3=document.getElementById('diagSessaoProx');
+  if(e1)e1.value=diag.sessaoFeito||'';
+  if(e2)e2.value=diag.sessaoReacao||'';
+  if(e3)e3.value=diag.sessaoProx||'';
+}
 function cxConta(n,um,varios){return n?n+' '+(n>1?varios:um):'';}
 
 const CX_SETA='<svg class="cx-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
@@ -5463,6 +5495,7 @@ function selecionarDiagPac(id,nome){
   document.getElementById('diagPacBusca').value=nome;
   document.getElementById('diagPacId').value=id;
   document.getElementById('diagPacLista').style.display='none';
+  renderDiagUltEncontro();
 }
 function fecharDiagPacLista(){
   setTimeout(()=>document.getElementById('diagPacLista').style.display='none',200);
@@ -5473,6 +5506,7 @@ function limparDiagnostico(){
   _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[]};
   document.getElementById('diagEscalaEmo').value='';
   document.getElementById('diagEmoObs').value='';
+  limparMemSessao();
   _diagJaSalvo=false;
   _diagEditandoId=null;
   const btn=document.getElementById('btnSalvarDiag');
@@ -5534,7 +5568,11 @@ async function salvarDiagnostico(){
     pontoSintomas:[...(_diagSelecoes.pontoSintomas||[])],
     psicanalise:[...(_diagSelecoes.psicanalise||[])],
     escalaEmocional:document.getElementById('diagEscalaEmo').value,
-    emoObs:document.getElementById('diagEmoObs').value
+    emoObs:document.getElementById('diagEmoObs').value,
+    // Memória da sessão — o que fica deste encontro para a próxima chegada
+    sessaoFeito:vMem('diagSessaoFeito'),
+    sessaoReacao:vMem('diagSessaoReacao'),
+    sessaoProx:vMem('diagSessaoProx')
   };
   try{
     if(_diagEditandoId){
@@ -5589,6 +5627,8 @@ function editarDiagHist(diagId,pacId){
     document.getElementById('diagEmoObs').value=diag.emoObs||'';
     const btn=document.getElementById('btnSalvarDiag');
     if(btn)btn.innerHTML=EDIT_ICON_HTML+' Salvar Alterações';
+    preencherMemSessao(diag);
+    renderDiagUltEncontro(diag.id);
     renderPulsoCard();renderElementosGrid();renderPontosGrid();initBaguaWheel();renderDiagPainel();
     toast('Editando avaliação. Altere o que precisar e salve.','#1565C0',"edit");
   },200);
@@ -5875,6 +5915,88 @@ async function carregarRxHistPac(pacId){
     </div>`).join('');
 }
 
+// ===== MEMÓRIA DA SESSÃO — o último encontro na chegada do paciente =====
+// Lê só o que já está na memória do navegador (cache dos diagnósticos, que
+// chega junto no login). Nenhuma consulta nova ao banco: a cota da Clínica é
+// por egress, então a chegada tem que ser de graça.
+const ICO_MEMORIA='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-2.5px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>';
+
+function ultimoEncontroDoPac(pacId,ignorarId){
+  if(!pacId)return null;
+  const doPac=(gD('diagnosticos')||[]).filter(d=>
+    String(d.pacienteId)===String(pacId)&&d.data&&String(d.id)!==String(ignorarId||' ')
+  );
+  doPac.sort((a,b)=>String(b.data).localeCompare(String(a.data)));
+  return doPac[0]||null;
+}
+
+// "há 12 dias", "ontem", "há 3 meses" — o tempo que passou, em voz humana
+function haQuantoTempo(dataIso){
+  const p=String(dataIso||'').split('-');
+  if(p.length!==3)return'';
+  const entao=new Date(+p[0],+p[1]-1,+p[2]);
+  const hoje=new Date();hoje.setHours(0,0,0,0);
+  const dias=Math.round((hoje-entao)/86400000);
+  if(dias<0)return'data à frente';
+  if(dias===0)return'hoje';
+  if(dias===1)return'ontem';
+  if(dias<31)return'há '+dias+' dias';
+  const meses=Math.floor(dias/30);
+  if(meses<12)return'há '+meses+(meses>1?' meses':' mês');
+  const anos=Math.floor(dias/365);
+  return'há '+anos+(anos>1?' anos':' ano');
+}
+
+// A faixa em si. Devolve '' quando não há encontro anterior nenhum.
+function htmlUltimoEncontro(diag,opts){
+  if(!diag)return'';
+  const o=opts||{};
+  const tag=(txt,fundo,cor)=>`<span style="display:inline-block;background:${fundo};color:${cor||'var(--txt)'};border-radius:4px;padding:2px 7px;margin:2px;font-size:11px">${escHtml(txt)}</span>`;
+  const marcas=[
+    ...(diag.elementos||[]).map(n=>tag(n,'var(--pri-l)')),
+    ...(diag.pontos||[]).map(n=>tag(n,'#E3F2FD')),
+    ...(diag.sistemasAbc||[]).map(id=>tag('ABC '+id,'var(--pri-pale)','var(--pri-deep)'))
+  ].join('');
+  const linha=(rot,txt)=>txt?`<div style="margin-top:8px;font-size:12.5px;line-height:1.6"><strong style="color:var(--pri-deep)">${rot}:</strong> ${escHtml(txt)}</div>`:'';
+  const anotacoes=linha('Foi feito',diag.sessaoFeito)+linha('Reagiu',diag.sessaoReacao)+linha('Para hoje',diag.sessaoProx);
+  const emo=diag.escalaEmocional?`<div style="margin-top:8px;font-size:11.5px;color:var(--txt-l)">Estado emocional: ${escHtml(diag.escalaEmocional)}</div>`:'';
+  const vazio=(!marcas&&!anotacoes&&!emo)
+    ?'<div style="margin-top:8px;font-size:12.5px;color:var(--txt-l)">A avaliação daquele dia foi salva sem marcações nem anotação.</div>':'';
+  const botao=o.comBotao
+    ?`<button type="button" class="btn btn-sec btn-sm" onclick="verDiagHist('${diag.id}')" style="flex-shrink:0"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span> Ver tudo</button>`:'';
+  return `<div class="fc" style="border-left:4px solid var(--pri-deep);background:var(--beige)">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+      <strong style="color:var(--pri-deep);font-size:13.5px;font-family:'Lora',serif">${ICO_MEMORIA} Último encontro — ${fd(diag.data)} <span style="font-weight:400;color:var(--txt-l);font-size:12px">(${haQuantoTempo(diag.data)})</span></strong>
+      ${botao}
+    </div>
+    ${marcas?`<div style="margin-top:7px">${marcas}</div>`:''}
+    ${anotacoes}${emo}${vazio}
+  </div>`;
+}
+
+// Faixa na tela de Diagnóstico, assim que o paciente é escolhido.
+// Em edição, ignora a própria avaliação aberta e mostra a anterior a ela.
+function renderDiagUltEncontro(ignorarId){
+  const el=document.getElementById('diagUltEncontro');
+  if(!el)return;
+  if(!_diagPacSel){el.style.display='none';el.innerHTML='';return;}
+  const diag=ultimoEncontroDoPac(_diagPacSel.id,ignorarId||_diagEditandoId);
+  el.style.display='block';
+  el.innerHTML=diag
+    ? htmlUltimoEncontro(diag,{comBotao:true})
+    : `<div class="fc" style="border-left:4px solid var(--pri);background:var(--beige)"><div style="font-size:12.5px;color:var(--txt-l)">${ICO_MEMORIA} Primeiro encontro registrado com <strong style="color:var(--pri-deep)">${escHtml(_diagPacSel.nome)}</strong>. O que você anotar hoje aparece aqui na próxima chegada.</div></div>`;
+}
+
+// Faixa no cadastro do paciente, ao abrir a ficha para editar.
+function renderUltEncontro(pacId){
+  const el=document.getElementById('ultEncontro');
+  if(!el)return;
+  const diag=pacId?ultimoEncontroDoPac(pacId):null;
+  if(!diag){el.style.display='none';el.innerHTML='';return;}
+  el.style.display='block';
+  el.innerHTML=htmlUltimoEncontro(diag,{comBotao:true});
+}
+
 // ===== HISTÓRICO DE DIAGNÓSTICO INTEGRADO POR PACIENTE =====
 async function carregarDiagHistPac(pacId){
   let diags=gD('diagnosticos');
@@ -5900,6 +6022,8 @@ async function carregarDiagHistPac(pacId){
         ${(d.sistemasAbc||[]).map(id=>`<span style="display:inline-block;background:var(--pri-pale);color:var(--pri-deep);border-radius:4px;padding:2px 7px;margin:2px;font-size:11px;font-weight:600">ABC ${id}</span>`).join('')}
       </div>
       ${d.escalaEmocional?`<div style="font-size:11.5px;color:var(--txt-l);margin-top:5px">Estado emocional: ${d.escalaEmocional}</div>`:''}
+      ${d.sessaoFeito?`<div style="font-size:12px;color:var(--txt);margin-top:6px;line-height:1.6"><strong style="color:var(--pri-deep)">Foi feito:</strong> ${escHtml(d.sessaoFeito)}</div>`:''}
+      ${d.sessaoProx?`<div style="font-size:12px;color:var(--txt);margin-top:4px;line-height:1.6"><strong style="color:var(--pri-deep)">Para o próximo:</strong> ${escHtml(d.sessaoProx)}</div>`:''}
     </div>`).join('');
 }
 
@@ -5948,6 +6072,15 @@ function montarHtmlDiagnostico(diag){
   if(diag.escalaEmocional){
     html+=`<div class="fc"><div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg></span>Estado emocional</div><p style="font-size:12.5px">${escHtml(diag.escalaEmocional)}${diag.emoObs?'<br><span style="color:var(--txt-l)">'+escHtml(diag.emoObs)+'</span>':''}</p></div>`;
   }
+  const mem=[['O que foi feito',diag.sessaoFeito],['Como reagiu',diag.sessaoReacao],['Para o próximo encontro',diag.sessaoProx]]
+    .filter(x=>x[1])
+    .map(x=>`<p style="margin-bottom:7px"><strong>${x[0]}:</strong> ${escHtml(x[1])}</p>`).join('');
+  if(mem){
+    html+=`<div class="fc" style="border-left:5px solid var(--pri-deep)">
+      <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span>Memória da sessão</div>
+      <div style="font-size:12.5px;line-height:1.7">${mem}</div>
+    </div>`;
+  }
   return html||'<p style="color:var(--txt-l);font-size:13px">Nenhum elemento ou ponto registrado nesta avaliação.</p>';
 }
 
@@ -5990,6 +6123,10 @@ function duplicarDiagHist(diagId,pacId){
     document.getElementById('diagEmoObs').value=diag.emoObs||'';
     const btn=document.getElementById('btnSalvarDiag');
     if(btn)btn.innerHTML=SAVE_ICON_HTML+' Salvar Avaliação';
+    // A memória da sessão nasce vazia: este é um encontro novo. O que ficou do
+    // anterior continua visível na faixa "Último encontro", logo acima.
+    limparMemSessao();
+    renderDiagUltEncontro();
     renderPulsoCard();renderElementosGrid();renderPontosGrid();initBaguaWheel();renderDiagPainel();
     toast('Avaliação duplicada! Ajuste se necessário e salve.',null,"clip");
   },200);
