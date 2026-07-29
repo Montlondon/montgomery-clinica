@@ -2,6 +2,14 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## Agenda Cheia: fim da sessão em dobro (v4.7, 28/07/2026)
+
+O Montgomery viu na tela: João Calha e Wervely apareciam **duas vezes** no mesmo dia — em laranja como sessão e em cinza como compromisso do Google.
+
+A causa: o filtro reconhecia só os eventos com a etiqueta invisível `clinicaId`, que existe apenas nos eventos criados pela Ponte. Os que nasceram do caminho antigo — "Salvar e abrir Google Agenda", ele clicando no Google — chegam sem etiqueta e sem carimbo, e a Clínica não os reconhecia como filhos dela.
+
+Agora eles são reconhecidos **pelo que se vê**: mesma hora de início e o nome do paciente batendo com o título do evento (sem acento, sem caixa, um contendo o outro — o Google costuma cortar títulos).
+
 ## Ponte de mão dupla — o sentido de volta (v4.6, 28/07/2026)
 
 Até aqui a ponte era de mão única: a Clínica escrevia no Google e não escutava. Se o Montgomery arrastasse a sessão no celular, dentro do Google, as duas verdades se separavam.

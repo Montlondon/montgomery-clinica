@@ -1665,7 +1665,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v4.6 · 28/07';
+const APP_VER='v4.7 · 28/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -4079,6 +4079,26 @@ async function gcalEventosDaSemana(ini,fim){
 // minutos desde a meia-noite, para saber se dois horários se cruzam
 function _min(hhmm){const [h,m]=(hhmm||'').split(':').map(Number);return (h||0)*60+(m||0);}
 
+// Um evento do Google que na verdade É uma sessão que já está na grade.
+// A etiqueta invisível (clinicaId) só existe nos eventos que a Ponte criou; os
+// que nasceram do caminho antigo — "Salvar e abrir Google Agenda", com o
+// Montgomery clicando no Google — chegam sem etiqueta e sem carimbo, e por isso
+// apareciam duas vezes: em laranja como sessão e em cinza como compromisso.
+// Aqui eles são reconhecidos pelo que se vê: mesma hora de início e o nome do
+// paciente batendo com o título do evento (sem acento, sem caixa; um contendo o
+// outro, porque o Google costuma cortar o título).
+function _ehSessaoRepetida(ev,sessoesDoDia){
+  if(ev.diaTodo||!ev.hora)return false;
+  const t=semAcento(ev.titulo).trim();
+  if(!t)return false;
+  return sessoesDoDia.some(s=>{
+    if(s.horario!==ev.hora)return false;
+    const n=semAcento(s.pacienteNome||'').trim();
+    if(!n)return false;
+    return n===t||n.includes(t)||t.includes(n);
+  });
+}
+
 async function pintarAgendaCheia(ini,fim){
   if(!agCheiaAtiva()||!ponteAtiva())return;
   const porDia=await gcalEventosDaSemana(ini,fim);
@@ -4089,9 +4109,11 @@ async function pintarAgendaCheia(ini,fim){
     const evs=porDia[dia]||[];
     if(!evs.length)return;
     // sessões daquele dia, cada uma ocupando uma hora
-    const janelas=ss.filter(s=>s.data===dia&&s.horario).map(s=>[_min(s.horario),_min(s.horario)+60]);
+    const doDia=ss.filter(s=>s.data===dia);
+    const janelas=doDia.filter(s=>s.horario).map(s=>[_min(s.horario),_min(s.horario)+60]);
     let h='';
     evs.forEach(ev=>{
+      if(_ehSessaoRepetida(ev,doDia))return;   // já está aí em laranja como sessão
       const ini2=ev.diaTodo?null:_min(ev.hora);
       const fim2=ev.diaTodo?null:(ev.fimH?_min(ev.fimH):ini2+60);
       const choca=ini2!==null&&janelas.some(([a,b])=>ini2<b&&fim2>a);
