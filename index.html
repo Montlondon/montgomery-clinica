@@ -1665,7 +1665,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v4.7 · 28/07';
+const APP_VER='v4.8 · 29/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -5314,6 +5314,9 @@ function filtrarPsicanalise(){
   _psicAnaliseBusca=(document.getElementById('psicAnaliseBusca').value||'').toLowerCase();
   renderPsicanalise();
 }
+// Prepara um texto para viajar dentro de onclick="funcao('...')": escapa a barra,
+// a aspa simples do JS e a aspa dupla que fecharia o atributo HTML.
+function psicArg(s){return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;');}
 function renderPsicanalise(){
   const cont=document.getElementById('psicAnaliseConteudo');
   if(!cont)return;
@@ -5327,7 +5330,7 @@ function renderPsicanalise(){
     itens.forEach(item=>{
       const on=psicanaliseItemMarcado(cat.categoria,item.nome);
       html+=`<div style="display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--brd-l,#ede8df)">
-        <button type="button" onclick="togglePsicanalise('${cat.categoria.replace(/'/g,"\\'")}','${item.nome.replace(/'/g,"\\'")}')"
+        <button type="button" onclick="togglePsicanalise('${psicArg(cat.categoria)}','${psicArg(item.nome)}')"
           style="flex-shrink:0;width:22px;height:22px;border-radius:5px;border:2px solid var(--pri-d);background:${on?'var(--pri-d)':'transparent'};color:${on?'#fff':'var(--pri-d)'};font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:background .15s">
           ${on?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px"><path d="M5 12l5 5L19 7"/></svg>':'+'}
         </button>

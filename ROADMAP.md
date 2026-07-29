@@ -2,6 +2,26 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## Clínica — Psicanálise ampliada: de 59 a 110 conceitos (v4.8, 29/07/2026)
+
+O módulo que o Montgomery chamou de "a parte maior do sistema" mais que dobrou. Eram **11 categorias e 59 itens**; agora são **18 categorias e 110 itens**, todos clicáveis, buscáveis, salvos no Supabase e presentes no resumo e no PDF — sem uma linha de layout nova: o `renderPsicanalise` já sabia crescer sozinho.
+
+**As oito camadas novas:**
+
+- **Estruturas Clínicas — Neurose, Psicose e Perversão** (7). A pergunta que vem antes do sintoma. Cada estrutura com seu mecanismo (recalque, forclusão, renegação), mais Histeria, Neurose obsessiva e Fobia como formas da neurose, e um roteiro de **diferencial na primeira escuta** — dúvida x certeza, culpa x ausência de culpa, corpo x pensamento.
+- **Angústia, Medo e Pânico** (6). A virada de 1926: não é o recalque que gera angústia, é a angústia que dispara o recalque. Angústia-sinal x automática, a diferença entre medo, angústia e susto, as situações de perigo por idade, o pânico como afeto sem palavra, e a **inibição** — o preço silencioso que ninguém traz como queixa.
+- **Culpa, Vergonha e Necessidade de Punição** (7). O território mais calado da clínica. Culpa inconsciente, reação terapêutica negativa, masoquismo moral, o paradoxo do superego severo (quanto mais virtuoso, mais castigado), culpa do sobrevivente, culpa herdada de gerações — e a distinção que muda o manejo: **culpa é sobre o que se fez, vergonha é sobre o que se é**.
+- **Trauma e Abuso** (7). Escrito com o máximo de cuidado e o mínimo de pressa. O trauma medido pelo desamparo e não pela gravidade do evento, os dois tempos do trauma, os efeitos duradouros do abuso na infância, o silêncio que adoece mais que o fato, dissociação, o laço que prende na violência doméstica — e uma entrada sobre o **cuidado de quem escuta** (trauma vicário, supervisão, limite de casos graves na agenda).
+- **Sonhos — a via régia** (8). A fundação de 1900 finalmente no sistema: conteúdo manifesto e latente, condensação, deslocamento, figurabilidade, elaboração secundária, restos diurnos, o **umbigo do sonho** e os pesadelos de repetição que levaram Freud a ir além do princípio do prazer.
+- **Atos Falhos e Psicopatologia da Vida Cotidiana** (6). O inconsciente do dia a dia: lapsos, esquecimentos motivados, atos falhos de ação, objetos perdidos como sacrifício simbólico, o chiste como licença para dizer o proibido.
+- **Transferência, Resistência e Manejo Clínico** (10). A técnica propriamente dita — associação livre, atenção flutuante, transferência positiva e negativa, contratransferência como bússola, as formas da resistência, quando interpretar (e quando calar), elaboração, setting e abstinência. Fecha com **limites do método e encaminhamento**: a psicanálise não substitui psiquiatria, medicação nem rede de proteção.
+
+**Dois botões mortos ressuscitados.** Os itens `"Isso eu não tinha pensado"` e `"Destino demoníaco"` tinham aspas duplas no nome, e o nome viaja dentro de `onclick="..."` — o atributo fechava ali e o botão nunca foi clicável (mesma família do bug de 01/07). Os nomes passaram a usar aspas tipográficas e o renderizador ganhou `psicArg()`, que escapa barra, aspa simples e aspa dupla. Agora nenhum nome futuro quebra o clique.
+
+**Conferido em bancada isolada** (sem abrir a Clínica ao vivo, para não puxar paciente do Supabase): o `renderPsicanalise` real, alimentado pelo `dados-clinicos.js` real, gera **110 botões e 18 cabeçalhos, com zero `onclick` malformado**. A busca atravessa as camadas — "culpa" devolve 16 itens em 7 categorias, mostrando a teia se formando entre Melancolia, Mal-Estar, Trauma e Manejo.
+
+**O que ficou de fora, e por quê.** Os **Módulos 3-12 do curso de Formação em Psicanálise Clínica** vivem em `G:\My Drive\AAPsicanálise Clínica` e o Google Drive **não estava montado** nesta máquina. A ampliação foi escrita a partir das obras de Freud que estão em `03_Biblioteca/Freud` (Obras Completas Imago vols. 1-23 + avulsos) somadas à formação clínica clássica. Quando o `G:` voltar, revisar e completar estas oito categorias com o texto do curso — o aviso está registrado no cabeçalho do bloco em `dados-clinicos.js`.
+
 ## OS — Numerologia em abas internas (OS v4.1, 28/07/2026)
 
 A aba tinha virado um rolo comprido: sete blocos empilhados, cada resultado novo empurrando o anterior para baixo. Agora o mapa se lê **uma coisa de cada vez**.
