@@ -2,6 +2,20 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## Clínica — A mesma foto seis vezes (v5.0, 29/07/2026)
+
+O `index.html` da Clínica carregava **a mesma fotografia seis vezes**. O logo do Montgomery — um JPEG de 1254×1254 — estava colado em base64 dentro do arquivo em seis lugares: o `apple-touch-icon`, o `favicon`, a `<img>` da barra lateral, dois ícones do manifest gerado em JavaScript e a constante `LOGO_PADRAO`. Cada cópia, 129KB de texto. Juntas, **772KB — quase metade do arquivo inteiro**, baixados toda vez que ele abria a Clínica no celular.
+
+**O conserto.** As seis cópias saíram. No lugar delas, uma referência de uma linha a `icon-512.jpg` — que já existia na raiz do repositório desde julho, esperando. O navegador baixa o arquivo **uma vez** e usa nos quatro lugares; nas visitas seguintes nem baixa, vem do cache. Base64 nunca entra em cache: ele é o próprio HTML.
+
+Dois dos seis eram pior que redundantes. Havia um bloco de JavaScript montando um manifest PWA em memória e pendurando no `<head>` — mas o `manifest.json` de verdade já estava linkado na linha 12, e o navegador só obedece ao primeiro. O bloco era código morto carregando 258KB de foto para nada. Foi removido; o `manifest.json` já apontava para `icon-512.jpg` desde sempre.
+
+**O resultado, medido:** `index.html` caiu de **1568KB para 777KB** — 50% mais leve. O que sobra de foto no arquivo: nada.
+
+Conferido em bancada isolada, com a Clínica servida de verdade: favicon e apple-touch-icon apontando para o arquivo, o manifest agora único e com os dois tamanhos certos, o logo da barra lateral renderizando em 512×512, e o botão *remover logo* das Configurações voltando ao padrão como antes. Console sem um erro. As três imagens vazias que aparecem na varredura (`fotoPv`, `cfgLogoImg`, `exImg`) são espaços reservados que já eram assim.
+
+Fica pendente da mesma senha o `psicanaliseTemas` (agora ~120KB depois da v4.9) sair para arquivo próprio, carregado só ao abrir a caixa — mas essa é a próxima vela, e a alavanca grande já foi puxada.
+
 ## Clínica — Psicanálise: os mestres depois de Freud (v4.9, 29/07/2026)
 
 No mesmo dia da v4.8, o Montgomery corrigiu o rumo: *"quero todos os profissionais sim. Freud, Lacan, Roudinesco, Melanie Klein etc"*. O módulo deixa de ser freudiano e passa a ser **o campo psicanalítico**. De 18 para **29 categorias**, de 110 para **192 conceitos**.
