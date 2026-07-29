@@ -1167,7 +1167,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
 <section class="sec" id="sec-numerologia">
   <div class="sec-head">
     <h1>Numerologia</h1>
-    <p>O nome e a data de nascimento reduzidos a números-chave pelo método pitagórico. Cálculo exato e determinístico — cada resultado mostra de onde veio. Agora com <b>Pináculos</b> — as quatro estações da vida e os três ciclos longos, com a estação de hoje marcada —, <b>Gematria</b> do nome em letras hebraicas, a <b>ponte com a roda do zodíaco</b> (o Sol calculado, as esferas e os caminhos da Árvore lado a lado), Desafios, dívidas e lições kármicas, ponte do Caminho de Vida com as Sefirot, o mapa guardado no perfil e o bloco <b>Gilgul</b> — a bagagem de outras vidas pelos nodos da Lua e pelos 22 Arcanos.</p>
+    <p>O nome e a data de nascimento reduzidos a números-chave pelo método pitagórico. Cálculo exato e determinístico — cada resultado mostra de onde veio. O mapa vem em <b>sete abas</b>, uma de cada vez: <b>O mapa</b> (os números-chave e a Sefirá do Caminho de Vida), <b>Desafios</b>, <b>Pináculos</b> (as quatro estações da vida, com a de hoje marcada), <b>Lições kármicas</b>, <b>Gematria</b> (o nome em letras hebraicas), <b>A ponte</b> (o Sol calculado e o encontro com a roda do zodíaco) e <b>Gilgul</b> (a bagagem de outras vidas pelos nodos da Lua e pelos 22 Arcanos).</p>
   </div>
   <div class="bloco">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8.5 8.5 6v12"/><path d="M14 8.2a2.6 2.6 0 1 1 4.3 1.9L14 18h5"/></svg>Calcular mapa numerológico</h2>
@@ -1688,8 +1688,9 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v4.0';
-const APP_VERSION_NOTA='os dois mapas se encontram: o Sol calculado por Meeus entra na Numerologia e a roda do zodíaco deixa de ser genérica — passa a mostrar alguém, com o Sol e o eixo dos nodos marcados nos graus exatos. Os números caem nas esferas da Árvore, os signos caem nos caminhos entre elas';
+const APP_VERSION='v4.1';
+const APP_VERSION_NOTA='a Numerologia deixa de ser um rolo comprido: o mapa se organiza em sete abas internas, uma de cada vez, e a aba aberta continua aberta quando se recalcula — nada mudou no cálculo, só o jeito de olhar';
+const APP_VERSION_NOTA_V40='os dois mapas se encontram: o Sol calculado por Meeus entra na Numerologia e a roda do zodíaco deixa de ser genérica — passa a mostrar alguém, com o Sol e o eixo dos nodos marcados nos graus exatos. Os números caem nas esferas da Árvore, os signos caem nos caminhos entre elas';
 const APP_VERSION_NOTA_V39='acende-se a Gematria: o nome escrito em letras hebraicas e somado pelos valores antigos, com a tabela de transliteração inteira à vista — dizendo que a gematria é exata no hebraico, mas que transliterar um nome em português é convenção moderna, não revelação';
 const APP_VERSION_NOTA_V38='acendem-se os Pináculos: as quatro estações da vida e os três ciclos longos, com as idades de virada saindo do Caminho de Vida — e a estação de agora marcada, para o mapa responder sobre o presente e não só sobre a origem';
 const APP_VERSION_NOTA_V37='nasce o Gilgul na Numerologia: a bagagem de outras vidas lida pelos nodos da Lua (astronomia exata, fórmula de Meeus) e pelo Arcano de nascimento — dizendo com todas as letras que ninguém conta quantas vidas foram, só o que ficou por corrigir';
@@ -2447,6 +2448,7 @@ function numPinaculosBloco(nasc,vida){
 }
 
 let _numMapaAtual=null;
+let _numAbaAtual='mapa';
 function calcularNumerologia(){
   const msg=document.getElementById('numMsg');
   const out=document.getElementById('numResultado');
@@ -2460,7 +2462,8 @@ function calcularNumerologia(){
   const cadExpr=numCadeia(numSoma(letras));
   const cadAlma=numCadeia(numSoma(vogais));
   const cadPers=numCadeia(numSoma(consoantes));
-  let cards=[],extra='',cadVida=null;
+  // O mapa cresceu: cada assunto vira uma aba interna em vez de mais um bloco na pilha.
+  let cards=[],cadVida=null,abaDesafios='',abaPinaculos='',abaLicoes='';
   if(nasc){
     const [Y,M,D]=nasc.split('-').map(Number);
     const rd=numCadeia(D),rm=numCadeia(M),ry=numCadeia(Y);
@@ -2477,14 +2480,14 @@ function calcularNumerologia(){
       '<div style="display:flex;align-items:baseline;gap:10px"><span style="font-size:1.7rem;font-weight:700;color:#1b3a5c;line-height:1">'+val+'</span>'+
       '<b style="font-size:0.82rem">'+rot+'</b></div>'+
       '<div style="font-size:0.7rem;color:var(--cinza);margin-top:4px">'+det+'</div></div>';
-    extra+='<div class="bloco"><h2 style="border:0;padding:0;margin:0 0 4px">Desafios</h2>'+
+    abaDesafios='<div class="bloco"><h2 style="border:0;padding:0;margin:0 0 4px">Desafios</h2>'+
       '<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 12px">As tensões a atravessar, obtidas pela subtração dos dígitos da data. O <b>0</b> é o desafio do vazio — nenhuma direção fixa, todas em aberto.</p>'+
       '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px">'+
       desCard('Primeira metade da vida',des1,'|mês '+rm1+' − dia '+rd1+'|')+
       desCard('Segunda metade da vida',des2,'|dia '+rd1+' − ano '+ry1+'|')+
       desCard('Desafio principal',desP,'|desafio 1 − desafio 2|')+
       '</div></div>';
-    extra+=numPinaculosBloco(nasc,cadVida.at(-1));
+    abaPinaculos=numPinaculosBloco(nasc,cadVida.at(-1));
   }
   cards.push(numCard('Expressão / Destino',cadExpr.at(-1),'todas as letras do nome, soma '+cadExpr[0]+'  =  '+cadExpr.join(' → ')));
   cards.push(numCard('Motivação / Alma',cadAlma.at(-1),'vogais ('+(vogais.join('')||'—')+'), soma '+cadAlma[0]+'  =  '+cadAlma.join(' → ')));
@@ -2498,28 +2501,28 @@ function calcularNumerologia(){
   const presentes=new Set([...letras].map(numValor));
   const licoes=[1,2,3,4,5,6,7,8,9].filter(n=>!presentes.has(n));
   if(dividas.length||licoes.length){
-    extra+='<div class="bloco"><h2 style="border:0;padding:0;margin:0 0 4px">Lições kármicas</h2>';
+    abaLicoes='<div class="bloco"><h2 style="border:0;padding:0;margin:0 0 4px">Lições kármicas</h2>';
     if(dividas.length){
-      extra+='<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 8px">Dívidas kármicas — surgem quando um número-chave passa por 13, 14, 16 ou 19 antes de se reduzir:</p>'+
+      abaLicoes+='<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 8px">Dívidas kármicas — surgem quando um número-chave passa por 13, 14, 16 ou 19 antes de se reduzir:</p>'+
         '<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px">'+
         dividas.map(d=>'<div style="border-left:3px solid #C9A84C;padding:6px 12px"><b style="font-size:0.85rem">'+d.n+' <span style="font-weight:400;color:var(--cinza)">(via '+esc(d.rot)+')</span></b><br><span style="font-size:0.8rem;line-height:1.45">'+esc(d.txt)+'</span></div>').join('')+
         '</div>';
     }else{
-      extra+='<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 12px">Nenhuma dívida kármica (13, 14, 16, 19) nos números-chave.</p>';
+      abaLicoes+='<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 12px">Nenhuma dívida kármica (13, 14, 16, 19) nos números-chave.</p>';
     }
     if(licoes.length){
-      extra+='<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 6px">Lições — números de 1 a 9 que <b>não aparecem</b> no nome; qualidades a desenvolver nesta vida:</p>'+
+      abaLicoes+='<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 6px">Lições — números de 1 a 9 que <b>não aparecem</b> no nome; qualidades a desenvolver nesta vida:</p>'+
         '<div style="display:flex;flex-wrap:wrap;gap:8px">'+
         licoes.map(n=>'<div style="border:1px solid rgba(27,58,92,0.14);border-radius:8px;padding:6px 10px;font-size:0.78rem"><b>'+n+'</b> · '+esc((NUM_SIGNIFICADOS[n]||{}).t||'')+'</div>').join('')+
         '</div>';
     }else{
-      extra+='<p style="font-size:0.78rem;color:var(--cinza);margin:0">Todos os números de 1 a 9 estão presentes no nome — nenhuma lição kármica ausente.</p>';
+      abaLicoes+='<p style="font-size:0.78rem;color:var(--cinza);margin:0">Todos os números de 1 a 9 estão presentes no nome — nenhuma lição kármica ausente.</p>';
     }
-    extra+='</div>';
+    abaLicoes+='</div>';
   }
-  extra+=numGematriaBloco(nome);
-  extra+=numPonteRodaBloco(nasc,cadVida?cadVida.at(-1):null,nome);
-  extra+=numGilgulBloco(nasc);
+  const abaGematria=numGematriaBloco(nome);
+  const abaPonte=numPonteRodaBloco(nasc,cadVida?cadVida.at(-1):null,nome);
+  const abaGilgul=numGilgulBloco(nasc);
   const _g=nasc?(function(){const [Y,M,D]=nasc.split('-').map(Number);
     const nN=nodoLunarNorte(Y,M,D);
     return {nodoNorte:_signoDaLongitude(nN).n,nodoSul:_signoDaLongitude((nN+180)%360).n,arcano:arcanoDeNascimento(Y,M,D).num};
@@ -2529,12 +2532,40 @@ function calcularNumerologia(){
     gematria:_gem.length?{total:_gem.reduce((s,p)=>s+GEM_VAL[p.heb],0),hebraico:_gem.map(p=>p.heb).join('')}:null};
   const perfilId=document.getElementById('numPerfil').value;
   const btnGuardar=perfilId?'<div style="margin-top:14px"><button class="btn btn-p btn-mini" onclick="numGuardarNoPerfil()">Guardar mapa no perfil</button> <span id="numGuardarMsg" style="font-size:0.75rem;color:var(--verde,#2e7d5b);margin-left:8px"></span></div>':'<p style="font-size:0.72rem;color:var(--cinza);margin-top:12px">Escolha um perfil da família acima para poder guardar este mapa nele.</p>';
-  out.innerHTML='<div class="bloco"><h2 style="border:0;padding:0;margin:0 0 4px">Mapa de '+esc(nome)+'</h2>'+
-    (nasc?'':'<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 12px">Adicione a data de nascimento para ver Caminho de Vida, Dia Natal, Ano Pessoal e Desafios.</p>')+
+  const abaMapa='<div class="bloco"><h2 style="border:0;padding:0;margin:0 0 4px">Mapa de '+esc(nome)+'</h2>'+
+    (nasc?'':'<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 12px">Adicione a data de nascimento para ver Caminho de Vida, Dia Natal, Ano Pessoal e as demais abas.</p>')+
     '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:12px">'+cards.join('')+'</div>'+
     (cadVida?'<div style="margin-top:14px">'+numSefiraCard(cadVida.at(-1))+'</div>':'')+
     '<p style="font-size:0.72rem;color:var(--cinza);margin-top:16px;line-height:1.5">Método pitagórico. Cada letra vale de 1 a 9; números mestres (11, 22, 33) não se reduzem. A numerologia é uma linguagem simbólica de autoconhecimento — um espelho para reflexão, não uma previsão determinística da vida.</p>'+
-    btnGuardar+'</div>'+extra;
+    btnGuardar+'</div>';
+  const abas=[
+    {id:'mapa',rot:'O mapa',dica:'Os números-chave do nome e da data',html:abaMapa},
+    {id:'desafios',rot:'Desafios',dica:'As tensões a atravessar',html:abaDesafios},
+    {id:'pinaculos',rot:'Pináculos',dica:'As quatro estações da vida',html:abaPinaculos},
+    {id:'licoes',rot:'Lições kármicas',dica:'Dívidas e números ausentes',html:abaLicoes},
+    {id:'gematria',rot:'Gematria',dica:'O nome em letras hebraicas',html:abaGematria},
+    {id:'ponte',rot:'A ponte',dica:'Os números e a roda do zodíaco',html:abaPonte},
+    {id:'gilgul',rot:'Gilgul',dica:'A bagagem de outras vidas',html:abaGilgul}
+  ].filter(a=>a.html);
+  // A aba escolhida antes é preservada; se ela não existir neste mapa, volta ao começo.
+  if(!abas.some(a=>a.id===_numAbaAtual))_numAbaAtual='mapa';
+  out.innerHTML='<div class="num-abas" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:var(--f3)">'+
+      abas.map(a=>'<button class="btn num-tab" data-aba="'+a.id+'" title="'+esc(a.dica)+'" onclick="numAba(\''+a.id+'\')" style="padding:6px 14px;font-size:0.78rem">'+esc(a.rot)+'</button>').join('')+
+    '</div>'+
+    abas.map(a=>'<div class="num-pane" data-aba="'+a.id+'">'+a.html+'</div>').join('');
+  numAba(_numAbaAtual);
+}
+// Troca a aba interna da Numerologia (só mostra/esconde — nada é recalculado).
+function numAba(id){
+  _numAbaAtual=id;
+  document.querySelectorAll('#numResultado .num-pane').forEach(p=>{p.style.display=(p.dataset.aba===id)?'':'none';});
+  document.querySelectorAll('#numResultado .num-tab').forEach(b=>{
+    const on=b.dataset.aba===id;
+    b.style.background=on?'#1b3a5c':'transparent';
+    b.style.color=on?'#fff':'var(--azul)';
+    b.style.borderColor=on?'#1b3a5c':'rgba(27,58,92,0.22)';
+    b.style.fontWeight=on?'600':'400';
+  });
 }
 function numGuardarNoPerfil(){
   const id=document.getElementById('numPerfil').value;

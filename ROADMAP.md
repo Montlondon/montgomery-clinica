@@ -2,6 +2,15 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## OS — Numerologia em abas internas (OS v4.1, 28/07/2026)
+
+A aba tinha virado um rolo comprido: sete blocos empilhados, cada resultado novo empurrando o anterior para baixo. Agora o mapa se lê **uma coisa de cada vez**.
+
+- Sete abas internas: **O mapa · Desafios · Pináculos · Lições kármicas · Gematria · A ponte · Gilgul**.
+- **Só aparecem as abas que existem** naquele mapa — sem data de nascimento, restam três (O mapa, Lições kármicas, Gematria).
+- **A aba aberta continua aberta** ao recalcular; se ela sumir (a data foi apagada, por exemplo), volta para O mapa sozinha.
+- Trocar de aba **não recalcula nada** — só mostra e esconde. O cálculo é o mesmo de antes, nenhum número mudou.
+
 ## OS — A ponte: os números e a roda (OS v4.0, 28/07/2026)
 
 A Numerologia e a Astrologia viviam em abas vizinhas sem se falar. Agora se cruzam — e o encaixe não é invenção: é a arquitetura da própria Árvore da Vida. **Dez esferas e vinte e dois caminhos.** A numerologia cai nas **esferas** (o Caminho de Vida na sua Sefirá); o zodíaco cai nos **caminhos** entre elas (cada signo nasce de uma letra do Sefer Yetzirá, e cada letra é um caminho). Um diz de que matéria a pessoa é feita; o outro, por onde ela anda.
