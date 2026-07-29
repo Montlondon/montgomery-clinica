@@ -20,7 +20,7 @@ Agora a Clínica pergunta de volta (`pontePull`), ao abrir a aba Agenda e pelo b
 - Do evento ela aceita só **dia e hora** — o que o Google sabe melhor. Nome, valor e notas continuam mandando daqui.
 - **Apagar não é ouvido, de propósito.** Sumiu o evento no Google, a sessão fica de pé aqui. Perder atendimento por um toque errado no celular seria caro demais; apagar segue sendo decisão tomada dentro da Clínica.
 
-**Falta ainda:** escutar sem precisar abrir a aba (sincronismo automático de fundo, via `syncToken`).
+**Sincronismo de fundo — DESCARTADO por decisão do Montgomery (28/07/2026).** A ideia era a Clínica escutar o Google sozinha, o tempo todo, sem precisar abrir a aba. Ele avaliou e concluiu: *"um refresh resolve"*. E resolve mesmo — a aba Agenda já pergunta ao Google toda vez que abre, e ninguém remarca no celular esperando a tela do computador adivinhar. Não vale a complexidade permanente nem o tráfego a mais (a Clínica já apanhou de cota uma vez). Só reabrir se a rotina mudar.
 
 ## Agenda Cheia — ACESA (v4.5, 28/07/2026)
 
