@@ -1167,7 +1167,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
 <section class="sec" id="sec-numerologia">
   <div class="sec-head">
     <h1>Numerologia</h1>
-    <p>O nome e a data de nascimento reduzidos a números-chave pelo método pitagórico. Cálculo exato e determinístico — cada resultado mostra de onde veio. Agora com Desafios, dívidas e lições kármicas, ponte do Caminho de Vida com as Sefirot, e o mapa guardado no perfil.</p>
+    <p>O nome e a data de nascimento reduzidos a números-chave pelo método pitagórico. Cálculo exato e determinístico — cada resultado mostra de onde veio. Agora com Desafios, dívidas e lições kármicas, ponte do Caminho de Vida com as Sefirot, o mapa guardado no perfil e o bloco <b>Gilgul</b> — a bagagem de outras vidas pelos nodos da Lua e pelos 22 Arcanos.</p>
   </div>
   <div class="bloco">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8.5 8.5 6v12"/><path d="M14 8.2a2.6 2.6 0 1 1 4.3 1.9L14 18h5"/></svg>Calcular mapa numerológico</h2>
@@ -1679,8 +1679,8 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v3.6';
-const APP_VERSION_NOTA='a trilha do Montgomery Code virou painel: os sete cartões agora são portas clicáveis que levam direto à camada (a 1 abre a aula na Escola), com aviso gentil nas ainda apagadas';
+const APP_VERSION='v3.7';
+const APP_VERSION_NOTA='nasce o Gilgul na Numerologia: a bagagem de outras vidas lida pelos nodos da Lua (astronomia exata, fórmula de Meeus) e pelo Arcano de nascimento — dizendo com todas as letras que ninguém conta quantas vidas foram, só o que ficou por corrigir';
 function carimbarVersao(){
   const linha='Montgomery OS · Fase 2 — Corpo · '+APP_VERSION+' ('+APP_VERSION_NOTA+')';
   const rod=document.getElementById('appVersion');if(rod)rod.textContent=linha;
@@ -2122,6 +2122,103 @@ function numSefiraCard(num){
     '<button class="btn btn-sec btn-mini" onclick="'+irPara+'">Abrir a esfera no Mapa Energético</button>'+
   '</div>';
 }
+// ===== GILGUL — a bagagem de outras vidas =====
+// Honestidade primeiro: NÃO existe cálculo que conte quantas vidas alguém viveu.
+// Nenhuma escola, cabalística ou não, verifica isso. O que existe são métodos
+// tradicionais que descrevem O QUE a alma teria trazido por corrigir — e é isso,
+// e só isso, que este bloco mostra. Duas vias, ambas exatas no cálculo:
+//
+//  1. NODO SUL da Lua — a via propriamente cabalística (gilgul, a transmigração
+//     das almas; o Tikun do Berg mora aqui). É astronomia de verdade: o nodo é o
+//     ponto onde a órbita da Lua cruza a eclíptica, e ele retrograda uma volta a
+//     cada ~18,6 anos. Usamos o nodo MÉDIO pela fórmula clássica (Meeus) — sem
+//     tabela, sem internet, exato dentro de ~1 grau. O nodo sul é o oposto do
+//     norte: a bagagem; o norte é a direção a caminhar.
+//  2. ARCANO DE NASCIMENTO — a via dos 22 Arcanos/letras hebraicas: a data
+//     inteira somada e reduzida até caber em 1–22. É a tabela que as escolas
+//     brasileiras de "cabala numerológica" costumam usar.
+//
+// Se a professora do Montgomery deu um NÚMERO de encarnações, veio de uma
+// tabela como a 2. Se falou do que ele veio corrigir, veio da 1.
+
+// Dia juliano ao meio-dia UTC — o nodo anda 0,053° por dia, então a hora do
+// nascimento não muda o resultado em nada que se perceba.
+function _diaJuliano(Y,M,D){return Date.UTC(Y,M-1,D,12)/86400000+2440587.5;}
+
+// Longitude do nodo lunar médio ascendente (Meeus, Astronomical Algorithms).
+function nodoLunarNorte(Y,M,D){
+  const T=(_diaJuliano(Y,M,D)-2451545)/36525;
+  let O=125.04452-1934.136261*T+0.0020708*T*T+(T*T*T)/450000;
+  O=((O%360)+360)%360;
+  return O;
+}
+function _signoDaLongitude(lon){return SIGNOS[Math.floor((((lon%360)+360)%360)/30)];}
+function _grauNoSigno(lon){const x=(((lon%360)+360)%360)%30;return x.toFixed(1).replace('.',',');}
+
+// Os 22 Arcanos com a letra hebraica correspondente (atribuição da Golden Dawn,
+// a mesma que as escolas modernas de cabala numerológica adotam).
+const ARCANOS=[
+  null,
+  {n:'O Mago',l:'א',ln:'Aleph',t:'A vontade que inicia. Veio para aprender a usar a força que já tem.'},
+  {n:'A Sacerdotisa',l:'ב',ln:'Bet',t:'O silêncio que sabe. Veio para confiar no que sente antes de provar.'},
+  {n:'A Imperatriz',l:'ג',ln:'Gimel',t:'A fartura que gera. Veio para nutrir sem sufocar.'},
+  {n:'O Imperador',l:'ד',ln:'Dalet',t:'A ordem que sustenta. Veio para mandar sem endurecer.'},
+  {n:'O Hierofante',l:'ה',ln:'Heh',t:'A ponte com o alto. Veio para ensinar sem virar dogma.'},
+  {n:'Os Enamorados',l:'ו',ln:'Vav',t:'A escolha que une. Veio para escolher, e não ficar entre dois.'},
+  {n:'O Carro',l:'ז',ln:'Zayin',t:'A direção sob rédeas. Veio para vencer sem atropelar.'},
+  {n:'A Força',l:'ח',ln:'Cheth',t:'A mão mansa sobre o leão. Veio para domar por dentro, não por fora.'},
+  {n:'O Eremita',l:'ט',ln:'Tet',t:'A lâmpada na noite. Veio para se recolher sem se isolar.'},
+  {n:'A Roda',l:'י',ln:'Yod',t:'O giro do destino. Veio para aceitar o movimento sem se agarrar à borda.'},
+  {n:'A Justiça',l:'כ',ln:'Kaph',t:'A balança exata. Veio para medir sem condenar.'},
+  {n:'O Enforcado',l:'ל',ln:'Lamed',t:'A entrega de cabeça para baixo. Veio para largar o controle.'},
+  {n:'A Morte',l:'מ',ln:'Mem',t:'A porta, não o fim. Veio para deixar morrer o que já acabou.'},
+  {n:'A Temperança',l:'נ',ln:'Nun',t:'A mistura na medida. Veio para achar o meio-termo dos excessos.'},
+  {n:'O Diabo',l:'ס',ln:'Samekh',t:'A corrente frouxa no pescoço. Veio para ver de que apego é escravo.'},
+  {n:'A Torre',l:'ע',ln:'Ayin',t:'O que cai porque foi alto demais. Veio para reconstruir na humildade.'},
+  {n:'A Estrela',l:'פ',ln:'Peh',t:'A água derramada na terra. Veio para esperançar de perto.'},
+  {n:'A Lua',l:'צ',ln:'Tzaddi',t:'O caminho entre as sombras. Veio para atravessar o medo antigo.'},
+  {n:'O Sol',l:'ק',ln:'Qoph',t:'A luz que não pede aplauso. Veio para brilhar sem ofuscar.'},
+  {n:'O Julgamento',l:'ר',ln:'Resh',t:'O chamado que acorda. Veio para responder ao que chama.'},
+  {n:'O Mundo',l:'ש',ln:'Shin',t:'O círculo fechado. Veio para completar o que ficou pela metade.'},
+  {n:'O Louco',l:'ת',ln:'Tav',t:'O passo no abismo. Veio para recomeçar de zero, com fé e sem bagagem.'}
+];
+function arcanoDeNascimento(Y,M,D){
+  let n=String(D)+String(M)+String(Y);
+  let soma=[...n].reduce((a,d)=>a+(+d),0);
+  const cadeia=[soma];
+  while(soma>22){soma=[...String(soma)].reduce((a,d)=>a+(+d),0);cadeia.push(soma);}
+  if(soma===0)soma=22;
+  return {num:soma,cadeia};
+}
+
+function numGilgulBloco(nasc){
+  if(!nasc)return '';
+  const [Y,M,D]=nasc.split('-').map(Number);
+  const norte=nodoLunarNorte(Y,M,D);
+  const sul=(norte+180)%360;
+  const sN=_signoDaLongitude(norte),sS=_signoDaLongitude(sul);
+  const arc=arcanoDeNascimento(Y,M,D),a=ARCANOS[arc.num];
+  const cx=(cor,rot,corpo)=>'<div style="border:1px solid '+cor+'55;border-radius:12px;padding:16px 18px;background:'+cor+'0A">'+
+    '<div style="font-size:0.66rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--cinza);margin-bottom:6px">'+rot+'</div>'+corpo+'</div>';
+  return '<div class="bloco"><h2 style="border:0;padding:0;margin:0 0 4px">Gilgul — a bagagem de outras vidas</h2>'+
+    '<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 14px;line-height:1.5"><b>Antes de tudo:</b> nenhum método conta <i>quantas</i> vidas alguém viveu — isso não se calcula, em escola nenhuma. O que a tradição calcula é <b>o que ficou por corrigir</b>. É o que está aqui.</p>'+
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px">'+
+    cx('#7A5C3A','Nodo Sul — o que a alma trouxe pronto',
+      '<b style="font-size:1.05rem;color:#1b3a5c">'+sS.g+' '+esc(sS.n)+' <span style="font-weight:400;font-size:0.8rem;color:var(--cinza)">'+_grauNoSigno(sul)+'°</span></b>'+
+      '<p style="margin:8px 0 0;font-size:0.82rem;line-height:1.5">A zona de conforto herdada — o que já se sabe fazer bem demais, e por isso vira muleta: <i>'+esc(sS.sombra)+'</i></p>')+
+    cx('#2F6DA8','Nodo Norte — o Tikun desta vida',
+      '<b style="font-size:1.05rem;color:#1b3a5c">'+sN.g+' '+esc(sN.n)+' <span style="font-weight:400;font-size:0.8rem;color:var(--cinza)">'+_grauNoSigno(norte)+'°</span></b>'+
+      '<p style="margin:8px 0 0;font-size:0.82rem;line-height:1.5">A direção desconfortável que corrige: <i>'+esc(sN.tikun)+'</i></p>'+
+      '<button class="btn btn-sec btn-mini" style="margin-top:10px" onclick="go(\'astrologia\');setTimeout(function(){selSigno&&selSigno(\''+sN.id+'\')},80)">Abrir '+esc(sN.n)+' na Astrologia</button>')+
+    cx('#C9A84C','Arcano de nascimento — a via dos 22',
+      '<b style="font-size:1.05rem;color:#1b3a5c">'+arc.num+' · '+esc(a.n)+' <span style="font-size:1.3rem;margin-left:4px">'+a.l+'</span> <span style="font-weight:400;font-size:0.8rem;color:var(--cinza)">'+a.ln+'</span></b>'+
+      '<p style="margin:8px 0 6px;font-size:0.82rem;line-height:1.5">'+esc(a.t)+'</p>'+
+      '<div style="font-size:0.7rem;color:var(--cinza)">'+D+'+'+M+'+'+Y+' dígito a dígito = '+arc.cadeia.join(' → ')+'</div>')+
+    '</div>'+
+    '<p style="font-size:0.72rem;color:var(--cinza);margin-top:16px;line-height:1.5"><b>De onde vem cada coisa.</b> Os nodos são <b>astronomia</b>: o ponto onde a órbita da Lua cruza a eclíptica, calculado aqui pela fórmula do nodo médio (Meeus), exato dentro de cerca de um grau — dá para conferir em qualquer efeméride. Já a <b>leitura</b> dos nodos como memória de outras vidas é doutrina do <i>gilgul</i> (transmigração das almas), na formulação do Kabbalah Centre — mesma fonte do Tikun na aba Astrologia. O Arcano de nascimento é numerologia moderna com as letras hebraicas atribuídas pela Golden Dawn, não fonte antiga. Linguagem simbólica para se olhar no espelho — não previsão, não diagnóstico.</p>'+
+    '</div>';
+}
+
 let _numMapaAtual=null;
 function calcularNumerologia(){
   const msg=document.getElementById('numMsg');
@@ -2192,7 +2289,12 @@ function calcularNumerologia(){
     }
     extra+='</div>';
   }
-  _numMapaAtual={nome,nasc,vida:cadVida?cadVida.at(-1):null,expr:cadExpr.at(-1),alma:cadAlma.at(-1),pers:cadPers.at(-1)};
+  extra+=numGilgulBloco(nasc);
+  const _g=nasc?(function(){const [Y,M,D]=nasc.split('-').map(Number);
+    const nN=nodoLunarNorte(Y,M,D);
+    return {nodoNorte:_signoDaLongitude(nN).n,nodoSul:_signoDaLongitude((nN+180)%360).n,arcano:arcanoDeNascimento(Y,M,D).num};
+  })():null;
+  _numMapaAtual={nome,nasc,vida:cadVida?cadVida.at(-1):null,expr:cadExpr.at(-1),alma:cadAlma.at(-1),pers:cadPers.at(-1),gilgul:_g};
   const perfilId=document.getElementById('numPerfil').value;
   const btnGuardar=perfilId?'<div style="margin-top:14px"><button class="btn btn-p btn-mini" onclick="numGuardarNoPerfil()">Guardar mapa no perfil</button> <span id="numGuardarMsg" style="font-size:0.75rem;color:var(--verde,#2e7d5b);margin-left:8px"></span></div>':'<p style="font-size:0.72rem;color:var(--cinza);margin-top:12px">Escolha um perfil da família acima para poder guardar este mapa nele.</p>';
   out.innerHTML='<div class="bloco"><h2 style="border:0;padding:0;margin:0 0 4px">Mapa de '+esc(nome)+'</h2>'+

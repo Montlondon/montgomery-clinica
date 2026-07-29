@@ -2,6 +2,19 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## OS — Gilgul: a bagagem de outras vidas (OS v3.7, 28/07/2026)
+
+Nasceu de uma pergunta do Montgomery: uma professora fez para ele, anos atrás, um "cálculo de reencarnações" usando Cabala, e ele nunca soube como era feito.
+
+**A resposta honesta veio primeiro:** não existe cálculo que conte *quantas* vidas alguém viveu — em escola nenhuma. O que a tradição calcula é **o que ficou por corrigir**. Isso está escrito no topo do próprio bloco, em negrito, para ninguém confundir.
+
+O bloco novo na Numerologia traz duas vias, ambas exatas no cálculo:
+
+1. **Nodos da Lua** — a via propriamente cabalística (*gilgul*, transmigração das almas; é onde mora o Tikun do Berg). O **nodo sul** é a bagagem, a zona de conforto herdada que vira muleta; o **nodo norte** é a correção desta vida. Calculado pela fórmula do nodo médio (Meeus), sem tabela e sem internet — conferido contra a referência em J2000: **125,0445°**, exato. Liga direto ao signo na aba Astrologia.
+2. **Arcano de nascimento** — a data inteira somada dígito a dígito e reduzida até caber em 1–22, com a letra hebraica correspondente. É a tabela que as escolas brasileiras de "cabala numerológica" usam; provavelmente foi daí que saiu o número que a professora deu a ele.
+
+Cada fonte está declarada no rodapé do bloco: os nodos são astronomia, a **leitura** deles como memória de outras vidas é doutrina do Kabbalah Centre, e a atribuição letra→arcano é da Golden Dawn, não fonte antiga.
+
 ## Agenda Cheia: fim da sessão em dobro (v4.7, 28/07/2026)
 
 O Montgomery viu na tela: João Calha e Wervely apareciam **duas vezes** no mesmo dia — em laranja como sessão e em cinza como compromisso do Google.
