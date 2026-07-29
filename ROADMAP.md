@@ -2,6 +2,22 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## Concluído — MMObras v9.26: a nuvem para de falhar calada (29/07/2026)
+
+O Montgomery notou, por conta própria, que os valores no computador eram diferentes do celular — 16.490,76 contra 15.200,76. Foi uma observação de ouro: não era erro de conta, era a nuvem morta há dois dias.
+
+**O que o banco contou.** A linha estava congelada em 27/07 às 10h07. O log da API mostrou `POST 401` nos dois aparelhos, e o corpo do erro deu o nome exato: `42501 — new row violates row-level security policy`. A entrada com o Google havia vencido nos dois; a regra do banco exige `auth.uid() = user_id`; a gravação como anônimo foi recusada. E o app escrevia isso num `console.warn` escondido e seguia como se nada fosse. **Um backup que falha em silêncio é pior que não ter backup, porque a pessoa confia nele.**
+
+**O segundo achado, que ninguém procurava.** O log mostrava um `GET` na linha inteira **a cada 60 segundos**, de cada aparelho aberto — a ronda `cloudCheck`, baixando 5 MB com foto e tudo só para comparar um horário. Um aparelho aberto uma hora consumia centenas de MB de cota sem nenhuma novidade. Isso explica o estouro de egress de julho.
+
+**Feito:**
+- Faixa vermelha fixa no topo quando a nuvem não recebe, com **Entrar de novo** e **Exportar**. Aparece também no caminho onde a sessão vencida derrubava o app para o modo local — que era justamente onde ele ficava calado.
+- `cloudPush` e `enviarNuvem` reconhecem a falta de sessão (42501/401/JWT) e guardam a hora do último envio que a nuvem **realmente** aceitou.
+- A ronda de 60s e o `cloudPull` passam a perguntar **só a hora** (`select=_ts:data->_ts`, 2 bytes conferidos por curl) e baixam o backup inteiro apenas quando a hora prova que vale. O caminho mais comum — este aparelho é o mais recente — passou a custar 2 bytes em vez de 5 MB.
+
+**Testado ao vivo:** faixa na tela com os dois botões; o reconhecedor aceita 42501 e ignora erro comum; aparelho mais novo envia sem baixar nada; nuvem mais nova baixa uma vez só.
+
+**Lição que fica:** toda ponte com a nuvem tem que dizer quando não passa. E nenhuma ronda de fundo pode baixar o dado inteiro para conferir uma data.
 ## Concluído — MMObras v9.24: o `config` de 3,6 MB emagrece sozinho (29/07/2026)
 
 Senha *"Emagrecer o config"* cumprida. Medido no banco antes de mexer: a linha do Montgomery em `mmobras_backup` tinha **5.055 kB**, e o culpado era um só — `config.foto` com **3.658 kB**, três quartos de tudo. O resto é miudeza: `recibos` 969 kB, `perfil` 219 kB.
