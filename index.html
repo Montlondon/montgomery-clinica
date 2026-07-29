@@ -945,6 +945,7 @@ window.addEventListener('DOMContentLoaded',()=>{
         <button class="btn btn-sec btn-sm" onclick="navSem(1)">▶</button>
       </div>
       <div style="display:flex;align-items:center;gap:8px">
+        <button class="btn btn-sec btn-sm" id="btnPuxarGoogle" onclick="puxarDoGoogle()" title="Trazer para a Clínica as sessões que você remarcou dentro do Google"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 0 0-14-4.5L4 9"/><path d="M4 5v4h4"/><path d="M4 13a8 8 0 0 0 14 4.5L20 15"/><path d="M20 19v-4h-4"/></svg></span>Puxar do Google</button>
         <button class="btn btn-sec btn-sm" id="btnAgGoogle" onclick="alternarAgendaCheia()" title="Mostrar também os compromissos do Google, só leitura"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span>Agenda cheia</button>
         <button class="btn btn-sec btn-sm" onclick="irHoje()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg></span>Hoje</button>
       </div>
@@ -1664,7 +1665,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v4.5 · 28/07';
+const APP_VER='v4.6 · 28/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -3766,6 +3767,77 @@ async function ponteCancelar(s){
   }
 }
 
+// ===== O SENTIDO DE VOLTA: mexeu no Google, muda na Clínica =====
+// Até aqui a ponte era de mão única — a Clínica escrevia no Google e pronto. Se
+// o Montgomery arrastasse a sessão no celular, dentro do Google, a Clínica não
+// ficava sabendo e as duas verdades se separavam.
+//
+// Agora ela pergunta de volta. Mas só sobre o que é DELA: o Google só é ouvido
+// nos eventos que trazem a etiqueta clinicaId (ou o carimbo [clinica:ID]) e que
+// batem com uma sessão existente. Compromisso pessoal nunca vira sessão, e
+// evento sem dono nunca cria paciente nenhum. Do evento a Clínica aceita só o
+// que ele sabe melhor: o dia e a hora.
+//
+// Apagar não é ouvido de propósito: se um evento sumiu do Google, a sessão fica
+// de pé aqui. Perder atendimento por um toque errado no celular seria caro
+// demais — apagar continua sendo decisão tomada dentro da Clínica.
+function _idDoCarimbo(ev){
+  const priv=(ev.extendedProperties&&ev.extendedProperties.private)||{};
+  if(priv.clinicaId)return String(priv.clinicaId);
+  const m=/\[clinica:(\d+)\]/.exec(ev.description||'');
+  return m?m[1]:null;
+}
+
+async function pontePull(silencioso=true){
+  if(!ponteAtiva())return 0;
+  const ag=agendaEscolhida();
+  if(!ag)return 0;
+  const hoje=new Date();
+  const de=new Date(hoje.getFullYear(),hoje.getMonth(),hoje.getDate()-60);
+  const ate=new Date(hoje.getFullYear(),hoje.getMonth(),hoje.getDate()+180);
+  const r=await gcalReq('GET',`/calendars/${encodeURIComponent(ag)}/events`+
+    `?singleEvents=true&orderBy=startTime&maxResults=250&showDeleted=false`+
+    `&timeMin=${encodeURIComponent(de.toISOString())}&timeMax=${encodeURIComponent(ate.toISOString())}`,null,silencioso);
+  if(!r)return 0;
+  const ss=gD('sessoes');
+  let mudou=0;
+  for(const ev of (r.items||[])){
+    if(ev.status==='cancelled')continue;
+    const id=_idDoCarimbo(ev);
+    if(!id)continue;                                   // sem etiqueta: não é assunto da Clínica
+    const idx=ss.findIndex(s=>String(s.id)===String(id));
+    if(idx<0)continue;                                 // etiqueta órfã: nunca cria sessão nova
+    const ini=ev.start&&ev.start.dateTime;
+    if(!ini)continue;                                  // virou "dia todo" no Google: sem hora, não mexe
+    const d=new Date(ini);
+    const data=dLocal(d);
+    const horario=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+    const s=ss[idx];
+    const precisa=(s.data!==data)||(s.horario!==horario)||(s.gcalId!==ev.id);
+    if(!precisa)continue;
+    ss[idx]={...s,data,horario,gcalId:ev.id};
+    _cache['sessoes']=ss;
+    await dbGravar('sessoes',s.id,ss[idx]);
+    if(s.data!==data||s.horario!==horario)mudou++;
+  }
+  if(mudou){
+    renderSemana();renderAg();atuFin();atuDash();
+    toast(mudou===1?'1 sessão veio remarcada do Google.':mudou+' sessões vieram remarcadas do Google.',null,"ok");
+  }
+  return mudou;
+}
+
+// Botão da tela da Agenda: puxar agora, na mão, quando ele quiser conferir.
+async function puxarDoGoogle(){
+  if(!ponteAtiva()){toast('Ligue a ponte com o Google primeiro.','#EF6C00',"warn");return;}
+  const b=document.getElementById('btnPuxarGoogle');
+  if(b)b.disabled=true;
+  try{
+    const n=await pontePull(false);
+    if(!n)toast('Tudo igual dos dois lados.',null,"ok");
+  }finally{ if(b)b.disabled=false; }
+}
+
 // Liga/desliga a ponte pela tela de Configurações.
 async function alternarPonte(){
   if(ponteAtiva()){
@@ -3885,7 +3957,13 @@ function renderPonteBotao(){
 }
 
 // ===== AGENDA =====
-function initAgenda(){semOff_=0;renderSemana();renderAg();const h=new Date();document.getElementById('agAno').value=h.getFullYear();}
+function initAgenda(){
+  semOff_=0;renderSemana();renderAg();
+  const h=new Date();document.getElementById('agAno').value=h.getFullYear();
+  // Ao abrir a Agenda, pergunta ao Google se algo foi remarcado por lá. Silenciosa:
+  // se a ponte estiver desligada ou o Google não responder, a tela segue igual.
+  pontePull(true);
+}
 function navSem(d){semOff_+=d;renderSemana();}
 function irHoje(){semOff_=0;renderSemana();}
 function renderSemana(){

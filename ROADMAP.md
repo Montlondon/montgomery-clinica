@@ -2,6 +2,18 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## Ponte de mão dupla — o sentido de volta (v4.6, 28/07/2026)
+
+Até aqui a ponte era de mão única: a Clínica escrevia no Google e não escutava. Se o Montgomery arrastasse a sessão no celular, dentro do Google, as duas verdades se separavam.
+
+Agora a Clínica pergunta de volta (`pontePull`), ao abrir a aba Agenda e pelo botão **"Puxar do Google"**:
+
+- Só é ouvido o que é **dela**: evento com etiqueta `clinicaId` ou carimbo `[clinica:ID]` que bate com uma sessão existente. Compromisso pessoal nunca vira sessão; etiqueta órfã nunca cria paciente.
+- Do evento ela aceita só **dia e hora** — o que o Google sabe melhor. Nome, valor e notas continuam mandando daqui.
+- **Apagar não é ouvido, de propósito.** Sumiu o evento no Google, a sessão fica de pé aqui. Perder atendimento por um toque errado no celular seria caro demais; apagar segue sendo decisão tomada dentro da Clínica.
+
+**Falta ainda:** escutar sem precisar abrir a aba (sincronismo automático de fundo, via `syncToken`).
+
 ## Agenda Cheia — ACESA (v4.5, 28/07/2026)
 
 A vista semanal agora mostra **também** os compromissos do Google, em cinza claro, só de leitura, embaixo das sessões de cada dia.
