@@ -2,6 +2,22 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## OS — A ponte: os números e a roda (OS v4.0, 28/07/2026)
+
+A Numerologia e a Astrologia viviam em abas vizinhas sem se falar. Agora se cruzam — e o encaixe não é invenção: é a arquitetura da própria Árvore da Vida. **Dez esferas e vinte e dois caminhos.** A numerologia cai nas **esferas** (o Caminho de Vida na sua Sefirá); o zodíaco cai nos **caminhos** entre elas (cada signo nasce de uma letra do Sefer Yetzirá, e cada letra é um caminho). Um diz de que matéria a pessoa é feita; o outro, por onde ela anda.
+
+**Na Numerologia — bloco "A ponte":**
+- **O Sol calculado**, não escolhido por tabela de datas: fórmula de Meeus, precisão de cerca de 0,01°, com o grau dentro do signo, a letra hebraica, o caminho na Árvore e o Tikun. Quem nasce a menos de um grau da virada recebe **aviso** de que sem a hora exata o Sol pode estar no signo vizinho.
+- **A esfera e o caminho lado a lado**, com botão para abrir o caminho na Árvore.
+- **O eixo dos nodos** em resumo, remetendo ao Gilgul.
+- **As letras do nome que também são signos** — doze das vinte e duas letras regem um signo; as que aparecem na transliteração viram atalhos clicáveis para a roda. Declarado como observação nossa, não regra de escola.
+
+**Na Astrologia — a roda deixa de ser genérica.** Um seletor "Marcar a roda de" lista os perfis com mapa numerológico guardado; escolhido um, aparecem no desenho o **Sol** e o **eixo dos nodos** nos graus exatos, e o centro da roda passa a dizer o nome da pessoa. Sem ninguém marcado, volta a ser a roda do ano.
+
+Conferido ao vivo: equinócio de 20/03/2000 → 0,185° de Áries; solstício de 21/06/2000 → 90,41°; Montgomery (10/01/1976) → **19,4° de Capricórnio**, letra Ayin, caminho 26, cruzando com o Caminho de Vida 7 em Netzach.
+
+Declarado no rodapé do bloco: Sol e nodos são **astronomia**; letra→signo é o **Sefer Yetzirá**; a leitura do Caminho de Vida como Sefirá e a ideia de olhar esfera e caminho juntos são **formulação nossa** sobre a estrutura clássica — não doutrina de escola nenhuma.
+
 ## OS — Gematria: o nome em letras hebraicas (OS v3.9, 28/07/2026)
 
 O pitagórico já lia o nome pelos números de 1 a 9. A gematria lê o mesmo nome pelo outro alfabeto — Aleph=1 até Tav=400 — e a tradição aproxima as palavras que somam igual.

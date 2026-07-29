@@ -1167,7 +1167,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
 <section class="sec" id="sec-numerologia">
   <div class="sec-head">
     <h1>Numerologia</h1>
-    <p>O nome e a data de nascimento reduzidos a números-chave pelo método pitagórico. Cálculo exato e determinístico — cada resultado mostra de onde veio. Agora com <b>Pináculos</b> — as quatro estações da vida e os três ciclos longos, com a estação de hoje marcada —, <b>Gematria</b> do nome em letras hebraicas, Desafios, dívidas e lições kármicas, ponte do Caminho de Vida com as Sefirot, o mapa guardado no perfil e o bloco <b>Gilgul</b> — a bagagem de outras vidas pelos nodos da Lua e pelos 22 Arcanos.</p>
+    <p>O nome e a data de nascimento reduzidos a números-chave pelo método pitagórico. Cálculo exato e determinístico — cada resultado mostra de onde veio. Agora com <b>Pináculos</b> — as quatro estações da vida e os três ciclos longos, com a estação de hoje marcada —, <b>Gematria</b> do nome em letras hebraicas, a <b>ponte com a roda do zodíaco</b> (o Sol calculado, as esferas e os caminhos da Árvore lado a lado), Desafios, dívidas e lições kármicas, ponte do Caminho de Vida com as Sefirot, o mapa guardado no perfil e o bloco <b>Gilgul</b> — a bagagem de outras vidas pelos nodos da Lua e pelos 22 Arcanos.</p>
   </div>
   <div class="bloco">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8.5 8.5 6v12"/><path d="M14 8.2a2.6 2.6 0 1 1 4.3 1.9L14 18h5"/></svg>Calcular mapa numerológico</h2>
@@ -1189,10 +1189,14 @@ tr:hover td{background:rgba(201,168,76,0.05)}
 <section class="sec" id="sec-astrologia">
   <div class="sec-head">
     <h1>Astrologia</h1>
-    <p>A roda do zodíaco lida pela Cabala — cada signo nasce de uma letra do Sefer Yetzirá, habita um mês hebraico e rege uma parte do corpo. O mapa descreve as forças; o livre-arbítrio decide o que fazer com elas. Semente plantada pela releitura de <em>Astrologia Cabalística</em> (Rav Berg).</p>
+    <p>A roda do zodíaco lida pela Cabala — cada signo nasce de uma letra do Sefer Yetzirá, habita um mês hebraico e rege uma parte do corpo. O mapa descreve as forças; o livre-arbítrio decide o que fazer com elas. Marcando um perfil que já tenha mapa guardado na Numerologia, a roda deixa de ser genérica e mostra <b>aquela pessoa</b>: o Sol e o eixo dos nodos nos graus exatos. Semente plantada pela releitura de <em>Astrologia Cabalística</em> (Rav Berg).</p>
   </div>
   <div class="bloco" style="display:flex;gap:var(--f4);flex-wrap:wrap;align-items:flex-start">
     <div style="flex:0 0 320px;max-width:100%;margin:0 auto">
+      <div class="fg" style="margin-bottom:10px"><label>Marcar a roda de</label>
+        <select id="astRodaPerfil" onchange="astroTrocarRoda()"></select>
+        <span id="astRodaDica" style="font-size:0.66rem;color:var(--cinza);display:block;margin-top:4px"></span>
+      </div>
       <svg viewBox="0 0 320 320" id="zodiacoSVG" style="width:100%;max-width:320px"></svg>
       <div style="display:flex;justify-content:center;gap:var(--f2);margin-top:8px;font-size:0.66rem;color:var(--cinza);flex-wrap:wrap">
         <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#B0472F;vertical-align:middle"></span> Fogo</span>
@@ -1200,7 +1204,12 @@ tr:hover td{background:rgba(201,168,76,0.05)}
         <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#C9A84C;vertical-align:middle"></span> Ar</span>
         <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#2F6DA8;vertical-align:middle"></span> Água</span>
       </div>
-      <p style="text-align:center;font-size:0.64rem;color:var(--cinza);font-style:italic;margin-top:4px">A roda gira de Áries/Nisan — o ano cabalístico começa na semente. Clique num signo.</p>
+      <div style="display:flex;justify-content:center;gap:var(--f2);margin-top:6px;font-size:0.66rem;color:var(--cinza);flex-wrap:wrap">
+        <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#C9A84C;opacity:0.55;vertical-align:middle"></span> Sol</span>
+        <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#2F6DA8;vertical-align:middle"></span> Nodo Norte</span>
+        <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;border:2px solid #7A5C3A;vertical-align:middle"></span> Nodo Sul</span>
+      </div>
+      <p style="text-align:center;font-size:0.64rem;color:var(--cinza);font-style:italic;margin-top:4px">A roda gira de Áries/Nisan — o ano cabalístico começa na semente. Clique num signo. Com um perfil marcado, o Sol e o eixo dos nodos aparecem nos graus exatos (Meeus, meio-dia — sem a hora do nascimento há meio grau de folga).</p>
     </div>
     <div style="flex:1;min-width:280px" id="signoPainel">
       <div class="vazio">Clique num signo na roda ao lado.<br><br>Cada um traz sua letra criadora, seu mês hebraico, o planeta, a parte do corpo que rege — e a faca de dois gumes: a mesma força como luz e como sombra.</div>
@@ -1679,8 +1688,9 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v3.9';
-const APP_VERSION_NOTA='acende-se a Gematria: o nome escrito em letras hebraicas e somado pelos valores antigos, com a tabela de transliteração inteira à vista — dizendo que a gematria é exata no hebraico, mas que transliterar um nome em português é convenção moderna, não revelação';
+const APP_VERSION='v4.0';
+const APP_VERSION_NOTA='os dois mapas se encontram: o Sol calculado por Meeus entra na Numerologia e a roda do zodíaco deixa de ser genérica — passa a mostrar alguém, com o Sol e o eixo dos nodos marcados nos graus exatos. Os números caem nas esferas da Árvore, os signos caem nos caminhos entre elas';
+const APP_VERSION_NOTA_V39='acende-se a Gematria: o nome escrito em letras hebraicas e somado pelos valores antigos, com a tabela de transliteração inteira à vista — dizendo que a gematria é exata no hebraico, mas que transliterar um nome em português é convenção moderna, não revelação';
 const APP_VERSION_NOTA_V38='acendem-se os Pináculos: as quatro estações da vida e os três ciclos longos, com as idades de virada saindo do Caminho de Vida — e a estação de agora marcada, para o mapa responder sobre o presente e não só sobre a origem';
 const APP_VERSION_NOTA_V37='nasce o Gilgul na Numerologia: a bagagem de outras vidas lida pelos nodos da Lua (astronomia exata, fórmula de Meeus) e pelo Arcano de nascimento — dizendo com todas as letras que ninguém conta quantas vidas foram, só o que ficou por corrigir';
 function carimbarVersao(){
@@ -2156,6 +2166,18 @@ function nodoLunarNorte(Y,M,D){
   O=((O%360)+360)%360;
   return O;
 }
+// Longitude aparente do Sol (Meeus, fórmula de baixa precisão — cerca de 0,01°).
+// Sem a hora do nascimento calculamos ao meio-dia UTC; o Sol anda ~1° por dia,
+// então quem nasceu na virada de um signo pode cair no vizinho. O bloco avisa.
+function solLongitude(Y,M,D){
+  const T=(_diaJuliano(Y,M,D)-2451545)/36525;
+  const L0=280.46646+36000.76983*T+0.0003032*T*T;
+  const Mo=(357.52911+35999.05029*T-0.0001537*T*T)*Math.PI/180;
+  const C=(1.914602-0.004817*T-0.000014*T*T)*Math.sin(Mo)+(0.019993-0.000101*T)*Math.sin(2*Mo)+0.000289*Math.sin(3*Mo);
+  const O=nodoLunarNorte(Y,M,D)*Math.PI/180;
+  const lon=L0+C-0.00569-0.00478*Math.sin(O);
+  return ((lon%360)+360)%360;
+}
 function _signoDaLongitude(lon){return SIGNOS[Math.floor((((lon%360)+360)%360)/30)];}
 function _grauNoSigno(lon){const x=(((lon%360)+360)%360)%30;return x.toFixed(1).replace('.',',');}
 
@@ -2289,6 +2311,67 @@ function numGematriaBloco(nome){
         '<div style="font-size:0.78rem;font-weight:600">'+GEM_VAL[p.heb]+'</div></div>').join('')+
     '</div>'+
     '<p style="font-size:0.72rem;color:var(--cinza);margin-top:16px;line-height:1.5"><b>As escolhas da tabela, ditas por inteiro.</b> O <b>C</b> vira ס antes de E/I e ק no resto; <b>Ç</b> e <b>TZ</b> viram צ; <b>CH</b>, <b>SH</b> e <b>X</b> viram ש; <b>NH</b> e <b>LH</b> caem em נ e ל, perdendo o som palatal que o hebraico não tem; <b>J</b>, <b>I</b> e <b>Y</b> compartilham י; <b>O</b>, <b>U</b>, <b>V</b> e <b>W</b> compartilham ו. As cinco letras finais (ך ם ן ף ץ) valem o mesmo que as normais, como é o uso mais corrente. Este número é <b>outra leitura</b> do mesmo nome, ao lado do pitagórico da Expressão — não uma correção dele, e nem um substituto. Linguagem simbólica para pensar, não previsão.</p>'+
+    '</div>';
+}
+
+// ===== A PONTE: NÚMEROS x RODA DO ZODÍACO =====
+// O encaixe não é invenção nossa — é a própria arquitetura da Árvore da Vida:
+// dez esferas e vinte e dois caminhos entre elas. A numerologia cai nas ESFERAS
+// (o Caminho de Vida 1–9 na sua Sefirá); a roda do zodíaco cai nos CAMINHOS (cada
+// signo nasce de uma letra do Sefer Yetzirah, e cada letra é um caminho). Um mapa
+// diz de que matéria a pessoa é feita; o outro, por onde ela anda.
+// O que é exato aqui: o Sol e os nodos, que são astronomia. O que é leitura: tudo
+// o mais — e está dito na tela.
+function numPonteRodaBloco(nasc,vida,nome){
+  if(!nasc)return '';
+  const [Y,M,D]=nasc.split('-').map(Number);
+  const solLon=solLongitude(Y,M,D),sol=_signoDaLongitude(solLon);
+  const grauNoSigno=(((solLon%360)+360)%360)%30;
+  const naVirada=grauNoSigno<1||grauNoSigno>29;
+  const norte=nodoLunarNorte(Y,M,D),sN=_signoDaLongitude(norte),sS=_signoDaLongitude((norte+180)%360);
+  const cam=(typeof CAMINHOS!=='undefined')?CAMINHOS.find(c=>c.num===sol.caminho):null;
+  const sef=vida!=null?NUM_SEFIRA[vida]:null;
+  const sefNome=sef?(sef.daat?"Da'at — Conhecimento":(function(){const x=SEFIROT.find(y=>y.id===sef.id);return x?x.n+' — '+x.pt:sef.id;})()):null;
+  const col=ELEMENTO_COR[sol.el];
+  // As letras dos 12 signos que aparecem no nome transliterado — observação nossa.
+  const letrasNome=new Set(gemTransliterar(nome).map(p=>p.heb));
+  const signosNoNome=SIGNOS.filter(s=>letrasNome.has(s.letra));
+  return '<div class="bloco"><h2 style="border:0;padding:0;margin:0 0 4px">A ponte — os números e a roda</h2>'+
+    '<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 14px;line-height:1.5">Os dois mapas se encontram na Árvore da Vida, e cada um cai num lugar diferente dela: a numerologia cai nas <b>esferas</b> — o Caminho de Vida na sua Sefirá; o zodíaco cai nos <b>caminhos</b> entre elas — cada signo nasce de uma letra do Sefer Yetzirá, e cada letra é um dos vinte e dois caminhos. Um diz de que matéria a pessoa é feita; o outro, por onde ela anda.</p>'+
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px">'+
+    // --- O Sol ---
+    '<div style="border:1px solid '+col+'55;border-radius:12px;padding:16px 18px;background:'+col+'0F">'+
+      '<div style="font-size:0.66rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--cinza);margin-bottom:6px">O Sol — o signo de nascimento</div>'+
+      '<div style="display:flex;align-items:center;gap:10px"><span style="font-family:Lora,serif;font-size:2rem;line-height:1;color:'+col+'">'+sol.g+'</span>'+
+      '<div><b style="font-size:1rem;color:#1b3a5c">'+esc(sol.n)+'</b> <span style="font-size:0.78rem;color:var(--cinza)">'+grauNoSigno.toFixed(1).replace('.',',')+'°</span><br>'+
+      '<span style="font-size:0.74rem;color:var(--cinza)">letra '+sol.letraNome+' ('+sol.letra+') · caminho '+sol.caminho+(cam?' · '+esc(cam.tarot):'')+'</span></div></div>'+
+      '<p style="margin:10px 0 0;font-size:0.8rem;line-height:1.45">'+esc(sol.tikun)+'</p>'+
+      (naVirada?'<div style="font-size:0.72rem;color:#8A6D24;margin-top:8px;line-height:1.4"><b>Atenção:</b> este nascimento cai a menos de um grau da virada do signo. Sem a hora exata, o Sol pode estar no signo vizinho — vale conferir numa efeméride com a hora.</div>':'')+
+      '<button class="btn btn-sec btn-mini" style="margin-top:10px" onclick="abrirRodaPessoal(\''+nasc+'\',\''+esc(nome).replace(/'/g,"\\'")+'\')">Ver esta roda marcada na Astrologia</button>'+
+    '</div>'+
+    // --- O número e a esfera ---
+    (sefNome?'<div style="border:1px solid rgba(201,168,76,0.45);border-radius:12px;padding:16px 18px;background:rgba(201,168,76,0.07)">'+
+      '<div style="font-size:0.66rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--cinza);margin-bottom:6px">O número — a esfera</div>'+
+      '<b style="font-size:1rem;color:#1b3a5c">Caminho de Vida '+vida+' &rarr; '+esc(sefNome)+'</b>'+
+      '<p style="margin:10px 0 0;font-size:0.8rem;line-height:1.45">A esfera é o <i>onde</i> a alma se apoia; o caminho do signo é o <i>por onde</i> ela se move. No seu mapa, a esfera de '+esc(sefNome.split(' —')[0])+' e o caminho '+sol.caminho+' ('+sol.letraNome+') são os dois pontos a olhar juntos na Árvore.</p>'+
+      '<button class="btn btn-sec btn-mini" style="margin-top:10px" onclick="go(\'arvore\');setTimeout(function(){selCaminho&&selCaminho('+sol.caminho+')},350)">Abrir o caminho '+sol.caminho+' na Árvore</button>'+
+    '</div>':'')+
+    // --- Os nodos ---
+    '<div style="border:1px solid rgba(27,58,92,0.16);border-radius:12px;padding:16px 18px">'+
+      '<div style="font-size:0.66rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--cinza);margin-bottom:6px">Os nodos — de onde para onde</div>'+
+      '<div style="font-size:0.86rem;line-height:1.6"><b>'+sS.g+' '+esc(sS.n)+'</b> <span style="color:var(--cinza)">(sul, a bagagem)</span><br>'+
+      '<b>'+sN.g+' '+esc(sN.n)+'</b> <span style="color:var(--cinza)">(norte, a correção)</span></div>'+
+      '<p style="margin:10px 0 0;font-size:0.8rem;line-height:1.45">Na roda, os dois ficam sempre em signos opostos — é o eixo que atravessa o mapa de lado a lado. O detalhe de cada um está no bloco Gilgul, logo abaixo.</p>'+
+    '</div>'+
+    '</div>'+
+    // --- Gematria x letras dos signos ---
+    (signosNoNome.length?'<h3 style="font-size:0.85rem;color:var(--azul);margin:20px 0 6px">As letras do nome que também são signos</h3>'+
+      '<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 10px">Doze das vinte e duas letras hebraicas regem um signo cada uma. Estas apareceram na transliteração do nome — <b>observação nossa</b>, não regra de escola: serve como convite a olhar, não como veredito.</p>'+
+      '<div style="display:flex;flex-wrap:wrap;gap:8px">'+
+      signosNoNome.map(s=>'<div style="border:1px solid '+ELEMENTO_COR[s.el]+'55;background:'+ELEMENTO_COR[s.el]+'0D;border-radius:8px;padding:6px 12px;font-size:0.78rem;cursor:pointer" onclick="go(\'astrologia\');setTimeout(function(){selSigno(\''+s.id+'\')},80)">'+
+        '<span style="font-size:1.1rem;margin-right:4px">'+s.letra+'</span> '+s.letraNome+' · '+s.g+' '+esc(s.n)+'</div>').join('')+
+      '</div>':'')+
+    '<p style="font-size:0.72rem;color:var(--cinza);margin-top:16px;line-height:1.5"><b>O que é exato e o que é leitura.</b> O Sol e os nodos são <b>astronomia</b> — fórmulas de Meeus, sem tabela e sem internet; o Sol com precisão de cerca de 0,01°, mas calculado ao meio-dia (sem a hora do nascimento há até meio grau de folga, e por isso o aviso na virada). A atribuição letra→signo é do <b>Sefer Yetzirá</b>, fonte antiga. Já a leitura do Caminho de Vida como Sefirá, e a ideia de olhar esfera e caminho juntos, é <b>formulação nossa</b> sobre a estrutura clássica da Árvore — não é doutrina de escola nenhuma. Linguagem para pensar sobre si, não previsão.</p>'+
     '</div>';
 }
 
@@ -2435,6 +2518,7 @@ function calcularNumerologia(){
     extra+='</div>';
   }
   extra+=numGematriaBloco(nome);
+  extra+=numPonteRodaBloco(nasc,cadVida?cadVida.at(-1):null,nome);
   extra+=numGilgulBloco(nasc);
   const _g=nasc?(function(){const [Y,M,D]=nasc.split('-').map(Number);
     const nN=nodoLunarNorte(Y,M,D);
@@ -3382,8 +3466,57 @@ const SIGNOS=[
     tikun:'Nadar com os dois peixes: mergulhar no invisível sem perder o chão — fechar o ciclo e guardar a colheita do ano inteiro.'}
 ];
 let _signoSel='';
+// A roda deixa de ser genérica e passa a mostrar ALGUÉM: Sol e nodos marcados
+// nos graus exatos. Vem da data guardada no mapa numerológico do perfil.
+let _rodaPessoal=null;
+function abrirRodaPessoal(nasc,nome){
+  _rodaPessoal={nasc,nome};
+  go('astrologia');
+  setTimeout(function(){
+    const sel=document.getElementById('astRodaPerfil');
+    if(sel){const op=[...sel.options].find(o=>o.dataset&&o.dataset.nasc===nasc);if(op)sel.value=op.value;}
+    renderAstrologia();
+    const s=_signoDaLongitude(solLongitude.apply(null,nasc.split('-').map(Number)));
+    if(s)selSigno(s.id);
+  },80);
+}
+function astroTrocarRoda(){
+  const sel=document.getElementById('astRodaPerfil');if(!sel)return;
+  const op=sel.selectedOptions[0];
+  _rodaPessoal=(op&&op.dataset.nasc)?{nasc:op.dataset.nasc,nome:op.dataset.nome||op.textContent}:null;
+  renderAstrologia();
+}
+function renderAstroSeletorRoda(){
+  const sel=document.getElementById('astRodaPerfil');if(!sel)return;
+  const comMapa=ler(K.perfis).filter(p=>p.numerologia&&p.numerologia.nasc);
+  sel.innerHTML='<option value="">A roda do ano (sem ninguém marcado)</option>'+
+    comMapa.map(p=>'<option value="'+p.id+'" data-nasc="'+p.numerologia.nasc+'" data-nome="'+esc(p.nome)+'">'+esc(p.nome)+'</option>').join('')+
+    ((_rodaPessoal&&!comMapa.some(p=>p.numerologia.nasc===_rodaPessoal.nasc))?'<option value="_avulso" data-nasc="'+_rodaPessoal.nasc+'" data-nome="'+esc(_rodaPessoal.nome||'')+'" selected>'+esc(_rodaPessoal.nome||'mapa aberto')+' (da Numerologia)</option>':'');
+  if(_rodaPessoal){const op=[...sel.options].find(o=>o.dataset&&o.dataset.nasc===_rodaPessoal.nasc);if(op)sel.value=op.value;}
+  const dica=document.getElementById('astRodaDica');
+  if(dica)dica.textContent=comMapa.length?'':'Nenhum perfil tem mapa numerológico guardado ainda — calcule na aba Numerologia e clique em "Guardar mapa no perfil".';
+}
+// Marcas do Sol e dos nodos sobre a roda, nos graus exatos.
+function astroMarcasPessoais(cx,cy,R,r){
+  if(!_rodaPessoal)return '';
+  const [Y,M,D]=_rodaPessoal.nasc.split('-').map(Number);
+  const solLon=solLongitude(Y,M,D),norte=nodoLunarNorte(Y,M,D),sul=(norte+180)%360;
+  // Áries começa no topo (-90°) e a roda segue horária: o grau vira ângulo direto.
+  const ponto=(lon,rad)=>{const a=(-90+lon)*Math.PI/180;return [cx+rad*Math.cos(a),cy+rad*Math.sin(a)];};
+  const marca=(lon,rad,corpo)=>{const [x,y]=ponto(lon,rad);return '<g transform="translate('+x.toFixed(1)+','+y.toFixed(1)+')">'+corpo+'</g>';};
+  const rm=(R+r)/2;
+  return '<g style="pointer-events:none">'+
+    // eixo dos nodos, de ponta a ponta
+    (function(){const [x1,y1]=ponto(norte,R-2),[x2,y2]=ponto(sul,R-2);
+      return '<line x1="'+x1.toFixed(1)+'" y1="'+y1.toFixed(1)+'" x2="'+x2.toFixed(1)+'" y2="'+y2.toFixed(1)+'" stroke="#1b3a5c" stroke-opacity="0.35" stroke-width="1" stroke-dasharray="4 3"/>';})()+
+    marca(norte,R-8,'<circle r="4.5" fill="#2F6DA8" stroke="#fff" stroke-width="1.2"/><title>Nodo Norte — a correção desta vida</title>')+
+    marca(sul,R-8,'<circle r="4.5" fill="none" stroke="#7A5C3A" stroke-width="1.8"/><title>Nodo Sul — a bagagem</title>')+
+    marca(solLon,rm,'<circle r="7" fill="#C9A84C" fill-opacity="0.25" stroke="#C9A84C" stroke-width="1.4"/><text text-anchor="middle" y="4" font-family="Lora,serif" font-size="10" fill="#8A6D24">☉</text><title>Sol</title>')+
+    '</g>';
+}
 function renderAstrologia(){
   const svg=document.getElementById('zodiacoSVG');if(!svg)return;
+  renderAstroSeletorRoda();
   const cx=160,cy=160,R=140,r=92;
   // 12 setores; Áries começa no topo (ângulo -90°) e a roda segue horária
   const arcos=SIGNOS.map((s,i)=>{
@@ -3401,8 +3534,12 @@ function renderAstrologia(){
   svg.innerHTML='<circle cx="'+cx+'" cy="'+cy+'" r="'+R+'" fill="none" stroke="#C9A84C" stroke-opacity="0.35" stroke-width="1"/>'+
     '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="#C9A84C" stroke-opacity="0.35" stroke-width="1"/>'+
     arcos+
-    '<text x="'+cx+'" y="'+(cy-8)+'" text-anchor="middle" font-family="Lora,serif" font-size="12" font-style="italic" fill="#8A6D24">a roda</text>'+
-    '<text x="'+cx+'" y="'+(cy+10)+'" text-anchor="middle" font-family="Lora,serif" font-size="12" font-style="italic" fill="#8A6D24">do ano</text>';
+    astroMarcasPessoais(cx,cy,R,r)+
+    (_rodaPessoal?
+      '<text x="'+cx+'" y="'+(cy-6)+'" text-anchor="middle" font-family="Lora,serif" font-size="12" font-style="italic" fill="#8A6D24">a roda de</text>'+
+      '<text x="'+cx+'" y="'+(cy+12)+'" text-anchor="middle" font-family="Lora,serif" font-size="12" fill="#1b3a5c">'+esc((_rodaPessoal.nome||'').split(' ')[0])+'</text>':
+      '<text x="'+cx+'" y="'+(cy-8)+'" text-anchor="middle" font-family="Lora,serif" font-size="12" font-style="italic" fill="#8A6D24">a roda</text>'+
+      '<text x="'+cx+'" y="'+(cy+10)+'" text-anchor="middle" font-family="Lora,serif" font-size="12" font-style="italic" fill="#8A6D24">do ano</text>');
   renderAstroTabela();
 }
 function selSigno(id){
