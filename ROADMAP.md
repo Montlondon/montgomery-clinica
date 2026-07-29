@@ -2,6 +2,20 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## OS — Acender o I Ching (OS v4.3, 29/07/2026)
+
+O Livro das Mutações entra na Metafísica, pendurado no anel 3 (as Tradições-mãe), descendo do tronco chinês que já estava lá pelos 5 Elementos.
+
+**As 8 manifestações.** Os oito trigramas como oito maneiras que a energia tem de se apresentar: Céu, Trovão, Água, Montanha, Terra, Vento, Fogo, Lago. Cada um com a imagem, o atributo, o lugar na família, a direção e um parágrafo de leitura. Cada card é desenhado em SVG na cor do elemento ao qual fizemos a ponte, e traz o chip que acende esse elemento na teia do corpo vitruviano — declarado como ponte nossa, não como tradição.
+
+**Os 64 hexagramas.** Grade 8×8 no arranjo do Rei Wen: a linha é a manifestação **de baixo** (o que se passa dentro), a coluna é a **de cima** (o que se passa fora). Os 64 desenhos são gerados linha a linha em SVG — nenhum depende de fonte instalada. Cada hexagrama abre com nome, pinyin, as duas manifestações que o compõem, a essência e uma linha *na escuta*, que é a leitura clínica nossa.
+
+**As três moedas.** O método antigo, seis lançamentos de baixo para cima: cara 3, coroa 2. Soma 6 ou 9 é linha mutável, pintada em dourado. Quando há mutação, aparecem os dois hexagramas lado a lado — a situação de agora e para onde ela caminha — e o painel abre no primeiro com as linhas mutáveis marcadas.
+
+Origem declarada no rodapé do bloco: nomes e ordem seguem o Rei Wen; as essências e as pontes com a clínica são leitura nossa. A regra da teia continua valendo — o hexagrama organiza o que a escuta trouxe, nunca decide pelo paciente.
+
+Conferido em bancada: os 64 números aparecem uma vez cada, e a função que recupera o número a partir das seis linhas bate com a tabela nos 64 casos.
+
 ## Clínica — A mesma foto seis vezes (v5.0, 29/07/2026)
 
 O `index.html` da Clínica carregava **a mesma fotografia seis vezes**. O logo do Montgomery — um JPEG de 1254×1254 — estava colado em base64 dentro do arquivo em seis lugares: o `apple-touch-icon`, o `favicon`, a `<img>` da barra lateral, dois ícones do manifest gerado em JavaScript e a constante `LOGO_PADRAO`. Cada cópia, 129KB de texto. Juntas, **772KB — quase metade do arquivo inteiro**, baixados toda vez que ele abria a Clínica no celular.
