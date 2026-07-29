@@ -1167,7 +1167,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
 <section class="sec" id="sec-numerologia">
   <div class="sec-head">
     <h1>Numerologia</h1>
-    <p>O nome e a data de nascimento reduzidos a números-chave pelo método pitagórico. Cálculo exato e determinístico — cada resultado mostra de onde veio. Agora com Desafios, dívidas e lições kármicas, ponte do Caminho de Vida com as Sefirot, o mapa guardado no perfil e o bloco <b>Gilgul</b> — a bagagem de outras vidas pelos nodos da Lua e pelos 22 Arcanos.</p>
+    <p>O nome e a data de nascimento reduzidos a números-chave pelo método pitagórico. Cálculo exato e determinístico — cada resultado mostra de onde veio. Agora com <b>Pináculos</b> — as quatro estações da vida e os três ciclos longos, com a estação de hoje marcada —, Desafios, dívidas e lições kármicas, ponte do Caminho de Vida com as Sefirot, o mapa guardado no perfil e o bloco <b>Gilgul</b> — a bagagem de outras vidas pelos nodos da Lua e pelos 22 Arcanos.</p>
   </div>
   <div class="bloco">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8.5 8.5 6v12"/><path d="M14 8.2a2.6 2.6 0 1 1 4.3 1.9L14 18h5"/></svg>Calcular mapa numerológico</h2>
@@ -1679,8 +1679,9 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v3.7';
-const APP_VERSION_NOTA='nasce o Gilgul na Numerologia: a bagagem de outras vidas lida pelos nodos da Lua (astronomia exata, fórmula de Meeus) e pelo Arcano de nascimento — dizendo com todas as letras que ninguém conta quantas vidas foram, só o que ficou por corrigir';
+const APP_VERSION='v3.8';
+const APP_VERSION_NOTA='acendem-se os Pináculos: as quatro estações da vida e os três ciclos longos, com as idades de virada saindo do Caminho de Vida — e a estação de agora marcada, para o mapa responder sobre o presente e não só sobre a origem';
+const APP_VERSION_NOTA_V37='nasce o Gilgul na Numerologia: a bagagem de outras vidas lida pelos nodos da Lua (astronomia exata, fórmula de Meeus) e pelo Arcano de nascimento — dizendo com todas as letras que ninguém conta quantas vidas foram, só o que ficou por corrigir';
 function carimbarVersao(){
   const linha='Montgomery OS · Fase 2 — Corpo · '+APP_VERSION+' ('+APP_VERSION_NOTA+')';
   const rod=document.getElementById('appVersion');if(rod)rod.textContent=linha;
@@ -1791,7 +1792,8 @@ function verPerfil(id){
     (p.numerologia?'<h3 style="font-size:0.85rem;color:var(--azul);margin:12px 0 6px">Mapa numerológico <span style="font-weight:400;color:var(--cinza);font-size:0.72rem">· guardado em '+esc(p.numerologia.guardadoEm||'—')+'</span></h3>'+
       '<div style="display:flex;flex-wrap:wrap;gap:8px;font-size:0.78rem">'+
       (p.numerologia.vida!=null?'<span class="tag tag-azul">Caminho de Vida '+p.numerologia.vida+'</span>':'')+
-      '<span class="tag">Expressão '+p.numerologia.expr+'</span><span class="tag">Alma '+p.numerologia.alma+'</span><span class="tag">Personalidade '+p.numerologia.pers+'</span></div>'+
+      '<span class="tag">Expressão '+p.numerologia.expr+'</span><span class="tag">Alma '+p.numerologia.alma+'</span><span class="tag">Personalidade '+p.numerologia.pers+'</span>'+
+      (p.numerologia.pinaculo?'<span class="tag tag-azul">Pináculo '+p.numerologia.pinaculo.ordem+' · '+p.numerologia.pinaculo.n+(p.numerologia.pinaculo.ate!=null?' (até '+p.numerologia.pinaculo.ate+' anos)':'')+'</span>':'')+'</div>'+
       '<div style="margin-top:8px"><button class="btn btn-sec btn-mini" onclick="numAbrirDoPerfil(\''+p.id+'\')">Abrir na Numerologia</button></div>':'')+
     '<div style="margin-top:16px"><button class="btn btn-sec btn-mini" onclick="editarPerfil(\''+p.id+'\')">Editar</button> '+
     '<button class="btn btn-red btn-mini" onclick="excluirPerfil(\''+p.id+'\')">Excluir</button> '+
@@ -2219,6 +2221,77 @@ function numGilgulBloco(nasc){
     '</div>';
 }
 
+// ===== PINÁCULOS E CICLOS DE VIDA =====
+// As quatro estações da vida, pelo método pitagórico clássico (Juno Jordan /
+// escola moderna). Cada pináculo é uma soma dos dígitos reduzidos da data:
+//   1º = mês + dia   ·   2º = dia + ano   ·   3º = 1º + 2º   ·   4º = mês + ano
+// As IDADES de virada saem do Caminho de Vida: o primeiro pináculo termina aos
+// 36 − Caminho de Vida (o 36 é 4×9, as quatro estações de nove); os dois do meio
+// duram nove anos cada; o quarto vai até o fim. Para essa conta os mestres
+// descem à vibração-base (11→2, 22→4, 33→6) — senão a idade não fecha.
+// Os três ciclos de vida correm por baixo, nas mesmas viradas: mês (formação),
+// dia (produção) e ano (colheita).
+function numIdade(nasc){
+  const [Y,M,D]=nasc.split('-').map(Number);const h=new Date();
+  let a=h.getFullYear()-Y;const antes=(h.getMonth()+1)<M||((h.getMonth()+1)===M&&h.getDate()<D);
+  return antes?a-1:a;
+}
+// Só o pináculo em vigor hoje — para guardar no perfil e mostrar na ficha.
+function numPinaculoAtual(nasc,vida){
+  if(!nasc||vida==null)return null;
+  const [Y,M,D]=nasc.split('-').map(Number);
+  const m=numReduzir1(M),d=numReduzir1(D),y=numReduzir1(Y);
+  const fim1=36-numReduzir1(vida),idade=numIdade(nasc);
+  const seq=[[numCadeia(m+d).at(-1),0,fim1],[numCadeia(d+y).at(-1),fim1+1,fim1+9],
+             [numCadeia(numReduzir1(m+d)+numReduzir1(d+y)).at(-1),fim1+10,fim1+18],
+             [numCadeia(m+y).at(-1),fim1+19,null]];
+  for(let i=0;i<seq.length;i++){const [n,ini,fim]=seq[i];
+    if(idade>=ini&&(fim==null||idade<=fim))return {n,ordem:i+1,ate:fim};}
+  return null;
+}
+function numPinaculosBloco(nasc,vida){
+  if(!nasc||vida==null)return '';
+  const [Y,M,D]=nasc.split('-').map(Number);
+  const m=numReduzir1(M),d=numReduzir1(D),y=numReduzir1(Y);
+  const fim1=36-numReduzir1(vida);
+  const idade=numIdade(nasc);
+  const pin=[
+    {rot:'Primeiro pináculo',cad:numCadeia(m+d),det:'mês '+m+' + dia '+d,ini:0,fim:fim1},
+    {rot:'Segundo pináculo',cad:numCadeia(d+y),det:'dia '+d+' + ano '+y,ini:fim1+1,fim:fim1+9},
+    {rot:'Terceiro pináculo',cad:numCadeia(numReduzir1(m+d)+numReduzir1(d+y)),det:'1º ('+numReduzir1(m+d)+') + 2º ('+numReduzir1(d+y)+')',ini:fim1+10,fim:fim1+18},
+    {rot:'Quarto pináculo',cad:numCadeia(m+y),det:'mês '+m+' + ano '+y,ini:fim1+19,fim:null}
+  ];
+  const ciclos=[
+    {rot:'Ciclo formativo',cad:numCadeia(M),det:'o mês de nascimento — o que se herda e se aprende',ini:0,fim:fim1},
+    {rot:'Ciclo produtivo',cad:numCadeia(D),det:'o dia de nascimento — o que se constrói no mundo',ini:fim1+1,fim:fim1+27},
+    {rot:'Ciclo de colheita',cad:numCadeia(Y),det:'o ano de nascimento — o que se recolhe e se transmite',ini:fim1+28,fim:null}
+  ];
+  const faixa=f=>f.ini+' → '+(f.fim==null?'fim da vida':f.fim+' anos');
+  const ativo=f=>idade>=f.ini&&(f.fim==null||idade<=f.fim);
+  const card=f=>{
+    const n=f.cad.at(-1),info=NUM_SIGNIFICADOS[n]||{t:'',s:''},aq=ativo(f);
+    return '<div style="border:1px solid '+(aq?'rgba(201,168,76,0.6)':'rgba(27,58,92,0.14)')+';border-radius:12px;padding:14px 16px;'+(aq?'background:rgba(201,168,76,0.08)':'')+'">'+
+      '<div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">'+
+      '<span style="font-size:2rem;font-weight:700;line-height:1;color:#1b3a5c">'+n+'</span>'+
+      '<span><b style="font-size:0.85rem">'+f.rot+'</b><br><span style="font-size:0.76rem;color:var(--cinza)">'+esc(info.t)+'</span></span>'+
+      (aq?'<span class="tag tag-azul" style="margin-left:auto">agora</span>':'')+'</div>'+
+      '<div style="font-size:0.74rem;color:var(--cinza);margin-top:8px"><b>'+faixa(f)+'</b></div>'+
+      '<p style="margin:6px 0 0;font-size:0.79rem;line-height:1.45">'+esc(info.s||'')+'</p>'+
+      '<div style="font-size:0.68rem;color:var(--cinza);margin-top:6px">'+esc(f.det)+(f.cad.length>1?'  =  '+f.cad.join(' → '):'')+'</div>'+
+    '</div>';
+  };
+  const agora=pin.find(ativo);
+  return '<div class="bloco"><h2 style="border:0;padding:0;margin:0 0 4px">Pináculos — as quatro estações da vida</h2>'+
+    '<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 4px;line-height:1.5">Cada pináculo é um clima que atravessa um trecho da vida — o que aquele tempo pede e cobra. As idades de virada saem do Caminho de Vida: a primeira estação termina aos <b>'+fim1+'</b> anos (36 − '+numReduzir1(vida)+'), as duas do meio duram nove anos cada, a última vai até o fim.</p>'+
+    (agora?'<p style="font-size:0.82rem;margin:0 0 12px"><b>Hoje, aos '+idade+' anos:</b> '+agora.rot.toLowerCase()+', o <b>'+agora.cad.at(-1)+'</b> — '+esc((NUM_SIGNIFICADOS[agora.cad.at(-1)]||{}).t||'')+'.</p>':'<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 12px">Idade calculada: '+idade+' anos.</p>')+
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px">'+pin.map(card).join('')+'</div>'+
+    '<h3 style="font-size:0.85rem;color:var(--azul);margin:20px 0 4px">Ciclos de vida</h3>'+
+    '<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 12px">Por baixo dos pináculos correm três ciclos longos, com as mesmas viradas — a estação de fundo de cada trecho.</p>'+
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px">'+ciclos.map(card).join('')+'</div>'+
+    '<p style="font-size:0.72rem;color:var(--cinza);margin-top:16px;line-height:1.5">Método pitagórico moderno; para a conta das idades os números mestres descem à vibração-base (11→2, 22→4, 33→6), senão a virada não fecha. É um mapa de climas, não um calendário de acontecimentos — nada aqui prevê o que vai acontecer, só nomeia o que aquele tempo pede.</p>'+
+    '</div>';
+}
+
 let _numMapaAtual=null;
 function calcularNumerologia(){
   const msg=document.getElementById('numMsg');
@@ -2257,6 +2330,7 @@ function calcularNumerologia(){
       desCard('Segunda metade da vida',des2,'|dia '+rd1+' − ano '+ry1+'|')+
       desCard('Desafio principal',desP,'|desafio 1 − desafio 2|')+
       '</div></div>';
+    extra+=numPinaculosBloco(nasc,cadVida.at(-1));
   }
   cards.push(numCard('Expressão / Destino',cadExpr.at(-1),'todas as letras do nome, soma '+cadExpr[0]+'  =  '+cadExpr.join(' → ')));
   cards.push(numCard('Motivação / Alma',cadAlma.at(-1),'vogais ('+(vogais.join('')||'—')+'), soma '+cadAlma[0]+'  =  '+cadAlma.join(' → ')));
@@ -2294,7 +2368,7 @@ function calcularNumerologia(){
     const nN=nodoLunarNorte(Y,M,D);
     return {nodoNorte:_signoDaLongitude(nN).n,nodoSul:_signoDaLongitude((nN+180)%360).n,arcano:arcanoDeNascimento(Y,M,D).num};
   })():null;
-  _numMapaAtual={nome,nasc,vida:cadVida?cadVida.at(-1):null,expr:cadExpr.at(-1),alma:cadAlma.at(-1),pers:cadPers.at(-1),gilgul:_g};
+  _numMapaAtual={nome,nasc,vida:cadVida?cadVida.at(-1):null,expr:cadExpr.at(-1),alma:cadAlma.at(-1),pers:cadPers.at(-1),gilgul:_g,pinaculo:cadVida?numPinaculoAtual(nasc,cadVida.at(-1)):null};
   const perfilId=document.getElementById('numPerfil').value;
   const btnGuardar=perfilId?'<div style="margin-top:14px"><button class="btn btn-p btn-mini" onclick="numGuardarNoPerfil()">Guardar mapa no perfil</button> <span id="numGuardarMsg" style="font-size:0.75rem;color:var(--verde,#2e7d5b);margin-left:8px"></span></div>':'<p style="font-size:0.72rem;color:var(--cinza);margin-top:12px">Escolha um perfil da família acima para poder guardar este mapa nele.</p>';
   out.innerHTML='<div class="bloco"><h2 style="border:0;padding:0;margin:0 0 4px">Mapa de '+esc(nome)+'</h2>'+

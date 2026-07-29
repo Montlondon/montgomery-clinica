@@ -2,6 +2,18 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## OS — Pináculos: as quatro estações da vida (OS v3.8, 28/07/2026)
+
+A Numerologia sabia falar da origem — nome e data — mas não sabia responder sobre o **agora**. Os Pináculos fecham essa lacuna.
+
+- **Quatro pináculos**, pelo método pitagórico moderno: 1º = mês + dia · 2º = dia + ano · 3º = 1º + 2º · 4º = mês + ano.
+- **As idades de virada saem do Caminho de Vida**: a primeira estação termina aos 36 − Caminho de Vida, as duas do meio duram nove anos cada, a última vai até o fim. Para essa conta os mestres descem à vibração-base (11→2, 22→4, 33→6), senão a virada não fecha — está declarado na tela.
+- **Três ciclos de vida** correndo por baixo, nas mesmas viradas: mês (formação), dia (produção), ano (colheita).
+- **A estação de hoje vem marcada** — o card ativo ganha a tarja "agora" e uma frase de abertura com a idade calculada. No mapa do Montgomery (10/01/1976, Caminho de Vida 7): primeira estação até os 29, e hoje, aos 50, o quarto pináculo, o 6 — o Cuidador.
+- O pináculo em vigor fica **guardado no perfil** junto com o resto do mapa e aparece como tag na ficha.
+
+Dito com todas as letras no rodapé do bloco: é um mapa de **climas**, não um calendário de acontecimentos — não prevê o que vai acontecer, só nomeia o que aquele tempo pede.
+
 ## OS — Gilgul: a bagagem de outras vidas (OS v3.7, 28/07/2026)
 
 Nasceu de uma pergunta do Montgomery: uma professora fez para ele, anos atrás, um "cálculo de reencarnações" usando Cabala, e ele nunca soube como era feito.
