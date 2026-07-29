@@ -2,6 +2,47 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## A Estante do Kindle — Hua Hu Ching e o silêncio (OS v4.2 / Clínica v5.1, 29/07/2026)
+
+Senha *"Abrir a Estante do Kindle"*. A biblioteca do Kindle do Montgomery estava em `Documents\My Kindle Content` — 24 pastas de nomes ilegíveis (`CLFA4BX4...`), nenhum título à vista. Os títulos foram lidos direto dos cabeçalhos MOBI dos arquivos `.azw`: **22 livros**. Os comprados na Amazon têm DRM e só entregam metadado; os **documentos pessoais (PDOC) não têm DRM** e abriram inteiros — descomprimidos com um extrator PalmDOC/LZ77 escrito para isto (`mobi.py`, no scratchpad).
+
+Ele escolheu o rumo: **destilar e ligar**, para enriquecer os atendimentos.
+
+**Quatro livros abertos e guardados** em `03_Biblioteca` (pasta ignorada pelo git — os textos-fonte ficam só na máquina dele):
+
+- `Hua Hu Ching/` — o texto integral e o `RESUMO_Hua_Hu_Ching.md`
+- `Psicanalise_Alem_de_Freud/` — Nasio, *O silêncio na psicanálise*, com resumo próprio; o *Dicionário de psicanálise* de Roudinesco & Plon (~3,7 milhões de caracteres, mil verbetes); e um texto sobre psicanálise e ética
+
+### O que acendeu no OS (v4.2) — Espiritualidade
+
+Terceiro livro da estante viva: **Hua Hu Ching, os últimos ensinamentos de Lao-Tzu** (化胡經) — o que ele ensinou *depois* do Tao Te Ching, já do outro lado da fronteira. Proibido em 705 d.C., mandado destruir no século XIII, sobreviveu por 74 gerações de transmissão oral. **Catorze blocos expansíveis:**
+
+não é religião nem ciência e não há método · a dualidade é a doença · o ego é um macaco e não se mata macaco · **a cadeia de cinco elos que fabrica sofrimento** · as quatro virtudes e as cinco bênçãos · espiritualidade não se separa da vida prática · corpo-mente-espírito: integração ou colapso · **as três energias no corpo** (Terra/abdômen, Céu/cabeça, harmonizada/coração — os três Dan Tien) · **os oito degraus para compreender o universo** (onde os graus 5 e 6 são exatamente os 5 Elementos e os fatores patogênicos da MTC) · as ciências holísticas dos mestres antigos (Yi Yau, Syang Ming, Fu Kua, Shu Ser…) · **o ensinamento final é o I Ching** · o mestre e o falso mestre · o eco inesperado · a essência em uma frase.
+
+Com honestidade de origem no rodapé: a versão de Brian Walker é recriação poética sobre a transmissão de Hua-Ching Ni, não tradução direta do chinês antigo.
+
+### O que acendeu na Clínica (v5.1) — Psicanálise
+
+De 29 para **31 categorias**, de 192 para **210 conceitos**, agora com **fonte no acervo** e não só de memória.
+
+- **O silêncio na sessão** (14 itens) — a categoria de manejo clínico que faltava, tirada inteira do Nasio. *Sileo* e *taceo*, os dois silêncios que o português junta e o latim separa. A correção que mais muda o atendimento: **nem todo silêncio é resistência** — Reik e Glover contra a rigidez de Reich, porque o mutismo pode ser a resposta mais convincente a uma interpretação justa, e insistir ali estraga. A Zona de Silêncio perto de Vancouver como imagem do recalcado. A regra de Freud de 1912 para quando as associações somam zero. Emmy von N. ensinando Freud a se calar. A advertência de Lacan de que **aprovar pode frustrar mais que calar**. E o preparo: *desimpedir-se*, fazer calar em si a agitação imaginária antes da sessão.
+- **Dicionário de psicanálise (Roudinesco & Plon)** (4 itens) — os verbetes que mudam conduta: *a posteriori* (Nachträglichkeit, o "só-depois"), **análise selvagem** (o erro de atirar no rosto do paciente o segredo adivinhado — inaceitável seja a interpretação verdadeira ou falsa), atenção flutuante, e por que se consulta um dicionário em vez da memória.
+- **O aviso de procedência foi reescrito.** Antes dizia que nenhuma categoria além das freudianas tinha fonte no acervo. Agora separa em três: as que foram conferidas contra o texto original (Freud, Nasio, Roudinesco), as que continuam escritas de conhecimento geral (Klein, Lacan, Winnicott, Bion, Ferenczi, Anna Freud, Dolto, Kohut), e Jung, que segue declarado como psicologia analítica.
+
+**Consertado de passagem:** a busca da Psicanálise não ignorava acento — quem digitasse "silencio" via 8 linhas em vez de 59. Agora usa `semAcento()`, o mesmo helper que o resto da Clínica já usava. "silencio", "edipo", "angustia", "transferencia" encontram tudo.
+
+### A ponte que ninguém tinha visto
+
+O achado desta leitura não foi na acupuntura — foi entre Lao-Tzu e o divã. O Hua Hu Ching diz que o Tao é alcançado **pelo esvair, não pelo preencher**, e que forçar só reforça o mecanismo que se queria dissolver; *wu wei*, na nota de Alan Watts que o próprio livro traz, é menos "não fazer" e mais **não obstruir, não bloquear a própria luz**. Vinte e cinco séculos depois, num colóquio em Paris em 1985, os analistas dizem que para escutar é preciso **desimpedir-se** — fazer calar em si a agitação imaginária e criar um espaço de vacuidade.
+
+Dois nomes para o mesmo gesto, descoberto duas vezes por caminhos que nunca se cruzaram. Está registrado nos dois lados: no bloco *O eco inesperado* da Espiritualidade e no resumo do Nasio.
+
+### Próxima vela — o I Ching
+
+O próprio Hua Hu Ching aponta: entre todas as ciências holísticas, **"o mais importante para os aprendizes consiste no estudo do I Ching"**. As oito manifestações (Céu, Terra, Água, Fogo, Trovão, Lago, Vento, Montanha) e as 64 combinações são a gramática do mundo em movimento — território da **Metafísica**, e parente do **Ba Gua** que já vive no diagnóstico da Clínica. O Montgomery já disse que quer aprender. Está anotado no bloco *Próximos livros da estante*.
+
+**Pendente:** merge e push das duas plataformas.
+
 ## Clínica — A mesma foto seis vezes (v5.0, 29/07/2026)
 
 O `index.html` da Clínica carregava **a mesma fotografia seis vezes**. O logo do Montgomery — um JPEG de 1254×1254 — estava colado em base64 dentro do arquivo em seis lugares: o `apple-touch-icon`, o `favicon`, a `<img>` da barra lateral, dois ícones do manifest gerado em JavaScript e a constante `LOGO_PADRAO`. Cada cópia, 129KB de texto. Juntas, **772KB — quase metade do arquivo inteiro**, baixados toda vez que ele abria a Clínica no celular.
