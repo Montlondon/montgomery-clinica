@@ -14,6 +14,16 @@ Senha *"Emagrecer o config"* cumprida. Medido no banco antes de mexer: a linha d
 
 **Por que importa:** Clínica e MMObras dividem o mesmo projeto Supabase (`eltjhrhrtuymejojxyhe`) — a cota é uma só para os dois. Foi isso que fez o estouro de egress doer.
 
+## Concluído — MMObras v9.25: cada foto no tamanho da própria tela (29/07/2026)
+
+O Montgomery perguntou se a foto que emagreceu era a da frente da casa dele ou a do perfil. Eram duas coisas: a de 3,6 MB é a **foto da obra**, no topo do painel; a do perfil (`perfil.avatar`) tinha 202 kB e o logo, 17 kB. Ele pediu para alcançar essas também.
+
+**A régua nova:** cada foto guardada tem um tamanho de tela. A da obra ocupa a largura toda — 1280px. O avatar aparece em 60px (e 46px na gaveta). O logo, em 88px nos relatórios. Guardar mais pixel do que a tela mostra é peso puro na nuvem. Então a varredura virou uma lista de alvos, cada um com seu limite e seu lado máximo: obra 500 kB/1280px, avatar e logo 60 kB/512px — retina com folga.
+
+**E a prevenção subiu junto:** o `compressImg` passou a aceitar o lado máximo, e avatar e logo **novos** já nascem em 512px em vez de 1280px. Antes, uma foto de perfil nova entrava do tamanho de uma foto de obra.
+
+**Testado ao vivo:** avatar de 745 kB (ruído puro, o pior caso possível de comprimir) virou 82 kB; o logo de 46 kB ficou intacto, por estar abaixo do limite — exatamente o comportamento certo. As duas fotos seguem na tela, sem erro no console.
+
 ## MMObras — O Adson entra, e um `config` de 3,6 MB aparece (v9.22, 29/07/2026)
 
 O Montgomery quis passar o MMObras para o pintor Adson e perguntou, antes de tudo, se havia risco de perda. A conferência foi feita no que está **no ar**, não na cópia local:
