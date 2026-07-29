@@ -27,6 +27,8 @@ Agora eles são reconhecidos **pelo que se vê**: mesma hora de início e o nome
 
 Até aqui a ponte era de mão única: a Clínica escrevia no Google e não escutava. Se o Montgomery arrastasse a sessão no celular, dentro do Google, as duas verdades se separavam.
 
+**Testada ao vivo pelo Montgomery em 28/07/2026, nos dois sentidos** — "funcionou perfeitamente". Clínica→Google muda na hora; Google→Clínica aparece ao reabrir a aba Agenda (ou com refresh, ou pelo botão "Puxar do Google").
+
 Agora a Clínica pergunta de volta (`pontePull`), ao abrir a aba Agenda e pelo botão **"Puxar do Google"**:
 
 - Só é ouvido o que é **dela**: evento com etiqueta `clinicaId` ou carimbo `[clinica:ID]` que bate com uma sessão existente. Compromisso pessoal nunca vira sessão; etiqueta órfã nunca cria paciente.
