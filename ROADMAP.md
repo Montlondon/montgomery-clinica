@@ -2,6 +2,30 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## Clínica — Psicanálise: os mestres depois de Freud (v4.9, 29/07/2026)
+
+No mesmo dia da v4.8, o Montgomery corrigiu o rumo: *"quero todos os profissionais sim. Freud, Lacan, Roudinesco, Melanie Klein etc"*. O módulo deixa de ser freudiano e passa a ser **o campo psicanalítico**. De 18 para **29 categorias**, de 110 para **192 conceitos**.
+
+**As onze camadas novas:**
+
+- **Melanie Klein** (9) — as posições esquizoparanoide e depressiva, clivagem, identificação projetiva, inveja e gratidão, reparação, fantasia inconsciente, o brincar como associação livre da criança, o superego precoce e cruel.
+- **Lacan** (10) — Real/Simbólico/Imaginário, estádio do espelho, o inconsciente como linguagem, o desejo é o desejo do Outro, necessidade-demanda-desejo, Nome-do-Pai e foraclusão, objeto a e gozo, sujeito suposto saber, tempo lógico, a interpretação como corte.
+- **Winnicott** (9) — mãe suficientemente boa, holding e handling, objeto transicional, espaço potencial, verdadeiro e falso self, capacidade de estar só, preocupação materna primária, sobrevivência do objeto, a tendência antissocial como esperança.
+- **Bion** (7) — elementos beta e função alfa, rêverie, continente-contido, ataques ao vínculo, sem memória e sem desejo, tolerar ou evadir a frustração, grupos de suposição básica.
+- **Ferenczi** (7) — confusão de línguas, identificação com o agressor, terrorismo do sofrimento, a criança mal acolhida, elasticidade da técnica, o reconhecimento como reparação.
+- **Anna Freud e a Psicologia do Ego** (6) — as defesas sistematizadas, altruísmo defensivo, linhas de desenvolvimento, o ego observador.
+- **Françoise Dolto** (6) — imagem inconsciente do corpo, falar a verdade à criança, castrações simbolígenas, o sintoma da criança fala da família.
+- **Jung** (9) — inconsciente coletivo, arquétipos, sombra, persona, individuação, sincronicidade, a alquimia como mapa do processo psíquico. **Declarado no intro como psicologia analítica, não psicanálise em sentido estrito** — e uma entrada inteira sobre onde ele e Freud se separam.
+- **Kohut e a Psicologia do Self** (6) — objeto-self, espelhamento/idealização/gemelaridade, raiva narcísica, empatia como método, frustração ótima.
+- **Roudinesco** (6) — a psicanálise tem história e não só doutrina, a crítica ao DSM e à medicalização, a família em desordem, o paciente de hoje não é o de Freud.
+- **As escolas em diálogo** (7) — categoria de orientação, não de doutrina. O mesmo sintoma visto por cada lente, qual lente usar quando o eixo é o ambiente / o mundo interno / a palavra / o self ferido / o simbólico — e uma regra contra o ecletismo cego: usar muitas escolas é legítimo, usar sem saber qual está em uso não é.
+
+**A busca virou o que ela precisava ser.** Digitar "desejo" acende **21 itens em 13 categorias** — Freud, Lacan, Klein e Winnicott respondendo à mesma pergunta de ângulos diferentes, lado a lado na tela durante o atendimento. "trauma" devolve 20 itens em 7 categorias. É a teia diagnóstica funcionando dentro de um módulo só.
+
+**Procedência, dita com todas as letras.** `03_Biblioteca/Freud` só tem Freud — as onze categorias novas **não saíram de PDF do acervo**, foram escritas do conhecimento da literatura psicanalítica. Servem como mapa confiável e orientação de leitura, mas não substituem a obra. Quando os originais entrarem na estante (Klein, Lacan, Winnicott, Bion), vale conferir e aprofundar contra o texto. O aviso está no cabeçalho do bloco em `dados-clinicos.js`.
+
+Conferido em bancada isolada: 192 botões, 29 cabeçalhos, zero `onclick` malformado. `dados-clinicos.js` passou de 188KB para 232KB — vale ficar de olho quando a vez do lazy-load chegar.
+
 ## Clínica — Psicanálise ampliada: de 59 a 110 conceitos (v4.8, 29/07/2026)
 
 O módulo que o Montgomery chamou de "a parte maior do sistema" mais que dobrou. Eram **11 categorias e 59 itens**; agora são **18 categorias e 110 itens**, todos clicáveis, buscáveis, salvos no Supabase e presentes no resumo e no PDF — sem uma linha de layout nova: o `renderPsicanalise` já sabia crescer sozinho.
