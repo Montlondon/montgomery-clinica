@@ -2,6 +2,18 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## Agenda Cheia — ACESA (v4.5, 28/07/2026)
+
+A vista semanal agora mostra **também** os compromissos do Google, em cinza claro, só de leitura, embaixo das sessões de cada dia.
+
+- Botão **"Agenda cheia"** ao lado do "Hoje": liga e desliga, e a escolha fica guardada (`cfg_agenda_cheia`). Aceso, ele fica dourado.
+- Lê **todas** as agendas que ele deixa visíveis no Google (não só a agenda da Clínica), uma semana por vez, com o resultado guardado para navegar ida-e-volta sem repetir pedido.
+- Os eventos criados pela própria Clínica são filtrados (etiqueta `clinicaId` ou carimbo `[clinica:ID]`) — já aparecem como sessão, não aparecem duas vezes.
+- Quando um compromisso do Google **cruza o horário de uma sessão**, aparece um "!" laranja ao lado da hora.
+- Regra de ouro mantida: aqui a Clínica só **lê**. Nenhuma escrita em evento pessoal, em lugar nenhum deste caminho.
+
+**Falta ainda:** o sentido completo — mexeu no Google, muda na Clínica (hoje o Google→Clínica é só de olhar).
+
 ## Senha "Acender a Agenda Cheia" — a agenda que enxerga a vida inteira (27/07/2026)
 
 Nasceu do desejo do Montgomery de ter "o próprio Google Agenda dentro da plataforma".

@@ -150,6 +150,10 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .cal-wrap{overflow-x:auto;border-radius:var(--radius);box-shadow:var(--shadow);background:#fff}
 .cal-table{width:100%;border-collapse:collapse;min-width:560px}
 .ev-card{border-radius:4px;padding:3px 5px;margin-bottom:3px;cursor:pointer;font-size:10px;transition:opacity .15s}
+/* compromissos do Google: cinza, discretos, sem clique — a vida dele, só de olhar */
+.gc-ev{border-radius:4px;padding:2px 5px;margin-bottom:3px;font-size:9px;background:#f4f4f4;border-left:3px solid #c8c8c8;color:#777;cursor:default}
+.gc-ev .gc-h{font-weight:700;font-size:8px;color:#999}
+.gc-ev .gc-t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px}
 .ev-card:hover{opacity:.8}
 .ev-card[draggable="true"]{cursor:grab}
 .ev-card.ag-dragging{opacity:.4;cursor:grabbing}
@@ -940,7 +944,10 @@ window.addEventListener('DOMContentLoaded',()=>{
         <strong id="semLbl" style="color:var(--pri-d);font-size:13px"></strong>
         <button class="btn btn-sec btn-sm" onclick="navSem(1)">▶</button>
       </div>
-      <button class="btn btn-sec btn-sm" onclick="irHoje()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg></span>Hoje</button>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button class="btn btn-sec btn-sm" id="btnAgGoogle" onclick="alternarAgendaCheia()" title="Mostrar também os compromissos do Google, só leitura"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg></span>Agenda cheia</button>
+        <button class="btn btn-sec btn-sm" onclick="irHoje()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></svg></span>Hoje</button>
+      </div>
     </div>
   </div>
   <div class="cal-wrap" style="margin-bottom:14px"><div id="calSem"></div></div>
@@ -1657,7 +1664,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v4.4 · 27/07';
+const APP_VER='v4.5 · 28/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -3920,11 +3927,103 @@ function renderSemana(){
         </div>
       </div>`;
     });
+    h+=`<div class="gc-dia" data-dia="${ds2}"></div>`;
     h+=`<div style="text-align:center;margin-top:2px"><button onclick="novoNoDia('${ds2}')" style="background:none;border:1px dashed #ddd;border-radius:3px;color:#bbb;font-size:9px;padding:1px 4px;cursor:pointer;width:100%" onmouseover="this.style.color='var(--pri)'" onmouseout="this.style.color='#bbb'">+</button></div>`;
     h+=`</td>`;
   });
   h+='</tr></tbody></table>';
   document.getElementById('calSem').innerHTML=h;
+  renderAgCheiaBotao();
+  pintarAgendaCheia(ini,fim);   // os compromissos do Google chegam depois, sem travar a grade
+}
+
+// ===== AGENDA CHEIA: os compromissos do Google ao lado das sessões =====
+// Só leitura, sempre. A Clínica LÊ a vida do Montgomery para não marcar em cima
+// dela, e nunca escreve nesses eventos — ela só mexe no que ela mesma criou
+// (etiqueta clinicaId / carimbo [clinica:ID]). Por isso os eventos da própria
+// Clínica são filtrados aqui: já aparecem como sessão, não precisam aparecer duas vezes.
+const AGCHEIA_KEY='cfg_agenda_cheia';
+function agCheiaAtiva(){return localStorage.getItem(AGCHEIA_KEY)==='true';}
+function renderAgCheiaBotao(){
+  const b=document.getElementById('btnAgGoogle');
+  if(!b)return;
+  const on=agCheiaAtiva();
+  b.style.borderColor=on?'var(--gold,#C9A84C)':'';
+  b.style.color=on?'var(--gold,#C9A84C)':'';
+}
+function alternarAgendaCheia(){
+  const on=!agCheiaAtiva();
+  localStorage.setItem(AGCHEIA_KEY,on?'true':'false');
+  if(on&&!ponteAtiva()){toast('Ligue a ponte com o Google para eu enxergar os compromissos.','#EF6C00',"warn");}
+  renderSemana();
+}
+
+// Uma busca por semana fica guardada, para navegar ida-e-volta sem repetir pedido.
+const _gcalSemCache={};
+async function gcalEventosDaSemana(ini,fim){
+  const chave=dLocal(ini)+'|'+dLocal(fim);
+  if(_gcalSemCache[chave])return _gcalSemCache[chave];
+  const tMin=new Date(ini.getFullYear(),ini.getMonth(),ini.getDate(),0,0,0).toISOString();
+  const tMax=new Date(fim.getFullYear(),fim.getMonth(),fim.getDate()+1,0,0,0).toISOString();
+  const lista=await gcalReq('GET','/users/me/calendarList',null,true);
+  if(!lista)return null;
+  const ags=(lista.items||[]).filter(c=>!c.deleted&&c.selected!==false);
+  const porDia={};
+  for(const ag of ags){
+    const r=await gcalReq('GET',`/calendars/${encodeURIComponent(ag.id)}/events`+
+      `?singleEvents=true&orderBy=startTime&maxResults=100&showDeleted=false`+
+      `&timeMin=${encodeURIComponent(tMin)}&timeMax=${encodeURIComponent(tMax)}`,null,true);
+    if(!r)continue;
+    (r.items||[]).forEach(ev=>{
+      if(ev.status==='cancelled')return;
+      // o que a Clínica criou já está na grade como sessão
+      const priv=(ev.extendedProperties&&ev.extendedProperties.private)||{};
+      if(priv.clinicaId||/\[clinica:\d+\]/.test(ev.description||''))return;
+      const inicio=(ev.start&&(ev.start.dateTime||ev.start.date))||'';
+      if(!inicio)return;
+      const diaTodo=!(ev.start&&ev.start.dateTime);
+      const dia=inicio.slice(0,10);
+      let hora='',fimH='';
+      if(!diaTodo){
+        const d1=new Date(inicio);
+        hora=String(d1.getHours()).padStart(2,'0')+':'+String(d1.getMinutes()).padStart(2,'0');
+        const iF=(ev.end&&ev.end.dateTime)||'';
+        if(iF){const d2=new Date(iF);fimH=String(d2.getHours()).padStart(2,'0')+':'+String(d2.getMinutes()).padStart(2,'0');}
+      }
+      (porDia[dia]=porDia[dia]||[]).push({titulo:(ev.summary||'(sem título)'),hora,fimH,diaTodo,agenda:ag.summary||''});
+    });
+  }
+  Object.keys(porDia).forEach(d=>porDia[d].sort((a,b)=>(a.hora||'').localeCompare(b.hora||'')));
+  _gcalSemCache[chave]=porDia;
+  return porDia;
+}
+
+// minutos desde a meia-noite, para saber se dois horários se cruzam
+function _min(hhmm){const [h,m]=(hhmm||'').split(':').map(Number);return (h||0)*60+(m||0);}
+
+async function pintarAgendaCheia(ini,fim){
+  if(!agCheiaAtiva()||!ponteAtiva())return;
+  const porDia=await gcalEventosDaSemana(ini,fim);
+  if(!porDia)return;
+  const ss=gD('sessoes');
+  document.querySelectorAll('#calSem .gc-dia').forEach(box=>{
+    const dia=box.getAttribute('data-dia');
+    const evs=porDia[dia]||[];
+    if(!evs.length)return;
+    // sessões daquele dia, cada uma ocupando uma hora
+    const janelas=ss.filter(s=>s.data===dia&&s.horario).map(s=>[_min(s.horario),_min(s.horario)+60]);
+    let h='';
+    evs.forEach(ev=>{
+      const ini2=ev.diaTodo?null:_min(ev.hora);
+      const fim2=ev.diaTodo?null:(ev.fimH?_min(ev.fimH):ini2+60);
+      const choca=ini2!==null&&janelas.some(([a,b])=>ini2<b&&fim2>a);
+      h+=`<div class="gc-ev" title="${(ev.titulo+(ev.agenda?' — '+ev.agenda:'')).replace(/"/g,'&quot;')}${choca?' (choca com uma sessão)':''}">
+        <div class="gc-h">${ev.diaTodo?'dia todo':ev.hora}${choca?' <span style="color:#EF6C00" title="Choca com uma sessão">!</span>':''}</div>
+        <div class="gc-t">${ev.titulo}</div>
+      </div>`;
+    });
+    box.innerHTML=h;
+  });
 }
 // ===== Arrastar-e-soltar na agenda: remarcar sessão trocando o dia =====
 let _agDragId=null;
