@@ -1167,7 +1167,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
 <section class="sec" id="sec-numerologia">
   <div class="sec-head">
     <h1>Numerologia</h1>
-    <p>O nome e a data de nascimento reduzidos a números-chave pelo método pitagórico. Cálculo exato e determinístico — cada resultado mostra de onde veio. Agora com <b>Pináculos</b> — as quatro estações da vida e os três ciclos longos, com a estação de hoje marcada —, Desafios, dívidas e lições kármicas, ponte do Caminho de Vida com as Sefirot, o mapa guardado no perfil e o bloco <b>Gilgul</b> — a bagagem de outras vidas pelos nodos da Lua e pelos 22 Arcanos.</p>
+    <p>O nome e a data de nascimento reduzidos a números-chave pelo método pitagórico. Cálculo exato e determinístico — cada resultado mostra de onde veio. Agora com <b>Pináculos</b> — as quatro estações da vida e os três ciclos longos, com a estação de hoje marcada —, <b>Gematria</b> do nome em letras hebraicas, Desafios, dívidas e lições kármicas, ponte do Caminho de Vida com as Sefirot, o mapa guardado no perfil e o bloco <b>Gilgul</b> — a bagagem de outras vidas pelos nodos da Lua e pelos 22 Arcanos.</p>
   </div>
   <div class="bloco">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8.5 8.5 6v12"/><path d="M14 8.2a2.6 2.6 0 1 1 4.3 1.9L14 18h5"/></svg>Calcular mapa numerológico</h2>
@@ -1679,8 +1679,9 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v3.8';
-const APP_VERSION_NOTA='acendem-se os Pináculos: as quatro estações da vida e os três ciclos longos, com as idades de virada saindo do Caminho de Vida — e a estação de agora marcada, para o mapa responder sobre o presente e não só sobre a origem';
+const APP_VERSION='v3.9';
+const APP_VERSION_NOTA='acende-se a Gematria: o nome escrito em letras hebraicas e somado pelos valores antigos, com a tabela de transliteração inteira à vista — dizendo que a gematria é exata no hebraico, mas que transliterar um nome em português é convenção moderna, não revelação';
+const APP_VERSION_NOTA_V38='acendem-se os Pináculos: as quatro estações da vida e os três ciclos longos, com as idades de virada saindo do Caminho de Vida — e a estação de agora marcada, para o mapa responder sobre o presente e não só sobre a origem';
 const APP_VERSION_NOTA_V37='nasce o Gilgul na Numerologia: a bagagem de outras vidas lida pelos nodos da Lua (astronomia exata, fórmula de Meeus) e pelo Arcano de nascimento — dizendo com todas as letras que ninguém conta quantas vidas foram, só o que ficou por corrigir';
 function carimbarVersao(){
   const linha='Montgomery OS · Fase 2 — Corpo · '+APP_VERSION+' ('+APP_VERSION_NOTA+')';
@@ -1793,7 +1794,8 @@ function verPerfil(id){
       '<div style="display:flex;flex-wrap:wrap;gap:8px;font-size:0.78rem">'+
       (p.numerologia.vida!=null?'<span class="tag tag-azul">Caminho de Vida '+p.numerologia.vida+'</span>':'')+
       '<span class="tag">Expressão '+p.numerologia.expr+'</span><span class="tag">Alma '+p.numerologia.alma+'</span><span class="tag">Personalidade '+p.numerologia.pers+'</span>'+
-      (p.numerologia.pinaculo?'<span class="tag tag-azul">Pináculo '+p.numerologia.pinaculo.ordem+' · '+p.numerologia.pinaculo.n+(p.numerologia.pinaculo.ate!=null?' (até '+p.numerologia.pinaculo.ate+' anos)':'')+'</span>':'')+'</div>'+
+      (p.numerologia.pinaculo?'<span class="tag tag-azul">Pináculo '+p.numerologia.pinaculo.ordem+' · '+p.numerologia.pinaculo.n+(p.numerologia.pinaculo.ate!=null?' (até '+p.numerologia.pinaculo.ate+' anos)':'')+'</span>':'')+
+      (p.numerologia.gematria?'<span class="tag">Gematria '+p.numerologia.gematria.total+' · <span dir="rtl">'+p.numerologia.gematria.hebraico+'</span></span>':'')+'</div>'+
       '<div style="margin-top:8px"><button class="btn btn-sec btn-mini" onclick="numAbrirDoPerfil(\''+p.id+'\')">Abrir na Numerologia</button></div>':'')+
     '<div style="margin-top:16px"><button class="btn btn-sec btn-mini" onclick="editarPerfil(\''+p.id+'\')">Editar</button> '+
     '<button class="btn btn-red btn-mini" onclick="excluirPerfil(\''+p.id+'\')">Excluir</button> '+
@@ -2221,6 +2223,75 @@ function numGilgulBloco(nasc){
     '</div>';
 }
 
+// ===== GEMATRIA HEBRAICA =====
+// A gematria é autêntica e antiga: cada letra do alfabeto hebraico tem um valor
+// numérico fixo (Aleph=1 … Tav=400), e a tradição lê como aparentadas as palavras
+// que somam igual. Isso vale para palavras JÁ escritas em hebraico.
+// Um nome em português NÃO está em hebraico — para somá-lo é preciso primeiro
+// transliterar, e transliteração é convenção moderna, não fonte antiga: tabelas
+// diferentes dão totais diferentes. A tabela usada aqui está inteira à vista na
+// tela, letra por letra, justamente para que o resultado possa ser conferido e
+// discutido — não para passar por revelação.
+// Valores padrão (mispar hechrachi); as cinco finais (ך ם ן ף ץ) valem o mesmo
+// que as normais, como é o uso mais corrente.
+const GEM_VAL={'א':1,'ב':2,'ג':3,'ד':4,'ה':5,'ו':6,'ז':7,'ח':8,'ט':9,'י':10,'כ':20,'ל':30,'מ':40,'נ':50,'ס':60,'ע':70,'פ':80,'צ':90,'ק':100,'ר':200,'ש':300,'ת':400};
+const GEM_NOME={'א':'Aleph','ב':'Bet','ג':'Gimel','ד':'Dalet','ה':'Heh','ו':'Vav','ז':'Zayin','ח':'Chet','ט':'Tet','י':'Yod','כ':'Kaf','ל':'Lamed','מ':'Mem','נ':'Nun','ס':'Samech','ע':'Ayin','פ':'Peh','צ':'Tzadi','ק':'Qof','ר':'Resh','ש':'Shin','ת':'Tav'};
+// Pares de duas letras resolvidos antes das soltas (sons do português).
+const GEM_DIGRAFOS=[['TZ','צ'],['CH','ש'],['SH','ש'],['PH','פ'],['TH','ת'],['QU','ק'],['NH','נ'],['LH','ל'],['RR','ר'],['SS','ס']];
+const GEM_SIMPLES={A:'א',B:'ב',C:'ק',D:'ד',E:'ה',F:'פ',G:'ג',H:'ה',I:'י',J:'י',K:'כ',L:'ל',M:'מ',N:'נ',O:'ו',P:'פ',Q:'ק',R:'ר',S:'ס',T:'ת',U:'ו',V:'ו',W:'ו',X:'ש',Y:'י',Z:'ז'};
+// Totais que a tradição carrega — se o nome cair num deles, vale mostrar.
+const GEM_ECOS={13:'אחד (echad, "um") e אהבה (ahava, "amor") — a tradição observa que amor e unidade somam igual.',18:'חי (chai, "vivo") — o número da vida, por isso as doações de 18 em 18.',26:'יהוה — o Tetragrama, o Nome de quatro letras.',37:'יחידה (yechidah, a centelha mais alta da alma).',72:'חסד (chesed, misericórdia) — e os 72 Nomes.',86:'אלהים (Elohim) — o mesmo total de הטבע (ha-teva, "a natureza").',91:'אמן (amén) — a soma de יהוה (26) com אדני (65).',112:'יבק — a inicial dos três Nomes.',214:'רוח (ruach, o sopro/espírito).',314:'שדי (Shadai) — o Nome no umbral da porta.',358:'משיח (Mashiach) — e נחש (nachash, a serpente): o mesmo total, a queda e a redenção.',611:'תורה (Torá).'};
+// "Ç" vira o som de Tzadi antes de os acentos serem removidos.
+function gemTransliterar(nome){
+  const bruto=(nome||'').replace(/[çÇ]/g,'TZ').normalize('NFD').replace(/[̀-ͯ]/g,'').toUpperCase().replace(/[^A-Z]/g,'');
+  const saida=[];
+  for(let i=0;i<bruto.length;i++){
+    const par=bruto.slice(i,i+2),dig=GEM_DIGRAFOS.find(x=>x[0]===par);
+    if(dig){saida.push({latim:par,heb:dig[1]});i++;continue;}
+    const c=bruto[i];
+    // C tem dois sons: brando antes de E/I (Samech), duro no resto (Qof).
+    const heb=(c==='C'&&'EI'.includes(bruto[i+1]||''))?'ס':GEM_SIMPLES[c];
+    if(heb)saida.push({latim:c,heb});
+  }
+  return saida;
+}
+function numGematriaBloco(nome){
+  const pares=gemTransliterar(nome);
+  if(!pares.length)return '';
+  const total=pares.reduce((s,p)=>s+GEM_VAL[p.heb],0);
+  const cad=numCadeia(total);
+  const reduzido=cad.at(-1);
+  const eco=GEM_ECOS[total];
+  const palavra=pares.map(p=>p.heb).join('');
+  const info=NUM_SIGNIFICADOS[reduzido]||{t:'',s:''};
+  return '<div class="bloco"><h2 style="border:0;padding:0;margin:0 0 4px">Gematria — o nome em letras hebraicas</h2>'+
+    '<p style="font-size:0.78rem;color:var(--cinza);margin:0 0 14px;line-height:1.5"><b>Antes de tudo:</b> a gematria é antiga e exata para palavras <i>escritas em hebraico</i>. Um nome em português não está em hebraico — para somá-lo é preciso <b>transliterar</b>, e isso é convenção moderna, não fonte antiga. Tabelas diferentes dariam totais diferentes. A tabela inteira está aberta aqui embaixo, letra por letra, para poder ser conferida e discutida.</p>'+
+    '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">'+
+    '<div style="border:1px solid rgba(201,168,76,0.4);border-radius:12px;padding:16px 18px;background:rgba(201,168,76,0.07)">'+
+      '<div style="font-size:0.66rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--cinza);margin-bottom:8px">O nome transliterado</div>'+
+      '<div dir="rtl" style="font-size:2rem;line-height:1.4;color:#1b3a5c;word-break:break-word">'+palavra+'</div>'+
+      '<div style="font-size:0.74rem;color:var(--cinza);margin-top:8px">'+esc(nome)+'</div>'+
+    '</div>'+
+    '<div style="border:1px solid rgba(27,58,92,0.16);border-radius:12px;padding:16px 18px">'+
+      '<div style="font-size:0.66rem;text-transform:uppercase;letter-spacing:0.5px;color:var(--cinza);margin-bottom:8px">Valor total (mispar hechrachi)</div>'+
+      '<div style="display:flex;align-items:baseline;gap:12px"><span style="font-size:2.4rem;font-weight:700;line-height:1;color:#1b3a5c">'+total+'</span>'+
+      '<span style="font-size:0.8rem;color:var(--cinza)">reduzido a <b style="color:#1b3a5c;font-size:1rem">'+reduzido+'</b> · '+esc(info.t)+'</span></div>'+
+      '<div style="font-size:0.7rem;color:var(--cinza);margin-top:8px">'+cad.join(' → ')+'</div>'+
+    '</div>'+
+    '</div>'+
+    (eco?'<div style="border-left:3px solid #C9A84C;padding:8px 14px;margin-top:14px"><b style="font-size:0.85rem">'+total+' também é o total de</b><br><span style="font-size:0.82rem;line-height:1.45">'+esc(eco)+'</span></div>':'')+
+    '<h3 style="font-size:0.85rem;color:var(--azul);margin:20px 0 8px">Letra por letra — a conta à vista</h3>'+
+    '<div style="display:flex;flex-wrap:wrap;gap:8px">'+
+      pares.map(p=>'<div style="border:1px solid rgba(27,58,92,0.14);border-radius:8px;padding:6px 10px;text-align:center;min-width:64px">'+
+        '<div style="font-size:0.68rem;color:var(--cinza)">'+esc(p.latim)+'</div>'+
+        '<div style="font-size:1.3rem;color:#1b3a5c;line-height:1.2">'+p.heb+'</div>'+
+        '<div style="font-size:0.68rem;color:var(--cinza)">'+GEM_NOME[p.heb]+'</div>'+
+        '<div style="font-size:0.78rem;font-weight:600">'+GEM_VAL[p.heb]+'</div></div>').join('')+
+    '</div>'+
+    '<p style="font-size:0.72rem;color:var(--cinza);margin-top:16px;line-height:1.5"><b>As escolhas da tabela, ditas por inteiro.</b> O <b>C</b> vira ס antes de E/I e ק no resto; <b>Ç</b> e <b>TZ</b> viram צ; <b>CH</b>, <b>SH</b> e <b>X</b> viram ש; <b>NH</b> e <b>LH</b> caem em נ e ל, perdendo o som palatal que o hebraico não tem; <b>J</b>, <b>I</b> e <b>Y</b> compartilham י; <b>O</b>, <b>U</b>, <b>V</b> e <b>W</b> compartilham ו. As cinco letras finais (ך ם ן ף ץ) valem o mesmo que as normais, como é o uso mais corrente. Este número é <b>outra leitura</b> do mesmo nome, ao lado do pitagórico da Expressão — não uma correção dele, e nem um substituto. Linguagem simbólica para pensar, não previsão.</p>'+
+    '</div>';
+}
+
 // ===== PINÁCULOS E CICLOS DE VIDA =====
 // As quatro estações da vida, pelo método pitagórico clássico (Juno Jordan /
 // escola moderna). Cada pináculo é uma soma dos dígitos reduzidos da data:
@@ -2363,12 +2434,15 @@ function calcularNumerologia(){
     }
     extra+='</div>';
   }
+  extra+=numGematriaBloco(nome);
   extra+=numGilgulBloco(nasc);
   const _g=nasc?(function(){const [Y,M,D]=nasc.split('-').map(Number);
     const nN=nodoLunarNorte(Y,M,D);
     return {nodoNorte:_signoDaLongitude(nN).n,nodoSul:_signoDaLongitude((nN+180)%360).n,arcano:arcanoDeNascimento(Y,M,D).num};
   })():null;
-  _numMapaAtual={nome,nasc,vida:cadVida?cadVida.at(-1):null,expr:cadExpr.at(-1),alma:cadAlma.at(-1),pers:cadPers.at(-1),gilgul:_g,pinaculo:cadVida?numPinaculoAtual(nasc,cadVida.at(-1)):null};
+  const _gem=gemTransliterar(nome);
+  _numMapaAtual={nome,nasc,vida:cadVida?cadVida.at(-1):null,expr:cadExpr.at(-1),alma:cadAlma.at(-1),pers:cadPers.at(-1),gilgul:_g,pinaculo:cadVida?numPinaculoAtual(nasc,cadVida.at(-1)):null,
+    gematria:_gem.length?{total:_gem.reduce((s,p)=>s+GEM_VAL[p.heb],0),hebraico:_gem.map(p=>p.heb).join('')}:null};
   const perfilId=document.getElementById('numPerfil').value;
   const btnGuardar=perfilId?'<div style="margin-top:14px"><button class="btn btn-p btn-mini" onclick="numGuardarNoPerfil()">Guardar mapa no perfil</button> <span id="numGuardarMsg" style="font-size:0.75rem;color:var(--verde,#2e7d5b);margin-left:8px"></span></div>':'<p style="font-size:0.72rem;color:var(--cinza);margin-top:12px">Escolha um perfil da família acima para poder guardar este mapa nele.</p>';
   out.innerHTML='<div class="bloco"><h2 style="border:0;padding:0;margin:0 0 4px">Mapa de '+esc(nome)+'</h2>'+

@@ -2,6 +2,18 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## OS — Gematria: o nome em letras hebraicas (OS v3.9, 28/07/2026)
+
+O pitagórico já lia o nome pelos números de 1 a 9. A gematria lê o mesmo nome pelo outro alfabeto — Aleph=1 até Tav=400 — e a tradição aproxima as palavras que somam igual.
+
+- **Transliteração declarada**: o nome vira letras hebraicas por uma tabela que fica inteira à vista na tela, letra por letra, com o valor de cada uma. O C vira ס antes de E/I e ק no resto; Ç e TZ viram צ; CH, SH e X viram ש; NH e LH caem em נ e ל, perdendo o som palatal que o hebraico não tem; J, I e Y dividem י; O, U, V e W dividem ו.
+- **Total (mispar hechrachi)** e a redução até 1–9 preservando os mestres. As cinco letras finais valem o mesmo que as normais, como é o uso corrente.
+- **Ecos da tradição**: se o total cair num número que a tradição carrega (13 echad/ahava, 18 chai, 26 o Tetragrama, 86 Elohim, 358 Mashiach/nachash, 611 Torá, entre outros), o bloco mostra qual palavra soma igual.
+- O total e o nome em hebraico ficam **guardados no perfil** e viram tag na ficha.
+- Conferido ao vivo: **Montgomery = מונתגומהרי = 760** (40+6+50+400+3+6+40+5+200+10), reduzido a 4.
+
+A transparência aqui é o ponto delicado e está dita no topo do bloco: a gematria é **antiga e exata para palavras já escritas em hebraico**; um nome em português precisa primeiro ser transliterado, e transliteração é convenção moderna — tabelas diferentes dariam totais diferentes. Por isso a tabela fica aberta: para ser conferida e discutida, não para passar por revelação.
+
 ## OS — Pináculos: as quatro estações da vida (OS v3.8, 28/07/2026)
 
 A Numerologia sabia falar da origem — nome e data — mas não sabia responder sobre o **agora**. Os Pináculos fecham essa lacuna.
