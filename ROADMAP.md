@@ -20,7 +20,9 @@ O módulo que o Montgomery chamou de "a parte maior do sistema" mais que dobrou.
 
 **Conferido em bancada isolada** (sem abrir a Clínica ao vivo, para não puxar paciente do Supabase): o `renderPsicanalise` real, alimentado pelo `dados-clinicos.js` real, gera **110 botões e 18 cabeçalhos, com zero `onclick` malformado**. A busca atravessa as camadas — "culpa" devolve 16 itens em 7 categorias, mostrando a teia se formando entre Melancolia, Mal-Estar, Trauma e Manejo.
 
-**O que ficou de fora, e por quê.** Os **Módulos 3-12 do curso de Formação em Psicanálise Clínica** vivem em `G:\My Drive\AAPsicanálise Clínica` e o Google Drive **não estava montado** nesta máquina. A ampliação foi escrita a partir das obras de Freud que estão em `03_Biblioteca/Freud` (Obras Completas Imago vols. 1-23 + avulsos) somadas à formação clínica clássica. Quando o `G:` voltar, revisar e completar estas oito categorias com o texto do curso — o aviso está registrado no cabeçalho do bloco em `dados-clinicos.js`.
+**A fonte, por decisão do Montgomery (29/07).** A ampliação foi escrita a partir das obras do **próprio Freud**, em `03_Biblioteca/Freud` (Obras Completas Imago vols. 1-23 + avulsos). Os Módulos 3-12 do curso de Formação em Psicanálise Clínica não entraram — o Google Drive não estava montado, e ao saber disso o Montgomery respondeu que **prefere assim**: "eu até prefiro que tenha sido das escritas do Freud unicamente. Não há necessidade de conferir". Fica valendo como regra do módulo: **a fonte é Freud**, e não há revisão pendente contra o curso.
+
+Onde uma entrada se apoia em quem veio depois de Freud, isso vem dito no texto do próprio item — a tríade neurose/psicose/perversão com o termo *forclusão* é sistematização de **Lacan**; a *confusão de línguas* no abuso infantil é de **Ferenczi**; a contratransferência como instrumento é da **clínica posterior**; e as entradas sobre pânico, dissociação e o ciclo da violência doméstica falam a língua da clínica contemporânea, não a de 1930. São poucas e estão declaradas, mas são o que sustenta o módulo na hora do atendimento de hoje.
 
 ## OS — Numerologia em abas internas (OS v4.1, 28/07/2026)
 

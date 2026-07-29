@@ -2119,11 +2119,11 @@ const auriculoProtocolos = [
 //
 // Ampliação de 29/07/2026 — 8 categorias novas (Estruturas Clínicas, Angústia,
 // Culpa/Vergonha, Trauma e Abuso, Sonhos, Atos Falhos, Manejo Clínico).
-// Procedência: obras de Freud presentes em 03_Biblioteca/Freud (Obras Completas
-// Imago vols. 1-23 + avulsos) somadas à formação clínica clássica. Os Módulos
-// 3-12 do curso vivem em G:\My Drive\AAPsicanálise Clínica e NÃO estavam
-// acessíveis nesta máquina (Drive não montado) — quando estiverem, revisar e
-// completar estas oito categorias com o texto do curso. =====
+// Procedência: as obras do próprio Freud, em 03_Biblioteca/Freud (Obras
+// Completas Imago vols. 1-23 + avulsos). Decisão do Montgomery em 29/07: a
+// fonte do módulo é Freud — NÃO revisar contra os Módulos 3-12 do curso.
+// Onde uma entrada se apoia em quem veio depois de Freud (Lacan, Ferenczi,
+// clínica contemporânea), isso vem dito no próprio texto do item. =====
 const psicanaliseTemas = [
   {
     categoria:'1ª Tópica (Modelo Topográfico)',
