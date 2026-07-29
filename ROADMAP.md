@@ -2,6 +2,57 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## Concluído — MMObras v9.24: o `config` de 3,6 MB emagrece sozinho (29/07/2026)
+
+Senha *"Emagrecer o config"* cumprida. Medido no banco antes de mexer: a linha do Montgomery em `mmobras_backup` tinha **5.055 kB**, e o culpado era um só — `config.foto` com **3.658 kB**, três quartos de tudo. O resto é miudeza: `recibos` 969 kB, `perfil` 219 kB.
+
+**Diagnóstico:** o app já sabia emagrecer foto desde sempre (`compressImg`, 1280px, JPEG 72%). Aquela foto é **anterior** a essa função — entrou crua da câmera, com EXIF e tudo. Mesma doença curada na Clínica v5.0 no mesmo dia: uma imagem grande escondida dentro do dado que a nuvem baixa a cada busca.
+
+**Cura:** na entrada do app (nuvem, Modo Pintor ou sem internet), `enxugarFotosAntigas()` acha qualquer foto em base64 acima de 500 kB e passa nela a mesma receita do `compressImg`. Roda uma vez, avisa por *toast* o antes e o depois, e o `save()` seguinte já leva a versão magra para a nuvem. A prevenção não precisou ser escrita — ela já existia; o que faltava era alcançar o que ficou para trás.
+
+**Testado ao vivo** no navegador, com uma foto de 3000×2000 plantada de propósito: **8.974 kB viraram 208 kB**, sem erro no console e com a foto na tela. Publicado em montlondon.github.io/obra.
+
+**Por que importa:** Clínica e MMObras dividem o mesmo projeto Supabase (`eltjhrhrtuymejojxyhe`) — a cota é uma só para os dois. Foi isso que fez o estouro de egress doer.
+
+## MMObras — O Adson entra, e um `config` de 3,6 MB aparece (v9.22, 29/07/2026)
+
+O Montgomery quis passar o MMObras para o pintor Adson e perguntou, antes de tudo, se havia risco de perda. A conferência foi feita no que está **no ar**, não na cópia local:
+
+- **Lista de convidados** (`ALLOWED_EMAILS`, linha 3744) — quem receber o link repassado não entra. A porta não é o endereço, é o e-mail.
+- **Cofre local por pessoa** — cada usuário tem sua própria gaveta `mmobras_v2_u_<uid>`; o convidado abre um MMObras vazio.
+- **RLS conferida no banco** — `mmobras_backup` tem `rowsecurity = true` e uma política única, *"cada um vê só o seu"*, valendo para todos os comandos: `auth.uid() = user_id` na leitura **e** na gravação. A separação não está na tela, está no banco — não se contorna pelo console.
+
+**Feito:** `adsonpoprock@hotmail.com` entrou na lista; a comparação de e-mail passou a normalizar minúsculas, para o caso de o Google devolver o endereço capitalizado. No ar e conferido no site publicado.
+
+**Respondido também:** um link diferenciado (com número no fim) não separaria nada — a página é a mesma, quem separa é o login. Pior: daria falsa sensação de porta particular.
+
+### Pendente — senha **"Emagrecer o config"**
+
+A cota do Supabase é **uma só para a Clínica e o MMObras** — os dois usam o projeto `eltjhrhrtuymejojxyhe`. Foi isso que fez o estouro de egress doer neste mês.
+
+E o convidado não é o peso. **O peso é a linha do Montgomery: 5.055 kB**, baixados a cada busca na nuvem. Repartição medida no banco:
+
+| parte | tamanho |
+|---|---|
+| `config` | 3.658 kB |
+| `recibos` | 969 kB |
+| `perfil` | 219 kB |
+| `urgencias` | 103 kB |
+| `comprovantes` | 87 kB |
+| resto | ~18 kB |
+
+O `config` sozinho é **três quartos de tudo** — e configuração deveria pesar kilobytes, não três megas e meio. Quase certamente é imagem em base64 guardada lá dentro: a mesma doença da foto repetida curada na Clínica v5.0, no mesmo dia. Abrir o `config`, achar a imagem, tirá-la de lá.
+
+Fica anotado também, sem pressa e sem relação com o Adson: em `C:\Montgomery\obra`, o `git remote` guarda o token do GitHub em texto aberto dentro da URL. É uma chave exposta num arquivo do computador dele.
+
+### Pendente — senha **"Modo Pintor"**
+
+O Montgomery perguntou se dava para o convidado ter uma versão que **não usasse o Supabase dele**. Dava — e a alternativa fácil não servia: no plano gratuito a cota é contada **por organização, não por projeto**. Existem dois projetos (`montgomery-clinica` ativo e "Montlondon's Project" parado desde maio) na mesma organização; mudar o convidado de projeto seria trocar de gaveta dentro do mesmo armário.
+
+Escolhida a **opção B**: convidado roda **local, sem nuvem**. Um arquivo só, sem cópia paralela — a nuvem passa a valer apenas para quem está na lista com sincronismo, e quem não está entra sem tela de login, com os dados no `localStorage` e a exportação que o MMObras já tem servindo de backup manual. Cabe um aviso na tela lembrando de exportar: o preço honesto do modo local é não sincronizar entre aparelhos e perder tudo se o navegador for limpo sem backup.
+
+Recusada a opção A (conta Supabase própria do convidado) — funcionaria e daria sincronismo, mas é burocracia demais para um pintor.
+
 ## Clínica — A mesma foto seis vezes (v5.0, 29/07/2026)
 
 O `index.html` da Clínica carregava **a mesma fotografia seis vezes**. O logo do Montgomery — um JPEG de 1254×1254 — estava colado em base64 dentro do arquivo em seis lugares: o `apple-touch-icon`, o `favicon`, a `<img>` da barra lateral, dois ícones do manifest gerado em JavaScript e a constante `LOGO_PADRAO`. Cada cópia, 129KB de texto. Juntas, **772KB — quase metade do arquivo inteiro**, baixados toda vez que ele abria a Clínica no celular.
