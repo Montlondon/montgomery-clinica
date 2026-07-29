@@ -939,6 +939,89 @@ tr:hover td{background:rgba(201,168,76,0.05)}
       <div id="leisHermeticas"></div>
     </div>
   </div>
+  <div class="bloco" id="mfBlocoAtomos">
+    <style>
+      .atPeca{cursor:pointer;transition:opacity .15s}
+      .atPeca:hover{opacity:0.65}
+      .atDeg{cursor:pointer;border:1px solid rgba(27,58,92,0.14);border-radius:8px;padding:6px 4px;text-align:center;transition:all .15s;background:rgba(255,255,255,0.02)}
+      .atDeg:hover{border-color:var(--dourado,#c9a84c);transform:translateY(-1px)}
+      .atDeg.sel{border-color:var(--dourado,#c9a84c);background:rgba(201,168,76,0.14)}
+      .atDeg .esc{font-size:0.58rem;color:var(--cinza);line-height:1;margin-bottom:2px}
+      .atDeg .nm{font-size:0.7rem;line-height:1.15}
+      @keyframes atGira{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+      .atOrb{transform-origin:300px 300px}
+    </style>
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="1.6"/><ellipse cx="12" cy="12" rx="10" ry="4.2"/><ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(120 12 12)"/></svg>Os Átomos — a matéria vista por dentro</h2>
+    <p style="font-size:0.82rem;line-height:1.6;margin-bottom:10px">"Energia pra mim é vida, é átomo." Este é o degrau em que a Metafísica encosta na ciência sem precisar forçar nada: o átomo é, literalmente, <strong style="color:var(--azul)">energia organizada em forma</strong>. Tudo o que se toca — a mesa, o corpo do paciente, a agulha, a água do chá — é o mesmo punhado de peças repetido em arranjos diferentes. Não há duas matérias no mundo: há uma só, montada de muitos jeitos.</p>
+    <div style="display:flex;gap:var(--f4);flex-wrap:wrap;align-items:flex-start;margin-top:14px">
+      <div style="flex:0 0 300px;max-width:100%;margin:0 auto">
+        <svg viewBox="0 0 600 600" style="width:100%;max-width:300px;border-radius:12px">
+          <defs>
+            <radialGradient id="atFundo" cx="50%" cy="50%" r="70%">
+              <stop offset="0%" stop-color="#0d1a2e"/><stop offset="100%" stop-color="#060b14"/>
+            </radialGradient>
+            <filter id="atBrilho" x="-40%" y="-40%" width="180%" height="180%">
+              <feGaussianBlur stdDeviation="2.4" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <rect width="600" height="600" fill="url(#atFundo)" rx="12"/>
+          <g class="atPeca" onclick="atPeca('vazio')">
+            <circle cx="300" cy="300" r="285" fill="transparent"/>
+            <circle cx="300" cy="300" r="285" fill="none" stroke="#3d7db8" stroke-width="0.6" stroke-dasharray="3 7" opacity="0.45"/>
+          </g>
+          <g fill="none" stroke="#3d7db8" stroke-width="1" opacity="0.5">
+            <circle cx="300" cy="300" r="120"/><circle cx="300" cy="300" r="215"/>
+          </g>
+          <g class="atPeca" onclick="atPeca('eletron')" filter="url(#atBrilho)">
+            <g class="atOrb" style="animation:atGira 14s linear infinite">
+              <circle cx="420" cy="300" r="8" fill="#9fd8ff"/><circle cx="180" cy="300" r="8" fill="#9fd8ff"/>
+            </g>
+            <g class="atOrb" style="animation:atGira 26s linear infinite reverse">
+              <circle cx="515" cy="300" r="8" fill="#9fd8ff"/><circle cx="300" cy="515" r="8" fill="#9fd8ff"/>
+              <circle cx="85" cy="300" r="8" fill="#9fd8ff"/><circle cx="300" cy="85" r="8" fill="#9fd8ff"/>
+            </g>
+          </g>
+          <g class="atPeca" onclick="atPeca('nucleo')" filter="url(#atBrilho)">
+            <circle cx="300" cy="300" r="46" fill="transparent"/>
+            <circle cx="284" cy="290" r="15" fill="#e0713a"/><circle cx="316" cy="292" r="15" fill="#e0713a"/>
+            <circle cx="300" cy="318" r="15" fill="#e0713a"/><circle cx="272" cy="314" r="15" fill="#cfd8e3"/>
+            <circle cx="328" cy="316" r="15" fill="#cfd8e3"/><circle cx="300" cy="278" r="15" fill="#cfd8e3"/>
+          </g>
+        </svg>
+        <div style="text-align:center;margin-top:8px;font-size:0.68rem;color:var(--cinza)">
+          O carbono — 6 prótons, 6 nêutrons, 6 elétrons.<br>O átomo da vida. Toque no núcleo, nos elétrons ou no vazio em volta.
+        </div>
+      </div>
+      <div style="flex:1;min-width:280px">
+        <div id="atPecaPainel" class="vazio" style="font-size:0.8rem">Toque numa parte do átomo ao lado — o núcleo, os elétrons ou o espaço vazio entre eles.</div>
+        <p style="font-size:0.74rem;color:var(--cinza);margin-top:10px">O desenho é o modelo antigo, de bolinhas em órbita — o mesmo que se aprende na escola. A física moderna já não desenha assim (o elétron é nuvem de probabilidade, não bolinha), mas nenhum desenho honesto do átomo real existe: ele não tem aparência. Fica o modelo velho, com o aviso junto.</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:Lora,serif;font-size:0.95rem;color:var(--azul);margin:20px 0 6px">A escada da matéria — assim embaixo, assim em cima</h3>
+    <p style="font-size:0.74rem;color:var(--cinza);margin-bottom:8px">A Lei da Correspondência não é metáfora aqui: é a mesma estrutura repetida de degrau em degrau — algo pequeno e denso no centro, algo leve girando em volta, e vazio quase inteiro no meio. Toque num degrau.</p>
+    <div id="atEscada" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px"></div>
+    <div id="atEscadaPainel" class="vazio" style="font-size:0.8rem;margin-top:10px">Escolha um degrau da escada.</div>
+
+    <h3 style="font-family:Lora,serif;font-size:0.95rem;color:var(--azul);margin:20px 0 6px">De que o corpo é feito — os elementos e seus pesos</h3>
+    <p style="font-size:0.74rem;color:var(--cinza);margin-bottom:8px">Percentuais por massa de um corpo humano adulto. Onze elementos fazem 99,9% de uma pessoa inteira; o resto — ferro, zinco, iodo, selênio, cobre — cabe numa colher e ainda assim decide se ela acorda disposta. Toque para ver a função e a ponte com a clínica.</p>
+    <div id="atElementos" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:6px"></div>
+    <div id="atElemPainel" class="vazio" style="font-size:0.8rem;margin-top:10px">Escolha um elemento acima.</div>
+
+    <h3 style="font-family:Lora,serif;font-size:0.95rem;color:var(--azul);margin:20px 0 8px">O que o átomo ensina — e onde a leitura começa</h3>
+    <div class="cards">
+      <div class="card"><h3>Somos quase todo vazio</h3><div class="sub">Se o núcleo de um átomo tivesse o tamanho de uma azeitona no centro de um campo de futebol, os elétrons estariam na arquibancada — e no meio, nada. Mais de 99,9999999996% do volume de qualquer matéria é espaço vazio. A solidez que se sente ao apertar um braço não é matéria encostando em matéria: é campo elétrico empurrando campo elétrico. Nada nunca se toca de verdade.</div></div>
+      <div class="card"><h3>Somos poeira de estrela</h3><div class="sub">O hidrogênio veio do começo do universo. Todo o resto — o carbono dos ossos, o oxigênio do sangue, o ferro que carrega o oxigênio — foi forjado dentro de estrelas e espalhado quando elas morreram. Isto não é poesia solta: é nucleossíntese, física estabelecida. Cada átomo do corpo do paciente já esteve dentro de uma estrela. Ele é, literalmente, mais velho que o Sol.</div></div>
+      <div class="card"><h3>Nada está parado</h3><div class="sub">A Lei da Vibração dita ao pé da letra: elétrons em movimento perpétuo, núcleos oscilando, moléculas trepidando conforme a temperatura. Zero absoluto — o único ponto de repouso possível — nunca foi alcançado em lugar nenhum do universo. Aquilo que a mão sente como "morno" é literalmente a velocidade com que os átomos daquele corpo estão se agitando.</div></div>
+      <div class="card"><h3>A matéria se recicla inteira</h3><div class="sub">O corpo troca a maior parte de seus átomos ao longo dos anos: o revestimento do intestino em dias, a pele em semanas, o esqueleto em cerca de dez anos. Quem está sentado na cadeira não é feito da mesma matéria de dez anos atrás — e continua sendo a mesma pessoa. A identidade, portanto, não mora nos átomos. Mora no padrão que os organiza.</div></div>
+    </div>
+
+    <h3 style="font-family:Lora,serif;font-size:0.95rem;color:var(--azul);margin:20px 0 8px">A fronteira honesta — onde a física para</h3>
+    <p style="font-size:0.8rem;line-height:1.6">A física quântica é usada por aí para justificar quase tudo, e a maior parte disso é falso. Vale marcar a linha com clareza, porque a Metafísica aqui não precisa de empréstimos: <strong style="color:var(--azul)">o "observador" da física quântica não é a consciência humana</strong> — é qualquer interação de medida, um detector desligado numa sala vazia já basta. Pensamento não move partícula. O emaranhamento é real e comprovado, mas não transmite informação e não liga duas pessoas à distância. "Tudo é vibração" é verdadeiro no sentido literal e físico (matéria é agitação), e não no sentido de que se sintonize um estado emocional como se sintoniza um rádio.</p>
+    <p style="font-size:0.8rem;line-height:1.6;margin-top:8px">O que sobra depois de cortar os empréstimos falsos ainda é imenso, e é tudo verdadeiro: a unidade da matéria, a estrutura que se repete em toda escala, a origem estelar do corpo, o vazio quase total, o movimento que nunca cessa, a identidade que sobrevive à troca completa das peças. Não é preciso torcer a física para achar espanto nela.</p>
+    <p style="font-size:0.74rem;color:var(--cinza);margin-top:16px;border-top:1px solid rgba(201,168,76,0.15);padding-top:10px">Origem declarada: os números e os fatos deste bloco são física e bioquímica estabelecidas (composição elementar do corpo, nucleossíntese estelar, escalas atômicas). As pontes com a clínica, com os 5 Elementos e com as Leis Herméticas são leitura nossa, camada Metafísica — o átomo não fala de fígado nem de Madeira. Vale a regra da teia: <strong style="color:var(--azul)">isto organiza o espanto, não substitui a escuta nem o médico</strong>.</p>
+  </div>
   <div class="bloco" id="mfBloco2">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 2.5a4.75 4.75 0 0 0 0 9.5 4.75 4.75 0 0 1 0 9.5"/><circle cx="12" cy="7.25" r="1"/><circle cx="12" cy="16.75" r="1"/></svg>Polaridade — a dobradiça do mapa</h2>
     <p style="font-size:0.82rem;line-height:1.55;margin-bottom:10px">"Tudo é duplo; os opostos são idênticos em natureza, diferentes em grau." Frio e calor não são duas coisas — são a mesma régua de temperatura. Medo e coragem não são dois sentimentos — são a mesma energia em graus diferentes. Não se elimina um polo: <strong style="color:var(--azul)">caminha-se pela régua</strong>.</p>
@@ -1718,8 +1801,9 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v4.3';
-const APP_VERSION_NOTA='acende-se o I Ching dentro da Metafísica: as 8 manifestações (as oito maneiras que a energia tem de se apresentar), os 64 hexagramas numa grade onde a linha é o que se passa dentro e a coluna é o que se passa fora, e as três moedas para consultar o momento — com as linhas mutáveis mostrando por onde a situação já está virando outra';
+const APP_VERSION='v4.4';
+const APP_VERSION_NOTA='acendem-se os Átomos no anel 1 da Metafísica: um átomo de carbono que se pode tocar por dentro (núcleo, elétrons e o vazio que é quase tudo), a escada da matéria em doze degraus — do quark ao universo, sempre a mesma planta se repetindo — e os quatorze elementos de que o corpo é feito, cada um com seu peso e sua ponte com a clínica; com a fronteira dita em voz alta de onde a física acaba e a leitura começa';
+const APP_VERSION_NOTA_V43='acende-se o I Ching dentro da Metafísica: as 8 manifestações (as oito maneiras que a energia tem de se apresentar), os 64 hexagramas numa grade onde a linha é o que se passa dentro e a coluna é o que se passa fora, e as três moedas para consultar o momento — com as linhas mutáveis mostrando por onde a situação já está virando outra';
 const APP_VERSION_NOTA_V41='a Numerologia deixa de ser um rolo comprido: o mapa se organiza em sete abas internas, uma de cada vez, e a aba aberta continua aberta quando se recalcula — nada mudou no cálculo, só o jeito de olhar';
 const APP_VERSION_NOTA_V40='os dois mapas se encontram: o Sol calculado por Meeus entra na Numerologia e a roda do zodíaco deixa de ser genérica — passa a mostrar alguém, com o Sol e o eixo dos nodos marcados nos graus exatos. Os números caem nas esferas da Árvore, os signos caem nos caminhos entre elas';
 const APP_VERSION_NOTA_V39='acende-se a Gematria: o nome escrito em letras hebraicas e somado pelos valores antigos, com a tabela de transliteração inteira à vista — dizendo que a gematria é exata no hebraico, mas que transliterar um nome em português é convenção moderna, não revelação';
@@ -3770,7 +3854,7 @@ const LEIS_HERMETICAS=[
 // ===== ÍNDICE FIBONACCI DA METAFÍSICA (anéis da árvore) =====
 const MF_NIVEIS=[
   {n:0,titulo:'O Vazio',resumo:'O que é Metafísica aqui: a compreensão dos fenômenos além dos 5 sentidos. A palavra sai impregnada da frequência do que sabemos sobre ela. "Que seu sim seja sim." A palavra é criadora; o foco é o leme.'},
-  {n:1,titulo:'O Princípio',resumo:'A unidade da qual tudo deriva. As 7 Leis Herméticas do Caibalion, a ponte honesta com a ciência (gravidade, átomo, quântica) e o Cubo de Metatron como símbolo visual.',bloco:'mfBloco1'},
+  {n:1,titulo:'O Princípio',resumo:'A unidade da qual tudo deriva. As 7 Leis Herméticas do Caibalion, o Cubo de Metatron como símbolo visual e — logo abaixo neste anel — os Átomos: a ponte honesta com a ciência, com a escada da matéria do quark ao universo e a fronteira declarada de onde a física para.',bloco:'mfBloco1'},
   {n:2,titulo:'Polaridade',resumo:'A dobradiça do mapa: opostos são a mesma régua em graus diferentes. Três tradições descobriram a mesma lei — Hermetismo (Lei 4), Taoismo (yin/yang) e Freud (o que se nega, se afirma). A sombra é o polo não assumido; transmuta-se por grau, não por salto — como os florais: Rock Rose para o pavor, Mimulus para o medo nomeado.',bloco:'mfBloco2'},
   {n:3,titulo:'As Tradições-mãe',resumo:'As três escolhidas para começar: Hermetismo, Medicina Chinesa / 5 Elementos e Kabbalah / Árvore da Vida. Do tronco chinês desce o I Ching — as 8 manifestações e os 64 hexagramas, logo abaixo neste anel. Vedanta, Alquimia e a tradição estelar entram depois, com calma.',bloco:'mfBloco3'},
   {n:5,titulo:'Correspondências',resumo:'A teia que liga tudo: elemento, órgão, emoção, estação, cor, sabor, planeta, floral e lei. Cada coluna com sua origem declarada — tradição não se mistura com escolha nossa. A porta de entrada visual é o corpo vitruviano.',bloco:'mfBloco5'},
@@ -3821,7 +3905,96 @@ function renderMetafisica(){
       '<div style="font-size:0.8rem">'+l[2]+'</div></div>').join('');
   mfRenderLabels();
   ichRender();
+  atRender();
   mfCarregar();
+}
+
+// ===== ÁTOMOS — a matéria vista por dentro =====
+// Números e fatos: física/bioquímica estabelecidas. As pontes com a clínica e
+// com os 5 Elementos são leitura nossa (camada Metafísica), não física.
+const AT_PECAS={
+  nucleo:['O núcleo — prótons e nêutrons',
+    'Toda a massa do átomo mora aqui, num ponto cem mil vezes menor que o átomo inteiro. O número de prótons é a identidade: 6 prótons é carbono e será carbono para sempre; tire um e virou boro, outra substância. Os nêutrons não mudam a identidade, mudam o peso — são os isótopos, e é um deles, o carbono-14, que permite datar um osso antigo.',
+    'A leitura: o núcleo é o que não se negocia. Numa pessoa, é o que permanece quando tudo o mais muda — e o que se perde quando ela deixa de ser quem é. Poucos prótons, muita consequência.'],
+  eletron:['Os elétrons — a borda que negocia',
+    'Leves ao ponto de quase não pesarem (um próton pesa 1836 elétrons), são eles que fazem toda a química do mundo. Ligação entre átomos é elétron partilhado, doado ou disputado. Eletricidade é elétron andando. A cor de qualquer coisa é elétron subindo e descendo de nível e devolvendo luz no caminho.',
+    'A leitura: a identidade está no núcleo, mas o encontro está na borda. Tudo o que um átomo faz com outro, ele faz pela periferia — nunca pelo centro. O contato acontece na superfície; o que é essencial não se mistura.'],
+  vazio:['O vazio — quase tudo',
+    'Entre o núcleo e os elétrons não há nada: nem ar, nem éter, nem matéria fina. Vazio. Mais de 99,9999999996% do volume de qualquer coisa sólida é espaço. Se todo o vazio dos átomos de um corpo humano fosse comprimido, a pessoa inteira caberia num grão de poeira — e continuaria pesando o mesmo.',
+    'A leitura: a solidez é uma experiência, não uma medida. E o vazio não é falta — é o que dá lugar para a estrutura existir. O mesmo que o Tao diz do vaso: serve pelo oco, não pela parede.']
+};
+function atPeca(k){
+  const p=AT_PECAS[k];if(!p)return;
+  const el=document.getElementById('atPecaPainel');
+  el.classList.remove('vazio');
+  el.innerHTML='<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:6px;font-size:1rem">'+p[0]+'</h3>'+
+    '<p style="font-size:0.8rem;line-height:1.6">'+p[1]+'</p>'+
+    '<p style="font-size:0.78rem;line-height:1.6;margin-top:8px;color:var(--cinza)"><em>'+p[2]+'</em></p>';
+}
+// [escala, nome, o que é, o que se repete nesse degrau]
+const AT_ESCADA=[
+  ['10⁻¹⁸ m','Quark','As peças de dentro do próton — três delas, presas por uma força que fica mais forte quanto mais se afastam. Nunca foram vistas sozinhas e talvez nunca sejam: separá-las cria pares novos em vez de soltar uma.','O fundo do poço conhecido. Quanto mais se tenta isolar a parte última, mais ela insiste em vir acompanhada.'],
+  ['10⁻¹⁵ m','Próton','Três quarks numa dança tão veloz que 99% da massa dele não é matéria — é a energia do próprio movimento. A massa do corpo humano é, em sua quase totalidade, movimento aprisionado.','Aqui a matéria já se revela como energia parada. E = mc² deixa de ser fórmula e vira descrição do corpo.'],
+  ['10⁻¹⁰ m','Átomo','Núcleo denso ao centro, elétrons na periferia, vazio no meio. 118 tipos conhecidos, 94 naturais — a lista completa de tudo que existe.','O padrão-mãe: centro denso, borda leve, vazio entre os dois.'],
+  ['10⁻⁹ m','Molécula','Átomos de mãos dadas pelos elétrons. Água é dois hidrogênios e um oxigênio num ângulo de 104,5° — e é esse ângulo torto, e só ele, que faz a água ser molhada, dissolver quase tudo e sustentar a vida.','A qualidade nasce do arranjo, não das peças. Mesmos átomos, ângulo diferente, mundo diferente.'],
+  ['10⁻⁶ m','Célula','A primeira coisa viva. Núcleo ao centro guardando a informação, membrana negociando a borda, citoplasma quase todo água no meio.','A mesma planta do átomo, agora viva: centro que guarda a identidade, borda que faz as trocas.'],
+  ['10⁻³ m','Tecido','Células iguais que combinaram de fazer a mesma coisa juntas. Osso, músculo, nervo, pele — no OS, a camada que a Anatomia acende.','Especializar-se é abrir mão de fazer tudo para fazer uma coisa bem. A célula do osso não vira nervo.'],
+  ['10⁻² m','Órgão','Tecidos diferentes cooperando numa função. É o degrau onde a Medicina Chinesa mora: Fígado, Coração, Baço, Pulmão, Rim.','O Zang-Fu vive aqui — a ponte entre o corpo físico e os 5 Elementos.'],
+  ['1 m','Corpo','Cerca de 7 octilhões de átomos (7 seguido de 27 zeros), 37 trilhões de células, um só nome. E o conjunto todo se sabe uma pessoa.','O degrau do espanto: em algum ponto entre o átomo e aqui, a matéria começou a dizer "eu".'],
+  ['10⁷ m','Planeta','Núcleo de ferro ao centro, crosta fina na borda, atmosfera de gases girando por cima. Mesma planta, outra escala.','O corpo e a Terra construídos pelo mesmo desenho — a Lei da Correspondência literal.'],
+  ['10¹² m','Sistema solar','O Sol concentra 99,86% da massa; os planetas giram no vazio à volta. É o átomo desenhado grande — e foi exatamente essa a imagem que Rutherford usou em 1911.','"Assim em cima como embaixo" já estava dito no Caibalion muito antes de alguém ver um átomo.'],
+  ['10²¹ m','Galáxia','200 bilhões de estrelas em espiral, um buraco negro colossal no centro, distâncias tão grandes que a estrela vizinha leva 4 anos-luz para mandar notícia.','Centro denso, periferia girando, vazio esmagador entre os dois. O padrão não desiste.'],
+  ['10²⁶ m','Universo','Tudo o que há, com 13,8 bilhões de anos. Da menor peça conhecida até aqui são 44 ordens de grandeza — e a mesma estrutura reaparece em quase todas.','O último degrau da escada é feito exatamente das mesmas peças do primeiro. A escada é circular.']
+];
+function atEscada(i){
+  const d=AT_ESCADA[i];if(!d)return;
+  AT_ESCADA.forEach((x,j)=>{const b=document.getElementById('atDeg'+j);if(b)b.classList.toggle('sel',j===i)});
+  const el=document.getElementById('atEscadaPainel');
+  el.classList.remove('vazio');
+  el.innerHTML='<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:4px;font-size:1rem">'+d[1]+
+    ' <span style="font-size:0.7rem;color:var(--cinza);font-family:inherit">· '+d[0]+'</span></h3>'+
+    '<p style="font-size:0.8rem;line-height:1.6">'+d[2]+'</p>'+
+    '<p style="font-size:0.78rem;line-height:1.6;margin-top:8px;color:var(--cinza)"><em>'+d[3]+'</em></p>';
+}
+// [símbolo, nome, % da massa do corpo, o que faz, ponte clínica/leitura nossa]
+const AT_ELEM=[
+  ['O','Oxigênio',65,'Dois terços de uma pessoa. A maior parte não é o ar respirado: é o oxigênio da água que forma o corpo. O que se respira é o que queima o açúcar e libera a energia de viver.','Metal, o pulmão, a Lei da Polaridade: inspirar e soltar. O elemento mais abundante do corpo é justamente o que precisa entrar e sair sem parar — não se estoca respiração.'],
+  ['C','Carbono',18.5,'O esqueleto de toda molécula viva. Sozinho entre os 118, faz quatro ligações estáveis e se encadeia sem limite — por isso a vida é de carbono e não de outra coisa.','O elemento da forma que se sustenta. Todo carbono do corpo foi fabricado dentro de uma estrela que já morreu.'],
+  ['H','Hidrogênio',9.5,'O átomo mais simples que existe: um próton, um elétron. É o mais antigo de todos — nasceu nos primeiros minutos do universo e não foi fabricado por ninguém depois.','A parte do corpo que tem 13,8 bilhões de anos. Água é hidrogênio; e a Água, na teia, é o Rim, a origem, a herança.'],
+  ['N','Nitrogênio',3.2,'Está em toda proteína e em todo o DNA. Abundante no ar (78%), e ainda assim inacessível: o corpo não consegue tirá-lo do ar — só chega pela comida.','Ter em volta não é ter dentro. O que nutre precisa de mediação — o Baço, a Terra, a transformação do que se come em si mesmo.'],
+  ['Ca','Cálcio',1.5,'99% no osso e no dente, e é o 1% restante que faz o trabalho fino: contração muscular, coagulação e cada batimento do coração dependem dele.','Osso é banco, não cofre: em falta, o corpo saca do esqueleto para manter o coração batendo. A estrutura se dissolve para sustentar a função.'],
+  ['P','Fósforo',1.0,'Com o cálcio faz o osso; e é dele a molécula do ATP, a moeda de energia de toda célula viva. Toda energia gasta hoje passou por uma ligação de fósforo.','A energia não se guarda em tanque, se produz e gasta na hora. O ATP dura segundos e é refeito o dia inteiro.'],
+  ['K','Potássio',0.4,'Manda dentro da célula. Junto com o sódio faz a bomba que gera o impulso nervoso — todo pensamento e todo movimento saem dessa diferença de carga.','O que é de dentro. Cada célula gasta perto de um terço de toda a sua energia só para manter essa diferença — é caro ser distinto do lado de fora.'],
+  ['S','Enxofre',0.3,'Faz as pontes que dobram a proteína no formato certo. Cabelo, unha e pele são ricos nele — cabelo liso ou cacheado é geometria de enxofre.','Sem a dobra certa, a proteína não serve para nada. A forma é a função — vale para molécula e vale para pessoa.'],
+  ['Na','Sódio',0.2,'Manda fora da célula. Segura a água no corpo, sustenta a pressão e é a outra metade da bomba do nervo.','O par sódio/potássio é a Polaridade em bioquímica: dentro e fora, e uma bomba trabalhando sem descanso para manter a diferença.'],
+  ['Cl','Cloro',0.2,'Acompanha o sódio no equilíbrio e faz o ácido do estômago, capaz de dissolver metal — guardado por uma parede que se refaz a cada poucos dias.','A digestão é violenta por natureza; o que a torna segura é a parede se renovar mais rápido do que se gasta.'],
+  ['Mg','Magnésio',0.1,'Necessário a mais de 300 reações do corpo, entre elas a que solta o músculo depois da contração e a que estabiliza o ATP.','A falta aparece como cãibra, tensão e insônia: não é o encolher que falha, é o soltar. Contrair é fácil; relaxar é que dá trabalho.'],
+  ['Fe','Ferro',0.006,'Carrega o oxigênio no sangue, e é a cor vermelha dele. Só se forma no coração de estrelas grandes, nos últimos instantes antes de explodirem.','O metal mais caro do universo para se fabricar circula em cada veia. Em falta: cansaço que não passa com sono.'],
+  ['Zn','Zinco',0.003,'Em centenas de enzimas, na cicatrização, na imunidade, no paladar e no olfato.','Perder o gosto das coisas costuma ter química por baixo antes de ter tristeza.'],
+  ['I','Iodo',0.00002,'Uns 20 miligramas na vida inteira, quase todos na tireoide — e são eles que regulam a velocidade de funcionamento do corpo todo.','Vinte miligramas decidem se a pessoa acorda acelerada ou arrastada. Quantidade não é o mesmo que importância.']
+];
+function atElem(i){
+  const e=AT_ELEM[i];if(!e)return;
+  AT_ELEM.forEach((x,j)=>{const b=document.getElementById('atEl'+j);if(b)b.classList.toggle('sel',j===i)});
+  const el=document.getElementById('atElemPainel');
+  el.classList.remove('vazio');
+  el.innerHTML='<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:4px;font-size:1rem">'+e[1]+
+    ' <span style="font-size:0.7rem;color:var(--cinza);font-family:inherit">· '+e[2]+'% da massa do corpo</span></h3>'+
+    '<p style="font-size:0.8rem;line-height:1.6">'+e[3]+'</p>'+
+    '<p style="font-size:0.78rem;line-height:1.6;margin-top:8px;color:var(--cinza)"><em>'+e[4]+'</em></p>';
+}
+function atRender(){
+  const esc=document.getElementById('atEscada');
+  if(esc&&!esc.hasChildNodes())
+    esc.innerHTML=AT_ESCADA.map((d,i)=>
+      '<div class="atDeg" id="atDeg'+i+'" onclick="atEscada('+i+')">'+
+      '<div class="esc">'+d[0]+'</div><div class="nm">'+d[1]+'</div></div>').join('');
+  const els=document.getElementById('atElementos');
+  if(els&&!els.hasChildNodes())
+    els.innerHTML=AT_ELEM.map((e,i)=>
+      '<div class="atDeg" id="atEl'+i+'" onclick="atElem('+i+')">'+
+      '<div style="font-family:Lora,serif;font-size:1.05rem;color:var(--azul);line-height:1.1">'+e[0]+'</div>'+
+      '<div class="nm">'+e[1]+'</div><div class="esc" style="margin:2px 0 0">'+e[2]+'%</div></div>').join('');
 }
 
 // ===== I CHING — as 8 manifestações e os 64 hexagramas =====

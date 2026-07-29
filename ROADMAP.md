@@ -699,7 +699,9 @@ Expandir `arvore_vida_correspondencias.md` com camada metafísica: gematria, gil
 **Contexto clínico que motiva tudo:** Montgomery recebe muitos pacientes mandados OPERAR a coluna quando precisam é de alinhamento integrado (nutricional + ósseo + emocional + energético). A Árvore da Vida é a resposta à fragmentação da medicina.
 
 ---
-## 🌱 Ideia (05/07/2026) — Falar de ÁTOMOS
+## 🌱 Ideia (05/07/2026) — Falar de ÁTOMOS — **FEITO 29/07/2026 (OS v4.4)**
+Acendida no anel 1 da Metafísica (O Princípio), bloco `mfBlocoAtomos`: um átomo de carbono clicável por dentro (núcleo, elétrons e o vazio que é 99,9999999996% de tudo), a **escada da matéria** em 12 degraus do quark ao universo — mostrando a mesma planta se repetindo (centro denso, borda leve, vazio no meio) como Lei da Correspondência literal — e os **14 elementos** de que o corpo é feito, com percentual de massa, função e ponte com a clínica. Fecha com a fronteira dita em voz alta: o que é física estabelecida (nucleossíntese, composição elementar, vibração térmica) e o que é empréstimo falso da quântica (o "observador" não é a consciência; pensamento não move partícula).
+
 Montgomery: "energia pra mim é vida, é átomo". Conversa/módulo sobre átomos, energia, a unidade da matéria — conecta com sua cosmovisão ("somos todos Um, feitos de átomos e luz") e com a geometria sagrada. Possível camada filosófica/didática na Árvore da Vida ou material próprio. A reforma da casa (do teto ao piso, caixa d'água, elétrica) é a metáfora viva: tudo é energia organizada.
 
 
