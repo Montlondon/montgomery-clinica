@@ -60,6 +60,84 @@ rotina. Despertador fica guardado como possibilidade, não como pendência.
 **Cuidado registrado:** `node_modules/` tem 291 MB e foi para o `.gitignore` antes do commit.
 Quase entrou no repo — o mesmo tipo de peso que já custou a cota do Supabase.
 
+## Matéria-prima para aulas do Montgomery Code — a janela dos agentes (30/07/2026)
+
+A janela em que o Ronda nasceu ensinou mais coisa do que coube na Camada 7. Cada bloco abaixo é
+**uma aula esperando ser escrita**, com a metáfora já achada e a prova real já vivida — não é
+teoria de livro, é coisa que aconteceu na tela dele. Escrever uma de cada vez, no ritmo dele.
+
+**Uma observação que virou regra:** este arquivo agora tem dois leitores — o Montgomery e os
+agentes. O Ronda lê só as 60 primeiras linhas. Por isso este catálogo mora aqui embaixo e não lá
+em cima: *onde a coisa fica no arquivo passou a importar.* Isso, sozinho, já é uma aula.
+
+### 1. Agente não é chat — a diferença das mãos
+**Camada 7.** Chat responde; agente vai lá e faz. A diferença não é inteligência, é **ferramenta**.
+Prova viva: o Ronda estendeu a mão cinco vezes (`Read`, `Read`, `Grep`, `Read`, `Read`) sem
+ninguém dizer *como* — só *o que*. Ele escolheu os passos sozinho.
+
+### 2. Cada agente tem a própria janela, minúscula e descartável
+**Camada 7.** A dúvida veio dele: *"meu Claude funciona com janelas, e o agente depende das
+janelas também?"* Não. Cada corrida do Ronda nasce em branco, vive vinte segundos e morre — não
+come da conversa longa, não precisa de ninguém olhando.
+**O outro lado, que é o mais importante:** como ele nasce em branco, ele **não sabe de nada**.
+Não sabe da Clínica, não sabe das senhas. Só sabe o que está no `systemPrompt` e o que lê nos
+arquivos. Daí a virada: *o ROADMAP era memória para o Montgomery; virou memória para os agentes.*
+
+### 3. As três travas — cadeado, teto e cerca
+**Camada 7 / Camada 6 (Segurança).** Já está resumido na aula acesa, mas merece bloco próprio,
+porque é o que separa brincar de trabalhar:
+`allowedTools` é **cadeado, não promessa** — sem `Write` na lista o agente não consegue escrever
+nem querendo; `maxTurns` é **teto** — impede o agente confuso de girar a noite queimando tokens;
+`cwd` é **cerca** — ele enxerga daquela pasta pra baixo e mais nada do computador.
+
+### 4. O preço mora no tamanho do que se abre
+**Camada 7.** A aula mais cara e a mais útil. "Leia o ROADMAP" custou US$ 0,1706 porque o arquivo
+tem 207 KB e o agente o abriu em quatro pedaços. "Leia apenas as primeiras 60 linhas" custou
+US$ 0,0508 — **3,4x mais barato**. E, o que ninguém espera: a resposta barata ficou *mais correta*,
+porque a cara listava itens deduzidos das seções de Concluído.
+> Agente caro costuma ser sintoma de pedido vago.
+Vale ligar isto ao `index.html` da Clínica: um agente que abrir aquele arquivo inteiro gasta numa
+tacada o que o Ronda gasta em cem corridas. O caminho é ensinar a **procurar** (`Grep`) em vez de
+**abrir** (`Read`) — e essa é a semente da senha "Acender o Vigia".
+
+### 5. Ligado 24 horas não é o que as pessoas pensam
+**Camada 3 (Servidor & nuvem) ou 7.** Três jeitos, não um: sob demanda (o Ronda hoje), por relógio
+(acorda, faz, dorme) e sempre ligado (queima o tempo todo — esse ninguém quer).
+Um agente por relógio **não é um funcionário: é um despertador com mãos**. A conta não é "quanto
+custa deixar ligado", é *quantas vezes por dia × quanto custa cada corrida*.
+Registrar junto a decisão dele de **não** pôr relógio no Ronda, e a razão: as ideias vêm sem que
+ele pense nelas.
+
+### 6. Credencial é do programa, não da pessoa
+**Camada 6 (Segurança).** O SDK trouxe o próprio Claude Code embutido, com login separado do
+aplicativo — daí o "Not logged in" na primeira corrida, mesmo com ele logado no Claude do dia a
+dia. Aula boa sobre por que cada programa guarda a própria chave, e por que login é sempre passo
+dele, nunca do Claude.
+
+### 7. Conflito de merge não é erro — é o Git se recusando a adivinhar
+**Camada 2.** A Camada 2 já explicou conflito em teoria; nesta janela aconteceu um de verdade, no
+`.gitignore`: os dois lados escreveram no fim do mesmo arquivo. A resolução foi trivial (queria os
+dois), mas o valor da aula é o susto que não veio. Vale mostrar o texto cru com
+`<<<<<<<`, `=======`, `>>>>>>>` e traduzir cada marca.
+
+### 8. Trabalhar com o `main` sujo sem estragar nada
+**Camada 2.** O `main` local dele vive com seis arquivos modificados e vários soltos, de outras
+sessões. A aula é a disciplina: commitar **só o arquivo necessário** (`git commit .gitignore`),
+nunca `git add -A` no main. Casa com a aula do ramo e do encontro (OS v5.1).
+
+### 9. O peso invisível — 291 MB que quase entraram no repo
+**Camada 2 / Camada 4.** As peças baixadas do agente pesam 291 MB e foram barradas no `.gitignore`
+minutos antes do commit. Mesma família do `config` de 3,6 MB do MMObras e da foto seis vezes na
+Clínica. A pergunta que fica como hábito: *o que estou prestes a subir, e quanto pesa?*
+
+### 10. As peças não viajam pelo git — a receita, não os ingredientes
+**Camada 2 / Camada 7.** Aconteceu minutos depois do merge: o Ronda subiu para o `main` e não
+rodou — `ERR_MODULE_NOT_FOUND`. O código chegou; os 291 MB de peças, não, porque estão barrados
+no `.gitignore`. Um `npm install` e ele andou.
+A imagem: **o git guarda a receita, não os ingredientes.** O `package.json` é a lista de compras;
+o `npm install` é ir ao mercado. É por isso que dá para trocar de computador sem carregar peso —
+e é por isso que um repositório limpo é leve. Fecha o arco com a aula 9.
+
 ## Concluído — Clínica v5.9: o fio único do Diagnóstico (30/07/2026)
 
 Senha **"Acender o Fio"** cumprida. A teia já tinha os dois andares — o geral (v5.5) e o daquela
