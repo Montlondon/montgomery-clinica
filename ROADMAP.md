@@ -90,6 +90,19 @@ O Montgomery perguntou se dava para o convidado ter uma versão que **não usass
 Escolhida a **opção B**: convidado roda **local, sem nuvem**. Um arquivo só, sem cópia paralela — a nuvem passa a valer apenas para quem está na lista com sincronismo, e quem não está entra sem tela de login, com os dados no `localStorage` e a exportação que o MMObras já tem servindo de backup manual. Cabe um aviso na tela lembrando de exportar: o preço honesto do modo local é não sincronizar entre aparelhos e perder tudo se o navegador for limpo sem backup.
 
 Recusada a opção A (conta Supabase própria do convidado) — funcionaria e daria sincronismo, mas é burocracia demais para um pintor.
+## OS — Acender o I Ching (OS v4.3, 29/07/2026)
+
+O Livro das Mutações entra na Metafísica, pendurado no anel 3 (as Tradições-mãe), descendo do tronco chinês que já estava lá pelos 5 Elementos.
+
+**As 8 manifestações.** Os oito trigramas como oito maneiras que a energia tem de se apresentar: Céu, Trovão, Água, Montanha, Terra, Vento, Fogo, Lago. Cada um com a imagem, o atributo, o lugar na família, a direção e um parágrafo de leitura. Cada card é desenhado em SVG na cor do elemento ao qual fizemos a ponte, e traz o chip que acende esse elemento na teia do corpo vitruviano — declarado como ponte nossa, não como tradição.
+
+**Os 64 hexagramas.** Grade 8×8 no arranjo do Rei Wen: a linha é a manifestação **de baixo** (o que se passa dentro), a coluna é a **de cima** (o que se passa fora). Os 64 desenhos são gerados linha a linha em SVG — nenhum depende de fonte instalada. Cada hexagrama abre com nome, pinyin, as duas manifestações que o compõem, a essência e uma linha *na escuta*, que é a leitura clínica nossa.
+
+**As três moedas.** O método antigo, seis lançamentos de baixo para cima: cara 3, coroa 2. Soma 6 ou 9 é linha mutável, pintada em dourado. Quando há mutação, aparecem os dois hexagramas lado a lado — a situação de agora e para onde ela caminha — e o painel abre no primeiro com as linhas mutáveis marcadas.
+
+Origem declarada no rodapé do bloco: nomes e ordem seguem o Rei Wen; as essências e as pontes com a clínica são leitura nossa. A regra da teia continua valendo — o hexagrama organiza o que a escuta trouxe, nunca decide pelo paciente.
+
+Conferido em bancada: os 64 números aparecem uma vez cada, e a função que recupera o número a partir das seis linhas bate com a tabela nos 64 casos.
 
 ## Clínica — A mesma foto seis vezes (v5.0, 29/07/2026)
 
@@ -774,7 +787,9 @@ Expandir `arvore_vida_correspondencias.md` com camada metafísica: gematria, gil
 **Contexto clínico que motiva tudo:** Montgomery recebe muitos pacientes mandados OPERAR a coluna quando precisam é de alinhamento integrado (nutricional + ósseo + emocional + energético). A Árvore da Vida é a resposta à fragmentação da medicina.
 
 ---
-## 🌱 Ideia (05/07/2026) — Falar de ÁTOMOS
+## 🌱 Ideia (05/07/2026) — Falar de ÁTOMOS — **FEITO 29/07/2026 (OS v4.4)**
+Acendida no anel 1 da Metafísica (O Princípio), bloco `mfBlocoAtomos`: um átomo de carbono clicável por dentro (núcleo, elétrons e o vazio que é 99,9999999996% de tudo), a **escada da matéria** em 12 degraus do quark ao universo — mostrando a mesma planta se repetindo (centro denso, borda leve, vazio no meio) como Lei da Correspondência literal — e os **14 elementos** de que o corpo é feito, com percentual de massa, função e ponte com a clínica. Fecha com a fronteira dita em voz alta: o que é física estabelecida (nucleossíntese, composição elementar, vibração térmica) e o que é empréstimo falso da quântica (o "observador" não é a consciência; pensamento não move partícula).
+
 Montgomery: "energia pra mim é vida, é átomo". Conversa/módulo sobre átomos, energia, a unidade da matéria — conecta com sua cosmovisão ("somos todos Um, feitos de átomos e luz") e com a geometria sagrada. Possível camada filosófica/didática na Árvore da Vida ou material próprio. A reforma da casa (do teto ao piso, caixa d'água, elétrica) é a metáfora viva: tudo é energia organizada.
 
 

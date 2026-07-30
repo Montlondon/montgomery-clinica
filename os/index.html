@@ -939,6 +939,89 @@ tr:hover td{background:rgba(201,168,76,0.05)}
       <div id="leisHermeticas"></div>
     </div>
   </div>
+  <div class="bloco" id="mfBlocoAtomos">
+    <style>
+      .atPeca{cursor:pointer;transition:opacity .15s}
+      .atPeca:hover{opacity:0.65}
+      .atDeg{cursor:pointer;border:1px solid rgba(27,58,92,0.14);border-radius:8px;padding:6px 4px;text-align:center;transition:all .15s;background:rgba(255,255,255,0.02)}
+      .atDeg:hover{border-color:var(--dourado,#c9a84c);transform:translateY(-1px)}
+      .atDeg.sel{border-color:var(--dourado,#c9a84c);background:rgba(201,168,76,0.14)}
+      .atDeg .esc{font-size:0.58rem;color:var(--cinza);line-height:1;margin-bottom:2px}
+      .atDeg .nm{font-size:0.7rem;line-height:1.15}
+      @keyframes atGira{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+      .atOrb{transform-origin:300px 300px}
+    </style>
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="1.6"/><ellipse cx="12" cy="12" rx="10" ry="4.2"/><ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(120 12 12)"/></svg>Os Átomos — a matéria vista por dentro</h2>
+    <p style="font-size:0.82rem;line-height:1.6;margin-bottom:10px">"Energia pra mim é vida, é átomo." Este é o degrau em que a Metafísica encosta na ciência sem precisar forçar nada: o átomo é, literalmente, <strong style="color:var(--azul)">energia organizada em forma</strong>. Tudo o que se toca — a mesa, o corpo do paciente, a agulha, a água do chá — é o mesmo punhado de peças repetido em arranjos diferentes. Não há duas matérias no mundo: há uma só, montada de muitos jeitos.</p>
+    <div style="display:flex;gap:var(--f4);flex-wrap:wrap;align-items:flex-start;margin-top:14px">
+      <div style="flex:0 0 300px;max-width:100%;margin:0 auto">
+        <svg viewBox="0 0 600 600" style="width:100%;max-width:300px;border-radius:12px">
+          <defs>
+            <radialGradient id="atFundo" cx="50%" cy="50%" r="70%">
+              <stop offset="0%" stop-color="#0d1a2e"/><stop offset="100%" stop-color="#060b14"/>
+            </radialGradient>
+            <filter id="atBrilho" x="-40%" y="-40%" width="180%" height="180%">
+              <feGaussianBlur stdDeviation="2.4" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <rect width="600" height="600" fill="url(#atFundo)" rx="12"/>
+          <g class="atPeca" onclick="atPeca('vazio')">
+            <circle cx="300" cy="300" r="285" fill="transparent"/>
+            <circle cx="300" cy="300" r="285" fill="none" stroke="#3d7db8" stroke-width="0.6" stroke-dasharray="3 7" opacity="0.45"/>
+          </g>
+          <g fill="none" stroke="#3d7db8" stroke-width="1" opacity="0.5">
+            <circle cx="300" cy="300" r="120"/><circle cx="300" cy="300" r="215"/>
+          </g>
+          <g class="atPeca" onclick="atPeca('eletron')" filter="url(#atBrilho)">
+            <g class="atOrb" style="animation:atGira 14s linear infinite">
+              <circle cx="420" cy="300" r="8" fill="#9fd8ff"/><circle cx="180" cy="300" r="8" fill="#9fd8ff"/>
+            </g>
+            <g class="atOrb" style="animation:atGira 26s linear infinite reverse">
+              <circle cx="515" cy="300" r="8" fill="#9fd8ff"/><circle cx="300" cy="515" r="8" fill="#9fd8ff"/>
+              <circle cx="85" cy="300" r="8" fill="#9fd8ff"/><circle cx="300" cy="85" r="8" fill="#9fd8ff"/>
+            </g>
+          </g>
+          <g class="atPeca" onclick="atPeca('nucleo')" filter="url(#atBrilho)">
+            <circle cx="300" cy="300" r="46" fill="transparent"/>
+            <circle cx="284" cy="290" r="15" fill="#e0713a"/><circle cx="316" cy="292" r="15" fill="#e0713a"/>
+            <circle cx="300" cy="318" r="15" fill="#e0713a"/><circle cx="272" cy="314" r="15" fill="#cfd8e3"/>
+            <circle cx="328" cy="316" r="15" fill="#cfd8e3"/><circle cx="300" cy="278" r="15" fill="#cfd8e3"/>
+          </g>
+        </svg>
+        <div style="text-align:center;margin-top:8px;font-size:0.68rem;color:var(--cinza)">
+          O carbono — 6 prótons, 6 nêutrons, 6 elétrons.<br>O átomo da vida. Toque no núcleo, nos elétrons ou no vazio em volta.
+        </div>
+      </div>
+      <div style="flex:1;min-width:280px">
+        <div id="atPecaPainel" class="vazio" style="font-size:0.8rem">Toque numa parte do átomo ao lado — o núcleo, os elétrons ou o espaço vazio entre eles.</div>
+        <p style="font-size:0.74rem;color:var(--cinza);margin-top:10px">O desenho é o modelo antigo, de bolinhas em órbita — o mesmo que se aprende na escola. A física moderna já não desenha assim (o elétron é nuvem de probabilidade, não bolinha), mas nenhum desenho honesto do átomo real existe: ele não tem aparência. Fica o modelo velho, com o aviso junto.</p>
+      </div>
+    </div>
+
+    <h3 style="font-family:Lora,serif;font-size:0.95rem;color:var(--azul);margin:20px 0 6px">A escada da matéria — assim embaixo, assim em cima</h3>
+    <p style="font-size:0.74rem;color:var(--cinza);margin-bottom:8px">A Lei da Correspondência não é metáfora aqui: é a mesma estrutura repetida de degrau em degrau — algo pequeno e denso no centro, algo leve girando em volta, e vazio quase inteiro no meio. Toque num degrau.</p>
+    <div id="atEscada" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px"></div>
+    <div id="atEscadaPainel" class="vazio" style="font-size:0.8rem;margin-top:10px">Escolha um degrau da escada.</div>
+
+    <h3 style="font-family:Lora,serif;font-size:0.95rem;color:var(--azul);margin:20px 0 6px">De que o corpo é feito — os elementos e seus pesos</h3>
+    <p style="font-size:0.74rem;color:var(--cinza);margin-bottom:8px">Percentuais por massa de um corpo humano adulto. Onze elementos fazem 99,9% de uma pessoa inteira; o resto — ferro, zinco, iodo, selênio, cobre — cabe numa colher e ainda assim decide se ela acorda disposta. Toque para ver a função e a ponte com a clínica.</p>
+    <div id="atElementos" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:6px"></div>
+    <div id="atElemPainel" class="vazio" style="font-size:0.8rem;margin-top:10px">Escolha um elemento acima.</div>
+
+    <h3 style="font-family:Lora,serif;font-size:0.95rem;color:var(--azul);margin:20px 0 8px">O que o átomo ensina — e onde a leitura começa</h3>
+    <div class="cards">
+      <div class="card"><h3>Somos quase todo vazio</h3><div class="sub">Se o núcleo de um átomo tivesse o tamanho de uma azeitona no centro de um campo de futebol, os elétrons estariam na arquibancada — e no meio, nada. Mais de 99,9999999996% do volume de qualquer matéria é espaço vazio. A solidez que se sente ao apertar um braço não é matéria encostando em matéria: é campo elétrico empurrando campo elétrico. Nada nunca se toca de verdade.</div></div>
+      <div class="card"><h3>Somos poeira de estrela</h3><div class="sub">O hidrogênio veio do começo do universo. Todo o resto — o carbono dos ossos, o oxigênio do sangue, o ferro que carrega o oxigênio — foi forjado dentro de estrelas e espalhado quando elas morreram. Isto não é poesia solta: é nucleossíntese, física estabelecida. Cada átomo do corpo do paciente já esteve dentro de uma estrela. Ele é, literalmente, mais velho que o Sol.</div></div>
+      <div class="card"><h3>Nada está parado</h3><div class="sub">A Lei da Vibração dita ao pé da letra: elétrons em movimento perpétuo, núcleos oscilando, moléculas trepidando conforme a temperatura. Zero absoluto — o único ponto de repouso possível — nunca foi alcançado em lugar nenhum do universo. Aquilo que a mão sente como "morno" é literalmente a velocidade com que os átomos daquele corpo estão se agitando.</div></div>
+      <div class="card"><h3>A matéria se recicla inteira</h3><div class="sub">O corpo troca a maior parte de seus átomos ao longo dos anos: o revestimento do intestino em dias, a pele em semanas, o esqueleto em cerca de dez anos. Quem está sentado na cadeira não é feito da mesma matéria de dez anos atrás — e continua sendo a mesma pessoa. A identidade, portanto, não mora nos átomos. Mora no padrão que os organiza.</div></div>
+    </div>
+
+    <h3 style="font-family:Lora,serif;font-size:0.95rem;color:var(--azul);margin:20px 0 8px">A fronteira honesta — onde a física para</h3>
+    <p style="font-size:0.8rem;line-height:1.6">A física quântica é usada por aí para justificar quase tudo, e a maior parte disso é falso. Vale marcar a linha com clareza, porque a Metafísica aqui não precisa de empréstimos: <strong style="color:var(--azul)">o "observador" da física quântica não é a consciência humana</strong> — é qualquer interação de medida, um detector desligado numa sala vazia já basta. Pensamento não move partícula. O emaranhamento é real e comprovado, mas não transmite informação e não liga duas pessoas à distância. "Tudo é vibração" é verdadeiro no sentido literal e físico (matéria é agitação), e não no sentido de que se sintonize um estado emocional como se sintoniza um rádio.</p>
+    <p style="font-size:0.8rem;line-height:1.6;margin-top:8px">O que sobra depois de cortar os empréstimos falsos ainda é imenso, e é tudo verdadeiro: a unidade da matéria, a estrutura que se repete em toda escala, a origem estelar do corpo, o vazio quase total, o movimento que nunca cessa, a identidade que sobrevive à troca completa das peças. Não é preciso torcer a física para achar espanto nela.</p>
+    <p style="font-size:0.74rem;color:var(--cinza);margin-top:16px;border-top:1px solid rgba(201,168,76,0.15);padding-top:10px">Origem declarada: os números e os fatos deste bloco são física e bioquímica estabelecidas (composição elementar do corpo, nucleossíntese estelar, escalas atômicas). As pontes com a clínica, com os 5 Elementos e com as Leis Herméticas são leitura nossa, camada Metafísica — o átomo não fala de fígado nem de Madeira. Vale a regra da teia: <strong style="color:var(--azul)">isto organiza o espanto, não substitui a escuta nem o médico</strong>.</p>
+  </div>
   <div class="bloco" id="mfBloco2">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 2.5a4.75 4.75 0 0 0 0 9.5 4.75 4.75 0 0 1 0 9.5"/><circle cx="12" cy="7.25" r="1"/><circle cx="12" cy="16.75" r="1"/></svg>Polaridade — a dobradiça do mapa</h2>
     <p style="font-size:0.82rem;line-height:1.55;margin-bottom:10px">"Tudo é duplo; os opostos são idênticos em natureza, diferentes em grau." Frio e calor não são duas coisas — são a mesma régua de temperatura. Medo e coragem não são dois sentimentos — são a mesma energia em graus diferentes. Não se elimina um polo: <strong style="color:var(--azul)">caminha-se pela régua</strong>.</p>
@@ -965,7 +1048,37 @@ tr:hover td{background:rgba(201,168,76,0.05)}
       <div class="card"><h3>Hermetismo</h3><div class="sub">As 7 leis do Caibalion — a casa natural: Mentalismo, Vibração, Causa e Efeito. "Que seu sim seja sim."</div></div>
       <div class="card click" onclick="go('arvore')"><h3>Kabbalah — Árvore da Vida</h3><div class="sub">As 10 Sefirot entre o físico e a fonte. Já vive no OS — clique para visitar o Mapa Energético.</div></div>
       <div class="card"><h3>Medicina Chinesa — 5 Elementos</h3><div class="sub">A tradição que liga a metafísica ao corpo e à clínica. Vive na Árvore da Vida e no corpo vitruviano.</div></div>
+      <div class="card click" onclick="document.getElementById('mfBlocoIChing').scrollIntoView({behavior:'smooth'})"><h3>I Ching — o Livro das Mutações</h3><div class="sub">O irmão mais velho do Taoismo: 8 manifestações que se combinam em 64 situações. Clique para descer ao bloco.</div></div>
     </div>
+  </div>
+  <div class="bloco" id="mfBlocoIChing">
+    <style>
+      .ichCel{cursor:pointer;border:1px solid rgba(27,58,92,0.14);border-radius:6px;padding:3px 1px 2px;text-align:center;transition:all .15s;background:rgba(255,255,255,0.02)}
+      .ichCel:hover{border-color:var(--dourado,#c9a84c);transform:translateY(-1px)}
+      .ichCel.sel{border-color:var(--dourado,#c9a84c);background:rgba(201,168,76,0.14)}
+      .ichCel .n{font-size:0.6rem;color:var(--cinza);line-height:1;margin-top:1px}
+      .ichTri{cursor:pointer;transition:all .15s}
+      .ichTri.sel{border-color:var(--dourado,#c9a84c);box-shadow:0 0 0 1px var(--dourado,#c9a84c)}
+    </style>
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M3 5h18M3 12h7M14 12h7M3 19h18"/></svg>I Ching — as 8 manifestações e as 64 situações</h2>
+    <p style="font-size:0.82rem;line-height:1.6;margin-bottom:10px">O I Ching não adivinha o futuro: ele descreve <strong style="color:var(--azul)">o momento</strong>. Uma linha inteira (yang) e uma linha partida (yin) — só isso. Três linhas empilhadas formam uma das <strong>8 manifestações</strong>, as oito maneiras que a energia tem de se apresentar no mundo. Duas manifestações, uma sobre a outra, formam um <strong>hexagrama</strong>: 8 × 8 = <strong>64 situações</strong>. E como nada fica parado, uma situação vira outra — daí o nome, Livro das <em>Mutações</em>.</p>
+    <p style="font-size:0.75rem;color:var(--cinza);margin-bottom:14px">Leitura de baixo para cima: a primeira linha é o começo, a de cima é o desfecho. A manifestação de baixo é o que se passa dentro (o interior, a raiz, o que a pessoa é); a de cima é o que se passa fora (o mundo, a circunstância, o que aparece).</p>
+
+    <h3 style="font-family:Lora,serif;font-size:0.95rem;color:var(--azul);margin:14px 0 8px">As 8 manifestações — os trigramas</h3>
+    <div id="ichTrigramas" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(122px,1fr));gap:8px"></div>
+    <div id="ichTriPainel" class="vazio" style="font-size:0.8rem;margin-top:10px">Toque numa manifestação para ver a imagem, a família, a ponte com os 5 Elementos e onde ela aparece na clínica.</div>
+
+    <h3 style="font-family:Lora,serif;font-size:0.95rem;color:var(--azul);margin:20px 0 6px">Os 64 hexagramas — a grade das mutações</h3>
+    <p style="font-size:0.74rem;color:var(--cinza);margin-bottom:8px">A linha diz a manifestação <strong>de baixo</strong> (o dentro); a coluna diz a manifestação <strong>de cima</strong> (o fora). Onde as duas se cruzam mora a situação. Toque para abrir.</p>
+    <div style="overflow-x:auto"><div id="ichGrade" style="min-width:430px"></div></div>
+    <div id="ichPainel" class="vazio" style="font-size:0.82rem;margin-top:12px">Escolha um hexagrama na grade — ou lance as moedas abaixo.</div>
+
+    <h3 style="font-family:Lora,serif;font-size:0.95rem;color:var(--azul);margin:20px 0 6px">As três moedas — consultar o momento</h3>
+    <p style="font-size:0.74rem;color:var(--cinza);margin-bottom:8px">O método antigo: três moedas jogadas seis vezes, de baixo para cima. Cara vale 3, coroa vale 2. Soma 6 ou 9 é linha <strong>mutável</strong> — o ponto onde a situação já está virando outra. A pergunta se faz antes de jogar, e é sobre a atitude, nunca sobre o resultado: não "vai dar certo?", mas "qual é o meu lugar nisso?".</p>
+    <button class="btn" onclick="ichLancar()">Lançar as moedas</button>
+    <div id="ichOraculo" style="margin-top:12px"></div>
+
+    <p style="font-size:0.74rem;color:var(--cinza);margin-top:16px;border-top:1px solid rgba(201,168,76,0.15);padding-top:10px">Origem declarada: os nomes e a ordem dos 64 seguem o arranjo do Rei Wen, o mais usado no Ocidente. As essências e as pontes com a clínica são leitura nossa — o I Ching original não fala de florais nem de Zang-Fu. A regra da teia vale aqui também: <strong style="color:var(--azul)">o hexagrama organiza o que a escuta trouxe, nunca decide pelo paciente</strong>.</p>
   </div>
   <div class="bloco" id="mfBloco8">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="6.3"/><circle cx="12" cy="12" r="9.6"/></svg>A Leitura em 4 Camadas</h2>
@@ -1688,8 +1801,10 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v4.1';
-const APP_VERSION_NOTA='a Numerologia deixa de ser um rolo comprido: o mapa se organiza em sete abas internas, uma de cada vez, e a aba aberta continua aberta quando se recalcula — nada mudou no cálculo, só o jeito de olhar';
+const APP_VERSION='v4.4';
+const APP_VERSION_NOTA='acendem-se os Átomos no anel 1 da Metafísica: um átomo de carbono que se pode tocar por dentro (núcleo, elétrons e o vazio que é quase tudo), a escada da matéria em doze degraus — do quark ao universo, sempre a mesma planta se repetindo — e os quatorze elementos de que o corpo é feito, cada um com seu peso e sua ponte com a clínica; com a fronteira dita em voz alta de onde a física acaba e a leitura começa';
+const APP_VERSION_NOTA_V43='acende-se o I Ching dentro da Metafísica: as 8 manifestações (as oito maneiras que a energia tem de se apresentar), os 64 hexagramas numa grade onde a linha é o que se passa dentro e a coluna é o que se passa fora, e as três moedas para consultar o momento — com as linhas mutáveis mostrando por onde a situação já está virando outra';
+const APP_VERSION_NOTA_V41='a Numerologia deixa de ser um rolo comprido: o mapa se organiza em sete abas internas, uma de cada vez, e a aba aberta continua aberta quando se recalcula — nada mudou no cálculo, só o jeito de olhar';
 const APP_VERSION_NOTA_V40='os dois mapas se encontram: o Sol calculado por Meeus entra na Numerologia e a roda do zodíaco deixa de ser genérica — passa a mostrar alguém, com o Sol e o eixo dos nodos marcados nos graus exatos. Os números caem nas esferas da Árvore, os signos caem nos caminhos entre elas';
 const APP_VERSION_NOTA_V39='acende-se a Gematria: o nome escrito em letras hebraicas e somado pelos valores antigos, com a tabela de transliteração inteira à vista — dizendo que a gematria é exata no hebraico, mas que transliterar um nome em português é convenção moderna, não revelação';
 const APP_VERSION_NOTA_V38='acendem-se os Pináculos: as quatro estações da vida e os três ciclos longos, com as idades de virada saindo do Caminho de Vida — e a estação de agora marcada, para o mapa responder sobre o presente e não só sobre a origem';
@@ -3739,9 +3854,9 @@ const LEIS_HERMETICAS=[
 // ===== ÍNDICE FIBONACCI DA METAFÍSICA (anéis da árvore) =====
 const MF_NIVEIS=[
   {n:0,titulo:'O Vazio',resumo:'O que é Metafísica aqui: a compreensão dos fenômenos além dos 5 sentidos. A palavra sai impregnada da frequência do que sabemos sobre ela. "Que seu sim seja sim." A palavra é criadora; o foco é o leme.'},
-  {n:1,titulo:'O Princípio',resumo:'A unidade da qual tudo deriva. As 7 Leis Herméticas do Caibalion, a ponte honesta com a ciência (gravidade, átomo, quântica) e o Cubo de Metatron como símbolo visual.',bloco:'mfBloco1'},
+  {n:1,titulo:'O Princípio',resumo:'A unidade da qual tudo deriva. As 7 Leis Herméticas do Caibalion, o Cubo de Metatron como símbolo visual e — logo abaixo neste anel — os Átomos: a ponte honesta com a ciência, com a escada da matéria do quark ao universo e a fronteira declarada de onde a física para.',bloco:'mfBloco1'},
   {n:2,titulo:'Polaridade',resumo:'A dobradiça do mapa: opostos são a mesma régua em graus diferentes. Três tradições descobriram a mesma lei — Hermetismo (Lei 4), Taoismo (yin/yang) e Freud (o que se nega, se afirma). A sombra é o polo não assumido; transmuta-se por grau, não por salto — como os florais: Rock Rose para o pavor, Mimulus para o medo nomeado.',bloco:'mfBloco2'},
-  {n:3,titulo:'As Tradições-mãe',resumo:'As três escolhidas para começar: Hermetismo, Medicina Chinesa / 5 Elementos e Kabbalah / Árvore da Vida. Vedanta, Alquimia e a tradição estelar entram depois, com calma.',bloco:'mfBloco3'},
+  {n:3,titulo:'As Tradições-mãe',resumo:'As três escolhidas para começar: Hermetismo, Medicina Chinesa / 5 Elementos e Kabbalah / Árvore da Vida. Do tronco chinês desce o I Ching — as 8 manifestações e os 64 hexagramas, logo abaixo neste anel. Vedanta, Alquimia e a tradição estelar entram depois, com calma.',bloco:'mfBloco3'},
   {n:5,titulo:'Correspondências',resumo:'A teia que liga tudo: elemento, órgão, emoção, estação, cor, sabor, planeta, floral e lei. Cada coluna com sua origem declarada — tradição não se mistura com escolha nossa. A porta de entrada visual é o corpo vitruviano.',bloco:'mfBloco5'},
   {n:8,titulo:'Uso Clínico',resumo:'A Leitura em 4 Camadas (corpo, emoção, símbolo, lei) e o Mapa Metafísico do Paciente — documento vivo por pessoa. Regra de ouro: a metafísica não substitui a escuta, ela organiza o que a escuta trouxe.',bloco:'mfBloco8'},
   {n:13,titulo:'Biblioteca',resumo:'Quatro estantes: Hermetismo (Caibalion fichado, Tábua de Esmeralda), Medicina Chinesa (Nei Jing, Tao Te Ching), Kabbalah (as 10 Sefirot, Sefer Yetzirah) e Pontes (Freud já no OS, florais de Bach, física para leigos). Regra: só entra livro com intenção real de leitura.',bloco:'mfBloco13'},
@@ -3789,7 +3904,300 @@ function renderMetafisica(){
       '<div style="font-style:italic;color:var(--cinza);font-size:0.78rem;margin:2px 0">"'+l[1]+'"</div>'+
       '<div style="font-size:0.8rem">'+l[2]+'</div></div>').join('');
   mfRenderLabels();
+  ichRender();
+  atRender();
   mfCarregar();
+}
+
+// ===== ÁTOMOS — a matéria vista por dentro =====
+// Números e fatos: física/bioquímica estabelecidas. As pontes com a clínica e
+// com os 5 Elementos são leitura nossa (camada Metafísica), não física.
+const AT_PECAS={
+  nucleo:['O núcleo — prótons e nêutrons',
+    'Toda a massa do átomo mora aqui, num ponto cem mil vezes menor que o átomo inteiro. O número de prótons é a identidade: 6 prótons é carbono e será carbono para sempre; tire um e virou boro, outra substância. Os nêutrons não mudam a identidade, mudam o peso — são os isótopos, e é um deles, o carbono-14, que permite datar um osso antigo.',
+    'A leitura: o núcleo é o que não se negocia. Numa pessoa, é o que permanece quando tudo o mais muda — e o que se perde quando ela deixa de ser quem é. Poucos prótons, muita consequência.'],
+  eletron:['Os elétrons — a borda que negocia',
+    'Leves ao ponto de quase não pesarem (um próton pesa 1836 elétrons), são eles que fazem toda a química do mundo. Ligação entre átomos é elétron partilhado, doado ou disputado. Eletricidade é elétron andando. A cor de qualquer coisa é elétron subindo e descendo de nível e devolvendo luz no caminho.',
+    'A leitura: a identidade está no núcleo, mas o encontro está na borda. Tudo o que um átomo faz com outro, ele faz pela periferia — nunca pelo centro. O contato acontece na superfície; o que é essencial não se mistura.'],
+  vazio:['O vazio — quase tudo',
+    'Entre o núcleo e os elétrons não há nada: nem ar, nem éter, nem matéria fina. Vazio. Mais de 99,9999999996% do volume de qualquer coisa sólida é espaço. Se todo o vazio dos átomos de um corpo humano fosse comprimido, a pessoa inteira caberia num grão de poeira — e continuaria pesando o mesmo.',
+    'A leitura: a solidez é uma experiência, não uma medida. E o vazio não é falta — é o que dá lugar para a estrutura existir. O mesmo que o Tao diz do vaso: serve pelo oco, não pela parede.']
+};
+function atPeca(k){
+  const p=AT_PECAS[k];if(!p)return;
+  const el=document.getElementById('atPecaPainel');
+  el.classList.remove('vazio');
+  el.innerHTML='<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:6px;font-size:1rem">'+p[0]+'</h3>'+
+    '<p style="font-size:0.8rem;line-height:1.6">'+p[1]+'</p>'+
+    '<p style="font-size:0.78rem;line-height:1.6;margin-top:8px;color:var(--cinza)"><em>'+p[2]+'</em></p>';
+}
+// [escala, nome, o que é, o que se repete nesse degrau]
+const AT_ESCADA=[
+  ['10⁻¹⁸ m','Quark','As peças de dentro do próton — três delas, presas por uma força que fica mais forte quanto mais se afastam. Nunca foram vistas sozinhas e talvez nunca sejam: separá-las cria pares novos em vez de soltar uma.','O fundo do poço conhecido. Quanto mais se tenta isolar a parte última, mais ela insiste em vir acompanhada.'],
+  ['10⁻¹⁵ m','Próton','Três quarks numa dança tão veloz que 99% da massa dele não é matéria — é a energia do próprio movimento. A massa do corpo humano é, em sua quase totalidade, movimento aprisionado.','Aqui a matéria já se revela como energia parada. E = mc² deixa de ser fórmula e vira descrição do corpo.'],
+  ['10⁻¹⁰ m','Átomo','Núcleo denso ao centro, elétrons na periferia, vazio no meio. 118 tipos conhecidos, 94 naturais — a lista completa de tudo que existe.','O padrão-mãe: centro denso, borda leve, vazio entre os dois.'],
+  ['10⁻⁹ m','Molécula','Átomos de mãos dadas pelos elétrons. Água é dois hidrogênios e um oxigênio num ângulo de 104,5° — e é esse ângulo torto, e só ele, que faz a água ser molhada, dissolver quase tudo e sustentar a vida.','A qualidade nasce do arranjo, não das peças. Mesmos átomos, ângulo diferente, mundo diferente.'],
+  ['10⁻⁶ m','Célula','A primeira coisa viva. Núcleo ao centro guardando a informação, membrana negociando a borda, citoplasma quase todo água no meio.','A mesma planta do átomo, agora viva: centro que guarda a identidade, borda que faz as trocas.'],
+  ['10⁻³ m','Tecido','Células iguais que combinaram de fazer a mesma coisa juntas. Osso, músculo, nervo, pele — no OS, a camada que a Anatomia acende.','Especializar-se é abrir mão de fazer tudo para fazer uma coisa bem. A célula do osso não vira nervo.'],
+  ['10⁻² m','Órgão','Tecidos diferentes cooperando numa função. É o degrau onde a Medicina Chinesa mora: Fígado, Coração, Baço, Pulmão, Rim.','O Zang-Fu vive aqui — a ponte entre o corpo físico e os 5 Elementos.'],
+  ['1 m','Corpo','Cerca de 7 octilhões de átomos (7 seguido de 27 zeros), 37 trilhões de células, um só nome. E o conjunto todo se sabe uma pessoa.','O degrau do espanto: em algum ponto entre o átomo e aqui, a matéria começou a dizer "eu".'],
+  ['10⁷ m','Planeta','Núcleo de ferro ao centro, crosta fina na borda, atmosfera de gases girando por cima. Mesma planta, outra escala.','O corpo e a Terra construídos pelo mesmo desenho — a Lei da Correspondência literal.'],
+  ['10¹² m','Sistema solar','O Sol concentra 99,86% da massa; os planetas giram no vazio à volta. É o átomo desenhado grande — e foi exatamente essa a imagem que Rutherford usou em 1911.','"Assim em cima como embaixo" já estava dito no Caibalion muito antes de alguém ver um átomo.'],
+  ['10²¹ m','Galáxia','200 bilhões de estrelas em espiral, um buraco negro colossal no centro, distâncias tão grandes que a estrela vizinha leva 4 anos-luz para mandar notícia.','Centro denso, periferia girando, vazio esmagador entre os dois. O padrão não desiste.'],
+  ['10²⁶ m','Universo','Tudo o que há, com 13,8 bilhões de anos. Da menor peça conhecida até aqui são 44 ordens de grandeza — e a mesma estrutura reaparece em quase todas.','O último degrau da escada é feito exatamente das mesmas peças do primeiro. A escada é circular.']
+];
+function atEscada(i){
+  const d=AT_ESCADA[i];if(!d)return;
+  AT_ESCADA.forEach((x,j)=>{const b=document.getElementById('atDeg'+j);if(b)b.classList.toggle('sel',j===i)});
+  const el=document.getElementById('atEscadaPainel');
+  el.classList.remove('vazio');
+  el.innerHTML='<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:4px;font-size:1rem">'+d[1]+
+    ' <span style="font-size:0.7rem;color:var(--cinza);font-family:inherit">· '+d[0]+'</span></h3>'+
+    '<p style="font-size:0.8rem;line-height:1.6">'+d[2]+'</p>'+
+    '<p style="font-size:0.78rem;line-height:1.6;margin-top:8px;color:var(--cinza)"><em>'+d[3]+'</em></p>';
+}
+// [símbolo, nome, % da massa do corpo, o que faz, ponte clínica/leitura nossa]
+const AT_ELEM=[
+  ['O','Oxigênio',65,'Dois terços de uma pessoa. A maior parte não é o ar respirado: é o oxigênio da água que forma o corpo. O que se respira é o que queima o açúcar e libera a energia de viver.','Metal, o pulmão, a Lei da Polaridade: inspirar e soltar. O elemento mais abundante do corpo é justamente o que precisa entrar e sair sem parar — não se estoca respiração.'],
+  ['C','Carbono',18.5,'O esqueleto de toda molécula viva. Sozinho entre os 118, faz quatro ligações estáveis e se encadeia sem limite — por isso a vida é de carbono e não de outra coisa.','O elemento da forma que se sustenta. Todo carbono do corpo foi fabricado dentro de uma estrela que já morreu.'],
+  ['H','Hidrogênio',9.5,'O átomo mais simples que existe: um próton, um elétron. É o mais antigo de todos — nasceu nos primeiros minutos do universo e não foi fabricado por ninguém depois.','A parte do corpo que tem 13,8 bilhões de anos. Água é hidrogênio; e a Água, na teia, é o Rim, a origem, a herança.'],
+  ['N','Nitrogênio',3.2,'Está em toda proteína e em todo o DNA. Abundante no ar (78%), e ainda assim inacessível: o corpo não consegue tirá-lo do ar — só chega pela comida.','Ter em volta não é ter dentro. O que nutre precisa de mediação — o Baço, a Terra, a transformação do que se come em si mesmo.'],
+  ['Ca','Cálcio',1.5,'99% no osso e no dente, e é o 1% restante que faz o trabalho fino: contração muscular, coagulação e cada batimento do coração dependem dele.','Osso é banco, não cofre: em falta, o corpo saca do esqueleto para manter o coração batendo. A estrutura se dissolve para sustentar a função.'],
+  ['P','Fósforo',1.0,'Com o cálcio faz o osso; e é dele a molécula do ATP, a moeda de energia de toda célula viva. Toda energia gasta hoje passou por uma ligação de fósforo.','A energia não se guarda em tanque, se produz e gasta na hora. O ATP dura segundos e é refeito o dia inteiro.'],
+  ['K','Potássio',0.4,'Manda dentro da célula. Junto com o sódio faz a bomba que gera o impulso nervoso — todo pensamento e todo movimento saem dessa diferença de carga.','O que é de dentro. Cada célula gasta perto de um terço de toda a sua energia só para manter essa diferença — é caro ser distinto do lado de fora.'],
+  ['S','Enxofre',0.3,'Faz as pontes que dobram a proteína no formato certo. Cabelo, unha e pele são ricos nele — cabelo liso ou cacheado é geometria de enxofre.','Sem a dobra certa, a proteína não serve para nada. A forma é a função — vale para molécula e vale para pessoa.'],
+  ['Na','Sódio',0.2,'Manda fora da célula. Segura a água no corpo, sustenta a pressão e é a outra metade da bomba do nervo.','O par sódio/potássio é a Polaridade em bioquímica: dentro e fora, e uma bomba trabalhando sem descanso para manter a diferença.'],
+  ['Cl','Cloro',0.2,'Acompanha o sódio no equilíbrio e faz o ácido do estômago, capaz de dissolver metal — guardado por uma parede que se refaz a cada poucos dias.','A digestão é violenta por natureza; o que a torna segura é a parede se renovar mais rápido do que se gasta.'],
+  ['Mg','Magnésio',0.1,'Necessário a mais de 300 reações do corpo, entre elas a que solta o músculo depois da contração e a que estabiliza o ATP.','A falta aparece como cãibra, tensão e insônia: não é o encolher que falha, é o soltar. Contrair é fácil; relaxar é que dá trabalho.'],
+  ['Fe','Ferro',0.006,'Carrega o oxigênio no sangue, e é a cor vermelha dele. Só se forma no coração de estrelas grandes, nos últimos instantes antes de explodirem.','O metal mais caro do universo para se fabricar circula em cada veia. Em falta: cansaço que não passa com sono.'],
+  ['Zn','Zinco',0.003,'Em centenas de enzimas, na cicatrização, na imunidade, no paladar e no olfato.','Perder o gosto das coisas costuma ter química por baixo antes de ter tristeza.'],
+  ['I','Iodo',0.00002,'Uns 20 miligramas na vida inteira, quase todos na tireoide — e são eles que regulam a velocidade de funcionamento do corpo todo.','Vinte miligramas decidem se a pessoa acorda acelerada ou arrastada. Quantidade não é o mesmo que importância.']
+];
+function atElem(i){
+  const e=AT_ELEM[i];if(!e)return;
+  AT_ELEM.forEach((x,j)=>{const b=document.getElementById('atEl'+j);if(b)b.classList.toggle('sel',j===i)});
+  const el=document.getElementById('atElemPainel');
+  el.classList.remove('vazio');
+  el.innerHTML='<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:4px;font-size:1rem">'+e[1]+
+    ' <span style="font-size:0.7rem;color:var(--cinza);font-family:inherit">· '+e[2]+'% da massa do corpo</span></h3>'+
+    '<p style="font-size:0.8rem;line-height:1.6">'+e[3]+'</p>'+
+    '<p style="font-size:0.78rem;line-height:1.6;margin-top:8px;color:var(--cinza)"><em>'+e[4]+'</em></p>';
+}
+function atRender(){
+  const esc=document.getElementById('atEscada');
+  if(esc&&!esc.hasChildNodes())
+    esc.innerHTML=AT_ESCADA.map((d,i)=>
+      '<div class="atDeg" id="atDeg'+i+'" onclick="atEscada('+i+')">'+
+      '<div class="esc">'+d[0]+'</div><div class="nm">'+d[1]+'</div></div>').join('');
+  const els=document.getElementById('atElementos');
+  if(els&&!els.hasChildNodes())
+    els.innerHTML=AT_ELEM.map((e,i)=>
+      '<div class="atDeg" id="atEl'+i+'" onclick="atElem('+i+')">'+
+      '<div style="font-family:Lora,serif;font-size:1.05rem;color:var(--azul);line-height:1.1">'+e[0]+'</div>'+
+      '<div class="nm">'+e[1]+'</div><div class="esc" style="margin:2px 0 0">'+e[2]+'%</div></div>').join('');
+}
+
+// ===== I CHING — as 8 manifestações e os 64 hexagramas =====
+// Ordem e nomes seguem o arranjo do Rei Wen. As essências e as pontes com a
+// clínica são leitura nossa (camada Metafísica), não tradução do original.
+// bits: de BAIXO para CIMA — 1 = linha inteira (yang), 0 = linha partida (yin).
+const ICH_TRI=[
+  {id:'qian',bits:[1,1,1],n:'Qián',pt:'O Criativo',img:'Céu',atr:'Força que inicia',fam:'Pai',dir:'Noroeste',elo:'Metal',
+   txt:'Três linhas inteiras: energia pura, sem nada que a interrompa. É o impulso que começa as coisas — a intenção antes da forma. Onde o Céu aparece, há força disponível; o cuidado é não gastar tudo de uma vez.'},
+  {id:'zhen',bits:[1,0,0],n:'Zhèn',pt:'O Despertar',img:'Trovão',atr:'Movimento, susto',fam:'Filho mais velho',dir:'Leste',elo:'Madeira',
+   txt:'Um yang forçando por baixo de duas linhas partidas: a energia que rompe e sacode. É o susto que acorda, a notícia, o começo súbito. Na clínica, o trovão é o que tira a pessoa da inércia — desagradável e necessário.'},
+  {id:'kan',bits:[0,1,0],n:'Kǎn',pt:'O Abismo',img:'Água',atr:'Perigo, profundidade',fam:'Filho do meio',dir:'Norte',elo:'Água',
+   txt:'Um yang preso entre dois yin: luz no fundo do poço. A água não recua diante do buraco — enche e segue. É o perigo que se atravessa mantendo o coração firme, e é também o que há de mais profundo na pessoa.'},
+  {id:'gen',bits:[0,0,1],n:'Gèn',pt:'A Quietude',img:'Montanha',atr:'Parada, limite',fam:'Filho mais novo',dir:'Nordeste',elo:'Terra',
+   txt:'O yang no topo fecha o movimento: aqui a energia para. É o silêncio, o limite, a meditação e o luto que ainda não passou. Parar na hora certa é tão ativo quanto avançar.'},
+  {id:'kun',bits:[0,0,0],n:'Kūn',pt:'O Receptivo',img:'Terra',atr:'Acolhimento, entrega',fam:'Mãe',dir:'Sudoeste',elo:'Terra',
+   txt:'Três linhas partidas: espaço puro, sem resistência. Não é passividade — é a capacidade de sustentar, gestar e dar forma ao que o Céu apenas quis. Onde a Terra aparece, sustenta-se em vez de empurrar.'},
+  {id:'xun',bits:[0,1,1],n:'Xùn',pt:'O Suave',img:'Vento',atr:'Penetração gentil',fam:'Filha mais velha',dir:'Sudeste',elo:'Madeira',
+   txt:'O yin por baixo entra onde a força não entra. O vento não arromba portas: passa pelas frestas, insistindo. É a palavra dita devagar, repetida sem violência, que acaba mudando alguém.'},
+  {id:'li',bits:[1,0,1],n:'Lí',pt:'O Aderir',img:'Fogo',atr:'Clareza, beleza',fam:'Filha do meio',dir:'Sul',elo:'Fogo',
+   txt:'Vazio no centro, luz nas bordas: o fogo só existe agarrado ao que queima. Dá clareza, consciência e beleza — e lembra que toda luz depende de algo. Ver bem e depender andam juntos aqui.'},
+  {id:'dui',bits:[1,1,0],n:'Duì',pt:'A Alegria',img:'Lago',atr:'Prazer, fala',fam:'Filha mais nova',dir:'Oeste',elo:'Metal',
+   txt:'Aberto em cima como um lago que reflete o céu: a alegria que se conversa. É a boca, a troca, o prazer partilhado. Superfície serena com profundidade embaixo — alegria não é superficialidade.'}
+];
+// Tabela do Rei Wen: linha = manifestação de BAIXO, coluna = de CIMA (mesma ordem de ICH_TRI)
+const ICH_KW=[
+  [ 1,34, 5,26,11, 9,14,43],
+  [25,51, 3,27,24,42,21,17],
+  [ 6,40,29, 4, 7,59,64,47],
+  [33,62,39,52,15,53,56,31],
+  [12,16, 8,23, 2,20,35,45],
+  [44,32,48,18,46,57,50,28],
+  [13,55,63,22,36,37,30,49],
+  [10,54,60,41,19,61,38,58]
+];
+// [nome, pinyin, essência, o que ele acende na escuta]
+const ICH_HEX={
+ 1:['O Criativo','Qián','Força pura que inicia, sem nada que a interrompa.','Há energia disponível — o risco é gastá-la toda de uma vez.'],
+ 2:['O Receptivo','Kūn','A terra que acolhe, sustenta e dá forma ao que foi concebido.','Hora de sustentar, não de empurrar.'],
+ 3:['A Dificuldade Inicial','Zhūn','O broto rompendo a terra: todo começo é confuso.','Início atrapalhado não é fracasso — é a forma do começo.'],
+ 4:['A Insensatez Juvenil','Méng','O não-saber que pede ensino, e o ensino que espera ser pedido.','O paciente que ainda não sabe perguntar; ensinar sem humilhar.'],
+ 5:['A Espera','Xū','Esperar com confiança, nutrindo-se enquanto o tempo faz sua parte.','Adiar com maturidade — a ansiedade quer atropelar o prazo.'],
+ 6:['O Conflito','Sòng','Dois direitos que se chocam de frente.','Brigas em que ganhar custa mais caro que ceder.'],
+ 7:['O Exército','Shī','Disciplina organizada em torno de um centro confiável.','A vida pede ordem e um comando interno claro.'],
+ 8:['A União','Bǐ','Águas que se juntam naturalmente: pertencer.','Com quem essa pessoa conta de verdade.'],
+ 9:['A Força Domadora do Pequeno','Xiǎo Chù','O pouco segurando o muito — por enquanto.','Só pequenos ajustes são possíveis agora; aceite a escala.'],
+ 10:['O Pisar','Lǚ','Andar sobre a cauda do tigre, com cortesia e atenção.','Terreno delicado: a conduta importa mais que a razão.'],
+ 11:['A Paz','Tài','O que sobe e o que desce se encontram; céu embaixo, terra em cima.','Janela boa — aproveitar sem descuidar.'],
+ 12:['A Estagnação','Pǐ','Céu e terra se afastam: ninguém mais se comunica.','Relação em que os dois já pararam de escutar.'],
+ 13:['Comunhão entre Homens','Tóng Rén','Juntar-se em campo aberto por um propósito comum.','Pertencer sem se dissolver no grupo.'],
+ 14:['A Posse do Grande','Dà Yǒu','Abundância que só se sustenta se circular.','Fartura que precisa ser repartida para não apodrecer.'],
+ 15:['A Modéstia','Qiān','A montanha escondida dentro da terra.','O valor que não precisa se anunciar — antídoto direto ao ego.'],
+ 16:['O Entusiasmo','Yù','Trovão saindo da terra: o ânimo que arrasta os outros.','Música, ritmo, entusiasmo que move o corpo antes da razão.'],
+ 17:['O Seguir','Suí','Adaptar-se ao que o momento pede, sem servilismo.','Seguir alguém sem se anular.'],
+ 18:['O Trabalho no Deteriorado','Gǔ','Consertar o que apodreceu por descuido de quem veio antes.','Herança familiar a reparar — a tarefa que ninguém fez.'],
+ 19:['A Aproximação','Lín','O que se avizinha e cresce dia a dia.','Algo está chegando: preparar o terreno.'],
+ 20:['A Contemplação','Guān','Olhar de cima o conjunto — e ser olhado.','Pausa para ver o todo; a hora da supervisão.'],
+ 21:['A Mordida Decisiva','Shì Kè','Morder e romper o obstáculo entalado entre os dentes.','Nomear o que trava, sem rodeio e sem crueldade.'],
+ 22:['A Graça','Bì','A beleza que veste a forma.','Cuidar da aparência da vida — lembrando que forma não substitui fundo.'],
+ 23:['A Desagregação','Bō','O que se esfarela por dentro até cair.','Perdas em curso: não sustentar o insustentável.'],
+ 24:['O Retorno','Fù','O solstício: a luz volta exatamente pelo ponto mais baixo.','Recaída não é o fim — é o ciclo virando.'],
+ 25:['A Inocência','Wú Wàng','Agir sem segunda intenção.','Espontaneidade limpa; parar de calcular cada passo.'],
+ 26:['A Força Domadora do Grande','Dà Chù','Reter uma energia grande até a hora dela.','Acumular antes de agir — represa, não desperdício.'],
+ 27:['O Alimento','Yí','O que se põe para dentro: comida, palavra, imagem.','Nutrição literal e simbólica — o que essa pessoa anda engolindo.'],
+ 28:['A Preponderância do Grande','Dà Guò','A viga que verga sob peso demais.','Sobrecarga: algo quebra se não aliviar agora.'],
+ 29:['O Abismal','Kǎn','Água sobre água: o perigo que se repete.','Atravessar o medo mantendo o coração firme.'],
+ 30:['O Aderir','Lí','Fogo que só existe agarrado ao que queima.','Clareza e dependência juntas: de que essa luz depende?'],
+ 31:['A Influência','Xián','Atração mútua; o cortejo antes da união.','Começo de vínculo, sensibilidade da pele.'],
+ 32:['A Duração','Héng','O que permanece porque se renova por dentro.','Casamento, prática, constância — durar não é repetir.'],
+ 33:['A Retirada','Dùn','Recuar a tempo, com dignidade, não em fuga.','Afastar-se do que adoece antes de adoecer.'],
+ 34:['O Poder do Grande','Dà Zhuàng','Força em excesso pedindo direção.','Potência sem medida — o risco aqui é a arrogância.'],
+ 35:['O Progresso','Jìn','O sol subindo sobre a terra.','Avanço claro e reconhecimento merecido.'],
+ 36:['O Obscurecimento da Luz','Míng Yí','O sol enterrado: guardar a chama por dentro.','Ambiente hostil — proteger a luz sem apagá-la.'],
+ 37:['A Família','Jiā Rén','Cada um no seu lugar dentro de casa.','Papéis familiares embaralhados: quem faz de pai de quem.'],
+ 38:['A Oposição','Kuí','Os que discordam e mesmo assim se completam.','Diferença que não precisa virar ruptura.'],
+ 39:['O Obstáculo','Jiǎn','O desfiladeiro: parar diante do impedimento e olhar para dentro.','Quando o caminho fecha, o que muda é a pessoa.'],
+ 40:['A Liberação','Xiè','A tempestade que passa e limpa o ar.','Alívio depois da crise — hora de soltar, não de cobrar.'],
+ 41:['A Diminuição','Sǔn','Tirar de baixo para dar em cima.','Renúncia consciente; simplificar a vida de propósito.'],
+ 42:['O Aumento','Yì','Tirar de cima para dar embaixo.','Generosidade que multiplica; momento fértil.'],
+ 43:['A Irrupção','Guài','A verdade que precisa ser dita na praça.','Nomear o abuso com firmeza e sem ódio.'],
+ 44:['O Encontro','Gòu','O yin que retorna sem aviso, por baixo.','Tentação e encontro inesperado — cuidado com o começo pequeno.'],
+ 45:['A Reunião','Cuì','Juntar as pessoas em torno do que é sagrado.','Rituais e encontros coletivos como remédio.'],
+ 46:['A Ascensão','Shēng','A árvore que sobe devagar, empurrando a terra.','Crescimento invisível e constante — não desanimar pela lentidão.'],
+ 47:['A Opressão','Kùn','O lago sem água: exaustão.','Esgotamento — guardar a palavra e poupar força.'],
+ 48:['O Poço','Jǐng','A fonte que serve a todos e não muda de lugar.','Voltar ao que realmente nutre; a cidade muda, o poço não.'],
+ 49:['A Revolução','Gé','Trocar a pele quando o tempo pede.','Mudança de fundo — o difícil é escolher a hora.'],
+ 50:['O Caldeirão','Dǐng','Cozinhar o cru até virar alimento.','Transformar a matéria bruta da vida em nutrição.'],
+ 51:['O Choque','Zhèn','Trovão sobre trovão: o susto que desperta.','Notícia, susto, trauma — o corpo treme e depois se recompõe.'],
+ 52:['A Quietude','Gèn','Montanha sobre montanha: parar de verdade.','Aquietar o pensamento; meditação, respiração, coluna.'],
+ 53:['O Desenvolvimento Gradual','Jiàn','A árvore na montanha, o voo do ganso: etapa por etapa.','Nada aqui pula degrau.'],
+ 54:['A Noiva','Guī Mèi','Entrar numa posição que não se escolheu.','Lugar secundário — manter a dignidade dentro do limite.'],
+ 55:['A Abundância','Fēng','O meio-dia pleno, que no auge já começa a declinar.','Gozar o auge sem se agarrar a ele.'],
+ 56:['O Viajante','Lǚ','Estar de passagem, sem casa.','Desenraizamento, mudança, o luto de um lugar.'],
+ 57:['O Suave','Xùn','O vento que penetra por insistência, não por força.','Influência gentil e repetida; a palavra que entra devagar.'],
+ 58:['A Alegria','Duì','Lago sobre lago: a alegria que se conversa.','Prazer partilhado, fala, boca.'],
+ 59:['A Dissolução','Huàn','O gelo que derrete: desfazer o endurecido.','Dissolver rigidez e ressentimento antes que virem pedra.'],
+ 60:['A Limitação','Jié','O nó do bambu: o limite que dá forma.','Contrato, horário, medida — limite que cuida.'],
+ 61:['A Verdade Interior','Zhōng Fú','O centro vazio que ressoa no outro.','Sinceridade que convence sem precisar de argumento.'],
+ 62:['A Preponderância do Pequeno','Xiǎo Guò','Hora do detalhe, não do grande gesto.','Cuidar do pequeno com esmero; o grande fica para depois.'],
+ 63:['Depois da Consumação','Jì Jì','Tudo no lugar — e a partir daqui só se desarruma.','Sucesso que pede vigilância.'],
+ 64:['Antes da Consumação','Wèi Jì','Quase lá: a raposa molha a cauda no último passo.','A etapa final é a mais delicada de todas.']
+};
+function ichTriIdx(bits){return ICH_TRI.findIndex(t=>t.bits.join('')===bits.join(''))}
+function ichNum(bits){// bits de baixo p/ cima (6)
+  return ICH_KW[ichTriIdx(bits.slice(0,3))][ichTriIdx(bits.slice(3,6))];
+}
+// desenha linhas de baixo para cima; mut = índices das linhas mutáveis
+function ichDesenho(bits,larg,cor,mut){
+  const L=larg||46,esp=L*0.13,h=L*0.115,gap=L*0.09,cc=cor||'#1b3a5c',m=mut||[];
+  const alt=bits.length*(h+gap);
+  let s='<svg viewBox="0 0 '+L+' '+alt.toFixed(2)+'" style="width:'+L+'px;height:auto;display:block;margin:0 auto">';
+  bits.forEach((b,i)=>{
+    const y=(bits.length-1-i)*(h+gap),c=m.indexOf(i)>=0?'#c9a84c':cc;
+    if(b)s+='<rect x="0" y="'+y.toFixed(2)+'" width="'+L+'" height="'+h.toFixed(2)+'" fill="'+c+'" rx="0.6"/>';
+    else{const w=(L-esp)/2;
+      s+='<rect x="0" y="'+y.toFixed(2)+'" width="'+w.toFixed(2)+'" height="'+h.toFixed(2)+'" fill="'+c+'" rx="0.6"/>'+
+         '<rect x="'+(w+esp).toFixed(2)+'" y="'+y.toFixed(2)+'" width="'+w.toFixed(2)+'" height="'+h.toFixed(2)+'" fill="'+c+'" rx="0.6"/>';}
+  });
+  return s+'</svg>';
+}
+function ichRender(){
+  const gt=document.getElementById('ichTrigramas');
+  if(gt&&!gt.hasChildNodes()){
+    gt.innerHTML=ICH_TRI.map((t,i)=>
+      '<div class="card ichTri" id="ichTri'+i+'" onclick="ichVerTri('+i+')" style="padding:10px 8px;text-align:center">'+
+      ichDesenho(t.bits,42,(MF_TEIA[t.elo]||{}).cor||'#1b3a5c')+
+      '<div style="font-family:Lora,serif;color:var(--azul);font-size:0.85rem;margin-top:6px">'+t.pt+'</div>'+
+      '<div style="font-size:0.68rem;color:var(--cinza)">'+t.n+' · '+t.img+'</div></div>').join('');
+  }
+  const g=document.getElementById('ichGrade');
+  if(g&&!g.hasChildNodes()){
+    const cel=(c)=>'<div style="padding:2px">'+c+'</div>';
+    let html='<div style="display:grid;grid-template-columns:46px repeat(8,1fr);gap:3px;align-items:center">';
+    html+=cel('<div style="font-size:0.58rem;color:var(--cinza);text-align:center;line-height:1.15">cima →<br>baixo ↓</div>');
+    ICH_TRI.forEach(t=>{html+=cel('<div style="text-align:center">'+ichDesenho(t.bits,30,(MF_TEIA[t.elo]||{}).cor||'#1b3a5c')+
+      '<div style="font-size:0.56rem;color:var(--cinza);margin-top:2px">'+t.img+'</div></div>');});
+    ICH_TRI.forEach((tb,li)=>{
+      html+=cel('<div style="text-align:center">'+ichDesenho(tb.bits,30,(MF_TEIA[tb.elo]||{}).cor||'#1b3a5c')+
+        '<div style="font-size:0.56rem;color:var(--cinza);margin-top:2px">'+tb.img+'</div></div>');
+      ICH_TRI.forEach((tc,ci)=>{
+        const n=ICH_KW[li][ci];
+        html+=cel('<div class="ichCel" id="ichCel'+n+'" onclick="ichVer('+n+')" title="'+ICH_HEX[n][0]+'">'+
+          ichDesenho(tb.bits.concat(tc.bits),22,'#1b3a5c')+'<div class="n">'+n+'</div></div>');
+      });
+    });
+    g.innerHTML=html+'</div>';
+  }
+}
+function ichVerTri(i){
+  const t=ICH_TRI[i],cor=(MF_TEIA[t.elo]||{}).cor||'#1b3a5c';
+  ICH_TRI.forEach((x,k)=>{const e=document.getElementById('ichTri'+k);if(e)e.classList.toggle('sel',k===i)});
+  const p=document.getElementById('ichTriPainel');p.classList.remove('vazio');
+  p.innerHTML='<div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap">'+
+    '<div style="flex:0 0 auto">'+ichDesenho(t.bits,54,cor)+'</div>'+
+    '<div style="flex:1;min-width:220px">'+
+    '<h3 style="font-family:Lora,serif;color:var(--azul);margin:0 0 4px">'+t.pt+' — '+t.img+' <span style="font-size:0.75rem;color:var(--cinza)">('+t.n+')</span></h3>'+
+    '<div style="font-size:0.72rem;color:var(--cinza);margin-bottom:6px">'+t.atr+' · '+t.fam+' · '+t.dir+'</div>'+
+    '<p style="font-size:0.82rem;line-height:1.55;margin-bottom:8px">'+t.txt+'</p>'+
+    '<span class="tag" style="cursor:pointer;background:'+cor+'22;color:'+cor+';border:1px solid '+cor+'55" '+
+    'onclick="mfAcender(\''+t.elo+'\')" title="Acender este elemento na teia">ponte nossa: '+t.elo+' →</span>'+
+    '</div></div>';
+}
+function ichVer(n,mut,destino){
+  const h=ICH_HEX[n];if(!h)return;
+  document.querySelectorAll('.ichCel').forEach(c=>c.classList.toggle('sel',c.id==='ichCel'+n));
+  const li=ICH_KW.findIndex(r=>r.indexOf(n)>=0),ci=ICH_KW[li].indexOf(n);
+  const baixo=ICH_TRI[li],cima=ICH_TRI[ci];
+  const bits=baixo.bits.concat(cima.bits);
+  const p=document.getElementById('ichPainel');p.classList.remove('vazio');
+  p.innerHTML='<div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap">'+
+    '<div style="flex:0 0 auto">'+ichDesenho(bits,50,'#1b3a5c',mut)+'</div>'+
+    '<div style="flex:1;min-width:240px">'+
+    '<h3 style="font-family:Lora,serif;color:var(--azul);margin:0 0 2px">'+n+' · '+h[0]+' <span style="font-size:0.75rem;color:var(--cinza)">('+h[1]+')</span></h3>'+
+    '<div style="font-size:0.72rem;color:var(--cinza);margin-bottom:8px">dentro: '+baixo.img+' ('+baixo.pt+') · fora: '+cima.img+' ('+cima.pt+')</div>'+
+    '<p style="font-size:0.86rem;line-height:1.6;font-family:Lora,serif;color:var(--azul);margin-bottom:8px">'+h[2]+'</p>'+
+    '<div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.4px;color:var(--cinza)">Na escuta</div>'+
+    '<p style="font-size:0.82rem;line-height:1.55">'+h[3]+'</p>'+
+    (mut&&mut.length?'<p style="font-size:0.75rem;color:var(--dourado,#c9a84c);margin-top:8px">Linhas mutáveis (em dourado): '+mut.map(i=>i+1).join(', ')+' — é por aí que esta situação já está virando outra.</p>':'')+
+    (destino?'<p style="font-size:0.78rem;margin-top:8px">Caminha para <strong style="color:var(--azul)">'+destino+' · '+ICH_HEX[destino][0]+'</strong> — <span style="cursor:pointer;text-decoration:underline" onclick="ichVer('+destino+')">abrir</span></p>':'')+
+    '</div></div>';
+  p.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+// ----- as três moedas: seis lançamentos, de baixo para cima -----
+function ichLancar(){
+  const val=[],bits=[],mut=[];
+  for(let i=0;i<6;i++){
+    let s=0;for(let c=0;c<3;c++)s+=Math.random()<0.5?2:3;// cara 3, coroa 2
+    val.push(s);bits.push(s===7||s===9?1:0);
+    if(s===6||s===9)mut.push(i);
+  }
+  const n=ichNum(bits);
+  const bits2=bits.map((b,i)=>mut.indexOf(i)>=0?(b?0:1):b);
+  const n2=mut.length?ichNum(bits2):null;
+  const nomeVal={6:'6 · yin mutável',7:'7 · yang',8:'8 · yin',9:'9 · yang mutável'};
+  document.getElementById('ichOraculo').innerHTML=
+    '<div style="font-size:0.72rem;color:var(--cinza);margin-bottom:6px">Do primeiro lançamento (linha de baixo) ao sexto (linha de cima): '+
+    val.map(v=>nomeVal[v]).join(' · ')+'</div>'+
+    (n2?'<div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap;margin-bottom:8px">'+
+       '<div style="text-align:center"><div style="font-size:0.68rem;color:var(--cinza);margin-bottom:4px">agora</div>'+ichDesenho(bits,46,'#1b3a5c',mut)+'<div style="font-size:0.62rem;color:var(--cinza);margin-top:3px">'+n+'</div></div>'+
+       '<div style="align-self:center;color:var(--dourado,#c9a84c);font-size:1.2rem">→</div>'+
+       '<div style="text-align:center"><div style="font-size:0.68rem;color:var(--cinza);margin-bottom:4px">para onde vai</div>'+ichDesenho(bits2,46,'#8aa0b5')+'<div style="font-size:0.62rem;color:var(--cinza);margin-top:3px">'+n2+'</div></div></div>'
+     :'<div style="font-size:0.75rem;color:var(--cinza);margin-bottom:8px">Nenhuma linha mutável: a situação está firme como está.</div>');
+  ichVer(n,mut,n2);
 }
 
 // ===== CORPO VITRUVIANO — porta de entrada da teia (nível 8) =====
