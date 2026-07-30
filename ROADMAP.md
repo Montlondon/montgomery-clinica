@@ -4,6 +4,20 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
+## Concluído — OS v4.5: os 5 Sólidos Platônicos (30/07/2026)
+
+A senha **"Acender os Sólidos"** foi cumprida. O bloco `mfBlocoSolidos` nasceu logo abaixo dos Átomos, no mesmo anel 1 (O Princípio) — o irmão geométrico deles: a mesma pergunta, *"de que a matéria é feita?"*, respondida pela **forma** em vez da partícula. A legenda do Cubo de Metatron, que já os anunciava, deixou de ser promessa.
+
+- **Os cinco giram de verdade.** Não são desenhos: cada sólido é construído pelas coordenadas reais, projetado em 3D e girando na tela, com as arestas da frente claras e as de trás escuras para se ver o volume. As arestas não foram digitadas — saem da própria forma (são os pares de vértices na menor distância), e por isso as contagens fecham sozinhas: tetraedro 4/6, cubo 8/12, octaedro 6/12, icosaedro 12/30, dodecaedro 20/30.
+- **Cada um com seu painel.** Elemento de Platão, contagem exata, o par de que é o avesso, o fato geométrico e a leitura nossa em itálico. O tetraedro como o mínimo que já basta (quatro pontos e existe um dentro e um fora); o cubo como o que empilha sem fresta; o octaedro como o equilíbrio que não é imobilidade; o icosaedro como o que cede sem se desfazer; o dodecaedro como o quinto que não entra na fila porque é a caixa que contém os outros quatro.
+- **A prova de que são cinco, em um parágrafo.** Três faces no mínimo por vértice, e a soma dos ângulos ali tem que ser menor que 360°. Triângulos cabem três, quatro ou cinco; quadrados só três; pentágonos só três; hexágonos já dão 360° exatos — plano, colmeia, nunca sólido. Acabou a lista. É um dos poucos lugares onde a tradição e a matemática dizem o mesmo número sem ninguém ter forçado.
+- **A dualidade.** Cubo e octaedro são o mesmo sólido pelo avesso (o centro da face de um é o vértice do outro), o mesmo vale para dodecaedro e icosaedro, e o tetraedro é dual de si mesmo. Dois casais e um solitário — Polaridade desenhada em pedra, muito antes da Lei 4.
+- **Quatro cartas de leitura:** a regularidade é rara (infinitos polígonos no plano, cinco sólidos no espaço — subir de dimensão restringe); o que afia e o que rola; Kepler errou com eles em 1596 e foi procurando o encaixe que achou as órbitas elípticas; e a natureza usa alguns de fato (sal cúbico, fluorita octaédrica, diamante tetraédrico, cápsula de vírus icosaédrica).
+
+**A fronteira dita em voz alta**, na receita dos Átomos: a geometria é matemática (Euclides, *Elementos*, livro XIII) e vale em qualquer lugar do universo; a correspondência com fogo, terra, ar, água e éter é Platão no *Timeu* — tradição, não física. E fica escrito que os cinco elementos gregos **não** se misturam com os 5 Elementos chineses da teia: dois sistemas de povos diferentes que coincidem só no número, sem sólido para Madeira e Metal, sem Zang-Fu para o éter. Forçar o encaixe seria inventar ponte onde não há.
+
+Conferido rodando: os cinco botões desenhados, o dodecaedro girando, as contagens corretas, console limpo. Falta merge no main e push.
+
 ## Concluído — OS v4.4: os Átomos entram na Metafísica (29/07/2026)
 
 **NO AR** em montgomery-clinica.vercel.app/os — merge `fa3626f`, conferido no site publicado (servidor entregando v4.4, os três painéis respondendo, console limpo).
@@ -20,11 +34,9 @@ A ideia de 05/07/2026 — *"energia pra mim é vida, é átomo"* — virou bloco
 
 1. **Ligar os elementos à teia.** Cálcio, magnésio e ferro trazerem o chip que acende o elemento correspondente no corpo vitruviano — a mesma mecânica que o I Ching já usa nos trigramas (`mfAcender`).
 2. **A escada encostando na Anatomia.** Os degraus *tecido*, *órgão* e *corpo* são exatamente as camadas que a Anatomia já desenha. Clicar de um lado e cair no outro.
-3. **Os 5 sólidos platônicos.** A legenda do Cubo de Metatron já os anuncia (fogo, terra, ar, água, éter) e eles ainda não têm bloco. É o irmão geométrico deste dos átomos.
+3. ~~**Os 5 sólidos platônicos.**~~ **FEITO** em 30/07/2026 — bloco `mfBlocoSolidos`, OS v4.5 (ver acima).
 
-### Aberto — senha **"Acender os Sólidos"**
-
-Janela nova vai direto aos 5 sólidos platônicos dentro do anel 1 da Metafísica, na receita deste bloco dos átomos: **fato estabelecido primeiro, leitura nossa em itálico depois, origem declarada no rodapé.** Tetraedro/fogo, cubo/terra, octaedro/ar, icosaedro/água, dodecaedro/éter — com a geometria real (vértices, faces, o porquê de serem só cinco, que é teorema e não mística) separada da correspondência atribuída por Platão no *Timeu*, que é tradição, não física.
+### Senha **"Acender os Sólidos"** — CUMPRIDA em 30/07/2026 (OS v4.5)
 
 ## Aberto — Senha "Nunca o relógio decide" (29/07/2026)
 

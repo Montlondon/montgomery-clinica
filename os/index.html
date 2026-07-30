@@ -1022,6 +1022,60 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     <p style="font-size:0.8rem;line-height:1.6;margin-top:8px">O que sobra depois de cortar os empréstimos falsos ainda é imenso, e é tudo verdadeiro: a unidade da matéria, a estrutura que se repete em toda escala, a origem estelar do corpo, o vazio quase total, o movimento que nunca cessa, a identidade que sobrevive à troca completa das peças. Não é preciso torcer a física para achar espanto nela.</p>
     <p style="font-size:0.74rem;color:var(--cinza);margin-top:16px;border-top:1px solid rgba(201,168,76,0.15);padding-top:10px">Origem declarada: os números e os fatos deste bloco são física e bioquímica estabelecidas (composição elementar do corpo, nucleossíntese estelar, escalas atômicas). As pontes com a clínica, com os 5 Elementos e com as Leis Herméticas são leitura nossa, camada Metafísica — o átomo não fala de fígado nem de Madeira. Vale a regra da teia: <strong style="color:var(--azul)">isto organiza o espanto, não substitui a escuta nem o médico</strong>.</p>
   </div>
+  <div class="bloco" id="mfBlocoSolidos">
+    <style>
+      .solBt{cursor:pointer;border:1px solid rgba(27,58,92,0.14);border-radius:10px;padding:8px 4px 6px;text-align:center;transition:all .15s;background:rgba(255,255,255,0.02)}
+      .solBt:hover{border-color:var(--dourado,#c9a84c);transform:translateY(-1px)}
+      .solBt.sel{border-color:var(--dourado,#c9a84c);background:rgba(201,168,76,0.14)}
+      .solBt .nm{font-size:0.74rem;line-height:1.15;margin-top:4px}
+      .solBt .el{font-size:0.6rem;color:var(--cinza);line-height:1;margin-top:2px}
+      .solBt svg{width:100%;max-width:64px;display:block;margin:0 auto}
+    </style>
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5 21 8v8l-9 5.5L3 16V8z"/><path d="M12 2.5 3 16M12 2.5 21 16M3 8l18 8M21 8 3 16M12 21.5V2.5"/></svg>Os 5 Sólidos Platônicos — a matéria vista pela forma</h2>
+    <p style="font-size:0.82rem;line-height:1.6;margin-bottom:10px">O bloco dos Átomos pergunta de que a matéria é feita e responde pela <strong style="color:var(--azul)">partícula</strong>. Aqui a mesma pergunta é respondida pela <strong style="color:var(--azul)">forma</strong>. Existe um fato geométrico raro, provado e definitivo: só é possível construir <strong>cinco</strong> corpos perfeitamente regulares — todas as faces iguais, todos os ângulos iguais, todos os vértices idênticos. Cinco, e nunca mais. Não é escolha, opinião nem tradição: é demonstração, e está no último livro dos <em>Elementos</em> de Euclides, por volta de 300 a.C.</p>
+    <p style="font-size:0.74rem;color:var(--cinza);margin-bottom:12px">Toque num sólido para vê-lo girar e ler o que ele é. Eles já estavam anunciados na legenda do Cubo de Metatron, aqui em cima — dentro daquela teia de 13 círculos os cinco cabem todos.</p>
+    <div id="solBotoes" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px"></div>
+    <div style="display:flex;gap:var(--f4);flex-wrap:wrap;align-items:flex-start;margin-top:14px">
+      <div style="flex:0 0 300px;max-width:100%;margin:0 auto">
+        <svg viewBox="0 0 600 600" style="width:100%;max-width:300px;border-radius:12px">
+          <defs>
+            <radialGradient id="solFundo" cx="50%" cy="50%" r="70%">
+              <stop offset="0%" stop-color="#0d1a2e"/><stop offset="100%" stop-color="#060b14"/>
+            </radialGradient>
+            <filter id="solBrilho" x="-40%" y="-40%" width="180%" height="180%">
+              <feGaussianBlur stdDeviation="2.4" result="b"/>
+              <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+          </defs>
+          <rect width="600" height="600" fill="url(#solFundo)" rx="12"/>
+          <g id="solPalco" filter="url(#solBrilho)"></g>
+        </svg>
+        <div style="text-align:center;margin-top:8px;font-size:0.68rem;color:var(--cinza)" id="solLegenda">
+          Escolha um sólido acima para ele girar aqui.
+        </div>
+      </div>
+      <div style="flex:1;min-width:280px">
+        <div id="solPainel" class="vazio" style="font-size:0.8rem">Toque num dos cinco — o tetraedro, o cubo, o octaedro, o icosaedro ou o dodecaedro.</div>
+      </div>
+    </div>
+
+    <h3 style="font-family:Lora,serif;font-size:0.95rem;color:var(--azul);margin:20px 0 8px">Por que exatamente cinco — e não seis</h3>
+    <p style="font-size:0.8rem;line-height:1.6">A razão é simples o bastante para caber num parágrafo. Para fechar um canto de sólido é preciso juntar no mínimo três faces num vértice, e a soma dos ângulos ali tem que ser <em>menor</em> que 360° — se der 360° a coisa fica plana, se passar não fecha. Com triângulos (60° cada) cabem três, quatro ou cinco faces por vértice: tetraedro, octaedro, icosaedro. Com quadrados (90°) só cabem três: o cubo. Com pentágonos (108°) só cabem três: o dodecaedro. Com hexágonos, três já dão 360° exatos — plano, colmeia, nunca sólido. Acabou a lista. <strong style="color:var(--azul)">A geometria fecha a porta sozinha</strong>, e é por isso que este é um dos poucos lugares onde a tradição e a matemática dizem o mesmo número sem ninguém ter forçado.</p>
+    <p style="font-size:0.8rem;line-height:1.6;margin-top:8px">Há ainda um par que se repete no meio deles: o cubo e o octaedro são o mesmo sólido visto do avesso — o centro de cada face de um é o vértice do outro. O mesmo vale para o dodecaedro e o icosaedro. O tetraedro é o dual de si mesmo, o único que não precisa de par. Assim os cinco são, na verdade, <strong style="color:var(--azul)">dois casais e um solitário</strong> — Polaridade desenhada em pedra, muito antes de alguém escrever a Lei 4.</p>
+
+    <h3 style="font-family:Lora,serif;font-size:0.95rem;color:var(--azul);margin:20px 0 8px">O que a forma ensina</h3>
+    <div class="cards">
+      <div class="card"><h3>A regularidade é rara</h3><div class="sub">Existem infinitos polígonos regulares no plano — triângulo, quadrado, pentágono, e assim para sempre. Basta ganhar uma dimensão para a liberdade quase acabar: no espaço sobram cinco. Subir de nível não amplia as possibilidades, restringe. Quanto mais real a coisa fica, menos maneiras existem de ela ser perfeita.</div></div>
+      <div class="card"><h3>O que se afia e o que rola</h3><div class="sub">O tetraedro é a forma mais pontiaguda possível com o mínimo de peças; o icosaedro é a que mais se aproxima da esfera sem ser esfera. Entre penetrar e envolver, os cinco cobrem a régua inteira — e no meio dela o cubo, o único que empilha e assenta sem deixar fresta.</div></div>
+      <div class="card"><h3>Kepler errou — e o erro valeu</h3><div class="sub">Em 1596 Johannes Kepler encaixou os cinco sólidos uns dentro dos outros para explicar as distâncias dos planetas. Estava errado, e ele mesmo descobriu depois — foi procurando o encaixe que achou as órbitas elípticas de verdade. Beleza formal não é prova; mas a busca por ela já levou gente longe.</div></div>
+      <div class="card"><h3>A natureza usa alguns</h3><div class="sub">Isto é observação, não tradição: cristais de sal são cúbicos, os de fluorita são octaédricos, o diamante é uma malha tetraédrica, e cápsulas de muitos vírus são icosaédricas — a forma que fecha o maior volume com o menor número de peças repetidas. O dodecaedro é o que menos aparece na matéria bruta; justamente o que Platão deu ao éter.</div></div>
+    </div>
+
+    <h3 style="font-family:Lora,serif;font-size:0.95rem;color:var(--azul);margin:20px 0 8px">A fronteira honesta — onde a geometria para</h3>
+    <p style="font-size:0.8rem;line-height:1.6">Vale separar as duas metades deste bloco com clareza, como se fez com os Átomos. <strong style="color:var(--azul)">A geometria é matemática</strong>: os vértices, as arestas, as faces, a dualidade e a prova de que são só cinco valem em qualquer lugar do universo e não dependem de ninguém acreditar. <strong style="color:var(--azul)">A correspondência com os elementos é Platão</strong>, escrita no diálogo <em>Timeu</em> por volta de 360 a.C. — fogo/tetraedro, terra/cubo, ar/octaedro, água/icosaedro, e o dodecaedro reservado ao todo, ao cosmos. É tradição e leitura, não física: a matéria não é feita de tetraedros, é feita de átomos, e disso trata o bloco de cima.</p>
+    <p style="font-size:0.8rem;line-height:1.6;margin-top:8px">Também não se misturam aqui os cinco elementos gregos com os <strong>5 Elementos chineses</strong> da teia (Madeira, Fogo, Terra, Metal, Água). São dois sistemas diferentes, de povos diferentes, e coincidem só no número. Fogo, Terra e Água têm nome parecido nos dois e significam coisas distintas; Madeira e Metal não têm sólido, éter e ar não têm Zang-Fu. Forçar o encaixe seria inventar ponte onde não há — e o que este módulo tem de valor é justamente não fazer isso.</p>
+    <p style="font-size:0.74rem;color:var(--cinza);margin-top:16px;border-top:1px solid rgba(201,168,76,0.15);padding-top:10px">Origem declarada: a geometria (contagens, prova dos cinco, dualidade) é matemática estabelecida — Euclides, <em>Elementos</em>, livro XIII. As correspondências com fogo, terra, ar, água e éter são de Platão, <em>Timeu</em>: tradição filosófica, não descrição do mundo físico. As leituras em itálico são nossas, camada Metafísica. Vale a regra da teia: <strong style="color:var(--azul)">isto organiza o espanto, não substitui a escuta nem o médico</strong>.</p>
+  </div>
   <div class="bloco" id="mfBloco2">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 2.5a4.75 4.75 0 0 0 0 9.5 4.75 4.75 0 0 1 0 9.5"/><circle cx="12" cy="7.25" r="1"/><circle cx="12" cy="16.75" r="1"/></svg>Polaridade — a dobradiça do mapa</h2>
     <p style="font-size:0.82rem;line-height:1.55;margin-bottom:10px">"Tudo é duplo; os opostos são idênticos em natureza, diferentes em grau." Frio e calor não são duas coisas — são a mesma régua de temperatura. Medo e coragem não são dois sentimentos — são a mesma energia em graus diferentes. Não se elimina um polo: <strong style="color:var(--azul)">caminha-se pela régua</strong>.</p>
@@ -1801,8 +1855,9 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v4.4';
-const APP_VERSION_NOTA='acendem-se os Átomos no anel 1 da Metafísica: um átomo de carbono que se pode tocar por dentro (núcleo, elétrons e o vazio que é quase tudo), a escada da matéria em doze degraus — do quark ao universo, sempre a mesma planta se repetindo — e os quatorze elementos de que o corpo é feito, cada um com seu peso e sua ponte com a clínica; com a fronteira dita em voz alta de onde a física acaba e a leitura começa';
+const APP_VERSION='v4.5';
+const APP_VERSION_NOTA='acendem-se os 5 Sólidos Platônicos ao lado dos Átomos, no anel 1 da Metafísica: os cinco corpos giram de verdade na tela — tetraedro, cubo, octaedro, icosaedro e dodecaedro — cada um com sua contagem exata de vértices, arestas e faces, o par de que é o avesso e a razão provada de serem só cinco; com a linha dita em voz alta entre a geometria, que é matemática, e a correspondência com fogo, terra, ar, água e éter, que é Platão';
+const APP_VERSION_NOTA_V44='acendem-se os Átomos no anel 1 da Metafísica: um átomo de carbono que se pode tocar por dentro (núcleo, elétrons e o vazio que é quase tudo), a escada da matéria em doze degraus — do quark ao universo, sempre a mesma planta se repetindo — e os quatorze elementos de que o corpo é feito, cada um com seu peso e sua ponte com a clínica; com a fronteira dita em voz alta de onde a física acaba e a leitura começa';
 const APP_VERSION_NOTA_V43='acende-se o I Ching dentro da Metafísica: as 8 manifestações (as oito maneiras que a energia tem de se apresentar), os 64 hexagramas numa grade onde a linha é o que se passa dentro e a coluna é o que se passa fora, e as três moedas para consultar o momento — com as linhas mutáveis mostrando por onde a situação já está virando outra';
 const APP_VERSION_NOTA_V41='a Numerologia deixa de ser um rolo comprido: o mapa se organiza em sete abas internas, uma de cada vez, e a aba aberta continua aberta quando se recalcula — nada mudou no cálculo, só o jeito de olhar';
 const APP_VERSION_NOTA_V40='os dois mapas se encontram: o Sol calculado por Meeus entra na Numerologia e a roda do zodíaco deixa de ser genérica — passa a mostrar alguém, com o Sol e o eixo dos nodos marcados nos graus exatos. Os números caem nas esferas da Árvore, os signos caem nos caminhos entre elas';
@@ -3854,7 +3909,7 @@ const LEIS_HERMETICAS=[
 // ===== ÍNDICE FIBONACCI DA METAFÍSICA (anéis da árvore) =====
 const MF_NIVEIS=[
   {n:0,titulo:'O Vazio',resumo:'O que é Metafísica aqui: a compreensão dos fenômenos além dos 5 sentidos. A palavra sai impregnada da frequência do que sabemos sobre ela. "Que seu sim seja sim." A palavra é criadora; o foco é o leme.'},
-  {n:1,titulo:'O Princípio',resumo:'A unidade da qual tudo deriva. As 7 Leis Herméticas do Caibalion, o Cubo de Metatron como símbolo visual e — logo abaixo neste anel — os Átomos: a ponte honesta com a ciência, com a escada da matéria do quark ao universo e a fronteira declarada de onde a física para.',bloco:'mfBloco1'},
+  {n:1,titulo:'O Princípio',resumo:'A unidade da qual tudo deriva. As 7 Leis Herméticas do Caibalion, o Cubo de Metatron como símbolo visual e — logo abaixo neste anel — os Átomos: a ponte honesta com a ciência, com a escada da matéria do quark ao universo e a fronteira declarada de onde a física para. Logo em seguida, o irmão geométrico deles: os 5 Sólidos Platônicos — a mesma pergunta ("de que a matéria é feita?") respondida pela forma, com a prova de que só existem cinco.',bloco:'mfBloco1'},
   {n:2,titulo:'Polaridade',resumo:'A dobradiça do mapa: opostos são a mesma régua em graus diferentes. Três tradições descobriram a mesma lei — Hermetismo (Lei 4), Taoismo (yin/yang) e Freud (o que se nega, se afirma). A sombra é o polo não assumido; transmuta-se por grau, não por salto — como os florais: Rock Rose para o pavor, Mimulus para o medo nomeado.',bloco:'mfBloco2'},
   {n:3,titulo:'As Tradições-mãe',resumo:'As três escolhidas para começar: Hermetismo, Medicina Chinesa / 5 Elementos e Kabbalah / Árvore da Vida. Do tronco chinês desce o I Ching — as 8 manifestações e os 64 hexagramas, logo abaixo neste anel. Vedanta, Alquimia e a tradição estelar entram depois, com calma.',bloco:'mfBloco3'},
   {n:5,titulo:'Correspondências',resumo:'A teia que liga tudo: elemento, órgão, emoção, estação, cor, sabor, planeta, floral e lei. Cada coluna com sua origem declarada — tradição não se mistura com escolha nossa. A porta de entrada visual é o corpo vitruviano.',bloco:'mfBloco5'},
@@ -3906,6 +3961,7 @@ function renderMetafisica(){
   mfRenderLabels();
   ichRender();
   atRender();
+  solRender();
   mfCarregar();
 }
 
@@ -3995,6 +4051,112 @@ function atRender(){
       '<div class="atDeg" id="atEl'+i+'" onclick="atElem('+i+')">'+
       '<div style="font-family:Lora,serif;font-size:1.05rem;color:var(--azul);line-height:1.1">'+e[0]+'</div>'+
       '<div class="nm">'+e[1]+'</div><div class="esc" style="margin:2px 0 0">'+e[2]+'%</div></div>').join('');
+}
+
+// ===== OS 5 SÓLIDOS PLATÔNICOS — a matéria vista pela forma =====
+// A geometria (vértices, arestas, faces, dualidade, a prova de que são só cinco)
+// é matemática estabelecida — Euclides, Elementos, livro XIII. A correspondência
+// com fogo/terra/ar/água/éter é de Platão, Timeu: tradição, não física.
+const SOL_PHI=(1+Math.sqrt(5))/2;
+// gera as combinações de sinais; coordenada zero não vira duas (0 e -0 são o mesmo ponto)
+function solSinais(a,b,c){
+  const s=n=>n===0?[0]:[n,-n],r=[];
+  for(const x of s(a))for(const y of s(b))for(const z of s(c))r.push([x,y,z]);
+  return r;
+}
+// as três permutações cíclicas de (0, ±b, ±c) — o jeito clássico de escrever icosaedro e dodecaedro
+function solCiclo(a,b,c){return[].concat(solSinais(a,b,c),solSinais(b,c,a),solSinais(c,a,b))}
+const SOL_VERTS={
+  tetra:[[1,1,1],[1,-1,-1],[-1,1,-1],[-1,-1,1]],
+  cubo:solSinais(1,1,1),
+  octa:[[1,0,0],[-1,0,0],[0,1,0],[0,-1,0],[0,0,1],[0,0,-1]],
+  icosa:solCiclo(0,1,SOL_PHI),
+  dodeca:[].concat(solSinais(1,1,1),solCiclo(0,1/SOL_PHI,SOL_PHI))
+};
+// as arestas saem da própria forma: são os pares de vértices na menor distância
+function solArestas(v){
+  let min=Infinity;const d=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1],a[2]-b[2]);
+  for(let i=0;i<v.length;i++)for(let j=i+1;j<v.length;j++)min=Math.min(min,d(v[i],v[j]));
+  const e=[];
+  for(let i=0;i<v.length;i++)for(let j=i+1;j<v.length;j++)if(d(v[i],v[j])<min*1.02)e.push([i,j]);
+  return e;
+}
+// [id, nome, elemento de Platão, vértices, arestas, faces, dual, fato geométrico, leitura nossa]
+const SOL_DADOS=[
+  ['tetra','Tetraedro','Fogo',4,6,'4 triângulos','ele mesmo',
+   'O menor sólido possível: com menos de quatro pontos não se fecha volume nenhum no espaço. É o único dos cinco que não tem faces paralelas — nenhuma parte dele repousa; qualquer apoio é uma ponta ou uma quina. É também o mais rígido: uma estrutura de arestas tetraédricas não se deforma sem quebrar, e por isso a engenharia a usa em treliça e em torre.',
+   'Platão deu o fogo a ele pelo corte: é a forma mais pontiaguda que a geometria permite, a que penetra. A leitura que se pode fazer sem forçar nada é a do mínimo que já basta — quatro pontos e existe um dentro e um fora. Toda estrutura viva começa assim, com o número mínimo de apoios que faz uma coisa parar de ser plana.'],
+  ['cubo','Cubo','Terra',8,12,'6 quadrados','octaedro',
+   'O único dos cinco que preenche o espaço sozinho: cubos empilhados não deixam fresta nenhuma. Todos os ângulos são retos, todas as faces se opõem duas a duas, e ele assenta em qualquer lado que se ponha. Cristais de sal de cozinha crescem cúbicos por causa do arranjo dos átomos de sódio e cloro — isso é observação de laboratório, não símbolo.',
+   'A terra pelo repouso: é o sólido que fica onde é posto. A leitura é a da estrutura que se pode confiar — o que sustenta não é o que brilha, é o que empilha sem fresta. É a forma da parede, da caixa, do tijolo: tudo que a gente constrói para durar tende ao cubo.'],
+  ['octa','Octaedro','Ar',6,12,'8 triângulos','cubo',
+   'Duas pirâmides coladas pela base. É o avesso exato do cubo: o centro de cada face de um é o vértice do outro, e trocando um pelo outro nada se perde — as contagens de vértices e faces simplesmente trocam de lugar (8 e 6 viram 6 e 8). Cristais de fluorita e de diamante bruto aparecem octaédricos na natureza.',
+   'O ar pela leveza e pela mobilidade: gira em qualquer eixo e continua igual. A leitura é a do equilíbrio que não é imobilidade — ele repousa sobre um vértice sozinho tanto quanto sobre uma face. E é o lembrete geométrico de que todo oposto é o mesmo visto do outro lado.'],
+  ['icosa','Icosaedro','Água',12,30,'20 triângulos','dodecaedro',
+   'O que mais se aproxima da esfera entre os cinco: vinte faces triangulares que quase arredondam o volume. É a forma que fecha o maior espaço com o menor número de peças repetidas — e é por isso, por economia e não por simbolismo, que a cápsula de muitos vírus é icosaédrica. Suas coordenadas nascem da proporção áurea.',
+   'A água por escorrer: é o que menos se agarra ao chão, o que rola. A leitura é a da forma que cede sem se desfazer — muda de posição o tempo todo e continua a mesma. Na teia, a Água é o Rim, a herança, o que corre por baixo; a coincidência de nome é bonita, mas é coincidência entre dois sistemas diferentes.'],
+  ['dodeca','Dodecaedro','Éter — o todo',20,30,'12 pentágonos','icosaedro',
+   'O único construído com pentágonos, e por isso o único que carrega a proporção áurea na cara: a diagonal de cada face está para o lado dela como 1,618 está para 1. Doze faces, como doze meses e doze signos — Platão notou isso. É também o que menos aparece em cristal na natureza, ao contrário dos outros quatro.',
+   'Platão não deu elemento a ele: reservou-o ao cosmos inteiro, ao quinto princípio que os antigos chamaram de éter ou quintessência. A leitura é a do que não é peça, é o conjunto — o quinto que não entra na fila dos outros quatro porque é a caixa que os contém. É a forma da totalidade, e é justo que seja a que menos se encontra solta por aí.']
+];
+let solAtivo=null,solAng=0,solRaf=null;
+function solPontos(id,ax,ay){
+  const v=SOL_VERTS[id];
+  const ca=Math.cos(ax),sa=Math.sin(ax),cb=Math.cos(ay),sb=Math.sin(ay);
+  let raio=0;v.forEach(p=>raio=Math.max(raio,Math.hypot(p[0],p[1],p[2])));
+  const k=210/raio;
+  return v.map(p=>{
+    let[x,y,z]=p;
+    let x1=x*cb+z*sb, z1=-x*sb+z*cb;          // gira em torno do eixo vertical
+    let y1=y*ca - z1*sa, z2=y*sa + z1*ca;      // inclina para a frente
+    const persp=1/(1+z2*0.12/raio);
+    return [300+x1*k*persp, 300-y1*k*persp, z2];
+  });
+}
+function solDesenho(id,ax,ay,esc){
+  const pts=solPontos(id,ax,ay), ar=solArestas(SOL_VERTS[id]);
+  const cx=esc?(p)=>[300+(p[0]-300)*esc,300+(p[1]-300)*esc]:(p)=>p;
+  const linhas=ar.map(([i,j])=>{
+    const a=cx(pts[i]),b=cx(pts[j]);
+    const prof=(pts[i][2]+pts[j][2])/2;
+    const frente=prof>=0;
+    return '<line x1="'+a[0].toFixed(1)+'" y1="'+a[1].toFixed(1)+'" x2="'+b[0].toFixed(1)+'" y2="'+b[1].toFixed(1)+
+      '" stroke="'+(frente?'#9fd8ff':'#3d7db8')+'" stroke-width="'+(frente?2:1.1)+'" stroke-linecap="round" opacity="'+(frente?0.95:0.45)+'"/>';
+  }).join('');
+  const nos=pts.map(p=>{const a=cx(p);
+    return '<circle cx="'+a[0].toFixed(1)+'" cy="'+a[1].toFixed(1)+'" r="'+(p[2]>=0?5.5:3.5)*(esc||1)+
+      '" fill="#e8f4ff" opacity="'+(p[2]>=0?0.95:0.5)+'"/>';}).join('');
+  return linhas+nos;
+}
+function solGirar(){
+  const palco=document.getElementById('solPalco');
+  if(!palco||!solAtivo){solRaf=null;return}
+  solAng+=0.006;
+  palco.innerHTML=solDesenho(solAtivo,-0.42,solAng);
+  solRaf=requestAnimationFrame(solGirar);
+}
+function solEscolher(id){
+  const d=SOL_DADOS.find(x=>x[0]===id);if(!d)return;
+  solAtivo=id;
+  SOL_DADOS.forEach(x=>{const b=document.getElementById('solBt'+x[0]);if(b)b.classList.toggle('sel',x[0]===id)});
+  const leg=document.getElementById('solLegenda');
+  if(leg)leg.innerHTML=d[1]+' — '+d[3]+' vértices, '+d[4]+' arestas, '+d[5]+'.<br>Dual: '+d[6]+'.';
+  const el=document.getElementById('solPainel');
+  el.classList.remove('vazio');
+  el.innerHTML='<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:4px;font-size:1rem">'+d[1]+
+    ' <span style="font-size:0.7rem;color:var(--cinza);font-family:inherit">· '+d[2]+'</span></h3>'+
+    '<p style="font-size:0.72rem;color:var(--cinza);margin-bottom:6px">'+d[3]+' vértices · '+d[4]+' arestas · '+d[5]+' · dual do '+d[6]+'</p>'+
+    '<p style="font-size:0.8rem;line-height:1.6">'+d[7]+'</p>'+
+    '<p style="font-size:0.78rem;line-height:1.6;margin-top:8px;color:var(--cinza)"><em>'+d[8]+'</em></p>';
+  if(!solRaf)solRaf=requestAnimationFrame(solGirar);
+}
+function solRender(){
+  const box=document.getElementById('solBotoes');
+  if(!box||box.hasChildNodes())return;
+  box.innerHTML=SOL_DADOS.map(d=>
+    '<div class="solBt" id="solBt'+d[0]+'" onclick="solEscolher(\''+d[0]+'\')">'+
+    '<svg viewBox="60 60 480 480">'+solDesenho(d[0],-0.42,0.6,1)+'</svg>'+
+    '<div class="nm">'+d[1]+'</div><div class="el">'+d[2].split(' —')[0]+'</div></div>').join('');
 }
 
 // ===== I CHING — as 8 manifestações e os 64 hexagramas =====
