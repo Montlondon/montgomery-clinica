@@ -1484,3 +1484,23 @@ Pergunta do Montgomery vendo o Metatron girar: *"futuramente teria como eu dar u
 
 1. **Tela cheia por clique — fazer.** `requestFullscreen` no container do SVG: o desenho ocupa o monitor inteiro, fundo escuro, sem menu nem barra lateral, `Esc` volta. Funciona no computador e no celular, sem instalar nada, e a animação segue igual (mesmo desenho, só maior). Enquanto grande, caprichar: revezamento mais lento, METATRON maior, legenda sumindo depois de alguns segundos. **Vale para todos os desenhos animados do OS** — Cubo de Metatron, os 5 sólidos, o átomo de carbono, o corpo vitruviano: um botão de expandir no canto de cada um, mesma mecânica.
 2. **Descanso de tela de verdade do Windows — não agora.** Precisa ser um `.scr` instalado no sistema; é programa, não página. Possível, mas projeto separado e sem ganho de beleza sobre o item 1. Na prática, a aba aberta em tela cheia num monitor já faz o papel — só não liga sozinha.
+
+## Aberto — senha **"Acender as Ervas"** (30/07/2026)
+
+A régua de doses dos minerais ficou pronta na Clínica v5.2, mas a aba **Minerais nasce
+vazia**: a régua existe, o conteúdo não. E do lado da fitoterapia falta a posologia — a
+erva está lá como nome, sem a dose que se dá de verdade.
+
+Duas coisas, uma senha:
+
+1. **Subir todos os minerais nos seus momentos.** Cada mineral com sua régua já
+   preenchida — a faixa de dose, e principalmente **o momento**: jejum, com a refeição,
+   à noite, longe do café, longe de outro mineral. Cálcio e magnésio não se dão na mesma
+   hora; ferro pede estômago vazio e briga com cálcio; zinco à noite. O momento é metade
+   da prescrição e é o que o Montgomery carrega na cabeça hoje — a tela tem que carregar
+   por ele. Preset a clique, editável, como já ficou combinado.
+2. **A posologia da fitoterapia.** A mesma régua, aplicada às ervas: quanto, quantas
+   vezes ao dia, em que forma (tintura, chá, cápsula) e por quanto tempo.
+
+Regra que vale para as duas: os valores e as combinações vêm **dele**, da prática de
+atendimento — o Claude constrói a régua e organiza, nunca inventa dose.
