@@ -1544,6 +1544,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     <button class="active" onclick="showSupTab('sp-produtos',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/><path d="M4 11h16"/></svg></span>Produtos</button>
     <button onclick="showSupTab('sp-minerais',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 4.5v9L12 21l-7-4.5v-9L12 3Z"/><path d="M12 3v18M5 7.5l14 9M19 7.5l-14 9"/></svg></span>Minerais</button>
     <button onclick="showSupTab('sp-ervas',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-3 5-6 11-11"/></svg></span>Ervas</button>
+    <button onclick="showSupTab('sp-prateleira',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 13h18M3 19h18"/><path d="M7 7v-2M12 13v-2M17 19v-2"/></svg></span>Onde comprar</button>
     <button onclick="showSupTab('sp-ligacoes',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="3"/><circle cx="17" cy="17" r="3"/><path d="M9.1 9.1l5.8 5.8"/></svg></span>Ligações</button>
   </div>
 
@@ -1599,6 +1600,23 @@ window.addEventListener('DOMContentLoaded',()=>{
       <div id="evGrid"></div>
       <div id="evPainel"></div>
       <div id="evFormulas" style="margin-top:22px"></div>
+    </div>
+  </div>
+
+  <!-- ===== ONDE COMPRAR — A PRATELEIRA =====
+       O vão que faltava. A régua diz quanto e qual sal, e parava aí: a pessoa
+       saía do atendimento sabendo que precisa de 400 mg de bisglicinato e ia
+       procurar sozinha numa prateleira onde o óxido é o que mais aparece.
+       Aqui cada linha amarra o mineral (ou a erva) ao produto comprável de
+       verdade: a forma, a loja, o link, a dose do frasco. Nada é buscado na
+       internet nem sugerido pelo sistema — cada linha é escrita por ele, com a
+       data. E quando o link remunera quem recomendou, isso vai escrito na
+       folha do paciente, não escondido. -->
+  <div class="pg-panel" id="sp-prateleira">
+    <div class="fc">
+      <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:4px">A prateleira. Onde se compra exatamente o que você indicou.</p>
+      <p style="font-size:11.5px;color:var(--txt-l);margin-bottom:12px">Cada linha aqui é sua: o mineral ou a erva, <strong>a forma exata</strong> (bisglicinato não é óxido), a loja, o link e o que vem no frasco. O sistema não procura preço nem produto em lugar nenhum — ele guarda o que você achou. Depois, o painel daquele mineral passa a mostrar, embaixo da dose escolhida, onde comprar aquilo mesmo. <strong>Se o link for de afiliado</strong> — quer dizer, se você recebe alguma coisa quando a pessoa compra por ele —, marque a caixinha: a folha do paciente vai dizer isso na cara.</p>
+      <div id="ptPainel"></div>
     </div>
   </div>
 
@@ -1830,7 +1848,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v5.9 · 30/07';
+const APP_VER='v6.0 · 30/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -3751,6 +3769,7 @@ function showSupTab(id,btn){
   document.getElementById('supAcoesProdutos').style.display=(id==='sp-produtos')?'flex':'none';
   if(id==='sp-minerais'){renderMnGrid();renderMnPainel();}
   if(id==='sp-ervas'){renderEvGrid();renderEvPainel();renderEvFormulas();}
+  if(id==='sp-prateleira'){renderPtPainel();}
   if(id==='sp-ligacoes'){renderLgPainel();}
   cdRenderVolta();
 }
@@ -3827,7 +3846,9 @@ function renderMnPainel(){
       ${MN_VOCAB_MOMENTO.filter(m=>!d.momentos.includes(m)).map(m=>`<button class="mn-voc" onclick="mnPorMomento('${_mnSel}',${jsq(m)})">${escHtml(m)}</button>`).join('')||'<span style="font-size:11px;color:var(--txt-l);font-style:italic">todas as palavras do vocabulário já estão na régua deste mineral</span>'}
     </div>
 
-    <div class="mn-lbl">Anotar na ficha de alguém</div>
+    ${ptBlocoHtml('mineral',_mnSel,_mnFormaSel,d.nome)}
+
+    <div class="mn-lbl" style="margin-top:20px">Anotar na ficha de alguém</div>
     <div style="font-size:12px;color:var(--ink-soft);margin-bottom:8px">Escolhido: <strong>${_mnDoseSel!==null?_mnDoseSel+' '+d.unidade:'nenhuma dose'}</strong>${_mnFormaSel?' · <strong>'+escHtml(_mnFormaSel)+'</strong>':''}${_mnMomSel?' · <strong style="color:#7a5c1e">'+escHtml(_mnMomSel)+'</strong>':''}</div>
     <div class="fr">
       <div class="fg"><label>Paciente</label>
@@ -4179,6 +4200,8 @@ function renderEvPainel(){
     </div>`:`<div class="ev-ref"><span class="ev-ref-lbl">Referência da literatura</span>O livro não traz faixa para esta erva. A quantidade é sua.</div>`}
 
     ${EV_CAMPOS.map(listaCampo).join('')}
+
+    ${ptBlocoHtml('erva',_evSel,_evEscolha.formas,evNome(b))}
 
     <div class="mn-lbl" style="margin-top:20px">Anotar na ficha de alguém</div>
     <div style="font-size:12px;color:var(--ink-soft);margin-bottom:8px">Escolhido: <strong>${escolhido?escHtml(escolhido):'nada ainda'}</strong></div>
@@ -4865,6 +4888,167 @@ function renderLgPainel(){
     </tr>`).join('')}</tbody></table></div>`:'<p class="mn-vazio">A teia está vazia — e ela nasce vazia mesmo. Nenhuma ligação daqui vem de livro: cada uma vai ser sua, com a data em que você a fez.</p>'}
   ${dfResumoHtml()}
   ${cdPropostasHtml()}`;
+}
+
+// ===== A PRATELEIRA — ONDE COMPRAR =====
+// Mora na mesma tabela `minerais` (tipo 'link'), como tudo desta estante: não
+// abre tabela nova no Supabase e não pesa na cota. Uma linha por produto:
+// o item (mineral ou erva), a forma exata, a loja, o link, o que vem no frasco.
+// Nada aqui é buscado nem sugerido — é catálogo dele, escrito por ele.
+let _ptAlvo='mineral',_ptBusca='',_ptEditId=null;
+const ptLinks=()=>gD('minerais').filter(r=>r.tipo==='link');
+const ptDoItem=(alvo,chave)=>ptLinks().filter(l=>l.alvo===alvo&&String(l.chave)===String(chave));
+const ptTemAfiliado=()=>ptLinks().some(l=>l.afiliado);
+// O aviso que entra junto, não depois: quando a recomendação carrega link que
+// remunera quem recomendou, a folha do paciente diz isso com todas as letras.
+const PT_AVISO_AFILIADO='Alguns links desta folha são de afiliado: se você comprar por eles, quem escreveu esta recomendação recebe uma parte da loja, sem aumentar o seu preço. A indicação do que tomar não muda por causa disso — e você pode comprar onde quiser.';
+
+async function ptSalvarDoForm(){
+  const chave=v('ptItem'),produto=v('ptProduto').trim(),url=v('ptUrl').trim();
+  if(!chave){toast('Escolha o mineral ou a erva primeiro.','#EF6C00',"warn");return;}
+  if(!produto){toast('Escreva o nome do produto.','#EF6C00',"warn");return;}
+  if(url&&!/^https?:\/\//i.test(url)){toast('O link precisa começar com http:// ou https://','#EF6C00',"warn");return;}
+  const data=dLocal(new Date());
+  const campos={alvo:_ptAlvo,chave,nome:cdNome(_ptAlvo,chave),
+    forma:v('ptForma').trim(),produto,loja:v('ptLoja').trim(),url,
+    frasco:v('ptFrasco').trim(),preco:v('ptPreco').trim(),
+    afiliado:!!document.getElementById('ptAfiliado').checked,obs:v('ptObs').trim()};
+  if(_ptEditId){
+    const r=ptLinks().find(l=>String(l.id)===String(_ptEditId));
+    if(r){Object.assign(r,campos);await dbGravar('minerais',r.id,r);}
+    _ptEditId=null;
+    toast('Linha da prateleira atualizada.',null,"ok");
+  }else{
+    await dbAdd('minerais',Object.assign({id:novoId(),tipo:'link',data,dataBr:data.split('-').reverse().join('/')},campos));
+    toast(produto+' está na prateleira do '+campos.nome+'.',null,"ok");
+  }
+  renderPtPainel();renderMnPainel();renderEvPainel();
+}
+function ptEditar(id){
+  const l=ptLinks().find(x=>String(x.id)===String(id));if(!l)return;
+  _ptEditId=id;_ptAlvo=l.alvo;renderPtPainel();
+  const p=(k,val)=>{const el=document.getElementById(k);if(el)el.value=val||'';};
+  const sel=document.getElementById('ptItem');if(sel)sel.value=l.chave;
+  p('ptForma',l.forma);p('ptProduto',l.produto);p('ptLoja',l.loja);p('ptUrl',l.url);
+  p('ptFrasco',l.frasco);p('ptPreco',l.preco);p('ptObs',l.obs);
+  const af=document.getElementById('ptAfiliado');if(af)af.checked=!!l.afiliado;
+  document.getElementById('ptPainel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function ptCancelarEdicao(){_ptEditId=null;renderPtPainel();}
+async function ptApagar(id){
+  if(!confirm('Tirar esta linha da prateleira? Ela some dos painéis do mineral e da erva.'))return;
+  _cache['minerais']=gD('minerais').filter(r=>String(r.id)!==String(id));
+  await supaReq('DELETE','minerais',null,`?user_id=eq.montgomery&dados->>id=eq.${id}`);
+  renderPtPainel();renderMnPainel();renderEvPainel();
+  toast('Fora da prateleira','#c62828',"trash");
+}
+function ptTrocarAlvo(a){_ptAlvo=a;_ptEditId=null;renderPtPainel();}
+function ptFiltrar(){_ptBusca=(v('ptBusca')||'').toLowerCase();renderPtLista();}
+
+// O que ele já vende no catálogo Produtos, ao lado do link de fora. Casamento
+// por nome, sem esperteza: se o nome do produto do catálogo aparece na linha,
+// aparece aqui — e a decisão continua sendo dele.
+function ptCatalogo(termos){
+  const alvo=termos.filter(Boolean).map(t=>String(t).toLowerCase());
+  if(!alvo.length)return [];
+  return gD('suplementos').filter(p=>{
+    const n=String(p.nome||'').toLowerCase();
+    return alvo.some(t=>t.length>3&&(n.includes(t)||t.includes(n)));
+  });
+}
+
+// O bloco que aparece dentro do painel do mineral e da erva, embaixo da dose.
+// Quando existe forma escolhida, a linha daquela forma vem marcada — é o ponto
+// inteiro da coisa: 400 mg de bisglicinato, e o bisglicinato é ESTE aqui.
+function ptBlocoHtml(alvo,chave,formaSel,nomeItem){
+  const links=ptDoItem(alvo,chave);
+  const cat=ptCatalogo([nomeItem,formaSel]);
+  const casa=l=>formaSel&&l.forma&&l.forma.toLowerCase()===String(formaSel).toLowerCase();
+  return `<div class="mn-lbl" style="margin-top:20px">Onde comprar</div>
+  ${links.length?`<div style="display:flex;flex-direction:column;gap:7px;margin-bottom:8px">
+    ${links.sort((a,b)=>(casa(b)?1:0)-(casa(a)?1:0)).map(l=>`
+    <div style="border:1px solid ${casa(l)?'#C9A227':'var(--brd)'};background:${casa(l)?'#FFFBEA':'#FDFAF6'};border-radius:9px;padding:8px 11px">
+      <div style="font-size:12.5px;font-weight:700;color:var(--pri-d)">${escHtml(l.produto||'-')}${l.forma?` <span style="font-weight:400;color:var(--ink-soft)">· ${escHtml(l.forma)}</span>`:''}${casa(l)?' <span style="font-size:10px;color:#7a5c1e;font-weight:700">a forma que você escolheu</span>':''}</div>
+      <div style="font-size:11.5px;color:var(--txt-l)">${[l.loja,l.frasco,l.preco].filter(Boolean).map(escHtml).join(' · ')||'sem loja anotada'}</div>
+      ${l.obs?`<div style="font-size:11px;color:var(--ink-soft);font-style:italic">${escHtml(l.obs)}</div>`:''}
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:4px">
+        ${l.url?`<a href="${escHtml(l.url)}" target="_blank" rel="noopener" style="font-size:11.5px;color:var(--pri)">abrir na loja</a>`:'<span style="font-size:11px;color:var(--txt-l)">sem link</span>'}
+        ${l.afiliado?'<span style="font-size:10px;color:#7a5c1e;border:1px solid #C9A227;border-radius:999px;padding:1px 7px">link de afiliado</span>':''}
+      </div>
+    </div>`).join('')}
+  </div>`:`<p class="mn-vazio">Nenhum produto anotado ainda para este item. A prateleira nasce vazia — o que se compra e onde é você quem sabe. Vá em <strong>Suplementos &rsaquo; Onde comprar</strong> e escreva a primeira linha.</p>`}
+  ${cat.length?`<div style="font-size:11.5px;color:var(--ink-soft);margin-bottom:6px">No seu catálogo <em>Produtos</em>, sem precisar mandar buscar fora: ${cat.map(p=>escHtml(p.nome)+' ('+fm(p.preco)+(p.estoque?', '+p.estoque+' em estoque':', sem estoque')+')').join(' · ')}</div>`:''}`;
+}
+
+function renderPtPainel(){
+  const el=document.getElementById('ptPainel');if(!el)return;
+  const itens=_ptAlvo==='mineral'
+    ? MN_BASE.map(m=>({chave:m[0],nome:m[2]}))
+    : evLista().map(e=>({chave:e.id,nome:evNomeCheio(e)+' — '+evOrigem(e)}));
+  el.innerHTML=`
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+    ${[['mineral','Mineral'],['erva','Erva']].map(([k,l])=>`<button type="button" class="mn-voc" style="${_ptAlvo===k?'border-style:solid;border-color:#C9A227;color:#7a5c1e;font-weight:700':''}" onclick="ptTrocarAlvo('${k}')">${l}</button>`).join('')}
+  </div>
+  <div class="fr">
+    <div class="fg"><label class="req">${_ptAlvo==='mineral'?'Mineral':'Erva'}</label>
+      <select id="ptItem">${itens.map(i=>`<option value="${escHtml(i.chave)}">${escHtml(i.nome)}</option>`).join('')}</select></div>
+    <div class="fg"><label>Forma / sal exato</label><input type="text" id="ptForma" placeholder="ex: Bisglicinato"></div>
+  </div>
+  <div class="fr">
+    <div class="fg"><label class="req">Produto</label><input type="text" id="ptProduto" placeholder="ex: Magnésio Bisglicinato 60 caps"></div>
+    <div class="fg"><label>Loja</label><input type="text" id="ptLoja" placeholder="ex: Mercado Livre, Amazon, farmácia daqui"></div>
+  </div>
+  <div class="fr full"><div class="fg"><label>Link</label><input type="text" id="ptUrl" placeholder="https://..."></div></div>
+  <div class="fr">
+    <div class="fg"><label>O que vem no frasco</label><input type="text" id="ptFrasco" placeholder="ex: 60 cápsulas de 400 mg"></div>
+    <div class="fg"><label>Preço visto (opcional)</label><input type="text" id="ptPreco" placeholder="ex: R$ 68 em 30/07"></div>
+  </div>
+  <div class="fr full"><div class="fg"><label>Observação (opcional)</label><input type="text" id="ptObs" placeholder="ex: conferir se é bisglicinato puro, não buffered"></div></div>
+  <label style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-soft);margin-bottom:10px;cursor:pointer">
+    <input type="checkbox" id="ptAfiliado" style="width:auto;margin:0">
+    Este é um <strong>link de afiliado</strong> — eu recebo uma parte quando a pessoa compra por ele
+  </label>
+  <div style="display:flex;gap:7px;flex-wrap:wrap">
+    <button class="btn btn-pri btn-sm" onclick="ptSalvarDoForm()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>${_ptEditId?'Salvar a alteração':'Pôr na prateleira'}</button>
+    ${_ptEditId?'<button class="btn btn-sec btn-sm" onclick="ptCancelarEdicao()">Cancelar</button>':''}
+  </div>
+
+  <div class="mn-lbl" style="margin-top:20px">A prateleira</div>
+  <div class="sw" style="max-width:300px;margin-bottom:10px"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><input type="text" id="ptBusca" placeholder="Buscar produto, item, loja..." oninput="ptFiltrar()" value="${escHtml(_ptBusca)}"></div>
+  <div id="ptLista"></div>`;
+  renderPtLista();
+}
+
+function renderPtLista(){
+  const el=document.getElementById('ptLista');if(!el)return;
+  const b=_ptBusca;
+  const lista=ptLinks().filter(l=>!b||[l.nome,l.produto,l.loja,l.forma,l.obs].some(x=>String(x||'').toLowerCase().includes(b)))
+    .sort((a,b2)=>String(a.nome||'').localeCompare(String(b2.nome||''))||String(a.produto||'').localeCompare(String(b2.produto||'')));
+  if(!lista.length){el.innerHTML='<p class="mn-vazio">A prateleira está vazia. Nenhum produto vem de fábrica aqui: cada linha é uma que você conferiu e aprovou.</p>';return;}
+  el.innerHTML=`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">
+    <thead><tr><th style="text-align:left;padding:6px">O quê</th><th style="text-align:left;padding:6px">Forma</th><th style="text-align:left;padding:6px">Produto</th><th style="text-align:left;padding:6px">Loja</th><th style="text-align:left;padding:6px">Frasco</th><th style="text-align:left;padding:6px">Link</th><th style="padding:6px"></th></tr></thead>
+    <tbody>${lista.map(l=>`<tr style="border-top:1px solid var(--brd)">
+      <td style="padding:6px"><strong>${escHtml(l.nome||l.chave)}</strong> <span style="color:var(--txt-l)">${l.alvo==='mineral'?'mineral':'erva'}</span></td>
+      <td style="padding:6px;color:#7a5c1e">${escHtml(l.forma||'-')}</td>
+      <td style="padding:6px">${escHtml(l.produto||'-')}${l.obs?`<div style="font-size:11px;color:var(--txt-l);font-style:italic">${escHtml(l.obs)}</div>`:''}</td>
+      <td style="padding:6px">${escHtml(l.loja||'-')}</td>
+      <td style="padding:6px;color:var(--txt-l)">${escHtml([l.frasco,l.preco].filter(Boolean).join(' · ')||'-')}</td>
+      <td style="padding:6px">${l.url?`<a href="${escHtml(l.url)}" target="_blank" rel="noopener">abrir</a>`:'-'}${l.afiliado?'<div style="font-size:10px;color:#7a5c1e">afiliado</div>':''}</td>
+      <td style="padding:6px;text-align:right;white-space:nowrap">
+        <button class="btn btn-sec btn-sm" title="Editar esta linha" onclick="ptEditar('${l.id}')">editar</button>
+        <button class="btn btn-dan btn-sm" title="Tirar da prateleira" onclick="ptApagar('${l.id}')"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
+      </td>
+    </tr>`).join('')}</tbody></table></div>`;
+}
+
+// A prateleira do que está NESTA folha. Casa pelo nome que já foi impresso —
+// o mesmo nome que a régua mandou para a Recomendação.
+function ptDaRecomendacao(nomes){
+  const alvo=nomes.filter(Boolean).map(n=>String(n).toLowerCase());
+  return ptLinks().filter(l=>{
+    const n=String(l.nome||'').toLowerCase();
+    return n&&alvo.some(x=>x.includes(n)||n.includes(x));
+  });
 }
 
 // ===== GOOGLE AGENDA =====
@@ -7460,9 +7644,10 @@ function gerarHtmlRx(){
   const logo=gC('config_logo')||cfgData.logo||'';
   const rod=cfgData.rxRod||'Em caso de reação adversa, suspenda o uso e entre em contato.';
   const dt=v('rxDt');
-  let pl='';let n=1;
+  let pl='';let n=1;const nomesRx=[];
   document.querySelectorAll('.rx-p').forEach(it=>{
     const nm=it.querySelector('.rxNm').value;if(!nm)return;
+    nomesRx.push(nm);
     const fm2=it.querySelector('.rxFm').value;
     const ds=it.querySelector('.rxDs').value;
     const fq=it.querySelector('.rxFq').value;
@@ -7472,6 +7657,23 @@ function gerarHtmlRx(){
       ${(ds||fq||du)?`<tr><td style="padding:0 4px 2px 14px;font-size:9pt;color:#6b6358">${[ds,fq,du].filter(Boolean).join(' · ')}</td></tr>`:''}
       ${ins?`<tr><td style="padding:0 4px 11px 14px;font-size:8.5pt;color:#9a938b;font-style:italic;border-bottom:1px solid #EDE7DB">↳ ${ins}</td></tr>`:`<tr><td style="padding:0 4px 11px;border-bottom:1px solid #EDE7DB"></td></tr>`}`;
   });
+
+  // ONDE COMPRAR — a prateleira desta folha. Só entra o que ele mesmo anotou
+  // para os itens que estão nesta recomendação; se a prateleira daquele item
+  // está vazia, a seção nem aparece. E se algum link é de afiliado, o aviso
+  // vem junto, na mesma folha, escrito para o paciente ler.
+  const linksRx=ptDaRecomendacao(nomesRx.concat(_rxMineraisSel.filter(m=>m.nome).map(m=>m.nome)));
+  const temAfil=linksRx.some(l=>l.afiliado);
+  const ondeHtml=linksRx.length?`<div style="text-align:center;margin-bottom:14px"><span style="display:inline-block;background:#4A6B4A;color:#fff;font-size:9pt;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 18px;border-radius:20px">Onde comprar</span></div>
+  <div style="background:#fff;border-radius:10px;padding:10px 18px;margin-bottom:18px;border:1px solid #EDE7DB">
+    <div style="font-size:8.5pt;color:#6b6358;margin-bottom:6px;line-height:1.45">A forma importa tanto quanto a dose. Estes são os produtos conferidos — comprando outro, confira se a forma é a mesma.</div>
+    ${linksRx.map(l=>`<div style="padding:6px 0;border-top:1px solid #F2EEE5">
+      <div style="font-size:10pt;font-weight:700;color:#4A6B4A">${l.produto||''}${l.forma?` <span style="font-weight:400;color:#6b6358;font-size:9pt">${l.forma}</span>`:''}${l.afiliado?' <span style="font-size:7.5pt;color:#7a5c1e">*</span>':''}</div>
+      <div style="font-size:8.5pt;color:#6b6358">${[l.nome,l.loja,l.frasco].filter(Boolean).join(' · ')}</div>
+      ${l.url?`<div style="font-size:8pt;color:#8a8278;word-break:break-all">${l.url}</div>`:''}
+    </div>`).join('')}
+    ${temAfil?`<div style="font-size:7.5pt;color:#7a5c1e;line-height:1.5;margin-top:9px;padding-top:7px;border-top:1px solid #EDE7DB">* ${PT_AVISO_AFILIADO}</div>`:''}
+  </div>`:'';
 
   const logoHtml=logo?`<img src="${logo}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid #1E3A5F;margin-right:14px" alt="Logo">`:'<div style="width:64px;height:64px;border-radius:50%;background:#EEF4FA;display:flex;align-items:center;justify-content:center;margin-right:14px"><svg viewBox="0 0 24 24" fill="none" stroke="#1E3A5F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:30px;height:30px"><path d="M6 20C4 14 6 6 16 4c1 6-2 13-10 16Z"/><path d="M7 19c2-4 4-7 8-10"/></svg></div>';
 
@@ -7522,6 +7724,8 @@ function gerarHtmlRx(){
         ${m.momento?`<tr><td style="padding:0 4px 11px 14px;font-size:9pt;color:#7a5c1e;font-weight:600;border-bottom:1px solid #EDE7DB"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="#7a5c1e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.3 2"/></svg>${m.momento}</td></tr>`:`<tr><td style="padding:0 4px 11px;border-bottom:1px solid #EDE7DB"></td></tr>`}`).join('')}
       </table>
     </div>`:''}
+
+    ${ondeHtml}
 
     ${v('rxDurG')||v('rxRet')?`<table style="width:100%;margin-bottom:16px"><tr>
       ${v('rxDurG')?`<td style="padding-right:8px"><div style="background:#EEF4FA;border-radius:8px;padding:9px 14px"><div style="font-size:7.5pt;color:#1E3A5F;text-transform:uppercase;letter-spacing:.4px"><svg viewBox="0 0 24 24" width="10" height="10" fill="none" stroke="#1E3A5F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;margin-right:3px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.3 2"/></svg>Duração</div><div style="font-size:10pt;font-weight:600;color:#1E3A5F;margin-top:2px">${v('rxDurG')}</div></div></td>`:''}

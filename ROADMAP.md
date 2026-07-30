@@ -4,24 +4,46 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
-## Próximo — senha "Acender a Prateleira" (combinada em 30/07/2026)
+## Próximo — a prateleira precisa das primeiras linhas dele
 
-A terceira aba de Suplementos, do jeito barato primeiro: **onde se compra exatamente aquilo**.
-As duas dependências já estão de pé — a régua dos minerais (v5.2) e a posologia das ervas (v5.3).
+A aba está de pé e **nasce vazia de propósito**: nenhum produto vem de fábrica ali. O próximo
+passo não é código, é dele — abrir *Suplementos › Onde comprar*, escolher o magnésio, escrever a
+primeira linha (bisglicinato, a loja, o link, o que vem no frasco) e conferir se o painel do
+mineral acende embaixo da dose. Se ele tiver código de afiliado do Mercado Livre ou da Amazon,
+o link já entra com o código dentro e a caixinha marcada.
 
-Hoje a régua diz *quanto* e *qual sal*, e para aí: a pessoa sai do atendimento sabendo que precisa
-de 400 mg de bisglicinato e vai procurar sozinha, no escuro, numa prateleira onde o óxido é o que
-mais aparece. A aba nova fecha esse vão — uma linha por produto, escrita por ele: nome, o mineral
-ou a erva a que corresponde (o elo com a régua), a loja, o link e a dose que vem no frasco. Aí o
-painel do bisglicinato passa a mostrar, embaixo da dose escolhida, onde comprar aquilo mesmo — e
-o que ele já vende no catálogo *Produtos* aparece do lado do link de fora.
+Depois disso, e só depois, vale investigar a **OneDrop/dropshipping** — que continua sendo outra
+coisa: não é campo de link, é loja inteira (frete, pedido, rastreio, devolução) e depende de
+contrato + porta técnica deles.
 
-**Dropshipping/OneDrop fica de fora desta janela** — aquilo não é um campo de link, é uma loja
-inteira (frete, pedido, rastreio, devolução) e depende de contrato. O link de afiliado cabe hoje.
+## Concluído — Clínica v6.0: a Prateleira acesa, senha "Acender a Prateleira" (30/07/2026)
 
-**A linha de cuidado, escrita antes de doer:** quando uma recomendação a paciente carrega um link
-que remunera quem recomendou, a tela tem que dizer isso na cara, no rodapé da recomendação.
-Isso entra junto, não depois.
+O vão entre *saber o que tomar* e *conseguir comprar aquilo* fechou.
+
+**A terceira aba: `Suplementos › Onde comprar`.** Uma linha por produto, escrita por ele: o item
+(mineral ou erva), a **forma exata** — bisglicinato não é óxido —, a loja, o link, o que vem no
+frasco, o preço visto com a data e uma observação. Busca, editar e tirar da prateleira. O sistema
+não procura preço nem produto em lugar nenhum: ele guarda o que o Montgomery conferiu.
+
+**O elo com a régua, que era o ponto todo.** O painel do mineral e o painel da erva ganharam o
+bloco *Onde comprar* embaixo da dose escolhida. Quando ele toca no sal — Bisglicinato —, a linha
+daquele sal sobe para o topo marcada em dourado, dizendo *a forma que você escolheu*. E o que ele
+já vende no catálogo *Produtos* aparece ao lado do link de fora, com preço e estoque.
+
+**A folha do paciente.** Quando a recomendação leva um mineral ou uma erva que tem prateleira, a
+folha sai com a seção **Onde comprar** — produto, forma, loja e link — e o recado de que a forma
+importa tanto quanto a dose. Se a prateleira daquele item está vazia, a seção nem aparece.
+
+**O cuidado ético entrou junto, não depois.** Cada linha tem a caixinha *link de afiliado*. Se
+algum item da folha for de afiliado, o aviso sai impresso ali mesmo, para o paciente ler: quem
+recomendou recebe uma parte, o preço dele não muda, a indicação não muda por causa disso e ele
+pode comprar onde quiser.
+
+**Onde mora:** a mesma tabela `minerais` do Supabase, com `tipo:'link'` — a estante inteira
+(réguas, indicações, ligações, votos e agora a prateleira) continua numa tabela só. Nenhuma tabela
+nova, nenhum peso novo na cota.
+
+**Fora do escopo, de propósito:** Dropshipping/OneDrop.
 
 ## Concluído — OS v5.3: a Camada 7 acesa e o primeiro agente (30/07/2026)
 
