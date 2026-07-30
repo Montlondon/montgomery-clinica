@@ -93,6 +93,25 @@ p.sub{text-align:center;font-size:11px;color:#5a5040;margin-bottom:14px;font-sty
 .balao-row input:focus{border-color:#9a6abf}
 .balao-row button{background:#160e26;border:1px solid #6a4aaa;color:#9a6abf;border-radius:8px;padding:6px 12px;font-size:11px;cursor:pointer;font-family:Georgia,serif}
 .tag-balao{display:inline-block;background:#0a1a14;border:1px solid #3a8a4a;color:#7aba8a;border-radius:10px;padding:2px 8px;margin:2px 3px 2px 0;font-size:10px}
+
+/* Árvore do paciente (crescimento) */
+.btn-crescer{background:#06100a;border:1px solid #3a8a4a;color:#5aaa6a;border-radius:8px;padding:8px 14px;font-family:Georgia,serif;font-size:12px;cursor:pointer;letter-spacing:1px}
+.btn-crescer:hover{background:#0a1a10}
+#overlayCresc{display:none;position:fixed;inset:0;background:rgba(4,4,10,.96);z-index:50;overflow-y:auto;padding:24px 16px}
+#overlayCresc.aberto{display:block}
+.cresc-wrap{max-width:760px;margin:0 auto}
+.cresc-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.cresc-head h2{font-size:18px;color:#c9a84c;letter-spacing:2px}
+.cresc-head .fechar{margin-left:auto;background:none;border:1px solid #4a3a6a;color:#9a7abf;border-radius:8px;padding:6px 14px;cursor:pointer;font-family:Georgia,serif;font-size:11px}
+.cresc-sub{font-size:11px;color:#5a5040;font-style:italic;margin-bottom:14px}
+.cresc-svg{width:100%;background:#05050c;border:1px solid #1a1428;border-radius:12px}
+.padroes{margin-top:14px;background:#08060f;border:1px solid #1a1428;border-radius:12px;padding:12px 16px}
+.padroes h3{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#c9a84c;margin-bottom:9px}
+.pad-linha{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.pad-nome{width:110px;font-size:11px;color:#c8b890}
+.pad-barra{height:8px;border-radius:4px;min-width:2px}
+.pad-num{font-size:10px;color:#6a5a4a}
+.cresc-detalhe{margin-top:12px;font-size:11px;color:#9a7abf;background:#0a0818;border:1px solid #2a1a40;border-radius:12px;padding:10px 14px;line-height:1.7;display:none}
 </style>
 </head>
 <body>
@@ -103,7 +122,23 @@ p.sub{text-align:center;font-size:11px;color:#5a5040;margin-bottom:14px;font-sty
   <input id="pacNome" placeholder="Nome do paciente..." oninput="pacMudou()">
   <span class="pac-data" id="pacData"></span>
   <button class="btn-salvar" onclick="salvarSessao()">Salvar sessão</button>
+  <button class="btn-crescer" onclick="abrirCresc()">Ver árvore do paciente</button>
   <div class="sessoes" id="sessoesBar"></div>
+</div>
+
+<!-- ===== ÁRVORE DO PACIENTE (CRESCIMENTO) ===== -->
+<div id="overlayCresc">
+  <div class="cresc-wrap">
+    <div class="cresc-head">
+      <h2 id="crescNome"></h2>
+      <span class="cresc-sub" id="crescInfo"></span>
+      <button class="fechar" onclick="fecharCresc()">Voltar à sessão</button>
+    </div>
+    <p class="cresc-sub">Cada galho é uma sessão · cada folha, uma percepção — colorida pelo Elemento. Clique num galho para reabrir a sessão.</p>
+    <div id="crescSvgBox"></div>
+    <div class="padroes" id="crescPadroes"></div>
+    <div class="cresc-detalhe" id="crescDetalhe"></div>
+  </div>
 </div>
 
 <div class="layout">
@@ -1472,7 +1507,7 @@ function addBalao(){
 function atualizar(){
   const lista=document.getElementById('resumoLista');
   let h=selecionados.map(s=>`<span style="display:inline-block;background:#1a0e2a;border:1px solid #4a2a6a;border-radius:10px;padding:2px 8px;margin:2px 3px 2px 0;font-size:10px">${s}</span>`).join('');
-  h+=baloes.map((b,i)=>`<span class="tag-balao" onclick="baloes.splice(${i},1);atualizar()" title="clique para remover">💬 ${b}</span>`).join('');
+  h+=baloes.map((b,i)=>`<span class="tag-balao" onclick="baloes.splice(${i},1);atualizar()" title="clique para remover">${b}</span>`).join('');
   lista.innerHTML=h||'<span style="opacity:.4;font-style:italic">Vazio — selecione desequilíbrios ou adicione balões</span>';
 }
 function limpar(){
@@ -1487,7 +1522,7 @@ function textoAnamnese(){
   const nome=(document.getElementById('pacNome').value||'').trim()||'(sem nome)';
   let t='=== ÁRVORE DA VIDA — '+nome+' — '+brData(hoje())+' ===\n';
   if(selecionados.length)t+='\nDesequilíbrios:\n'+selecionados.map(s=>'• '+s).join('\n')+'\n';
-  if(baloes.length)t+='\nBalões de percepção:\n'+baloes.map(b=>'💬 '+b).join('\n')+'\n';
+  if(baloes.length)t+='\nBalões de percepção:\n'+baloes.map(b=>'– '+b).join('\n')+'\n';
   return t;
 }
 function copiarAnamnese(){
@@ -1507,7 +1542,7 @@ function salvarSessao(){
   const sess={data:d,desequilibrios:selecionados.slice(),baloes:baloes.slice()};
   if(ix>=0)sessoes[ix]=sess;else sessoes.push(sess);
   save();renderSessoes();
-  alert('Sessão salva — '+nome+' agora tem '+sessoes.length+' sessão(ões). A árvore cresceu 🌳');
+  alert('Sessão salva — '+nome+' agora tem '+sessoes.length+' sessão(ões). A árvore cresceu.');
 }
 function carregarSessao(nome,ix){
   const s=(db.pacientes[nome]||[])[ix];
@@ -1531,6 +1566,101 @@ function renderSessoes(){
     return `<div class="sess-no${eHoje?' hoje':''}" onclick="carregarSessao('${nome.replace(/'/g,"\\'")}',${i})" title="${brData(s.data)}">${eHoje?'Hoje':'S'+(i+1)}</div>`;
   }).join('');
 }
+/* ===== ÁRVORE DO PACIENTE (CRESCIMENTO) ===== */
+const ELEMENTOS=[
+ {nome:'Madeira',cor:'#4a9a4a',chaves:['fígado','figado','vesícula','vesicula','vb ','vento']},
+ {nome:'Fogo',cor:'#c9503a',chaves:['coração','coracao','intestino delgado','pericárdio','pericardio','triplo aquecedor','shen','fogo']},
+ {nome:'Terra',cor:'#c9a84c',chaves:['baço','baco','estômago','estomago','umidade','fleuma']},
+ {nome:'Metal',cor:'#a8b0b8',chaves:['pulmão','pulmao','intestino grosso','ig ','secura','tristeza']},
+ {nome:'Água',cor:'#3a7aaa',chaves:['rim','bexiga','jing','medo','frio']}
+];
+function elementoDe(txt){
+  const t=(txt||'').toLowerCase();
+  for(const e of ELEMENTOS){if(e.chaves.some(c=>t.includes(c)))return e;}
+  return null;
+}
+function abrirCresc(){
+  const nome=(document.getElementById('pacNome').value||'').trim();
+  if(!nome){alert('Escreva o nome do paciente primeiro');return;}
+  const sessoes=db.pacientes[nome]||[];
+  document.getElementById('crescNome').textContent=nome;
+  document.getElementById('crescInfo').textContent=sessoes.length+' sessão(ões)';
+  document.getElementById('crescDetalhe').style.display='none';
+  desenharCresc(nome,sessoes);
+  padroesCresc(sessoes);
+  document.getElementById('overlayCresc').classList.add('aberto');
+}
+function fecharCresc(){document.getElementById('overlayCresc').classList.remove('aberto');}
+function desenharCresc(nome,sessoes){
+  const n=sessoes.length;
+  const alt=Math.max(300,120+n*72);
+  const cx=380;
+  let s='<svg class="cresc-svg" viewBox="0 0 760 '+alt+'" xmlns="http://www.w3.org/2000/svg">';
+  // raízes + tronco
+  s+='<g stroke="#6a4a2a" fill="none" stroke-linecap="round">';
+  s+='<path d="M'+cx+' '+(alt-20)+' q -30 14 -60 10 M'+cx+' '+(alt-20)+' q 30 14 60 10 M'+cx+' '+(alt-20)+' q 0 16 0 18" stroke-width="3" opacity=".6"/>';
+  s+='<path d="M'+cx+' '+(alt-22)+' C '+(cx-6)+' '+(alt-90)+' '+(cx+6)+' 110 '+cx+' 60" stroke-width="'+Math.min(14,6+n)+'"/>';
+  s+='</g>';
+  if(!n){
+    s+='<text x="'+cx+'" y="'+(alt/2)+'" fill="#5a5040" font-size="13" text-anchor="middle" font-style="italic">Semente plantada — salve a primeira sessão e a árvore nasce</text>';
+  }
+  sessoes.forEach((sess,i)=>{
+    const lado=i%2===0?-1:1;
+    const y=alt-70-i*68;
+    const gx=cx+lado*150;
+    const itens=(sess.desequilibrios||[]).concat(sess.baloes||[]);
+    // galho
+    s+='<g style="cursor:pointer" onclick="crescClique('+i+')">';
+    s+='<path d="M'+cx+' '+(y+22)+' Q '+(cx+lado*70)+' '+(y+14)+' '+gx+' '+y+'" stroke="#8a6a3a" stroke-width="3.5" fill="none" stroke-linecap="round"/>';
+    // folhas
+    itens.slice(0,8).forEach((it,j)=>{
+      const el=elementoDe(it);
+      const cor=el?el.cor:'#9a7abf';
+      const fx=gx+lado*(-8+((j%4)*16))+((j>3)?lado*8:0);
+      const fy=y-8-Math.floor(j/4)*16;
+      s+='<ellipse cx="'+fx+'" cy="'+fy+'" rx="7" ry="10" fill="'+cor+'" opacity=".85" transform="rotate('+(lado*25)+' '+fx+' '+fy+')"><title>'+String(it).replace(/[<>&"]/g,'')+'</title></ellipse>';
+    });
+    if(itens.length>8)s+='<text x="'+gx+'" y="'+(y-40)+'" fill="#6a5a4a" font-size="9" text-anchor="middle">+'+(itens.length-8)+'</text>';
+    // rótulo
+    s+='<text x="'+(gx+lado*14)+'" y="'+(y+16)+'" fill="#c8b890" font-size="11" text-anchor="'+(lado<0?'end':'start')+'" font-family="Georgia">S'+(i+1)+' · '+brData(sess.data)+'</text>';
+    s+='</g>';
+  });
+  // copa no topo se a árvore está madura
+  if(n>=3)s+='<circle cx="'+cx+'" cy="52" r="16" fill="none" stroke="#c9a84c" stroke-width="1" opacity=".5"/><circle cx="'+cx+'" cy="52" r="8" fill="#c9a84c" opacity=".25"/>';
+  s+='</svg>';
+  document.getElementById('crescSvgBox').innerHTML=s;
+}
+function padroesCresc(sessoes){
+  const cont={};let semElem=0,total=0;
+  sessoes.forEach(sess=>{
+    (sess.desequilibrios||[]).concat(sess.baloes||[]).forEach(it=>{
+      total++;
+      const el=elementoDe(it);
+      if(el)cont[el.nome]=(cont[el.nome]||0)+1;else semElem++;
+    });
+  });
+  let h='<h3>Padrões entre sessões</h3>';
+  if(!total){h+='<span style="font-size:11px;color:#5a5040;font-style:italic">Ainda sem registros para revelar padrões</span>';}
+  else{
+    const max=Math.max(...ELEMENTOS.map(e=>cont[e.nome]||0),semElem,1);
+    ELEMENTOS.forEach(e=>{
+      const v=cont[e.nome]||0;if(!v)return;
+      h+='<div class="pad-linha"><span class="pad-nome">'+e.nome+'</span><div class="pad-barra" style="background:'+e.cor+';width:'+(v/max*320)+'px"></div><span class="pad-num">'+v+'</span></div>';
+    });
+    if(semElem)h+='<div class="pad-linha"><span class="pad-nome">Balões livres</span><div class="pad-barra" style="background:#9a7abf;width:'+(semElem/max*320)+'px"></div><span class="pad-num">'+semElem+'</span></div>';
+  }
+  document.getElementById('crescPadroes').innerHTML=h;
+}
+function crescClique(ix){
+  const nome=(document.getElementById('pacNome').value||'').trim();
+  const s=(db.pacientes[nome]||[])[ix];
+  if(!s)return;
+  const det=document.getElementById('crescDetalhe');
+  const itens=(s.desequilibrios||[]).concat(s.baloes||[]);
+  det.innerHTML='<strong style="color:#c9a84c">Sessão '+(ix+1)+' — '+brData(s.data)+'</strong><br>'+itens.map(i=>'• '+String(i).replace(/[<>&]/g,'')).join('<br>')+'<br><button class="fechar" style="margin-top:8px" onclick="fecharCresc();carregarSessao(\''+nome.replace(/'/g,"\\'")+'\','+ix+')">Reabrir esta sessão</button>';
+  det.style.display='block';
+}
+
 document.getElementById('pacData').textContent=brData(hoje());
 atualizar();
 const nomes=Object.keys(db.pacientes);
