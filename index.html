@@ -184,6 +184,29 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
    vermelho é o que não funcionou; os dois pesam no aponte, em sentidos opostos. */
 .cd-por.pac{background:#EAF5EC;color:#1B5E20;border-color:#A5CFAC}
 .cd-por.nao{background:#FBEAE8;color:#8E2B20;border-color:#E0B0A9}
+/* O FIO — a faixa fina que acompanha a página enquanto ele desce.
+   NÃO é um quadro repetido embaixo de cada setor: isso traria de volta a
+   poluição que as caixas vieram tirar. É uma linha só, grudada no alto, que
+   diz o que o marcado até aqui está puxando — Elemento, meridiano, tema — e
+   quantos candidatos isso já acendeu lá embaixo. Mostra; nunca decide. */
+.fio-barra{position:sticky;top:0;z-index:90;margin:0 0 14px;background:rgba(255,253,245,.96);backdrop-filter:blur(6px);border:1px solid #E2D8BE;border-left:4px solid #C9A227;border-radius:11px;box-shadow:0 2px 10px rgba(43,41,36,.06)}
+.fio-linha{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:7px 11px}
+.fio-tit{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#7a5c1e;flex-shrink:0}
+.fio-tit svg{width:15px;height:15px}
+.fio-chips{display:flex;align-items:center;gap:5px;flex-wrap:wrap;flex:1;min-width:0}
+.fio-ch{display:inline-flex;align-items:center;gap:5px;padding:2px 8px;border-radius:999px;font-size:10.5px;font-weight:600;background:var(--surface);border:1px solid var(--brd);color:var(--txt)}
+.fio-ch .pt{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.fio-ch.mer{background:var(--pri-l);border-color:var(--pri);color:var(--pri-d)}
+.fio-ch.tem{background:#F3EFF7;border-color:#C9B8DA;color:#5B3F76}
+.fio-ch.pac{background:#EAF5EC;border-color:#A5CFAC;color:#1B5E20}
+.fio-ch.nao{background:#FBEAE8;border-color:#E0B0A9;color:#8E2B20}
+.fio-ch.mudo{color:var(--txt-l);font-weight:500}
+.fio-seta{background:none;border:none;cursor:pointer;color:var(--txt-l);padding:2px;display:flex;flex-shrink:0}
+.fio-seta svg{width:15px;height:15px;transition:transform .2s}
+.fio-barra.fechado .fio-seta svg{transform:rotate(-90deg)}
+.fio-barra.fechado .fio-chips,.fio-barra.fechado .fio-btn{display:none}
+/* No celular o menu fica fixo no canto de cima; o fio desvia dele. */
+@media(max-width:900px){.fio-barra{top:52px}.fio-tit span{display:none}}
 /* O INTERRUPTOR DE TRÊS POSIÇÕES — a peça reaproveitável.
    Nasce sem posição escolhida (ninguém decide por ele) e cada toque grava.
    Tocar de novo na posição acesa desliga: sai a clique como entrou a clique. */
@@ -1121,6 +1144,9 @@ window.addEventListener('DOMContentLoaded',()=>{
 <section class="page" id="pg-diagnostico">
   <div class="page-header"><h1><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 7 4-14 2 7h6"/></svg></span>Diagnóstico Integrado</h1></div>
 
+  <!-- O fio: fica aqui em cima, gruda no alto e desce junto com ele. -->
+  <div class="fio-barra no-print" id="fioBarra" style="display:none"></div>
+
   <div class="fc no-print" style="margin-bottom:14px">
     <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink,#2B2B2B);margin-bottom:10px"><span style="width:18px;height:18px;color:var(--gold,#C9A84C)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h4M7 12h2M15 8v8M12 16h6"/></svg></span>Calculadora de IMC</div>
     <div class="fr">
@@ -1804,7 +1830,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v5.8 · 30/07';
+const APP_VER='v5.9 · 30/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -4648,6 +4674,73 @@ function cdBlocoHtml(){
   </div>`;
 }
 
+// ===== O FIO — a teia acompanhando a página =====
+// O dado já existia todo: cdFoco traduz a ficha, cdCalcular junta a literatura,
+// as ligações dele e a memória da pessoa. O que faltava era o dado chegar aos
+// OLHOS dele no momento do clique — com o paciente na frente e sem as duas mãos
+// livres para rolar a página até lá embaixo.
+// A forma foi escolhida por ele: uma faixa fina só, grudada no alto, e não um
+// quadro repetido embaixo de cada setor. E o fio continua sendo espelho: cada
+// número aqui é contagem do que ele marcou, nunca palpite da máquina.
+const FIO_CX='fio_diag_aberto';
+const CD_MERID_NOME=Object.fromEntries(Object.entries(CD_MERID_ID).map(([nome,id])=>[id,nome]));
+const fioAberto=()=>localStorage.getItem(FIO_CX)!=='0';
+function fioAlternar(){
+  localStorage.setItem(FIO_CX,fioAberto()?'0':'1');
+  fioRender();
+}
+// A porta para o bloco dos candidatos, sem passar pelo menu (que zeraria tudo).
+function fioIrCandidatos(){
+  const b=document.getElementById('cdBloco');
+  if(!b)return;
+  const fc=b.closest('.fc[data-cx]');
+  if(fc&&!fc.classList.contains('cx-aberta'))cxToggle(fc);
+  b.scrollIntoView({behavior:'smooth',block:'center'});
+}
+function fioRender(){
+  const barra=document.getElementById('fioBarra');
+  if(!barra)return;
+  const foco=cdFoco();
+  const temFoco=foco.elemento.length||foco.meridiano.length||foco.psicanalise.length;
+  if(!temFoco){barra.style.display='none';barra.innerHTML='';return;}
+  const lista=cdCalcular();
+  const fora=_diagSelecoes.candidatosFora||[];
+  const aceitos=_diagSelecoes.candidatos||[];
+  const abertos=lista.filter(c=>!fora.includes(cdChave(c))&&!aceitos.some(a=>a.alvo===c.alvo&&a.chave===c.chave));
+  // O que a pessoa já respondeu — e o que já falhou nela. Os dois aparecem:
+  // esconder o fracasso deixaria a tela repetir o erro no ano que vem.
+  const temPac=f=>lista.filter(c=>c.motivos.some(m=>m.fonte===f));
+  const bons=temPac('pac'),ruins=temPac('pacnao');
+  const chips=[];
+  foco.elemento.forEach(nome=>{
+    const e=bancoIntegrativoCompleto.matrizCincoElementos[nome];
+    chips.push(`<span class="fio-ch" title="Elemento marcado nesta ficha"><span class="pt" style="background:${e?e.cor:'var(--pri)'}"></span>${escHtml(nome)}</span>`);
+  });
+  foco.meridiano.forEach(id=>{
+    const nome=CD_MERID_NOME[id]||id;
+    chips.push(`<span class="fio-ch mer" title="${escHtml(nome)} — veio dos pontos, dos Sistemas ABC, do Bagua ou do elemento marcado">${escHtml(id)}</span>`);
+  });
+  if(foco.psicanalise.length)
+    chips.push(`<span class="fio-ch tem" title="${escHtml(foco.psicanalise.join(' · '))}">${foco.psicanalise.length} tema${foco.psicanalise.length>1?'s':''} da Psicanálise</span>`);
+  const puxa=[];
+  if(abertos.length)puxa.push(`${abertos.length} para filtrar`);
+  if(aceitos.length)puxa.push(`${aceitos.length} aceito${aceitos.length>1?'s':''}`);
+  const nomePac=_diagPacSel?_diagPacSel.nome:'';
+  barra.style.display='block';
+  barra.className='fio-barra no-print'+(fioAberto()?'':' fechado');
+  barra.innerHTML=`<div class="fio-linha">
+    <span class="fio-tit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18c5 0 4-12 9-12s4 12 9 12"/><circle cx="3" cy="18" r="1.4" fill="currentColor" stroke="none"/><circle cx="21" cy="18" r="1.4" fill="currentColor" stroke="none"/></svg><span>O fio</span></span>
+    <span class="fio-chips">
+      ${chips.join('')}
+      ${puxa.length?`<span class="fio-ch mudo">puxa ${puxa.join(' · ')}</span>`:`<span class="fio-ch mudo">nada apontado ainda</span>`}
+      ${bons.length?`<span class="fio-ch pac" title="${escHtml(bons.slice(0,6).map(c=>c.nome).join(' · '))}">${bons.length} já respondeu${nomePac?' em '+escHtml(nomePac.split(' ')[0]):''}</span>`:''}
+      ${ruins.length?`<span class="fio-ch nao" title="${escHtml(ruins.slice(0,6).map(c=>c.nome).join(' · '))}">${ruins.length} não respondeu nela</span>`:''}
+    </span>
+    ${lista.length?`<button type="button" class="btn btn-sec btn-sm fio-btn" style="padding:2px 9px;font-size:10.5px;flex-shrink:0" onclick="fioIrCandidatos()">Ver os candidatos</button>`:''}
+    <button type="button" class="fio-seta" title="${fioAberto()?'Recolher o fio':'Abrir o fio'}" onclick="fioAlternar()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button>
+  </div>`;
+}
+
 // AS PROPOSTAS — a conversa de 30/07 sobre "os minerais são todos Terra".
 // A intuição tinha um fundo verdadeiro (todo mineral entra pela Terra, que é a
 // digestão), mas a MTC classifica por FUNÇÃO, não por matéria: três substâncias
@@ -6700,7 +6793,7 @@ function renderDiagPainel(){
   if(!temAlgo){
     // Avaliação limpa: as caixas também esvaziam, senão sobra resto de antes
     ['pulso','elementos','pontos','abc','sup','auriculo','bagua','quiroref'].forEach(k=>entregarNaCaixa(k,''));
-    painel.style.display='none';resumoBox.style.display='none';return;
+    painel.style.display='none';resumoBox.style.display='none';fioRender();return;
   }
   painel.style.display='block';
   resumoBox.style.display='block';
@@ -6867,6 +6960,7 @@ function renderDiagPainel(){
   entregarNaCaixa('bagua',hBagua);
   entregarNaCaixa('quiroref',hQuiro);
   painel.innerHTML=html;
+  fioRender();   // o fio conta o mesmo que as caixas — e conta lá em cima
 
   // Resumo compacto
   const resumo=document.getElementById('diagResumo');

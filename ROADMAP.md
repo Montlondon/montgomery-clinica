@@ -4,18 +4,32 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
-## Próximo — senha "Acender o Fio" (combinada em 30/07/2026)
+## Concluído — Clínica v5.9: o fio único do Diagnóstico (30/07/2026)
 
-A teia já tem os dois andares: o geral (v5.5) e o daquela pessoa (v5.7). O que falta não é mais
-dado — é o dado **chegar aos olhos dele no momento do clique**, com o paciente na frente.
+Senha **"Acender o Fio"** cumprida. A teia já tinha os dois andares — o geral (v5.5) e o daquela
+pessoa (v5.7). O que faltava não era mais dado: era o dado **chegar aos olhos dele no momento do
+clique**, com o paciente na frente e sem as duas mãos livres para rolar a página até lá embaixo.
 
-Forma já escolhida lá atrás e mantida: **um fio único que acompanha a página enquanto ele desce**,
-mostrando o que o marcado até ali está puxando (Elemento → meridiano → o que a teia liga → o que
-já funcionou nesta pessoa). **Não** um quadro repetido embaixo de cada setor — isso traz de volta
-a poluição que o toggle das caixas veio tirar.
+Entrou **uma faixa fina só**, no alto do Diagnóstico, que **gruda no topo e desce junto** com ele
+(`position:sticky`). Não é um quadro repetido embaixo de cada setor — isso traria de volta a
+poluição que o toggle das caixas veio tirar. Em uma linha ela diz o que o marcado até ali está
+puxando:
 
-Onde pegar: `cdFoco` e `cdCalcular` já traduzem a ficha para as três dimensões, `dfDoPaciente` já
-guarda a memória da pessoa, e o bloco `cdBloco` é o ponto de partida no Diagnóstico.
+- os **Elementos** marcados, cada um com a bolinha da cor dele;
+- os **meridianos** que a ficha acendeu (dos pontos, dos Sistemas ABC, do Bagua e do próprio
+  elemento) — a sigla, com o nome inteiro ao passar o mouse;
+- quantos **temas da Psicanálise** estão marcados;
+- **o que isso puxa**: quantos candidatos estão para filtrar e quantos ele já aceitou;
+- e a memória daquela pessoa: **quantos já responderam nela** (verde) e **quantos não
+  responderam** (vermelho) — os dois lados, porque esconder o fracasso deixaria a tela repetir o
+  erro no ano que vem.
+
+O botão **Ver os candidatos** desce até o bloco `cdBloco` sem passar pelo menu (que zeraria a
+avaliação). A setinha recolhe o fio, e a escolha fica guardada — quando ele quiser a tela limpa,
+ela fica limpa. O fio nasce escondido: sem nada marcado, não existe.
+
+Nada aqui é conta nova: `cdFoco` e `cdCalcular` já eram a fonte, e o fio só conta o mesmo que as
+caixas contam lá embaixo. **O fio mostra; nunca decide.**
 
 ## Concluído — Clínica v5.8: o caminho de volta da régua (30/07/2026)
 
