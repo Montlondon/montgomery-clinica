@@ -4,6 +4,10 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
+## Concluído — OS v4.8: o Cubo diz o próprio nome (30/07/2026)
+
+*"O nome Metatron poderia também ficar lá no cubo, eu gosto demais de ler o nome Metatron."* Feito: **METATRON** em letras douradas e espaçadas dentro da própria arte, sob um traço fino, com o mesmo brilho das linhas. Não é legenda em HTML embaixo do desenho — está dentro do SVG, faz parte da imagem. O símbolo deixou de ser anônimo.
+
 ## Concluído — OS v4.7: a teia não para mais (30/07/2026)
 
 Emenda do Montgomery logo em seguida: *"deixa o cubo girando sozinho quando n[inguém escolher]"*. Feito — o Cubo de Metatron nunca mais fica parado.
