@@ -4,7 +4,15 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
+## Concluído — OS v4.6: o Cubo de Metatron acorda (30/07/2026)
+
+Pedido do Montgomery na hora em que viu os sólidos girando: *"teria como colocar a animação no Cubo de Metatron também"*. Tinha — e era, na verdade, cobrar uma promessa antiga. A legenda embaixo do Cubo sempre disse **"dentro da teia vivem os 5 sólidos platônicos"**, e até agora era só uma frase.
+
+Agora tem cinco botões sob o desenho, um por sólido. Toca no nome e ele **acende girando dentro dos 13 círculos**, no mesmo tamanho da teia, com as arestas da frente claras e as de trás escuras; toca de novo e apaga, e a legenda volta ao normal. Enquanto está aceso, a legenda diz qual é, o elemento de Platão e as contagens dele. Mesma matemática do bloco de baixo — nada foi duplicado, o desenho vem da mesma função.
+
 ## Concluído — OS v4.5: os 5 Sólidos Platônicos (30/07/2026)
+
+**NO AR** — merge `da087b8` no main, publicado.
 
 A senha **"Acender os Sólidos"** foi cumprida. O bloco `mfBlocoSolidos` nasceu logo abaixo dos Átomos, no mesmo anel 1 (O Princípio) — o irmão geométrico deles: a mesma pergunta, *"de que a matéria é feita?"*, respondida pela **forma** em vez da partícula. A legenda do Cubo de Metatron, que já os anunciava, deixou de ser promessa.
 
@@ -16,7 +24,7 @@ A senha **"Acender os Sólidos"** foi cumprida. O bloco `mfBlocoSolidos` nasceu 
 
 **A fronteira dita em voz alta**, na receita dos Átomos: a geometria é matemática (Euclides, *Elementos*, livro XIII) e vale em qualquer lugar do universo; a correspondência com fogo, terra, ar, água e éter é Platão no *Timeu* — tradição, não física. E fica escrito que os cinco elementos gregos **não** se misturam com os 5 Elementos chineses da teia: dois sistemas de povos diferentes que coincidem só no número, sem sólido para Madeira e Metal, sem Zang-Fu para o éter. Forçar o encaixe seria inventar ponte onde não há.
 
-Conferido rodando: os cinco botões desenhados, o dodecaedro girando, as contagens corretas, console limpo. Falta merge no main e push.
+Conferido rodando: os cinco botões desenhados, o dodecaedro girando, as contagens corretas, console limpo.
 
 ## Concluído — OS v4.4: os Átomos entram na Metafísica (29/07/2026)
 
