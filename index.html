@@ -1535,17 +1535,19 @@ window.addEventListener('DOMContentLoaded',()=>{
   </div>
 
   <!-- ===== ERVAS — A POSOLOGIA DA FITOTERAPIA =====
-       A mesma régua do outro lado da estante. A identidade da erva (sabor,
-       natureza, meridianos, ações) vem da literatura clássica de MTC e está
-       citada como tal. A POSOLOGIA nasce vazia: quanto, quantas vezes, em que
+       A mesma régua do outro lado da estante. A identidade da erva vem citada
+       com a sua procedência: da literatura clássica de MTC (sabor, natureza,
+       meridianos) ou da literatura oficial brasileira — Formulário de
+       Fitoterápicos da Farmacopeia Brasileira e RENISUS — para as ervas do
+       Brasil, que trazem parte usada e preparo no lugar do vocabulário chinês. A POSOLOGIA nasce vazia: quanto, quantas vezes, em que
        forma, por quanto tempo e em que momento é ele quem põe. Onde a
        literatura traz uma faixa de referência, ela aparece numa caixa à parte,
        dita em voz alta como referência de livro — nunca como a dose dele. -->
   <div class="pg-panel" id="sp-ervas">
     <div class="fc">
       <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:4px">A posologia da fitoterapia. Toque numa erva para abrir a régua dela.</p>
-      <p style="font-size:11.5px;color:var(--txt-l);margin-bottom:10px">O que a erva é — sabor, natureza, meridianos, ações — vem da literatura clássica de MTC. <strong>Quanto se dá</strong> é seu: a régua nasce vazia e cada quantidade, forma, frequência, duração e momento entra a clique. Onde o livro traz uma faixa, ela fica numa caixa separada, marcada como referência.</p>
-      <div class="sw" style="max-width:300px;margin-bottom:10px"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><input type="text" id="evBusca" placeholder="Buscar erva, ação, indicação..." oninput="renderEvGrid()"></div>
+      <p style="font-size:11.5px;color:var(--txt-l);margin-bottom:10px">Duas procedências na mesma estante, e a tela sempre diz qual é qual: as <strong>ervas da China</strong> trazem sabor, natureza e meridianos da literatura clássica de MTC; as <strong>ervas do Brasil</strong> trazem parte usada e preparo do Formulário de Fitoterápicos da Farmacopeia Brasileira e da RENISUS — e, onde só existe uso tradicional, está escrito que é uso tradicional. <strong>Quanto se dá</strong> é seu nos dois casos: a régua nasce vazia e cada quantidade, forma, frequência, duração e momento entra a clique. Onde o livro traz uma faixa, ela fica numa caixa separada, marcada como referência.</p>
+      <div class="sw" style="max-width:300px;margin-bottom:10px"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><input type="text" id="evBusca" placeholder="Buscar erva, ação, indicação, parte usada..." oninput="renderEvGrid()"></div>
       <div id="evGrid"></div>
       <div id="evPainel"></div>
       <div id="evFormulas" style="margin-top:22px"></div>
@@ -1555,7 +1557,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   <div class="pg-panel" id="sp-ligacoes">
     <div class="fc">
       <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:4px">A teia de ligações — de onde os candidatos do Diagnóstico saem.</p>
-      <p style="font-size:11.5px;color:var(--txt-l);margin-bottom:12px">A erva já traz elemento e meridianos da literatura clássica, e por isso ela aponta sozinha. <strong>Tudo o mais é seu:</strong> mineral não tem elemento em livro nenhum, e nenhum tema da Psicanálise tem erva escrita em lugar algum. Esta tela nasce vazia de propósito — cada ligação que entrar aqui é sua, com a data em que você a fez, e é assim que ela vai aparecer na hora do atendimento. O sistema nunca liga sozinho: quando você aceitar a mesma coisa várias vezes, ele <em>pergunta</em>.</p>
+      <p style="font-size:11.5px;color:var(--txt-l);margin-bottom:12px">A erva da MTC já traz elemento e meridianos da literatura clássica, e por isso ela aponta sozinha. <strong>A erva do Brasil não</strong> — nenhum livro brasileiro lhe dá elemento ou meridiano, então ela só chega aos Candidatos pela ligação que você fizer aqui. <strong>Tudo o mais é seu:</strong> mineral não tem elemento em livro nenhum, e nenhum tema da Psicanálise tem erva escrita em lugar algum. Esta tela nasce vazia de propósito — cada ligação que entrar aqui é sua, com a data em que você a fez, e é assim que ela vai aparecer na hora do atendimento. O sistema nunca liga sozinho: quando você aceitar a mesma coisa várias vezes, ele <em>pergunta</em>.</p>
       <div id="lgPainel"></div>
     </div>
   </div>
@@ -1780,7 +1782,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v5.5 · 30/07';
+const APP_VER='v5.6 · 30/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -3984,6 +3986,16 @@ const EV_CAMPOS=[
 let _evSel=null,_evPacSel=null,_evEscolha={quantidades:null,formas:null,frequencias:null,duracoes:null,momentos:null};
 
 const evLista=()=>(typeof fitoterapiaErvas!=='undefined'?fitoterapiaErvas:[]);
+// Duas procedências na mesma estante. A erva da MTC se chama pelo pinyin e traz
+// sabor, natureza e meridiano; a erva do Brasil se chama pelo nome popular e
+// traz parte usada e forma de preparo. O botão, a régua, a ficha e o caminho
+// até a Recomendação são os mesmos — só o nome e a identidade mudam.
+const evOrigem=e=>(e&&e.origem)||((e&&e.nome_pinyin)?'MTC':'Brasil');
+const evNome=e=>((e&&(e.nome_pinyin||e.nome_popular||e.id))||'');
+const evNome2=e=>(!e?'':(e.nome_pinyin?(e.nome_popular||e.nome_cientifico||''):(e.nome_cientifico||'')));
+const evNomeCheio=e=>evNome(e)+(evNome2(e)?' · '+evNome2(e):'');
+let _evOrigemFiltro='todas';
+function evFiltrarOrigem(o){_evOrigemFiltro=o;_evSel=null;renderEvGrid();renderEvPainel();}
 const evBase=id=>evLista().find(e=>e.id===id);
 const evReguas=()=>gD('minerais').filter(r=>r.tipo==='regua_erva');
 const evIndicacoes=()=>gD('minerais').filter(r=>r.tipo==='indicacao_erva');
@@ -4000,7 +4012,7 @@ async function evGravarRegua(id,patch){
   let r=evRegua(id);
   if(!r){
     const d=evDados(id),b=d.base;
-    r={id:novoId(),tipo:'regua_erva',chave:id,nome:b.nome_pinyin||id,popular:b.nome_popular||'',nota:d.nota};
+    r={id:novoId(),tipo:'regua_erva',chave:id,nome:evNome(b)||id,popular:b.nome_popular||'',nota:d.nota};
     EV_CAMPOS.forEach(c=>{r[c.k]=d[c.k];});
     Object.assign(r,patch);
     await dbAdd('minerais',r);
@@ -4039,21 +4051,33 @@ function evAbrir(id){
   renderEvGrid();renderEvPainel();
 }
 
+// A peneira da procedência. Contada na hora, do próprio banco — o número não é
+// escrito à mão em lugar nenhum.
+function evOrigemBotoes(){
+  const todas=evLista();
+  const n=o=>todas.filter(e=>evOrigem(e)===o).length;
+  const ops=[['todas','Todas',todas.length],['MTC','China (MTC)',n('MTC')],['Brasil','Brasil',n('Brasil')]];
+  return `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px">
+    ${ops.map(([k,l,c])=>`<button type="button" class="mn-voc" style="${_evOrigemFiltro===k?'border-style:solid;border-color:#C9A227;color:#7a5c1e;font-weight:700':''}" onclick="evFiltrarOrigem('${k}')">${l} <span style="opacity:.6">${c}</span></button>`).join('')}
+  </div>`;
+}
+
 function renderEvGrid(){
   const el=document.getElementById('evGrid');if(!el)return;
   const todas=evLista();
   if(!todas.length){el.innerHTML='<p class="mn-vazio">A base de ervas não carregou (fitoterapia-data.js).</p>';return;}
   const q=semAcento(((document.getElementById('evBusca')||{}).value||'').trim().toLowerCase());
-  const filtra=e=>!q||[e.nome_pinyin,e.nome_popular,e.nome_cientifico,e.categoria,e.acoes,e.indicacoes].some(x=>semAcento(String(x||'').toLowerCase()).includes(q));
+  const filtra=e=>(_evOrigemFiltro==='todas'||evOrigem(e)===_evOrigemFiltro)
+    &&(!q||[e.nome_pinyin,e.nome_popular,e.nome_cientifico,e.categoria,e.acoes,e.indicacoes,e.parte_usada,e.forma_tradicional].some(x=>semAcento(String(x||'').toLowerCase()).includes(q)));
   const cats={};
   todas.filter(filtra).forEach(e=>{(cats[e.categoria||'Sem categoria']=cats[e.categoria||'Sem categoria']||[]).push(e);});
   const chaves=Object.keys(cats);
-  if(!chaves.length){el.innerHTML='<p class="mn-vazio">Nenhuma erva encontrada com esta busca.</p>';return;}
-  el.innerHTML=chaves.map(c=>`<div class="ev-cat">${escHtml(c)}</div>
+  if(!chaves.length){el.innerHTML=evOrigemBotoes()+'<p class="mn-vazio">Nenhuma erva encontrada com esta busca.</p>';return;}
+  el.innerHTML=evOrigemBotoes()+chaves.map(c=>`<div class="ev-cat">${escHtml(c)}</div>
     <div style="display:flex;flex-wrap:wrap;gap:6px">${cats[c].map(e=>`
       <button class="ev-erva${_evSel===e.id?' sel':''}" onclick="evAbrir('${e.id}')" title="${escHtml(e.acoes||'')}">
-        <span class="ev-pin">${escHtml(e.nome_pinyin||e.id)}</span>
-        <span class="ev-pop">${escHtml(e.nome_popular||e.nome_cientifico||'')}</span>
+        <span class="ev-pin">${escHtml(evNome(e))}</span>
+        <span class="ev-pop">${escHtml(evNome2(e))}</span>
         <span class="ev-mark">${evTemRegua(e.id)?'régua sua':'régua vazia'}</span>
       </button>`).join('')}</div>`).join('');
 }
@@ -4078,21 +4102,23 @@ function renderEvPainel(){
   const escolhido=EV_CAMPOS.map(c=>_evEscolha[c.k]).filter(Boolean).join(' · ');
   el.innerHTML=`
   <div style="border-top:1px solid var(--brd);padding-top:14px;margin-top:14px">
-    <h3 style="font-size:16px;color:var(--pri-d);margin:0 0 2px">${escHtml(b.nome_pinyin||_evSel)}${b.nome_popular?' · '+escHtml(b.nome_popular):''}</h3>
+    <h3 style="font-size:16px;color:var(--pri-d);margin:0 0 2px">${escHtml(evNome(b)||_evSel)}${b.nome_pinyin&&evNome2(b)?' · '+escHtml(evNome2(b)):''}</h3>
     <div style="font-size:11.5px;color:var(--txt-l);font-style:italic;margin-bottom:8px">${escHtml(b.nome_cientifico||'')}</div>
     <div class="ev-id">
       ${b.sabor?`<div><b>Sabor:</b> ${escHtml([].concat(b.sabor).join(', '))} · <b>Natureza:</b> ${escHtml(b.natureza||'-')}</div>`:''}
       ${b.meridianos?`<div><b>Meridianos:</b> ${escHtml([].concat(b.meridianos).join(', '))}${b.elemento_relacionado?' · <b>Elemento:</b> '+escHtml(b.elemento_relacionado):''}</div>`:''}
+      ${b.parte_usada?`<div><b>Parte usada:</b> ${escHtml(b.parte_usada)}${b.forma_tradicional?' · <b>Preparo:</b> '+escHtml(b.forma_tradicional):''}</div>`:''}
       ${b.acoes?`<div style="margin-top:5px"><b>Ações:</b> ${escHtml(b.acoes)}</div>`:''}
       ${b.indicacoes?`<div><b>Indicações:</b> ${escHtml(b.indicacoes)}</div>`:''}
       ${b.contraindicacoes?`<div style="color:#b3261e;margin-top:4px"><b>Contraindicações:</b> ${escHtml(b.contraindicacoes)}</div>`:''}
-      <div style="font-size:10.5px;color:var(--txt-l);margin-top:6px">Identidade compilada de literatura clássica de MTC.</div>
+      <div style="font-size:10.5px;color:var(--txt-l);margin-top:6px">${escHtml(b.fonte||'Identidade compilada de literatura clássica de MTC.')}</div>
+      ${evOrigem(b)==='Brasil'?`<div style="font-size:10.5px;color:var(--txt-l);margin-top:2px">Erva do Brasil: a literatura brasileira não lhe dá sabor, natureza, meridiano nem elemento — por isso ela só aparece nos Candidatos por uma ligação sua, feita na aba Ligações.</div>`:''}
     </div>
     <p style="font-size:12px;color:var(--ink-soft);font-style:italic;margin-bottom:4px">${d.nota?escHtml(d.nota):'<span style="color:var(--txt-l);font-style:normal">Sem a sua leitura ainda — o que esta erva faz no seu atendimento é seu.</span>'}</p>
     <button class="btn btn-sec btn-sm" style="margin-bottom:12px" onclick="evEditarNota('${_evSel}')">${d.nota?'Editar a sua leitura':'Escrever a sua leitura'}</button>
 
     ${b.dosagem_referencia?`<div class="ev-ref">
-      <span class="ev-ref-lbl">Referência da literatura clássica — não é a sua dose</span>
+      <span class="ev-ref-lbl">${evOrigem(b)==='Brasil'?'Referência da literatura oficial brasileira — não é a sua dose':'Referência da literatura clássica — não é a sua dose'}</span>
       ${escHtml(b.dosagem_referencia)}
       <div style="margin-top:6px"><button class="btn btn-sec btn-sm" onclick="evPorNaRegua('${_evSel}','quantidades',${jsq(b.dosagem_referencia)})">Usar como ponto de partida</button></div>
     </div>`:`<div class="ev-ref"><span class="ev-ref-lbl">Referência da literatura</span>O livro não traz faixa para esta erva. A quantidade é sua.</div>`}
@@ -4158,13 +4184,13 @@ async function evAnotarNaFicha(id){
   if(!_evPacSel||!_evPacSel.id){toast('Escolha a pessoa primeiro.','#EF6C00',"warn");return;}
   if(!_evEscolha.quantidades){toast('Toque numa quantidade da régua primeiro.','#EF6C00',"warn");return;}
   const data=v('evData')||dLocal(new Date());
-  const reg={id:novoId(),tipo:'indicacao_erva',chave:id,erva:b.nome_pinyin||id,popular:b.nome_popular||'',
+  const reg={id:novoId(),tipo:'indicacao_erva',chave:id,erva:evNome(b)||id,popular:evNome2(b)||'',
     quantidade:_evEscolha.quantidades,forma:_evEscolha.formas||'',frequencia:_evEscolha.frequencias||'',
     duracao:_evEscolha.duracoes||'',momento:_evEscolha.momentos||'',
     pacienteId:_evPacSel.id,pacienteNome:_evPacSel.nome,
     data,dataBr:data.split('-').reverse().join('/'),obs:v('evObs')};
   await dbAdd('minerais',reg);
-  toast((b.nome_pinyin||id)+' anotada na ficha de '+_evPacSel.nome+'.',null,"ok");
+  toast((evNome(b)||id)+' anotada na ficha de '+_evPacSel.nome+'.',null,"ok");
   renderEvPainel();
 }
 async function evApagarAnotacao(id){
@@ -4201,7 +4227,7 @@ function renderEvFicha(pacId){
 function evLevarParaRx(id){
   const d=evDados(id),b=d.base;
   if(!_evEscolha.quantidades){toast('Toque numa quantidade da régua primeiro.','#EF6C00',"warn");return;}
-  const nome=(b.nome_pinyin||id)+(b.nome_popular?' ('+b.nome_popular+')':'');
+  const nome=(evNome(b)||id)+(evNome2(b)?' ('+evNome2(b)+')':'');
   const pac=_evPacSel;
   const linha={nome,forma:_evEscolha.formas||'',dosagem:_evEscolha.quantidades,freq:_evEscolha.frequencias||'',dur:_evEscolha.duracoes||'',inst:_evEscolha.momentos||''};
   go('prescricao',null);
@@ -4218,7 +4244,7 @@ function evLevarParaRx(id){
     alvo.querySelector('.rxFq').value=linha.freq;
     alvo.querySelector('.rxDu').value=linha.dur;
     alvo.querySelector('.rxIn').value=linha.inst;
-    toast((b.nome_pinyin||id)+' foi para a Recomendação'+(pac&&pac.id?' de '+pac.nome:'')+'.',null,"planta");
+    toast((evNome(b)||id)+' foi para a Recomendação'+(pac&&pac.id?' de '+pac.nome:'')+'.',null,"planta");
   },200);
 }
 
@@ -4272,7 +4298,7 @@ const cdChave=c=>c.alvo+'|'+c.chave;
 function cdNome(alvo,chave){
   if(alvo==='mineral'){const b=mnBase(chave);return b?b[2]:chave;}
   const e=evBase(chave);
-  return e?((e.nome_pinyin||chave)+(e.nome_popular?' · '+e.nome_popular:'')):chave;
+  return e?(evNomeCheio(e)||chave):chave;
 }
 // O que está marcado na ficha, traduzido para as três dimensões da teia.
 // Nada é inventado: elemento é o que ele marcou, meridiano vem dos pontos, dos
@@ -4510,7 +4536,7 @@ function renderLgPainel(){
   const dim=CD_DIMS.find(d=>d.k===_lgDim)||CD_DIMS[0];
   const itens=_lgAlvo==='mineral'
     ? MN_BASE.map(m=>({chave:m[0],nome:m[2]}))
-    : evLista().map(e=>({chave:e.id,nome:(e.nome_pinyin||e.id)+(e.nome_popular?' · '+e.nome_popular:'')}));
+    : evLista().map(e=>({chave:e.id,nome:evNomeCheio(e)+' — '+evOrigem(e)}));
   const lista=lgLista().sort((a,b)=>String(b.data||'').localeCompare(String(a.data||'')));
   el.innerHTML=`
   <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">

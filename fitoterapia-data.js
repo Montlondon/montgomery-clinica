@@ -227,6 +227,428 @@ const fitoterapiaErvas = [
     contraindicacoes: "Calor-excesso, deficiência de Yin com calor, gestação.",
     dosagem_referencia: "1–4,5 g/dia",
     elemento_relacionado: "Água"
+  },
+
+  // ===== AS ERVAS DO BRASIL =====
+  // O outro lado da estante. Aqui a identidade NÃO vem da MTC: vem da
+  // literatura oficial brasileira (Formulário de Fitoterápicos da Farmacopeia
+  // Brasileira e a RENISUS do Ministério da Saúde) e, onde só existe o uso
+  // tradicional, está dito que é uso tradicional — sem faixa de dose nenhuma.
+  // Por isso estas ervas não trazem sabor, natureza, meridiano nem elemento:
+  // ninguém escreveu isso num livro brasileiro, e o sistema não vai inventar.
+  // Elas entram na teia de Ligações pela mão dele, uma a uma.
+  {
+    id: "br_camomila",
+    nome_popular: "Camomila",
+    nome_cientifico: "Matricaria chamomilla",
+    categoria: "Brasil · Calmantes e sono",
+    origem: "Brasil",
+    parte_usada: "Capítulos florais",
+    forma_tradicional: "Infusão",
+    acoes: "Calmante leve, antiespasmódica e anti-inflamatória de mucosas.",
+    indicacoes: "Ansiedade leve, dificuldade para dormir, cólicas digestivas, uso externo em irritações da pele.",
+    contraindicacoes: "Alergia a plantas da família Asteraceae.",
+    dosagem_referencia: "Infusão: 3 g dos capítulos florais em 150 mL, 3x ao dia",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS"
+  },
+  {
+    id: "br_ervacidreira",
+    nome_popular: "Erva-cidreira (melissa)",
+    nome_cientifico: "Melissa officinalis",
+    categoria: "Brasil · Calmantes e sono",
+    origem: "Brasil",
+    parte_usada: "Folhas",
+    forma_tradicional: "Infusão",
+    acoes: "Calmante suave, antiespasmódica, carminativa.",
+    indicacoes: "Agitação, insônia leve, desconforto digestivo de fundo nervoso.",
+    contraindicacoes: "Hipotireoidismo em uso de reposição hormonal (cautela relatada).",
+    dosagem_referencia: "Infusão: 2–4 g das folhas em 150 mL, 2–3x ao dia",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS"
+  },
+  {
+    id: "br_capimlimao",
+    nome_popular: "Capim-limão (capim-santo)",
+    nome_cientifico: "Cymbopogon citratus",
+    categoria: "Brasil · Calmantes e sono",
+    origem: "Brasil",
+    parte_usada: "Folhas",
+    forma_tradicional: "Infusão",
+    acoes: "Calmante leve, antiespasmódica, carminativa.",
+    indicacoes: "Nervosismo, cólicas leves, desconforto abdominal por gases.",
+    contraindicacoes: "Hipotensão e uso de anti-hipertensivos (cautela).",
+    dosagem_referencia: "Infusão: 1–3 g das folhas em 150 mL, 2–3x ao dia",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS"
+  },
+  {
+    id: "br_maracuja",
+    nome_popular: "Maracujá",
+    nome_cientifico: "Passiflora incarnata / Passiflora edulis",
+    categoria: "Brasil · Calmantes e sono",
+    origem: "Brasil",
+    parte_usada: "Folhas",
+    forma_tradicional: "Infusão",
+    acoes: "Sedativa leve, ansiolítica de uso tradicional.",
+    indicacoes: "Ansiedade, insônia de conciliação.",
+    contraindicacoes: "Sonolência — cautela ao dirigir e com depressores do sistema nervoso.",
+    dosagem_referencia: "Infusão: 2 g das folhas em 150 mL, 2–3x ao dia",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS"
+  },
+  {
+    id: "br_mulungu",
+    nome_popular: "Mulungu",
+    nome_cientifico: "Erythrina mulungu",
+    categoria: "Brasil · Calmantes e sono",
+    origem: "Brasil",
+    parte_usada: "Cascas do caule",
+    forma_tradicional: "Decocção",
+    acoes: "Calmante de uso tradicional, relaxante.",
+    indicacoes: "Agitação, insônia, ansiedade — no uso popular brasileiro.",
+    contraindicacoes: "Hipotensão; associação com sedativos.",
+    fonte: "Uso tradicional brasileiro — sem faixa de dose em literatura oficial"
+  },
+  {
+    id: "br_hortela",
+    nome_popular: "Hortelã-pimenta",
+    nome_cientifico: "Mentha x piperita",
+    categoria: "Brasil · Digestivas e carminativas",
+    origem: "Brasil",
+    parte_usada: "Folhas",
+    forma_tradicional: "Infusão",
+    acoes: "Antiespasmódica, carminativa, colerética leve.",
+    indicacoes: "Má digestão, gases, cólicas intestinais.",
+    contraindicacoes: "Refluxo gastroesofágico, obstrução das vias biliares, cálculos biliares; não usar o óleo essencial em crianças pequenas.",
+    dosagem_referencia: "Infusão: 3 g das folhas em 150 mL, 2–3x ao dia",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS"
+  },
+  {
+    id: "br_espinheirasanta",
+    nome_popular: "Espinheira-santa",
+    nome_cientifico: "Maytenus ilicifolia",
+    categoria: "Brasil · Digestivas e carminativas",
+    origem: "Brasil",
+    parte_usada: "Folhas",
+    forma_tradicional: "Infusão",
+    acoes: "Protetora da mucosa gástrica, antiácida.",
+    indicacoes: "Gastrite, azia, dispepsia, apoio em úlcera péptica.",
+    contraindicacoes: "Gestação e amamentação.",
+    dosagem_referencia: "Infusão: 1–2 g das folhas em 150 mL, 3–4x ao dia, antes das refeições",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS"
+  },
+  {
+    id: "br_ervadoce",
+    nome_popular: "Erva-doce (funcho)",
+    nome_cientifico: "Foeniculum vulgare",
+    categoria: "Brasil · Digestivas e carminativas",
+    origem: "Brasil",
+    parte_usada: "Frutos",
+    forma_tradicional: "Infusão",
+    acoes: "Carminativa, antiespasmódica, expectorante leve.",
+    indicacoes: "Gases, cólicas, desconforto digestivo.",
+    contraindicacoes: "Gestação; não usar o óleo essencial em lactentes.",
+    dosagem_referencia: "Infusão: 1–2 g dos frutos em 150 mL, 2–3x ao dia",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS"
+  },
+  {
+    id: "br_gengibre",
+    nome_popular: "Gengibre",
+    nome_cientifico: "Zingiber officinale",
+    categoria: "Brasil · Digestivas e carminativas",
+    origem: "Brasil",
+    parte_usada: "Rizoma",
+    forma_tradicional: "Infusão ou decocção",
+    acoes: "Antiemética, digestiva, aquecedora.",
+    indicacoes: "Náusea, enjoo de movimento, digestão lenta, resfriado com frio.",
+    contraindicacoes: "Cálculos biliares, uso de anticoagulantes; cautela na gestação.",
+    dosagem_referencia: "Infusão: 0,5–1 g do rizoma em 150 mL, 2–3x ao dia",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS"
+  },
+  {
+    id: "br_marcela",
+    nome_popular: "Marcela (macela)",
+    nome_cientifico: "Achyrocline satureioides",
+    categoria: "Brasil · Digestivas e carminativas",
+    origem: "Brasil",
+    parte_usada: "Capítulos florais",
+    forma_tradicional: "Infusão",
+    acoes: "Digestiva, antiespasmódica, calmante leve.",
+    indicacoes: "Má digestão, cólicas, desconforto abdominal.",
+    contraindicacoes: "Alergia a Asteraceae; gestação (cautela).",
+    dosagem_referencia: "Infusão: 3 g dos capítulos florais em 150 mL, 2–3x ao dia",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS"
+  },
+  {
+    id: "br_boldochile",
+    nome_popular: "Boldo-do-chile",
+    nome_cientifico: "Peumus boldus",
+    categoria: "Brasil · Fígado e vesícula",
+    origem: "Brasil",
+    parte_usada: "Folhas",
+    forma_tradicional: "Infusão",
+    acoes: "Colerética, colagoga, digestiva.",
+    indicacoes: "Digestão difícil de refeição gordurosa, desconforto hepático.",
+    contraindicacoes: "Obstrução das vias biliares, doença hepática grave, gestação.",
+    dosagem_referencia: "Infusão: 1–2 g das folhas em 150 mL, 2–3x ao dia",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira"
+  },
+  {
+    id: "br_falsoboldo",
+    nome_popular: "Boldo-brasileiro (falso-boldo)",
+    nome_cientifico: "Plectranthus barbatus",
+    categoria: "Brasil · Fígado e vesícula",
+    origem: "Brasil",
+    parte_usada: "Folhas",
+    forma_tradicional: "Infusão",
+    acoes: "Digestiva e colerética de uso tradicional — é a folha do quintal brasileiro, planta diferente do boldo-do-chile.",
+    indicacoes: "Má digestão, desconforto após refeição pesada.",
+    contraindicacoes: "Gestação, obstrução biliar, uso de anti-hipertensivos (cautela).",
+    dosagem_referencia: "Infusão: 1–3 g das folhas em 150 mL, 2–3x ao dia",
+    fonte: "RENISUS · uso tradicional brasileiro"
+  },
+  {
+    id: "br_alcachofra",
+    nome_popular: "Alcachofra",
+    nome_cientifico: "Cynara scolymus",
+    categoria: "Brasil · Fígado e vesícula",
+    origem: "Brasil",
+    parte_usada: "Folhas",
+    forma_tradicional: "Infusão",
+    acoes: "Colerética, hepatoprotetora, digestiva.",
+    indicacoes: "Dispepsia, desconforto hepatobiliar.",
+    contraindicacoes: "Obstrução das vias biliares, alergia a Asteraceae.",
+    dosagem_referencia: "Infusão: 2 g das folhas em 150 mL, 3x ao dia",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS"
+  },
+  {
+    id: "br_carqueja",
+    nome_popular: "Carqueja",
+    nome_cientifico: "Baccharis trimera",
+    categoria: "Brasil · Fígado e vesícula",
+    origem: "Brasil",
+    parte_usada: "Partes aéreas",
+    forma_tradicional: "Infusão",
+    acoes: "Digestiva, colerética, amarga tônica.",
+    indicacoes: "Má digestão, desconforto hepático.",
+    contraindicacoes: "Gestação e amamentação; hipotensão; diabetes em uso de hipoglicemiantes (cautela).",
+    dosagem_referencia: "Infusão: 2,5 g das partes aéreas em 150 mL, 2–3x ao dia",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS"
+  },
+  {
+    id: "br_quebrapedra",
+    nome_popular: "Quebra-pedra",
+    nome_cientifico: "Phyllanthus niruri",
+    categoria: "Brasil · Rins e vias urinárias",
+    origem: "Brasil",
+    parte_usada: "Partes aéreas",
+    forma_tradicional: "Infusão",
+    acoes: "Diurética, antiespasmódica de vias urinárias.",
+    indicacoes: "Apoio em cálculo renal, desconforto urinário.",
+    contraindicacoes: "Gestação; hipotensão; uso de anticoagulantes e hipoglicemiantes (cautela).",
+    dosagem_referencia: "Infusão: 3 g das partes aéreas em 150 mL, 3–4x ao dia",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS"
+  },
+  {
+    id: "br_cavalinha",
+    nome_popular: "Cavalinha",
+    nome_cientifico: "Equisetum arvense",
+    categoria: "Brasil · Rins e vias urinárias",
+    origem: "Brasil",
+    parte_usada: "Partes aéreas",
+    forma_tradicional: "Infusão",
+    acoes: "Diurética, remineralizante de uso tradicional (rica em silício).",
+    indicacoes: "Retenção de líquidos leve, apoio a unhas e cabelo.",
+    contraindicacoes: "Insuficiência renal ou cardíaca, gestação; não usar por períodos longos sem pausa.",
+    dosagem_referencia: "Infusão: 1–3 g das partes aéreas em 150 mL, 2–3x ao dia",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS"
+  },
+  {
+    id: "br_chapeudecouro",
+    nome_popular: "Chapéu-de-couro",
+    nome_cientifico: "Echinodorus grandiflorus",
+    categoria: "Brasil · Rins e vias urinárias",
+    origem: "Brasil",
+    parte_usada: "Folhas",
+    forma_tradicional: "Infusão",
+    acoes: "Diurética e depurativa de uso tradicional.",
+    indicacoes: "Retenção de líquidos, desconforto articular no uso popular.",
+    contraindicacoes: "Gestação; uso de diuréticos (cautela com potássio).",
+    dosagem_referencia: "Infusão: 3 g das folhas em 150 mL, 2–3x ao dia",
+    fonte: "RENISUS · uso tradicional brasileiro"
+  },
+  {
+    id: "br_guaco",
+    nome_popular: "Guaco",
+    nome_cientifico: "Mikania glomerata",
+    categoria: "Brasil · Respiratórias",
+    origem: "Brasil",
+    parte_usada: "Folhas",
+    forma_tradicional: "Infusão ou xarope",
+    acoes: "Broncodilatadora, expectorante.",
+    indicacoes: "Tosse, bronquite, chiado.",
+    contraindicacoes: "Uso de anticoagulantes (cumarina); gestação; doses altas irritam o estômago.",
+    dosagem_referencia: "Infusão: 3 g das folhas em 150 mL, 3x ao dia",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS"
+  },
+  {
+    id: "br_poejo",
+    nome_popular: "Poejo",
+    nome_cientifico: "Mentha pulegium",
+    categoria: "Brasil · Respiratórias",
+    origem: "Brasil",
+    parte_usada: "Partes aéreas",
+    forma_tradicional: "Infusão",
+    acoes: "Expectorante, antiespasmódica.",
+    indicacoes: "Tosse, resfriado, catarro.",
+    contraindicacoes: "Gestação e amamentação; o óleo essencial é tóxico — só a infusão.",
+    dosagem_referencia: "Infusão: 1–3 g das partes aéreas em 150 mL, 3x ao dia",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira"
+  },
+  {
+    id: "br_unhadegato",
+    nome_popular: "Unha-de-gato",
+    nome_cientifico: "Uncaria tomentosa",
+    categoria: "Brasil · Anti-inflamatórias e articulações",
+    origem: "Brasil",
+    parte_usada: "Casca do caule",
+    forma_tradicional: "Decocção",
+    acoes: "Anti-inflamatória, imunomoduladora de uso tradicional amazônico.",
+    indicacoes: "Dor articular, apoio imunológico.",
+    contraindicacoes: "Gestação e amamentação; transplantados e doenças autoimunes; uso de imunossupressores.",
+    dosagem_referencia: "Decocção: 1 g da casca em 150 mL, 2–3x ao dia",
+    fonte: "RENISUS · uso tradicional amazônico"
+  },
+  {
+    id: "br_copaiba",
+    nome_popular: "Copaíba",
+    nome_cientifico: "Copaifera langsdorffii",
+    categoria: "Brasil · Anti-inflamatórias e articulações",
+    origem: "Brasil",
+    parte_usada: "Óleo-resina do tronco",
+    forma_tradicional: "Óleo — uso externo, e interno só com orientação",
+    acoes: "Anti-inflamatória e cicatrizante.",
+    indicacoes: "Dor e inflamação local, feridas, afecções de pele.",
+    contraindicacoes: "Gestação; uso interno prolongado irrita a mucosa gástrica.",
+    fonte: "RENISUS · uso tradicional amazônico — sem faixa de dose oficial para uso interno"
+  },
+  {
+    id: "br_ervabaleeira",
+    nome_popular: "Erva-baleeira",
+    nome_cientifico: "Varronia curassavica (Cordia verbenacea)",
+    categoria: "Brasil · Anti-inflamatórias e articulações",
+    origem: "Brasil",
+    parte_usada: "Folhas",
+    forma_tradicional: "Uso externo (creme, compressa)",
+    acoes: "Anti-inflamatória tópica, analgésica local.",
+    indicacoes: "Contusões, tendinites, dor muscular localizada.",
+    contraindicacoes: "Uso externo apenas; evitar em pele ferida aberta.",
+    fonte: "RENISUS · uso tradicional brasileiro"
+  },
+  {
+    id: "br_barbatimao",
+    nome_popular: "Barbatimão",
+    nome_cientifico: "Stryphnodendron adstringens",
+    categoria: "Brasil · Pele e mucosas (uso externo)",
+    origem: "Brasil",
+    parte_usada: "Casca do caule",
+    forma_tradicional: "Decocção para lavagem e compressa",
+    acoes: "Adstringente e cicatrizante.",
+    indicacoes: "Feridas, escaras, inflamações de mucosa — uso externo.",
+    contraindicacoes: "Uso interno não recomendado; gestação.",
+    dosagem_referencia: "Decocção: 3 g da casca em 150 mL, uso externo",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS"
+  },
+  {
+    id: "br_aroeira",
+    nome_popular: "Aroeira",
+    nome_cientifico: "Schinus terebinthifolia",
+    categoria: "Brasil · Pele e mucosas (uso externo)",
+    origem: "Brasil",
+    parte_usada: "Casca do caule",
+    forma_tradicional: "Decocção para banho de assento e lavagem",
+    acoes: "Adstringente, cicatrizante, anti-inflamatória de mucosa.",
+    indicacoes: "Afecções ginecológicas e feridas — uso externo.",
+    contraindicacoes: "Gestação e amamentação; uso interno não recomendado.",
+    dosagem_referencia: "Decocção: 3 g da casca em 150 mL, uso externo",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS"
+  },
+  {
+    id: "br_babosa",
+    nome_popular: "Babosa (aloe)",
+    nome_cientifico: "Aloe vera",
+    categoria: "Brasil · Pele e mucosas (uso externo)",
+    origem: "Brasil",
+    parte_usada: "Gel da folha",
+    forma_tradicional: "Uso externo",
+    acoes: "Cicatrizante, hidratante, calmante da pele.",
+    indicacoes: "Queimaduras leves, ressecamento, irritação da pele.",
+    contraindicacoes: "Uso interno do látex é laxante irritante e não recomendado; gestação.",
+    fonte: "RENISUS · uso tradicional — referência de uso externo"
+  },
+  {
+    id: "br_calendula",
+    nome_popular: "Calêndula",
+    nome_cientifico: "Calendula officinalis",
+    categoria: "Brasil · Pele e mucosas (uso externo)",
+    origem: "Brasil",
+    parte_usada: "Capítulos florais",
+    forma_tradicional: "Infusão para compressa e bochecho",
+    acoes: "Cicatrizante, anti-inflamatória de pele e mucosa.",
+    indicacoes: "Feridas superficiais, inflamação de boca e garganta.",
+    contraindicacoes: "Alergia a Asteraceae; gestação (uso interno).",
+    dosagem_referencia: "Infusão: 1–3 g dos capítulos florais em 150 mL, uso externo",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS"
+  },
+  {
+    id: "br_guarana",
+    nome_popular: "Guaraná",
+    nome_cientifico: "Paullinia cupana",
+    categoria: "Brasil · Tônicos e estimulantes",
+    origem: "Brasil",
+    parte_usada: "Sementes",
+    forma_tradicional: "Pó",
+    acoes: "Estimulante do sistema nervoso central (cafeína), tônica.",
+    indicacoes: "Fadiga, sonolência diurna, falta de concentração.",
+    contraindicacoes: "Hipertensão, arritmias, insônia, ansiedade, gestação; não usar à noite.",
+    fonte: "Uso tradicional amazônico — sem faixa de dose em literatura oficial"
+  },
+  {
+    id: "br_catuaba",
+    nome_popular: "Catuaba",
+    nome_cientifico: "Trichilia catigua",
+    categoria: "Brasil · Tônicos e estimulantes",
+    origem: "Brasil",
+    parte_usada: "Casca do caule",
+    forma_tradicional: "Decocção ou tintura",
+    acoes: "Tônica e estimulante de uso tradicional.",
+    indicacoes: "Fadiga, tônico geral no uso popular.",
+    contraindicacoes: "Gestação; associação com estimulantes.",
+    fonte: "Uso tradicional brasileiro — sem faixa de dose em literatura oficial"
+  },
+  {
+    id: "br_iperoxo",
+    nome_popular: "Ipê-roxo (pau d'arco)",
+    nome_cientifico: "Handroanthus impetiginosus",
+    categoria: "Brasil · Tônicos e estimulantes",
+    origem: "Brasil",
+    parte_usada: "Casca do caule",
+    forma_tradicional: "Decocção",
+    acoes: "Depurativa e anti-inflamatória de uso tradicional.",
+    indicacoes: "Afecções de pele, uso depurativo popular.",
+    contraindicacoes: "Gestação e amamentação; uso de anticoagulantes.",
+    fonte: "RENISUS · uso tradicional brasileiro — sem faixa de dose oficial"
+  },
+  {
+    id: "br_alecrim",
+    nome_popular: "Alecrim",
+    nome_cientifico: "Rosmarinus officinalis",
+    categoria: "Brasil · Tônicos e estimulantes",
+    origem: "Brasil",
+    parte_usada: "Folhas",
+    forma_tradicional: "Infusão",
+    acoes: "Tônica, digestiva, estimulante circulatória leve.",
+    indicacoes: "Cansaço mental, má digestão, dor de cabeça leve de fundo tensional.",
+    contraindicacoes: "Gestação; obstrução das vias biliares; hipertensão (cautela).",
+    dosagem_referencia: "Infusão: 2 g das folhas em 150 mL, 2–3x ao dia",
+    fonte: "Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS"
   }
 ];
 
@@ -374,10 +796,14 @@ const fitoterapiaFormulas = [
 ];
 
 // Helpers de integração
+// A procedência não precisa estar escrita em toda erva antiga: quem tem nome em
+// pinyin veio da MTC, quem não tem veio do Brasil.
+const ervaOrigem = (e) => e.origem || (e.nome_pinyin ? "MTC" : "Brasil");
+const buscarErvasPorOrigem = (origem) => fitoterapiaErvas.filter(e => ervaOrigem(e) === origem);
 const buscarErvaPorId = (id) => fitoterapiaErvas.find(e => e.id === id);
 const buscarFormulasPorElemento = (elemento) => fitoterapiaFormulas.filter(f => f.elemento_relacionado?.includes(elemento));
 const buscarFormulasPorPadrao = (termo) => fitoterapiaFormulas.filter(f => f.padrao_mtc?.toLowerCase().includes(termo.toLowerCase()));
 
 if (typeof module !== "undefined") {
-  module.exports = { fitoterapiaErvas, fitoterapiaFormulas, buscarErvaPorId, buscarFormulasPorElemento, buscarFormulasPorPadrao };
+  module.exports = { fitoterapiaErvas, fitoterapiaFormulas, ervaOrigem, buscarErvasPorOrigem, buscarErvaPorId, buscarFormulasPorElemento, buscarFormulasPorPadrao };
 }

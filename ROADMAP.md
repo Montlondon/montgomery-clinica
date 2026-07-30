@@ -4,6 +4,48 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
+## Concluído — Clínica v5.6: as ervas do Brasil na estante (30/07/2026)
+
+Senha **"Acender as Ervas do Brasil"** cumprida. A aba Ervas tinha 15 plantas, e as 15 eram
+chinesas. Agora são **45**: as mesmas 15 da MTC mais **30 ervas do Brasil**, na mesma estante,
+com a mesma régua e o mesmo caminho até a folha do paciente.
+
+**A procedência aparece sempre.** Três botões no alto da estante — *Todas 45 · China (MTC) 15 ·
+Brasil 30* — e a contagem é feita na hora, do próprio banco. As ervas do Brasil estão em oito
+famílias de categoria, todas prefixadas com **Brasil ·**: calmantes e sono (camomila,
+erva-cidreira, capim-limão, maracujá, mulungu), digestivas e carminativas (hortelã,
+espinheira-santa, erva-doce, gengibre, marcela), fígado e vesícula (boldo-do-chile,
+boldo-brasileiro, alcachofra, carqueja), rins e vias urinárias (quebra-pedra, cavalinha,
+chapéu-de-couro), respiratórias (guaco, poejo), anti-inflamatórias e articulações (unha-de-gato,
+copaíba, erva-baleeira), pele e mucosas em uso externo (barbatimão, aroeira, babosa, calêndula) e
+tônicos (guaraná, catuaba, ipê-roxo, alecrim).
+
+**A identidade muda com a procedência, e a tela diz de onde veio.** A erva chinesa se chama pelo
+pinyin e traz sabor, natureza, meridianos e elemento. A erva brasileira se chama pelo **nome
+popular**, traz **parte usada** e **preparo**, e no rodapé da identidade vem a fonte escrita:
+*Formulário de Fitoterápicos da Farmacopeia Brasileira · RENISUS*. Onde só existe uso popular —
+mulungu, guaraná, catuaba, copaíba, ipê-roxo, babosa, erva-baleeira — está dito **uso tradicional
+brasileiro, sem faixa de dose em literatura oficial**, e a caixa de referência aparece vazia com a
+frase de sempre: *o livro não traz faixa para esta erva; a quantidade é sua*. Onde a faixa existe,
+ela vem com a tarja **"Referência da literatura oficial brasileira — não é a sua dose"**.
+
+**A fronteira continua onde estava.** A régua (quanto, forma, frequência, duração, momento) nasce
+vazia em todas as 30. As contraindicações vieram junto porque são segurança, não prescrição —
+gestação na carqueja, na aroeira, no alecrim; anticoagulante no guaco; obstrução biliar no boldo;
+cálculo biliar na hortelã; rim e coração na cavalinha; autoimune na unha-de-gato; o látex da
+babosa e o óleo essencial do poejo, que são as duas armadilhas clássicas.
+
+**E o que elas ainda não fazem, dito em voz alta.** Nenhum livro brasileiro dá elemento ou
+meridiano a uma erva daqui. Por isso a erva do Brasil **não aponta sozinha** nos Candidatos do
+Diagnóstico — ela só chega lá por uma ligação feita por ele na aba Ligações, e a tela avisa isso
+tanto no painel da erva quanto na abertura da aba Ligações. A lista de alvos das Ligações agora
+mostra a procedência ao lado de cada nome.
+
+**Onde mexeu.** `fitoterapia-data.js` (30 entradas novas + os helpers `ervaOrigem` e
+`buscarErvasPorOrigem`) e `index.html` (a peneira de procedência, o nome que deixa de depender do
+pinyin, a fonte por erva, os dois avisos). Nada de tabela nova, nada de RLS, nada de backup — as
+ervas do Brasil escrevem na mesma `minerais`, com os mesmos `regua_erva`/`indicacao_erva`.
+
 ## Concluído — Clínica v5.2: a régua de doses dos minerais (30/07/2026)
 
 Senha **"Acender o Magnésio"** cumprida. O degrau que faltava entre a desarmonia e a **quantidade** está no ar — e está no ar do jeito que ele pediu: **a máquina não calcula dose nenhuma.**
