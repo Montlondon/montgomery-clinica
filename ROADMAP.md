@@ -40,10 +40,22 @@ querendo. `maxTurns` impede o agente confuso de girar a noite. `cwd` é a cerca 
 trilha junto com 3, 4, 5 e 6. Agora tem o laço de quatro passos, as três travas, a conta do gasto
 e o Ronda por dentro. O cartão 7 do mapa passa a abrir a aula.
 
-**O que ficou por fazer:** o SDK traz o próprio Claude Code embutido, com credencial separada do
-aplicativo. O Montgomery precisa rodar `claude.exe /login` uma vez, dentro de
-`01_Codigo/agentes/node_modules/@anthropic-ai/claude-agent-sdk-win32-x64/`. Enquanto não fizer,
-o Ronda sai e volta com "Not logged in" — o laço gira, mas a porta está trancada.
+**O login foi feito no mesmo dia** e o Ronda andou de verdade: seis voltas no laço, cinco mãos
+estendidas, e voltou com o pendente certo. (O SDK traz o próprio Claude Code embutido, com
+credencial separada do aplicativo — foi preciso rodar `claude.exe /login` uma vez.)
+
+**A lição que a primeira corrida cobrou.** "Leia o ROADMAP" custou US$ 0,1706, porque este
+arquivo já tem 207 KB e o agente o abriu em quatro pedaços. Trocado por "leia apenas as primeiras
+60 linhas": **US$ 0,0508** — três vezes e meia mais barato. E a resposta ficou *mais correta*: a
+versão cara listava cinco itens, parte deles deduzidos das seções de Concluído; a barata leu só a
+seção Próximo e disse a verdade nua — o que está combinado é **um**, a Prateleira.
+
+> Agente caro costuma ser sintoma de pedido vago.
+
+**Decisão do Montgomery, registrada: o Ronda não vai ter relógio.** Nada de acordar sozinho todo
+dia. Ele roda quando for chamado, e ponto. A razão é dele e é boa: *"as ideias vêm sem que eu
+pense nelas"* — um agente com hora marcada serve a uma rotina, e o trabalho dele não anda por
+rotina. Despertador fica guardado como possibilidade, não como pendência.
 
 **Cuidado registrado:** `node_modules/` tem 291 MB e foi para o `.gitignore` antes do commit.
 Quase entrou no repo — o mesmo tipo de peso que já custou a cota do Supabase.
