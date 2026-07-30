@@ -4,6 +4,37 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
+## Concluído — OS v5.4: o Montgomery Code vira curso de verdade (30/07/2026)
+
+Pedido dele, com estas palavras: *"eu gostaria na verdade que eu tivesse aulas como uma pessoa
+que aprende realmente em uma faculdade, com passo a passo e metodologias."* Até aqui as aulas
+eram boas mas **soltas** — nasciam do trabalho do dia, cada uma com a sua forma. Faltava a coisa
+que uma faculdade tem e um punhado de aulas não tem: **grade, método e pré-requisito.**
+
+Entraram dois blocos novos no topo da aba, antes da trilha das sete camadas:
+
+**O método — cinco passos, sempre na mesma ordem.** (1) a imagem, antes de qualquer termo;
+(2) o conceito, o nome certo dito uma vez; (3) o código real, apontado dentro dos sistemas dele,
+nunca exemplo inventado; (4) o passo seu, exercício de dois minutos com as mãos dele no teclado;
+(5) **a prova** — ele escreve no caderno com as palavras dele, e sem isso a aula não fecha.
+Mais as quatro regras da casa: pré-requisito de verdade (só fecha com prova escrita), uma vela
+de cada vez, aula viva (o que acontece no trabalho vira aula na hora) e nada de teatro.
+
+**A grade — o curso inteiro aberto.** Sete módulos, cada um com objetivo e pré-requisito
+declarados, e **35 aulas numeradas** (1.1, 1.2, 2.1...) com o estado de cada uma: *acesa* (7,
+podem ser lidas hoje, com o link "abrir" que leva até ela), *na fila* (11 — as que já estão
+escritas neste ROADMAP, no catálogo lá embaixo, esperando ser montadas) e *plantada* (as demais,
+ainda por escrever). Cada aula tem caixinha; marcar guarda em `mos_code_grade` neste aparelho, e
+uma barra no alto mostra quantas já têm prova escrita.
+
+Detalhe que importa para o futuro: **a grade é dado, não texto** — mora na constante `GRADE` no
+JavaScript. Aula nova entra numa linha e a tela se refaz sozinha. As 11 aulas "na fila" saíram
+diretamente do catálogo *Matéria-prima para aulas do Montgomery Code*: o que estava só no ROADMAP
+agora aparece na tela dele, numerado e no módulo certo.
+
+Conferido no navegador antes de subir: 7 módulos montam, a barra conta 35, a caixinha grava e
+volta, e os links "abrir" acendem a Camada 2 e a Camada 7 (e a Camada 1, que mora na Escola).
+
 ## Próximo — senha "Acender a Prateleira" (combinada em 30/07/2026)
 
 A terceira aba de Suplementos, do jeito barato primeiro: **onde se compra exatamente aquilo**.
