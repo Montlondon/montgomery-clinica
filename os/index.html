@@ -1805,11 +1805,50 @@ tr:hover td{background:rgba(201,168,76,0.05)}
       <div><span style="color:var(--cinza)"># o índice do livro: uma linha por evolução, da mais nova para a mais velha</span></div>
     </div>
 
+    <h3 style="color:var(--azul);font-size:1rem;margin:0 0 var(--f2)">O ramo e o encontro &middot; <code style="font-family:'Courier New',monospace;color:var(--dourado)">branch</code> e <code style="font-family:'Courier New',monospace;color:var(--dourado)">merge</code></h3>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)">Você pediu para entender exatamente o que isto significa &mdash; e faz sentido, porque é a parte que a gente vinha fazendo sem nomear. Comece pela imagem: o <b>tronco</b> da árvore é a linha principal, o <code style="font-family:'Courier New',monospace;color:var(--dourado)">main</code>. É dele que a Vercel lê para pôr o site no ar. Tudo que está no tronco, o mundo está vendo.</p>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">Um <b>branch</b> (ramo) é um galho que sai do tronco. Ele nasce sendo uma cópia exata do tronco naquele instante, e a partir daí segue a vida dele: você pode escrever, apagar, errar e refazer no galho <b>sem que uma vírgula do tronco se mova</b>. O site no ar continua exatamente como estava. É a sala de rascunho &mdash; com a segurança de que o rascunho também está sendo guardado, evolução por evolução, como qualquer outra parte do livro.</p>
+
+    <h4 style="color:var(--azul);font-size:0.92rem;margin:0 0 var(--f2)">A metáfora: a folha de rascunho do prontuário</h4>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">Você atende um caso difícil e quer pensar num protocolo novo. Não escreve direto na evolução oficial &mdash; pega uma folha à parte, rabisca, risca, testa três combinações. Essa folha é o <b>branch</b>. Quando o protocolo fica de pé e você tem certeza, você o transcreve para o prontuário de verdade. Essa transcrição é o <b>merge</b>. E se a folha não der em nada, você a joga fora e o prontuário nunca soube que ela existiu &mdash; um branch abandonado não deixa cicatriz no <code style="font-family:'Courier New',monospace;color:var(--dourado)">main</code>.</p>
+
+    <h4 style="color:var(--azul);font-size:0.92rem;margin:0 0 var(--f2)">Merge é o galho voltando para o tronco</h4>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)"><b>Merge</b> quer dizer <i>fundir</i>. É o gesto de dizer: "o que amadureceu no galho agora faz parte do tronco". A partir do merge, aquilo é oficial &mdash; e, no caso do OS e da Clínica, é o instante em que a mudança fica a um <code style="font-family:'Courier New',monospace;color:var(--dourado)">push</code> de distância de estar no ar para todo mundo. Por isso o merge é sempre uma <b>decisão sua</b>, nunca automática: o galho é liberdade, o tronco é compromisso.</p>
+
+    <h4 style="color:var(--azul);font-size:0.92rem;margin:0 0 var(--f2)">As duas maneiras de o encontro acontecer</h4>
+    <div class="cards" style="grid-template-columns:1fr 1fr;margin-bottom:var(--f3)">
+      <div class="card"><h3>fast-forward</h3><div class="sub">o tronco não andou</div><p style="font-size:0.85rem;color:var(--texto)">Enquanto você escrevia no galho, ninguém mexeu no tronco. Então não há nada a fundir: o Git simplesmente <b>desliza o tronco para a frente</b> até o galho. Sem costura, sem risco. Foi o que aconteceu hoje.</p></div>
+      <div class="card"><h3>conflito</h3><div class="sub">os dois mexeram na mesma linha</div><p style="font-size:0.85rem;color:var(--texto)">Se o tronco andou <b>na mesma linha do mesmo arquivo</b> que o galho mudou, o Git para e pergunta: qual das duas versões fica? Ele nunca escolhe por você. Não é erro &mdash; é uma pergunta honesta.</p></div>
+    </div>
+
+    <h4 style="color:var(--azul);font-size:0.92rem;margin:0 0 var(--f2)">A aula viva: o que acabou de acontecer, agora há pouco</h4>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)">O galho se chamava <code style="font-family:'Courier New',monospace;color:var(--dourado)">claude/minerais-roadmap-a99e35</code> e nele nasceu a senha "Acender as Ervas" no <em>ROADMAP.md</em>. Três gestos:</p>
+    <div style="background:var(--bege);border:1px solid rgba(27,58,92,0.12);border-radius:11px;padding:var(--f3);font-family:'Courier New',monospace;font-size:0.82rem;line-height:2;overflow-x:auto;margin-bottom:var(--f2)">
+      <div><span style="color:var(--cinza)"># 1. voltar para o tronco</span></div>
+      <div style="color:var(--azul)">git checkout main</div>
+      <div style="margin-top:10px"><span style="color:var(--cinza)"># 2. trazer o galho para dentro dele</span></div>
+      <div style="color:var(--azul)">git merge claude/minerais-roadmap-a99e35</div>
+      <div style="margin-top:10px"><span style="color:var(--cinza)"># 3. mandar o tronco novo para o cofre</span></div>
+      <div style="color:var(--azul)">git push origin main</div>
+    </div>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)">E o Git respondeu com duas linhas que agora você lê inteiras:</p>
+    <div style="background:var(--bege);border:1px solid rgba(27,58,92,0.12);border-radius:11px;padding:var(--f3);font-family:'Courier New',monospace;font-size:0.82rem;line-height:2;overflow-x:auto;margin-bottom:var(--f2)">
+      <div style="color:var(--azul)">Updating 29093c9..27a59f4</div>
+      <div style="color:var(--azul)">Fast-forward</div>
+      <div style="color:var(--azul)">&nbsp;ROADMAP.md | 30 +++++++++</div>
+    </div>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)"><b>Updating 29093c9..27a59f4</b> &mdash; o tronco estava naquela evolução e passou a estar nesta. <b>Fast-forward</b> &mdash; ninguém tinha mexido no tronco, foi só deslizar. <b>ROADMAP.md | 30 +</b> &mdash; um único arquivo tocado, trinta linhas acrescentadas, nenhuma apagada. Repare no que essa última linha te garante: os seus arquivos que estavam mexidos na mesa (o Mapa da Metafísica, os backups do MMObras) <b>não entraram</b>. O merge só move o que foi costurado no livro do galho.</p>
+
+    <div style="border:1px solid rgba(74,124,89,0.4);border-radius:11px;background:rgba(74,124,89,0.06);padding:var(--f3);margin-bottom:var(--f3)">
+      <p style="font-size:0.9rem;margin:0"><b style="color:var(--verde)">Por que a gente trabalha assim.</b> Toda mudança grande nasce num galho, cresce lá, é lida por você e só depois entra no tronco. Isso quer dizer que <b>o OS e a Clínica no ar nunca ficam quebrados enquanto a gente constrói</b>. O que está no ar é sempre uma coisa terminada; o que está pela metade está no galho. É a mesma prudência de não escrever no prontuário aquilo de que você ainda não tem certeza.</p>
+    </div>
+
     <h3 style="color:var(--azul);font-size:1rem;margin:0 0 var(--f2)">O vocabulário mínimo</h3>
     <div class="cards" style="margin-bottom:var(--f3)">
       <div class="card"><h3>repositório</h3><p style="font-size:0.85rem;color:var(--texto)">A pasta do projeto <b>com</b> o livro de histórico dentro. Você tem vários: o do OS, o da Clínica, o do MMObras.</p></div>
       <div class="card"><h3>commit</h3><p style="font-size:0.85rem;color:var(--texto)">Uma evolução guardada. Como substantivo, é a página; como verbo, é o ato de costurá-la.</p></div>
-      <div class="card"><h3>branch (ramo)</h3><p style="font-size:0.85rem;color:var(--texto)">Uma linha de trabalho. A sua principal se chama <code style="font-family:'Courier New',monospace;color:var(--dourado)">main</code>. Ramos servem para experimentar sem sujar o tronco &mdash; camada para depois.</p></div>
+      <div class="card"><h3>branch (ramo)</h3><p style="font-size:0.85rem;color:var(--texto)">Uma linha de trabalho. A sua principal se chama <code style="font-family:'Courier New',monospace;color:var(--dourado)">main</code>. Ramos servem para experimentar sem sujar o tronco &mdash; veja a seção acima.</p></div>
+      <div class="card"><h3>merge</h3><p style="font-size:0.85rem;color:var(--texto)">Fundir um ramo de volta no tronco. O instante em que o rascunho vira oficial &mdash; sempre uma decisão sua.</p></div>
       <div class="card"><h3>remote (origin)</h3><p style="font-size:0.85rem;color:var(--texto)">O apelido do endereço da cópia na internet. <code style="font-family:'Courier New',monospace;color:var(--dourado)">origin</code> é o nome padrão do seu GitHub.</p></div>
     </div>
 
@@ -1889,8 +1928,9 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v5.0';
-const APP_VERSION_NOTA='os desenhos saem da caixinha: o Cubo de Metatron, os 5 sólidos, o átomo de carbono, o corpo vitruviano, a Árvore da Vida e a roda do zodíaco ganham um canto para tocar e tomar a tela inteira — fundo escuro, sem menu, sem barra lateral, só a imagem; Esc devolve. E o palco dos sólidos, se ninguém escolheu nada, já entra girando o tetraedro: tela cheia não fica parada esperando clique';
+const APP_VERSION='v5.1';
+const APP_VERSION_NOTA='a Camada 2 do Montgomery Code ganha o ramo e o encontro: o que são branch e merge ditos com a folha de rascunho do prontuário — o galho onde se erra à vontade sem que o site no ar se mexa, o merge como a transcrição para a evolução oficial, as duas maneiras de o encontro acontecer (fast-forward e conflito) e a leitura linha por linha do merge de hoje, o da senha Acender as Ervas';
+const APP_VERSION_NOTA_V50='os desenhos saem da caixinha: o Cubo de Metatron, os 5 sólidos, o átomo de carbono, o corpo vitruviano, a Árvore da Vida e a roda do zodíaco ganham um canto para tocar e tomar a tela inteira — fundo escuro, sem menu, sem barra lateral, só a imagem; Esc devolve. E o palco dos sólidos, se ninguém escolheu nada, já entra girando o tetraedro: tela cheia não fica parada esperando clique';
 const APP_VERSION_NOTA_V49='os Átomos deixam de ser uma ilha: oito dos quatorze elementos do corpo passam a acender o Elemento correspondente na teia com a razão dita em voz alta — e os seis que não têm razão dizem que não têm, em vez de inventar; e os degraus tecido, órgão e corpo da escada da matéria saltam direto para a camada da Anatomia que os desenha';
 const APP_VERSION_NOTA_V48='o nome entra na arte: METATRON escrito em letras douradas e espaçadas dentro do próprio desenho, sob um traço fino — o Cubo deixa de ser um símbolo sem assinatura e passa a dizer o próprio nome a quem olha';
 const APP_VERSION_NOTA_V47='a teia não para mais: sem ninguém escolher nada, os 5 sólidos se revezam sozinhos dentro do Cubo de Metatron, cada um dando uma volta inteira antes de passar a vez, com a legenda dizendo qual está passando — e quem quiser segurar um deles toca no nome, e toca de novo para devolver o revezamento';

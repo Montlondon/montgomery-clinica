@@ -1514,3 +1514,16 @@ Duas coisas, uma senha:
 
 Regra que vale para as três: os valores e as combinações vêm **dele**, da prática de
 atendimento — o Claude constrói a régua e organiza, nunca inventa dose.
+
+## Feito — a aula do ramo e do encontro (30/07/2026, OS v5.1)
+
+Pergunta do Montgomery logo depois do merge da senha "Acender as Ervas": *"poderia adicionar
+isto no Montgomery Code como aprendizado, exatamente o que isto significa?"*. Virou seção
+nova na **Camada 2 · Git & GitHub**: o que são `branch` e `merge`, com a metáfora da folha de
+rascunho do prontuário — o galho onde se erra à vontade sem que o site no ar se mexa, o merge
+como a transcrição para a evolução oficial, as duas maneiras de o encontro acontecer
+(fast-forward e conflito) e a leitura linha por linha da saída real do merge de hoje
+(`Updating 29093c9..27a59f4`, `Fast-forward`, `ROADMAP.md | 30 +`), inclusive por que os
+arquivos soltos na mesa dele não entraram. `merge` entrou também no vocabulário mínimo.
+
+A aula ensina com o que acabou de acontecer com ele — não com exemplo inventado.
