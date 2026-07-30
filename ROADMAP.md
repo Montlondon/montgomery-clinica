@@ -1524,6 +1524,71 @@ dele, a tela pergunta se quer ligar de vez — e só liga se ele disser sim.
 no Montgomery OS), então não há de onde apontar por elas ainda. A teia já está
 desenhada para receber a dimensão quando a Sefirá chegar a esta casa.
 
+## Feito — as propostas dos minerais na teia (30/07/2026, Clínica v5.5)
+
+Dito por ele vendo a v5.4: *"acredito eu que os minerais entram 100% no elemento
+Terra. Mas vale pesquisarmos pra termos mais certeza."*
+
+**A intuição tem um fundo verdadeiro:** todo mineral entra pela Terra, porque a
+absorção é do Baço/Estômago — ninguém aproveita ferro ou magnésio com a Terra
+fraca. E o próprio ciclo diz que a Terra gera o Metal, que os minerais se formam
+na terra.
+
+**Mas a MTC classifica pela função, não pela matéria** — e a própria matéria
+médica clássica desmente a leitura por composição: três substâncias de cálcio
+entram em canais diferentes (Shi Gao em Pulmão/Estômago, Long Gu em
+Coração/Fígado, Mu Li em Fígado/Rim). Se a matéria decidisse, as três seriam a
+mesma coisa.
+
+**E tem a consequência prática, que é o que decidiu:** ligar os treze minerais à
+Terra faria todo paciente com Terra marcada receber os treze candidatos de uma
+vez. Ligação que aponta tudo não aponta nada — o bloco viraria o oráculo que a
+senha inteira foi feita para evitar.
+
+**O que entrou na aba Ligações:** um bloco **Propostas para você conferir**, com
+quinze propostas de mineral → elemento, cada uma com a razão à mostra (cálcio e
+fósforo em Água porque osso e medula são do Rim; ferro em Madeira e Fogo porque o
+Fígado armazena e o Coração governa o sangue; iodo e selênio em Fogo; sódio e
+potássio em Água; zinco em Água e Metal; cobre em Metal; **cromo em Terra**, que
+é o que de fato é da Terra). **Nenhuma delas está ligada** — cada uma tem o botão
+*Ligar esta*, e há *Ligar todas de uma vez* com confirmação. O que ele clicar vira
+ligação dele, com a data e a razão, e a nota diz na cara que a razão é leitura
+cruzada com o Claude, **não citação de livro**. Molibdênio ficou de fora de
+propósito: não havia razão firme, e chutar seria pior que deixar vazio.
+
+**Junto veio o caminho de volta:** meridiano marcado na ficha agora acende também
+o elemento dele (correspondência Wu Xing padrão, a mesma tabela que o resto da
+tela já usava). Sem isso, marcar o Sistema ABC do Rim não fazia o cálcio aparecer.
+
+## Ideia — o botão que guarda o que deu certo naquela pessoa (30/07/2026)
+
+Dele, vendo os interruptores da tela de Configurações: *"deixar a plataforma com
+meios de ter um campo ou um botão como estes botões que tenho na clínica em
+configuração, ou clicáveis como na foto, de forma que ao ver que um mineral,
+cálcio por exemplo, no cliente x pode ser bom para o coração sem excesso, na
+quantidade exata, depois de termos certeza."*
+
+São **duas coisas** dentro do mesmo pedido, e vale separar:
+
+1. **A ligação por pessoa** — hoje a teia tem um andar só: mineral → Elemento,
+   Meridiano ou tema. O que ele descreve é um segundo andar: *neste paciente,
+   este mineral, nesta quantidade, funcionou para isto*. É a teia deixando de ser
+   geral e virando memória de atendimento. O dado para isso já existe pela metade:
+   a régua já grava `indicacao` com paciente, dose e momento — falta o que
+   **aconteceu depois**, e é aí que entra o clique: *funcionou / não funcionou /
+   ainda observando*, e daí para cima ele decide se aquilo vira ligação de vez.
+   Casa exatamente com o que a v5.4 já faz com a repetição: a tela pergunta,
+   nunca decide.
+2. **O interruptor como vocabulário da casa** — o botão de ligar/desligar da tela
+   de Configurações é o gesto mais rápido que a plataforma tem, e hoje ele só vive
+   lá. Vale virar peça reaproveitável para qualquer lugar onde a resposta é sim ou
+   não, em vez de caixinha de texto: confirmar uma proposta, marcar que uma dose
+   se firmou, ligar e desligar um candidato.
+
+Regra que continua valendo, e ele mesmo a escreveu neste dia: *"não quero jamais
+ser absoluto em nada, sempre vamos fazendo como sempre fizemos"* — nada aqui
+fecha sozinho, tudo entra a clique e sai a clique.
+
 ## A senha, como foi aberta (30/07/2026)
 
 Dito por ele logo depois da v5.3, e é o que a senha "Acender as Ervas" ainda não

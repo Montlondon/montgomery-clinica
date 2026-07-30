@@ -1780,7 +1780,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v5.4 · 30/07';
+const APP_VER='v5.5 · 30/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -4287,6 +4287,10 @@ function cdFoco(){
   (_diagSelecoes.sistemasAbc||[]).forEach(id=>meridianos.add(id));
   (_diagSelecoes.bagua||[]).forEach(b=>{if(b&&b.meridiano)meridianos.add(b.meridiano);});
   elementos.forEach(e=>{if(ELEMENTO_MERIDIANO_ABC[e])meridianos.add(ELEMENTO_MERIDIANO_ABC[e]);});
+  // E o caminho de volta: meridiano marcado acende o elemento dele. É a
+  // correspondência Wu Xing padrão, a mesma tabela que o resto da tela usa —
+  // não é ligação nova, é o mesmo dado lido do outro lado.
+  meridianos.forEach(m=>{if(MERIDIANO_ELEMENTO_WUXING[m])elementos.add(MERIDIANO_ELEMENTO_WUXING[m]);});
   return {elemento:[...elementos],meridiano:[...meridianos],psicanalise:(_diagSelecoes.psicanalise||[]).map(p=>p.nome)};
 }
 function cdCalcular(){
@@ -4411,6 +4415,67 @@ function cdBlocoHtml(){
   </div>`;
 }
 
+// AS PROPOSTAS — a conversa de 30/07 sobre "os minerais são todos Terra".
+// A intuição tinha um fundo verdadeiro (todo mineral entra pela Terra, que é a
+// digestão), mas a MTC classifica por FUNÇÃO, não por matéria: três substâncias
+// de cálcio da matéria médica clássica entram em canais diferentes (Shi Gao em
+// Pulmão/Estômago, Long Gu em Coração/Fígado, Mu Li em Fígado/Rim). Ligar os
+// treze minerais à Terra faria o bloco despejar tudo em todo mundo — apontar
+// tudo é não apontar nada.
+//
+// Então aqui embaixo NÃO há ligação nenhuma feita: há proposta, cada uma com a
+// razão escrita. Nada disto vale enquanto ele não clicar, e o que ele clicar
+// entra como ligação DELE, com a data do dia e a razão junto. Nenhuma destas é
+// citação de livro — é leitura cruzando fisiologia com Wu Xing, e a nota diz
+// isso na cara. Molibdênio não está na lista de propósito: não achei razão
+// firme para ele, e chutar seria pior do que deixar vazio.
+const CD_PROPOSTAS=[
+  ['calcio','elemento','Água','osso e medula são do Rim — e osso é cálcio'],
+  ['fosforo','elemento','Água','osso e a energia da medula, território do Rim'],
+  ['magnesio','elemento','Madeira','o que falha é o soltar, e o Fígado governa os tendões'],
+  ['magnesio','elemento','Água','o outro lado do magnésio é osso e sono, do Rim'],
+  ['ferro','elemento','Madeira','o Fígado armazena o sangue, e sangue é ferro'],
+  ['ferro','elemento','Fogo','o Coração governa o sangue'],
+  ['sodio','elemento','Água','líquidos e o sal do corpo, que o Rim regula'],
+  ['potassio','elemento','Água','o par do sódio: dentro e fora, água e sal'],
+  ['iodo','elemento','Fogo','decide se a pessoa acorda acelerada ou arrastada'],
+  ['selenio','elemento','Fogo','trabalha com o iodo na tireoide'],
+  ['zinco','elemento','Água','Jing, semente e maturação — do Rim'],
+  ['zinco','elemento','Metal','a defesa, o Wei Qi do Pulmão'],
+  ['cobre','elemento','Metal','o metal que deixa o ferro entrar no sangue'],
+  ['manganes','elemento','Água','osso e cartilagem'],
+  ['cromo','elemento','Terra','o açúcar no sangue — este sim é da Terra']
+];
+const CD_PROPOSTA_FONTE='leitura conversada com o Claude em 30/07/2026 (fisiologia cruzada com Wu Xing, não é citação de livro)';
+const cdPropostaLigada=p=>lgLista().some(l=>l.alvo==='mineral'&&l.chave===p[0]&&l.dim===p[1]&&l.valor===p[2]);
+async function cdAceitarProposta(i){
+  const p=CD_PROPOSTAS[i];if(!p)return;
+  await lgLigar('mineral',p[0],p[1],p[2],p[3]+' — '+CD_PROPOSTA_FONTE);
+}
+async function cdAceitarTodasPropostas(){
+  const faltam=CD_PROPOSTAS.map((p,i)=>[p,i]).filter(([p])=>!cdPropostaLigada(p));
+  if(!faltam.length)return;
+  if(!confirm('Pôr na teia as '+faltam.length+' propostas que ainda faltam?\n\nCada uma entra como ligação sua, com a razão e a data de hoje — e você pode desfazer qualquer uma depois, uma a uma.'))return;
+  for(const [,i] of faltam)await cdAceitarProposta(i);
+}
+function cdPropostasHtml(){
+  const abertas=CD_PROPOSTAS.map((p,i)=>[p,i]).filter(([p])=>!cdPropostaLigada(p));
+  if(!abertas.length)return `<div class="mn-lbl" style="margin-top:20px">Propostas dos minerais</div>
+    <p class="mn-vazio">Você já passou por todas as propostas daquela conversa. Para tirar alguma, é só desfazer a ligação na tabela acima.</p>`;
+  return `<div class="mn-lbl" style="margin-top:20px">Propostas para você conferir — os minerais</div>
+  <p style="font-size:11.5px;color:var(--txt-l);margin-bottom:4px">Da conversa sobre "os minerais são todos Terra". Todo mineral <em>entra</em> pela Terra, porque a absorção é do Baço — mas a MTC classifica pelo que a coisa faz, não pelo que ela é: na matéria médica clássica, três substâncias de cálcio entram em canais diferentes. Se os treze fossem Terra, todo paciente de Terra receberia os treze de uma vez.</p>
+  <p style="font-size:11.5px;color:var(--txt-l);margin-bottom:8px"><strong>Nenhuma destas está ligada.</strong> São propostas com a razão à mostra — e não são citação de livro, são leitura cruzando fisiologia com Wu Xing. O que você clicar vira ligação sua, com a data de hoje, e some daqui.</p>
+  <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px">
+    ${abertas.map(([p,i])=>`<div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;border:1px dashed var(--brd);border-radius:8px;padding:7px 11px;background:#FDFAF6">
+      <strong style="font-size:12.5px">${escHtml(cdNome('mineral',p[0]))}</strong>
+      <span class="cd-por">${escHtml(cdDimLbl(p[1])+' '+p[2])}</span>
+      <span style="font-size:11.5px;color:var(--ink-soft);font-style:italic">${escHtml(p[3])}</span>
+      <button type="button" class="btn btn-sec btn-sm" style="margin-left:auto;padding:2px 9px;font-size:10.5px" onclick="cdAceitarProposta(${i})">Ligar esta</button>
+    </div>`).join('')}
+  </div>
+  <button class="btn btn-sec btn-sm" onclick="cdAceitarTodasPropostas()">Ligar as ${abertas.length} de uma vez</button>`;
+}
+
 // A TEIA — a tela onde as ligações dele nascem. Nasce vazia, de propósito:
 // mineral não tem elemento em livro nenhum, e nenhum tema de Psicanálise tem
 // erva escrita em lugar algum. Tudo o que entrar aqui é dele, com data.
@@ -4471,7 +4536,8 @@ function renderLgPainel(){
       <td style="padding:6px;color:#7a5c1e">${escHtml(cdDimLbl(l.dim))} ${escHtml(l.valor)}</td>
       <td style="padding:6px;color:var(--txt-l)">${escHtml(l.nota||'')}</td>
       <td style="padding:6px;text-align:right"><button class="btn btn-dan btn-sm" title="Desfazer esta ligação" onclick="lgApagar('${l.id}')"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button></td>
-    </tr>`).join('')}</tbody></table></div>`:'<p class="mn-vazio">A teia está vazia — e ela nasce vazia mesmo. Nenhuma ligação daqui vem de livro: cada uma vai ser sua, com a data em que você a fez.</p>'}`;
+    </tr>`).join('')}</tbody></table></div>`:'<p class="mn-vazio">A teia está vazia — e ela nasce vazia mesmo. Nenhuma ligação daqui vem de livro: cada uma vai ser sua, com a data em que você a fez.</p>'}
+  ${cdPropostasHtml()}`;
 }
 
 // ===== GOOGLE AGENDA =====
