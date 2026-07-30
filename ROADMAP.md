@@ -23,6 +23,31 @@ inteira (frete, pedido, rastreio, devolução) e depende de contrato. O link de 
 que remunera quem recomendou, a tela tem que dizer isso na cara, no rodapé da recomendação.
 Isso entra junto, não depois.
 
+## Concluído — OS v5.3: a Camada 7 acesa e o primeiro agente (30/07/2026)
+
+A pergunta foi "como funciona este negócio de agentes?" e virou picanha: em vez de só explicar,
+a gente construiu um.
+
+**O Ronda** — `01_Codigo/agentes/ronda.mjs`, sessenta linhas comentadas em português.
+Lê o ROADMAP, lista o que está pendente, e imprime o custo real da corrida no fim.
+Roda com `node ronda.mjs`. Mãos só de leitura (Read, Grep, Glob), modelo Haiku, teto de 8 voltas.
+
+**Por que ele é assim de propósito:** as três travas são a aula inteira.
+`allowedTools` é cadeado, não promessa — sem `Write` na lista, ele não consegue escrever nem
+querendo. `maxTurns` impede o agente confuso de girar a noite. `cwd` é a cerca da pasta.
+
+**A Camada 7 do Montgomery Code (APIs & IA) saiu do escuro** — era o último cartão apagado da
+trilha junto com 3, 4, 5 e 6. Agora tem o laço de quatro passos, as três travas, a conta do gasto
+e o Ronda por dentro. O cartão 7 do mapa passa a abrir a aula.
+
+**O que ficou por fazer:** o SDK traz o próprio Claude Code embutido, com credencial separada do
+aplicativo. O Montgomery precisa rodar `claude.exe /login` uma vez, dentro de
+`01_Codigo/agentes/node_modules/@anthropic-ai/claude-agent-sdk-win32-x64/`. Enquanto não fizer,
+o Ronda sai e volta com "Not logged in" — o laço gira, mas a porta está trancada.
+
+**Cuidado registrado:** `node_modules/` tem 291 MB e foi para o `.gitignore` antes do commit.
+Quase entrou no repo — o mesmo tipo de peso que já custou a cota do Supabase.
+
 ## Concluído — Clínica v5.9: o fio único do Diagnóstico (30/07/2026)
 
 Senha **"Acender o Fio"** cumprida. A teia já tinha os dois andares — o geral (v5.5) e o daquela

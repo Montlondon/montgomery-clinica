@@ -1907,6 +1907,42 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     <p style="text-align:center;margin-top:var(--f2)"><a onclick="document.getElementById('trilha').scrollIntoView({behavior:'smooth',block:'start'})" style="color:var(--azul);cursor:pointer;font-size:0.82rem">&uarr; voltar ao mapa das camadas</a></p>
   </div>
 
+  <!-- CAMADA 7 · AGENTES -->
+  <div class="bloco" id="camada-7" style="border-color:rgba(74,124,89,0.4)">
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2"/></svg>Camada 7 &middot; APIs &amp; IA <span style="font-size:0.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--verde);margin-left:8px">Acesa</span></h2>
+    <p style="color:var(--cinza);font-size:0.9rem;margin-bottom:var(--f3)">Um <b>agente</b> é uma IA com uma tarefa, mãos e um laço que gira sozinho até terminar. É o que eu sou quando abro os seus arquivos e conserto a Clínica. E agora você tem o seu.</p>
+
+    <p style="font-family:'Lora',serif;font-style:italic;font-size:1.15rem;color:var(--azul);text-align:center;margin:var(--f2) 0">Chat responde. Agente vai lá e faz.</p>
+
+    <h3 style="color:var(--dourado);font-size:0.95rem;margin:var(--f2) 0 10px">O laço &mdash; o coração da coisa</h3>
+    <div class="cards" style="margin-bottom:var(--f3)">
+      <div class="card"><h3>1 &middot; Pensa</h3><p style="font-size:0.85rem;color:var(--texto)">Olha a tarefa e decide qual o próximo passo. Só um passo, não o plano todo.</p></div>
+      <div class="card"><h3>2 &middot; Usa uma mão</h3><p style="font-size:0.85rem;color:var(--texto)">Abre um arquivo, procura uma palavra, roda um comando. Uma ferramenta de cada vez.</p></div>
+      <div class="card"><h3>3 &middot; Vê o resultado</h3><p style="font-size:0.85rem;color:var(--texto)">O que voltou entra na cabeça dele. Agora ele sabe mais do que sabia.</p></div>
+      <div class="card"><h3>4 &middot; Volta ao 1</h3><p style="font-size:0.85rem;color:var(--texto)">E gira de novo, até a tarefa acabar. Não tem mágica: é um <code style="font-family:'Courier New',monospace;color:var(--dourado)">while</code>.</p></div>
+    </div>
+
+    <h3 style="color:var(--dourado);font-size:0.95rem;margin:var(--f2) 0 10px">As três travas &mdash; por que ele não sai destruindo</h3>
+    <div class="cards" style="margin-bottom:var(--f3)">
+      <div class="card"><h3>allowedTools &middot; as mãos</h3><p style="font-size:0.85rem;color:var(--texto)">Você lista o que ele pode fazer. Se <code style="font-family:'Courier New',monospace;color:var(--dourado)">Write</code> não está na lista, ele <b>não consegue</b> escrever &mdash; nem querendo. Não é promessa, é cadeado.</p></div>
+      <div class="card"><h3>maxTurns &middot; o teto</h3><p style="font-size:0.85rem;color:var(--texto)">Máximo de voltas no laço. Sem isso, um agente confuso gira a noite inteira queimando tokens.</p></div>
+      <div class="card"><h3>cwd &middot; a cerca</h3><p style="font-size:0.85rem;color:var(--texto)">A pasta onde ele pisa. Ele enxerga dali pra baixo, e mais nada do computador.</p></div>
+    </div>
+
+    <h3 style="color:var(--dourado);font-size:0.95rem;margin:var(--f2) 0 10px">O que ele custa</h3>
+    <p style="font-size:0.88rem;color:var(--texto);margin-bottom:var(--f2)">Cada arquivo que o agente lê entra na conta. O que encarece não é o tempo &mdash; é o <b>tamanho do que ele abre</b>. Uma tarefa que lê o ROADMAP custa centavos; a mesma tarefa lendo o <code style="font-family:'Courier New',monospace;color:var(--dourado)">index.html</code> da Clínica custa cem vezes mais, porque aquele arquivo é enorme.</p>
+    <div style="border:1px solid rgba(201,168,76,0.4);border-radius:11px;background:rgba(201,168,76,0.06);padding:var(--f3);margin-bottom:var(--f3)">
+      <p style="font-size:0.9rem;margin:0"><b style="color:var(--dourado)">A regra do Montgomery:</b> tarefa estreita, arquivo pequeno, modelo pequeno. Um agente que faz uma coisa só é barato, previsível e fácil de consertar. Um agente que "cuida de tudo" é caro e imprevisível &mdash; e você nunca sabe onde ele errou.</p>
+    </div>
+
+    <h3 style="color:var(--dourado);font-size:0.95rem;margin:var(--f2) 0 10px">O Ronda &mdash; o seu primeiro</h3>
+    <p style="font-size:0.88rem;color:var(--texto)">Mora em <code style="font-family:'Courier New',monospace;color:var(--azul)">01_Codigo/agentes/ronda.mjs</code>. Sessenta linhas. Lê o ROADMAP e conta o que ficou pendente &mdash; e só isso, porque as únicas mãos que ele tem são de leitura. No fim de cada corrida ele imprime o custo real, para você aprender a sentir o peso de cada pedido.</p>
+    <p style="font-size:0.88rem;color:var(--texto);margin-top:10px">Roda com um comando: <code style="font-family:'Courier New',monospace;color:var(--dourado)">node ronda.mjs</code>. Não é site, não é nuvem &mdash; é um programinha no seu computador que conversa com a Anthropic e olha os seus arquivos.</p>
+
+    <p style="font-family:'Lora',serif;font-style:italic;color:var(--cinza);text-align:center;margin-top:var(--f3);font-size:0.9rem">Dar mãos a uma inteligência é fácil. Saber quais mãos não dar &mdash; isso é o ofício.</p>
+    <p style="text-align:center;margin-top:var(--f2)"><a onclick="document.getElementById('trilha').scrollIntoView({behavior:'smooth',block:'start'})" style="color:var(--azul);cursor:pointer;font-size:0.82rem">&uarr; voltar ao mapa das camadas</a></p>
+  </div>
+
   <!-- O CADERNO -->
   <div class="bloco">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h13a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2Z"/><path d="M8 4v16M11 8h5M11 12h5"/></svg>O caderno &middot; o que aprendi</h2>
@@ -1976,8 +2012,9 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v5.2';
-const APP_VERSION_NOTA='a Camada 2 do Montgomery Code aprende a escada da entrega: merge, push, deploy e ship em quatro degraus, o que cada palavra promete de verdade, por que o deploy acontece sozinho e por que ship nao e comando nenhum, as quatro maneiras de dizer "faz o merge e sobe" em ingles, e a aula viva do push das ervas do Brasil (f9b93d7..6846ce2) com o ultimo cuidado: subir e olhar';
+const APP_VERSION='v5.3';
+const APP_VERSION_NOTA='a Camada 7 do Montgomery Code acende: o que é um agente de verdade — o laço de quatro passos (pensa, usa uma mão, vê o resultado, gira de novo), as três travas que impedem estrago (allowedTools como cadeado, maxTurns como teto, cwd como cerca), o que ele custa e por que o tamanho do arquivo é que encarece, e o Ronda, o primeiro agente do Montgomery, sessenta linhas em 01_Codigo/agentes que leem o ROADMAP e dizem o preço da corrida';
+const APP_VERSION_NOTA_V52='a Camada 2 do Montgomery Code aprende a escada da entrega: merge, push, deploy e ship em quatro degraus, o que cada palavra promete de verdade, por que o deploy acontece sozinho e por que ship nao e comando nenhum, as quatro maneiras de dizer "faz o merge e sobe" em ingles, e a aula viva do push das ervas do Brasil (f9b93d7..6846ce2) com o ultimo cuidado: subir e olhar';
 const APP_VERSION_NOTA_V51='a Camada 2 do Montgomery Code ganha o ramo e o encontro: o que são branch e merge ditos com a folha de rascunho do prontuário — o galho onde se erra à vontade sem que o site no ar se mexa, o merge como a transcrição para a evolução oficial, as duas maneiras de o encontro acontecer (fast-forward e conflito) e a leitura linha por linha do merge de hoje, o da senha Acender as Ervas';
 const APP_VERSION_NOTA_V50='os desenhos saem da caixinha: o Cubo de Metatron, os 5 sólidos, o átomo de carbono, o corpo vitruviano, a Árvore da Vida e a roda do zodíaco ganham um canto para tocar e tomar a tela inteira — fundo escuro, sem menu, sem barra lateral, só a imagem; Esc devolve. E o palco dos sólidos, se ninguém escolheu nada, já entra girando o tetraedro: tela cheia não fica parada esperando clique';
 const APP_VERSION_NOTA_V49='os Átomos deixam de ser uma ilha: oito dos quatorze elementos do corpo passam a acender o Elemento correspondente na teia com a razão dita em voz alta — e os seis que não têm razão dizem que não têm, em vez de inventar; e os degraus tecido, órgão e corpo da escada da matéria saltam direto para a camada da Anatomia que os desenha';
@@ -5427,7 +5464,7 @@ const CAMADAS={
   4:{nome:'Banco de dados'},
   5:{nome:'Deploy'},
   6:{nome:'Segurança'},
-  7:{nome:'APIs & IA'}
+  7:{nome:'APIs & IA', onde:'code', alvo:'camada-7'}
 };
 function irCamada(n){
   const c=CAMADAS[n];if(!c)return;

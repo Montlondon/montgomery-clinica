@@ -2,3 +2,6 @@
 
 .vercel
 03_Biblioteca/
+
+# agentes: as pecas baixadas nao vao pro git
+node_modules/
