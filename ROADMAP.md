@@ -21,6 +21,8 @@ Senha para a próxima janela: **"Acender o Magnésio"**.
 
 **E para todos os minerais, não só o magnésio.** Fósforo, zinco, cálcio, ferro, potássio, sódio, iodo, cobre, selênio, cromo, manganês, molibdênio. Os quatorze elementos do corpo já estão listados no bloco dos Átomos com percentual e ponte clínica — a régua de doses é a camada que se assenta em cima dessa lista, e o magnésio, com seus doze sais, é só o primeiro a ser aceso porque é o mais ramificado.
 
+**Onde mora — decidido por ele (30/07).** Na **Clínica**, dentro de **Suplementos**, que hoje é uma página só: catálogo com produto, fornecedor, preço e estoque. A página ganha **abas internas** — *Produtos* (o que já existe, intacto) e **Minerais** (a régua de doses, que nasce vazia e vai sendo preenchida por ele, um mineral de cada vez). A receita das abas já está pronta na casa: é a mesma da Numerologia (OS v4.1) e da Astrologia. Faz sentido também porque é em Suplementos que a venda acontece: o mineral que ele indica e o produto que ele vende passam a morar na mesma página, e um dia se olham.
+
 **A fronteira honesta fica resolvida por aí.** Os números são dele, entram por ele, são editáveis por ele — a plataforma é a gaveta e a régua, não o prescritor. Nenhum miligrama nasce inventado por máquina. Onde ele não tiver posto valor ainda, a régua fica vazia dizendo que está vazia, em vez de chutar.
 
 ## Concluído — OS v5.0: os desenhos em tela cheia (30/07/2026)
