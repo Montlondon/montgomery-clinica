@@ -4,6 +4,19 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
+## Próximo — senha "Acender o Fio" (combinada em 30/07/2026)
+
+A teia já tem os dois andares: o geral (v5.5) e o daquela pessoa (v5.7). O que falta não é mais
+dado — é o dado **chegar aos olhos dele no momento do clique**, com o paciente na frente.
+
+Forma já escolhida lá atrás e mantida: **um fio único que acompanha a página enquanto ele desce**,
+mostrando o que o marcado até ali está puxando (Elemento → meridiano → o que a teia liga → o que
+já funcionou nesta pessoa). **Não** um quadro repetido embaixo de cada setor — isso traz de volta
+a poluição que o toggle das caixas veio tirar.
+
+Onde pegar: `cdFoco` e `cdCalcular` já traduzem a ficha para as três dimensões, `dfDoPaciente` já
+guarda a memória da pessoa, e o bloco `cdBloco` é o ponto de partida no Diagnóstico.
+
 ## Concluído — Clínica v5.8: o caminho de volta da régua (30/07/2026)
 
 Achado usando de verdade, minutos depois da v5.7: *"pede abrir a régua, vai para as ervas, mas
