@@ -2,6 +2,14 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+## Aberto — Senha "Nunca o relógio decide" (29/07/2026)
+
+Na mesma noite da v9.26, a regra de sincronismo cobrou o preço. O MMObras decide pelo relógio (`db._ts`): quem tem a marca mais recente vence e **substitui o outro sem perguntar**. O computador entrou primeiro, o relógio dele marcou 21h10 — os dois aparelhos tinham acabado de bumpar o `_ts` com o enxugamento das fotos — e publicou a versão mais pobre por cima. A nuvem foi de **16 fornecedores / R$ 16.490,76** para **12 / R$ 15.200,76**, e o celular, entrando depois, puxou a versão pobre e perdeu o próprio trabalho.
+
+O Montgomery é precavido e tinha backup do dia; nada se perdeu de fato. Mas o app não deu aviso, nem pergunta, nem escolha — e isso, para lançamento de dinheiro de obra, é inaceitável.
+
+**O que a senha constrói:** antes de substituir, o app pergunta, mostrando os dois lados em português claro — *"neste aparelho: 16 fornecedores, R$ 16.490,76 · na nuvem: 12 fornecedores, R$ 15.200,76 — qual vale?"* — e ele escolhe. Vale para `cloudPull` e `cloudCheck`. Relógio nunca decide sozinho sobre dinheiro.
+
 ## Concluído — MMObras v9.26: a nuvem para de falhar calada (29/07/2026)
 
 O Montgomery notou, por conta própria, que os valores no computador eram diferentes do celular — 16.490,76 contra 15.200,76. Foi uma observação de ouro: não era erro de conta, era a nuvem morta há dois dias.
