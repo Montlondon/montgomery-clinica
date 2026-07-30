@@ -4,6 +4,25 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
+## Próximo — senha "Acender a Prateleira" (combinada em 30/07/2026)
+
+A terceira aba de Suplementos, do jeito barato primeiro: **onde se compra exatamente aquilo**.
+As duas dependências já estão de pé — a régua dos minerais (v5.2) e a posologia das ervas (v5.3).
+
+Hoje a régua diz *quanto* e *qual sal*, e para aí: a pessoa sai do atendimento sabendo que precisa
+de 400 mg de bisglicinato e vai procurar sozinha, no escuro, numa prateleira onde o óxido é o que
+mais aparece. A aba nova fecha esse vão — uma linha por produto, escrita por ele: nome, o mineral
+ou a erva a que corresponde (o elo com a régua), a loja, o link e a dose que vem no frasco. Aí o
+painel do bisglicinato passa a mostrar, embaixo da dose escolhida, onde comprar aquilo mesmo — e
+o que ele já vende no catálogo *Produtos* aparece do lado do link de fora.
+
+**Dropshipping/OneDrop fica de fora desta janela** — aquilo não é um campo de link, é uma loja
+inteira (frete, pedido, rastreio, devolução) e depende de contrato. O link de afiliado cabe hoje.
+
+**A linha de cuidado, escrita antes de doer:** quando uma recomendação a paciente carrega um link
+que remunera quem recomendou, a tela tem que dizer isso na cara, no rodapé da recomendação.
+Isso entra junto, não depois.
+
 ## Concluído — Clínica v5.9: o fio único do Diagnóstico (30/07/2026)
 
 Senha **"Acender o Fio"** cumprida. A teia já tinha os dois andares — o geral (v5.5) e o daquela
