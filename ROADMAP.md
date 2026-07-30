@@ -138,6 +138,23 @@ A imagem: **o git guarda a receita, não os ingredientes.** O `package.json` é 
 o `npm install` é ir ao mercado. É por isso que dá para trocar de computador sem carregar peso —
 e é por isso que um repositório limpo é leve. Fecha o arco com a aula 9.
 
+### 11. Stand by, hibernar e a diferença entre continuidade e espaço
+**Camada 7.** Pergunta dele: *"o agente pode ficar em stand by?"* Pode, e sai de graça — programa
+parado não pensa, e o que custa é pensar. Vale inclusive para a conversa: uma janela aberta e
+sem uso não gasta nada.
+**A ressalva:** stand by de agente não é mente cochilando, é **ratoeira armada**. Ao acordar ele
+está em branco e só sabe o que estiver escrito nos arquivos — daí o `CLAUDE.md` importar tanto.
+**A descoberta útil:** `claude --continue` retoma a conversa exatamente de onde parou, mesmo dias
+depois, com custo zero no intervalo. Mas **retomar restaura, não aumenta** — janela quase cheia
+volta quase cheia. Duas paredes diferentes, duas ferramentas: `--continue` resolve "fechei e
+perdi"; senha + ROADMAP + CLAUDE.md resolvem "encheu".
+
+### 12. O arquivo que faz a conversa não começar do zero
+**Camada 7 / Camada 2.** O `CLAUDE.md` na raiz é lido por qualquer Claude que abrir o repositório
+— aplicativo, terminal, navegador, celular. Antes dele, só a memória deste computador sabia quem
+era o Montgomery; no celular o Claude começava cego. Aula sobre a diferença entre **memória
+pessoal** (fica na máquina) e **contexto do projeto** (viaja junto com o código).
+
 ## Concluído — Clínica v5.9: o fio único do Diagnóstico (30/07/2026)
 
 Senha **"Acender o Fio"** cumprida. A teia já tinha os dois andares — o geral (v5.5) e o daquela
