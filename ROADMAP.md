@@ -19,7 +19,7 @@ mais.
 medir: **35 MB já estavam dentro do repositório**, rastreados, subindo a cada push — o
 `.gitignore` só guarda a porta, não alcança quem já entrou.
 
-**3. A quarentena** (`03e21a1`). Ele decidiu: *"cria uma Claude_Main_Clean, move o que achar que
+**3. A quarentena** (`2d8714b`). Ele decidiu: *"cria uma Claude_Main_Clean, move o que achar que
 deve ser movido, depois se tiver de deletar a gente deleta"*. Os dez arquivos de backup saíram do
 repositório para `C:\Montgomery\Clinica\Backup\Claude_Main_Clean` — **fora** do repositório de
 propósito, porque dentro o Git continuaria carregando o peso. Nada foi apagado. Um `LEIA-ME.md`
