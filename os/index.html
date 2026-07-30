@@ -1009,12 +1009,12 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     </div>
 
     <h3 style="font-family:Lora,serif;font-size:0.95rem;color:var(--azul);margin:20px 0 6px">A escada da matéria — assim embaixo, assim em cima</h3>
-    <p style="font-size:0.74rem;color:var(--cinza);margin-bottom:8px">A Lei da Correspondência não é metáfora aqui: é a mesma estrutura repetida de degrau em degrau — algo pequeno e denso no centro, algo leve girando em volta, e vazio quase inteiro no meio. Toque num degrau.</p>
+    <p style="font-size:0.74rem;color:var(--cinza);margin-bottom:8px">A Lei da Correspondência não é metáfora aqui: é a mesma estrutura repetida de degrau em degrau — algo pequeno e denso no centro, algo leve girando em volta, e vazio quase inteiro no meio. Toque num degrau. Três degraus — tecido, órgão e corpo — já são camadas que a Anatomia desenha: o degrau leva até lá.</p>
     <div id="atEscada" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:6px"></div>
     <div id="atEscadaPainel" class="vazio" style="font-size:0.8rem;margin-top:10px">Escolha um degrau da escada.</div>
 
     <h3 style="font-family:Lora,serif;font-size:0.95rem;color:var(--azul);margin:20px 0 6px">De que o corpo é feito — os elementos e seus pesos</h3>
-    <p style="font-size:0.74rem;color:var(--cinza);margin-bottom:8px">Percentuais por massa de um corpo humano adulto. Onze elementos fazem 99,9% de uma pessoa inteira; o resto — ferro, zinco, iodo, selênio, cobre — cabe numa colher e ainda assim decide se ela acorda disposta. Toque para ver a função e a ponte com a clínica.</p>
+    <p style="font-size:0.74rem;color:var(--cinza);margin-bottom:8px">Percentuais por massa de um corpo humano adulto. Onze elementos fazem 99,9% de uma pessoa inteira; o resto — ferro, zinco, iodo, selênio, cobre — cabe numa colher e ainda assim decide se ela acorda disposta. Toque para ver a função e a ponte com a clínica. Onde a bioquímica já apontava para um dos 5 Elementos, o item acende a teia; onde não apontava, fica dito que não há ponte.</p>
     <div id="atElementos" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:6px"></div>
     <div id="atElemPainel" class="vazio" style="font-size:0.8rem;margin-top:10px">Escolha um elemento acima.</div>
 
@@ -1864,8 +1864,9 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v4.8';
-const APP_VERSION_NOTA='o nome entra na arte: METATRON escrito em letras douradas e espaçadas dentro do próprio desenho, sob um traço fino — o Cubo deixa de ser um símbolo sem assinatura e passa a dizer o próprio nome a quem olha';
+const APP_VERSION='v4.9';
+const APP_VERSION_NOTA='os Átomos deixam de ser uma ilha: oito dos quatorze elementos do corpo passam a acender o Elemento correspondente na teia com a razão dita em voz alta — e os seis que não têm razão dizem que não têm, em vez de inventar; e os degraus tecido, órgão e corpo da escada da matéria saltam direto para a camada da Anatomia que os desenha';
+const APP_VERSION_NOTA_V48='o nome entra na arte: METATRON escrito em letras douradas e espaçadas dentro do próprio desenho, sob um traço fino — o Cubo deixa de ser um símbolo sem assinatura e passa a dizer o próprio nome a quem olha';
 const APP_VERSION_NOTA_V47='a teia não para mais: sem ninguém escolher nada, os 5 sólidos se revezam sozinhos dentro do Cubo de Metatron, cada um dando uma volta inteira antes de passar a vez, com a legenda dizendo qual está passando — e quem quiser segurar um deles toca no nome, e toca de novo para devolver o revezamento';
 const APP_VERSION_NOTA_V46='o Cubo de Metatron acorda: a legenda sempre disse que os 5 sólidos vivem dentro dos 13 círculos, e agora eles aparecem lá de verdade — toque no nome de um e ele acende girando dentro da teia, toque de novo e ele apaga, com a legenda dizendo qual é e as contagens dele';
 const APP_VERSION_NOTA_V45='acendem-se os 5 Sólidos Platônicos ao lado dos Átomos, no anel 1 da Metafísica: os cinco corpos giram de verdade na tela — tetraedro, cubo, octaedro, icosaedro e dodecaedro — cada um com sua contagem exata de vértices, arestas e faces, o par de que é o avesso e a razão provada de serem só cinco; com a linha dita em voz alta entre a geometria, que é matemática, e a correspondência com fogo, terra, ar, água e éter, que é Platão';
@@ -3999,16 +4000,17 @@ function atPeca(k){
     '<p style="font-size:0.8rem;line-height:1.6">'+p[1]+'</p>'+
     '<p style="font-size:0.78rem;line-height:1.6;margin-top:8px;color:var(--cinza)"><em>'+p[2]+'</em></p>';
 }
-// [escala, nome, o que é, o que se repete nesse degrau]
+// [escala, nome, o que é, o que se repete nesse degrau, (opcional) camadas da Anatomia
+//  que desenham exatamente este degrau — ponte de dado, não de texto]
 const AT_ESCADA=[
   ['10⁻¹⁸ m','Quark','As peças de dentro do próton — três delas, presas por uma força que fica mais forte quanto mais se afastam. Nunca foram vistas sozinhas e talvez nunca sejam: separá-las cria pares novos em vez de soltar uma.','O fundo do poço conhecido. Quanto mais se tenta isolar a parte última, mais ela insiste em vir acompanhada.'],
   ['10⁻¹⁵ m','Próton','Três quarks numa dança tão veloz que 99% da massa dele não é matéria — é a energia do próprio movimento. A massa do corpo humano é, em sua quase totalidade, movimento aprisionado.','Aqui a matéria já se revela como energia parada. E = mc² deixa de ser fórmula e vira descrição do corpo.'],
   ['10⁻¹⁰ m','Átomo','Núcleo denso ao centro, elétrons na periferia, vazio no meio. 118 tipos conhecidos, 94 naturais — a lista completa de tudo que existe.','O padrão-mãe: centro denso, borda leve, vazio entre os dois.'],
   ['10⁻⁹ m','Molécula','Átomos de mãos dadas pelos elétrons. Água é dois hidrogênios e um oxigênio num ângulo de 104,5° — e é esse ângulo torto, e só ele, que faz a água ser molhada, dissolver quase tudo e sustentar a vida.','A qualidade nasce do arranjo, não das peças. Mesmos átomos, ângulo diferente, mundo diferente.'],
   ['10⁻⁶ m','Célula','A primeira coisa viva. Núcleo ao centro guardando a informação, membrana negociando a borda, citoplasma quase todo água no meio.','A mesma planta do átomo, agora viva: centro que guarda a identidade, borda que faz as trocas.'],
-  ['10⁻³ m','Tecido','Células iguais que combinaram de fazer a mesma coisa juntas. Osso, músculo, nervo, pele — no OS, a camada que a Anatomia acende.','Especializar-se é abrir mão de fazer tudo para fazer uma coisa bem. A célula do osso não vira nervo.'],
-  ['10⁻² m','Órgão','Tecidos diferentes cooperando numa função. É o degrau onde a Medicina Chinesa mora: Fígado, Coração, Baço, Pulmão, Rim.','O Zang-Fu vive aqui — a ponte entre o corpo físico e os 5 Elementos.'],
-  ['1 m','Corpo','Cerca de 7 octilhões de átomos (7 seguido de 27 zeros), 37 trilhões de células, um só nome. E o conjunto todo se sabe uma pessoa.','O degrau do espanto: em algum ponto entre o átomo e aqui, a matéria começou a dizer "eu".'],
+  ['10⁻³ m','Tecido','Células iguais que combinaram de fazer a mesma coisa juntas. Osso, músculo, nervo, pele — no OS, a camada que a Anatomia acende.','Especializar-se é abrir mão de fazer tudo para fazer uma coisa bem. A célula do osso não vira nervo.',[['Ossos','ossos'],['Músculos','musculos'],['Tendões','tendoes']]],
+  ['10⁻² m','Órgão','Tecidos diferentes cooperando numa função. É o degrau onde a Medicina Chinesa mora: Fígado, Coração, Baço, Pulmão, Rim.','O Zang-Fu vive aqui — a ponte entre o corpo físico e os 5 Elementos.',[['Órgãos','orgaos']]],
+  ['1 m','Corpo','Cerca de 7 octilhões de átomos (7 seguido de 27 zeros), 37 trilhões de células, um só nome. E o conjunto todo se sabe uma pessoa.','O degrau do espanto: em algum ponto entre o átomo e aqui, a matéria começou a dizer "eu".',[['Meridianos','meridianos']]],
   ['10⁷ m','Planeta','Núcleo de ferro ao centro, crosta fina na borda, atmosfera de gases girando por cima. Mesma planta, outra escala.','O corpo e a Terra construídos pelo mesmo desenho — a Lei da Correspondência literal.'],
   ['10¹² m','Sistema solar','O Sol concentra 99,86% da massa; os planetas giram no vazio à volta. É o átomo desenhado grande — e foi exatamente essa a imagem que Rutherford usou em 1911.','"Assim em cima como embaixo" já estava dito no Caibalion muito antes de alguém ver um átomo.'],
   ['10²¹ m','Galáxia','200 bilhões de estrelas em espiral, um buraco negro colossal no centro, distâncias tão grandes que a estrela vizinha leva 4 anos-luz para mandar notícia.','Centro denso, periferia girando, vazio esmagador entre os dois. O padrão não desiste.'],
@@ -4022,23 +4024,39 @@ function atEscada(i){
   el.innerHTML='<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:4px;font-size:1rem">'+d[1]+
     ' <span style="font-size:0.7rem;color:var(--cinza);font-family:inherit">· '+d[0]+'</span></h3>'+
     '<p style="font-size:0.8rem;line-height:1.6">'+d[2]+'</p>'+
-    '<p style="font-size:0.78rem;line-height:1.6;margin-top:8px;color:var(--cinza)"><em>'+d[3]+'</em></p>';
+    '<p style="font-size:0.78rem;line-height:1.6;margin-top:8px;color:var(--cinza)"><em>'+d[3]+'</em></p>'+
+    (d[4]?'<div style="margin-top:10px;padding-top:9px;border-top:1px solid rgba(27,58,92,0.12)">'+
+      '<div style="font-size:0.72rem;color:var(--cinza);margin-bottom:6px">Este degrau a Anatomia já desenha — abrir a camada:</div>'+
+      '<div style="display:flex;gap:6px;flex-wrap:wrap">'+
+      d[4].map(c=>'<button class="btn btn-sec btn-mini" onclick="atIrCamada(\''+c[1]+'\')">'+c[0]+' →</button>').join('')+
+      '</div></div>':'');
 }
-// [símbolo, nome, % da massa do corpo, o que faz, ponte clínica/leitura nossa]
+// A escada encosta na Anatomia: o degrau salta para a camada que o desenha.
+function atIrCamada(cam){
+  go('esqueleto');
+  setTimeout(function(){
+    if(typeof skCamada==='function')skCamada(cam);
+    const w=document.getElementById('skWrap');
+    if(w){w.scrollIntoView({behavior:'smooth',block:'center'});w.classList.remove('camada-alvo');void w.offsetWidth;w.classList.add('camada-alvo');}
+  },350);
+}
+// [símbolo, nome, % da massa do corpo, o que faz, ponte clínica/leitura nossa,
+//  (opcional) elemento da teia + por que — ponte nossa, e só onde a própria
+//  bioquímica já apontava. Onde não há razão, não há elo: 6 dos 14 ficam sem.]
 const AT_ELEM=[
-  ['O','Oxigênio',65,'Dois terços de uma pessoa. A maior parte não é o ar respirado: é o oxigênio da água que forma o corpo. O que se respira é o que queima o açúcar e libera a energia de viver.','Metal, o pulmão, a Lei da Polaridade: inspirar e soltar. O elemento mais abundante do corpo é justamente o que precisa entrar e sair sem parar — não se estoca respiração.'],
+  ['O','Oxigênio',65,'Dois terços de uma pessoa. A maior parte não é o ar respirado: é o oxigênio da água que forma o corpo. O que se respira é o que queima o açúcar e libera a energia de viver.','Metal, o pulmão, a Lei da Polaridade: inspirar e soltar. O elemento mais abundante do corpo é justamente o que precisa entrar e sair sem parar — não se estoca respiração.','Metal','o pulmão e o par inspirar/soltar'],
   ['C','Carbono',18.5,'O esqueleto de toda molécula viva. Sozinho entre os 118, faz quatro ligações estáveis e se encadeia sem limite — por isso a vida é de carbono e não de outra coisa.','O elemento da forma que se sustenta. Todo carbono do corpo foi fabricado dentro de uma estrela que já morreu.'],
-  ['H','Hidrogênio',9.5,'O átomo mais simples que existe: um próton, um elétron. É o mais antigo de todos — nasceu nos primeiros minutos do universo e não foi fabricado por ninguém depois.','A parte do corpo que tem 13,8 bilhões de anos. Água é hidrogênio; e a Água, na teia, é o Rim, a origem, a herança.'],
-  ['N','Nitrogênio',3.2,'Está em toda proteína e em todo o DNA. Abundante no ar (78%), e ainda assim inacessível: o corpo não consegue tirá-lo do ar — só chega pela comida.','Ter em volta não é ter dentro. O que nutre precisa de mediação — o Baço, a Terra, a transformação do que se come em si mesmo.'],
-  ['Ca','Cálcio',1.5,'99% no osso e no dente, e é o 1% restante que faz o trabalho fino: contração muscular, coagulação e cada batimento do coração dependem dele.','Osso é banco, não cofre: em falta, o corpo saca do esqueleto para manter o coração batendo. A estrutura se dissolve para sustentar a função.'],
+  ['H','Hidrogênio',9.5,'O átomo mais simples que existe: um próton, um elétron. É o mais antigo de todos — nasceu nos primeiros minutos do universo e não foi fabricado por ninguém depois.','A parte do corpo que tem 13,8 bilhões de anos. Água é hidrogênio; e a Água, na teia, é o Rim, a origem, a herança.','Água','a água do corpo, o Rim, a herança'],
+  ['N','Nitrogênio',3.2,'Está em toda proteína e em todo o DNA. Abundante no ar (78%), e ainda assim inacessível: o corpo não consegue tirá-lo do ar — só chega pela comida.','Ter em volta não é ter dentro. O que nutre precisa de mediação — o Baço, a Terra, a transformação do que se come em si mesmo.','Terra','o Baço e a transformação do que se come'],
+  ['Ca','Cálcio',1.5,'99% no osso e no dente, e é o 1% restante que faz o trabalho fino: contração muscular, coagulação e cada batimento do coração dependem dele.','Osso é banco, não cofre: em falta, o corpo saca do esqueleto para manter o coração batendo. A estrutura se dissolve para sustentar a função.','Água','o Rim rege os ossos e a medula'],
   ['P','Fósforo',1.0,'Com o cálcio faz o osso; e é dele a molécula do ATP, a moeda de energia de toda célula viva. Toda energia gasta hoje passou por uma ligação de fósforo.','A energia não se guarda em tanque, se produz e gasta na hora. O ATP dura segundos e é refeito o dia inteiro.'],
   ['K','Potássio',0.4,'Manda dentro da célula. Junto com o sódio faz a bomba que gera o impulso nervoso — todo pensamento e todo movimento saem dessa diferença de carga.','O que é de dentro. Cada célula gasta perto de um terço de toda a sua energia só para manter essa diferença — é caro ser distinto do lado de fora.'],
-  ['S','Enxofre',0.3,'Faz as pontes que dobram a proteína no formato certo. Cabelo, unha e pele são ricos nele — cabelo liso ou cacheado é geometria de enxofre.','Sem a dobra certa, a proteína não serve para nada. A forma é a função — vale para molécula e vale para pessoa.'],
+  ['S','Enxofre',0.3,'Faz as pontes que dobram a proteína no formato certo. Cabelo, unha e pele são ricos nele — cabelo liso ou cacheado é geometria de enxofre.','Sem a dobra certa, a proteína não serve para nada. A forma é a função — vale para molécula e vale para pessoa.','Metal','o tecido do Metal é a pele e os pelos'],
   ['Na','Sódio',0.2,'Manda fora da célula. Segura a água no corpo, sustenta a pressão e é a outra metade da bomba do nervo.','O par sódio/potássio é a Polaridade em bioquímica: dentro e fora, e uma bomba trabalhando sem descanso para manter a diferença.'],
-  ['Cl','Cloro',0.2,'Acompanha o sódio no equilíbrio e faz o ácido do estômago, capaz de dissolver metal — guardado por uma parede que se refaz a cada poucos dias.','A digestão é violenta por natureza; o que a torna segura é a parede se renovar mais rápido do que se gasta.'],
-  ['Mg','Magnésio',0.1,'Necessário a mais de 300 reações do corpo, entre elas a que solta o músculo depois da contração e a que estabiliza o ATP.','A falta aparece como cãibra, tensão e insônia: não é o encolher que falha, é o soltar. Contrair é fácil; relaxar é que dá trabalho.'],
-  ['Fe','Ferro',0.006,'Carrega o oxigênio no sangue, e é a cor vermelha dele. Só se forma no coração de estrelas grandes, nos últimos instantes antes de explodirem.','O metal mais caro do universo para se fabricar circula em cada veia. Em falta: cansaço que não passa com sono.'],
-  ['Zn','Zinco',0.003,'Em centenas de enzimas, na cicatrização, na imunidade, no paladar e no olfato.','Perder o gosto das coisas costuma ter química por baixo antes de ter tristeza.'],
+  ['Cl','Cloro',0.2,'Acompanha o sódio no equilíbrio e faz o ácido do estômago, capaz de dissolver metal — guardado por uma parede que se refaz a cada poucos dias.','A digestão é violenta por natureza; o que a torna segura é a parede se renovar mais rápido do que se gasta.','Terra','o Estômago, a víscera da Terra'],
+  ['Mg','Magnésio',0.1,'Necessário a mais de 300 reações do corpo, entre elas a que solta o músculo depois da contração e a que estabiliza o ATP.','A falta aparece como cãibra, tensão e insônia: não é o encolher que falha, é o soltar. Contrair é fácil; relaxar é que dá trabalho.','Madeira','o Fígado rege os tendões e o soltar'],
+  ['Fe','Ferro',0.006,'Carrega o oxigênio no sangue, e é a cor vermelha dele. Só se forma no coração de estrelas grandes, nos últimos instantes antes de explodirem.','O metal mais caro do universo para se fabricar circula em cada veia. Em falta: cansaço que não passa com sono.','Fogo','o sangue e os vasos, tecido do Fogo'],
+  ['Zn','Zinco',0.003,'Em centenas de enzimas, na cicatrização, na imunidade, no paladar e no olfato.','Perder o gosto das coisas costuma ter química por baixo antes de ter tristeza.','Metal','o nariz e o olfato, sentido do Metal'],
   ['I','Iodo',0.00002,'Uns 20 miligramas na vida inteira, quase todos na tireoide — e são eles que regulam a velocidade de funcionamento do corpo todo.','Vinte miligramas decidem se a pessoa acorda acelerada ou arrastada. Quantidade não é o mesmo que importância.']
 ];
 function atElem(i){
@@ -4049,7 +4067,14 @@ function atElem(i){
   el.innerHTML='<h3 style="font-family:Lora,serif;color:var(--azul);margin-bottom:4px;font-size:1rem">'+e[1]+
     ' <span style="font-size:0.7rem;color:var(--cinza);font-family:inherit">· '+e[2]+'% da massa do corpo</span></h3>'+
     '<p style="font-size:0.8rem;line-height:1.6">'+e[3]+'</p>'+
-    '<p style="font-size:0.78rem;line-height:1.6;margin-top:8px;color:var(--cinza)"><em>'+e[4]+'</em></p>';
+    '<p style="font-size:0.78rem;line-height:1.6;margin-top:8px;color:var(--cinza)"><em>'+e[4]+'</em></p>'+
+    '<div style="margin-top:10px;padding-top:9px;border-top:1px solid rgba(27,58,92,0.12)">'+
+    (e[5]?(function(){const cor=(MF_TEIA[e[5]]||{}).cor||'#999';
+      return '<span class="tag" style="cursor:pointer;background:'+cor+'22;color:'+cor+';border:1px solid '+cor+'55" '+
+        'onclick="mfAcender(\''+e[5]+'\')" title="Acender '+e[5]+' na teia">ponte nossa: '+e[5]+' →</span>'+
+        '<div style="font-size:0.72rem;color:var(--cinza);margin-top:6px">porque '+e[6]+'.</div>';})():
+      '<div style="font-size:0.72rem;color:var(--cinza)">Sem ponte com a teia: a bioquímica deste elemento não aponta para um Elemento em particular — e ponte inventada não é ponte.</div>')+
+    '</div>';
 }
 function atRender(){
   const esc=document.getElementById('atEscada');
