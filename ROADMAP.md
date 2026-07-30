@@ -4,6 +4,18 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
+## Concluído — OS v4.9: as pontes dos Átomos (30/07/2026)
+
+Senha *"Acender as Pontes dos Átomos"* cumprida. O bloco dos Átomos era lindo e era uma ilha; agora encosta nos dois lados.
+
+**Os elementos do corpo acendem a teia.** Oito dos quatorze — oxigênio, hidrogênio, nitrogênio, cálcio, enxofre, cloro, magnésio, ferro e zinco — trazem um chip que chama `mfAcender` e acende o Elemento correspondente, com a razão escrita logo abaixo ("porque o Rim rege os ossos e a medula"). Ponte de dado, a mesma mecânica do I Ching. Os outros seis não ganham chip: no lugar dele está dito que a bioquímica deles não aponta para Elemento nenhum — *ponte inventada não é ponte*.
+
+**A escada da matéria encosta na Anatomia.** Os degraus **tecido**, **órgão** e **corpo** são exatamente camadas que a Anatomia já desenha. Clicar leva ao outro módulo com a camada certa aberta e o corpo piscando ao chegar: tecido abre Ossos, Músculos ou Tendões; órgão abre as vísceras; corpo abre os meridianos.
+
+No ar em montgomery-clinica.vercel.app/os, conferido ao vivo (merge 2d7ed90).
+
+**Ainda pendurado na senha:** a tela cheia por clique nos desenhos animados.
+
 ## Concluído — OS v4.8: o Cubo diz o próprio nome (30/07/2026)
 
 *"O nome Metatron poderia também ficar lá no cubo, eu gosto demais de ler o nome Metatron."* Feito: **METATRON** em letras douradas e espaçadas dentro da própria arte, sob um traço fino, com o mesmo brilho das linhas. Não é legenda em HTML embaixo do desenho — está dentro do SVG, faz parte da imagem. O símbolo deixou de ser anônimo.
