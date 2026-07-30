@@ -1501,6 +1501,16 @@ Duas coisas, uma senha:
    por ele. Preset a clique, editável, como já ficou combinado.
 2. **A posologia da fitoterapia.** A mesma régua, aplicada às ervas: quanto, quantas
    vezes ao dia, em que forma (tintura, chá, cápsula) e por quanto tempo.
+3. **A régua desaguando na Recomendação Terapêutica.** Hoje o caminho dos suplementos já
+   está fechado — o bloco Suplementos do Diagnóstico avisa na própria tela que "eles já
+   chegam prontos se você enviar para Recomendação Terapêutica", e o botão *Enviar para
+   Recomendação Terapêutica* carrega a seleção na seção Suplementos da receita. **Os
+   minerais não têm essa ponte.** A régua grava na tabela `minerais` e a dose escolhida
+   aparece na ficha do paciente como *Minerais anotados* — um caderno do lado dele, que
+   nunca sai impresso na mão de quem foi atendido. Falta o mineral escolhido entrar na
+   Recomendação **com dose e com o momento**, na folha que o paciente leva pra casa. Sem
+   isso a régua é anotação; com isso vira prescrição — e o momento, que é metade do
+   tratamento, deixa de morar só na cabeça do Montgomery.
 
-Regra que vale para as duas: os valores e as combinações vêm **dele**, da prática de
+Regra que vale para as três: os valores e as combinações vêm **dele**, da prática de
 atendimento — o Claude constrói a régua e organiza, nunca inventa dose.
