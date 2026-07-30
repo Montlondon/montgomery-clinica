@@ -8,6 +8,10 @@ Na mesma noite da v9.26, a regra de sincronismo cobrou o preço. O MMObras decid
 
 O Montgomery é precavido e tinha backup do dia; nada se perdeu de fato. Mas o app não deu aviso, nem pergunta, nem escolha — e isso, para lançamento de dinheiro de obra, é inaceitável.
 
+**Como a noite terminou (21h33):** o Montgomery subiu o próprio backup e disse a palavra final — **R$ 16.490,76 é o valor correto** (16 fornecedores, 29 lançamentos, soma das contas 14.555,15, 6 orçamentos). O Orçamento #0005 do Adson (1.850,00) saiu junto, por não existir no arquivo dele; decisão dele, registrada. Depois de reabrir o app, o enxugamento rodou de novo sobre a foto que o backup trouxe gorda: a linha na nuvem fechou a noite em **1.319 kB** (foto 92 kB, avatar 34 kB), com os lançamentos intactos.
+
+**Detalhe a corrigir junto com a senha:** dois avisos disparam ao mesmo tempo na entrada e o "Backup na nuvem ativado!" cobre o do enxugamento — o Montgomery achou que não tinha rodado. O aviso do enxugamento tem que vir por último.
+
 **O que a senha constrói:** antes de substituir, o app pergunta, mostrando os dois lados em português claro — *"neste aparelho: 16 fornecedores, R$ 16.490,76 · na nuvem: 12 fornecedores, R$ 15.200,76 — qual vale?"* — e ele escolhe. Vale para `cloudPull` e `cloudCheck`. Relógio nunca decide sozinho sobre dinheiro.
 
 ## Concluído — MMObras v9.26: a nuvem para de falhar calada (29/07/2026)
