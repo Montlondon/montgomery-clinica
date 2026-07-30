@@ -4,6 +4,30 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
+## Concluído — Clínica v5.2: a régua de doses dos minerais (30/07/2026)
+
+Senha **"Acender o Magnésio"** cumprida. O degrau que faltava entre a desarmonia e a **quantidade** está no ar — e está no ar do jeito que ele pediu: **a máquina não calcula dose nenhuma.**
+
+**Onde ficou.** Em **Suplementos**, que agora tem abas internas: *Produtos* (o catálogo de sempre, intacto — nada foi mexido nele) e **Minerais**. A receita das abas é a da Numerologia, com uma diferença de cuidado: a classe é `.pg-panel` e não `.tab-panel`, porque o `showTab()` da ficha do paciente varre todo `.tab-panel` da plataforma e apagaria os painéis novos pelas costas.
+
+**Os treze minerais** aparecem como chips de tabela periódica: Mg, Ca, P, K, Na, Fe, Zn, I, Cu, Se, Cr, Mn, Mo — o magnésio primeiro, porque é o mais ramificado. Debaixo do nome, cada chip diz quantas doses já tem na régua, ou a palavra **vazia**. Nenhum deles nasceu com miligrama nenhum dentro.
+
+**A régua.** Abre ao toque no mineral. As doses são chips redondos: toque num e está escolhida. O campo **outra quantidade** põe a dose nova na régua, e ela fica lá dali em diante — a régua cresce por uso, nas mãos dele. Cada dose tem um × discreto (sempre visível, porque no celular não existe hover e botão invisível que apaga dose seria armadilha) para tirar da régua sem tocar no que já foi anotado nas fichas. A unidade é por mineral e editável: mg, mcg, g, ml, gotas, cápsulas.
+
+**Os doze sais do magnésio** estão lá como formas: treonato, dimalato, bisglicinato, citrato, óxido, cloreto, sulfato, carbonato, lactato, taurato, orotato, quelato. Os **cinco** que ele já descreveu vêm com a nota dele embaixo ("atravessa a barreira do cérebro", "é o que solta", "quase não absorve e é o que mais se vende"). Os outros sete dizem **sem nota ainda** — nome de sal é química, mas alvo é leitura dele, e leitura inventada não é leitura. Qualquer mineral pode receber formas novas, e qualquer forma pode receber a nota dele pelo botão *anotar*.
+
+**A leitura clínica** de cada mineral vem das palavras dele mesmo, copiadas do bloco dos Átomos do OS (o magnésio: *"não é o encolher que falha, é o soltar"*). Cobre, selênio, cromo, manganês e molibdênio ficaram **sem nota** — ele ainda não escreveu essas, e o botão *Escrever a nota* está lá esperando.
+
+**A escolha gruda na pessoa, com data.** Escolhe a dose, escolhe a forma, busca o nome (busca sem acento), põe a data e a observação, e anota. Aparece no histórico do mineral e também na ficha da pessoa, em **Complementares > Minerais anotados**.
+
+**Uma decisão de engenharia que evitou uma perda silenciosa.** A anotação NÃO mora dentro da ficha do paciente, mora em linha própria na tabela nova `minerais`. Motivo: o Salvar da ficha reescreve o paciente a partir do formulário — qualquer coisa guardada lá dentro que não tenha campo na tela desapareceria no primeiro salvamento, sem avisar. A tabela nova entrou na lista `TABELAS_COM_NOME_PAC`, então corrigir o nome de alguém corrige também as anotações de minerais dela.
+
+**No banco.** Tabela `minerais` (id, user_id, dados jsonb), com a **mesma tranca** das outras: RLS ligada, só os dois e-mails da allowlist. Duas espécies de linha, separadas por `tipo`: `regua` (uma por mineral, e só nasce quando ele põe a primeira coisa lá dentro) e `indicacao` (uma por anotação). Leve de propósito, por causa da cota de egress. Entrou no backup .json — e backup antigo, sem essa chave, não apaga o que já existe.
+
+**Testado ao vivo**: dose entra na régua, dose sai, sal marcado, anotação gravada na pessoa e refletida na ficha; e a tentativa de gravar sem login foi **recusada pelo banco** (`42501`) — a tranca está de pé.
+
+**O que sobra desta senha:** a posologia da **fitoterapia** (`fitoterapia-data.js` tem as ~30 ervas de MTC sem quantidade) — mesmo buraco, outro lado da estante, e agora com a receita da régua já pronta para copiar.
+
 ## Ideia viva — a Ortomolecular: quanto, de qual e por quê (30/07/2026)
 
 Senha para a próxima janela: **"Acender o Magnésio"**.

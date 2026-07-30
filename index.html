@@ -130,6 +130,31 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .tabs button .btn-ic{vertical-align:-2px;margin-right:3px}
 .tabs button:hover{color:var(--pri)}.tabs button.active{color:var(--pri-d);border-bottom-color:var(--pri)}
 .tab-panel{display:none}.tab-panel.active{display:block}
+/* Abas internas de página (receita da Numerologia do OS): classe própria para
+   não serem apagadas pelo showTab() da ficha do paciente, que varre .tab-panel. */
+.pg-panel{display:none}.pg-panel.active{display:block}
+
+/* MINERAIS — a régua de doses */
+.mn-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.mn-el{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:62px;padding:7px 9px;border:1px solid var(--brd);border-radius:10px;background:#FDFAF6;cursor:pointer;transition:all .16s;font-family:inherit}
+.mn-el:hover{border-color:var(--pri);transform:translateY(-1px)}
+.mn-el.sel{border-color:var(--pri);background:var(--pri);color:#fff;box-shadow:var(--shadow)}
+.mn-el .mn-sim{font-size:15px;font-weight:700;line-height:1.1}
+.mn-el .mn-nm{font-size:9.5px;font-weight:600;letter-spacing:.02em;opacity:.85;white-space:nowrap}
+.mn-el .mn-pt{font-size:8.5px;font-weight:700;margin-top:2px;opacity:.7}
+.mn-dose{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border:1.5px solid var(--brd);border-radius:999px;background:#FDFAF6;font-size:13px;font-weight:700;color:var(--ink-soft);cursor:pointer;transition:all .16s;font-family:inherit}
+.mn-dose:hover{border-color:var(--pri);color:var(--pri-d)}
+.mn-dose.sel{border-color:var(--pri);background:var(--pri);color:#fff}
+/* O × fica sempre visível (discreto): no celular não existe hover, e um botão
+   invisível que apaga dose seria uma armadilha. */
+.mn-dose .mn-x{opacity:.35;font-size:12px;transition:opacity .16s}
+.mn-dose:hover .mn-x{opacity:.75}
+.mn-forma{display:inline-block;padding:6px 11px;border:1px solid var(--brd);border-radius:8px;background:#FDFAF6;font-size:11.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;transition:all .16s;font-family:inherit;text-align:left}
+.mn-forma:hover{border-color:var(--pri)}
+.mn-forma.sel{border-color:var(--pri);background:rgba(0,0,0,.03)}
+.mn-forma small{display:block;font-weight:500;font-size:10px;color:var(--txt-l);margin-top:1px}
+.mn-vazio{font-size:12px;color:var(--txt-l);font-style:italic;padding:8px 0}
+.mn-lbl{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--txt-l);margin-bottom:7px}
 
 /* SAVE BAR */
 .sbar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--pri-l);border-radius:7px;margin-bottom:12px;flex-wrap:wrap;gap:7px}
@@ -834,6 +859,9 @@ window.addEventListener('DOMContentLoaded',()=>{
         <div class="fr full"><div class="fg"><label>Avaliação</label><textarea id="pSA" rows="3" oninput="mudou()"></textarea></div></div>
         <div class="fr full"><div class="fg"><label>Técnicas</label><textarea id="pST" rows="3" oninput="mudou()"></textarea></div></div>
         <div class="fr full"><div class="fg"><label>Obs. gerais</label><textarea id="pOG" rows="3" oninput="mudou()"></textarea></div></div>
+        <div class="fst" style="margin-top:14px"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 4.5v9L12 21l-7-4.5v-9L12 3Z"/><path d="M12 3v18M5 7.5l14 9M19 7.5l-14 9"/></svg></span>Minerais anotados</div>
+        <p style="font-size:11.5px;color:var(--txt-l);margin-bottom:9px">As doses escolhidas por você na régua (Suplementos &rsaquo; Minerais), com a data de cada escolha.</p>
+        <div id="mnFichaLista"></div>
       </div>
       <div class="tab-panel" id="tex">
         <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg></span>Exames e Imagens</div>
@@ -1420,12 +1448,19 @@ window.addEventListener('DOMContentLoaded',()=>{
 <!-- ===== SUPLEMENTOS ===== -->
 <section class="page" id="pg-suplementos">
   <div class="page-header"><h1><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v4l2 2v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-2Z"/><path d="M9 3h6M9 12h6"/></svg></span>Suplementos</h1>
-    <div style="display:flex;gap:6px;flex-wrap:wrap">
+    <div style="display:flex;gap:6px;flex-wrap:wrap" id="supAcoesProdutos">
       <button class="btn btn-sec btn-sm" onclick="exportarSuplementosCsv()" title="Salva uma planilha .csv que abre direto no Excel ou Google Sheets"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3v5a1 1 0 0 0 1 1h5"/><path d="M19 9v10a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h8z"/><path d="M9 13h6M9 16h6"/></svg></span> Exportar Excel</button>
       <button class="btn btn-sec btn-sm" onclick="imprimirSuplementos()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg></span> Imprimir</button>
       <button class="btn btn-pri btn-sm" onclick="abrirModalSuplemento()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>Novo</button>
     </div>
   </div>
+
+  <div class="tabs" id="supTabs">
+    <button class="active" onclick="showSupTab('sp-produtos',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/><path d="M4 11h16"/></svg></span>Produtos</button>
+    <button onclick="showSupTab('sp-minerais',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 4.5v9L12 21l-7-4.5v-9L12 3Z"/><path d="M12 3v18M5 7.5l14 9M19 7.5l-14 9"/></svg></span>Minerais</button>
+  </div>
+
+  <div class="pg-panel active" id="sp-produtos">
   <div class="tw">
     <div class="ttb">
       <div class="sw"><span class="si"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span><input type="text" id="busSup" placeholder="Buscar produto, fornecedor..." oninput="renderSuplementos()"></div>
@@ -1442,6 +1477,21 @@ window.addEventListener('DOMContentLoaded',()=>{
         <thead><tr><th style="text-align:left;padding:8px">Produto</th><th style="text-align:left;padding:8px">Fornecedor</th><th style="text-align:right;padding:8px">Preço</th><th style="text-align:right;padding:8px">Estoque</th><th style="padding:8px"></th></tr></thead>
         <tbody id="tabSup"></tbody>
       </table>
+    </div>
+  </div>
+  </div><!-- /sp-produtos -->
+
+  <!-- ===== MINERAIS — A RÉGUA DE DOSES =====
+       Nasce vazia de propósito. A plataforma é a gaveta e a régua, nunca o
+       prescritor: nenhum miligrama aqui é calculado nem chutado pelo sistema.
+       As doses entram por ele, a clique, e a partir daí ficam na régua. Onde
+       ele não tiver posto valor, a régua diz que está vazia. -->
+  <div class="pg-panel" id="sp-minerais">
+    <div class="fc">
+      <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:4px">A régua de doses. Toque num mineral para abrir a régua dele.</p>
+      <p style="font-size:11.5px;color:var(--txt-l);margin-bottom:12px">Nenhuma quantidade aqui é calculada pelo sistema — as doses são suas. Toque numa dose para escolhê-la; use <em>outra quantidade</em> e ela passa a morar na régua dali em diante. A escolha gruda na ficha da pessoa, com data.</p>
+      <div class="mn-grid" id="mnGrid"></div>
+      <div id="mnPainel"></div>
     </div>
   </div>
 </section>
@@ -1665,7 +1715,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v5.0 · 29/07';
+const APP_VER='v5.2 · 30/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -1941,7 +1991,7 @@ async function dbAdd(tabela,item){
 
 // Recarregar tudo do banco e atualizar a tela (chamar após qualquer mudança importante)
 async function syncTudo(){
-  await Promise.all([dbGet('pacientes',true),dbGet('sessoes',true),dbGet('diagnosticos',true),dbGet('despesas',true),dbGet('suplementos',true),dbGet('vendas_suplementos',true),dbGet('diplomas',true)]);
+  await Promise.all([dbGet('pacientes',true),dbGet('sessoes',true),dbGet('diagnosticos',true),dbGet('despesas',true),dbGet('suplementos',true),dbGet('vendas_suplementos',true),dbGet('minerais',true),dbGet('diplomas',true)]);
   if(document.getElementById('cntP'))renderP();
   if(document.getElementById('pg-dashboard'))atuDash();
   if(document.getElementById('pg-financeiro'))atuFin();
@@ -2045,7 +2095,7 @@ async function syncConfigSupabase(){
 async function initDB(){
   showLoading(true);
   try{
-    await Promise.all([dbGet('pacientes',true),dbGet('sessoes',true),dbGet('diagnosticos',true),dbGet('despesas',true),dbGet('suplementos',true),dbGet('vendas_suplementos',true),dbGet('diplomas',true),syncConfigSupabase()]);
+    await Promise.all([dbGet('pacientes',true),dbGet('sessoes',true),dbGet('diagnosticos',true),dbGet('despesas',true),dbGet('suplementos',true),dbGet('vendas_suplementos',true),dbGet('minerais',true),dbGet('diplomas',true),syncConfigSupabase()]);
   }catch(e){
     console.error('Erro Supabase:',e);
     toast('Erro ao conectar ao banco. Tente recarregar.','#EF6C00',"warn");
@@ -2309,7 +2359,7 @@ function go(p,el){
   // A faixa do último encontro segue sempre a ficha que está aberta de fato
   if(p==='novo-paciente')renderUltEncontro(editId);
   if(p==='financeiro'){atuFin();initFinScope();}
-  if(p==='suplementos')renderSuplementos();
+  if(p==='suplementos'){renderSuplementos();renderMnGrid();renderMnPainel();}
   if(p==='pacientes')renderP();
   if(p==='dashboard')atuDash();
   if(p==='backup')atuInfoSys();
@@ -2351,6 +2401,7 @@ function showTab(id,btn){
   document.querySelectorAll('#mTabs button').forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
+  if(id==='tc')renderMnFicha(editId);
   if(id==='trx'&&editId)carregarRxHistPac(editId);
   if(id==='tdg'&&editId)carregarDiagHistPac(editId);
 }
@@ -2596,7 +2647,7 @@ function limparForm(){
 // Esta é a única porta por onde o nome se corrige. Ela vai atrás de todas as
 // cópias pelo pacienteId, que é o fio que liga tudo, e reescreve no Google os
 // eventos das sessões que mudaram.
-const TABELAS_COM_NOME_PAC=['sessoes','diagnosticos','prescricoes','vendas_suplementos'];
+const TABELAS_COM_NOME_PAC=['sessoes','diagnosticos','prescricoes','vendas_suplementos','minerais'];
 
 async function renomearPaciente(pacId,novoNome){
   novoNome=String(novoNome||'').trim();
@@ -3483,6 +3534,291 @@ async function importarCatalogoInicial(){
   }
   renderSuplementos();
   toast(`${itens.length} produtos importados!`,null,"ok");
+}
+
+// ===== MINERAIS — A RÉGUA DE DOSES =====
+// O degrau que faltava entre a desarmonia e a QUANTIDADE.
+// Regra da casa, e é o coração disto: a máquina NÃO calcula dose nenhuma.
+// A lista abaixo traz só a identidade do mineral (símbolo, nome e a ponte
+// clínica que já estava escrita no bloco dos Átomos do OS, nas palavras dele).
+// Miligrama nenhum vem daqui: a régua nasce vazia e cada dose entra a clique.
+// Onde ele não tiver posto valor, a régua diz que está vazia — em vez de chutar.
+// [chave, símbolo, nome, unidade inicial, ponte clínica (vazio = ele escreve)]
+const MN_BASE=[
+  ['magnesio','Mg','Magnésio','mg','A falta aparece como cãibra, tensão e insônia: não é o encolher que falha, é o soltar. Contrair é fácil; relaxar é que dá trabalho.'],
+  ['calcio','Ca','Cálcio','mg','Osso é banco, não cofre: em falta, o corpo saca do esqueleto para manter o coração batendo. A estrutura se dissolve para sustentar a função.'],
+  ['fosforo','P','Fósforo','mg','A energia não se guarda em tanque, se produz e gasta na hora. O ATP dura segundos e é refeito o dia inteiro.'],
+  ['potassio','K','Potássio','mg','O que é de dentro. Cada célula gasta perto de um terço de toda a sua energia só para manter essa diferença — é caro ser distinto do lado de fora.'],
+  ['sodio','Na','Sódio','mg','O par sódio/potássio é a Polaridade em bioquímica: dentro e fora, e uma bomba trabalhando sem descanso para manter a diferença.'],
+  ['ferro','Fe','Ferro','mg','O metal mais caro do universo para se fabricar circula em cada veia. Em falta: cansaço que não passa com sono.'],
+  ['zinco','Zn','Zinco','mg','Perder o gosto das coisas costuma ter química por baixo antes de ter tristeza.'],
+  ['iodo','I','Iodo','mcg','Vinte miligramas decidem se a pessoa acorda acelerada ou arrastada. Quantidade não é o mesmo que importância.'],
+  ['cobre','Cu','Cobre','mg',''],
+  ['selenio','Se','Selênio','mcg',''],
+  ['cromo','Cr','Cromo','mcg',''],
+  ['manganes','Mn','Manganês','mg',''],
+  ['molibdenio','Mo','Molibdênio','mcg','']
+];
+// Os sais do magnésio. O magnésio é o primeiro da fila porque é o mais
+// ramificado: escolher o sal errado é tomar magnésio e não receber magnésio.
+// A nota só aparece nos cinco que ele já descreveu; nos outros sete fica dito
+// que ainda não há nota — nome de sal é química, mas alvo é leitura dele.
+const MN_FORMAS_INICIAIS={magnesio:[
+  {nome:'Treonato',nota:'atravessa a barreira do cérebro'},
+  {nome:'Dimalato',nota:'entra no ciclo da energia muscular'},
+  {nome:'Bisglicinato',nota:'o mais tolerado pelo intestino'},
+  {nome:'Citrato',nota:'é o que solta'},
+  {nome:'Óxido',nota:'quase não absorve, e é o que mais se vende'},
+  {nome:'Cloreto',nota:''},
+  {nome:'Sulfato',nota:''},
+  {nome:'Carbonato',nota:''},
+  {nome:'Lactato',nota:''},
+  {nome:'Taurato',nota:''},
+  {nome:'Orotato',nota:''},
+  {nome:'Quelato',nota:''}
+]};
+const MN_UNIDADES=['mg','mcg','g','ml','gotas','cápsulas'];
+
+let _mnSel=null,_mnDoseSel=null,_mnFormaSel=null,_mnPacSel=null;
+
+const mnBase=chave=>MN_BASE.find(m=>m[0]===chave);
+const mnReguas=()=>gD('minerais').filter(r=>r.tipo==='regua');
+const mnIndicacoes=()=>gD('minerais').filter(r=>r.tipo==='indicacao');
+const mnRegua=chave=>mnReguas().find(r=>r.chave===chave)||null;
+// Junta a identidade (código) com o que ele já gravou (banco). A linha no banco
+// só nasce quando ele põe a primeira coisa lá dentro — antes disso não existe.
+function mnDados(chave){
+  const b=mnBase(chave)||[chave,'?',chave,'mg',''],r=mnRegua(chave)||{};
+  return{chave,simbolo:b[1],nome:b[2],
+    unidade:r.unidade||b[3],
+    nota:(r.nota!==undefined&&r.nota!==null)?r.nota:b[4],
+    doses:Array.isArray(r.doses)?r.doses:[],
+    formas:Array.isArray(r.formas)?r.formas:(MN_FORMAS_INICIAIS[chave]||[])};
+}
+// Grava a régua deste mineral. Uma viagem só (dbGravar já cuida de nascer ou
+// atualizar sem abrir buraco).
+async function mnGravarRegua(chave,patch){
+  let r=mnRegua(chave);
+  if(!r){
+    const d=mnDados(chave);
+    r={id:novoId(),tipo:'regua',chave,nome:d.nome,simbolo:d.simbolo,unidade:d.unidade,nota:d.nota,doses:d.doses,formas:d.formas};
+    Object.assign(r,patch);
+    await dbAdd('minerais',r);
+  }else{
+    Object.assign(r,patch);
+    if(!_cache['minerais'])_cache['minerais']=[];
+    await dbGravar('minerais',r.id,r);
+  }
+  renderMnGrid();renderMnPainel();
+}
+
+function showSupTab(id,btn){
+  document.querySelectorAll('#pg-suplementos .pg-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('#supTabs button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  // Os botões do cabeçalho (Exportar/Imprimir/Novo) são do catálogo de produtos.
+  document.getElementById('supAcoesProdutos').style.display=(id==='sp-produtos')?'flex':'none';
+  if(id==='sp-minerais'){renderMnGrid();renderMnPainel();}
+}
+
+function renderMnGrid(){
+  const g=document.getElementById('mnGrid');if(!g)return;
+  g.innerHTML=MN_BASE.map(m=>{
+    const d=mnDados(m[0]),n=d.doses.length;
+    return `<button class="mn-el${_mnSel===m[0]?' sel':''}" onclick="mnAbrir('${m[0]}')" title="${escHtml(d.nome)}">
+      <span class="mn-sim">${d.simbolo}</span>
+      <span class="mn-nm">${escHtml(d.nome)}</span>
+      <span class="mn-pt">${n?n+(n===1?' dose':' doses'):'vazia'}</span>
+    </button>`;
+  }).join('');
+}
+
+function mnAbrir(chave){
+  if(_mnSel===chave){_mnSel=null;}else{_mnSel=chave;_mnDoseSel=null;_mnFormaSel=null;}
+  renderMnGrid();renderMnPainel();
+}
+
+function renderMnPainel(){
+  const el=document.getElementById('mnPainel');if(!el)return;
+  if(!_mnSel){el.innerHTML='<p class="mn-vazio">Escolha um mineral acima para abrir a régua dele.</p>';return;}
+  const d=mnDados(_mnSel);
+  const doses=[...d.doses].sort((a,b)=>a-b);
+  const hoje=dLocal(new Date());
+  el.innerHTML=`
+  <div style="border-top:1px solid var(--brd);padding-top:14px">
+    <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:6px">
+      <h3 style="font-size:16px;color:var(--pri-d);margin:0">${d.simbolo} · ${escHtml(d.nome)}</h3>
+      <label style="font-size:11px;color:var(--txt-l)">unidade
+        <select onchange="mnGravarRegua('${_mnSel}',{unidade:this.value})" style="font-size:11px;padding:2px 4px;width:auto;display:inline-block">
+          ${MN_UNIDADES.map(u=>`<option value="${u}"${u===d.unidade?' selected':''}>${u}</option>`).join('')}
+        </select>
+      </label>
+    </div>
+    <p style="font-size:12px;color:var(--ink-soft);font-style:italic;margin-bottom:4px">${d.nota?escHtml(d.nota):'<span style="color:var(--txt-l);font-style:normal">Sem nota ainda — a leitura clínica deste mineral é sua.</span>'}</p>
+    <button class="btn btn-sec btn-sm" style="margin-bottom:14px" onclick="mnEditarNota('${_mnSel}')">${d.nota?'Editar nota':'Escrever a nota'}</button>
+
+    <div class="mn-lbl">Régua de doses</div>
+    ${doses.length?`<div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px">
+      ${doses.map(v2=>`<span class="mn-dose${_mnDoseSel===v2?' sel':''}" onclick="mnPegarDose(${v2})" title="Toque para escolher esta dose">${v2} ${d.unidade}<button class="mn-x" onclick="event.stopPropagation();mnTirarDose('${_mnSel}',${v2})" title="Tirar da régua" style="border:none;background:none;color:inherit;cursor:pointer;padding:0 0 0 2px;font-family:inherit">×</button></span>`).join('')}
+    </div>`:`<p class="mn-vazio">A régua deste mineral está vazia. Nenhuma dose foi cadastrada ainda — e o sistema não vai inventar uma.</p>`}
+    <div style="display:flex;gap:6px;align-items:flex-end;flex-wrap:wrap;margin-bottom:16px">
+      <div class="fg" style="max-width:170px;margin:0"><label style="font-size:11px">Outra quantidade (${d.unidade})</label>
+        <input type="number" id="mnNovaDose" step="any" min="0" placeholder="ex: 400" onkeydown="if(event.key==='Enter'){event.preventDefault();mnPorNaRegua('${_mnSel}')}"></div>
+      <button class="btn btn-sec btn-sm" onclick="mnPorNaRegua('${_mnSel}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>Pôr na régua</button>
+      <span style="font-size:11px;color:var(--txt-l)">fica na régua daqui em diante</span>
+    </div>
+
+    <div class="mn-lbl">Formas / sais${_mnSel==='magnesio'?' — escolher o sal errado é tomar magnésio e não receber magnésio':''}</div>
+    ${d.formas.length?`<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px">
+      ${d.formas.map((f,i)=>`<span class="mn-forma${_mnFormaSel===f.nome?' sel':''}" onclick="mnPegarForma(${jsq(f.nome)})">${escHtml(f.nome)}<small>${f.nota?escHtml(f.nota):'sem nota ainda'}</small><button onclick="event.stopPropagation();mnNotaForma('${_mnSel}',${i})" title="Escrever a nota desta forma" style="border:none;background:none;color:var(--pri);cursor:pointer;font-size:10px;font-family:inherit;padding:2px 0 0">anotar</button><button onclick="event.stopPropagation();mnTirarForma('${_mnSel}',${i})" title="Tirar esta forma" style="border:none;background:none;color:var(--txt-l);cursor:pointer;font-size:10px;font-family:inherit;padding:2px 0 0 8px">tirar</button></span>`).join('')}
+    </div>`:`<p class="mn-vazio">Nenhuma forma cadastrada ainda para este mineral.</p>`}
+    <div style="display:flex;gap:6px;align-items:flex-end;flex-wrap:wrap;margin-bottom:18px">
+      <div class="fg" style="max-width:200px;margin:0"><label style="font-size:11px">Outra forma / sal</label>
+        <input type="text" id="mnNovaForma" placeholder="ex: Glicerofosfato" onkeydown="if(event.key==='Enter'){event.preventDefault();mnPorForma('${_mnSel}')}"></div>
+      <button class="btn btn-sec btn-sm" onclick="mnPorForma('${_mnSel}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>Acrescentar</button>
+    </div>
+
+    <div class="mn-lbl">Anotar na ficha de alguém</div>
+    <div style="font-size:12px;color:var(--ink-soft);margin-bottom:8px">Escolhido: <strong>${_mnDoseSel!==null?_mnDoseSel+' '+d.unidade:'nenhuma dose'}</strong>${_mnFormaSel?' · <strong>'+escHtml(_mnFormaSel)+'</strong>':''}</div>
+    <div class="fr">
+      <div class="fg"><label>Paciente</label>
+        <div style="position:relative">
+          <input type="text" id="mnPacBusca" placeholder="Digite o nome do paciente..." oninput="mnFiltrarPac()" onblur="mnFecharPacLista()" autocomplete="off" value="${_mnPacSel?escHtml(_mnPacSel.nome):''}">
+          <div id="mnPacLista" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--cream);border:1px solid var(--brd);border-radius:0 0 7px 7px;box-shadow:var(--shadow);z-index:200;max-height:220px;overflow-y:auto"></div>
+        </div>
+      </div>
+      <div class="fg"><label>Data</label><input type="date" id="mnData" value="${hoje}"></div>
+    </div>
+    <div class="fr full"><div class="fg"><label>Observação (opcional)</label><input type="text" id="mnObs" placeholder="ex: à noite, longe do cálcio"></div></div>
+    <button class="btn btn-pri btn-sm" onclick="mnAnotarNaFicha('${_mnSel}')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.3 2.3L16 9.5"/></svg></span>Anotar na ficha</button>
+
+    <div class="mn-lbl" style="margin-top:20px">O que já foi anotado</div>
+    ${mnHistoricoHtml(_mnSel)}
+  </div>`;
+}
+
+function mnHistoricoHtml(chave){
+  const lista=mnIndicacoes().filter(r=>r.chave===chave).sort((a,b)=>String(b.data||'').localeCompare(String(a.data||'')));
+  if(!lista.length)return '<p class="mn-vazio">Nada anotado ainda com este mineral.</p>';
+  return `<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">
+    <thead><tr><th style="text-align:left;padding:6px">Data</th><th style="text-align:left;padding:6px">Pessoa</th><th style="text-align:left;padding:6px">Dose</th><th style="text-align:left;padding:6px">Forma</th><th style="text-align:left;padding:6px">Obs.</th><th style="padding:6px"></th></tr></thead>
+    <tbody>${lista.map(r=>`<tr style="border-top:1px solid var(--brd)">
+      <td style="padding:6px;white-space:nowrap">${escHtml(r.dataBr||r.data||'-')}</td>
+      <td style="padding:6px">${escHtml(r.pacienteNome||'-')}</td>
+      <td style="padding:6px;font-weight:700">${r.dose!==''&&r.dose!==null&&r.dose!==undefined?escHtml(r.dose+' '+(r.unidade||'')):'-'}</td>
+      <td style="padding:6px">${escHtml(r.forma||'-')}</td>
+      <td style="padding:6px;color:var(--txt-l)">${escHtml(r.obs||'')}</td>
+      <td style="padding:6px;text-align:right"><button class="btn btn-dan btn-sm" title="Apagar esta anotação" onclick="mnApagarAnotacao('${r.id}')"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button></td>
+    </tr>`).join('')}</tbody></table></div>`;
+}
+
+function mnPegarDose(v2){_mnDoseSel=(_mnDoseSel===v2?null:v2);renderMnPainel();}
+function mnPegarForma(nome){_mnFormaSel=(_mnFormaSel===nome?null:nome);renderMnPainel();}
+
+async function mnPorNaRegua(chave){
+  const bruto=(document.getElementById('mnNovaDose')||{}).value;
+  const n=parseFloat(String(bruto).replace(',','.'));
+  if(!isFinite(n)||n<=0){toast('Escreva a quantidade primeiro.','#EF6C00',"warn");return;}
+  const d=mnDados(chave);
+  if(d.doses.some(x=>Number(x)===n)){toast('Esta dose já está na régua.','#EF6C00',"warn");_mnDoseSel=n;renderMnPainel();return;}
+  _mnDoseSel=n;
+  await mnGravarRegua(chave,{doses:[...d.doses,n].sort((a,b)=>a-b)});
+  toast(n+' '+d.unidade+' entrou na régua do '+d.nome+'.',null,"ok");
+}
+async function mnTirarDose(chave,v2){
+  const d=mnDados(chave);
+  if(!confirm('Tirar '+v2+' '+d.unidade+' da régua do '+d.nome+'?\n\nAs anotações já feitas nas fichas continuam como estão.'))return;
+  if(_mnDoseSel===v2)_mnDoseSel=null;
+  await mnGravarRegua(chave,{doses:d.doses.filter(x=>Number(x)!==Number(v2))});
+}
+async function mnPorForma(chave){
+  const nome=String((document.getElementById('mnNovaForma')||{}).value||'').trim();
+  if(!nome){toast('Escreva o nome da forma primeiro.','#EF6C00',"warn");return;}
+  const d=mnDados(chave);
+  if(d.formas.some(f=>semAcento(f.nome)===semAcento(nome))){toast('Esta forma já está na lista.','#EF6C00',"warn");return;}
+  await mnGravarRegua(chave,{formas:[...d.formas,{nome,nota:''}]});
+  toast(nome+' acrescentado.',null,"ok");
+}
+async function mnTirarForma(chave,i){
+  const d=mnDados(chave),f=d.formas[i];if(!f)return;
+  if(!confirm('Tirar "'+f.nome+'" da lista de formas do '+d.nome+'?'))return;
+  if(_mnFormaSel===f.nome)_mnFormaSel=null;
+  await mnGravarRegua(chave,{formas:d.formas.filter((_,j)=>j!==i)});
+}
+async function mnNotaForma(chave,i){
+  const d=mnDados(chave),f=d.formas[i];if(!f)return;
+  const t=prompt('O que esta forma faz — nas suas palavras:\n\n'+f.nome,f.nota||'');
+  if(t===null)return;
+  const formas=d.formas.map((x,j)=>j===i?{...x,nota:t.trim()}:x);
+  await mnGravarRegua(chave,{formas});
+}
+async function mnEditarNota(chave){
+  const d=mnDados(chave);
+  const t=prompt('Leitura clínica do '+d.nome+' — nas suas palavras:',d.nota||'');
+  if(t===null)return;
+  await mnGravarRegua(chave,{nota:t.trim()});
+}
+
+function mnFiltrarPac(){
+  const q=semAcento(document.getElementById('mnPacBusca').value.trim());
+  const lista=document.getElementById('mnPacLista');
+  if(!q){lista.style.display='none';_mnPacSel=null;return;}
+  const pacs=gD('pacientes').filter(p=>semAcento(p.nome).includes(q)).slice(0,12);
+  if(!pacs.length){lista.innerHTML='<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Nenhum paciente encontrado</div>';lista.style.display='block';return;}
+  lista.innerHTML=pacs.map(p=>`<div onclick="mnSelecionarPac('${p.id}',${jsq(p.nome)})" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${escHtml(p.nome)}</div>`).join('');
+  lista.style.display='block';
+}
+function mnSelecionarPac(id,nome){
+  _mnPacSel={id,nome};
+  document.getElementById('mnPacBusca').value=nome;
+  document.getElementById('mnPacLista').style.display='none';
+}
+function mnFecharPacLista(){setTimeout(()=>{const l=document.getElementById('mnPacLista');if(l)l.style.display='none';},200);}
+
+// A escolha gruda na ficha da pessoa, com data. Fica numa linha própria na
+// tabela minerais (não dentro da ficha) porque o Salvar do paciente reescreve
+// a ficha a partir do formulário — o que estivesse lá dentro e não tivesse
+// campo na tela sumiria no primeiro salvamento.
+async function mnAnotarNaFicha(chave){
+  const d=mnDados(chave);
+  if(!_mnPacSel||!_mnPacSel.id){toast('Escolha a pessoa primeiro.','#EF6C00',"warn");return;}
+  if(_mnDoseSel===null){toast('Toque numa dose da régua primeiro.','#EF6C00',"warn");return;}
+  const data=v('mnData')||dLocal(new Date());
+  const reg={id:novoId(),tipo:'indicacao',chave,mineral:d.nome,simbolo:d.simbolo,
+    dose:_mnDoseSel,unidade:d.unidade,forma:_mnFormaSel||'',
+    pacienteId:_mnPacSel.id,pacienteNome:_mnPacSel.nome,
+    data,dataBr:data.split('-').reverse().join('/'),obs:v('mnObs')};
+  await dbAdd('minerais',reg);
+  toast(d.nome+' '+_mnDoseSel+' '+d.unidade+' anotado na ficha de '+_mnPacSel.nome+'.',null,"ok");
+  renderMnPainel();
+}
+async function mnApagarAnotacao(id){
+  if(!confirm('Apagar esta anotação da ficha?'))return;
+  _cache['minerais']=gD('minerais').filter(r=>String(r.id)!==String(id));
+  await supaReq('DELETE','minerais',null,`?user_id=eq.montgomery&dados->>id=eq.${id}`);
+  renderMnPainel();
+  toast('Anotação removida','#c62828',"trash");
+}
+// O que já foi anotado para esta pessoa — leitura, dentro da ficha dela.
+function mnDoPaciente(pacId){
+  return mnIndicacoes().filter(r=>String(r.pacienteId)===String(pacId))
+    .sort((a,b)=>String(b.data||'').localeCompare(String(a.data||'')));
+}
+function renderMnFicha(pacId){
+  const el=document.getElementById('mnFichaLista');if(!el)return;
+  if(!pacId){el.innerHTML='<p class="mn-vazio">Salve a ficha primeiro; depois as anotações de minerais aparecem aqui.</p>';return;}
+  const lista=mnDoPaciente(pacId);
+  if(!lista.length){el.innerHTML='<p class="mn-vazio">Nenhum mineral anotado para esta pessoa ainda.</p>';return;}
+  el.innerHTML=`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">
+    <thead><tr><th style="text-align:left;padding:6px">Data</th><th style="text-align:left;padding:6px">Mineral</th><th style="text-align:left;padding:6px">Dose</th><th style="text-align:left;padding:6px">Forma</th><th style="text-align:left;padding:6px">Obs.</th></tr></thead>
+    <tbody>${lista.map(r=>`<tr style="border-top:1px solid var(--brd)">
+      <td style="padding:6px;white-space:nowrap">${escHtml(r.dataBr||r.data||'-')}</td>
+      <td style="padding:6px">${escHtml(r.mineral||'-')}</td>
+      <td style="padding:6px;font-weight:700">${r.dose!==''&&r.dose!==null&&r.dose!==undefined?escHtml(r.dose+' '+(r.unidade||'')):'-'}</td>
+      <td style="padding:6px">${escHtml(r.forma||'-')}</td>
+      <td style="padding:6px;color:var(--txt-l)">${escHtml(r.obs||'')}</td>
+    </tr>`).join('')}</tbody></table></div>`;
 }
 
 // ===== GOOGLE AGENDA =====
@@ -7145,7 +7481,7 @@ async function dbGetPacientesFull(){
 async function expJSON(){
   toast('Preparando backup completo (fotos e exames)…','#1565C0',"upload");
   const pacsFull=await dbGetPacientesFull();
-  const d={versao:'5.0',clinica:'Montgomery Magalhães',data:new Date().toISOString(),pacientes:pacsFull,sessoes:gD('sessoes'),config:getCfg()};
+  const d={versao:'5.0',clinica:'Montgomery Magalhães',data:new Date().toISOString(),pacientes:pacsFull,sessoes:gD('sessoes'),minerais:gD('minerais'),config:getCfg()};
   dl(JSON.stringify(d,null,2),'montgomery_backup_'+new Date().toISOString().slice(0,10)+'.json','application/json');
   toast('Backup completo exportado! ('+pacsFull.length+' pacientes)',null,"ok");
 }
@@ -7172,6 +7508,9 @@ async function impJSON(inp){
       if(!d.pacientes||!d.sessoes){toast('Arquivo inválido!','#c62828',"erro");return;}
       await dbSet('pacientes',d.pacientes);
       await dbSet('sessoes',d.sessoes);
+      // A régua de doses e as anotações de minerais só voltam se o arquivo as
+      // trouxer. Backup antigo (sem essa chave) não apaga o que já existe.
+      if(Array.isArray(d.minerais))await dbSet('minerais',d.minerais);
       if(d.config){localStorage.setItem('config',JSON.stringify(d.config));supaReq('DELETE','configuracoes',null,'?user_id=eq.montgomery').then(()=>supaReq('POST','configuracoes',[{user_id:'montgomery',dados:d.config}]));}
       atuInfoSys();atuDash();aplicarConfig();
       toast(''+d.pacientes.length+' pacientes restaurados na nuvem!',"ok");
