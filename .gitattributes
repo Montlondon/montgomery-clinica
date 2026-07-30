@@ -1,0 +1,21 @@
+# Fim de linha — a varrida dos fantasmas.
+#
+# Windows termina cada linha com dois caracteres invisiveis; Linux e Mac, com um.
+# Sem esta regra, um programa que reescreve o arquivo troca a marca de TODAS as linhas
+# e o Git ve um arquivo inteiro diferente — mesmo quando nenhuma palavra mudou.
+# Foi o que deixou REPERTORIO_INDICE.md e MEQ_MATERIAIS_INDICE.md sujos sem terem mudado.
+#
+# text=auto: o Git guarda tudo de um jeito so e entrega para cada computador do jeito dele.
+* text=auto
+
+# Estes nao sao texto — o Git nunca deve mexer neles, ou corrompe.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.mp3 binary
+*.mp4 binary
