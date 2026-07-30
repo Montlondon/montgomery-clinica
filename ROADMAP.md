@@ -17,7 +17,11 @@ Senha para a próxima janela: **"Acender o Magnésio"**.
 
 **A ponte já está construída e ninguém tinha reparado.** O bloco dos Átomos (OS v4.9) já diz, do magnésio: *"a falta aparece como cãibra, tensão e insônia: não é o encolher que falha, é o soltar"* — e já o acende como **Madeira** na teia. Ou seja: a teia já sabe ir da queixa ao elemento e do elemento ao mineral. Falta o último degrau, que é a quantidade.
 
-**A fronteira honesta, dita antes de começar.** Miligrama é conduta clínica, não enciclopédia. O que a plataforma pode fazer com integridade: guardar **faixas de referência da literatura, com a fonte citada em cada linha**, o cálculo por peso quando a fonte trabalha assim, as interações e os limites de segurança — e deixar a decisão com o terapeuta, sempre. O que ela não vai fazer: gerar número sem fonte, nem dizer "tome tanto". Nenhum miligrama entra inventado; cada faixa entra com de onde veio. É a mesma regra dos seis elementos sem ponte: onde não há fonte, fica escrito que não há.
+**Como ele quer que funcione (emenda de 30/07).** Nada de a máquina calcular sozinha. **Quantidades de praste — preset — escolhidas a clique**, e um lugar onde ele mesmo acrescenta as que faltarem. Cada mineral com sua régua de doses prontas (por exemplo 200 / 300 / 400 / 600 mg), toque numa e está escolhida; e um campo "outra quantidade" que entra no banco e passa a aparecer na régua da próxima vez. A dose escolhida gruda na ficha da pessoa, com a data.
+
+**E para todos os minerais, não só o magnésio.** Fósforo, zinco, cálcio, ferro, potássio, sódio, iodo, cobre, selênio, cromo, manganês, molibdênio. Os quatorze elementos do corpo já estão listados no bloco dos Átomos com percentual e ponte clínica — a régua de doses é a camada que se assenta em cima dessa lista, e o magnésio, com seus doze sais, é só o primeiro a ser aceso porque é o mais ramificado.
+
+**A fronteira honesta fica resolvida por aí.** Os números são dele, entram por ele, são editáveis por ele — a plataforma é a gaveta e a régua, não o prescritor. Nenhum miligrama nasce inventado por máquina. Onde ele não tiver posto valor ainda, a régua fica vazia dizendo que está vazia, em vez de chutar.
 
 ## Concluído — OS v5.0: os desenhos em tela cheia (30/07/2026)
 
