@@ -1485,6 +1485,49 @@ Pergunta do Montgomery vendo o Metatron girar: *"futuramente teria como eu dar u
 1. **Tela cheia por clique — fazer.** `requestFullscreen` no container do SVG: o desenho ocupa o monitor inteiro, fundo escuro, sem menu nem barra lateral, `Esc` volta. Funciona no computador e no celular, sem instalar nada, e a animação segue igual (mesmo desenho, só maior). Enquanto grande, caprichar: revezamento mais lento, METATRON maior, legenda sumindo depois de alguns segundos. **Vale para todos os desenhos animados do OS** — Cubo de Metatron, os 5 sólidos, o átomo de carbono, o corpo vitruviano: um botão de expandir no canto de cada um, mesma mecânica.
 2. **Descanso de tela de verdade do Windows — não agora.** Precisa ser um `.scr` instalado no sistema; é programa, não página. Possível, mas projeto separado e sem ganho de beleza sobre o item 1. Na prática, a aba aberta em tela cheia num monitor já faz o papel — só não liga sozinha.
 
+## Aberto — senha **"Acender os Candidatos"** (30/07/2026)
+
+Dito por ele logo depois da v5.3, e é o que a senha "Acender as Ervas" ainda não
+era: *"de acordo com a desarmonia da pessoa, nos 5 elementos, na Sefirot, na
+psicanálise, uma forma do sistema me apontar ou uma erva ou um mineral, e eu iria
+analisar se a informação iria condizer com o diagnóstico — não uma decisão do
+sistema, eu iria filtrar a mesma."*
+
+A v5.3 entregou a gaveta e a régua. Falta o **aponte**: no Diagnóstico, a partir
+do que ele marcou, a tela levantar candidatos e ele peneirar.
+
+**O motor já existe e é o molde.** `calcularSugestoesCruzadas` já faz exatamente
+esse movimento: dos pontos/elementos/sistemas marcados ele monta os meridianos em
+foco e sugere pontos auriculares, mostrando por quê. A senha é estender esse mesmo
+motor para ervas e minerais.
+
+**De onde cada ligação pode vir — e essa é a parte que não pode ser inventada:**
+- **Erva → Elemento e meridianos: já existe no dado.** `fitoterapia-data.js` traz
+  `elemento_relacionado` e `meridianos` em cada erva, e `padrao_mtc` nas fórmulas.
+  É literatura clássica, citável. Acende de graça, com a fonte dita na tela.
+- **Mineral → não existe nada.** `MN_BASE` tem símbolo, nome e a leitura clínica —
+  nenhum elemento, nenhuma Sefirá, nenhum tema. Essa ligação é dele.
+- **Sefirot e Psicanálise → não existe nada** para erva nem para mineral. Também
+  é dele, inteira.
+
+**O desenho:**
+1. **A teia de ligações** — uma tela onde ele liga cada mineral e cada erva a
+   Elemento(s), Sefirá(s) e categoria psicanalítica, a clique. Nasce vazia. Cada
+   ligação guarda a data. Enquanto ele não ligar, o sistema diz que não tem o que
+   apontar naquele eixo — em vez de chutar.
+2. **O bloco "Candidatos"** no Diagnóstico, ao lado das sugestões cruzadas: a
+   partir de elementos, Sefirot e psicanálise marcados naquela avaliação, lista
+   ervas e minerais candidatos. **Cada candidato diz de onde veio** — *"literatura
+   clássica: Elemento Terra"* ou *"ligação sua, de 30/07"*. Sem isso a tela vira
+   oráculo, que é o contrário do que ele pediu.
+3. **A peneira** — cada candidato tem *aceitar* (vai para a avaliação e daí para a
+   Recomendação, com a régua já pronta da v5.3) e *dispensar*. O que ele dispensa
+   some daquela avaliação. A decisão é sempre o último clique dele.
+4. **A teia aprende com ele, não com o Claude** — se ele aceita repetidamente uma
+   erva num padrão que ainda não estava ligado, a tela pode perguntar *"quer ligar
+   isto de vez?"*. Perguntar, nunca ligar sozinha. Casa com [[a teia diagnóstica]],
+   o sonho de fundo: a Clínica saber as ligações, e as ligações virem dele.
+
 ## Feito — senha **"Acender as Ervas"** (30/07/2026, Clínica v5.3)
 
 As três coisas da senha foram construídas. **A régua e o caminho ficaram prontos;
