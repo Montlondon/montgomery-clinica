@@ -176,6 +176,10 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .ev-ref .ev-ref-lbl{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#7a5c1e;display:block;margin-bottom:2px}
 .ev-id{font-size:12px;color:var(--ink-soft);line-height:1.55;margin-bottom:10px}
 .ev-id b{color:var(--pri-d)}
+/* CANDIDATOS — a procedência aparece antes do nome ser aceito.
+   Sem a etiqueta, o bloco viraria oráculo; com ela, é uma sugestão citável. */
+.cd-por{display:inline-block;padding:3px 9px;border-radius:999px;font-size:10.5px;font-weight:600;background:#F5F2EA;color:#7a5c1e;border:1px solid #E2D8BE}
+.cd-por.sua{background:var(--pri-l);color:var(--pri-d);border-color:var(--pri)}
 
 /* SAVE BAR */
 .sbar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--pri-l);border-radius:7px;margin-bottom:12px;flex-wrap:wrap;gap:7px}
@@ -1492,6 +1496,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     <button class="active" onclick="showSupTab('sp-produtos',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/><path d="M4 11h16"/></svg></span>Produtos</button>
     <button onclick="showSupTab('sp-minerais',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 4.5v9L12 21l-7-4.5v-9L12 3Z"/><path d="M12 3v18M5 7.5l14 9M19 7.5l-14 9"/></svg></span>Minerais</button>
     <button onclick="showSupTab('sp-ervas',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-3 5-6 11-11"/></svg></span>Ervas</button>
+    <button onclick="showSupTab('sp-ligacoes',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="3"/><circle cx="17" cy="17" r="3"/><path d="M9.1 9.1l5.8 5.8"/></svg></span>Ligações</button>
   </div>
 
   <div class="pg-panel active" id="sp-produtos">
@@ -1544,6 +1549,14 @@ window.addEventListener('DOMContentLoaded',()=>{
       <div id="evGrid"></div>
       <div id="evPainel"></div>
       <div id="evFormulas" style="margin-top:22px"></div>
+    </div>
+  </div>
+
+  <div class="pg-panel" id="sp-ligacoes">
+    <div class="fc">
+      <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:4px">A teia de ligações — de onde os candidatos do Diagnóstico saem.</p>
+      <p style="font-size:11.5px;color:var(--txt-l);margin-bottom:12px">A erva já traz elemento e meridianos da literatura clássica, e por isso ela aponta sozinha. <strong>Tudo o mais é seu:</strong> mineral não tem elemento em livro nenhum, e nenhum tema da Psicanálise tem erva escrita em lugar algum. Esta tela nasce vazia de propósito — cada ligação que entrar aqui é sua, com a data em que você a fez, e é assim que ela vai aparecer na hora do atendimento. O sistema nunca liga sozinho: quando você aceitar a mesma coisa várias vezes, ele <em>pergunta</em>.</p>
+      <div id="lgPainel"></div>
     </div>
   </div>
 </section>
@@ -1767,7 +1780,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v5.3 · 30/07';
+const APP_VER='v5.4 · 30/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2429,7 +2442,7 @@ function go(p,el){
     if(el){
       _diagEditandoId=null;
       _diagPacSel=null;
-      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:''};
+      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:'',candidatos:[],candidatosFora:[]};
       _diagJaSalvo=false;
       document.getElementById('diagPacBusca').value='';
       document.getElementById('diagPacId').value='';
@@ -3684,6 +3697,7 @@ function showSupTab(id,btn){
   document.getElementById('supAcoesProdutos').style.display=(id==='sp-produtos')?'flex':'none';
   if(id==='sp-minerais'){renderMnGrid();renderMnPainel();}
   if(id==='sp-ervas'){renderEvGrid();renderEvPainel();renderEvFormulas();}
+  if(id==='sp-ligacoes'){renderLgPainel();}
 }
 
 function renderMnGrid(){
@@ -4225,6 +4239,239 @@ function renderEvFormulas(){
     ${f.indicacoes?`<div style="font-size:11px;color:var(--ink-soft);margin-top:4px"><strong>Indicações:</strong> ${escHtml(f.indicacoes)}</div>`:''}
     ${f.contraindicacoes?`<div style="font-size:11px;color:#b3261e;margin-top:2px"><strong>Contraindicações:</strong> ${escHtml(f.contraindicacoes)}</div>`:''}
   </div>`).join('')}</div>`;
+}
+
+// ===== A TEIA DE LIGAÇÕES E OS CANDIDATOS =====
+// O aponte. A partir da desarmonia que já está na ficha — os 5 Elementos, os
+// meridianos e os temas da Psicanálise — a tela levanta ervas e minerais que
+// PODEM caber, e cada um chega dizendo de onde veio. Nada aqui decide: ele
+// aceita ou dispensa, e o último clique é sempre dele.
+//
+// Só existem duas procedências, e a tela sempre mostra qual é qual:
+//   · literatura clássica — a erva já traz elemento e meridianos no
+//     fitoterapia-data.js. É citável, não é opinião da máquina.
+//   · ligação sua — todo o resto. Mineral não tem elemento em livro nenhum, e
+//     tema de Psicanálise não tem erva correspondente em lugar nenhum: essas
+//     pontes são da prática dele, entram a clique na aba Ligações e guardam a
+//     data em que ele as fez.
+// A máquina nunca liga sozinha. Quando ele aceita a mesma coisa várias vezes
+// sem que a ligação exista, a tela PERGUNTA se ele quer ligar de vez.
+const CD_DIMS=[
+  {k:'elemento',lbl:'Elemento',vals:()=>['Madeira','Fogo','Terra','Metal','Água']},
+  {k:'meridiano',lbl:'Meridiano',vals:()=>MERIDIANOS_12},
+  {k:'psicanalise',lbl:'Psicanálise',vals:()=>(typeof psicanaliseTemasFlat!=='undefined'?psicanaliseTemasFlat.map(i=>i.nome):[])}
+];
+const cdDimLbl=k=>{const d=CD_DIMS.find(x=>x.k===k);return d?d.lbl:k;};
+// O nome do meridiano como a literatura de fitoterapia escreve → a sigla usada
+// no resto da Clínica. É tradução de vocabulário, não ligação clínica.
+const CD_MERID_ID={'Pulmão':'P','Intestino Grosso':'IG','Estômago':'E','Baço':'BP','Coração':'C','Intestino Delgado':'ID','Bexiga':'B','Rim':'R','Pericárdio':'PC','Triplo Aquecedor':'TA','Vesícula Biliar':'VB','Fígado':'F'};
+
+const lgLista=()=>gD('minerais').filter(r=>r.tipo==='ligacao');
+const cdVotos=()=>gD('minerais').filter(r=>r.tipo==='candidato_voto');
+const cdChave=c=>c.alvo+'|'+c.chave;
+function cdNome(alvo,chave){
+  if(alvo==='mineral'){const b=mnBase(chave);return b?b[2]:chave;}
+  const e=evBase(chave);
+  return e?((e.nome_pinyin||chave)+(e.nome_popular?' · '+e.nome_popular:'')):chave;
+}
+// O que está marcado na ficha, traduzido para as três dimensões da teia.
+// Nada é inventado: elemento é o que ele marcou, meridiano vem dos pontos, dos
+// sistemas ABC e do Bagua, tema é o que ele marcou na Psicanálise.
+function cdFoco(){
+  const elementos=new Set(_diagSelecoes.elementos||[]);
+  const meridianos=new Set();
+  (_diagSelecoes.pontos||[]).forEach(nome=>{
+    const p=bancoIntegrativoCompleto.pontosCorpo[nome];
+    meridianosDoCanal(p&&p.canal).forEach(m=>meridianos.add(m));
+  });
+  (_diagSelecoes.sistemasAbc||[]).forEach(id=>meridianos.add(id));
+  (_diagSelecoes.bagua||[]).forEach(b=>{if(b&&b.meridiano)meridianos.add(b.meridiano);});
+  elementos.forEach(e=>{if(ELEMENTO_MERIDIANO_ABC[e])meridianos.add(ELEMENTO_MERIDIANO_ABC[e]);});
+  return {elemento:[...elementos],meridiano:[...meridianos],psicanalise:(_diagSelecoes.psicanalise||[]).map(p=>p.nome)};
+}
+function cdCalcular(){
+  const foco=cdFoco();
+  if(!foco.elemento.length&&!foco.meridiano.length&&!foco.psicanalise.length)return [];
+  const mapa={};
+  const por=(alvo,chave,motivo)=>{
+    const k=alvo+'|'+chave;
+    if(!mapa[k])mapa[k]={alvo,chave,nome:cdNome(alvo,chave),motivos:[]};
+    if(!mapa[k].motivos.some(m=>m.txt===motivo.txt))mapa[k].motivos.push(motivo);
+  };
+  // Literatura clássica — só ervas, e só o que já está escrito no arquivo.
+  evLista().forEach(e=>{
+    if(e.elemento_relacionado&&foco.elemento.includes(e.elemento_relacionado))
+      por('erva',e.id,{fonte:'lit',dim:'elemento',valor:e.elemento_relacionado,txt:'literatura clássica: elemento '+e.elemento_relacionado});
+    [].concat(e.meridianos||[]).forEach(mn=>{
+      const id=CD_MERID_ID[mn];
+      if(id&&foco.meridiano.includes(id))
+        por('erva',e.id,{fonte:'lit',dim:'meridiano',valor:id,txt:'literatura clássica: meridiano '+mn+' ('+id+')'});
+    });
+  });
+  // As ligações dele — valem para erva e para mineral, e trazem a data.
+  lgLista().forEach(l=>{
+    if(!foco[l.dim]||!foco[l.dim].includes(l.valor))return;
+    por(l.alvo,l.chave,{fonte:'sua',dim:l.dim,valor:l.valor,txt:'ligação sua, de '+(l.dataBr||l.data||'—')+': '+cdDimLbl(l.dim)+' '+l.valor});
+  });
+  return Object.values(mapa).sort((a,b)=>b.motivos.length-a.motivos.length||a.nome.localeCompare(b.nome));
+}
+// A peneira. Aceitar e dispensar são gestos dele; os dois ficam gravados,
+// porque é dessa repetição que nasce a pergunta de ligar de vez.
+async function cdRegistrarVoto(c,decisao){
+  const data=dLocal(new Date());
+  for(const m of c.motivos){
+    await dbAdd('minerais',{id:novoId(),tipo:'candidato_voto',alvo:c.alvo,chave:c.chave,nome:c.nome,
+      dim:m.dim,valor:m.valor,fonte:m.fonte,decisao,data,dataBr:data.split('-').reverse().join('/'),
+      pacienteId:_diagPacSel?_diagPacSel.id:'',pacienteNome:_diagPacSel?_diagPacSel.nome:''});
+  }
+}
+const CD_REPETICOES=3; // quantas vezes ele precisa aceitar antes da pergunta
+// Perguntar, nunca ligar sozinha. Só olha os motivos que ainda NÃO são ligação
+// dele — o que já está na teia não tem o que perguntar.
+async function cdPerguntarLigar(c){
+  for(const m of c.motivos){
+    if(m.fonte!=='lit')continue;
+    if(lgLista().some(l=>l.alvo===c.alvo&&l.chave===c.chave&&l.dim===m.dim&&l.valor===m.valor))continue;
+    const n=cdVotos().filter(v=>v.decisao==='aceito'&&v.alvo===c.alvo&&v.chave===c.chave&&v.dim===m.dim&&v.valor===m.valor).length;
+    if(n<CD_REPETICOES)continue;
+    if(!confirm('Você já aceitou '+c.nome+' por '+cdDimLbl(m.dim)+' '+m.valor+' '+n+' vezes.\n\nQuer ligar de vez? A ligação passa a ser sua, com a data de hoje, e aparece na teia.'))continue;
+    await lgLigar(c.alvo,c.chave,m.dim,m.valor);
+  }
+}
+async function cdAceitar(alvo,chave){
+  const c=cdCalcular().find(x=>x.alvo===alvo&&x.chave===chave);
+  if(!c)return;
+  if(!_diagSelecoes.candidatos)_diagSelecoes.candidatos=[];
+  if(!_diagSelecoes.candidatos.some(a=>a.alvo===alvo&&a.chave===chave))
+    _diagSelecoes.candidatos.push({alvo,chave,nome:c.nome,motivos:c.motivos.map(m=>m.txt)});
+  _diagJaSalvo=false;
+  renderDiagPainel();
+  // O gesto dele já valeu na tela. Se o registro do voto falhar (queda de rede),
+  // o atendimento não pode parar por causa disso.
+  try{await cdRegistrarVoto(c,'aceito');await cdPerguntarLigar(c);}catch(e){}
+}
+async function cdDispensar(alvo,chave){
+  const c=cdCalcular().find(x=>x.alvo===alvo&&x.chave===chave);
+  if(!_diagSelecoes.candidatosFora)_diagSelecoes.candidatosFora=[];
+  if(!_diagSelecoes.candidatosFora.includes(alvo+'|'+chave))_diagSelecoes.candidatosFora.push(alvo+'|'+chave);
+  renderDiagPainel();
+  if(c){try{await cdRegistrarVoto(c,'dispensado');}catch(e){}}
+}
+function cdTirarAceito(alvo,chave){
+  _diagSelecoes.candidatos=(_diagSelecoes.candidatos||[]).filter(a=>!(a.alvo===alvo&&a.chave===chave));
+  _diagJaSalvo=false;
+  renderDiagPainel();
+}
+function cdMostrarTodos(){_diagSelecoes.candidatosFora=[];renderDiagPainel();}
+// Do candidato aceito para a gaveta onde mora a dose — que é de onde sai a
+// folha do paciente. O caminho já existe; aqui só se abre a porta certa.
+function cdAbrirRegua(alvo,chave){
+  const abaId=alvo==='mineral'?'sp-minerais':'sp-ervas';
+  go('suplementos',null);
+  setTimeout(()=>{
+    const btn=document.querySelector('#supTabs button[onclick*="'+abaId+'"]');
+    if(btn)showSupTab(abaId,btn);
+    if(alvo==='mineral'){_mnSel=chave;renderMnGrid();renderMnPainel();}
+    else{_evSel=chave;_evEscolha={quantidades:null,formas:null,frequencias:null,duracoes:null,momentos:null};renderEvGrid();renderEvPainel();}
+  },200);
+}
+function cdBlocoHtml(){
+  const lista=cdCalcular();
+  const fora=_diagSelecoes.candidatosFora||[];
+  const aceitos=_diagSelecoes.candidatos||[];
+  const abertos=lista.filter(c=>!fora.includes(cdChave(c))&&!aceitos.some(a=>a.alvo===c.alvo&&a.chave===c.chave));
+  if(!lista.length&&!aceitos.length)return '';
+  const cartao=c=>`<div style="padding:8px 0;border-bottom:1px solid var(--brd)">
+    <div style="display:flex;gap:8px;align-items:baseline;flex-wrap:wrap">
+      <strong style="font-size:12.5px">${escHtml(c.nome)}</strong>
+      <span style="font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--txt-l)">${c.alvo==='mineral'?'mineral':'erva'}</span>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin:5px 0 6px">
+      ${c.motivos.map(m=>`<span class="cd-por${m.fonte==='sua'?' sua':''}">${escHtml(m.txt)}</span>`).join('')}
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button type="button" class="btn btn-pri btn-sm" style="padding:2px 9px;font-size:10.5px" onclick="cdAceitar('${c.alvo}','${c.chave}')">Aceitar</button>
+      <button type="button" class="btn btn-sec btn-sm" style="padding:2px 9px;font-size:10.5px" onclick="cdDispensar('${c.alvo}','${c.chave}')">Dispensar</button>
+      <button type="button" class="btn btn-sec btn-sm" style="padding:2px 9px;font-size:10.5px" onclick="cdAbrirRegua('${c.alvo}','${c.chave}')">Abrir a régua</button>
+    </div>
+  </div>`;
+  return `<div class="fc" style="border-left:5px solid #C9A227;background:#FFFDF5">
+    <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-4 5-7 9-10"/></svg></span>Candidatos — ervas e minerais</div>
+    <p style="font-size:11.5px;color:var(--txt-l);margin-bottom:8px">A partir da desarmonia que já está nesta ficha. <strong>Nenhum destes é decisão do sistema</strong> — cada um diz de onde veio, e quem filtra é você. O que você aceitar fica anotado neste encontro; a dose continua morando na régua.</p>
+    ${aceitos.length?`<div class="mn-lbl" style="margin-top:4px">Aceitos neste encontro</div>
+      ${aceitos.map(a=>`<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:5px 0;border-bottom:1px solid var(--brd)">
+        <strong style="font-size:12.5px">${escHtml(a.nome)}</strong>
+        <span style="font-size:11px;color:var(--txt-l)">${escHtml((a.motivos||[]).join(' · '))}</span>
+        <button type="button" class="btn btn-sec btn-sm" style="padding:2px 9px;font-size:10.5px;margin-left:auto" onclick="cdAbrirRegua('${a.alvo}','${a.chave}')">Abrir a régua</button>
+        <button type="button" class="btn btn-dan btn-sm" style="padding:2px 9px;font-size:10.5px" onclick="cdTirarAceito('${a.alvo}','${a.chave}')">Tirar</button>
+      </div>`).join('')}`:''}
+    ${abertos.length?`<div class="mn-lbl" style="margin-top:12px">Para você filtrar</div>${abertos.map(cartao).join('')}`:
+      `<p class="mn-vazio" style="margin-top:10px">${lista.length?'Você já passou por todos os candidatos deste encontro.':'Nada a apontar ainda — marque elementos, pontos ou temas da Psicanálise e os candidatos aparecem aqui.'}</p>`}
+    ${fora.length?`<button type="button" class="btn btn-sec btn-sm" style="margin-top:8px;padding:2px 9px;font-size:10.5px" onclick="cdMostrarTodos()">Ver de novo os ${fora.length} dispensados</button>`:''}
+  </div>`;
+}
+
+// A TEIA — a tela onde as ligações dele nascem. Nasce vazia, de propósito:
+// mineral não tem elemento em livro nenhum, e nenhum tema de Psicanálise tem
+// erva escrita em lugar algum. Tudo o que entrar aqui é dele, com data.
+let _lgAlvo='mineral',_lgDim='elemento';
+async function lgLigar(alvo,chave,dim,valor,nota){
+  if(lgLista().some(l=>l.alvo===alvo&&l.chave===chave&&l.dim===dim&&l.valor===valor)){
+    toast('Essa ligação já existe na teia.','#1565C0',"info");return;
+  }
+  const data=dLocal(new Date());
+  await dbAdd('minerais',{id:novoId(),tipo:'ligacao',alvo,chave,nome:cdNome(alvo,chave),dim,valor,
+    nota:nota||'',data,dataBr:data.split('-').reverse().join('/')});
+  renderLgPainel();
+  toast(cdNome(alvo,chave)+' ligado a '+cdDimLbl(dim)+' '+valor+'.',null,"ok");
+}
+async function lgLigarDoForm(){
+  const chave=v('lgItem'),dim=v('lgDim'),valor=v('lgValor');
+  if(!chave||!valor){toast('Escolha o item e o valor da ligação.','#EF6C00',"warn");return;}
+  await lgLigar(_lgAlvo,chave,dim,valor,v('lgNota'));
+  const n=document.getElementById('lgNota');if(n)n.value='';
+}
+async function lgApagar(id){
+  if(!confirm('Desfazer esta ligação? Os candidatos param de apontar por ela.'))return;
+  _cache['minerais']=gD('minerais').filter(r=>String(r.id)!==String(id));
+  await supaReq('DELETE','minerais',null,`?user_id=eq.montgomery&dados->>id=eq.${id}`);
+  renderLgPainel();
+  toast('Ligação desfeita','#c62828',"trash");
+}
+function lgTrocarAlvo(a){_lgAlvo=a;renderLgPainel();}
+function lgTrocarDim(){_lgDim=v('lgDim');renderLgPainel();}
+function renderLgPainel(){
+  const el=document.getElementById('lgPainel');if(!el)return;
+  const dim=CD_DIMS.find(d=>d.k===_lgDim)||CD_DIMS[0];
+  const itens=_lgAlvo==='mineral'
+    ? MN_BASE.map(m=>({chave:m[0],nome:m[2]}))
+    : evLista().map(e=>({chave:e.id,nome:(e.nome_pinyin||e.id)+(e.nome_popular?' · '+e.nome_popular:'')}));
+  const lista=lgLista().sort((a,b)=>String(b.data||'').localeCompare(String(a.data||'')));
+  el.innerHTML=`
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+    ${[['mineral','Mineral'],['erva','Erva']].map(([k,l])=>`<button type="button" class="mn-voc" style="${_lgAlvo===k?'border-style:solid;border-color:#C9A227;color:#7a5c1e;font-weight:700':''}" onclick="lgTrocarAlvo('${k}')">${l}</button>`).join('')}
+  </div>
+  <div class="fr">
+    <div class="fg"><label>${_lgAlvo==='mineral'?'Mineral':'Erva'}</label>
+      <select id="lgItem">${itens.map(i=>`<option value="${escHtml(i.chave)}">${escHtml(i.nome)}</option>`).join('')}</select></div>
+    <div class="fg"><label>Ligar por</label>
+      <select id="lgDim" onchange="lgTrocarDim()">${CD_DIMS.map(d=>`<option value="${d.k}"${d.k===_lgDim?' selected':''}>${d.lbl}</option>`).join('')}</select></div>
+    <div class="fg"><label>${escHtml(dim.lbl)}</label>
+      <select id="lgValor">${dim.vals().map(x=>`<option value="${escHtml(x)}">${escHtml(x)}</option>`).join('')}</select></div>
+  </div>
+  <div class="fr full"><div class="fg"><label>Por quê (opcional — a sua razão, para daqui a um ano)</label><input type="text" id="lgNota" placeholder="ex: sempre que aparece tensão de Madeira, este é o que responde"></div></div>
+  <button class="btn btn-pri btn-sm" onclick="lgLigarDoForm()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="7" cy="7" r="3"/><circle cx="17" cy="17" r="3"/><path d="M9.1 9.1l5.8 5.8"/></svg></span>Ligar</button>
+
+  <div class="mn-lbl" style="margin-top:20px">A teia — ${lista.length} ${lista.length===1?'ligação sua':'ligações suas'}</div>
+  ${lista.length?`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">
+    <thead><tr><th style="text-align:left;padding:6px">Data</th><th style="text-align:left;padding:6px">O quê</th><th style="text-align:left;padding:6px">Ligado a</th><th style="text-align:left;padding:6px">Por quê</th><th style="padding:6px"></th></tr></thead>
+    <tbody>${lista.map(l=>`<tr style="border-top:1px solid var(--brd)">
+      <td style="padding:6px;white-space:nowrap">${escHtml(l.dataBr||l.data||'-')}</td>
+      <td style="padding:6px"><strong>${escHtml(l.nome||l.chave)}</strong> <span style="color:var(--txt-l)">${l.alvo==='mineral'?'mineral':'erva'}</span></td>
+      <td style="padding:6px;color:#7a5c1e">${escHtml(cdDimLbl(l.dim))} ${escHtml(l.valor)}</td>
+      <td style="padding:6px;color:var(--txt-l)">${escHtml(l.nota||'')}</td>
+      <td style="padding:6px;text-align:right"><button class="btn btn-dan btn-sm" title="Desfazer esta ligação" onclick="lgApagar('${l.id}')"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button></td>
+    </tr>`).join('')}</tbody></table></div>`:'<p class="mn-vazio">A teia está vazia — e ela nasce vazia mesmo. Nenhuma ligação daqui vem de livro: cada uma vai ser sua, com a data em que você a fez.</p>'}`;
 }
 
 // ===== GOOGLE AGENDA =====
@@ -5080,7 +5327,7 @@ function fecharRxPacLista(){
 let _diagPacSel=null;
 let _diagJaSalvo=false;
 let _diagEditandoId=null; // id do diagnóstico em edição (null = nova avaliação)
-let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:''}; // guarda o que foi clicado nesta avaliação + anotações por elemento
+let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:'',candidatos:[],candidatosFora:[]}; // guarda o que foi clicado nesta avaliação + anotações por elemento
 
 // Dados (bancoIntegrativoCompleto, CATALOGO_SUPLEMENTOS_INICIAL, sistemasABC) movidos para dados-clinicos.js
 
@@ -6306,6 +6553,8 @@ function renderDiagPainel(){
       </div>`).join('')}
     </div>`;
   }
+  // O aponte: candidatos de erva e de mineral, cada um com a procedência.
+  html+=cdBlocoHtml();
   // Cada bloco vai morar DENTRO da sua caixa — ferramenta, o que foi
   // selecionado e a anotação, nessa ordem. No painel de baixo fica só o que
   // não é de nenhuma ferramenta sozinha: as sugestões cruzadas.
@@ -6340,6 +6589,7 @@ function renderDiagPainel(){
   if((_diagSelecoes.pontoSintomas||[]).length)partes.push(`<strong>Sintomas (Pontos do Corpo):</strong> ${_diagSelecoes.pontoSintomas.map(s=>s.sintoma).join(', ')}`);
   if((_diagSelecoes.psicanalise||[]).length)partes.push(`<strong>Psicanálise:</strong> ${_diagSelecoes.psicanalise.map(p=>p.nome).join(', ')}`);
   if((_diagSelecoes.quiro||[]).length)partes.push(`<strong>Quiropraxia (ajustado):</strong> ${_diagSelecoes.quiro.map(q=>escHtml(q.art)).join(', ')}`);
+  if((_diagSelecoes.candidatos||[]).length)partes.push(`<strong>Candidatos aceitos:</strong> ${_diagSelecoes.candidatos.map(c=>escHtml(c.nome)).join(', ')}`);
   const emo=document.getElementById('diagEscalaEmo').value;
   if(emo)partes.push(`<strong>Estado emocional:</strong> ${emo}`);
   resumo.innerHTML=partes.map(p=>`<p style="margin-bottom:5px">${p}</p>`).join('');
@@ -6468,6 +6718,17 @@ function gerarHtmlDiag(diagRec){
     </div>`;
   }
 
+  // Os candidatos que ele aceitou. No papel entram com a procedência junto —
+  // é o que separa uma sugestão conferida de um palpite de máquina.
+  const candidatosPapel=diagRec?(diagRec.candidatos||[]):(_diagSelecoes.candidatos||[]);
+  if(candidatosPapel.length){
+    blocos+=`<div style="border-left:4px solid #C9A227;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
+      <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">Candidatos aceitos — ervas e minerais</div>
+      ${candidatosPapel.map(c=>`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>${escHtml(c.nome)}</strong> <span style="color:#7a6a55">(${escHtml((c.motivos||[]).join(' · '))})</span></div>`).join('')}
+      <div style="font-size:8.5pt;color:#7a6a55;margin-top:5px">Apontados pelo sistema a partir da desarmonia e conferidos pelo terapeuta. A posologia sai na Recomendação Terapêutica.</div>
+    </div>`;
+  }
+
   // Memória da sessão também no papel — é o que conta o encontro em si
   const memPapel=[
     ['O que foi feito',diagRec?diagRec.sessaoFeito:vMem('diagSessaoFeito')],
@@ -6555,7 +6816,7 @@ function fecharDiagPacLista(){
 
 function limparDiagnostico(){
   if(!confirm('Limpar toda a avaliação atual?'))return;
-  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:''};
+  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:'',candidatos:[],candidatosFora:[]};
   document.getElementById('diagEscalaEmo').value='';
   document.getElementById('diagEmoObs').value='';
   limparMemSessao();
@@ -6621,6 +6882,9 @@ async function salvarDiagnostico(){
     psicanalise:[...(_diagSelecoes.psicanalise||[])],
     quiro:[...(_diagSelecoes.quiro||[])],
     quiroObs:_diagSelecoes.quiroObs||'',
+    // Os candidatos que ELE aceitou neste encontro (os dispensados são da hora,
+    // não entram na ficha — ficam só no registro de votos da teia).
+    candidatos:[...(_diagSelecoes.candidatos||[])],
     escalaEmocional:document.getElementById('diagEscalaEmo').value,
     emoObs:document.getElementById('diagEmoObs').value,
     // Memória da sessão — o que fica deste encontro para a próxima chegada
@@ -6669,7 +6933,7 @@ function editarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])],quiro:[...(diag.quiro||[])],quiroObs:diag.quiroObs||''};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])],quiro:[...(diag.quiro||[])],quiroObs:diag.quiroObs||'',candidatos:[...(diag.candidatos||[])],candidatosFora:[]};
   _diagEditandoId=diag.id;
   _diagJaSalvo=false;
   go('diagnostico',null);
@@ -7285,7 +7549,7 @@ function duplicarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])],quiro:[...(diag.quiro||[])],quiroObs:diag.quiroObs||''};
+  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])],quiro:[...(diag.quiro||[])],quiroObs:diag.quiroObs||'',candidatos:[...(diag.candidatos||[])],candidatosFora:[]};
   _diagEditandoId=null;
   _diagJaSalvo=false;
   go('diagnostico',null);

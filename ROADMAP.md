@@ -1485,7 +1485,46 @@ Pergunta do Montgomery vendo o Metatron girar: *"futuramente teria como eu dar u
 1. **Tela cheia por clique — fazer.** `requestFullscreen` no container do SVG: o desenho ocupa o monitor inteiro, fundo escuro, sem menu nem barra lateral, `Esc` volta. Funciona no computador e no celular, sem instalar nada, e a animação segue igual (mesmo desenho, só maior). Enquanto grande, caprichar: revezamento mais lento, METATRON maior, legenda sumindo depois de alguns segundos. **Vale para todos os desenhos animados do OS** — Cubo de Metatron, os 5 sólidos, o átomo de carbono, o corpo vitruviano: um botão de expandir no canto de cada um, mesma mecânica.
 2. **Descanso de tela de verdade do Windows — não agora.** Precisa ser um `.scr` instalado no sistema; é programa, não página. Possível, mas projeto separado e sem ganho de beleza sobre o item 1. Na prática, a aba aberta em tela cheia num monitor já faz o papel — só não liga sozinha.
 
-## Aberto — senha **"Acender os Candidatos"** (30/07/2026)
+## Feito — senha **"Acender os Candidatos"** (30/07/2026, Clínica v5.4)
+
+O aponte está no ar. No Diagnóstico nasceu o bloco **Candidatos — ervas e
+minerais**: a partir do que ele já marcou naquela avaliação (os 5 Elementos, os
+meridianos que vêm dos pontos, dos Sistemas ABC e do Bagua, e os temas da
+Psicanálise), a tela levanta ervas e minerais que **podem** caber. Nenhum deles
+é decisão do sistema, e a tela diz isso com todas as letras.
+
+**A procedência aparece antes do nome ser aceito.** Cada candidato chega com uma
+etiqueta, e só existem duas:
+- *"literatura clássica: elemento Madeira"* / *"literatura clássica: meridiano
+  Fígado (F)"* — vem do `fitoterapia-data.js`, que já traz `elemento_relacionado`
+  e `meridianos` em cada erva. É citável, não é opinião da máquina.
+- *"ligação sua, de 30/07/2026: Elemento Madeira"* — é dele, com a data em que ele
+  a fez. Todo mineral entra por aqui, porque mineral não tem elemento em livro
+  nenhum; todo tema de Psicanálise também, porque não existe erva escrita para
+  tema de Psicanálise em lugar algum.
+
+**A peneira.** Cada candidato tem *Aceitar*, *Dispensar* e *Abrir a régua* (que
+salta para a gaveta certa — Minerais ou Ervas — com o item já aberto, que é de
+onde sai a folha do paciente). O que ele aceita vira a lista *Aceitos neste
+encontro*, é salvo com o diagnóstico e **sai impresso** no papel, com a
+procedência junto e a frase que separa uma sugestão conferida de um palpite:
+"apontados pelo sistema a partir da desarmonia e conferidos pelo terapeuta".
+O que ele dispensa some daquele encontro, com um botão para ver de novo.
+
+**A teia — aba Ligações, dentro de Suplementos.** Nasce vazia, de propósito. Ele
+liga um mineral ou uma erva a um Elemento, a um Meridiano ou a um tema da
+Psicanálise, escreve o porquê se quiser, e a ligação passa a apontar no
+atendimento com a data. Desfazer é um clique.
+
+**A tela pergunta, nunca liga sozinha.** Aceitar e dispensar ficam gravados. Na
+terceira vez que ele aceita a mesma coisa por um motivo que ainda não é ligação
+dele, a tela pergunta se quer ligar de vez — e só liga se ele disser sim.
+
+**O que ficou de fora, e por quê:** as **Sefirot** não existem na Clínica (moram
+no Montgomery OS), então não há de onde apontar por elas ainda. A teia já está
+desenhada para receber a dimensão quando a Sefirá chegar a esta casa.
+
+## A senha, como foi aberta (30/07/2026)
 
 Dito por ele logo depois da v5.3, e é o que a senha "Acender as Ervas" ainda não
 era: *"de acordo com a desarmonia da pessoa, nos 5 elementos, na Sefirot, na
