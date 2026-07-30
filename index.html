@@ -180,6 +180,21 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
    Sem a etiqueta, o bloco viraria oráculo; com ela, é uma sugestão citável. */
 .cd-por{display:inline-block;padding:3px 9px;border-radius:999px;font-size:10.5px;font-weight:600;background:#F5F2EA;color:#7a5c1e;border:1px solid #E2D8BE}
 .cd-por.sua{background:var(--pri-l);color:var(--pri-d);border-color:var(--pri)}
+/* A memória desta pessoa — o que já foi tentado nela. Verde é o que funcionou,
+   vermelho é o que não funcionou; os dois pesam no aponte, em sentidos opostos. */
+.cd-por.pac{background:#EAF5EC;color:#1B5E20;border-color:#A5CFAC}
+.cd-por.nao{background:#FBEAE8;color:#8E2B20;border-color:#E0B0A9}
+/* O INTERRUPTOR DE TRÊS POSIÇÕES — a peça reaproveitável.
+   Nasce sem posição escolhida (ninguém decide por ele) e cada toque grava.
+   Tocar de novo na posição acesa desliga: sai a clique como entrou a clique. */
+.swtri{display:inline-flex;border:1px solid var(--brd);border-radius:999px;overflow:hidden;background:#FDFAF6}
+.swtri button{border:none;background:none;font-family:inherit;font-size:10.5px;font-weight:600;color:var(--txt-l);padding:3px 9px;cursor:pointer;transition:all .16s;white-space:nowrap}
+.swtri button+button{border-left:1px solid var(--brd)}
+.swtri button:hover{background:#F2EDE2}
+.swtri button.on-bom{background:#2E7D32;color:#fff}
+.swtri button.on-obs{background:#C9A227;color:#fff}
+.swtri button.on-nao{background:#B3261E;color:#fff}
+.df-nota{font-size:10.5px;color:var(--ink-soft);font-style:italic;margin-top:2px}
 
 /* SAVE BAR */
 .sbar{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--pri-l);border-radius:7px;margin-bottom:12px;flex-wrap:wrap;gap:7px}
@@ -1782,7 +1797,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v5.6 · 30/07';
+const APP_VER='v5.7 · 30/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -3800,13 +3815,14 @@ function mnHistoricoHtml(chave){
   const lista=mnIndicacoes().filter(r=>r.chave===chave).sort((a,b)=>String(b.data||'').localeCompare(String(a.data||'')));
   if(!lista.length)return '<p class="mn-vazio">Nada anotado ainda com este mineral.</p>';
   return `<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">
-    <thead><tr><th style="text-align:left;padding:6px">Data</th><th style="text-align:left;padding:6px">Pessoa</th><th style="text-align:left;padding:6px">Dose</th><th style="text-align:left;padding:6px">Forma</th><th style="text-align:left;padding:6px">Momento</th><th style="text-align:left;padding:6px">Obs.</th><th style="padding:6px"></th></tr></thead>
+    <thead><tr><th style="text-align:left;padding:6px">Data</th><th style="text-align:left;padding:6px">Pessoa</th><th style="text-align:left;padding:6px">Dose</th><th style="text-align:left;padding:6px">Forma</th><th style="text-align:left;padding:6px">Momento</th><th style="text-align:left;padding:6px">Como respondeu</th><th style="text-align:left;padding:6px">Obs.</th><th style="padding:6px"></th></tr></thead>
     <tbody>${lista.map(r=>`<tr style="border-top:1px solid var(--brd)">
       <td style="padding:6px;white-space:nowrap">${escHtml(r.dataBr||r.data||'-')}</td>
       <td style="padding:6px">${escHtml(r.pacienteNome||'-')}</td>
       <td style="padding:6px;font-weight:700">${r.dose!==''&&r.dose!==null&&r.dose!==undefined?escHtml(r.dose+' '+(r.unidade||'')):'-'}</td>
       <td style="padding:6px">${escHtml(r.forma||'-')}</td>
       <td style="padding:6px;color:#7a5c1e">${escHtml(r.momento||'-')}</td>
+      <td style="padding:6px">${dfCelulaHtml(r)}</td>
       <td style="padding:6px;color:var(--txt-l)">${escHtml(r.obs||'')}</td>
       <td style="padding:6px;text-align:right"><button class="btn btn-dan btn-sm" title="Apagar esta anotação" onclick="mnApagarAnotacao('${r.id}')"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button></td>
     </tr>`).join('')}</tbody></table></div>`;
@@ -3947,13 +3963,14 @@ function renderMnFicha(pacId){
   const lista=mnDoPaciente(pacId);
   if(!lista.length){el.innerHTML='<p class="mn-vazio">Nenhum mineral anotado para esta pessoa ainda.</p>';return;}
   el.innerHTML=`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">
-    <thead><tr><th style="text-align:left;padding:6px">Data</th><th style="text-align:left;padding:6px">Mineral</th><th style="text-align:left;padding:6px">Dose</th><th style="text-align:left;padding:6px">Forma</th><th style="text-align:left;padding:6px">Momento</th><th style="text-align:left;padding:6px">Obs.</th></tr></thead>
+    <thead><tr><th style="text-align:left;padding:6px">Data</th><th style="text-align:left;padding:6px">Mineral</th><th style="text-align:left;padding:6px">Dose</th><th style="text-align:left;padding:6px">Forma</th><th style="text-align:left;padding:6px">Momento</th><th style="text-align:left;padding:6px">Como respondeu</th><th style="text-align:left;padding:6px">Obs.</th></tr></thead>
     <tbody>${lista.map(r=>`<tr style="border-top:1px solid var(--brd)">
       <td style="padding:6px;white-space:nowrap">${escHtml(r.dataBr||r.data||'-')}</td>
       <td style="padding:6px">${escHtml(r.mineral||'-')}</td>
       <td style="padding:6px;font-weight:700">${r.dose!==''&&r.dose!==null&&r.dose!==undefined?escHtml(r.dose+' '+(r.unidade||'')):'-'}</td>
       <td style="padding:6px">${escHtml(r.forma||'-')}</td>
       <td style="padding:6px;color:#7a5c1e">${escHtml(r.momento||'-')}</td>
+      <td style="padding:6px">${dfCelulaHtml(r)}</td>
       <td style="padding:6px;color:var(--txt-l)">${escHtml(r.obs||'')}</td>
     </tr>`).join('')}</tbody></table></div>`;
 }
@@ -4151,12 +4168,13 @@ function evHistoricoHtml(id){
   const lista=evIndicacoes().filter(r=>r.chave===id).sort((a,b)=>String(b.data||'').localeCompare(String(a.data||'')));
   if(!lista.length)return '<p class="mn-vazio">Nada anotado ainda com esta erva.</p>';
   return `<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">
-    <thead><tr><th style="text-align:left;padding:6px">Data</th><th style="text-align:left;padding:6px">Pessoa</th><th style="text-align:left;padding:6px">Posologia</th><th style="text-align:left;padding:6px">Momento</th><th style="text-align:left;padding:6px">Obs.</th><th style="padding:6px"></th></tr></thead>
+    <thead><tr><th style="text-align:left;padding:6px">Data</th><th style="text-align:left;padding:6px">Pessoa</th><th style="text-align:left;padding:6px">Posologia</th><th style="text-align:left;padding:6px">Momento</th><th style="text-align:left;padding:6px">Como respondeu</th><th style="text-align:left;padding:6px">Obs.</th><th style="padding:6px"></th></tr></thead>
     <tbody>${lista.map(r=>`<tr style="border-top:1px solid var(--brd)">
       <td style="padding:6px;white-space:nowrap">${escHtml(r.dataBr||r.data||'-')}</td>
       <td style="padding:6px">${escHtml(r.pacienteNome||'-')}</td>
       <td style="padding:6px;font-weight:700">${escHtml([r.quantidade,r.forma,r.frequencia,r.duracao].filter(Boolean).join(' · ')||'-')}</td>
       <td style="padding:6px;color:#7a5c1e">${escHtml(r.momento||'-')}</td>
+      <td style="padding:6px">${dfCelulaHtml(r)}</td>
       <td style="padding:6px;color:var(--txt-l)">${escHtml(r.obs||'')}</td>
       <td style="padding:6px;text-align:right"><button class="btn btn-dan btn-sm" title="Apagar esta anotação" onclick="evApagarAnotacao('${r.id}')"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button></td>
     </tr>`).join('')}</tbody></table></div>`;
@@ -4211,12 +4229,13 @@ function renderEvFicha(pacId){
   const lista=evDoPaciente(pacId);
   if(!lista.length){el.innerHTML='<p class="mn-vazio">Nenhuma erva anotada para esta pessoa ainda.</p>';return;}
   el.innerHTML=`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">
-    <thead><tr><th style="text-align:left;padding:6px">Data</th><th style="text-align:left;padding:6px">Erva</th><th style="text-align:left;padding:6px">Posologia</th><th style="text-align:left;padding:6px">Momento</th><th style="text-align:left;padding:6px">Obs.</th></tr></thead>
+    <thead><tr><th style="text-align:left;padding:6px">Data</th><th style="text-align:left;padding:6px">Erva</th><th style="text-align:left;padding:6px">Posologia</th><th style="text-align:left;padding:6px">Momento</th><th style="text-align:left;padding:6px">Como respondeu</th><th style="text-align:left;padding:6px">Obs.</th></tr></thead>
     <tbody>${lista.map(r=>`<tr style="border-top:1px solid var(--brd)">
       <td style="padding:6px;white-space:nowrap">${escHtml(r.dataBr||r.data||'-')}</td>
       <td style="padding:6px">${escHtml(r.erva||'-')}${r.popular?' <span style="color:var(--txt-l)">('+escHtml(r.popular)+')</span>':''}</td>
       <td style="padding:6px;font-weight:700">${escHtml([r.quantidade,r.forma,r.frequencia,r.duracao].filter(Boolean).join(' · ')||'-')}</td>
       <td style="padding:6px;color:#7a5c1e">${escHtml(r.momento||'-')}</td>
+      <td style="padding:6px">${dfCelulaHtml(r)}</td>
       <td style="padding:6px;color:var(--txt-l)">${escHtml(r.obs||'')}</td>
     </tr>`).join('')}</tbody></table></div>`;
 }
@@ -4265,6 +4284,140 @@ function renderEvFormulas(){
     ${f.indicacoes?`<div style="font-size:11px;color:var(--ink-soft);margin-top:4px"><strong>Indicações:</strong> ${escHtml(f.indicacoes)}</div>`:''}
     ${f.contraindicacoes?`<div style="font-size:11px;color:#b3261e;margin-top:2px"><strong>Contraindicações:</strong> ${escHtml(f.contraindicacoes)}</div>`:''}
   </div>`).join('')}</div>`;
+}
+
+// ===== O DESFECHO — O SEGUNDO ANDAR DA TEIA =====
+// Até aqui a teia tinha um andar só: mineral ou erva ligado a um Elemento, a um
+// meridiano, a um tema. Faltava o que acontece DEPOIS da dose, naquela pessoa.
+// É isso que entra agora: cada anotação de ficha ganha um interruptor de três
+// posições — funcionou / ainda observando / não funcionou — e nada mais.
+//
+// Três regras que não se quebram aqui:
+//   · Nasce sem posição. A tela não supõe que deu certo nem que deu errado;
+//     enquanto ele não tocar, a anotação continua sendo só uma anotação.
+//   · Sai a clique como entrou. Tocar de novo na posição acesa apaga o desfecho.
+//     Ele disse: "não quero jamais ser absoluto em nada."
+//   · O desfecho é DAQUELA pessoa. Ele volta como candidato só na ficha dela,
+//     dizendo a data. Para virar ligação geral, ele tem que ligar com a mão —
+//     a tela junta a evidência e pergunta, nunca promove sozinha.
+const DF_ESTADOS=[['bom','funcionou'],['obs','observando'],['nao','não funcionou']];
+const DF_LBL={bom:'funcionou',obs:'ainda observando',nao:'não funcionou'};
+const dfIndicacoes=()=>gD('minerais').filter(r=>r.tipo==='indicacao'||r.tipo==='indicacao_erva');
+const dfAlvo=r=>r.tipo==='indicacao'?'mineral':'erva';
+const dfNome=r=>r.tipo==='indicacao'?(r.mineral||r.chave):(r.erva||r.chave);
+const dfReg=id=>dfIndicacoes().find(r=>String(r.id)===String(id))||null;
+// O que já foi tentado nesta pessoa e tem desfecho marcado.
+const dfDoPaciente=pacId=>dfIndicacoes().filter(r=>r.desfecho&&String(r.pacienteId)===String(pacId));
+
+// O interruptor. É a peça reaproveitável: dado um id de anotação, devolve o
+// botão de três posições já sabendo em qual delas está.
+function dfInterruptorHtml(reg){
+  return `<span class="swtri">${DF_ESTADOS.map(([k,l])=>
+    `<button type="button" class="${reg.desfecho===k?'on-'+k:''}" title="${escHtml(DF_LBL[k])}${reg.desfecho===k?' — toque de novo para apagar':''}" onclick="dfMarcar('${reg.id}','${k}')">${escHtml(l)}</button>`).join('')}</span>`;
+}
+// A célula inteira: interruptor, data do desfecho e a razão dele, se escreveu.
+function dfCelulaHtml(reg){
+  return `${dfInterruptorHtml(reg)}
+    ${reg.desfecho?`<button type="button" class="mn-voc" style="padding:2px 8px;font-size:10px;margin-left:5px" onclick="dfEscreverNota('${reg.id}')">${reg.desfechoNota?'nota':'anotar'}</button>`:''}
+    ${reg.desfecho?`<div class="df-nota">${escHtml(reg.desfechoBr||'')}${reg.desfechoNota?' · '+escHtml(reg.desfechoNota):''}</div>`:''}`;
+}
+async function dfMarcar(id,estado){
+  const reg=dfReg(id);if(!reg)return;
+  const apagando=(reg.desfecho===estado);
+  const data=dLocal(new Date());
+  reg.desfecho=apagando?'':estado;
+  reg.desfechoData=apagando?'':data;
+  reg.desfechoBr=apagando?'':data.split('-').reverse().join('/');
+  if(apagando)reg.desfechoNota='';
+  await dbGravar('minerais',reg.id,reg);
+  dfRepintar();
+  if(apagando){toast('Desfecho apagado — volta a ser só uma anotação.','#1565C0',"info");return;}
+  toast(dfNome(reg)+' em '+(reg.pacienteNome||'—')+': '+DF_LBL[estado]+'.',estado==='nao'?'#B3261E':null,"ok");
+  if(estado==='bom')await dfPerguntarSubir(reg);
+}
+async function dfEscreverNota(id){
+  const reg=dfReg(id);if(!reg||!reg.desfecho)return;
+  const t=prompt('O que aconteceu com '+dfNome(reg)+' em '+(reg.pacienteNome||'—')+' — nas suas palavras:\n\n(fica guardado junto do desfecho)',reg.desfechoNota||'');
+  if(t===null)return;
+  reg.desfechoNota=t.trim();
+  await dbGravar('minerais',reg.id,reg);
+  dfRepintar();
+}
+// Repinta só o que estiver na tela. Cada render já sai calado se o alvo não
+// existir, então não custa chamar todos.
+function dfRepintar(){
+  renderMnPainel();renderEvPainel();
+  if(typeof editId!=='undefined'&&editId){renderMnFicha(editId);renderEvFicha(editId);}
+  renderLgPainel();
+  const p=document.getElementById('diagPainel');
+  if(p&&p.style.display!=='none')renderDiagPainel();
+}
+
+// Em quantas pessoas diferentes esta coisa funcionou (e em quantas não).
+function dfPlacar(alvo,chave){
+  const bons=new Set(),naos=new Set();
+  dfIndicacoes().forEach(r=>{
+    if(dfAlvo(r)!==alvo||r.chave!==chave||!r.pacienteId)return;
+    if(r.desfecho==='bom')bons.add(String(r.pacienteId));
+    if(r.desfecho==='nao')naos.add(String(r.pacienteId));
+  });
+  return {bons:bons.size,naos:naos.size};
+}
+const DF_PESSOAS=3; // em quantas pessoas antes de a tela perguntar
+// Perguntar, nunca promover. Quando a mesma coisa funcionou em três pessoas
+// diferentes e ainda não é ligação dele, a tela avisa e abre a teia com o item
+// escolhido — mas a dimensão (Elemento? meridiano? tema?) quem diz é ele.
+async function dfPerguntarSubir(reg){
+  const alvo=dfAlvo(reg),chave=reg.chave;
+  const {bons}=dfPlacar(alvo,chave);
+  if(bons<DF_PESSOAS)return;
+  if(lgLista().some(l=>l.alvo===alvo&&l.chave===chave))return; // já tem ligação sua
+  if(!confirm(dfNome(reg)+' já funcionou em '+bons+' pessoas diferentes.\n\nQuer abrir a teia para ligar isso de vez? Você escolhe por qual dimensão — a tela não escolhe por você.'))return;
+  dfAbrirNaTeia(alvo,chave);
+}
+// Leva o item para o formulário da teia, já escolhido. O resto é dele.
+function dfAbrirNaTeia(alvo,chave){
+  _lgAlvo=alvo;
+  go('suplementos',null);
+  setTimeout(()=>{
+    const btn=document.querySelector('#supTabs button[onclick*="sp-ligacoes"]');
+    if(btn)showSupTab('sp-ligacoes',btn);
+    const sel=document.getElementById('lgItem');
+    if(sel)sel.value=chave;
+    const n=document.getElementById('lgNota');
+    if(n&&!n.value)n.value='funcionou em '+dfPlacar(alvo,chave).bons+' pessoas até '+dLocal(new Date()).split('-').reverse().join('/');
+    if(sel)sel.scrollIntoView({behavior:'smooth',block:'center'});
+  },220);
+}
+// O quadro da experiência: tudo que já teve desfecho, contado por pessoas.
+// É a prova por baixo da teia — e o lugar de onde uma ligação geral nasce.
+function dfResumoHtml(){
+  const mapa={};
+  dfIndicacoes().forEach(r=>{
+    if(!r.desfecho||!r.pacienteId)return;
+    const alvo=dfAlvo(r),k=alvo+'|'+r.chave;
+    if(!mapa[k])mapa[k]={alvo,chave:r.chave,nome:dfNome(r),bom:new Set(),obs:new Set(),nao:new Set(),ult:''};
+    mapa[k][r.desfecho].add(String(r.pacienteId));
+    const d=r.desfechoData||r.data||'';
+    if(d>mapa[k].ult)mapa[k].ult=d;
+  });
+  const lista=Object.values(mapa).sort((a,b)=>b.bom.size-a.bom.size||a.nome.localeCompare(b.nome));
+  if(!lista.length)return `<div class="mn-lbl" style="margin-top:20px">O que funcionou nas pessoas</div>
+    <p class="mn-vazio">Nada marcado ainda. Na ficha de cada pessoa, cada mineral e cada erva anotados têm um interruptor: funcionou, ainda observando, não funcionou. O que você marcar lá aparece aqui — e volta a apontar naquela pessoa.</p>`;
+  return `<div class="mn-lbl" style="margin-top:20px">O que funcionou nas pessoas — ${lista.length} ${lista.length===1?'item':'itens'} com desfecho</div>
+  <p style="font-size:11.5px;color:var(--txt-l);margin-bottom:8px">A conta é por pessoas, não por vezes: dois encontros com a mesma pessoa contam um. Nada daqui vira ligação geral sozinho — a partir de ${DF_PESSOAS} pessoas a tela pergunta, e quem liga é você.</p>
+  <div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">
+    <thead><tr><th style="text-align:left;padding:6px">O quê</th><th style="text-align:left;padding:6px">Funcionou</th><th style="text-align:left;padding:6px">Observando</th><th style="text-align:left;padding:6px">Não funcionou</th><th style="text-align:left;padding:6px">Último</th><th style="padding:6px"></th></tr></thead>
+    <tbody>${lista.map(x=>{
+      const jaLigado=lgLista().some(l=>l.alvo===x.alvo&&l.chave===x.chave);
+      return `<tr style="border-top:1px solid var(--brd)">
+      <td style="padding:6px"><strong>${escHtml(x.nome)}</strong> <span style="color:var(--txt-l)">${x.alvo==='mineral'?'mineral':'erva'}</span></td>
+      <td style="padding:6px;color:#1B5E20;font-weight:700">${x.bom.size||'—'}</td>
+      <td style="padding:6px;color:#7a5c1e">${x.obs.size||'—'}</td>
+      <td style="padding:6px;color:#8E2B20;font-weight:700">${x.nao.size||'—'}</td>
+      <td style="padding:6px;white-space:nowrap;color:var(--txt-l)">${escHtml(x.ult?x.ult.split('-').reverse().join('/'):'—')}</td>
+      <td style="padding:6px;text-align:right">${jaLigado?'<span style="font-size:10.5px;color:var(--txt-l)">já está na teia</span>':`<button type="button" class="btn btn-sec btn-sm" style="padding:2px 9px;font-size:10.5px" onclick="dfAbrirNaTeia('${x.alvo}','${escHtml(x.chave)}')">Ligar de vez</button>`}</td>
+    </tr>`;}).join('')}</tbody></table></div>`;
 }
 
 // ===== A TEIA DE LIGAÇÕES E OS CANDIDATOS =====
@@ -4321,7 +4474,8 @@ function cdFoco(){
 }
 function cdCalcular(){
   const foco=cdFoco();
-  if(!foco.elemento.length&&!foco.meridiano.length&&!foco.psicanalise.length)return [];
+  const memoria=(_diagPacSel&&_diagPacSel.id)?dfDoPaciente(_diagPacSel.id):[];
+  if(!foco.elemento.length&&!foco.meridiano.length&&!foco.psicanalise.length&&!memoria.length)return [];
   const mapa={};
   const por=(alvo,chave,motivo)=>{
     const k=alvo+'|'+chave;
@@ -4343,7 +4497,19 @@ function cdCalcular(){
     if(!foco[l.dim]||!foco[l.dim].includes(l.valor))return;
     por(l.alvo,l.chave,{fonte:'sua',dim:l.dim,valor:l.valor,txt:'ligação sua, de '+(l.dataBr||l.data||'—')+': '+cdDimLbl(l.dim)+' '+l.valor});
   });
-  return Object.values(mapa).sort((a,b)=>b.motivos.length-a.motivos.length||a.nome.localeCompare(b.nome));
+  // A MEMÓRIA DESTA PESSOA — o segundo andar. Não é regra geral nem citação:
+  // é o que já aconteceu com ela, e por isso só aparece na ficha dela. O que
+  // não funcionou entra também, e entra dizendo que não funcionou: esconder o
+  // fracasso seria deixar a tela repetir o erro no ano que vem.
+  memoria.forEach(r=>{
+    const alvo=dfAlvo(r),quando=r.desfechoBr||r.dataBr||'—',nota=r.desfechoNota?' — '+r.desfechoNota:'';
+    if(r.desfecho==='bom')por(alvo,r.chave,{fonte:'pac',dim:'paciente',valor:_diagPacSel.nome,txt:'funcionou nesta pessoa em '+quando+nota});
+    if(r.desfecho==='nao')por(alvo,r.chave,{fonte:'pacnao',dim:'paciente',valor:_diagPacSel.nome,txt:'NÃO funcionou nesta pessoa em '+quando+nota});
+  });
+  // O peso ordena a fila: o que já respondeu nesta pessoa sobe, o que já falhou
+  // nela desce para o fim — continua na tela, só não fica na frente dos olhos.
+  const peso=c=>c.motivos.reduce((s,m)=>s+(m.fonte==='pac'?3:m.fonte==='pacnao'?-4:1),0);
+  return Object.values(mapa).sort((a,b)=>peso(b)-peso(a)||b.motivos.length-a.motivos.length||a.nome.localeCompare(b.nome));
 }
 // A peneira. Aceitar e dispensar são gestos dele; os dois ficam gravados,
 // porque é dessa repetição que nasce a pergunta de ligar de vez.
@@ -4417,7 +4583,7 @@ function cdBlocoHtml(){
       <span style="font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--txt-l)">${c.alvo==='mineral'?'mineral':'erva'}</span>
     </div>
     <div style="display:flex;flex-wrap:wrap;gap:5px;margin:5px 0 6px">
-      ${c.motivos.map(m=>`<span class="cd-por${m.fonte==='sua'?' sua':''}">${escHtml(m.txt)}</span>`).join('')}
+      ${c.motivos.map(m=>`<span class="cd-por${m.fonte==='sua'?' sua':m.fonte==='pac'?' pac':m.fonte==='pacnao'?' nao':''}">${escHtml(m.txt)}</span>`).join('')}
     </div>
     <div style="display:flex;gap:6px;flex-wrap:wrap">
       <button type="button" class="btn btn-pri btn-sm" style="padding:2px 9px;font-size:10.5px" onclick="cdAceitar('${c.alvo}','${c.chave}')">Aceitar</button>
@@ -4427,7 +4593,8 @@ function cdBlocoHtml(){
   </div>`;
   return `<div class="fc" style="border-left:5px solid #C9A227;background:#FFFDF5">
     <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-4 5-7 9-10"/></svg></span>Candidatos — ervas e minerais</div>
-    <p style="font-size:11.5px;color:var(--txt-l);margin-bottom:8px">A partir da desarmonia que já está nesta ficha. <strong>Nenhum destes é decisão do sistema</strong> — cada um diz de onde veio, e quem filtra é você. O que você aceitar fica anotado neste encontro; a dose continua morando na régua.</p>
+    <p style="font-size:11.5px;color:var(--txt-l);margin-bottom:8px">A partir da desarmonia que já está nesta ficha — e do que já foi tentado <strong>nesta pessoa</strong>. <strong>Nenhum destes é decisão do sistema</strong> — cada um diz de onde veio, e quem filtra é você. O que você aceitar fica anotado neste encontro; a dose continua morando na régua.</p>
+    <p style="font-size:11px;color:var(--txt-l);margin:-4px 0 8px">Etiqueta <span class="cd-por pac">verde</span> = respondeu nesta pessoa · <span class="cd-por nao">vermelha</span> = não respondeu nela. Vem do interruptor que você marca na ficha dela, nunca de suposição.</p>
     ${aceitos.length?`<div class="mn-lbl" style="margin-top:4px">Aceitos neste encontro</div>
       ${aceitos.map(a=>`<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:5px 0;border-bottom:1px solid var(--brd)">
         <strong style="font-size:12.5px">${escHtml(a.nome)}</strong>
@@ -4563,6 +4730,7 @@ function renderLgPainel(){
       <td style="padding:6px;color:var(--txt-l)">${escHtml(l.nota||'')}</td>
       <td style="padding:6px;text-align:right"><button class="btn btn-dan btn-sm" title="Desfazer esta ligação" onclick="lgApagar('${l.id}')"><svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button></td>
     </tr>`).join('')}</tbody></table></div>`:'<p class="mn-vazio">A teia está vazia — e ela nasce vazia mesmo. Nenhuma ligação daqui vem de livro: cada uma vai ser sua, com a data em que você a fez.</p>'}
+  ${dfResumoHtml()}
   ${cdPropostasHtml()}`;
 }
 

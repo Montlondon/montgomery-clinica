@@ -4,6 +4,33 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
+## Concluído — Clínica v5.7: a ligação do paciente, o segundo andar da teia (30/07/2026)
+
+Senha **"Acender a Ligação do Paciente"** cumprida. A teia da v5.5 tinha um andar só: mineral ou
+erva ligado a um Elemento, a um meridiano, a um tema. Faltava o que acontece **depois da dose,
+naquela pessoa** — que é onde mora a experiência de verdade.
+
+**O interruptor de três posições.** Toda anotação de ficha (mineral e erva) ganhou, na tabela,
+uma coluna *Como respondeu*: **funcionou · ainda observando · não funcionou**. Nasce sem posição
+escolhida — a tela não supõe nada — e **sai a clique como entrou**: tocar de novo na posição acesa
+apaga o desfecho e a linha volta a ser só uma anotação. É a regra dele: *"não quero jamais ser
+absoluto em nada."* Ao lado, um botão *anotar* guarda a razão em texto, junto com a data do
+desfecho. A peça (`.swtri` + `dfInterruptorHtml`) ficou solta de propósito, para servir a qualquer
+sim/não/talvez daqui em diante.
+
+**A memória volta no atendimento.** Com a pessoa escolhida no Diagnóstico, o bloco Candidatos
+passa a trazer o que já foi tentado nela: etiqueta **verde** para o que respondeu, **vermelha**
+para o que não respondeu. O que funcionou nela sobe para o topo da fila; o que falhou desce para
+o fim — continua na tela, porque esconder o fracasso é deixar a tela repetir o erro no ano que
+vem. E os candidatos por memória aparecem mesmo sem nenhum elemento marcado: é a ficha dela
+falando.
+
+**O quadro da experiência** entrou na aba Ligações: *O que funcionou nas pessoas*, contado **por
+pessoas, não por vezes** (dois encontros com a mesma pessoa contam um). A partir de **3 pessoas**
+diferentes, a tela **pergunta** se ele quer subir aquilo para ligação geral — e, se ele quiser,
+abre a teia com o item já escolhido, deixando a dimensão (Elemento? meridiano? tema?) por conta
+dele. A tela junta a evidência; **quem liga é ele**, sempre.
+
 ## Concluído — OS v5.2: a escada da entrega no Montgomery Code (30/07/2026)
 
 Pergunta dele logo depois do push das ervas do Brasil: *"como se diz faz o merge e sobe em
