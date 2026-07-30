@@ -4,6 +4,27 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
+## Concluído — OS v5.2: a escada da entrega no Montgomery Code (30/07/2026)
+
+Pergunta dele logo depois do push das ervas do Brasil: *"como se diz faz o merge e sobe em
+inglês?"*. Virou seção nova na **Camada 2 · Git & GitHub**, ao lado da aula do ramo e do encontro.
+
+**Os quatro degraus**, em ordem, cada um com o que promete de verdade: `commit` (guardar) →
+`merge` (fundir, e só na sua máquina) → `push` (empurrar para o cofre) → **deploy** (a Vercel vê
+sozinha, monta e troca o que está no ar — ninguém digita isso). E **ship**, que não é comando
+nenhum: é navio, é despachar a mercadoria, é a palavra que cobre a escada inteira do ponto de
+vista de quem entrega. As quatro maneiras de dizer viraram cartões: *merge and ship* (o natural),
+*merge and deploy* (o formal, o que a Vercel usa), *merge and push* (o gesto literal, que promete
+menos) e *ship it* sozinho (a aprovação: manda ver).
+
+**A aula viva é o push de hoje**, lido linha por linha: `f9b93d7..6846ce2  main -> main`, e o que
+veio depois sem ninguém mandar. Fecha com o último cuidado da escada — **subir e olhar**: foi
+assim que a gente conferiu o `v5.6` no rodapé do site publicado, não no computador. Enquanto você
+não viu com os próprios olhos, não está no ar; está só a caminho.
+
+`push`, `deploy` e `ship` entraram no vocabulário mínimo. A aula ensina com o que acabou de
+acontecer com ele — nunca com exemplo inventado.
+
 ## Concluído — Clínica v5.6: as ervas do Brasil na estante (30/07/2026)
 
 Senha **"Acender as Ervas do Brasil"** cumprida. A aba Ervas tinha 15 plantas, e as 15 eram
