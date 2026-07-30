@@ -29,10 +29,27 @@ passam a morar num lugar só.
 
 A bancada saiu de 17 itens para 7. Regra que fica: **backup é foto do dado, não é código.**
 
-**Ainda na bancada, esperando decisão dele:** três arquivos com trabalho real parado
-(`01_Codigo/prototipos/arvore_vida_prototipo.html` com 136 linhas novas, `02_Arvore/COMO-FUNCIONA.md`
-e `.claude/launch.json`) e quatro soltos — entre eles o `00_Nucleo/MAPA_METAFISICA.md`, que é
-fundação da Metafísica e está fora do repositório há semanas.
+**4. A fundação entra** (`29b7ae5`). O `00_Nucleo/MAPA_METAFISICA.md` estava fora do repositório
+desde 11/07 — sem cópia, sem histórico. Ele levantou a dúvida certa: *"a Metafísica já está no
+Montgomery OS, e a Árvore também"*. Está mesmo: os sete anéis do arquivo (0·1·2·3·5·8·13·21)
+batem com os sete anéis vivos, e os trechos-chave foram conferidos um a um no `os/index.html`.
+
+Mas o arquivo guarda o que a tela não guarda — **o porquê**: as ressalvas de honestidade (sobre
+a física quântica, *"usamos como espelho, não como prova"*), a intenção do projeto nas palavras
+dele de 11/07 (o ar impregnado com a frequência da palavra, *"como se eu vivesse nas Plêiades"*),
+o desenho de duas portas para dois leitores (ele pelo corpo e pela lei, a Vanessa pelo símbolo e
+pelo floral) e a decisão do campo `origem` em cada correspondência. **A tela pode ser refeita a
+partir do mapa; o mapa não pode ser refeito a partir da tela.** Junto entrou o
+`13_Midia/metatron_cube.svg` (8 KB), que o próprio mapa cita pelo nome.
+
+**5. Os dois superados.** Foram para a quarentena o `escola_montgomery_ia.html` (protótipo antigo
+da Escola, que hoje vive dentro do `os/index.html`) e uma anotação de prompt do Gemini. Cuidado
+anotado no `LEIA-ME.md`: estes **nunca foram versionados**, então o Git não tem cópia — a
+quarentena é o único lugar onde existem.
+
+**Ainda na bancada, esperando decisão dele — a senha "Varrer a bancada":** três arquivos com
+trabalho real parado, `01_Codigo/prototipos/arvore_vida_prototipo.html` (136 linhas novas, é o que
+merece olhada de perto), `02_Arvore/COMO-FUNCIONA.md` (2 linhas de verdade) e `.claude/launch.json`.
 
 ## Próximo — a prateleira precisa das primeiras linhas dele
 
