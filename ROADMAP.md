@@ -28,6 +28,25 @@ Senha **"Acender o Magnésio"** cumprida. O degrau que faltava entre a desarmoni
 
 **O que sobra desta senha:** a posologia da **fitoterapia** (`fitoterapia-data.js` tem as ~30 ervas de MTC sem quantidade) — mesmo buraco, outro lado da estante, e agora com a receita da régua já pronta para copiar.
 
+## Ideia viva — a terceira aba de Suplementos: o link de onde se compra (30/07/2026)
+
+*"Futuramente quero expandir nos suplementos, por exemplo quero ver se faço parceria com empresas tipo mercado livre e a amazon onde eu teria uma aba para adicionar os links de certos suplementos. No meu ver penso SUPLEMENTOS/MINERAIS/Dropshipping sistema da OneDrop."*
+
+**A forma que ele já viu.** Suplementos com três abas: *Produtos* · *Minerais* · **Dropshipping**. As duas primeiras nasceram em 30/07 (v5.2). A terceira é o passo seguinte, e a arquitetura já está pronta para recebê-la: é só mais um `.pg-panel` na mesma barra de abas.
+
+**O que a aba nova resolve.** Hoje a régua diz *quanto* e *qual sal* — e para aí. A pessoa sai do atendimento sabendo que precisa de 400 mg de bisglicinato e vai procurar sozinha, no escuro, onde o óxido é o que mais aparece na prateleira. A aba de links fecha o último vão: **do mineral indicado até o produto certo, comprável.**
+
+**Duas coisas diferentes dentro da mesma ideia, e é bom não confundir:**
+
+1. **Link de afiliado** (Mercado Livre Afiliados, Amazon Associates). Ele não estoca nada, não entrega nada: só indica, e recebe uma porcentagem se a pessoa comprar por aquele link. Barato de montar — é um campo de texto por produto, mais o código de afiliado dele. Cabe hoje na plataforma sem depender de ninguém.
+2. **Dropshipping / OneDrop.** É outro bicho: o pedido é feito na loja dele, e quem separa, embala e envia é o fornecedor. Isso não é um campo de link, é uma **loja** — catálogo, preço, frete, pedido, rastreio, devolução. Depende de contrato com o fornecedor e de uma integração de verdade (API ou painel deles). Vale investigar o que a OneDrop oferece de porta técnica antes de prometer tela.
+
+**O caminho barato primeiro.** A aba nasce como a régua nasceu: uma linha por produto, tudo escrito por ele. Nome do produto, mineral e forma a que corresponde (o elo com a régua), loja, link, e a dose que vem no frasco. Aí o painel do magnésio bisglicinato passa a mostrar, embaixo da dose escolhida, **onde comprar exatamente aquilo**. E o produto que ele já vende no catálogo *Produtos* aparece do lado do link de fora — ele vê na mesma tela o que tem em casa e o que precisa mandar buscar.
+
+**Uma linha de cuidado, dita agora para não doer depois.** No instante em que uma recomendação a paciente carrega um link que remunera quem recomendou, isso deixa de ser só técnica e passa a ser ética profissional: o certo é que apareça escrito na cara, para o paciente, que aquele link é do terapeuta. A plataforma pode e deve dizer isso sozinha, no rodapé da recomendação. Fica registrado aqui como parte do desenho, não como pedra no caminho.
+
+**Depende de:** a régua dos minerais (feita, v5.2) e a posologia da fitoterapia (senha *"Acender as Ervas"*) — porque as ervas vão querer o mesmo link.
+
 ## Ideia viva — a Ortomolecular: quanto, de qual e por quê (30/07/2026)
 
 Senha para a próxima janela: **"Acender o Magnésio"**.
