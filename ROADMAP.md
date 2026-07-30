@@ -1378,3 +1378,12 @@ apagar qualquer pasta, conferir arquivo por arquivo se existe copia no repositor
 
 Pendencia menor: a pasta vazia `Files_Claude` ficou presa ("device or resource busy") por
 uma sessao antiga do Claude aberta nela. Sai quando essa janela fechar.
+
+## Aberto — senha **"Acender as Pontes dos Átomos"** (30/07/2026)
+
+Dos três ganchos que o bloco dos Átomos deixou, o terceiro (os 5 sólidos) foi cumprido em 30/07. Sobraram dois, e são os que transformam o módulo de enciclopédia em sistema:
+
+1. **Os 14 elementos ligados à teia.** Cálcio, magnésio e ferro trazendo o chip que acende o elemento correspondente no corpo vitruviano, pela `mfAcender` — a mesma mecânica que o I Ching já usa nos trigramas.
+2. **A escada da matéria encostando na Anatomia.** Os degraus *tecido*, *órgão* e *corpo* são exatamente camadas que a Anatomia já desenha. Clicar de um lado e cair no outro.
+
+Enquanto o elemento não acende o corpo, o bloco é uma ilha bonita. O valor do OS é a teia saber as ligações.
