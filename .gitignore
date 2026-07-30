@@ -8,3 +8,7 @@
 
 # agentes: as pecas baixadas nao vao pro git
 node_modules/
+
+# Backups: foto do dado, nao codigo. 42 MB parados na entrada do main.
+# Os arquivos continuam no computador — o Git so para de vigiar e de oferecer.
+21_Backups/
