@@ -2,6 +2,30 @@
 
 Documento vivo para acompanhar o que já foi feito e o que está planejado. Atualizar conforme avançamos.
 
+> **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
+
+## Concluído — OS v4.4: os Átomos entram na Metafísica (29/07/2026)
+
+**NO AR** em montgomery-clinica.vercel.app/os — merge `fa3626f`, conferido no site publicado (servidor entregando v4.4, os três painéis respondendo, console limpo).
+
+A ideia de 05/07/2026 — *"energia pra mim é vida, é átomo"* — virou bloco vivo (`mfBlocoAtomos`), pendurado no anel 1 da Metafísica (O Princípio), que já prometia "a ponte honesta com a ciência" e agora cumpre. Três peças para tocar:
+
+- **Um átomo de carbono por dentro.** 6 prótons, 6 nêutrons, 6 elétrons, com os elétrons girando. Clicável em três partes: o **núcleo** (o que não se negocia — tire um próton e virou outra substância), os **elétrons** (a borda que negocia: identidade no centro, encontro na periferia) e o **vazio** (99,9999999996% de tudo; comprimido o vazio, uma pessoa inteira cabe num grão de poeira e pesa o mesmo). O desenho é o modelo antigo de bolinhas, com o aviso junto de que a física moderna já não desenha assim.
+- **A escada da matéria.** 12 degraus, do quark ao universo, 44 ordens de grandeza. Não é metáfora: é a mesma planta se repetindo — centro denso, borda leve, vazio quase inteiro no meio. Lei da Correspondência literal, e o Caibalion disse "assim em cima como embaixo" muito antes de alguém ver um átomo (Rutherford desenhou o átomo copiando o sistema solar, em 1911).
+- **Os 14 elementos do corpo.** Oxigênio 65%, carbono 18,5%, hidrogênio 9,5%, até o iodo — 20 mg na vida inteira que decidem se a pessoa acorda acelerada ou arrastada. Cada um com função e ponte clínica: o magnésio que falta não é o encolher que falha, é o soltar; o osso é banco e não cofre, saca cálcio de si para o coração continuar batendo.
+
+**A fronteira dita em voz alta.** O bloco fecha marcando onde a física para: o "observador" da quântica **não** é a consciência (um detector desligado numa sala vazia já basta), pensamento não move partícula, emaranhamento não liga duas pessoas à distância. O que sobra depois de cortar os empréstimos falsos ainda é imenso e é tudo verdade — inclusive que cada átomo do corpo do paciente já esteve dentro de uma estrela, e que ele é literalmente mais velho que o Sol.
+
+### Aberto — os três ganchos que ficaram deste bloco
+
+1. **Ligar os elementos à teia.** Cálcio, magnésio e ferro trazerem o chip que acende o elemento correspondente no corpo vitruviano — a mesma mecânica que o I Ching já usa nos trigramas (`mfAcender`).
+2. **A escada encostando na Anatomia.** Os degraus *tecido*, *órgão* e *corpo* são exatamente as camadas que a Anatomia já desenha. Clicar de um lado e cair no outro.
+3. **Os 5 sólidos platônicos.** A legenda do Cubo de Metatron já os anuncia (fogo, terra, ar, água, éter) e eles ainda não têm bloco. É o irmão geométrico deste dos átomos.
+
+### Aberto — senha **"Acender os Sólidos"**
+
+Janela nova vai direto aos 5 sólidos platônicos dentro do anel 1 da Metafísica, na receita deste bloco dos átomos: **fato estabelecido primeiro, leitura nossa em itálico depois, origem declarada no rodapé.** Tetraedro/fogo, cubo/terra, octaedro/ar, icosaedro/água, dodecaedro/éter — com a geometria real (vértices, faces, o porquê de serem só cinco, que é teorema e não mística) separada da correspondência atribuída por Platão no *Timeu*, que é tradição, não física.
+
 ## Aberto — Senha "Nunca o relógio decide" (29/07/2026)
 
 Na mesma noite da v9.26, a regra de sincronismo cobrou o preço. O MMObras decide pelo relógio (`db._ts`): quem tem a marca mais recente vence e **substitui o outro sem perguntar**. O computador entrou primeiro, o relógio dele marcou 21h10 — os dois aparelhos tinham acabado de bumpar o `_ts` com o enxugamento das fotos — e publicou a versão mais pobre por cima. A nuvem foi de **16 fornecedores / R$ 16.490,76** para **12 / R$ 15.200,76**, e o celular, entrando depois, puxou a versão pobre e perdeu o próprio trabalho.
