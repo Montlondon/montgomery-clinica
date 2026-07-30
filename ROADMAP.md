@@ -1387,3 +1387,10 @@ Dos três ganchos que o bloco dos Átomos deixou, o terceiro (os 5 sólidos) foi
 2. **A escada da matéria encostando na Anatomia.** Os degraus *tecido*, *órgão* e *corpo* são exatamente camadas que a Anatomia já desenha. Clicar de um lado e cair no outro.
 
 Enquanto o elemento não acende o corpo, o bloco é uma ilha bonita. O valor do OS é a teia saber as ligações.
+
+## Ideia — tela cheia nos desenhos animados (30/07/2026)
+
+Pergunta do Montgomery vendo o Metatron girar: *"futuramente teria como eu dar um clique nestas nossas imagens animadas e ela ficar na tela toda do computador, como um descanso de tela ou para ter uma melhor visualização"*. Tem, e é barato. Duas ambições diferentes, separadas por honestidade:
+
+1. **Tela cheia por clique — fazer.** `requestFullscreen` no container do SVG: o desenho ocupa o monitor inteiro, fundo escuro, sem menu nem barra lateral, `Esc` volta. Funciona no computador e no celular, sem instalar nada, e a animação segue igual (mesmo desenho, só maior). Enquanto grande, caprichar: revezamento mais lento, METATRON maior, legenda sumindo depois de alguns segundos. **Vale para todos os desenhos animados do OS** — Cubo de Metatron, os 5 sólidos, o átomo de carbono, o corpo vitruviano: um botão de expandir no canto de cada um, mesma mecânica.
+2. **Descanso de tela de verdade do Windows — não agora.** Precisa ser um `.scr` instalado no sistema; é programa, não página. Possível, mas projeto separado e sem ganho de beleza sobre o item 1. Na prática, a aba aberta em tela cheia num monitor já faz o papel — só não liga sozinha.
