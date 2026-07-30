@@ -1843,12 +1843,60 @@ tr:hover td{background:rgba(201,168,76,0.05)}
       <p style="font-size:0.9rem;margin:0"><b style="color:var(--verde)">Por que a gente trabalha assim.</b> Toda mudança grande nasce num galho, cresce lá, é lida por você e só depois entra no tronco. Isso quer dizer que <b>o OS e a Clínica no ar nunca ficam quebrados enquanto a gente constrói</b>. O que está no ar é sempre uma coisa terminada; o que está pela metade está no galho. É a mesma prudência de não escrever no prontuário aquilo de que você ainda não tem certeza.</p>
     </div>
 
-    <h3 style="color:var(--azul);font-size:1rem;margin:0 0 var(--f2)">O vocabulário mínimo</h3>
+    <h3 style="color:var(--azul);font-size:1rem;margin:var(--f4) 0 var(--f2)">Do galho at&eacute; o mundo &middot; <code style="font-family:'Courier New',monospace;color:var(--dourado)">merge</code>, <code style="font-family:'Courier New',monospace;color:var(--dourado)">push</code>, <em>deploy</em>, <em>ship</em></h3>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">O merge termina uma coisa e come&ccedil;a outra. Fundir o galho no tronco deixa a mudan&ccedil;a <b>oficial no seu computador</b> &mdash; e s&oacute; nele. Entre isso e uma pessoa abrindo a Cl&iacute;nica no celular ainda faltam dois passos, e cada um tem nome pr&oacute;prio. S&atilde;o quatro degraus, sempre nesta ordem:</p>
+
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:var(--f3)">
+      <div style="display:flex;gap:12px;align-items:flex-start;border-left:3px solid var(--azul);padding-left:12px">
+        <code style="font-family:'Courier New',monospace;color:var(--dourado);font-size:0.9rem;min-width:74px">commit</code>
+        <p style="font-size:0.88rem;margin:0"><b>Guardar.</b> A evolu&ccedil;&atilde;o costurada no livro do galho. Ainda &eacute; rascunho, mas rascunho que n&atilde;o se perde.</p>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;border-left:3px solid var(--azul);padding-left:12px">
+        <code style="font-family:'Courier New',monospace;color:var(--dourado);font-size:0.9rem;min-width:74px">merge</code>
+        <p style="font-size:0.88rem;margin:0"><b>Fundir.</b> O rascunho vira oficial &mdash; no tronco, na sua m&aacute;quina. Nada mudou no ar ainda.</p>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;border-left:3px solid var(--azul);padding-left:12px">
+        <code style="font-family:'Courier New',monospace;color:var(--dourado);font-size:0.9rem;min-width:74px">push</code>
+        <p style="font-size:0.88rem;margin:0"><b>Empurrar.</b> <i>Push</i> &eacute; empurrar, literalmente. Voc&ecirc; empurra o tronco novo para o cofre na internet &mdash; o GitHub. Agora existe fora de casa.</p>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;border-left:3px solid var(--verde);padding-left:12px">
+        <code style="font-family:'Courier New',monospace;color:var(--verde);font-size:0.9rem;min-width:74px">deploy</code>
+        <p style="font-size:0.88rem;margin:0"><b>Publicar.</b> A Vercel <em>v&ecirc;</em> o cofre mudar, monta o site de novo e troca o que est&aacute; no ar. <b>Ningu&eacute;m digita isso</b> &mdash; ela faz sozinha, em um ou dois minutos, porque a gente ligou o cofre nela uma vez. Da&iacute; o nome: <i>deploy</i> &eacute; a palavra militar de <b>desdobrar a tropa em campo</b> &mdash; tirar do quartel e p&ocirc;r onde a coisa acontece.</p>
+      </div>
+    </div>
+
+    <div style="border:1px solid rgba(201,168,76,0.4);border-radius:11px;background:rgba(201,168,76,0.06);padding:var(--f3);margin-bottom:var(--f3)">
+      <p style="font-size:0.9rem;margin:0"><b style="color:var(--dourado)">E <i>ship</i>?</b> <i>Ship</i> &eacute; navio; como verbo, <b>despachar a mercadoria</b> &mdash; p&ocirc;r no navio e mandar embora. Programador adotou a palavra para dizer "entreguei ao mundo". Ela n&atilde;o &eacute; um comando: nenhum terminal aceita <code style="font-family:'Courier New',monospace;color:var(--dourado)">git ship</code>. &Eacute; a palavra que cobre a escada inteira do ponto de vista de quem entrega. <b>"Merge and ship it"</b> &eacute; o que um colega diria &mdash; e &eacute; exatamente o que voc&ecirc; me pediu hoje, em portugu&ecirc;s: <em>faz o merge e sobe</em>.</p>
+    </div>
+
+    <h4 style="color:var(--azul);font-size:0.92rem;margin:0 0 var(--f2)">As quatro maneiras de dizer, e o que cada uma promete</h4>
+    <div class="cards" style="grid-template-columns:1fr 1fr;margin-bottom:var(--f3)">
+      <div class="card"><h3>merge and ship</h3><div class="sub">o mais natural</div><p style="font-size:0.85rem;color:var(--texto)">O que um colega diria de verdade. Promete a coisa inteira: fundir, empurrar e ver no ar.</p></div>
+      <div class="card"><h3>merge and deploy</h3><div class="sub">mais formal</div><p style="font-size:0.85rem;color:var(--texto)">O termo t&eacute;cnico, o que a pr&oacute;pria Vercel usa nos bot&otilde;es e nos avisos dela.</p></div>
+      <div class="card"><h3>merge and push</h3><div class="sub">o gesto literal</div><p style="font-size:0.85rem;color:var(--texto)">Diz menos: s&oacute; os dois comandos do Git. N&atilde;o promete que est&aacute; no ar &mdash; s&oacute; que chegou ao cofre.</p></div>
+      <div class="card"><h3>ship it</h3><div class="sub">a aprova&ccedil;&atilde;o</div><p style="font-size:0.85rem;color:var(--texto)">Sozinho, vira sinal verde: <em>manda ver, pode subir</em>. &Eacute; o que se responde a quem pediu licen&ccedil;a.</p></div>
+    </div>
+
+    <h4 style="color:var(--azul);font-size:0.92rem;margin:0 0 var(--f2)">A aula viva de hoje: as ervas do Brasil subindo</h4>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)">O galho se chamava <code style="font-family:'Courier New',monospace;color:var(--dourado)">claude/acender-ervas-brasil-ab1f1d</code> e nele nasceram as 30 ervas brasileiras da Cl&iacute;nica v5.6. Dois comandos, e o terceiro degrau ningu&eacute;m digitou:</p>
+    <div style="background:var(--bege);border:1px solid rgba(27,58,92,0.12);border-radius:11px;padding:var(--f3);font-family:'Courier New',monospace;font-size:0.82rem;line-height:2;overflow-x:auto;margin-bottom:var(--f2)">
+      <div style="color:var(--azul)">git merge claude/acender-ervas-brasil-ab1f1d</div>
+      <div style="color:var(--azul)">git push origin main</div>
+      <div style="margin-top:10px"><span style="color:var(--cinza)"># e a resposta do cofre:</span></div>
+      <div style="color:var(--verde)">To https://github.com/Montlondon/montgomery-clinica.git</div>
+      <div style="color:var(--verde)">&nbsp;&nbsp; f9b93d7..6846ce2&nbsp; main -&gt; main</div>
+    </div>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)"><b>f9b93d7..6846ce2</b> &mdash; o cofre estava naquela evolu&ccedil;&atilde;o e passou a estar nesta. <b>main -&gt; main</b> &mdash; o tronco daqui virou o tronco de l&aacute;. Da&iacute; em diante ningu&eacute;m mais mandou nada: a Vercel viu a mudan&ccedil;a sozinha, montou o site e trocou o que estava no ar. Menos de um minuto depois, o rodap&eacute; da Cl&iacute;nica publicada j&aacute; dizia <b>v5.6</b> &mdash; e foi assim que a gente <b>conferiu</b>, olhando a vers&atilde;o no site de verdade, n&atilde;o no computador. Esse &eacute; o &uacute;ltimo cuidado da escada: <b>subir e olhar</b>. Enquanto voc&ecirc; n&atilde;o viu com os pr&oacute;prios olhos, n&atilde;o est&aacute; no ar &mdash; est&aacute; s&oacute; a caminho.</p>
+
+    <h3 style="color:var(--azul);font-size:1rem;margin:0 0 var(--f2)">O vocabul&aacute;rio m&iacute;nimo</h3>
     <div class="cards" style="margin-bottom:var(--f3)">
       <div class="card"><h3>repositório</h3><p style="font-size:0.85rem;color:var(--texto)">A pasta do projeto <b>com</b> o livro de histórico dentro. Você tem vários: o do OS, o da Clínica, o do MMObras.</p></div>
       <div class="card"><h3>commit</h3><p style="font-size:0.85rem;color:var(--texto)">Uma evolução guardada. Como substantivo, é a página; como verbo, é o ato de costurá-la.</p></div>
       <div class="card"><h3>branch (ramo)</h3><p style="font-size:0.85rem;color:var(--texto)">Uma linha de trabalho. A sua principal se chama <code style="font-family:'Courier New',monospace;color:var(--dourado)">main</code>. Ramos servem para experimentar sem sujar o tronco &mdash; veja a seção acima.</p></div>
       <div class="card"><h3>merge</h3><p style="font-size:0.85rem;color:var(--texto)">Fundir um ramo de volta no tronco. O instante em que o rascunho vira oficial &mdash; sempre uma decisão sua.</p></div>
+      <div class="card"><h3>push</h3><p style="font-size:0.85rem;color:var(--texto)">Empurrar o tronco daqui para o cofre na internet. Depois do <code style="font-family:'Courier New',monospace;color:var(--dourado)">push</code> a mudan&ccedil;a existe fora da sua casa.</p></div>
+      <div class="card"><h3>deploy</h3><p style="font-size:0.85rem;color:var(--texto)">Publicar: a Vercel monta o site e troca o que est&aacute; no ar. Acontece <b>sozinha</b> depois do push &mdash; n&atilde;o &eacute; um comando que voc&ecirc; digita.</p></div>
+      <div class="card"><h3>ship</h3><p style="font-size:0.85rem;color:var(--texto)">Despachar ao mundo. N&atilde;o &eacute; comando nenhum &mdash; &eacute; a palavra que cobre commit, merge, push e deploy juntos. <em>"Merge and ship it."</em></p></div>
       <div class="card"><h3>remote (origin)</h3><p style="font-size:0.85rem;color:var(--texto)">O apelido do endereço da cópia na internet. <code style="font-family:'Courier New',monospace;color:var(--dourado)">origin</code> é o nome padrão do seu GitHub.</p></div>
     </div>
 
@@ -1928,8 +1976,9 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v5.1';
-const APP_VERSION_NOTA='a Camada 2 do Montgomery Code ganha o ramo e o encontro: o que são branch e merge ditos com a folha de rascunho do prontuário — o galho onde se erra à vontade sem que o site no ar se mexa, o merge como a transcrição para a evolução oficial, as duas maneiras de o encontro acontecer (fast-forward e conflito) e a leitura linha por linha do merge de hoje, o da senha Acender as Ervas';
+const APP_VERSION='v5.2';
+const APP_VERSION_NOTA='a Camada 2 do Montgomery Code aprende a escada da entrega: merge, push, deploy e ship em quatro degraus, o que cada palavra promete de verdade, por que o deploy acontece sozinho e por que ship nao e comando nenhum, as quatro maneiras de dizer "faz o merge e sobe" em ingles, e a aula viva do push das ervas do Brasil (f9b93d7..6846ce2) com o ultimo cuidado: subir e olhar';
+const APP_VERSION_NOTA_V51='a Camada 2 do Montgomery Code ganha o ramo e o encontro: o que são branch e merge ditos com a folha de rascunho do prontuário — o galho onde se erra à vontade sem que o site no ar se mexa, o merge como a transcrição para a evolução oficial, as duas maneiras de o encontro acontecer (fast-forward e conflito) e a leitura linha por linha do merge de hoje, o da senha Acender as Ervas';
 const APP_VERSION_NOTA_V50='os desenhos saem da caixinha: o Cubo de Metatron, os 5 sólidos, o átomo de carbono, o corpo vitruviano, a Árvore da Vida e a roda do zodíaco ganham um canto para tocar e tomar a tela inteira — fundo escuro, sem menu, sem barra lateral, só a imagem; Esc devolve. E o palco dos sólidos, se ninguém escolheu nada, já entra girando o tetraedro: tela cheia não fica parada esperando clique';
 const APP_VERSION_NOTA_V49='os Átomos deixam de ser uma ilha: oito dos quatorze elementos do corpo passam a acender o Elemento correspondente na teia com a razão dita em voz alta — e os seis que não têm razão dizem que não têm, em vez de inventar; e os degraus tecido, órgão e corpo da escada da matéria saltam direto para a camada da Anatomia que os desenha';
 const APP_VERSION_NOTA_V48='o nome entra na arte: METATRON escrito em letras douradas e espaçadas dentro do próprio desenho, sob um traço fino — o Cubo deixa de ser um símbolo sem assinatura e passa a dizer o próprio nome a quem olha';
