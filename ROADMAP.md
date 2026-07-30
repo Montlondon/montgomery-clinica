@@ -1485,7 +1485,62 @@ Pergunta do Montgomery vendo o Metatron girar: *"futuramente teria como eu dar u
 1. **Tela cheia por clique — fazer.** `requestFullscreen` no container do SVG: o desenho ocupa o monitor inteiro, fundo escuro, sem menu nem barra lateral, `Esc` volta. Funciona no computador e no celular, sem instalar nada, e a animação segue igual (mesmo desenho, só maior). Enquanto grande, caprichar: revezamento mais lento, METATRON maior, legenda sumindo depois de alguns segundos. **Vale para todos os desenhos animados do OS** — Cubo de Metatron, os 5 sólidos, o átomo de carbono, o corpo vitruviano: um botão de expandir no canto de cada um, mesma mecânica.
 2. **Descanso de tela de verdade do Windows — não agora.** Precisa ser um `.scr` instalado no sistema; é programa, não página. Possível, mas projeto separado e sem ganho de beleza sobre o item 1. Na prática, a aba aberta em tela cheia num monitor já faz o papel — só não liga sozinha.
 
-## Aberto — senha **"Acender as Ervas"** (30/07/2026)
+## Feito — senha **"Acender as Ervas"** (30/07/2026, Clínica v5.3)
+
+As três coisas da senha foram construídas. **A régua e o caminho ficaram prontos;
+o conteúdo continua sendo dele** — nenhuma dose, nenhuma combinação de momento e
+nenhuma posologia foi inventada pela máquina, que é a regra que a própria senha
+escreveu.
+
+**1. O momento entrou na régua dos minerais.** Cada mineral ganhou o bloco
+*Momento de tomar — metade da prescrição*: chips do que ele já pôs (com × para
+tirar), campo para escrever o momento com as palavras dele, e um **vocabulário a
+clique** com quinze palavras prontas (em jejum, com a refeição, à noite, longe do
+café, longe de outro mineral, dividir em duas tomadas…). O vocabulário é só uma
+caixa de palavras: nenhuma delas está amarrada a mineral nenhum no código. Quem
+casa a palavra com o mineral é ele, a clique — e a partir daí ela mora na régua
+daquele mineral. O momento escolhido vai junto na anotação da ficha, aparece no
+histórico do mineral e na coluna nova de *Minerais anotados* na ficha da pessoa.
+
+**2. A aba Ervas — a posologia da fitoterapia.** `fitoterapia-data.js`, que estava
+pronto e não era lido por ninguém, entrou na Clínica: terceira aba em Suplementos,
+15 ervas agrupadas por categoria, busca sem acento por nome, ação ou indicação. Ao
+abrir uma erva vem a identidade da literatura clássica (sabor, natureza,
+meridianos, ações, indicações, contraindicações, elemento) e, embaixo, **a régua
+dele em cinco campos que nascem vazios**: quanto, em que forma, quantas vezes ao
+dia, por quanto tempo e o momento. Forma e momento têm vocabulário a clique
+(palavras, nunca quantidades); quanto e por quanto tempo são sempre escritos por
+ele. Onde o livro traz faixa (`dosagem_referencia`), ela fica numa **caixa
+separada, com tarja dizendo "referência da literatura clássica — não é a sua
+dose"** e um botão *usar como ponto de partida*: enquanto ele não tocar, a régua
+dele continua vazia. Cada erva tem também a leitura clínica dele, anotação na
+ficha da pessoa com data, histórico próprio e a lista das 8 fórmulas clássicas com
+composição e proporções, como referência de leitura.
+
+**3. A régua desaguando na Recomendação Terapêutica.** O caminho que faltava:
+- Seção **Minerais** nova na Recomendação (mineral, forma/sal, dose, frequência,
+  duração e **momento**), que sai impressa na folha do paciente em bloco próprio,
+  vai no texto do WhatsApp, é salva no registro (`rx.minerais`), volta ao editar,
+  duplicar e ao usar outra receita como modelo, e aparece no card do histórico e
+  nos chips da ficha.
+- Botão **Levar para a Recomendação** na régua do mineral: leva paciente, dose,
+  forma e momento prontos.
+- Botão **Levar para a Recomendação** na régua da erva: cai no bloco
+  Plantas/Substâncias que já existia e já era impresso — a erva não precisava de
+  bloco novo, só de caminho. O momento vai no campo Instruções, que é onde a folha
+  o mostra.
+
+**Onde mora:** a mesma tabela `minerais`, com `tipo` `regua_erva` e
+`indicacao_erva` — sem tabela nova, sem mexer em RLS nem no backup, e leve por
+causa do egress. Como `minerais` já está em `TABELAS_COM_NOME_PAC`, corrigir o
+nome de alguém corrige também as anotações de ervas.
+
+**O que continua na mão dele (e é assim de propósito):** encher as réguas. As
+doses de cada mineral, quais momentos valem para cada um, e a posologia de cada
+erva. A régua está de pé e o caminho até a folha do paciente está aberto — falta
+a prática dele entrar, que é a única coisa que a plataforma não pode fazer por ele.
+
+## Antigo — senha **"Acender as Ervas"** (o pedido original)
 
 A régua de doses dos minerais ficou pronta na Clínica v5.2, mas a aba **Minerais nasce
 vazia**: a régua existe, o conteúdo não. E do lado da fitoterapia falta a posologia — a
