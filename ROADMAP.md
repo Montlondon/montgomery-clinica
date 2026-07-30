@@ -4,6 +4,12 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
+## Concluído — OS v4.7: a teia não para mais (30/07/2026)
+
+Emenda do Montgomery logo em seguida: *"deixa o cubo girando sozinho quando n[inguém escolher]"*. Feito — o Cubo de Metatron nunca mais fica parado.
+
+Sem ninguém tocar em nada, os cinco **se revezam sozinhos** lá dentro: cada sólido dá uma volta inteira e passa a vez ao próximo, na ordem do *Timeu* (fogo, terra, ar, água, éter). A legenda acompanha, dizendo qual está passando. Tocar num nome **segura** aquele sólido; tocar de novo **devolve o revezamento** — não apaga mais, porque agora não existe estado apagado.
+
 ## Concluído — OS v4.6: o Cubo de Metatron acorda (30/07/2026)
 
 Pedido do Montgomery na hora em que viu os sólidos girando: *"teria como colocar a animação no Cubo de Metatron também"*. Tinha — e era, na verdade, cobrar uma promessa antiga. A legenda embaixo do Cubo sempre disse **"dentro da teia vivem os 5 sólidos platônicos"**, e até agora era só uma frase.

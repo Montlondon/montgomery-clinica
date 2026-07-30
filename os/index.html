@@ -935,7 +935,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
         Dentro da teia vivem os 5 sólidos platônicos: fogo, terra, ar, água e éter.
       </div>
       <div id="mtSolBotoes" style="display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-top:8px"></div>
-      <div style="text-align:center;margin-top:6px;font-size:0.64rem;color:var(--cinza)">Acenda um deles dentro da teia — toque de novo para apagar.</div>
+      <div style="text-align:center;margin-top:6px;font-size:0.64rem;color:var(--cinza)">Sozinha, a teia passa os cinco um por um. Toque num nome para segurar aquele — toque de novo para devolver o revezamento.</div>
     </div>
     <div style="flex:1;min-width:280px">
       <h2 style="font-family:Lora,serif;font-size:1rem;color:var(--azul);margin-bottom:10px">As 7 Leis Herméticas</h2>
@@ -1858,8 +1858,9 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v4.6';
-const APP_VERSION_NOTA='o Cubo de Metatron acorda: a legenda sempre disse que os 5 sólidos vivem dentro dos 13 círculos, e agora eles aparecem lá de verdade — toque no nome de um e ele acende girando dentro da teia, toque de novo e ele apaga, com a legenda dizendo qual é e as contagens dele';
+const APP_VERSION='v4.7';
+const APP_VERSION_NOTA='a teia não para mais: sem ninguém escolher nada, os 5 sólidos se revezam sozinhos dentro do Cubo de Metatron, cada um dando uma volta inteira antes de passar a vez, com a legenda dizendo qual está passando — e quem quiser segurar um deles toca no nome, e toca de novo para devolver o revezamento';
+const APP_VERSION_NOTA_V46='o Cubo de Metatron acorda: a legenda sempre disse que os 5 sólidos vivem dentro dos 13 círculos, e agora eles aparecem lá de verdade — toque no nome de um e ele acende girando dentro da teia, toque de novo e ele apaga, com a legenda dizendo qual é e as contagens dele';
 const APP_VERSION_NOTA_V45='acendem-se os 5 Sólidos Platônicos ao lado dos Átomos, no anel 1 da Metafísica: os cinco corpos giram de verdade na tela — tetraedro, cubo, octaedro, icosaedro e dodecaedro — cada um com sua contagem exata de vértices, arestas e faces, o par de que é o avesso e a razão provada de serem só cinco; com a linha dita em voz alta entre a geometria, que é matemática, e a correspondência com fogo, terra, ar, água e éter, que é Platão';
 const APP_VERSION_NOTA_V44='acendem-se os Átomos no anel 1 da Metafísica: um átomo de carbono que se pode tocar por dentro (núcleo, elétrons e o vazio que é quase tudo), a escada da matéria em doze degraus — do quark ao universo, sempre a mesma planta se repetindo — e os quatorze elementos de que o corpo é feito, cada um com seu peso e sua ponte com a clínica; com a fronteira dita em voz alta de onde a física acaba e a leitura começa';
 const APP_VERSION_NOTA_V43='acende-se o I Ching dentro da Metafísica: as 8 manifestações (as oito maneiras que a energia tem de se apresentar), os 64 hexagramas numa grade onde a linha é o que se passa dentro e a coluna é o que se passa fora, e as três moedas para consultar o momento — com as linhas mutáveis mostrando por onde a situação já está virando outra';
@@ -4166,36 +4167,46 @@ function solRender(){
     bt.innerHTML=SOL_DADOS.map(d=>
       '<button class="btn" id="mtBt'+d[0]+'" onclick="mtSolido(\''+d[0]+'\')" '+
       'style="padding:4px 9px;font-size:0.68rem;border-radius:50px">'+d[1]+'</button>').join('');
+  if(!mtSolRaf&&document.getElementById('mtSolido'))mtSolRaf=requestAnimationFrame(mtSolGirar);
 }
 
 // ===== O SÓLIDO DENTRO DA TEIA — o Cubo de Metatron acordando =====
 // A legenda sempre disse que os cinco vivem dentro dos 13 círculos. Aqui eles
 // aparecem lá, girando, na mesma matemática do bloco de baixo.
-const MT_LEGENDA_BASE='Cubo de Metatron — 13 círculos da Fruta da Vida, 78 linhas.<br>Dentro da teia vivem os 5 sólidos platônicos: fogo, terra, ar, água e éter.';
-let mtSolAtivo=null,mtSolAng=0,mtSolRaf=null;
+// Sem ninguém escolher, a teia não fica parada: os cinco se revezam sozinhos,
+// cada um dando uma volta inteira antes de passar a vez.
+let mtSolAtivo=null,mtSolAng=0,mtSolRaf=null,mtSolPassando=null;
+function mtSolLegenda(id,auto){
+  const d=SOL_DADOS.find(x=>x[0]===id),leg=document.getElementById('mtLegenda');
+  if(!d||!leg)return;
+  leg.innerHTML='<strong style="color:var(--azul)">'+d[1]+'</strong> dentro da teia — '+d[2]+'.<br>'+
+    d[3]+' vértices, '+d[4]+' arestas, '+d[5]+'.'+
+    (auto?'<br><span style="opacity:0.75">os cinco passando um por um — toque num nome para segurar</span>':'');
+}
 function mtSolGirar(){
   const g=document.getElementById('mtSolido');
-  if(!g||!mtSolAtivo){mtSolRaf=null;return}
+  if(!g){mtSolRaf=null;return}
   mtSolAng+=0.005;
-  g.innerHTML=solDesenho(mtSolAtivo,-0.42,mtSolAng,0.72);
+  const auto=!mtSolAtivo;
+  let id=mtSolAtivo;
+  if(auto){
+    // uma volta completa por sólido, na ordem do Timeu
+    const i=Math.floor(mtSolAng/(Math.PI*2))%SOL_DADOS.length;
+    id=SOL_DADOS[i][0];
+    if(id!==mtSolPassando){mtSolPassando=id;mtSolLegenda(id,true)}
+  }
+  g.innerHTML=solDesenho(id,-0.42,mtSolAng,0.72);
   mtSolRaf=requestAnimationFrame(mtSolGirar);
 }
 function mtSolido(id){
   const d=SOL_DADOS.find(x=>x[0]===id);if(!d)return;
-  const apagar=(mtSolAtivo===id);
-  mtSolAtivo=apagar?null:id;
+  const soltar=(mtSolAtivo===id);          // tocar de novo devolve o revezamento
+  mtSolAtivo=soltar?null:id;
+  mtSolPassando=null;
   SOL_DADOS.forEach(x=>{const b=document.getElementById('mtBt'+x[0]);
     if(b){const on=x[0]===mtSolAtivo;
       b.style.borderColor=on?'var(--dourado,#c9a84c)':'';b.style.color=on?'var(--dourado,#c9a84c)':'';}});
-  const leg=document.getElementById('mtLegenda');
-  const g=document.getElementById('mtSolido');
-  if(apagar){
-    if(g)g.innerHTML='';
-    if(leg)leg.innerHTML=MT_LEGENDA_BASE;
-    return;
-  }
-  if(leg)leg.innerHTML='<strong style="color:var(--azul)">'+d[1]+'</strong> dentro da teia — '+d[2]+'.<br>'+
-    d[3]+' vértices, '+d[4]+' arestas, '+d[5]+'.';
+  if(!soltar)mtSolLegenda(id,false);
   if(!mtSolRaf)mtSolRaf=requestAnimationFrame(mtSolGirar);
 }
 
