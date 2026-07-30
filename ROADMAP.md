@@ -4,6 +4,21 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
+## Ideia viva — a Ortomolecular: quanto, de qual e por quê (30/07/2026)
+
+Senha para a próxima janela: **"Acender o Magnésio"**.
+
+*"Teria como criarmos algo, por exemplo, de acordo com a desarmonia da pessoa, sabermos a quantidade em miligramas e as quantidades diárias, por exemplo de magnésio, que ela necessita — e qual o tipo de magnésio: dimalato, treonato, citrato, bisglicinato, quelato. Me parece que são 12 tipos. E até mesmo a fitoterapia, que me parece que já está criada para a plataforma Clínica."*
+
+**Duas camadas, e a segunda já existe pela metade.**
+
+1. **Os tipos de magnésio.** Não é um mineral, são doze sais — e cada sal vai a um lugar diferente: o **treonato** atravessa a barreira do cérebro, o **dimalato** entra no ciclo da energia muscular, o **bisglicinato** é o mais tolerado pelo intestino, o **citrato** é o que solta, o **óxido** quase não absorve e é o que mais se vende. Escolher errado o sal é tomar magnésio e não receber magnésio. A ficha de cada um: absorção, alvo, o que a desarmonia pede, o que atrapalha.
+2. **A fitoterapia.** `fitoterapia-data.js` já vive na Clínica com cerca de 30 ervas clássicas de MTC — sabor, natureza, meridianos, ações, indicações. O que **não** tem é posologia. É o mesmo buraco do magnésio, no outro lado da estante.
+
+**A ponte já está construída e ninguém tinha reparado.** O bloco dos Átomos (OS v4.9) já diz, do magnésio: *"a falta aparece como cãibra, tensão e insônia: não é o encolher que falha, é o soltar"* — e já o acende como **Madeira** na teia. Ou seja: a teia já sabe ir da queixa ao elemento e do elemento ao mineral. Falta o último degrau, que é a quantidade.
+
+**A fronteira honesta, dita antes de começar.** Miligrama é conduta clínica, não enciclopédia. O que a plataforma pode fazer com integridade: guardar **faixas de referência da literatura, com a fonte citada em cada linha**, o cálculo por peso quando a fonte trabalha assim, as interações e os limites de segurança — e deixar a decisão com o terapeuta, sempre. O que ela não vai fazer: gerar número sem fonte, nem dizer "tome tanto". Nenhum miligrama entra inventado; cada faixa entra com de onde veio. É a mesma regra dos seis elementos sem ponte: onde não há fonte, fica escrito que não há.
+
 ## Concluído — OS v5.0: os desenhos em tela cheia (30/07/2026)
 
 *"Além de eu achar maravilhoso, eu medito nestas imagens, organiza a minha energia, fazendo com que eu jamais me esqueça de onde eu vim: da luz. E estou ficando mais velho a cada dia, então tela de computador é muito pequena."*
