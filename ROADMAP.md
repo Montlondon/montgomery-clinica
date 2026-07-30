@@ -4,6 +4,36 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
+## Concluído — a casa varrida: o main limpo e a quarentena (30/07/2026)
+
+Nasceu de uma pergunta dele: *"o que quer dizer este main viver sujo? Como melhorar isso?"*
+O `main` tinha **17 itens soltos** na bancada, de janelas que acabaram no meio. Três varridas,
+três commits pequenos, um arquivo por vez — nunca `git add -A`.
+
+**1. Os fantasmas** (`2e7ea8e`). Dois arquivos apareciam modificados sem terem mudado uma palavra:
+só a marca invisível de fim de linha, que o Windows escreve diferente do Linux. Entrou um
+`.gitattributes` com `* text=auto` e a lista dos binários que o Git nunca deve tocar. Não sujam
+mais.
+
+**2. O peso** (`ddadf70`). `21_Backups/` entrou no `.gitignore`. Mas a descoberta veio depois de
+medir: **35 MB já estavam dentro do repositório**, rastreados, subindo a cada push — o
+`.gitignore` só guarda a porta, não alcança quem já entrou.
+
+**3. A quarentena** (`03e21a1`). Ele decidiu: *"cria uma Claude_Main_Clean, move o que achar que
+deve ser movido, depois se tiver de deletar a gente deleta"*. Os dez arquivos de backup saíram do
+repositório para `C:\Montgomery\Clinica\Backup\Claude_Main_Clean` — **fora** do repositório de
+propósito, porque dentro o Git continuaria carregando o peso. Nada foi apagado. Um `LEIA-ME.md`
+na pasta diz o que é cada arquivo, quais são quase idênticos (23/06, 28/06 e 30/06 do mesmo mês)
+e o cuidado antes de apagar: **até hoje o GitHub era a segunda cópia desses backups**; ao saírem,
+passam a morar num lugar só.
+
+A bancada saiu de 17 itens para 7. Regra que fica: **backup é foto do dado, não é código.**
+
+**Ainda na bancada, esperando decisão dele:** três arquivos com trabalho real parado
+(`01_Codigo/prototipos/arvore_vida_prototipo.html` com 136 linhas novas, `02_Arvore/COMO-FUNCIONA.md`
+e `.claude/launch.json`) e quatro soltos — entre eles o `00_Nucleo/MAPA_METAFISICA.md`, que é
+fundação da Metafísica e está fora do repositório há semanas.
+
 ## Próximo — a prateleira precisa das primeiras linhas dele
 
 A aba está de pé e **nasce vazia de propósito**: nenhum produto vem de fábrica ali. O próximo
