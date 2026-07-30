@@ -4,6 +4,20 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
+## Concluído — OS v5.0: os desenhos em tela cheia (30/07/2026)
+
+*"Além de eu achar maravilhoso, eu medito nestas imagens, organiza a minha energia, fazendo com que eu jamais me esqueça de onde eu vim: da luz. E estou ficando mais velho a cada dia, então tela de computador é muito pequena."*
+
+Seis desenhos ganharam um cantinho de expandir: **o Cubo de Metatron, os 5 sólidos platônicos, o átomo de carbono, o corpo vitruviano, a Árvore da Vida e a roda do zodíaco**. Um toque e a imagem toma a tela inteira — fundo escuro, sem menu, sem barra lateral, sem texto em volta. Só o desenho, e ele continua girando e continua clicável lá dentro. `Esc` devolve.
+
+Onde o navegador não deixa (iPhone, páginas dentro de moldura), uma segunda via em CSS abre do mesmo jeito — o desenho nunca deixa de expandir.
+
+Detalhe de gosto já conhecido: **tela cheia não fica parada esperando clique**. O palco dos sólidos, cujos botões de escolha ficam fora dele, entra já girando o tetraedro.
+
+**Dito com honestidade:** descanso de tela de verdade do Windows seria um `.scr` instalado — outro tipo de projeto. A aba em tela cheia faz o papel, só não liga sozinha.
+
+No ar em montgomery-clinica.vercel.app/os, conferido ao vivo (merge f663915).
+
 ## Concluído — OS v4.9: as pontes dos Átomos (30/07/2026)
 
 Senha *"Acender as Pontes dos Átomos"* cumprida. O bloco dos Átomos era lindo e era uma ilha; agora encosta nos dois lados.
