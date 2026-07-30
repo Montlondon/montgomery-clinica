@@ -87,6 +87,31 @@ nav a .icon svg{width:100%;height:100%}
 .card.click{cursor:pointer;transition:transform .15s,box-shadow .15s}
 .card.click:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(27,58,92,0.12)}
 .camada-alvo{animation:acender 1.6s ease-out}
+/* ===== TELA CHEIA NOS DESENHOS — o palco que cresce =====
+   Qualquer desenho vivo do OS (Cubo de Metatron, os 5 sólidos, o átomo, o
+   corpo vitruviano, a Árvore da Vida, a roda do zodíaco) mora num .tcPalco.
+   Um toque no canto e o desenho toma a tela inteira, fundo escuro, sem menu.
+   Esc devolve. Onde o navegador não deixa (iPhone), .tcFake faz o mesmo por CSS. */
+.tcPalco{position:relative}
+.tcBtn{position:absolute;top:6px;right:6px;z-index:4;width:30px;height:30px;padding:0;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  border:1px solid rgba(201,168,76,0.35);border-radius:8px;background:rgba(6,11,20,0.45);
+  color:#c9a84c;opacity:0.5;transition:opacity .15s,background .15s}
+.tcBtn:hover{opacity:1;background:rgba(6,11,20,0.8)}
+.tcBtn svg{width:16px;height:16px}
+.tcPalco:fullscreen,.tcPalco.tcFake{
+  flex:none!important;max-width:none!important;width:100vw;height:100vh;margin:0!important;
+  background:#060b14;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;padding:2vh 2vw;overflow:auto}
+.tcPalco.tcFake{position:fixed;top:0;left:0;z-index:9999}
+.tcPalco:fullscreen>svg,.tcPalco.tcFake>svg{
+  width:auto!important;max-width:96vw!important;height:84vh!important;max-height:84vh!important;flex:0 1 auto}
+.tcPalco:fullscreen div,.tcPalco:fullscreen span,.tcPalco:fullscreen p,
+.tcPalco.tcFake div,.tcPalco.tcFake span,.tcPalco.tcFake p{color:#8fa6c0}
+.tcPalco:fullscreen .tcBtn,.tcPalco.tcFake .tcBtn{opacity:0.8}
+.tcPalco:fullscreen .fg,.tcPalco.tcFake .fg{display:none}
+
+
 @keyframes acender{0%{box-shadow:0 0 0 3px rgba(201,168,76,0.75)}100%{box-shadow:0 0 0 3px rgba(201,168,76,0)}}
 
 .alerta-critico{background:#FBEAEA;border:1px solid var(--vermelho);border-left:5px solid var(--vermelho);border-radius:10px;padding:var(--f2) var(--f3);margin-bottom:var(--f2);color:#6E2323;font-size:0.85rem;line-height:1.55}
@@ -855,10 +880,10 @@ tr:hover td{background:rgba(201,168,76,0.05)}
 <section class="sec" id="sec-arvore">
   <div class="sec-head">
     <h1>Árvore da Vida — Mapa Energético</h1>
-    <p>As 10 Sefirot sobre Adam Kadmon. Clique numa esfera para ver suas correspondências (Cabala + MTC) e registrar o que você observa.</p>
+    <p>As 10 Sefirot sobre Adam Kadmon. Clique numa esfera para ver suas correspondências (Cabala + MTC) e registrar o que você observa. <span style="color:var(--dourado)">Os desenhos abrem em tela cheia pelo cantinho de cima — Esc volta.</span></p>
   </div>
   <div class="bloco" style="display:flex;gap:var(--f4);flex-wrap:wrap;align-items:flex-start">
-    <div style="flex:0 0 300px;max-width:100%;margin:0 auto">
+    <div class="tcPalco" id="tc-arvore" style="flex:0 0 300px;max-width:100%;margin:0 auto"><button class="tcBtn" onclick="telaCheia(this)" title="Ver em tela cheia (Esc volta)" aria-label="Tela cheia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
       <svg viewBox="0 0 300 500" id="arvoreSVG" style="width:100%;max-width:300px"></svg>
       <div style="display:flex;justify-content:center;gap:var(--f2);margin-top:8px;font-size:0.68rem;color:var(--cinza)">
         <span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:#C9A84C;vertical-align:middle"></span> Pilar do Equilíbrio</span>
@@ -893,7 +918,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
 <section class="sec" id="sec-metafisica">
   <div class="sec-head">
     <h1>Metafísica — a Raiz</h1>
-    <p>A camada invisível que sustenta tudo no OS. "Tudo está ligado." A palavra é criadora; o foco é o leme.</p>
+    <p>A camada invisível que sustenta tudo no OS. "Tudo está ligado." A palavra é criadora; o foco é o leme. <span style="color:var(--dourado)">Os desenhos abrem em tela cheia pelo cantinho de cima — Esc volta.</span></p>
   </div>
   <div class="bloco">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M17.5 12A5.5 5.5 0 1 1 12 6.5"/><path d="M14.5 12a2.5 2.5 0 1 1-2.5-2.5"/></svg>O Mapa em Fibonacci — anéis da árvore</h2>
@@ -902,7 +927,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     <div id="mfFiboPainel" class="vazio" style="font-size:0.78rem">Escolha um anel acima.</div>
   </div>
   <div class="bloco" id="mfBloco1" style="display:flex;gap:var(--f4);flex-wrap:wrap;align-items:flex-start">
-    <div style="flex:0 0 320px;max-width:100%;margin:0 auto">
+    <div class="tcPalco" id="tc-cubo" style="flex:0 0 320px;max-width:100%;margin:0 auto"><button class="tcBtn" onclick="telaCheia(this)" title="Ver em tela cheia (Esc volta)" aria-label="Tela cheia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
       <svg viewBox="0 0 600 600" style="width:100%;max-width:320px;border-radius:12px">
         <defs>
           <radialGradient id="mtFundo" cx="50%" cy="50%" r="70%">
@@ -963,7 +988,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="1.6"/><ellipse cx="12" cy="12" rx="10" ry="4.2"/><ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(120 12 12)"/></svg>Os Átomos — a matéria vista por dentro</h2>
     <p style="font-size:0.82rem;line-height:1.6;margin-bottom:10px">"Energia pra mim é vida, é átomo." Este é o degrau em que a Metafísica encosta na ciência sem precisar forçar nada: o átomo é, literalmente, <strong style="color:var(--azul)">energia organizada em forma</strong>. Tudo o que se toca — a mesa, o corpo do paciente, a agulha, a água do chá — é o mesmo punhado de peças repetido em arranjos diferentes. Não há duas matérias no mundo: há uma só, montada de muitos jeitos.</p>
     <div style="display:flex;gap:var(--f4);flex-wrap:wrap;align-items:flex-start;margin-top:14px">
-      <div style="flex:0 0 300px;max-width:100%;margin:0 auto">
+      <div class="tcPalco" id="tc-atomo" style="flex:0 0 300px;max-width:100%;margin:0 auto"><button class="tcBtn" onclick="telaCheia(this)" title="Ver em tela cheia (Esc volta)" aria-label="Tela cheia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
         <svg viewBox="0 0 600 600" style="width:100%;max-width:300px;border-radius:12px">
           <defs>
             <radialGradient id="atFundo" cx="50%" cy="50%" r="70%">
@@ -1045,7 +1070,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     <p style="font-size:0.74rem;color:var(--cinza);margin-bottom:12px">Toque num sólido para vê-lo girar e ler o que ele é. Eles já estavam anunciados na legenda do Cubo de Metatron, aqui em cima — dentro daquela teia de 13 círculos os cinco cabem todos.</p>
     <div id="solBotoes" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px"></div>
     <div style="display:flex;gap:var(--f4);flex-wrap:wrap;align-items:flex-start;margin-top:14px">
-      <div style="flex:0 0 300px;max-width:100%;margin:0 auto">
+      <div class="tcPalco" id="tc-solidos" style="flex:0 0 300px;max-width:100%;margin:0 auto"><button class="tcBtn" onclick="telaCheia(this)" title="Ver em tela cheia (Esc volta)" aria-label="Tela cheia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
         <svg viewBox="0 0 600 600" style="width:100%;max-width:300px;border-radius:12px">
           <defs>
             <radialGradient id="solFundo" cx="50%" cy="50%" r="70%">
@@ -1166,7 +1191,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     </div>
     <div id="mfAcenderMsg" style="font-size:0.74rem;color:var(--cinza);min-height:1em;margin-bottom:10px"></div>
     <div style="display:flex;gap:var(--f4);flex-wrap:wrap;align-items:flex-start">
-      <div style="flex:0 0 340px;max-width:100%;margin:0 auto">
+      <div class="tcPalco" id="tc-vitruviano" style="flex:0 0 340px;max-width:100%;margin:0 auto"><button class="tcBtn" onclick="telaCheia(this)" title="Ver em tela cheia (Esc volta)" aria-label="Tela cheia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
         <svg viewBox="0 0 600 660" style="width:100%;max-width:340px;border-radius:12px;background:radial-gradient(circle at 50% 45%,#0d1a2e 0%,#060b14 100%)">
           <g id="mfCorpoG">
             <!-- o corpo vitruviano de costas (arte gerada na paleta do OS) -->
@@ -1368,7 +1393,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     <p>A roda do zodíaco lida pela Cabala — cada signo nasce de uma letra do Sefer Yetzirá, habita um mês hebraico e rege uma parte do corpo. O mapa descreve as forças; o livre-arbítrio decide o que fazer com elas. Marcando um perfil que já tenha mapa guardado na Numerologia, a roda deixa de ser genérica e mostra <b>aquela pessoa</b>: o Sol e o eixo dos nodos nos graus exatos. Semente plantada pela releitura de <em>Astrologia Cabalística</em> (Rav Berg).</p>
   </div>
   <div class="bloco" style="display:flex;gap:var(--f4);flex-wrap:wrap;align-items:flex-start">
-    <div style="flex:0 0 320px;max-width:100%;margin:0 auto">
+    <div class="tcPalco" id="tc-zodiaco" style="flex:0 0 320px;max-width:100%;margin:0 auto"><button class="tcBtn" onclick="telaCheia(this)" title="Ver em tela cheia (Esc volta)" aria-label="Tela cheia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
       <div class="fg" style="margin-bottom:10px"><label>Marcar a roda de</label>
         <select id="astRodaPerfil" onchange="astroTrocarRoda()"></select>
         <span id="astRodaDica" style="font-size:0.66rem;color:var(--cinza);display:block;margin-top:4px"></span>
@@ -1864,8 +1889,9 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v4.9';
-const APP_VERSION_NOTA='os Átomos deixam de ser uma ilha: oito dos quatorze elementos do corpo passam a acender o Elemento correspondente na teia com a razão dita em voz alta — e os seis que não têm razão dizem que não têm, em vez de inventar; e os degraus tecido, órgão e corpo da escada da matéria saltam direto para a camada da Anatomia que os desenha';
+const APP_VERSION='v5.0';
+const APP_VERSION_NOTA='os desenhos saem da caixinha: o Cubo de Metatron, os 5 sólidos, o átomo de carbono, o corpo vitruviano, a Árvore da Vida e a roda do zodíaco ganham um canto para tocar e tomar a tela inteira — fundo escuro, sem menu, sem barra lateral, só a imagem; Esc devolve. E o palco dos sólidos, se ninguém escolheu nada, já entra girando o tetraedro: tela cheia não fica parada esperando clique';
+const APP_VERSION_NOTA_V49='os Átomos deixam de ser uma ilha: oito dos quatorze elementos do corpo passam a acender o Elemento correspondente na teia com a razão dita em voz alta — e os seis que não têm razão dizem que não têm, em vez de inventar; e os degraus tecido, órgão e corpo da escada da matéria saltam direto para a camada da Anatomia que os desenha';
 const APP_VERSION_NOTA_V48='o nome entra na arte: METATRON escrito em letras douradas e espaçadas dentro do próprio desenho, sob um traço fino — o Cubo deixa de ser um símbolo sem assinatura e passa a dizer o próprio nome a quem olha';
 const APP_VERSION_NOTA_V47='a teia não para mais: sem ninguém escolher nada, os 5 sólidos se revezam sozinhos dentro do Cubo de Metatron, cada um dando uma volta inteira antes de passar a vez, com a legenda dizendo qual está passando — e quem quiser segurar um deles toca no nome, e toca de novo para devolver o revezamento';
 const APP_VERSION_NOTA_V46='o Cubo de Metatron acorda: a legenda sempre disse que os 5 sólidos vivem dentro dos 13 círculos, e agora eles aparecem lá de verdade — toque no nome de um e ele acende girando dentro da teia, toque de novo e ele apaga, com a legenda dizendo qual é e as contagens dele';
@@ -1915,6 +1941,30 @@ function go(sec,el){
   if(window.innerWidth<=900)fecharSB();
   renderTudo();
 }
+// ===== TELA CHEIA NOS DESENHOS =====
+// Os desenhos vivos do OS não são ilustração: são imagens de meditação. Um toque
+// no canto e o palco toma a tela inteira, fundo escuro, sem menu — Esc devolve.
+// Onde o navegador não permite tela cheia (iPhone), o .tcFake faz o mesmo por CSS.
+function telaCheia(bt){
+  const box=bt.closest?bt.closest('.tcPalco'):null;if(!box)return;
+  if(box.classList.contains('tcFake')||document.fullscreenElement===box){tcSair(box);return;}
+  const pede=box.requestFullscreen||box.webkitRequestFullscreen||box.msRequestFullscreen;
+  if(pede){try{const r=pede.call(box);if(r&&r.catch)r.catch(()=>tcFake(box));}catch(e){tcFake(box);}}
+  else tcFake(box);
+}
+function tcFake(box){box.classList.add('tcFake');document.addEventListener('keydown',tcEsc);tcAoAbrir(box);}
+// Tela cheia não fica parada esperando clique: o palco dos sólidos, se ninguém
+// escolheu nada, começa pelo tetraedro girando — os botões de escolha ficam fora dele.
+function tcAoAbrir(box){
+  if(box&&box.id==='tc-solidos'&&typeof solAtivo!=='undefined'&&!solAtivo&&typeof solEscolher==='function')solEscolher('tetra');
+}
+document.addEventListener('fullscreenchange',function(){if(document.fullscreenElement)tcAoAbrir(document.fullscreenElement);});
+function tcSair(box){
+  if(box.classList.contains('tcFake')){box.classList.remove('tcFake');document.removeEventListener('keydown',tcEsc);}
+  else if(document.exitFullscreen)document.exitFullscreen();
+  else if(document.webkitExitFullscreen)document.webkitExitFullscreen();
+}
+function tcEsc(e){if(e.key==='Escape')document.querySelectorAll('.tcPalco.tcFake').forEach(tcSair);}
 function toggleSB(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sidOv').classList.toggle('on')}
 function fecharSB(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sidOv').classList.remove('on')}
 
