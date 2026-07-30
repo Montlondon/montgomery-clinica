@@ -1042,6 +1042,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 <!-- ===== PRESCRIÇÃO ===== -->
 <section class="page" id="pg-prescricao">
   <div class="page-header"><h1><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-3 5-6 11-11"/></svg></span>Recomendação Terapêutica</h1></div>
+  <div class="volta-diag no-print" style="display:none"></div>
   <div class="fio-elementos no-print" style="max-width:140px"></div>
   <div class="fc no-print">
     <div class="fr">
@@ -1507,6 +1508,12 @@ window.addEventListener('DOMContentLoaded',()=>{
     </div>
   </div>
 
+  <!-- O CAMINHO DE VOLTA. Quem chega aqui pelo botão "Abrir a régua" veio do
+       meio de um atendimento, com o paciente na frente — e ficava sem porta de
+       saída. Esta faixa só aparece quando existe uma avaliação esperando, e
+       leva de volta exatamente ao ponto de onde ele saiu. -->
+  <div class="volta-diag no-print" style="display:none"></div>
+
   <div class="tabs" id="supTabs">
     <button class="active" onclick="showSupTab('sp-produtos',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/><path d="M4 11h16"/></svg></span>Produtos</button>
     <button onclick="showSupTab('sp-minerais',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 4.5v9L12 21l-7-4.5v-9L12 3Z"/><path d="M12 3v18M5 7.5l14 9M19 7.5l-14 9"/></svg></span>Minerais</button>
@@ -1797,7 +1804,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v5.7 · 30/07';
+const APP_VER='v5.8 · 30/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2445,6 +2452,7 @@ function go(p,el){
   if(p==='novo-paciente')renderUltEncontro(editId);
   if(p==='financeiro'){atuFin();initFinScope();}
   if(p==='suplementos'){renderSuplementos();renderMnGrid();renderMnPainel();}
+  cdRenderVolta();   // a porta de saída aparece em qualquer página que a tenha
   if(p==='pacientes')renderP();
   if(p==='dashboard')atuDash();
   if(p==='backup')atuInfoSys();
@@ -2457,6 +2465,9 @@ function go(p,el){
     // Continuar uma avaliação salva só é possível via "Editar"/"Duplicar"
     // dentro do cadastro do paciente (que chamam go('diagnostico', null)).
     if(el){
+      // Se a avaliação está sendo zerada, não existe mais para onde voltar:
+      // a faixa some junto, para nunca prometer uma volta que não existe.
+      _cdVolta=null;
       _diagEditandoId=null;
       _diagPacSel=null;
       _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:'',candidatos:[],candidatosFora:[]};
@@ -3715,6 +3726,7 @@ function showSupTab(id,btn){
   if(id==='sp-minerais'){renderMnGrid();renderMnPainel();}
   if(id==='sp-ervas'){renderEvGrid();renderEvPainel();renderEvFormulas();}
   if(id==='sp-ligacoes'){renderLgPainel();}
+  cdRenderVolta();
 }
 
 function renderMnGrid(){
@@ -4561,8 +4573,36 @@ function cdTirarAceito(alvo,chave){
 function cdMostrarTodos(){_diagSelecoes.candidatosFora=[];renderDiagPainel();}
 // Do candidato aceito para a gaveta onde mora a dose — que é de onde sai a
 // folha do paciente. O caminho já existe; aqui só se abre a porta certa.
+// O CAMINHO DE VOLTA — descoberto usando de verdade, em 30/07/2026: ele abriu a
+// régua de dentro do Diagnóstico, com o paciente na frente, e a tela não tinha
+// porta de saída. Voltar pelo menu lateral não servia: o menu ZERA a avaliação
+// (é assim de propósito, para nunca misturar duas pessoas). Então a volta tem
+// que ser esta, que não zera nada — a avaliação continua inteira do outro lado.
+let _cdVolta=null; // {nome} enquanto houver uma avaliação esperando
+function cdRenderVolta(){
+  const alvos=document.querySelectorAll('.volta-diag');
+  if(!alvos.length)return;
+  const html=!_cdVolta?'':`<div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;background:var(--pri-l);border-left:4px solid var(--pri);border-radius:7px;padding:8px 12px;margin-bottom:12px">
+    <span style="font-size:12px;color:var(--pri-d)">Você veio de uma avaliação em aberto${_cdVolta.nome?' de <strong>'+escHtml(_cdVolta.nome)+'</strong>':''} — ela continua inteira, esperando.</span>
+    <button type="button" class="btn btn-pri btn-sm" style="margin-left:auto" onclick="cdVoltarAoDiag()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5l-7 7 7 7"/><path d="M3 12h12a5 5 0 0 1 5 5v2"/></svg></span>Voltar ao Diagnóstico</button>
+  </div>`;
+  alvos.forEach(el=>{el.innerHTML=html;el.style.display=html?'block':'none';});
+}
+function cdVoltarAoDiag(){
+  _cdVolta=null;cdRenderVolta();
+  // go(...,null) não zera nada: só o clique no menu lateral começa do zero.
+  go('diagnostico',null);
+  document.querySelectorAll('.sidebar nav a').forEach(a=>{
+    a.classList.toggle('active',String(a.getAttribute('onclick')||'').includes("'diagnostico'"));
+  });
+  setTimeout(()=>{
+    const b=document.getElementById('cdBloco');
+    if(b)b.scrollIntoView({behavior:'smooth',block:'center'});
+  },160);
+}
 function cdAbrirRegua(alvo,chave){
   const abaId=alvo==='mineral'?'sp-minerais':'sp-ervas';
+  _cdVolta={nome:_diagPacSel?_diagPacSel.nome:''};
   go('suplementos',null);
   setTimeout(()=>{
     const btn=document.querySelector('#supTabs button[onclick*="'+abaId+'"]');
@@ -4591,7 +4631,7 @@ function cdBlocoHtml(){
       <button type="button" class="btn btn-sec btn-sm" style="padding:2px 9px;font-size:10.5px" onclick="cdAbrirRegua('${c.alvo}','${c.chave}')">Abrir a régua</button>
     </div>
   </div>`;
-  return `<div class="fc" style="border-left:5px solid #C9A227;background:#FFFDF5">
+  return `<div class="fc" id="cdBloco" style="border-left:5px solid #C9A227;background:#FFFDF5">
     <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-4 5-7 9-10"/></svg></span>Candidatos — ervas e minerais</div>
     <p style="font-size:11.5px;color:var(--txt-l);margin-bottom:8px">A partir da desarmonia que já está nesta ficha — e do que já foi tentado <strong>nesta pessoa</strong>. <strong>Nenhum destes é decisão do sistema</strong> — cada um diz de onde veio, e quem filtra é você. O que você aceitar fica anotado neste encontro; a dose continua morando na régua.</p>
     <p style="font-size:11px;color:var(--txt-l);margin:-4px 0 8px">Etiqueta <span class="cd-por pac">verde</span> = respondeu nesta pessoa · <span class="cd-por nao">vermelha</span> = não respondeu nela. Vem do interruptor que você marca na ficha dela, nunca de suposição.</p>

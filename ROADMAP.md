@@ -4,6 +4,20 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
+## Concluído — Clínica v5.8: o caminho de volta da régua (30/07/2026)
+
+Achado usando de verdade, minutos depois da v5.7: *"pede abrir a régua, vai para as ervas, mas
+como retorno para o diagnóstico?"*. Não retornava. E voltar pelo menu lateral seria pior do que
+não voltar: **o menu zera a avaliação de propósito**, para nunca misturar duas pessoas — ele
+perderia tudo o que já tinha marcado, com o paciente na frente.
+
+Entrou uma **faixa de volta** no alto de Suplementos e da Recomendação, que só aparece quando
+existe uma avaliação esperando: *"Você veio de uma avaliação em aberto de Fulano — ela continua
+inteira, esperando"*, com o botão **Voltar ao Diagnóstico**. A volta não zera nada (usa
+`go(...,null)`, o mesmo caminho de Editar/Duplicar), reacende o menu lateral e desce até o bloco
+Candidatos, no ponto exato de onde ele saiu. Se a avaliação for zerada pelo menu, a faixa some
+junto — a tela nunca promete uma volta que não existe mais.
+
 ## Concluído — Clínica v5.7: a ligação do paciente, o segundo andar da teia (30/07/2026)
 
 Senha **"Acender a Ligação do Paciente"** cumprida. A teia da v5.5 tinha um andar só: mineral ou
