@@ -77,9 +77,50 @@ dedo → meridiano → órgão → emoção → Sefirot teria um lugar natural p
 Vitruviano. **Não decidir isso agora** — mas quando a conversa do chão acontecer, esta ideia entra
 na mesa. Senha: **"O chão da teia"**.
 
-**O que ainda não foi decidido, e não deve ser decidido sozinho:** se as abas atuais viram camadas
-do Vitruviano ou continuam existindo ao lado dele; e o que acontece com o Vitruviano de frente,
-que hoje não espelha a Árvore. São perguntas para quando ele quiser acender isso.
+### Respondido por ele no mesmo dia — a visão de costas é a visão certa
+
+**Decidido:** a Árvore mora na **visão de costas**, e é a visão natural desse conjunto. A razão é
+dele, e é geométrica antes de ser mística:
+
+> *"Assim dá para visualizar Chokmah à direita do cérebro — assim você se imagina dentro da árvore,
+> dentro do vórtice, dentro da energia divina."*
+
+**Por que a geometria dá razão a ele:** quando a pessoa está de costas, os lados **coincidem** — a
+direita dela cai à direita de quem olha. Chokmah desenhada à direita é, de fato, o hemisfério
+direito. Na visão de frente tudo se inverte, e a mesma Árvore passaria a apontar o lado errado do
+corpo. Não é preferência de gosto: de frente, sem correção, **o desenho mentiria**.
+
+**A solução que ele deu, e que fecha o problema antigo:** ao lado do *Inverter visão*, um botão
+para **girar a Árvore junto**. Assim os dois propósitos coincidem em vez de brigarem — o corpo vira,
+a Árvore vira com ele, e Chokmah continua no hemisfério direito real em qualquer visão. Isso resolve
+o detalhe conhecido desde 13/07 (*"a Árvore não espelha na visão de frente"*), que até hoje estava
+anotado como defeito sem conserto escolhido.
+
+### O verdadeiro sonho, dito por ele (30/07/2026)
+
+> *"A ideia do Vitruviano em um lugar único, hoje sim. Mas futuramente posso ter a ideia de desejar
+> vê-lo na Clínica — e quem sabe, ao invés da aba Diagnóstico ser daquela forma, por que não ver
+> apenas o Vitruviano com a Árvore e toda a teia ligada a ele? Este era o verdadeiro sonho."*
+
+**Isto não contradiz a decisão de hoje, e é importante entender por quê.** O que foi barrado em
+30/07 foi **uma segunda árvore**: copiar a do OS para a Clínica, ou desenhar outra a partir das
+sessões — duas verdades que divergiriam. O sonho é o oposto disso: **um corpo só, um mapa só**,
+aparecendo nos dois lugares porque é o mesmo. É exatamente a regra *"não copiar, extrair"* levada
+até o fim.
+
+**O que ele está descrevendo é a aba Diagnóstico deixar de ser formulário e virar corpo.** Hoje o
+Diagnóstico é uma sequência de caixas que ele preenche. No sonho, é o Vitruviano com a Árvore, e a
+teia acesa sobre ele: marca o pulso, acende o fio; toca a vértebra, acende o que ela puxa.
+
+**Continua sendo ideia, não obra.** Nada disso começa sem ele mandar. Mas fica escrito porque é
+a primeira vez que o destino aparece inteiro — e porque explica todo o resto: a teia dormente
+esperava um chão, e o chão tem nome.
+
+### O que ainda não foi decidido
+
+Se as abas atuais viram camadas do Vitruviano ou continuam existindo ao lado dele. Ele inclinou
+para camadas **na Clínica** (*"ao invés da aba Diagnóstico ser daquela forma"*); no OS, não disse.
+Pergunta para quando acender.
 
 ## Concluído — a bancada varrida: a árvore que cresce, senha "Varrer a bancada" (30/07/2026)
 
