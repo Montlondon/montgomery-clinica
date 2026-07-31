@@ -4,20 +4,43 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
-## Em espera, por decisão dele — a Árvore da Vida na Clínica (30/07/2026)
+## Decisão fechada — a Árvore fica só no Montgomery OS (30/07/2026)
 
-*"A ideia da Árvore da Vida na Clínica precisamos discutir melhor sobre isso."*
+*"Quero que deixe apenas a árvore como já existe no Montgomery OS."*
 
-**Nada de Árvore na Clínica começa até essa conversa acontecer.** O plano técnico já levantado
+**Existe uma Árvore só:** as 10 Sefirot sobre Adam Kadmon, em `os/index.html`, seção `sec-arvore`.
+É um mapa fixo, igual para todo mundo. Ela continua viva e continua crescendo em conteúdo — o que
+está encerrado é **abrir uma segunda árvore em outro lugar**.
+
+**Não construir árvore na Clínica.** Não copiar a do OS para lá, não desenhar uma nova a partir
+das sessões, não extrair para arquivo compartilhado. Dois itens saíram do ROADMAP por isso:
+o plano do botão na ficha do paciente e o **item 9** da pauta de 27/07 (*"Árvore e Vitruviano na
+Clínica"*). Os dois estão inteiros em
+`Claude_Main_Clean/01_Codigo/prototipos/ARVORE_NA_CLINICA_plano_em_espera.md`.
+
+**Um fio solto que a teia herda:** o item 9 dizia que a teia dependia da Árvore estar na Clínica.
+Com a Árvore ficando só no OS, a teia precisa de outro chão — isso entra na conversa dela, não na
+da Árvore.
+
+**A senha "Plantar a Árvore na Clínica" está encerrada.**
+
+<details>
+<summary>O que havia sido levantado antes da decisão (registro)</summary>
+
+O plano técnico já levantado
 (onde entra o botão, de onde vêm os dados, as cores dos Elementos) saiu daqui inteiro e espera em
 `Claude_Main_Clean/01_Codigo/prototipos/ARVORE_NA_CLINICA_plano_em_espera.md`, junto com as quatro
 perguntas que a conversa precisa responder. O protótipo aposentado está na mesma pasta, e a última
 versão viva dele no commit `aa4e651`.
 
 Saiu do topo do ROADMAP de propósito: é a primeira coisa que a próxima janela lê e que o Ronda
-enxerga. Enquanto estava aqui, mandava começar uma obra que ainda não foi decidida.
+enxerga. Enquanto estava aqui, mandava começar uma obra que ainda não foi decidida — e horas
+depois a decisão veio, fechando a questão.
 
-**A senha "Plantar a Árvore na Clínica" fica suspensa** — não abrir janela com ela por ora.
+O protótipo do desenho continua guardado em `Claude_Main_Clean` e no commit `aa4e651`. Nada foi
+apagado; só parou de puxar trabalho.
+
+</details>
 
 ## Concluído — a bancada varrida: a árvore que cresce, senha "Varrer a bancada" (30/07/2026)
 
@@ -1798,11 +1821,11 @@ pensar junto no momento do atendimento.
    busca normalizada (minusculo, sem acento) no banco — nao na pagina, para nao gastar
    egress. Pequeno e doi HOJE: fazer primeiro.
 
-9. **Arvore e Vitruviano na Clinica.** Hoje so existem no Montgomery OS. NAO copiar:
-   copia vira duas verdades que divergem (ja aconteceu com clinica_DO_AR.html e com o
-   MMObras). Extrair para um arquivo unico que OS e Clinica carregam. E tambem o
-   primeiro "andar" do predio, e a teia depende disso — se a Arvore for copia, a
-   corrente dedo->meridiano->orgao->emocao->Sefirot teria que ser escrita duas vezes.
+9. ~~**Arvore e Vitruviano na Clinica.**~~ **RECOLHIDO em 30/07/2026.** A Arvore fica
+   apenas onde ja esta: no Montgomery OS. O item inteiro (a parte da Arvore) foi para
+   `Claude_Main_Clean/01_Codigo/prototipos/ARVORE_NA_CLINICA_plano_em_espera.md`.
+   O **Vitruviano** nao foi recolhido — se um dia ele quiser o corpo na Clinica, a
+   preocupacao de nao virar copia continua valendo, mas isso e outra conversa.
 
 10. **App instalavel separado do OS.** Ja funciona: os dois manifestos existem e tem
     escopos distintos ("/" e "/os/"), entao o Windows trata como dois programas. Falta
@@ -1810,8 +1833,9 @@ pensar junto no momento do atendimento.
     falta um service worker — meia hora, e da de brinde abrir sem internet.
 
 **Ordem combinada:** 8 → toggles/caixas → pulso por posicao (busca dentro de cada
-quadro) → quiropraxia completa → registro de sessao → 9 → a teia (janela propria,
-arquitetura antes do codigo).
+quadro) → quiropraxia completa → registro de sessao → ~~9~~ → a teia (janela propria,
+arquitetura antes do codigo). *O 9 saiu da fila em 30/07/2026: a Arvore fica so no OS.
+A teia segue sem ele — as ligacoes que ele quer nao dependem da Arvore estar na Clinica.*
 
 **Regra que ele deu para a teia:** as ligacoes tem que vir DELE, nao do Claude. Claude
 constroi onde as ligacoes moram e como percorre-las; o Montgomery escreve ou confirma
@@ -1836,8 +1860,9 @@ Ordem da janela:
 3. **Pulso por posicao** — as qualidades passam a morar DENTRO do quadro de cada posicao,
    com a busca dos 28 dentro de cada quadro tambem.
 
-Depois: quiropraxia completa -> registro de sessao + resumo na chegada -> Arvore e
-Vitruviano num arquivo so servindo OS e Clinica -> a teia.
+Depois: quiropraxia completa -> registro de sessao + resumo na chegada -> ~~Arvore e
+Vitruviano num arquivo so servindo OS e Clinica~~ -> a teia.
+*(a Arvore saiu desta fila em 30/07/2026 — fica so no Montgomery OS.)*
 
 ## Concluido (27/07/2026) — Arrumacao: tudo passou a morar no lugar certo
 
