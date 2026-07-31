@@ -19,8 +19,13 @@ Clínica"*). Os dois estão inteiros em
 `Claude_Main_Clean/01_Codigo/prototipos/ARVORE_NA_CLINICA_plano_em_espera.md`.
 
 **Um fio solto que a teia herda:** o item 9 dizia que a teia dependia da Árvore estar na Clínica.
-Com a Árvore ficando só no OS, a teia precisa de outro chão — isso entra na conversa dela, não na
-da Árvore.
+Com a Árvore ficando só no OS, a teia precisa de outro chão.
+
+**A teia fica dormente** — decisão dele no mesmo dia: *"depois vamos pensar como fazer este chão.
+Por enquanto a ideia vai ficar dormente."* Não é desistência e não foi para a quarentena: o desejo
+continua escrito, inteiro, mais abaixo neste documento. Só saiu da fila. Quando ele quiser retomar,
+a primeira pergunta já está formulada — **onde a teia mora, se a Árvore não vai para a Clínica?**
+Senha: **"O chão da teia"**.
 
 **A senha "Plantar a Árvore na Clínica" está encerrada.**
 
@@ -1833,9 +1838,9 @@ pensar junto no momento do atendimento.
     falta um service worker — meia hora, e da de brinde abrir sem internet.
 
 **Ordem combinada:** 8 → toggles/caixas → pulso por posicao (busca dentro de cada
-quadro) → quiropraxia completa → registro de sessao → ~~9~~ → a teia (janela propria,
-arquitetura antes do codigo). *O 9 saiu da fila em 30/07/2026: a Arvore fica so no OS.
-A teia segue sem ele — as ligacoes que ele quer nao dependem da Arvore estar na Clinica.*
+quadro) → quiropraxia completa → registro de sessao → ~~9~~ → ~~a teia~~.
+*Em 30/07/2026 os dois ultimos sairam da fila: o 9 porque a Arvore fica so no OS, e a teia
+porque ele mandou deixar dormente ate pensarem o chao dela. A fila termina no registro de sessao.*
 
 **Regra que ele deu para a teia:** as ligacoes tem que vir DELE, nao do Claude. Claude
 constroi onde as ligacoes moram e como percorre-las; o Montgomery escreve ou confirma
