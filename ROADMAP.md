@@ -47,6 +47,40 @@ apagado; só parou de puxar trabalho.
 
 </details>
 
+## Ideia viva — o Vitruviano como o lugar único (30/07/2026)
+
+**Não é obra, é ideia.** Registrada no dia em que ele fechou que a Árvore fica só no OS, e nasce
+justamente daí. Palavras dele:
+
+> *"Futuramente este vitruviano que já contém a árvore, vamos utilizá-lo, e a partir dele teremos
+> tudo em um lugar só. A partir dele teremos tudo."*
+
+**A premissa está certa — conferida no código, não suposta.** O Vitruviano já é o lugar onde as
+camadas se sobrepõem no mesmo corpo. Hoje ele tem três interruptores lado a lado
+(`os/index.html:1302`): **Pontos**, **Árvore da Vida** e **Inverter visão**, mais os chips dos
+meridianos logo abaixo. A Árvore já acende **sobre** o corpo (`mfToggleArvore`, `os/index.html:4672`).
+Ou seja: a peça que ele está imaginando não precisa ser inventada — ela já existe e já funciona.
+O que a ideia propõe é **promovê-la a porta de entrada**.
+
+**O que muda de figura para porta.** Hoje o Vitruviano é uma tela que você visita. Na ideia dele,
+é de onde tudo parte: você chega no corpo, e cada coisa que o OS sabe — osso, meridiano, ponto,
+órgão, Sefirá, Elemento, vértebra — é uma camada que acende ali, em vez de morar numa aba separada
+que você precisa lembrar que existe.
+
+**Por que isso conversa com a decisão de hoje.** A Árvore não vai para a Clínica; ela fica no OS.
+Esta ideia diz para onde a energia vai em vez disso: **aprofundar o lugar único** em vez de
+espalhar cópias. É o contrário de duplicar — é concentrar.
+
+**E é possivelmente o chão que a teia estava procurando.** A teia ficou dormente esperando
+responder *onde ela mora*. Se tudo se acende a partir do mesmo corpo, a corrente
+dedo → meridiano → órgão → emoção → Sefirot teria um lugar natural para ser percorrida: o próprio
+Vitruviano. **Não decidir isso agora** — mas quando a conversa do chão acontecer, esta ideia entra
+na mesa. Senha: **"O chão da teia"**.
+
+**O que ainda não foi decidido, e não deve ser decidido sozinho:** se as abas atuais viram camadas
+do Vitruviano ou continuam existindo ao lado dele; e o que acontece com o Vitruviano de frente,
+que hoje não espelha a Árvore. São perguntas para quando ele quiser acender isso.
+
 ## Concluído — a bancada varrida: a árvore que cresce, senha "Varrer a bancada" (30/07/2026)
 
 A bancada do `main` estava com três itens parados. Cada um foi olhado antes de decidir, e o
