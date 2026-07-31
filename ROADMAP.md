@@ -4,42 +4,20 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
-## Próximo — a Árvore na ficha do paciente, senha "Plantar a Árvore na Clínica"
+## Em espera, por decisão dele — a Árvore da Vida na Clínica (30/07/2026)
 
-Decisão dele em 30/07/2026, com a frase que fecha a questão: ***"pra que criar algo que já existe"***.
+*"A ideia da Árvore da Vida na Clínica precisamos discutir melhor sobre isso."*
 
-**As duas árvores não são a mesma coisa, e isso precisa ficar claro.** A do OS (`sec-arvore`,
-`os/index.html:880`) é as 10 Sefirot sobre Adam Kadmon: um **mapa fixo**, igual para todo mundo,
-que não muda de forma nunca. A que vai entrar na Clínica é o **retrato de uma pessoa no tempo** —
-o desenho muda a cada sessão, a árvore da Maria não se parece com a do João. Uma é a partitura,
-a outra é a gravação daquela pessoa tocando. Por isso ela precisa de **nome próprio**, para as
-duas não colidirem: *Árvore do Paciente*, ou o nome que ele escolher.
+**Nada de Árvore na Clínica começa até essa conversa acontecer.** O plano técnico já levantado
+(onde entra o botão, de onde vêm os dados, as cores dos Elementos) saiu daqui inteiro e espera em
+`Claude_Main_Clean/01_Codigo/prototipos/ARVORE_NA_CLINICA_plano_em_espera.md`, junto com as quatro
+perguntas que a conversa precisa responder. O protótipo aposentado está na mesma pasta, e a última
+versão viva dele no commit `aa4e651`.
 
-**O que ele decidiu:** não é tela nova, é **um botão dentro da ficha do paciente**. A árvore se
-desenha a partir do que a Clínica já guarda. **Nenhuma tabela nova, nenhum lugar novo para anotar,
-nenhum peso novo na cota.** O risco que isso evita é real: o OS já tem *"Observações energéticas
-registradas"* por perfil debaixo das Sefirot — se a Clínica ganhasse um segundo caderno, daqui a
-três meses ele não lembraria em qual dos dois escreveu.
+Saiu do topo do ROADMAP de propósito: é a primeira coisa que a próxima janela lê e que o Ronda
+enxerga. Enquanto estava aqui, mandava começar uma obra que ainda não foi decidida.
 
-### O mapa técnico, já levantado — a próxima janela não precisa procurar nada
-
-| O que | Onde |
-|---|---|
-| A ficha que abre ao clicar no paciente (onde entra o botão) | `verPac(id)`, `index.html:2867` — a fileira de botões fica em `index.html:2890` |
-| A fonte dos dados, **já em cache local** | `gD('diagnosticos')` — nenhuma leitura nova do Supabase |
-| Como filtrar as sessões de uma pessoa | mesma receita de `ultimoEncontroDoPac()`, `index.html:7892`: `filter(d=>String(d.pacienteId)===String(pacId))`, ordenado por `d.data` |
-| O que cada sessão traz | `salvarDiagnostico()`, `index.html:7441`: `data`, `elementos`, `pontos`, `elementoSintomas`, `candidatos`, `escalaEmocional`, `sessaoFeito/Reacao/Prox` |
-| Formato dos Elementos | strings puras — `'Madeira'`, `'Fogo'`, `'Terra'`, `'Metal'`, `'Água'` |
-| A cor de cada Elemento, já pronta | `bancoIntegrativoCompleto.matrizCincoElementos[nome].cor` (`dados-clinicos.js:36`) — **usar essas, não inventar paleta nova** |
-| Como o tempo vira voz humana | `haQuantoTempo()`, `index.html:7902` |
-
-**O desenho já existe e está guardado:** o commit `aa4e651` tem a árvore que cresce inteira
-(galhos alternando de lado, folhas coloridas pelo Elemento, copa a partir da terceira sessão,
-barras de padrões entre sessões, clique no galho reabre). É de lá que se transplanta — não se
-reescreve do zero.
-
-**Ganho que a Clínica dá e o protótipo não tinha:** lá os Elementos eram adivinhados por palavra-chave
-no texto. Aqui eles já vêm **escolhidos por ele** no diagnóstico. A folha não chuta mais a cor.
+**A senha "Plantar a Árvore na Clínica" fica suspensa** — não abrir janela com ela por ora.
 
 ## Concluído — a bancada varrida: a árvore que cresce, senha "Varrer a bancada" (30/07/2026)
 
