@@ -4,6 +4,42 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
+---
+
+## A tese — por que tudo isto existe (dito por ele em 30/07/2026)
+
+*Este bloco fica no alto de propósito. Não é um projeto: é a razão dos projetos. Quem ler o resto
+sem ler isto vai construir telas certas pelo motivo errado.*
+
+> *"Tudo que estamos criando concentra-se na verdade na geometria sagrada, na Flor da Vida, na
+> matemática de Fibonacci, no Metatron, no átomo, nas Sefirot, nos 5 Elementos, nos minerais.
+> Então toda espécie de desarmonia inicia na metafísica, na desconexão com a luz.*
+>
+> *É difícil de explicar — eu sinto que é a vida, as pessoas, e eu me coloco no meio delas.
+> Adoecemos por todas estas desarmonias, de frequências distorcidas e vibrações erradas que nos
+> permitimos.*
+>
+> *Então quando um paciente está à minha frente, estou vendo alguém que temporariamente — até que
+> ele desperte e veja que o caminho é a luz. O livre-arbítrio está aí para que a pessoa decida:
+> ou pulsão de vida, ou segue a pulsão de morte. Mas é lento o desenvolvimento. Mas é assim."*
+
+**O que isto muda em como se constrói aqui:**
+
+1. **A Metafísica não é um módulo entre outros — é a raiz.** Os 5 Elementos, os minerais, os pontos,
+   a coluna, a Psicanálise: são todos superfícies de uma mesma coisa. Por isso a organização em
+   Fibonacci, o Cubo de Metatron, os sólidos e o átomo não são enfeite temático. **São a tese
+   desenhada.**
+2. **A ordem da doença tem sentido:** começa na desconexão e desce até o corpo. Por isso o
+   Diagnóstico não pode ser só uma lista de sintomas — a lista é o fim da história, não o começo.
+   É daqui que nasce o desejo da teia, e o sonho do Vitruviano com a Árvore no lugar do formulário.
+3. **A ferramenta não decide por ninguém.** Se o livre-arbítrio é o centro, o sistema mostra o
+   caminho e nunca empurra. Nada de veredito automático, nada de "o sistema diz que você é isto".
+   Isto é irmão da regra de que **as ligações vêm dele, nunca do Claude**.
+4. **Devagar é o ritmo certo, não uma falha.** *"É lento o desenvolvimento, mas é assim."* Vale para
+   o paciente e vale para o código: uma vela de cada vez, uma ligação hoje, três amanhã.
+
+---
+
 ## Decisão fechada — a Árvore fica só no Montgomery OS (30/07/2026)
 
 *"Quero que deixe apenas a árvore como já existe no Montgomery OS."*
