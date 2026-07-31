@@ -4,6 +4,41 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
+## Concluído — a bancada varrida: a árvore que cresce, senha "Varrer a bancada" (30/07/2026)
+
+A bancada do `main` estava com três itens parados. Cada um foi olhado antes de decidir, e o
+critério ficou claro: **só sobrevive o que é trabalho, não o que é rastro.**
+
+**O que virou commit** (`aa4e651`) — o protótipo `01_Codigo/prototipos/arvore_vida_prototipo.html`
+tinha 136 linhas de trabalho real esperando: a **árvore do paciente que cresce a cada sessão**.
+Um botão *Ver árvore do paciente* abre a árvore inteira em tela cheia. Cada sessão é um **galho**,
+alternando de lado; cada percepção é uma **folha**, colorida pelo Elemento que ela toca — Madeira
+verde, Fogo vermelho, Terra dourada, Metal cinza, Água azul. O que não cai em Elemento nenhum vira
+folha roxa: balão livre. A partir da terceira sessão a **copa acende** no topo. Clicando num galho,
+a sessão se abre embaixo e dá para reabrir ela na tela de trabalho.
+
+Embaixo da árvore, as **barras de padrões entre sessões**: quantas vezes cada Elemento apareceu na
+vida daquela pessoa somando tudo. É a primeira vez que o sistema mostra o **padrão** em vez do
+episódio — o começo do que ele chama de teia.
+
+Emoji saiu de três lugares onde ainda estava (balões, anamnese, aviso de sessão salva).
+
+**Provado ao vivo, não no arquivo:** três sessões inventadas, servidor local, a árvore desenhou os
+três galhos, as barras contaram certo (Metal 2, Água 2, balões 2) e o clique no galho reabriu a
+sessão. Um defeito apareceu só na tela — o fundo da tela cheia era quase transparente e o título da
+página vazava por trás. Virou fundo sólido. **Nenhum teste teria pego isso; olhar pegou.**
+
+**O que foi descartado, e por quê.** Dois arquivos apareciam modificados sem trazerem trabalho:
+`.claude/launch.json` ganhou um segundo servidor local (`static-b`) que nasceu de uma sessão e não
+serve a ninguém, e `02_Arvore/COMO-FUNCIONA.md` tinha uma tabela inteira reescrita por um
+formatador automático — 28 linhas de diff para mudar zero palavra de conteúdo. Descartados, não
+apagados: nunca chegaram a existir no histórico.
+
+Regra que fica ao lado da outra: **backup é foto do dado, não é código** — e agora
+**diff sem conteúdo não é trabalho.**
+
+Bancada: **zero itens.** O `main` está limpo pela primeira vez.
+
 ## Concluído — a casa varrida: o main limpo e a quarentena (30/07/2026)
 
 Nasceu de uma pergunta dele: *"o que quer dizer este main viver sujo? Como melhorar isso?"*
