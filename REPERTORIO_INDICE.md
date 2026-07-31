@@ -21,7 +21,8 @@ As pastas seguem a **sequência de Fibonacci** — do núcleo (0) expandindo em 
 Biografia (`quem-e-montgomery.md`), índice do universo (`00-MONTGOMERY-UNIVERSE-INDICE.md`), prompts de todos os projetos, palavra-chave mestre `Montgomery`, `Suplementos.md` (Plano de Saúde Integrativa e Cronofarmacologia 2026 — plano pessoal; fonte do futuro módulo Cronofarmacologia no OS).
 
 ## 💻 01_Codigo/ — schemas, protótipos e notas técnicas
-Schemas SQL, componentes (.jsx), `prototipos/` (arvore_vida_prototipo.html **ativo** + nucleo-prototipo.html), `_prompts_notas/`.
+Schemas SQL, componentes (.jsx), `prototipos/` (nucleo-prototipo.html), `_prompts_notas/`.
+O `arvore_vida_prototipo.html` **saiu em 30/07/2026** para `Claude_Main_Clean/01_Codigo/prototipos/` — a Árvore fica só no Montgomery OS.
 
 ## 🌳 02_Arvore/ — Árvore da Vida, MTC, anamnese
 `anamnese_montgomery_modelo.md` (blueprint da anamnese), `arvore_vida_correspondencias.md`, `MEQ_METODO_ABC.md` (método ABC minerado), `MEQ_MATERIAIS_INDICE.md`, `bagua_visao_prompt.md`, `Bussola_Holografica_Genesis.md`, propostas de módulos (Língua, Psicanálise, Sintomas), `VISAO_MONTGOMERY.md`, `meta-montgomery-projeto.md`.

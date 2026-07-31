@@ -4,42 +4,123 @@ Documento vivo para acompanhar o que já foi feito e o que está planejado. Atua
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam — este documento não. Nenhuma linha, nenhuma ideia solta, nenhuma decisão pode ficar só dentro de uma janela. O que não está escrito aqui, some.
 
-## Próximo — a Árvore na ficha do paciente, senha "Plantar a Árvore na Clínica"
+## Decisão fechada — a Árvore fica só no Montgomery OS (30/07/2026)
 
-Decisão dele em 30/07/2026, com a frase que fecha a questão: ***"pra que criar algo que já existe"***.
+*"Quero que deixe apenas a árvore como já existe no Montgomery OS."*
 
-**As duas árvores não são a mesma coisa, e isso precisa ficar claro.** A do OS (`sec-arvore`,
-`os/index.html:880`) é as 10 Sefirot sobre Adam Kadmon: um **mapa fixo**, igual para todo mundo,
-que não muda de forma nunca. A que vai entrar na Clínica é o **retrato de uma pessoa no tempo** —
-o desenho muda a cada sessão, a árvore da Maria não se parece com a do João. Uma é a partitura,
-a outra é a gravação daquela pessoa tocando. Por isso ela precisa de **nome próprio**, para as
-duas não colidirem: *Árvore do Paciente*, ou o nome que ele escolher.
+**Existe uma Árvore só:** as 10 Sefirot sobre Adam Kadmon, em `os/index.html`, seção `sec-arvore`.
+É um mapa fixo, igual para todo mundo. Ela continua viva e continua crescendo em conteúdo — o que
+está encerrado é **abrir uma segunda árvore em outro lugar**.
 
-**O que ele decidiu:** não é tela nova, é **um botão dentro da ficha do paciente**. A árvore se
-desenha a partir do que a Clínica já guarda. **Nenhuma tabela nova, nenhum lugar novo para anotar,
-nenhum peso novo na cota.** O risco que isso evita é real: o OS já tem *"Observações energéticas
-registradas"* por perfil debaixo das Sefirot — se a Clínica ganhasse um segundo caderno, daqui a
-três meses ele não lembraria em qual dos dois escreveu.
+**Não construir árvore na Clínica.** Não copiar a do OS para lá, não desenhar uma nova a partir
+das sessões, não extrair para arquivo compartilhado. Dois itens saíram do ROADMAP por isso:
+o plano do botão na ficha do paciente e o **item 9** da pauta de 27/07 (*"Árvore e Vitruviano na
+Clínica"*). Os dois estão inteiros em
+`Claude_Main_Clean/01_Codigo/prototipos/ARVORE_NA_CLINICA_plano_em_espera.md`.
 
-### O mapa técnico, já levantado — a próxima janela não precisa procurar nada
+**Um fio solto que a teia herda:** o item 9 dizia que a teia dependia da Árvore estar na Clínica.
+Com a Árvore ficando só no OS, a teia precisa de outro chão.
 
-| O que | Onde |
-|---|---|
-| A ficha que abre ao clicar no paciente (onde entra o botão) | `verPac(id)`, `index.html:2867` — a fileira de botões fica em `index.html:2890` |
-| A fonte dos dados, **já em cache local** | `gD('diagnosticos')` — nenhuma leitura nova do Supabase |
-| Como filtrar as sessões de uma pessoa | mesma receita de `ultimoEncontroDoPac()`, `index.html:7892`: `filter(d=>String(d.pacienteId)===String(pacId))`, ordenado por `d.data` |
-| O que cada sessão traz | `salvarDiagnostico()`, `index.html:7441`: `data`, `elementos`, `pontos`, `elementoSintomas`, `candidatos`, `escalaEmocional`, `sessaoFeito/Reacao/Prox` |
-| Formato dos Elementos | strings puras — `'Madeira'`, `'Fogo'`, `'Terra'`, `'Metal'`, `'Água'` |
-| A cor de cada Elemento, já pronta | `bancoIntegrativoCompleto.matrizCincoElementos[nome].cor` (`dados-clinicos.js:36`) — **usar essas, não inventar paleta nova** |
-| Como o tempo vira voz humana | `haQuantoTempo()`, `index.html:7902` |
+**A teia fica dormente** — decisão dele no mesmo dia: *"depois vamos pensar como fazer este chão.
+Por enquanto a ideia vai ficar dormente."* Não é desistência e não foi para a quarentena: o desejo
+continua escrito, inteiro, mais abaixo neste documento. Só saiu da fila. Quando ele quiser retomar,
+a primeira pergunta já está formulada — **onde a teia mora, se a Árvore não vai para a Clínica?**
+Senha: **"O chão da teia"**.
 
-**O desenho já existe e está guardado:** o commit `aa4e651` tem a árvore que cresce inteira
-(galhos alternando de lado, folhas coloridas pelo Elemento, copa a partir da terceira sessão,
-barras de padrões entre sessões, clique no galho reabre). É de lá que se transplanta — não se
-reescreve do zero.
+**A senha "Plantar a Árvore na Clínica" está encerrada.**
 
-**Ganho que a Clínica dá e o protótipo não tinha:** lá os Elementos eram adivinhados por palavra-chave
-no texto. Aqui eles já vêm **escolhidos por ele** no diagnóstico. A folha não chuta mais a cor.
+<details>
+<summary>O que havia sido levantado antes da decisão (registro)</summary>
+
+O plano técnico já levantado
+(onde entra o botão, de onde vêm os dados, as cores dos Elementos) saiu daqui inteiro e espera em
+`Claude_Main_Clean/01_Codigo/prototipos/ARVORE_NA_CLINICA_plano_em_espera.md`, junto com as quatro
+perguntas que a conversa precisa responder. O protótipo aposentado está na mesma pasta, e a última
+versão viva dele no commit `aa4e651`.
+
+Saiu do topo do ROADMAP de propósito: é a primeira coisa que a próxima janela lê e que o Ronda
+enxerga. Enquanto estava aqui, mandava começar uma obra que ainda não foi decidida — e horas
+depois a decisão veio, fechando a questão.
+
+O protótipo do desenho continua guardado em `Claude_Main_Clean` e no commit `aa4e651`. Nada foi
+apagado; só parou de puxar trabalho.
+
+</details>
+
+## Ideia viva — o Vitruviano como o lugar único (30/07/2026)
+
+**Não é obra, é ideia.** Registrada no dia em que ele fechou que a Árvore fica só no OS, e nasce
+justamente daí. Palavras dele:
+
+> *"Futuramente este vitruviano que já contém a árvore, vamos utilizá-lo, e a partir dele teremos
+> tudo em um lugar só. A partir dele teremos tudo."*
+
+**A premissa está certa — conferida no código, não suposta.** O Vitruviano já é o lugar onde as
+camadas se sobrepõem no mesmo corpo. Hoje ele tem três interruptores lado a lado
+(`os/index.html:1302`): **Pontos**, **Árvore da Vida** e **Inverter visão**, mais os chips dos
+meridianos logo abaixo. A Árvore já acende **sobre** o corpo (`mfToggleArvore`, `os/index.html:4672`).
+Ou seja: a peça que ele está imaginando não precisa ser inventada — ela já existe e já funciona.
+O que a ideia propõe é **promovê-la a porta de entrada**.
+
+**O que muda de figura para porta.** Hoje o Vitruviano é uma tela que você visita. Na ideia dele,
+é de onde tudo parte: você chega no corpo, e cada coisa que o OS sabe — osso, meridiano, ponto,
+órgão, Sefirá, Elemento, vértebra — é uma camada que acende ali, em vez de morar numa aba separada
+que você precisa lembrar que existe.
+
+**Por que isso conversa com a decisão de hoje.** A Árvore não vai para a Clínica; ela fica no OS.
+Esta ideia diz para onde a energia vai em vez disso: **aprofundar o lugar único** em vez de
+espalhar cópias. É o contrário de duplicar — é concentrar.
+
+**E é possivelmente o chão que a teia estava procurando.** A teia ficou dormente esperando
+responder *onde ela mora*. Se tudo se acende a partir do mesmo corpo, a corrente
+dedo → meridiano → órgão → emoção → Sefirot teria um lugar natural para ser percorrida: o próprio
+Vitruviano. **Não decidir isso agora** — mas quando a conversa do chão acontecer, esta ideia entra
+na mesa. Senha: **"O chão da teia"**.
+
+### Respondido por ele no mesmo dia — a visão de costas é a visão certa
+
+**Decidido:** a Árvore mora na **visão de costas**, e é a visão natural desse conjunto. A razão é
+dele, e é geométrica antes de ser mística:
+
+> *"Assim dá para visualizar Chokmah à direita do cérebro — assim você se imagina dentro da árvore,
+> dentro do vórtice, dentro da energia divina."*
+
+**Por que a geometria dá razão a ele:** quando a pessoa está de costas, os lados **coincidem** — a
+direita dela cai à direita de quem olha. Chokmah desenhada à direita é, de fato, o hemisfério
+direito. Na visão de frente tudo se inverte, e a mesma Árvore passaria a apontar o lado errado do
+corpo. Não é preferência de gosto: de frente, sem correção, **o desenho mentiria**.
+
+**A solução que ele deu, e que fecha o problema antigo:** ao lado do *Inverter visão*, um botão
+para **girar a Árvore junto**. Assim os dois propósitos coincidem em vez de brigarem — o corpo vira,
+a Árvore vira com ele, e Chokmah continua no hemisfério direito real em qualquer visão. Isso resolve
+o detalhe conhecido desde 13/07 (*"a Árvore não espelha na visão de frente"*), que até hoje estava
+anotado como defeito sem conserto escolhido.
+
+### O verdadeiro sonho, dito por ele (30/07/2026)
+
+> *"A ideia do Vitruviano em um lugar único, hoje sim. Mas futuramente posso ter a ideia de desejar
+> vê-lo na Clínica — e quem sabe, ao invés da aba Diagnóstico ser daquela forma, por que não ver
+> apenas o Vitruviano com a Árvore e toda a teia ligada a ele? Este era o verdadeiro sonho."*
+
+**Isto não contradiz a decisão de hoje, e é importante entender por quê.** O que foi barrado em
+30/07 foi **uma segunda árvore**: copiar a do OS para a Clínica, ou desenhar outra a partir das
+sessões — duas verdades que divergiriam. O sonho é o oposto disso: **um corpo só, um mapa só**,
+aparecendo nos dois lugares porque é o mesmo. É exatamente a regra *"não copiar, extrair"* levada
+até o fim.
+
+**O que ele está descrevendo é a aba Diagnóstico deixar de ser formulário e virar corpo.** Hoje o
+Diagnóstico é uma sequência de caixas que ele preenche. No sonho, é o Vitruviano com a Árvore, e a
+teia acesa sobre ele: marca o pulso, acende o fio; toca a vértebra, acende o que ela puxa.
+
+**Continua sendo ideia, não obra.** Nada disso começa sem ele mandar. Mas fica escrito porque é
+a primeira vez que o destino aparece inteiro — e porque explica todo o resto: a teia dormente
+esperava um chão, e o chão tem nome.
+
+### O que ainda não foi decidido
+
+Se as abas atuais viram camadas do Vitruviano ou continuam existindo ao lado dele. Ele inclinou
+para camadas **na Clínica** (*"ao invés da aba Diagnóstico ser daquela forma"*); no OS, não disse.
+Pergunta para quando acender.
 
 ## Concluído — a bancada varrida: a árvore que cresce, senha "Varrer a bancada" (30/07/2026)
 
@@ -1820,11 +1901,11 @@ pensar junto no momento do atendimento.
    busca normalizada (minusculo, sem acento) no banco — nao na pagina, para nao gastar
    egress. Pequeno e doi HOJE: fazer primeiro.
 
-9. **Arvore e Vitruviano na Clinica.** Hoje so existem no Montgomery OS. NAO copiar:
-   copia vira duas verdades que divergem (ja aconteceu com clinica_DO_AR.html e com o
-   MMObras). Extrair para um arquivo unico que OS e Clinica carregam. E tambem o
-   primeiro "andar" do predio, e a teia depende disso — se a Arvore for copia, a
-   corrente dedo->meridiano->orgao->emocao->Sefirot teria que ser escrita duas vezes.
+9. ~~**Arvore e Vitruviano na Clinica.**~~ **RECOLHIDO em 30/07/2026.** A Arvore fica
+   apenas onde ja esta: no Montgomery OS. O item inteiro (a parte da Arvore) foi para
+   `Claude_Main_Clean/01_Codigo/prototipos/ARVORE_NA_CLINICA_plano_em_espera.md`.
+   O **Vitruviano** nao foi recolhido — se um dia ele quiser o corpo na Clinica, a
+   preocupacao de nao virar copia continua valendo, mas isso e outra conversa.
 
 10. **App instalavel separado do OS.** Ja funciona: os dois manifestos existem e tem
     escopos distintos ("/" e "/os/"), entao o Windows trata como dois programas. Falta
@@ -1832,8 +1913,9 @@ pensar junto no momento do atendimento.
     falta um service worker — meia hora, e da de brinde abrir sem internet.
 
 **Ordem combinada:** 8 → toggles/caixas → pulso por posicao (busca dentro de cada
-quadro) → quiropraxia completa → registro de sessao → 9 → a teia (janela propria,
-arquitetura antes do codigo).
+quadro) → quiropraxia completa → registro de sessao → ~~9~~ → ~~a teia~~.
+*Em 30/07/2026 os dois ultimos sairam da fila: o 9 porque a Arvore fica so no OS, e a teia
+porque ele mandou deixar dormente ate pensarem o chao dela. A fila termina no registro de sessao.*
 
 **Regra que ele deu para a teia:** as ligacoes tem que vir DELE, nao do Claude. Claude
 constroi onde as ligacoes moram e como percorre-las; o Montgomery escreve ou confirma
@@ -1858,8 +1940,9 @@ Ordem da janela:
 3. **Pulso por posicao** — as qualidades passam a morar DENTRO do quadro de cada posicao,
    com a busca dos 28 dentro de cada quadro tambem.
 
-Depois: quiropraxia completa -> registro de sessao + resumo na chegada -> Arvore e
-Vitruviano num arquivo so servindo OS e Clinica -> a teia.
+Depois: quiropraxia completa -> registro de sessao + resumo na chegada -> ~~Arvore e
+Vitruviano num arquivo so servindo OS e Clinica~~ -> a teia.
+*(a Arvore saiu desta fila em 30/07/2026 — fica so no Montgomery OS.)*
 
 ## Concluido (27/07/2026) — Arrumacao: tudo passou a morar no lugar certo
 
