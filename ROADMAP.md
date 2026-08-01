@@ -158,6 +158,38 @@ Se as abas atuais viram camadas do Vitruviano ou continuam existindo ao lado del
 para camadas **na Clínica** (*"ao invés da aba Diagnóstico ser daquela forma"*); no OS, não disse.
 Pergunta para quando acender.
 
+## Concluído — Clínica v6.1: a aba Histórico de sessões (31/07/2026)
+
+Nasceu de um atendimento real. Ele estava com uma paciente na frente, quis lembrar o que tinha
+sido feito no último encontro, e para ler **três linhas** teve que abrir o Diagnóstico inteiro —
+uma tela de dez ferramentas. A informação existia; faltava um lugar curto onde ela morasse.
+
+**A descoberta:** o dado já estava escrito. A caixa **Memória da sessão**, no fim do Diagnóstico,
+guarda desde a v4.1 exatamente os três campos que ele queria — *o que foi feito*, *como reagiu*,
+*para o próximo encontro*. Não era construir; era **abrir uma janela para o que já existia**.
+
+**O que foi feito:** décima segunda aba na ficha do paciente, chamada **Sessões**. Lista, da mais
+recente para a mais antiga, só o relato de cada encontro, com o rótulo da sessão e a data. Entram
+apenas os diagnósticos que têm algum relato escrito — o resto não polui. Cada linha tem um botão
+*Ver o diagnóstico do dia*, para quando ele quiser o quadro completo daquele encontro.
+
+**A imagem:** o Diagnóstico é a bancada; esta aba é o caderno de bordo. Um conta o que se pensou,
+o outro conta o que se fez.
+
+### O que ficou pendente desta conversa
+
+Ele pediu também que **o Diagnóstico e a Recomendação abrissem inteiros dentro da própria ficha**,
+sem sair. Foi dito a ele o preço: a tela do Diagnóstico é uma bancada com estado (paciente na
+cadeira, campos preenchidos, candidatos, régua) — existir em dois lugares ao mesmo tempo cria
+**duas bancadas com as mesmas ferramentas**, e o risco real é preencher uma e salvar a outra.
+Já houve dor assim na Recomendação, e é por isso que existe a proteção do `go('prescricao')`.
+
+**O caminho proposto no lugar, ainda não construído:** a bancada continua sendo uma só, mas as
+abas Diagnóstico e Recomendações da ficha passam a *levar* até a tela cheia já com a pessoa
+dentro, e um botão **"Voltar à ficha de [nome]"** traz de volta ao mesmo ponto. A receita já
+existe e funciona — é o `cdVoltarAoDiag` da régua de minerais. Sensação de não ter saído do
+lugar, sem duas bancadas. **Senha para retomar: "Ir e voltar".**
+
 ## Concluído — a bancada varrida: a árvore que cresce, senha "Varrer a bancada" (30/07/2026)
 
 A bancada do `main` estava com três itens parados. Cada um foi olhado antes de decidir, e o

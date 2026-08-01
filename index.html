@@ -844,6 +844,7 @@ window.addEventListener('DOMContentLoaded',()=>{
       <button onclick="showTab('tex',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5-4 4-3-3-6 6"/></svg></span>Exames</button>
       <button onclick="showTab('trx',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-3 5-6 11-11"/></svg></span>Recomendações</button>
       <button onclick="showTab('tdg',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 7 4-14 2 7h6"/></svg></span>Diagnósticos</button>
+      <button onclick="showTab('tss',this)"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span>Sessões</button>
     </div>
     <form id="fPac" onsubmit="salvarPac(event)">
       <div class="tab-panel active" id="tp">
@@ -945,6 +946,14 @@ window.addEventListener('DOMContentLoaded',()=>{
         <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 7 4-14 2 7h6"/></svg></span>Histórico de Diagnósticos Integrados</div>
         <p style="font-size:12px;color:var(--txt-l);margin-bottom:11px">Todas as avaliações de Diagnóstico Integrado já registradas para este paciente.</p>
         <div id="diagHistLista"><div style="text-align:center;color:var(--txt-l);padding:20px;font-size:13px">Nenhuma avaliação registrada ainda.</div></div>
+      </div>
+      <!-- Histórico de sessões: só o que foi feito no encontro, sem o resto do
+           Diagnóstico. Nasceu de um atendimento real: para lembrar três linhas
+           ele precisava abrir uma tela de dez ferramentas. -->
+      <div class="tab-panel" id="tss">
+        <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span>Histórico de sessões</div>
+        <p style="font-size:12px;color:var(--txt-l);margin-bottom:11px">O relato curto de cada encontro — o que foi feito, como a pessoa reagiu e o que ficou para a próxima. Vem das Memórias de sessão anotadas no Diagnóstico.</p>
+        <div id="sessHistLista"><div style="text-align:center;color:var(--txt-l);padding:20px;font-size:13px">Nenhuma sessão relatada ainda.</div></div>
       </div>
       <div style="margin-top:13px;padding:10px;background:var(--pri-l);border-radius:6px">
         <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:12px">
@@ -1848,7 +1857,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v6.0 · 30/07';
+const APP_VER='v6.1 · 31/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2544,6 +2553,7 @@ function showTab(id,btn){
   if(id==='tc'){renderMnFicha(editId);renderEvFicha(editId);}
   if(id==='trx'&&editId)carregarRxHistPac(editId);
   if(id==='tdg'&&editId)carregarDiagHistPac(editId);
+  if(id==='tss'&&editId)carregarSessHistPac(editId);
 }
 
 // ===== SAVE STATUS =====
@@ -7994,6 +8004,35 @@ async function carregarDiagHistPac(pacId){
       ${d.escalaEmocional?`<div style="font-size:11.5px;color:var(--txt-l);margin-top:5px">Estado emocional: ${d.escalaEmocional}</div>`:''}
       ${d.sessaoFeito?`<div style="font-size:12px;color:var(--txt);margin-top:6px;line-height:1.6"><strong style="color:var(--pri-deep)">Foi feito:</strong> ${escHtml(d.sessaoFeito)}</div>`:''}
       ${d.sessaoProx?`<div style="font-size:12px;color:var(--txt);margin-top:4px;line-height:1.6"><strong style="color:var(--pri-deep)">Para o próximo:</strong> ${escHtml(d.sessaoProx)}</div>`:''}
+    </div>`).join('');
+}
+
+// ===== HISTÓRICO DE SESSÕES POR PACIENTE =====
+// A mesma fonte do histórico de diagnósticos, peneirada: aqui só entra o relato
+// do encontro. Quem quiser o resto abre o Diagnóstico daquele dia pelo botão.
+async function carregarSessHistPac(pacId){
+  const el=document.getElementById('sessHistLista');
+  if(!el)return;
+  let diags=gD('diagnosticos');
+  if(!diags.length)diags=await dbGet('diagnosticos',true);
+  const comRelato=diags
+    .filter(d=>String(d.pacienteId)===String(pacId))
+    .filter(d=>d.sessaoFeito||d.sessaoReacao||d.sessaoProx)
+    .sort((a,b)=>b.data.localeCompare(a.data));
+  if(!comRelato.length){
+    el.innerHTML='<div style="text-align:center;color:var(--txt-l);padding:20px;font-size:13px;line-height:1.7">Nenhuma sessão relatada ainda.<br>O relato é escrito na caixa <strong>Memória da sessão</strong>, no fim do Diagnóstico.</div>';
+    return;
+  }
+  const linha=(rot,txt)=>txt?`<div style="margin-top:6px;font-size:12.5px;line-height:1.65"><strong style="color:var(--pri-deep)">${rot}:</strong> ${escHtml(txt)}</div>`:'';
+  el.innerHTML=comRelato.map(d=>`
+    <div style="background:var(--beige);border-radius:8px;padding:12px;margin-bottom:10px;border-left:3px solid var(--pri)">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+        <strong style="color:var(--pri-d);font-size:13px"><span style="display:inline-block;background:var(--pri-deep);color:#fff;border-radius:5px;padding:2px 8px;font-size:11px;letter-spacing:.4px;margin-right:6px">${rotuloSessao(d).toUpperCase()}</span>${fd(d.data)}</strong>
+        <button type="button" class="btn btn-sec btn-sm" onclick="verDiagHist('${d.id}')" title="Abre a avaliação completa daquele dia"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span> Ver o diagnóstico do dia</button>
+      </div>
+      ${linha('Foi feito',d.sessaoFeito)}
+      ${linha('Como reagiu',d.sessaoReacao)}
+      ${linha('Para o próximo',d.sessaoProx)}
     </div>`).join('');
 }
 
