@@ -272,6 +272,26 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .fam-ed .fr{margin-bottom:0}
 .fam-pe{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:7px 12px;border-top:1px solid #EFE7D6}
 .fam-nota{font-size:11px;color:var(--txt-l);line-height:1.6}
+/* O PALCO: mesma receita do Vitruviano no OS — um toque no canto e o desenho
+   toma a tela inteira, Esc devolve. Aqui o fundo é o papel da Clínica, e não
+   o céu escuro do OS: esta imagem não é para meditar, é para trabalhar nela.
+   Por isso o editor entra junto — dá para escrever com o desenho grande. */
+.fam-palco{position:relative}
+.fam-tc{position:absolute;top:6px;right:6px;z-index:4;width:28px;height:28px;padding:0;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  border:1px solid var(--brd);border-radius:8px;background:var(--surface);
+  color:var(--txt-l);opacity:.55;transition:opacity .15s,color .15s}
+.fam-tc:hover{opacity:1;color:var(--gold,#C9A84C)}
+.fam-tc svg{width:15px;height:15px}
+.fam-palco:fullscreen,.fam-palco.fam-cheio{
+  width:100vw;height:100vh;margin:0;background:#FFFDF7;
+  display:flex;flex-direction:column;align-items:stretch;overflow:auto}
+.fam-palco.fam-cheio{position:fixed;top:0;left:0;z-index:9999}
+.fam-palco:fullscreen #famTela,.fam-palco.fam-cheio #famTela{
+  flex:1 1 auto;display:flex;align-items:center;justify-content:center;overflow:auto;padding:1vh 1vw}
+.fam-palco:fullscreen .fam-tela,.fam-palco.fam-cheio .fam-tela{
+  max-width:96vw!important;width:auto!important;height:82vh!important;border-top:none}
+.fam-palco:fullscreen .fam-ed,.fam-palco.fam-cheio .fam-ed{flex:0 0 auto}
 /* O INTERRUPTOR DE TRÊS POSIÇÕES — a peça reaproveitável.
    Nasce sem posição escolhida (ninguém decide por ele) e cada toque grava.
    Tocar de novo na posição acesa desliga: sai a clique como entrou a clique. */
@@ -1279,8 +1299,11 @@ window.addEventListener('DOMContentLoaded',()=>{
       <span style="font-weight:400;font-size:11.5px;color:var(--txt-l)">— toque para escrever e dizer de quem essa pessoa é; arraste para mudar de fileira</span>
     </div>
     <div class="fam-add" id="famAdd"></div>
-    <div id="famTela"></div>
-    <div id="famEditor"></div>
+    <div class="fam-palco" id="famPalco">
+      <button type="button" class="fam-tc" onclick="famTelaCheia(this)" title="Ver em tela cheia (Esc volta)" aria-label="Tela cheia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+      <div id="famTela"></div>
+      <div id="famEditor"></div>
+    </div>
     <div class="fam-pe">
       <span class="fam-nota" id="famConta"></span>
       <button type="button" class="btn btn-sec btn-sm" style="margin-left:auto" id="famBtnPen" onclick="famPeneirar()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4 2v-8Z"/></svg></span> O que a família reconhece</button>
@@ -1970,7 +1993,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v7.0 · 01/08';
+const APP_VER='v7.1 · 01/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -8361,6 +8384,23 @@ function famCandidatos(p,campo){
     .filter(o=>String(o.id)!==String(p.id))
     .map(o=>({id:o.id,rot:(o.nome||(o.eu&&_diagPacSel?_diagPacSel.nome:'')||'sem nome')+(o.papel?' ('+o.papel+')':'')}));
 }
+/* Pôr alguém JÁ LIGADO a quem está aberto. É o gesto que ele descreveu —
+   "vou adicionando quem pertence a quem" — em um toque só, sem passar pela
+   lista: a figura nasce no lugar certo e o laço já vem feito. */
+function famBrotar(id,lado){
+  const p=famPorId(id);
+  if(!p)return;
+  const g=lado==='filho'?p.ger+1:p.ger;
+  if(!FAM_GERACOES.some(x=>x.g===g)){toast('Não há fileira abaixo desta','#EF6C00',"warn");return;}
+  const novo={id:novoId(),nome:'',papel:'',sexo:'n',ger:g,ord:famLinha(g).length,morto:false,obs:'',de:'',par:''};
+  _famPessoas.push(novo);
+  famNormalizarOrdem();
+  if(lado==='filho'){novo.de=p.id;}
+  else{famVinculo(novo.id,'par',p.id);}
+  _famSel=novo.id;
+  _diagJaSalvo=false;
+  famGuardarRascunho();famRender();
+}
 function famVinculo(id,campo,valor){
   const p=famPorId(id);
   if(!p)return;
@@ -8402,6 +8442,10 @@ function famRenderEditor(){
       </select></div>
     </div>
     <div class="fr full"><div class="fg"><label>Uma linha sobre essa pessoa</label><input type="text" value="${escHtml(p.obs||'')}" oninput="famCampo('${p.id}','obs',this.value)" placeholder="o que ela disse dessa pessoa — a peneira também lê daqui"></div></div>
+    <div class="fam-add" style="padding:9px 0 0">
+      <button type="button" onclick="famBrotar('${p.id}','par')" title="Nasce ao lado, já ligado a esta pessoa">+ Par de ${escHtml(famCurto(p.nome||(p.eu&&_diagPacSel?_diagPacSel.nome:'')||'quem está aberto',14))}</button>
+      ${FAM_GERACOES.some(x=>x.g===p.ger+1)?`<button type="button" onclick="famBrotar('${p.id}','filho')" title="Nasce na fileira de baixo, já como filho(a) desta pessoa">+ Filho(a) desta pessoa</button>`:''}
+    </div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px">
       ${FAM_SEXOS.map(s=>`<button type="button" class="folha-ch${p.sexo===s.k?' on':''}"${p.sexo===s.k?'':` onclick="famSexo('${p.id}','${s.k}')"`}>${s.rot}</button>`).join('')}
       <button type="button" class="folha-ch${p.morto?' on':''}" onclick="famMorto('${p.id}')" title="O traço do genograma: a pessoa continua desenhada">${p.morto?'Já partiu':'Marcar como já partiu'}</button>
@@ -8419,6 +8463,25 @@ function famContar(){
 function famRender(){
   famRenderAdd();famDesenhar();famRenderEditor();famContar();renderFamPeneira();
 }
+
+/* TELA CHEIA — a mesma receita dos desenhos do OS (.tcPalco lá, .fam-palco
+   aqui). Onde o navegador não deixa pedir tela cheia (iPhone), a classe
+   fam-cheio faz o mesmo por CSS. Esc devolve o desenho ao lugar dele. */
+function famTelaCheia(bt){
+  const box=bt.closest?bt.closest('.fam-palco'):null;
+  if(!box)return;
+  if(box.classList.contains('fam-cheio')||document.fullscreenElement===box){famSairCheia(box);return;}
+  const pede=box.requestFullscreen||box.webkitRequestFullscreen||box.msRequestFullscreen;
+  if(pede){try{const r=pede.call(box);if(r&&r.catch)r.catch(()=>famFakeCheia(box));}catch(e){famFakeCheia(box);}}
+  else famFakeCheia(box);
+}
+function famFakeCheia(box){box.classList.add('fam-cheio');document.addEventListener('keydown',famEscCheia);}
+function famSairCheia(box){
+  if(box.classList.contains('fam-cheio')){box.classList.remove('fam-cheio');document.removeEventListener('keydown',famEscCheia);}
+  else if(document.exitFullscreen)document.exitFullscreen();
+  else if(document.webkitExitFullscreen)document.webkitExitFullscreen();
+}
+function famEscCheia(e){if(e.key==='Escape')document.querySelectorAll('.fam-palco.fam-cheio').forEach(famSairCheia);}
 
 /* ===== A PENEIRA DA FAMÍLIA =====
    Mesma regra da folha: reconhece, não decide. Duas portas de entrada —
