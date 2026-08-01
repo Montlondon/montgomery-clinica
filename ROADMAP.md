@@ -334,7 +334,7 @@ para o registro salvo; o rascunho se apaga depois de salvar e o texto fica na te
 **A próxima é a régua de encontros** — os encontros espaçados pelo tempo real entre eles, com a linha
 da Escala de Orientação Emocional. Senha: **"A régua dos encontros"**.
 
-### FEITO — Faixa 3: os bonecos (Clínica v6.8, 01/08/2026)
+### FEITO — Faixa 3: os bonecos (Clínica v6.8, 01/08/2026) — NO AR
 
 **A família desenhada, logo abaixo da folha limpa.** É a etapa 4 da ordem de construção — ele
 escolheu acender esta antes da régua de encontros.
