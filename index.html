@@ -1970,7 +1970,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v6.8 · 01/08';
+const APP_VER='v6.9 · 01/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -7541,27 +7541,89 @@ function imprimirDiag(diagId){
   setTimeout(()=>{win.print();setTimeout(()=>win.close(),800);},400);
 }
 
+/* A busca do cabeçalho olhava só a lista de ativos em memória e comparava com
+   acento. Depois da triagem, a maioria das pessoas está ARQUIVADA — e quem tem
+   acento no nome nunca era achado ("Jose" não encontrava "José"). O resultado
+   era o pior possível: a única porta que sobrava era "Criar", e criar quem já
+   existe é duplicar a pessoa.
+   Agora é a mesma receita do agendamento: os ativos aparecem na hora, e em
+   paralelo o banco é consultado pela coluna busca_nome (que já é sem acento e
+   inclui os arquivados). Enquanto a resposta do banco não chega, a porta de
+   nascer FICA FECHADA — nascer é a última coisa a se oferecer, nunca a
+   primeira. Escolher alguém arquivado reativa a pessoa, sem apagar nada. */
+let _diagPacDbTimer=null, _diagPacDbSeq=0, _diagPacDbCache=[], _diagPacDbTermo='';
+
 function filtrarDiagPac(){
   const cru=document.getElementById('diagPacBusca').value.trim();
-  const q=cru.toLowerCase();
   const lista=document.getElementById('diagPacLista');
-  if(!q){lista.style.display='none';_diagPacSel=null;document.getElementById('diagPacId').value='';cabRender();return;}
-  const pacs=gD('pacientes').filter(p=>p.nome.toLowerCase().includes(q)).slice(0,12);
+  if(!cru){
+    lista.style.display='none';_diagPacSel=null;_diagPacDbCache=[];_diagPacDbTermo='';
+    document.getElementById('diagPacId').value='';cabRender();return;
+  }
+  const daCasa=cru!==_diagPacDbTermo;         // o banco ainda não respondeu por este termo
+  renderDiagPacLista(cru,daCasa);
+  clearTimeout(_diagPacDbTimer);
+  if(cru.length<2)return;
+  const seq=++_diagPacDbSeq;
+  _diagPacDbTimer=setTimeout(async()=>{
+    const achados=await buscarPacPicker(cru);
+    if(seq!==_diagPacDbSeq)return;            // chegou tarde: já digitaram outra coisa
+    if(document.getElementById('diagPacBusca').value.trim()!==cru)return;
+    _diagPacDbCache=achados;_diagPacDbTermo=cru;
+    renderDiagPacLista(cru,false);
+  },350);
+}
+
+function renderDiagPacLista(cru,procurando){
+  const lista=document.getElementById('diagPacLista');
+  if(!lista)return;
+  const q=semAcento(cru);
+  const locais=gD('pacientes').filter(p=>semAcento(p.nome).includes(q));
+  const idsLocais=new Set(locais.map(p=>String(p.id)));
+  const extras=(cru===_diagPacDbTermo?_diagPacDbCache:[]).filter(p=>!idsLocais.has(String(p.id)));
+  const todos=[...locais.map(p=>({...p,arquivado:false})),...extras].slice(0,12);
+  const linhas=todos.map(p=>`<div onclick="escolherDiagPac('${p.id}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${escHtml(p.nome)}${p.arquivado?' <span style="background:#ECEFF1;color:#546E7A;border-radius:4px;padding:1px 6px;font-size:9.5px;font-weight:700;letter-spacing:.3px">ARQUIVADO</span>':''}${p.telefone?`<span style="color:var(--txt-l);font-size:11px;margin-left:8px">${escHtml(p.telefone)}</span>`:''}</div>`).join('');
+  // Enquanto o banco não respondeu, a lista diz que ainda está procurando —
+  // e não oferece criar. Um "não achei" apressado convida a duplicar gente.
+  const espera=procurando
+    ? `<div style="padding:8px 12px;color:var(--txt-l);font-size:12px;display:flex;align-items:center;gap:7px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" style="width:13px;height:13px"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg> Procurando também nos arquivados…</div>`
+    : '';
   // Ninguém com esse nome: em vez de um beco sem saída, a porta de nascer.
   // Esta linha é o ponto 1 dos nove — antes era preciso sair da tela, abrir
   // "Novo paciente", preencher, salvar e voltar só para marcar a primeira sessão.
   // Com nomes parecidos na lista, a porta continua aberta — quem chega pode ser
   // a "Ana Paula" numa casa que já tem uma "Ana" —, mas ela se anuncia de outro jeito.
-  const exato=gD('pacientes').some(p=>p.nome.toLowerCase()===q);
-  const nascer=exato?'':`<div onmousedown="event.preventDefault()" style="padding:9px 12px;border-top:1px solid var(--brd);background:var(--beige)">
-      <button type="button" class="btn btn-pri btn-sm" style="width:100%" onclick="cabNascerPaciente()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9.5" cy="8" r="3.2"/><path d="M3.5 20c0-3.3 2.8-5.8 6-5.8s6 2.5 6 5.8"/><path d="M18.5 8v5M16 10.5h5"/></svg></span> ${pacs.length?'Nenhuma dessas — criar':'Criar'} &laquo;${escHtml(cru)}&raquo;</button>
+  const exato=todos.some(p=>semAcento(p.nome)===q);
+  const nascer=(procurando||exato)?'':`<div onmousedown="event.preventDefault()" style="padding:9px 12px;border-top:1px solid var(--brd);background:var(--beige)">
+      <button type="button" class="btn btn-pri btn-sm" style="width:100%" onclick="cabNascerPaciente()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9.5" cy="8" r="3.2"/><path d="M3.5 20c0-3.3 2.8-5.8 6-5.8s6 2.5 6 5.8"/><path d="M18.5 8v5M16 10.5h5"/></svg></span> ${todos.length?'Nenhuma dessas — criar':'Criar'} &laquo;${escHtml(cru)}&raquo;</button>
       <div style="font-size:11px;color:var(--txt-l);margin-top:5px;line-height:1.5">Nasce só com o nome. A ficha inteira continua lá e pode ser completada depois.</div>
     </div>`;
-  const cabeca=pacs.length
-    ? pacs.map(p=>`<div onclick="selecionarDiagPac('${p.id}','${p.nome.replace(/'/g,"\\'")}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${escHtml(p.nome)}</div>`).join('')
-    : '<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Ninguém com esse nome ainda.</div>';
-  lista.innerHTML=cabeca+nascer;
+  const vazio=todos.length?'':(procurando?'':'<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Ninguém com esse nome, nem entre os arquivados.</div>');
+  lista.innerHTML=linhas+vazio+espera+nascer;
   lista.style.display='block';
+}
+
+// Escolher alguém da lista. Se veio do banco e está arquivado, a pessoa é
+// reativada primeiro — sem apagar nada, mesma porta do agendamento.
+async function escolherDiagPac(id){
+  let p=gD('pacientes').find(x=>String(x.id)===String(id));
+  if(!p){
+    const doBanco=_diagPacDbCache.find(x=>String(x.id)===String(id));
+    if(!doBanco)return;
+    if(doBanco.arquivado){
+      const inp=document.getElementById('diagPacBusca');
+      if(inp){inp.value='Reativando '+doBanco.nome+'…';inp.disabled=true;}
+      const n=await rpcArquivar([id],false);
+      if(inp)inp.disabled=false;
+      if(n===null){toast('Não consegui reativar o paciente','#c62828',"erro");if(inp)inp.value=doBanco.nome;return;}
+      await dbGet('pacientes',true);
+      atuDash();renderP();
+      p=gD('pacientes').find(x=>String(x.id)===String(id));
+      toast(doBanco.nome+' estava arquivado — reativei para o atendimento.',null,"ok");
+    }
+    if(!p)p=doBanco;
+  }
+  selecionarDiagPac(p.id,p.nome);
 }
 function selecionarDiagPac(id,nome){
   _diagPacSel={id,nome};
@@ -7589,9 +7651,21 @@ async function cabNascerPaciente(){
   const nome=document.getElementById('diagPacBusca').value.trim();
   if(!nome){toast('Escreva o nome primeiro','#EF6C00',"warn");return;}
   if(_cabSalvando)return;
-  const jaTem=gD('pacientes').find(p=>p.nome.toLowerCase()===nome.toLowerCase());
+  const jaTem=gD('pacientes').find(p=>semAcento(p.nome)===semAcento(nome));
   if(jaTem){selecionarDiagPac(jaTem.id,jaTem.nome);toast('Esta pessoa já existia — abri a que já estava aqui.',null,"ok");return;}
+  // Última conferência antes de criar: o banco inteiro, arquivados incluídos.
+  // A lista da tela pode estar velha, e criar quem já existe é duplicar gente.
   _cabSalvando=true;
+  try{
+    const doBanco=(await buscarPacPicker(nome)).find(p=>semAcento(p.nome)===semAcento(nome));
+    if(doBanco){
+      _diagPacDbCache=[doBanco];
+      _cabSalvando=false;
+      await escolherDiagPac(doBanco.id);
+      document.getElementById('diagPacLista').style.display='none';
+      return;
+    }
+  }catch(e){/* sem resposta do banco: segue pelo caminho de criar */}
   try{
     // Mesma forma de ficha que o formulário grava, com os campos vazios.
     const d={...coletarDadosVazio(),nome,id:novoId(),dataCadastro:new Date().toLocaleDateString('pt-BR'),foto:'',exames:[]};

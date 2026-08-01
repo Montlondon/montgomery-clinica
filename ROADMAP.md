@@ -375,6 +375,37 @@ vem do último encontro salvo; o "eu" não se apaga; e as três partes da figura
 
 **A próxima continua sendo a régua de encontros.** Senha: **"A régua dos encontros"**.
 
+### CONSERTO — a busca do cabeçalho só sabia criar (Clínica v6.9, 01/08/2026) — NO AR
+
+**O que ele viu:** digitava o nome de quem já é paciente e a única coisa que aparecia era
+*Criar «Fulana»*.
+
+**Por quê, em duas causas somadas:**
+1. A busca do cabeçalho olhava **só a lista de ativos em memória** (`gD('pacientes')`). Depois da
+   triagem, a maioria das pessoas está **arquivada** — e arquivado não está nessa lista.
+2. Comparava **com acento**: "jose" nunca encontrava "José". O resto da casa já usa `semAcento`;
+   esta busca tinha ficado para trás.
+
+Somadas, davam o pior resultado possível: a porta que sobrava era a de nascer, e **criar quem já
+existe é duplicar a pessoa**.
+
+**O conserto é a mesma receita do agendamento** (`filtrarPS`): os ativos aparecem na hora, e em
+paralelo — com 350 ms de espera para não disparar a cada tecla — o banco é consultado pela coluna
+`busca_nome`, que já é sem acento e **inclui os arquivados**. Quem vem de lá aparece com o selo
+ARQUIVADO; escolher essa pessoa **reativa** (mesmo `rpcArquivar`), sem apagar nada.
+
+**A regra nova, que vale para qualquer porta de criar:** enquanto o banco não respondeu, a porta de
+nascer **fica fechada** e a lista diz *"Procurando também nos arquivados…"*. Nascer é a última coisa
+a se oferecer, nunca a primeira. E o botão de criar, quando é tocado, ainda confere o banco inteiro
+antes: se a pessoa existe, ele abre a que existe em vez de fazer a segunda.
+
+**Conferido em bancada isolada:** 15 provas — acha "José" por "jose"; acha o arquivado e mostra o
+selo; escolher arquivado reativa em vez de duplicar; a porta de criar continua aberta para quem é
+novo mesmo; e resposta atrasada de um termo velho não escreve na tela.
+
+**Sobra a mesma falha na busca da Recomendação** (`filtrarRxPac`), que ainda é só-ativos e com
+acento. Mesma receita resolve.
+
 ### Decidido em 01/08 sobre o histórico e os bonecos
 
 **O histórico NÃO é espiral nem planta.** As duas foram desenhadas, calculadas e mostradas a ele;
