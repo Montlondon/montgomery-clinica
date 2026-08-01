@@ -1993,7 +1993,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v7.1 · 01/08';
+const APP_VER='v7.2 · 01/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -7992,12 +7992,19 @@ const FAM_BR=FAM_TR/FAM_PHI;                     // meio-vão dos braços
 const FAM_PASSO=Math.round(FAM_H*FAM_PHI);       // passo entre fileiras e entre figuras
 const FAM_LARG=640;                              // largura da prancheta (viewBox)
 const FAM_TOPO=26;                               // ar acima da primeira fileira
+/* As fileiras. As quatro do meio (base) estão sempre desenhadas, porque são as
+   que o atendimento sempre visita. As das pontas — bisavós e netos — só
+   aparecem quando alguém mora nelas: fileira vazia é ar gasto na tela. */
 const FAM_GERACOES=[
-  {g:-2,rot:'Avós',       add:'Avó ou avô',   papel:'avó/avô',   sexo:'n'},
-  {g:-1,rot:'Pais',       add:'Pai ou mãe',   papel:'mãe',       sexo:'f'},
-  {g: 0,rot:'Ela e os irmãos',add:'Irmão ou irmã',papel:'irmã',  sexo:'f'},
-  {g: 1,rot:'Filhos',     add:'Filho ou filha',papel:'filha',    sexo:'f'}
+  {g:-3,rot:'Bisavós',    add:'Bisavó ou bisavô',papel:'bisavó/bisavô',sexo:'n'},
+  {g:-2,rot:'Avós',       add:'Avó ou avô',   papel:'avó/avô',   sexo:'n', base:true},
+  {g:-1,rot:'Pais',       add:'Pai ou mãe',   papel:'mãe',       sexo:'f', base:true},
+  {g: 0,rot:'Ela e os irmãos',add:'Irmão ou irmã',papel:'irmã',  sexo:'f', base:true},
+  {g: 1,rot:'Filhos',     add:'Filho ou filha',papel:'filha',    sexo:'f', base:true},
+  {g: 2,rot:'Netos',      add:'Neto ou neta', papel:'neta',      sexo:'f'}
 ];
+// As fileiras que estão em cena agora: as de sempre, mais as pontas habitadas.
+function famGerVis(){return FAM_GERACOES.filter(gr=>gr.base||famLinha(gr.g).length);}
 const FAM_RASC='fam_rascunho_';
 
 const FAM_ESQ=118;                               // faixa dos rótulos, à esquerda do desenho
@@ -8021,7 +8028,8 @@ function famConsertarVinculos(){
   _famPessoas.forEach(p=>{
     if(p.de){
       const pai=famPorId(p.de);
-      if(!pai||pai.ger!==p.ger-1||String(pai.id)===String(p.id))p.de='';
+      if(!pai||pai.ger!==p.ger-1||String(pai.id)===String(p.id)){p.de='';p.deCasal=false;}
+      else if(p.deCasal&&!pai.par)p.deCasal=false;   // o casal desfez: o filho continua dele
     }
     if(p.par){
       const par=famPorId(p.par);
@@ -8033,6 +8041,17 @@ function famConsertarVinculos(){
     if(!p.par)return;
     const par=famPorId(p.par);
     if(par&&String(par.par||'')!==String(p.id))par.par=p.id;
+  });
+  // Filho de um casal aponta sempre o primeiro dos dois na fileira, para que a
+  // lista mostre marcado o casal que o desenho já está mostrando.
+  _famPessoas.forEach(p=>{
+    if(!p.de||!p.deCasal)return;
+    const pai=famPorId(p.de);
+    if(!pai||!pai.par)return;
+    const linha=famLinha(pai.ger);
+    const i=linha.findIndex(x=>String(x.id)===String(pai.id));
+    const j=linha.findIndex(x=>String(x.id)===String(pai.par));
+    if(j>=0&&j<i)p.de=pai.par;
   });
 }
 // A pessoa da cadeira é a única figura que não se adiciona: ela já está lá.
@@ -8048,7 +8067,8 @@ function famGarantirEu(){
 
 function famDados(){
   return _famPessoas.map(p=>({id:p.id,nome:p.nome||'',papel:p.papel||'',sexo:p.sexo||'n',
-    ger:p.ger,ord:p.ord,morto:!!p.morto,obs:p.obs||'',eu:!!p.eu,de:p.de||'',par:p.par||''}));
+    ger:p.ger,ord:p.ord,morto:!!p.morto,obs:p.obs||'',eu:!!p.eu,
+    de:p.de||'',deCasal:!!p.deCasal,par:p.par||'',esperado:!!p.esperado}));
 }
 function famChaveRasc(){return _diagPacSel?FAM_RASC+_diagPacSel.id:null;}
 function famGuardarRascunho(){
@@ -8131,10 +8151,21 @@ function famMorto(id){
   const p=famPorId(id);if(!p)return;
   p.morto=!p.morto;_diagJaSalvo=false;famGuardarRascunho();famRender();
 }
+// Quem está a caminho já ocupa lugar na família muito antes de nascer — e no
+// atendimento pesa como quem já chegou. Fica pontilhado até o dia.
+function famEsperado(id){
+  const p=famPorId(id);if(!p||p.eu)return;
+  p.esperado=!p.esperado;
+  if(p.esperado)p.morto=false;
+  _diagJaSalvo=false;famGuardarRascunho();famRender();
+}
 
 // ===== O DESENHO =====
-function famAltura(){return FAM_TOPO+(FAM_GERACOES.length-1)*FAM_PASSO+FAM_H+30;}
-function famY(g){return FAM_TOPO+(FAM_GERACOES.findIndex(x=>x.g===g))*FAM_PASSO;}
+function famAltura(){return FAM_TOPO+(famGerVis().length-1)*FAM_PASSO+FAM_H+30;}
+function famY(g){
+  const v=famGerVis(), i=v.findIndex(x=>x.g===g);
+  return FAM_TOPO+(i<0?0:i)*FAM_PASSO;
+}
 // Uma unidade é uma figura sozinha ou um par que anda junto — quem faz par
 // não se separa, e por isso o desenho os trata como uma peça só.
 function famUnidades(g){
@@ -8148,55 +8179,88 @@ function famUnidades(g){
   });
   return us;
 }
-/* Onde cada figura fica. Antes o lugar vinha só da ordem na fileira — todo
-   mundo no meio da prancheta. Agora quem tem pai apontado nasce debaixo dele,
-   e os irmãos se abrem em torno desse mesmo ponto. Quem não tem pai apontado
-   continua no meio, como antes. No fim ninguém pisa em ninguém: a varredura
-   da esquerda para a direita empurra o que ficou por cima. */
+/* ONDE CADA FIGURA FICA — pensado por TRONCO, não por fileira.
+
+   A primeira versão colocava fileira por fileira e depois empurrava quem
+   pisava em quem. Isso escorregava: bastava um casal na fileira de baixo
+   ocupar a coluna de uma tia para a filha dela sair meio passo do prumo.
+
+   Agora é como uma árvore de verdade. Cada tronco (uma pessoa, ou um casal,
+   que é uma peça só) se desenha DE BAIXO PARA CIMA: primeiro os galhos, e o
+   tronco vai para o meio do que nasceu dele. Um marcador por fileira guarda
+   até onde já se ocupou, então nenhum tronco invade o vizinho — e quando um
+   tronco precisa andar para a direita, TODO o galho dele anda junto, para o
+   prumo entre pai e filho nunca se perder. */
 function famCalcularPos(){
   _famPos={};
-  const meio=FAM_LARG/2;
+  const vis=famGerVis();
+  const porGer={}, deQuemE=new Map();
+  vis.forEach(gr=>{
+    porGer[gr.g]=famUnidades(gr.g);
+    porGer[gr.g].forEach(u=>u.forEach(p=>deQuemE.set(String(p.id),u)));
+  });
+  const larg=u=>u.length*FAM_PASSO;
+  // De qual tronco esta unidade nasceu, e por qual membro dela.
+  const galhos=new Map(), raizes=[];
+  vis.forEach(gr=>porGer[gr.g].forEach(u=>{
+    let laco=null;
+    u.forEach(p=>{
+      if(laco||!p.de)return;
+      const pai=famPorId(p.de), tronco=deQuemE.get(String(p.de));
+      if(pai&&tronco&&tronco!==u)laco={tronco,pai,membro:p};
+    });
+    u.laco=laco;u.ger=gr.g;
+    if(laco){
+      if(!galhos.has(laco.tronco))galhos.set(laco.tronco,[]);
+      galhos.get(laco.tronco).push(u);
+    }else raizes.push(u);
+  }));
+  // Onde, dentro do tronco, este galho se pendura: no membro que é o pai, ou
+  // no meio dos dois quando a criança é do casal.
+  const pontoNoTronco=u=>{
+    const t=u.laco.tronco;
+    if(u.laco.membro.deCasal&&t.length>1)return 0;
+    const k=t.findIndex(x=>String(x.id)===String(u.laco.pai.id));
+    return -larg(t)/2+(k<0?0:k+0.5)*FAM_PASSO;
+  };
+  // E qual membro do galho se pendura — o filho, não o par dele.
+  const membroPendurado=u=>u.laco?u.findIndex(x=>String(x.id)===String(u.laco.membro.id)):0;
+  const deslocaGalho=u=>(u.length/2-membroPendurado(u)-0.5)*FAM_PASSO;
+
+  const cx=new Map(), cursor={};
+  const andar=(u,d)=>{
+    cx.set(u,cx.get(u)+d);
+    cursor[u.ger]=Math.max(cursor[u.ger]||-Infinity,cx.get(u)+larg(u)/2);
+    (galhos.get(u)||[]).forEach(f=>andar(f,d));
+  };
+  const colocar=u=>{
+    const fs=galhos.get(u)||[];
+    fs.forEach(colocar);
+    let centro;
+    if(fs.length){
+      // O tronco vai para onde os galhos pedem: cada galho quer nascer de um
+      // ponto certo do tronco, e o tronco atende a média desses pedidos.
+      // Pelo VÃO dos pedidos, não pela média: assim um galho carregado não
+      // puxa o tronco para o lado dele.
+      const ped=fs.map(f=>cx.get(f)-deslocaGalho(f)-pontoNoTronco(f));
+      centro=(Math.min(...ped)+Math.max(...ped))/2;
+    }else centro=(cursor[u.ger]||0)+larg(u)/2;
+    const minimo=(cursor[u.ger]||0)+larg(u)/2;
+    if(centro<minimo-0.01){
+      const d=minimo-centro;
+      centro=minimo;
+      fs.forEach(f=>andar(f,d));       // o galho inteiro acompanha o tronco
+    }
+    cx.set(u,centro);
+    cursor[u.ger]=centro+larg(u)/2;
+  };
+  raizes.forEach(colocar);
+
   let min=Infinity,max=-Infinity;
-  FAM_GERACOES.forEach(gr=>{
-    const us=famUnidades(gr.g);
-    if(!us.length)return;
-    const itens=us.map(u=>{
-      const anc=[];
-      u.forEach(p=>{
-        if(!p.de)return;
-        const pai=famPorId(p.de);
-        if(!pai||_famPos[pai.id]==null)return;
-        anc.push(_famPos[pai.id]);
-        if(pai.par&&_famPos[pai.par]!=null)anc.push(_famPos[pai.par]);   // debaixo do casal, no meio dos dois
-      });
-      return {u,larg:u.length*FAM_PASSO,des:anc.length?anc.reduce((a,b)=>a+b,0)/anc.length:null};
-    });
-    // Irmãos do mesmo pai não se empilham: abrem-se em torno dele.
-    const ninhos={};
-    itens.forEach(it=>{if(it.des!=null){const k=it.des.toFixed(1);(ninhos[k]=ninhos[k]||[]).push(it);}});
-    Object.keys(ninhos).forEach(k=>{
-      const gp=ninhos[k], total=gp.reduce((s,it)=>s+it.larg,0);
-      let x=parseFloat(k)-total/2;
-      gp.forEach(it=>{it.des=x+it.larg/2;x+=it.larg;});
-    });
-    // Sem pai apontado: no meio da prancheta, como sempre foi.
-    const soltos=itens.filter(it=>it.des==null);
-    if(soltos.length){
-      const total=soltos.reduce((s,it)=>s+it.larg,0);
-      let x=meio-total/2;
-      soltos.forEach(it=>{it.des=x+it.larg/2;x+=it.larg;});
-    }
-    itens.sort((a,b)=>a.des-b.des);
-    for(let i=1;i<itens.length;i++){
-      const minimo=itens[i-1].des+(itens[i-1].larg+itens[i].larg)/2;
-      if(itens[i].des<minimo)itens[i].des=minimo;
-    }
-    itens.forEach(it=>{
-      let x=it.des-it.larg/2;
-      it.u.forEach(p=>{_famPos[p.id]=x+FAM_PASSO/2;x+=FAM_PASSO;});
-      min=Math.min(min,it.des-it.larg/2);
-      max=Math.max(max,it.des+it.larg/2);
-    });
+  cx.forEach((c,u)=>{
+    let x=c-larg(u)/2;
+    u.forEach(p=>{_famPos[p.id]=x+FAM_PASSO/2;x+=FAM_PASSO;});
+    min=Math.min(min,c-larg(u)/2);max=Math.max(max,c+larg(u)/2);
   });
   if(!isFinite(min)){_famLarg=FAM_LARG;return;}
   _famLarg=Math.max(FAM_LARG,Math.round(FAM_ESQ+(max-min)+30));
@@ -8230,7 +8294,7 @@ function famFiguraSVG(p){
   const papel=famCurto(p.papel,17);
   return `<g class="fam-fig" data-fam="${p.id}">
     ${sel?`<rect x="${(x-FAM_PASSO/2+4).toFixed(1)}" y="${y-9}" width="${FAM_PASSO-8}" height="${FAM_H+34}" rx="9" fill="var(--pri-l)" stroke="var(--pri)" stroke-width="1"/>`:''}
-    <g fill="none" stroke="${cor}" stroke-width="${esp}" stroke-linecap="round" stroke-linejoin="round">${d}</g>
+    <g fill="none" stroke="${cor}" stroke-width="${esp}" stroke-linecap="round" stroke-linejoin="round"${p.esperado?' stroke-dasharray="3 3" opacity=".75"':''}>${d}</g>
     ${p.eu?`<path d="M${(x-FAM_BR*1.5).toFixed(1)} ${pe+5} L${(x+FAM_BR*1.5).toFixed(1)} ${pe+5}" stroke="var(--gold,#C9A84C)" stroke-width="2" stroke-linecap="round"/>`:''}
     <text x="${x}" y="${pe+17}" text-anchor="middle" font-size="10.5" font-weight="${p.eu?'700':'600'}" fill="#2B2924">${escHtml(nome)}</text>
     <text x="${x}" y="${pe+28}" text-anchor="middle" font-size="9.5" fill="#8A8578">${escHtml(papel)}</text>
@@ -8255,7 +8319,7 @@ function famDesenhar(){
   // de fora da barra de irmandade, ligado só pelo traço do par.
   const trazidos=new Set();
   FAM_GERACOES.forEach(gr=>famUnidades(gr.g).forEach(u=>{if(u[1])trazidos.add(String(u[1].id));}));
-  FAM_GERACOES.forEach(gr=>{
+  famGerVis().forEach(gr=>{
     const linha=famLinha(gr.g), y=famY(gr.g);
     svg+=`<text x="10" y="${y+FAM_H/2}" font-size="9.5" fill="#B9AF98" font-weight="700" letter-spacing="0.5">${gr.rot.toUpperCase()}</text>`;
     if(!linha.length)return;
@@ -8293,7 +8357,7 @@ function famDesenhar(){
     const pai=famPorId(p.de);
     if(!pai)return;
     let x0=famX(pai);
-    if(pai.par&&famPorId(pai.par))x0=(x0+famX(famPorId(pai.par)))/2;
+    if(p.deCasal&&pai.par&&famPorId(pai.par))x0=(x0+famX(famPorId(pai.par)))/2;
     const ya=famY(pai.ger)+FAM_H+6, yb=famY(p.ger)-9, x1=famX(p);
     svg+=`<path d="M${x0.toFixed(1)} ${ya} L${x0.toFixed(1)} ${yb} L${x1} ${yb} L${x1} ${famY(p.ger)-1}" stroke="#E4DCCB" stroke-width="1.2" fill="none"/>`;
   });
@@ -8345,7 +8409,7 @@ function famLigarArrasto(){
         const xFinal=famX(p)+dx;
         // A fileira mais perto do centro da figura solta manda no tempo.
         let alvo=p.ger, melhor=Infinity;
-        FAM_GERACOES.forEach(gr=>{
+        famGerVis().forEach(gr=>{
           const d=Math.abs(famY(gr.g)+FAM_H/2-yFinal);
           if(d<melhor){melhor=d;alvo=gr.g;}
         });
@@ -8372,18 +8436,34 @@ function famLigarArrasto(){
 function famRenderAdd(){
   const el=document.getElementById('famAdd');
   if(!el)return;
-  el.innerHTML=FAM_GERACOES.map(gr=>`<button type="button" onclick="famAdicionar(${gr.g})" title="Põe uma figura na fileira ${gr.rot.toLowerCase()}">+ ${escHtml(gr.add)}</button>`).join('');
+  el.innerHTML=famGerVis().map(gr=>`<button type="button" onclick="famAdicionar(${gr.g})" title="Põe uma figura na fileira ${gr.rot.toLowerCase()}">+ ${escHtml(gr.add)}</button>`).join('');
 }
 
 const FAM_SEXOS=[{k:'f',rot:'Figura de saia'},{k:'m',rot:'Figura de pernas'},{k:'n',rot:'Figura neutra'}];
 // Quem pode ser pai desta figura: a fileira de cima. Quem pode ser par: a
 // mesma fileira. Fora disso o desenho mentiria.
+const famNomeDe=o=>o.nome||(o.eu&&_diagPacSel?_diagPacSel.nome:'')||'sem nome';
+/* Quem pode ser par desta figura: a mesma fileira. Quem pode ser pai: a fileira
+   de cima — e aí a lista tem DUAS naturezas, porque a vida tem as duas: filho
+   DO CASAL (desce do meio dos dois) e filho SÓ DE UM (desce só dele, como a
+   Jéssica, que é do Manoel e não da Alessandra). */
 function famCandidatos(p,campo){
-  const g=campo==='de'?p.ger-1:p.ger;
-  return famLinha(g)
-    .filter(o=>String(o.id)!==String(p.id))
-    .map(o=>({id:o.id,rot:(o.nome||(o.eu&&_diagPacSel?_diagPacSel.nome:'')||'sem nome')+(o.papel?' ('+o.papel+')':'')}));
+  if(campo==='par'){
+    return famLinha(p.ger).filter(o=>String(o.id)!==String(p.id))
+      .map(o=>({v:String(o.id),rot:famNomeDe(o)+(o.papel?' ('+o.papel+')':'')}));
+  }
+  const acima=famLinha(p.ger-1), fora=new Set(), lista=[];
+  acima.forEach(o=>{
+    if(fora.has(String(o.id))||!o.par)return;
+    const par=acima.find(x=>String(x.id)===String(o.par));
+    if(!par)return;
+    fora.add(String(o.id));fora.add(String(par.id));
+    lista.push({v:String(o.id)+'|c',rot:famNomeDe(o)+' e '+famNomeDe(par)+' — o casal'});
+  });
+  acima.forEach(o=>{lista.push({v:String(o.id),rot:'só '+famNomeDe(o)+(o.papel?' ('+o.papel+')':'')});});
+  return lista;
 }
+const famValorDe=p=>p.de?String(p.de)+(p.deCasal?'|c':''):'';
 /* Pôr alguém JÁ LIGADO a quem está aberto. É o gesto que ele descreveu —
    "vou adicionando quem pertence a quem" — em um toque só, sem passar pela
    lista: a figura nasce no lugar certo e o laço já vem feito. */
@@ -8395,7 +8475,9 @@ function famBrotar(id,lado){
   const novo={id:novoId(),nome:'',papel:'',sexo:'n',ger:g,ord:famLinha(g).length,morto:false,obs:'',de:'',par:''};
   _famPessoas.push(novo);
   famNormalizarOrdem();
-  if(lado==='filho'){novo.de=p.id;}
+  // Filho de quem faz par nasce do casal — que é o caso comum. Se for só de
+  // um, a lista "Filho(a) de" desfaz num toque.
+  if(lado==='filho'){novo.de=p.id;novo.deCasal=!!p.par;}
   else{famVinculo(novo.id,'par',p.id);}
   _famSel=novo.id;
   _diagJaSalvo=false;
@@ -8416,7 +8498,10 @@ function famVinculo(id,campo,valor){
       novo.par=p.id;
     }
   }else{
-    p.de=valor||'';
+    // "id" é filho só daquela pessoa; "id|c" é filho do casal dela.
+    const par=String(valor||'').split('|');
+    p.de=par[0]||'';
+    p.deCasal=par[1]==='c';
   }
   _diagJaSalvo=false;
   famGuardarRascunho();famRender();
@@ -8434,11 +8519,11 @@ function famRenderEditor(){
     <div class="fr">
       <div class="fg"><label>Filho(a) de</label><select onchange="famVinculo('${p.id}','de',this.value)">
         <option value="">— ninguém apontado —</option>
-        ${famCandidatos(p,'de').map(o=>`<option value="${o.id}"${String(p.de||'')===String(o.id)?' selected':''}>${escHtml(o.rot)}</option>`).join('')}
+        ${famCandidatos(p,'de').map(o=>`<option value="${o.v}"${famValorDe(p)===o.v?' selected':''}>${escHtml(o.rot)}</option>`).join('')}
       </select></div>
       <div class="fg"><label>Faz par com</label><select onchange="famVinculo('${p.id}','par',this.value)">
         <option value="">— ninguém —</option>
-        ${famCandidatos(p,'par').map(o=>`<option value="${o.id}"${String(p.par||'')===String(o.id)?' selected':''}>${escHtml(o.rot)}</option>`).join('')}
+        ${famCandidatos(p,'par').map(o=>`<option value="${o.v}"${String(p.par||'')===o.v?' selected':''}>${escHtml(o.rot)}</option>`).join('')}
       </select></div>
     </div>
     <div class="fr full"><div class="fg"><label>Uma linha sobre essa pessoa</label><input type="text" value="${escHtml(p.obs||'')}" oninput="famCampo('${p.id}','obs',this.value)" placeholder="o que ela disse dessa pessoa — a peneira também lê daqui"></div></div>
@@ -8449,6 +8534,7 @@ function famRenderEditor(){
     <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px">
       ${FAM_SEXOS.map(s=>`<button type="button" class="folha-ch${p.sexo===s.k?' on':''}"${p.sexo===s.k?'':` onclick="famSexo('${p.id}','${s.k}')"`}>${s.rot}</button>`).join('')}
       <button type="button" class="folha-ch${p.morto?' on':''}" onclick="famMorto('${p.id}')" title="O traço do genograma: a pessoa continua desenhada">${p.morto?'Já partiu':'Marcar como já partiu'}</button>
+      ${p.eu?'':`<button type="button" class="folha-ch${p.esperado?' on':''}" onclick="famEsperado('${p.id}')" title="Quem está a caminho já ocupa lugar na família — o traço fica pontilhado até nascer">${p.esperado?'Ainda vai nascer':'Marcar como a caminho'}</button>`}
       ${p.eu?'<span class="fam-nota" style="margin-left:auto">Esta é ela. O nome vem da ficha.</span>':`<button type="button" class="btn btn-sec btn-sm" style="margin-left:auto;color:var(--danger)" onclick="famTirar('${p.id}')">Tirar do desenho</button>`}
     </div>
   </div>
