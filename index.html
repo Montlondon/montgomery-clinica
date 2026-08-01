@@ -940,11 +940,13 @@ window.addEventListener('DOMContentLoaded',()=>{
       <div class="tab-panel" id="trx">
         <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-3 5-6 11-11"/></svg></span>Histórico de Recomendações Terapêuticas</div>
         <p style="font-size:12px;color:var(--txt-l);margin-bottom:11px">Todas as recomendações já feitas para este paciente. Duplique uma antiga para agilizar um novo atendimento.</p>
+        <div style="margin-bottom:12px"><button type="button" class="btn btn-pri btn-sm" onclick="abrirRxDaFicha()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13"/><path d="M13 6l6 6-6 6"/></svg></span>Abrir a Recomendação desta pessoa</button></div>
         <div id="rxHistLista"><div style="text-align:center;color:var(--txt-l);padding:20px;font-size:13px">Nenhuma recomendação registrada ainda.</div></div>
       </div>
       <div class="tab-panel" id="tdg">
         <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 7 4-14 2 7h6"/></svg></span>Histórico de Diagnósticos Integrados</div>
         <p style="font-size:12px;color:var(--txt-l);margin-bottom:11px">Todas as avaliações de Diagnóstico Integrado já registradas para este paciente.</p>
+        <div style="margin-bottom:12px"><button type="button" class="btn btn-pri btn-sm" onclick="abrirDiagDaFicha()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13"/><path d="M13 6l6 6-6 6"/></svg></span>Abrir o Diagnóstico desta pessoa</button></div>
         <div id="diagHistLista"><div style="text-align:center;color:var(--txt-l);padding:20px;font-size:13px">Nenhuma avaliação registrada ainda.</div></div>
       </div>
       <!-- Histórico de sessões: só o que foi feito no encontro, sem o resto do
@@ -953,6 +955,7 @@ window.addEventListener('DOMContentLoaded',()=>{
       <div class="tab-panel" id="tss">
         <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span>Histórico de sessões</div>
         <p style="font-size:12px;color:var(--txt-l);margin-bottom:11px">O relato curto de cada encontro — o que foi feito, como a pessoa reagiu e o que ficou para a próxima. Vem das Memórias de sessão anotadas no Diagnóstico.</p>
+        <div style="margin-bottom:12px"><button type="button" class="btn btn-pri btn-sm" onclick="abrirDiagDaFicha()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13"/><path d="M13 6l6 6-6 6"/></svg></span>Relatar a sessão de hoje</button></div>
         <div id="sessHistLista"><div style="text-align:center;color:var(--txt-l);padding:20px;font-size:13px">Nenhuma sessão relatada ainda.</div></div>
       </div>
       <div style="margin-top:13px;padding:10px;background:var(--pri-l);border-radius:6px">
@@ -1075,6 +1078,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 <section class="page" id="pg-prescricao">
   <div class="page-header"><h1><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-3 5-6 11-11"/></svg></span>Recomendação Terapêutica</h1></div>
   <div class="volta-diag no-print" style="display:none"></div>
+  <div class="volta-ficha no-print" style="display:none"></div>
   <div class="fio-elementos no-print" style="max-width:140px"></div>
   <div class="fc no-print">
     <div class="fr">
@@ -1152,6 +1156,8 @@ window.addEventListener('DOMContentLoaded',()=>{
 <!-- ===== DIAGNÓSTICO INTEGRADO ===== -->
 <section class="page" id="pg-diagnostico">
   <div class="page-header"><h1><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2 7 4-14 2 7h6"/></svg></span>Diagnóstico Integrado</h1></div>
+
+  <div class="volta-ficha no-print" style="display:none"></div>
 
   <!-- O fio: fica aqui em cima, gruda no alto e desce junto com ele. -->
   <div class="fio-barra no-print" id="fioBarra" style="display:none"></div>
@@ -1857,7 +1863,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v6.1 · 31/07';
+const APP_VER='v6.2 · 31/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2476,6 +2482,9 @@ function toast(msg,cor,icone){
 
 // ===== NAVEGAÇÃO =====
 function go(p,el){
+  // Clique real no menu lateral = recomeço. A faixa "Voltar à ficha" some junto,
+  // para nunca prometer uma volta que não existe mais.
+  if(el){_voltaFicha=null;renderVoltaFicha();}
   document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
   document.getElementById('pg-'+p).classList.add('active');
   document.querySelectorAll('.sidebar nav a').forEach(x=>x.classList.remove('active'));
@@ -7398,6 +7407,77 @@ function selecionarDiagPac(id,nome){
   document.getElementById('diagPacLista').style.display='none';
   renderDiagUltEncontro();
 }
+/* ===== IR E VOLTAR: da ficha do paciente até a bancada, e de volta =====
+   Ele pediu para o Diagnóstico e a Recomendação abrirem DENTRO da ficha. Não
+   pode: as duas telas guardam estado (paciente na cadeira, campos, candidatos,
+   régua). Existir em dois lugares ao mesmo tempo cria duas bancadas com as
+   mesmas ferramentas, e o risco é preencher uma e salvar a outra.
+   Então a bancada continua sendo UMA só: a ficha leva até ela com a pessoa já
+   dentro, e uma faixa no alto traz de volta ao mesmo ponto. Mesma receita do
+   caminho de volta da régua de minerais (_cdVolta). */
+let _voltaFicha=null;   // {id,nome} enquanto houver uma ficha esperando
+
+function renderVoltaFicha(){
+  const alvos=document.querySelectorAll('.volta-ficha');
+  if(!alvos.length)return;
+  const html=!_voltaFicha?'':`<div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap;background:var(--beige);border-left:4px solid var(--pri-deep);border-radius:7px;padding:8px 12px;margin-bottom:12px">
+    <span style="font-size:12px;color:var(--pri-d)">Você veio da ficha de <strong>${escHtml(_voltaFicha.nome)}</strong>.</span>
+    <button type="button" class="btn btn-sec btn-sm" style="margin-left:auto" onclick="voltarAFicha()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5l-7 7 7 7"/><path d="M3 12h12a5 5 0 0 1 5 5v2"/></svg></span>Voltar à ficha</button>
+  </div>`;
+  alvos.forEach(el=>{el.innerHTML=html;el.style.display=_voltaFicha?'block':'none';});
+}
+
+// Guarda de onde saímos. Só marca se a ficha estiver de fato aberta em alguém.
+function _marcarVoltaFicha(){
+  if(!editId)return null;
+  const p=gD('pacientes').find(x=>String(x.id)===String(editId));
+  const nome=p?p.nome:(document.getElementById('pN')||{}).value||'';
+  if(!nome)return null;
+  _voltaFicha={id:editId,nome};
+  renderVoltaFicha();
+  return {id:editId,nome};
+}
+
+function abrirDiagDaFicha(){
+  const de=_marcarVoltaFicha();
+  if(!de){toast('Abra a ficha de um paciente primeiro','#EF6C00',"warn");return;}
+  // go(...,null) não zera nada: só o clique no menu lateral começa do zero.
+  go('diagnostico',null);
+  marcarMenuLateral('diagnostico');
+  setTimeout(()=>{
+    // Não troca a pessoa se já houver uma avaliação em aberto para ela mesma.
+    if(!_diagPacSel||String(_diagPacSel.id)!==String(de.id))selecionarDiagPac(de.id,de.nome);
+    renderVoltaFicha();
+  },160);
+}
+
+function abrirRxDaFicha(){
+  const de=_marcarVoltaFicha();
+  if(!de){toast('Abra a ficha de um paciente primeiro','#EF6C00',"warn");return;}
+  go('prescricao',null);
+  marcarMenuLateral('prescricao');
+  setTimeout(()=>{
+    if(!_rxPacSel||String(_rxPacSel.id)!==String(de.id))selecionarRxPac(de.id,de.nome,'');
+    renderVoltaFicha();
+  },160);
+}
+
+// Acende no menu lateral a página para onde fomos sem clique real.
+function marcarMenuLateral(pagina){
+  document.querySelectorAll('.sidebar nav a').forEach(a=>{
+    a.classList.toggle('active',String(a.getAttribute('onclick')||'').includes("'"+pagina+"'"));
+  });
+}
+
+// A volta. A bancada fica inteira do outro lado — nada é zerado aqui.
+async function voltarAFicha(){
+  if(!_voltaFicha)return;
+  const id=_voltaFicha.id;
+  _voltaFicha=null;renderVoltaFicha();
+  await editarPac(id);
+  marcarMenuLateral('pacientes');
+}
+
 function fecharDiagPacLista(){
   setTimeout(()=>document.getElementById('diagPacLista').style.display='none',200);
 }

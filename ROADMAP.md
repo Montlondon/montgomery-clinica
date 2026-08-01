@@ -176,6 +176,23 @@ apenas os diagnósticos que têm algum relato escrito — o resto não polui. Ca
 **A imagem:** o Diagnóstico é a bancada; esta aba é o caderno de bordo. Um conta o que se pensou,
 o outro conta o que se fez.
 
+## Concluído — Clínica v6.2: o ir-e-voltar, senha "Ir e voltar" (31/07/2026)
+
+Feito na mesma janela, logo depois da v6.1. **A bancada continua sendo uma só.**
+
+- Nas abas *Recomendações*, *Diagnósticos* e *Sessões* da ficha, um botão leva à tela cheia
+  **já com a pessoa dentro** (`abrirDiagDaFicha`, `abrirRxDaFicha`).
+- No alto do Diagnóstico e da Recomendação, uma faixa discreta: *"Você veio da ficha de [nome]"*,
+  com o botão **Voltar à ficha** (`voltarAFicha`) — devolve à ficha da mesma pessoa.
+- A faixa **some sozinha** quando ele clica no menu lateral, porque clique real é recomeço: nunca
+  prometer uma volta que não existe mais.
+- Nada é zerado na travessia. Se já houver uma avaliação aberta para aquela mesma pessoa, ela
+  continua inteira — o botão não troca o paciente.
+- Na aba Sessões o botão se chama **Relatar a sessão de hoje**: leva ao Diagnóstico, onde mora a
+  caixa Memória da sessão.
+
+Testado na tela antes de subir: ida, volta, faixa aparecendo e sumindo, console limpo.
+
 ### O que ficou pendente desta conversa
 
 Ele pediu também que **o Diagnóstico e a Recomendação abrissem inteiros dentro da própria ficha**,
