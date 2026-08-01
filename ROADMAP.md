@@ -460,6 +460,43 @@ Duas diferenças de propósito: o fundo é o **papel** da Clínica e não o céu
 do primeiro casal em 292 — o meio exato dos dois; e o palco em 686×675 com o desenho a 82% da
 altura, voltando a 640×371 ao sair.
 
+### FEITO — a família pensada por tronco (Clínica v7.2, 01/08/2026) — NO AR
+
+**O caso que ele trouxe, e que é o caso de todo atendimento:** *"o Venâncio é filho da Vanessa; a
+Raquel é minha sobrinha mas é filha da Alessandra; o Manoel tem uma filha, a Jéssica; e o Venâncio
+vai ser pai em setembro do Dimitre, com a Tamires — é exatamente assim que acontece no atendimento."*
+
+E a imagem que ele deu junto: **"como se fosse troncos de uma árvore"**. Era essa a chave.
+
+**O que faltava, em três buracos:**
+1. **Não havia fileira de netos.** O Dimitre não tinha onde nascer. Agora existem **Bisavós** e
+   **Netos**, e as duas só aparecem quando alguém mora nelas — fileira vazia é ar gasto na tela.
+2. **Todo filho era do casal.** A Jéssica é do Manoel e **não** da Alessandra. A lista "Filho(a) de"
+   agora tem as duas naturezas: *"Alessandra e Manoel — o casal"* e *"só Manoel"*. Do casal desce do
+   meio dos dois; só de um, desce dele.
+3. **Quem está a caminho não tinha lugar.** O Dimitre nasce em setembro e já pesa no atendimento
+   hoje. Ganhou o botão *Marcar como a caminho*: a figura fica **pontilhada** até nascer.
+
+**E o miolo do cálculo mudou de ideia — esta é a parte que importa.** Era **por fileira**: colocava
+todo mundo e depois empurrava quem pisava em quem. Escorregava. Bastava o casal do Venâncio ocupar a
+coluna da Alessandra para a Raquel sair **meio passo** do prumo da mãe. O desenho ficava quase certo,
+que num genograma é o mesmo que errado.
+
+Agora é **por tronco**, de baixo para cima, como uma árvore de verdade:
+- cada tronco é uma pessoa **ou um casal** — um casal é uma peça só;
+- desenham-se **os galhos primeiro**, e o tronco vai para o **meio do vão** do que nasceu dele (pelo
+  vão e não pela média, para que um galho carregado não puxe o tronco para o lado);
+- quem pendura o galho é **o filho**, não o par dele — por isso o Venâncio fica no prumo dos pais e
+  a Tamires vem ao lado;
+- um marcador por fileira guarda até onde já se ocupou, então **nenhum tronco invade o vizinho**;
+- e quando um tronco precisa andar para a direita, **o galho inteiro anda junto** — o prumo entre
+  pai e filho nunca se perde.
+
+**Conferido em bancada com a família inteira da imagem dele** (16 figuras, cinco fileiras): a Raquel
+exatamente sob a Alessandra; a Jéssica exatamente sob o Manoel; o Venâncio no meio exato dele com a
+Vanessa; o Dimitre no meio do Venâncio com a Tamires; os pais no meio do vão das quatro crianças; os
+avós no prumo do pai. A prancheta cresceu sozinha de 640 para 801.
+
 ### Decidido em 01/08 sobre o histórico e os bonecos
 
 **O histórico NÃO é espiral nem planta.** As duas foram desenhadas, calculadas e mostradas a ele;
