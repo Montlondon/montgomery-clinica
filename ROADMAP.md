@@ -158,7 +158,102 @@ Se as abas atuais viram camadas do Vitruviano ou continuam existindo ao lado del
 para camadas **na Clínica** (*"ao invés da aba Diagnóstico ser daquela forma"*); no OS, não disse.
 Pergunta para quando acender.
 
-## A planta da síntese — as três gavetas (31/07/2026, senha "Sintetizar")
+## A tela única — a arquitetura que ele descreveu (01/08/2026, senha "Sintetizar")
+
+*Nove pontos ditos por ele numa conversa de arquitetura, antes de qualquer código. Isto **substitui**
+a planta das três gavetas logo abaixo, que continua registrada por honestidade mas não é mais o rumo.*
+
+### O diagnóstico da coisa, em uma frase
+
+A Clínica foi construída **na ordem do cadastro** — primeiro existe o registro, depois acontece a
+pessoa. Ela precisa ser construída **na ordem do atendimento**: primeiro acontece a pessoa, e o
+registro é o rastro que ela deixa.
+
+### Os nove pontos, na voz dele
+
+1. **Não dá para agendar quem ainda não é paciente.** Para marcar a primeira sessão é preciso parar,
+   ir em *Novo paciente*, preencher, salvar, e só então voltar à Agenda.
+2. **Com a pessoa na frente, uma ficha só** — e o lugar já existe: o Diagnóstico. Começa por um
+   cabeçalho com os dados dela, e o que ele anota **acende os ramos** sozinho.
+3. **As doze abas viram uma.** O destino é o Vitruviano com a Árvore dentro dessa tela: clica em
+   quiropraxia, anota ali; precisa de suplemento, está ali.
+4. **No pé, a pessoa inteira** — sessões, o que foi feito, o que foi recomendado, a psicanálise, e
+   as pessoas dela. *"Seria como se eu estivesse vendo a paciente."*
+5. **Folha limpa e bonecos.** Escrever solto como se escreve no chat, e desenhar as figuras até o
+   triângulo familiar aparecer. *"Uma pessoa nunca é somente ela."*
+6. **O desenho é instrumento, não retrato:** acha o Édipo, as fixações (oral, anal, fálica), onde a
+   energia vaza em preocupação.
+7. **O desenho também é para ele** — é como ele memoriza e como pensa. *"Acho muito mais prático ver
+   uma perna e localizar o E36."* O Vitruviano não é enfeite: **é o formato certo do conteúdo.**
+8. **As doze abas poderiam nem existir.** A aba Diagnóstico **é** a ficha.
+9. **A espiral desenha as sessões**, e só desenha — a numeração segue 1, 2, 3, 4, 5.
+
+### As sete faixas da tela única (a planta)
+
+Uma página só, de cima para baixo, sem aba nenhuma:
+
+1. **O cabeçalho** — quem chegou. Se a pessoa não existe, **nasce aqui**, e a sessão de hoje já fica
+   agendada. Mata o ponto 1.
+2. **A folha limpa** — um campo sem rótulo. Escrever primeiro, classificar depois.
+3. **Os bonecos** — a família arrastável; acende a Psicanálise que já está catalogada.
+4. **O corpo** — o Vitruviano como *lugar onde se escreve*, não mapa para consultar.
+5. **A recomendação** — minerais, ervas, suplementos, prateleira. Mudam de lugar, não de conteúdo.
+6. **A espiral** — o histórico, desenhado.
+7. **A memória da sessão** — já existe e vira o fecho natural da página.
+
+### Duas regras que ele fechou nesta conversa
+
+- **Tudo que existe hoje no Diagnóstico permanece.** A obra é de lugar, não de conteúdo. Nenhum campo
+  que ele usa some no caminho.
+- **Nada de desenho sem proporção áurea.** Dito por ele: *"o desenho sem proporção áurea me incomoda
+  mais do que posso te explicar."* A primeira espiral que o Claude mandou foi traçada no olho e estava
+  errada. A certa é a espiral logarítmica áurea `r = a · φ^(2θ/π)` — a cada quarto de volta o raio
+  cresce exatamente φ. **Os encontros ficam sobre ela em passo igual de arco**, não de ângulo: no
+  passo de ângulo as cinco primeiras sessões se amontoam num punhado de pixels e a décima sai da
+  tela. A curva continua exata; só os marcos é que se distribuem. Script do cálculo guardado com a
+  janela; refazer com `PHI=(1+Math.sqrt(5))/2`, `k=2*ln(PHI)/PI`.
+  **Esta regra vale para todo desenho novo da casa, não só para a espiral.**
+
+### O que é novo de verdade
+
+Só três coisas: **a pessoa nascer no cabeçalho**, **os bonecos** e **a espiral**. Todo o resto já
+existe na Clínica e muda de lugar.
+
+### A ordem de construção (recomendação do Claude, aceita como rumo)
+
+1. A pessoa nasce no atendimento (cabeçalho que cria o paciente e agenda).
+2. A folha limpa.
+3. A espiral.
+4. Os bonecos — a maior; merece uma janela só dela.
+5. O corpo como lugar de escrita — por último, porque as quatro primeiras funcionam sem ele.
+
+**As doze abas não somem de uma vez.** Ficam vivas enquanto a tela nova cresce ao lado, e só se
+apagam quando ele disser que não sente falta.
+
+### Em aberto
+
+- Onde exatamente mora a recomendação terapêutica (o Claude recomenda o pé, antes da espiral).
+- Se a folha limpa e os campos classificados convivem (o Claude recomenda que sim, folha primeiro).
+
+### Sobre encolher o código — a conta honesta
+
+Ele perguntou se isto deixaria o código menor e mais rápido. Medido em 01/08: `index.html` tem
+**897 KB** — **719 KB de JavaScript** e **178 KB de HTML/CSS**. **O arquivo não vai encolher de forma
+relevante e pode até crescer**: as doze abas são só uns 10–15 KB, e os bonecos e a espiral somam
+código novo. Os 719 KB são quase todos **conhecimento** (361 pontos, ervas, minerais, pulsos,
+psicanálise) e não saem.
+
+**O ganho real é outro:** cada ficha carrega hoje **62 campos**, vários deles cópia do que o
+Diagnóstico já grava datado. Um lugar só significa **menos dado lido por paciente** — e o que estoura
+a cota do Supabase é *egress*, não tamanho de tela. O segundo ganho não se mede em KB: **um lugar
+para consertar em vez de dois.**
+
+## A planta da síntese — as três gavetas (31/07/2026, senha "Sintetizar") — SUPERADA
+
+*Registrada por honestidade. A conversa de 01/08 (acima) mostrou que reorganizar doze abas era
+resolver o problema errado: o número certo de abas é um. A vela 1 desta planta (v6.4, a última
+leitura datada) continua válida e no ar — ela dá data ao que não tinha, e isso o rumo novo também
+quer. As velas 2, 3 e 4 daqui estão canceladas.*
 
 *Sinal verde dele: "acredito que estamos partindo para um grande avanço". Esta é a planta escrita
 antes da obra, para que nenhuma janela precise redescobri-la.*
