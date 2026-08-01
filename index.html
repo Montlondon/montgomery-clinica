@@ -253,6 +253,25 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .folha-ch .pl{font-weight:400;color:var(--txt-l);font-size:10.5px}
 .folha-ch.on{background:#EAF5EC;border-color:#A5CFAC;color:#1B5E20;cursor:default}
 .folha-ch.on:hover{background:#EAF5EC;border-color:#A5CFAC}
+/* ===== FAIXA 3: OS BONECOS — a família desenhada =====
+   Uma pessoa nunca é somente ela. As figuras ficam em fileiras de geração
+   (avós, pais, ela e os irmãos, filhos) e se arrastam: a fileira diz o lugar
+   no tempo, a posição na fileira diz a ordem. Nada é traçado no olho — todas
+   as medidas saem de phi (ver FAM_H no script). */
+.fam{background:var(--cream);border:1px solid var(--brd);border-radius:11px;margin-bottom:14px;box-shadow:0 1px 4px rgba(43,41,36,.04)}
+.fam-cab{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 12px 8px;font-size:13px;font-weight:600;color:var(--txt)}
+.fam-cab svg{width:17px;height:17px;color:var(--gold,#C9A84C);flex-shrink:0}
+.fam-add{display:flex;gap:6px;flex-wrap:wrap;padding:0 12px 9px}
+.fam-add button{padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:600;font-family:inherit;background:var(--surface);border:1px solid var(--brd);color:var(--txt);cursor:pointer}
+.fam-add button:hover{background:var(--pri-l);border-color:var(--pri)}
+.fam-tela{display:block;width:100%;touch-action:none;user-select:none;border-top:1px solid #EFE7D6;background:#FFFDF7}
+.fam-fig{cursor:grab}
+.fam-fig.puxando{cursor:grabbing;opacity:.85}
+.fam-vazio{padding:14px 12px;font-size:12px;color:var(--txt-l);line-height:1.6;border-top:1px solid #EFE7D6}
+.fam-ed{padding:10px 12px 12px;border-top:1px solid #EFE7D6;background:var(--beige)}
+.fam-ed .fr{margin-bottom:0}
+.fam-pe{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:7px 12px;border-top:1px solid #EFE7D6}
+.fam-nota{font-size:11px;color:var(--txt-l);line-height:1.6}
 /* O INTERRUPTOR DE TRÊS POSIÇÕES — a peça reaproveitável.
    Nasce sem posição escolhida (ninguém decide por ele) e cada toque grava.
    Tocar de novo na posição acesa desliga: sai a clique como entrou a clique. */
@@ -1249,6 +1268,26 @@ window.addEventListener('DOMContentLoaded',()=>{
     <div id="folhaPeneira"></div>
   </div>
 
+  <!-- ===== FAIXA 3: OS BONECOS =====
+       "Uma pessoa nunca é somente ela." A família em fileiras de geração,
+       com figuras que se adicionam e se arrastam. O desenho é instrumento:
+       quando pai, mãe e ela estão na tela, o triângulo aparece sozinho. -->
+  <div class="fam no-print" id="famBloco">
+    <div class="fam-cab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="2.6"/><circle cx="16" cy="7" r="2.6"/><path d="M3.5 19c0-2.5 2-4.4 4.5-4.4s4.5 1.9 4.5 4.4M11.5 19c0-2.5 2-4.4 4.5-4.4s4.5 1.9 4.5 4.4"/></svg>
+      As pessoas dela
+      <span style="font-weight:400;font-size:11.5px;color:var(--txt-l)">— arraste para mudar de fileira ou de ordem; toque para escrever</span>
+    </div>
+    <div class="fam-add" id="famAdd"></div>
+    <div id="famTela"></div>
+    <div id="famEditor"></div>
+    <div class="fam-pe">
+      <span class="fam-nota" id="famConta"></span>
+      <button type="button" class="btn btn-sec btn-sm" style="margin-left:auto" id="famBtnPen" onclick="famPeneirar()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4 2v-8Z"/></svg></span> O que a família reconhece</button>
+    </div>
+    <div id="famPeneira"></div>
+  </div>
+
   <div class="fc no-print" style="margin-bottom:14px">
     <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink,#2B2B2B);margin-bottom:10px"><span style="width:18px;height:18px;color:var(--gold,#C9A84C)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h4M7 12h2M15 8v8M12 16h6"/></svg></span>Calculadora de IMC</div>
     <div class="fr">
@@ -1931,7 +1970,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v6.7 · 01/08';
+const APP_VER='v6.8 · 01/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2612,6 +2651,9 @@ function go(p,el){
       // _diagPacSel já foi zerado acima, folhaLimpar não tem chave para apagar.
       // Quem escolher a mesma pessoa de novo recebe o texto de volta.
       folhaLimpar();
+      // Mesma regra dos bonecos: some da tela, mas o desenho DAQUELA pessoa
+      // continua guardado — famLimpar sem paciente não tem chave para apagar.
+      famLimpar();
       renderDiagUltEncontro();
       const b=document.getElementById('btnSalvarDiag');
       if(b)b.innerHTML=SAVE_ICON_HTML+' Salvar Avaliação';
@@ -6143,6 +6185,7 @@ function initDiagnostico(){
   cabRender();
   folhaContar();
   renderFolhaPeneira();
+  famRender();
 }
 
 // ===== ACUPUNTURA — PONTOS DOS MERIDIANOS (dados em acupuntura-data.js) =====
@@ -7413,6 +7456,27 @@ function gerarHtmlDiag(diagRec){
     </div>`;
   }
 
+  // As pessoas dela no papel. O desenho não vai — vai quem estava desenhado,
+  // por geração, que é o que se lê depois sem precisar da tela.
+  const famPapel=diagRec?(Array.isArray(diagRec.familia)?diagRec.familia:[]):famDados();
+  const famVale=famPapel.filter(p=>!p.eu&&(p.nome||p.papel));
+  if(famVale.length){
+    const rot={'-2':'Avós','-1':'Pais','0':'Ela e os irmãos','1':'Filhos'};
+    const linhas=[-2,-1,0,1].map(g=>{
+      const q=famVale.filter(p=>Number(p.ger)===g).sort((a,b)=>a.ord-b.ord);
+      if(!q.length)return '';
+      const nomes=q.map(p=>{
+        const n=[p.nome,p.papel?'('+p.papel+')':''].filter(Boolean).join(' ');
+        return escHtml(n)+(p.morto?' <span style="color:#7a6a55">— já partiu</span>':'')+(p.obs?` <span style="color:#7a6a55">· ${escHtml(p.obs)}</span>`:'');
+      }).join('; ');
+      return `<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>${rot[g]}:</strong> ${nomes}</div>`;
+    }).filter(Boolean).join('');
+    blocos+=`<div style="border-left:4px solid #8A8578;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
+      <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">As pessoas dela</div>
+      ${linhas}
+    </div>`;
+  }
+
   // Memória da sessão também no papel — é o que conta o encontro em si
   const memPapel=[
     ['O que foi feito',diagRec?diagRec.sessaoFeito:vMem('diagSessaoFeito')],
@@ -7507,6 +7571,7 @@ function selecionarDiagPac(id,nome){
   document.getElementById('diagPacLista').style.display='none';
   renderDiagUltEncontro();
   folhaCarregarRascunho();
+  famCarregar();
 }
 
 /* ===== O CABEÇALHO — a pessoa nasce e a sessão se marca aqui =====
@@ -7811,6 +7876,377 @@ function folhaTocar(i){
   if(typeof fioRender==='function')fioRender();
 }
 
+/* ===== OS BONECOS — a família desenhada (Faixa 3) =====
+   "Uma pessoa nunca é somente ela." Isto não é retrato: é instrumento. As
+   figuras moram em fileiras de geração e se arrastam — a fileira diz o lugar
+   no tempo, a posição na fileira diz a ordem entre irmãos. Quando o pai, a mãe
+   e ela estão na tela, o TRIÂNGULO aparece sozinho: não é enfeite, é o que se
+   vê quando a pessoa está entre os dois.
+
+   Nada aqui é traçado no olho. Toda medida sai de phi: a figura tem altura
+   FAM_H e se reparte em cabeça (H/phi³), tronco (H/phi²) e pernas (H/phi²) —
+   0,236 + 0,382 + 0,382 = 1 exato. O passo entre fileiras e entre figuras é
+   H·phi. */
+const FAM_PHI=(1+Math.sqrt(5))/2;
+const FAM_H=54;                                  // altura da figura inteira
+const FAM_R=FAM_H/Math.pow(FAM_PHI,3)/2;         // raio da cabeça
+const FAM_TR=FAM_H/Math.pow(FAM_PHI,2);          // tronco (ombros ao quadril)
+const FAM_BR=FAM_TR/FAM_PHI;                     // meio-vão dos braços
+const FAM_PASSO=Math.round(FAM_H*FAM_PHI);       // passo entre fileiras e entre figuras
+const FAM_LARG=640;                              // largura da prancheta (viewBox)
+const FAM_TOPO=26;                               // ar acima da primeira fileira
+const FAM_GERACOES=[
+  {g:-2,rot:'Avós',       add:'Avó ou avô',   papel:'avó/avô',   sexo:'n'},
+  {g:-1,rot:'Pais',       add:'Pai ou mãe',   papel:'mãe',       sexo:'f'},
+  {g: 0,rot:'Ela e os irmãos',add:'Irmão ou irmã',papel:'irmã',  sexo:'f'},
+  {g: 1,rot:'Filhos',     add:'Filho ou filha',papel:'filha',    sexo:'f'}
+];
+const FAM_RASC='fam_rascunho_';
+
+let _famPessoas=[];      // [{id,nome,papel,sexo,ger,ord,morto,obs,eu}]
+let _famSel=null;        // id da figura aberta no editor
+let _famPenAberta=false;
+let _famAchados=[];
+
+const famLinha=g=>_famPessoas.filter(p=>p.ger===g).sort((a,b)=>a.ord-b.ord);
+const famPorId=id=>_famPessoas.find(p=>String(p.id)===String(id))||null;
+function famNormalizarOrdem(){
+  FAM_GERACOES.forEach(gr=>famLinha(gr.g).forEach((p,i)=>{p.ord=i;}));
+}
+// A pessoa da cadeira é a única figura que não se adiciona: ela já está lá.
+function famGarantirEu(){
+  if(!_diagPacSel)return;
+  let eu=_famPessoas.find(p=>p.eu);
+  if(!eu){
+    eu={id:'eu',nome:_diagPacSel.nome,papel:'ela mesma',sexo:'n',ger:0,ord:0,morto:false,obs:'',eu:true};
+    _famPessoas.unshift(eu);
+    famNormalizarOrdem();
+  }else if(!eu.nome){eu.nome=_diagPacSel.nome;}
+}
+
+function famDados(){
+  return _famPessoas.map(p=>({id:p.id,nome:p.nome||'',papel:p.papel||'',sexo:p.sexo||'n',
+    ger:p.ger,ord:p.ord,morto:!!p.morto,obs:p.obs||'',eu:!!p.eu}));
+}
+function famChaveRasc(){return _diagPacSel?FAM_RASC+_diagPacSel.id:null;}
+function famGuardarRascunho(){
+  const c=famChaveRasc();
+  if(!c)return;
+  // Só o "eu" sozinho não é desenho nenhum — não vale guardar.
+  const vale=_famPessoas.some(p=>!p.eu);
+  if(vale)localStorage.setItem(c,JSON.stringify(famDados()));else localStorage.removeItem(c);
+}
+// A família não nasce de novo a cada encontro: ela veio do último desenho.
+// Primeiro o rascunho local (o que ele estava desenhando agora), depois o que
+// ficou guardado na última avaliação que tinha família.
+function famCarregar(){
+  _famPessoas=[];_famSel=null;_famPenAberta=false;
+  const c=famChaveRasc();
+  let de='';
+  if(c){
+    try{
+      const g=JSON.parse(localStorage.getItem(c)||'null');
+      if(Array.isArray(g)&&g.length){_famPessoas=g;de='rascunho';}
+    }catch(e){}
+  }
+  if(!_famPessoas.length&&_diagPacSel){
+    const antes=gD('diagnosticos')
+      .filter(d=>String(d.pacienteId)===String(_diagPacSel.id)&&Array.isArray(d.familia)&&d.familia.length)
+      .sort((a,b)=>String(b.data||'').localeCompare(String(a.data||'')))[0];
+    if(antes){_famPessoas=JSON.parse(JSON.stringify(antes.familia));de='ultimo:'+antes.data;}
+  }
+  famGarantirEu();famNormalizarOrdem();famRender();
+  if(de==='rascunho')toast('A família desta pessoa voltou como estava.','#1565C0',"info");
+  else if(de.startsWith('ultimo:'))toast('A família veio do encontro de '+fd(de.slice(7))+'. Mude o que mudou.','#1565C0',"info");
+}
+function famLimpar(){
+  const c=famChaveRasc();
+  if(c)localStorage.removeItem(c);
+  _famPessoas=[];_famSel=null;_famPenAberta=false;_famAchados=[];
+  famRender();
+}
+
+function famAdicionar(g){
+  if(!_diagPacSel){toast('Escolha quem chegou primeiro','#EF6C00',"warn");return;}
+  const gr=FAM_GERACOES.find(x=>x.g===g);
+  const p={id:novoId(),nome:'',papel:gr?gr.papel:'',sexo:gr?gr.sexo:'n',ger:g,ord:famLinha(g).length,morto:false,obs:''};
+  _famPessoas.push(p);
+  _famSel=p.id;
+  _diagJaSalvo=false;
+  famNormalizarOrdem();famGuardarRascunho();famRender();
+}
+function famTirar(id){
+  const p=famPorId(id);
+  if(!p||p.eu)return;
+  _famPessoas=_famPessoas.filter(x=>String(x.id)!==String(id));
+  if(String(_famSel)===String(id))_famSel=null;
+  _diagJaSalvo=false;
+  famNormalizarOrdem();famGuardarRascunho();famRender();
+}
+function famCampo(id,campo,valor){
+  const p=famPorId(id);
+  if(!p)return;
+  p[campo]=valor;
+  _diagJaSalvo=false;
+  famGuardarRascunho();
+  famDesenhar();          // o desenho acompanha; o editor não se redesenha por baixo do cursor
+  famContar();
+}
+function famSexo(id,s){
+  const p=famPorId(id);if(!p)return;
+  p.sexo=s;_diagJaSalvo=false;famGuardarRascunho();famRender();
+}
+function famMorto(id){
+  const p=famPorId(id);if(!p)return;
+  p.morto=!p.morto;_diagJaSalvo=false;famGuardarRascunho();famRender();
+}
+
+// ===== O DESENHO =====
+function famAltura(){return FAM_TOPO+(FAM_GERACOES.length-1)*FAM_PASSO+FAM_H+30;}
+function famY(g){return FAM_TOPO+(FAM_GERACOES.findIndex(x=>x.g===g))*FAM_PASSO;}
+function famX(p){
+  const linha=famLinha(p.ger);
+  const i=linha.findIndex(x=>String(x.id)===String(p.id));
+  return FAM_LARG/2+(i-(linha.length-1)/2)*FAM_PASSO;
+}
+function famCurto(s,n){s=String(s||'');return s.length>n?s.slice(0,n-1)+'…':s;}
+
+function famFiguraSVG(p){
+  const x=famX(p), y=famY(p.ger), sel=String(_famSel)===String(p.id);
+  const cor=p.eu?'#2B2924':'#6B6357', esp=p.eu?2.1:1.5;
+  const ombro=y+2*FAM_R, quadril=ombro+FAM_TR, pe=y+FAM_H, braco=ombro+FAM_TR/(FAM_PHI*FAM_PHI);
+  let d='';
+  d+=`<circle cx="${x}" cy="${y+FAM_R}" r="${FAM_R.toFixed(2)}"/>`;
+  d+=`<path d="M${x} ${ombro} L${x} ${quadril}"/>`;
+  d+=`<path d="M${(x-FAM_BR).toFixed(1)} ${(braco+FAM_BR*.6).toFixed(1)} L${x} ${braco.toFixed(1)} L${(x+FAM_BR).toFixed(1)} ${(braco+FAM_BR*.6).toFixed(1)}"/>`;
+  if(p.sexo==='f')d+=`<path d="M${x} ${quadril.toFixed(1)} L${(x-FAM_BR*1.15).toFixed(1)} ${pe} L${(x+FAM_BR*1.15).toFixed(1)} ${pe} Z"/>`;
+  else if(p.sexo==='m')d+=`<path d="M${(x-FAM_BR*.75).toFixed(1)} ${pe} L${x} ${quadril.toFixed(1)} L${(x+FAM_BR*.75).toFixed(1)} ${pe}"/>`;
+  else d+=`<path d="M${x} ${quadril.toFixed(1)} L${x} ${pe}"/><path d="M${(x-FAM_BR*.7).toFixed(1)} ${pe} L${(x+FAM_BR*.7).toFixed(1)} ${pe}"/>`;
+  // Quem já partiu leva o traço do genograma — a pessoa continua no desenho.
+  if(p.morto)d+=`<path d="M${(x-FAM_BR*1.4).toFixed(1)} ${y-3} L${(x+FAM_BR*1.4).toFixed(1)} ${pe+3}" stroke-width="1.2"/>`;
+  const nome=famCurto(p.nome||(p.eu?_diagPacSel&&_diagPacSel.nome:''),15);
+  const papel=famCurto(p.papel,17);
+  return `<g class="fam-fig" data-fam="${p.id}">
+    ${sel?`<rect x="${(x-FAM_PASSO/2+4).toFixed(1)}" y="${y-9}" width="${FAM_PASSO-8}" height="${FAM_H+34}" rx="9" fill="var(--pri-l)" stroke="var(--pri)" stroke-width="1"/>`:''}
+    <g fill="none" stroke="${cor}" stroke-width="${esp}" stroke-linecap="round" stroke-linejoin="round">${d}</g>
+    ${p.eu?`<path d="M${(x-FAM_BR*1.5).toFixed(1)} ${pe+5} L${(x+FAM_BR*1.5).toFixed(1)} ${pe+5}" stroke="var(--gold,#C9A84C)" stroke-width="2" stroke-linecap="round"/>`:''}
+    <text x="${x}" y="${pe+17}" text-anchor="middle" font-size="10.5" font-weight="${p.eu?'700':'600'}" fill="#2B2924">${escHtml(nome)}</text>
+    <text x="${x}" y="${pe+28}" text-anchor="middle" font-size="9.5" fill="#8A8578">${escHtml(papel)}</text>
+    <rect x="${(x-FAM_PASSO/2+4).toFixed(1)}" y="${y-9}" width="${FAM_PASSO-8}" height="${FAM_H+34}" fill="transparent"/>
+  </g>`;
+}
+
+function famDesenhar(){
+  const el=document.getElementById('famTela');
+  if(!el)return;
+  if(!_diagPacSel){
+    el.innerHTML='<div class="fam-vazio">Escolha quem chegou no cabeçalho — a família é dela, e o desenho fica guardado com ela.</div>';
+    return;
+  }
+  famGarantirEu();
+  const alt=famAltura();
+  let svg=`<svg class="fam-tela" viewBox="0 0 ${FAM_LARG} ${alt}" preserveAspectRatio="xMidYMid meet" id="famSvg" style="max-width:${FAM_LARG}px;height:auto;aspect-ratio:${FAM_LARG}/${alt};margin:0 auto">`;
+  // As fileiras: o rótulo à esquerda e a linha fina da geração.
+  const ocupadas=[];
+  FAM_GERACOES.forEach(gr=>{
+    const linha=famLinha(gr.g), y=famY(gr.g);
+    svg+=`<text x="10" y="${y+FAM_H/2}" font-size="9.5" fill="#B9AF98" font-weight="700" letter-spacing="0.5">${gr.rot.toUpperCase()}</text>`;
+    if(!linha.length)return;
+    ocupadas.push(gr.g);
+    const xs=linha.map(p=>famX(p));
+    const x1=Math.min(...xs), x2=Math.max(...xs);
+    if(linha.length>1)svg+=`<path d="M${x1} ${y-9} L${x2} ${y-9}" stroke="#E4DCCB" stroke-width="1.2" fill="none"/>`;
+    xs.forEach(x=>{svg+=`<path d="M${x} ${y-9} L${x} ${y-1}" stroke="#E4DCCB" stroke-width="1.2" fill="none"/>`;});
+  });
+  // A descendência: a linha que liga uma fileira à seguinte, pelo meio.
+  for(let i=0;i<ocupadas.length-1;i++){
+    const ya=famY(ocupadas[i])+FAM_H, yb=famY(ocupadas[i+1])-9;
+    svg+=`<path d="M${FAM_LARG/2} ${ya+6} L${FAM_LARG/2} ${yb}" stroke="#EFE7D6" stroke-width="1.2" fill="none"/>`;
+  }
+  // O TRIÂNGULO — aparece sozinho quando pai e mãe estão desenhados com ela.
+  const eu=_famPessoas.find(p=>p.eu);
+  const pais=famLinha(-1).filter(p=>{const s=semAcento(p.papel||'');return s.includes('pai')||s.includes('mae');});
+  const temTri=!!eu&&pais.some(p=>semAcento(p.papel||'').includes('pai'))&&pais.some(p=>semAcento(p.papel||'').includes('mae'));
+  if(temTri){
+    const yEu=famY(0)+FAM_R, xEu=famX(eu);
+    pais.slice(0,2).forEach(p=>{
+      svg+=`<path d="M${famX(p)} ${famY(-1)+FAM_H} L${xEu} ${yEu-FAM_R-4}" stroke="var(--gold,#C9A84C)" stroke-width="1.2" stroke-dasharray="3 4" fill="none" opacity=".85"/>`;
+    });
+  }
+  _famPessoas.forEach(p=>{svg+=famFiguraSVG(p);});
+  svg+='</svg>';
+  el.innerHTML=svg;
+  if(temTri)el.insertAdjacentHTML('beforeend','<div class="fam-nota" style="padding:0 12px 8px">O triângulo está desenhado: o pai, a mãe e ela.</div>');
+  famLigarArrasto();
+}
+
+// Arrastar: a fileira em que a figura for solta vira a geração dela, e a
+// posição horizontal vira a ordem. Soltar no mesmo lugar (menos de 4 px) não é
+// arrasto — é toque, e toque abre a figura para escrever.
+function famLigarArrasto(){
+  const svg=document.getElementById('famSvg');
+  if(!svg)return;
+  svg.querySelectorAll('.fam-fig').forEach(g=>{
+    g.addEventListener('pointerdown',ev=>{
+      const p=famPorId(g.dataset.fam);
+      if(!p)return;
+      ev.preventDefault();
+      const esc=svg.getBoundingClientRect().width/FAM_LARG;
+      const x0=ev.clientX, y0=ev.clientY;
+      let dx=0,dy=0,moveu=false;
+      g.setPointerCapture(ev.pointerId);
+      g.classList.add('puxando');
+      const mover=e=>{
+        dx=(e.clientX-x0)/esc; dy=(e.clientY-y0)/esc;
+        if(Math.abs(e.clientX-x0)>4||Math.abs(e.clientY-y0)>4)moveu=true;
+        g.setAttribute('transform',`translate(${dx.toFixed(1)},${dy.toFixed(1)})`);
+      };
+      const soltar=()=>{
+        g.removeEventListener('pointermove',mover);
+        g.removeEventListener('pointerup',soltar);
+        g.removeEventListener('pointercancel',soltar);
+        g.classList.remove('puxando');
+        if(!moveu){_famSel=String(_famSel)===String(p.id)?null:p.id;famRender();return;}
+        const yFinal=famY(p.ger)+dy+FAM_H/2;
+        const xFinal=famX(p)+dx;
+        // A fileira mais perto do centro da figura solta manda no tempo.
+        let alvo=p.ger, melhor=Infinity;
+        FAM_GERACOES.forEach(gr=>{
+          const d=Math.abs(famY(gr.g)+FAM_H/2-yFinal);
+          if(d<melhor){melhor=d;alvo=gr.g;}
+        });
+        if(p.eu)alvo=0;                     // ela é a fileira dela; não vira avó de si mesma
+        // Ordem dentro da fileira: quem está mais à esquerda vem antes. As
+        // posições dos outros são lidas ANTES de mexer em qualquer ord — senão
+        // a conta compara com um desenho que já mudou.
+        const outros=famLinha(alvo).filter(o=>String(o.id)!==String(p.id));
+        const xsOutros=outros.map(o=>famX(o));
+        const pos=xsOutros.filter(x=>x<xFinal).length;
+        p.ger=alvo;
+        outros.forEach((o,i)=>{o.ord=i;});
+        p.ord=pos-0.5;
+        _diagJaSalvo=false;
+        famNormalizarOrdem();famGuardarRascunho();famRender();
+      };
+      g.addEventListener('pointermove',mover);
+      g.addEventListener('pointerup',soltar);
+      g.addEventListener('pointercancel',soltar);
+    });
+  });
+}
+
+function famRenderAdd(){
+  const el=document.getElementById('famAdd');
+  if(!el)return;
+  el.innerHTML=FAM_GERACOES.map(gr=>`<button type="button" onclick="famAdicionar(${gr.g})" title="Põe uma figura na fileira ${gr.rot.toLowerCase()}">+ ${escHtml(gr.add)}</button>`).join('');
+}
+
+const FAM_SEXOS=[{k:'f',rot:'Figura de saia'},{k:'m',rot:'Figura de pernas'},{k:'n',rot:'Figura neutra'}];
+function famRenderEditor(){
+  const el=document.getElementById('famEditor');
+  if(!el)return;
+  const p=famPorId(_famSel);
+  if(!p){el.innerHTML='';return;}
+  el.innerHTML=`<div class="fam-ed">
+    <div class="fr">
+      <div class="fg"><label>Nome</label><input type="text" value="${escHtml(p.nome||'')}" ${p.eu?'readonly':''} oninput="famCampo('${p.id}','nome',this.value)" placeholder="${p.eu?'':'Como ela chama essa pessoa'}"></div>
+      <div class="fg"><label>Quem é</label><input type="text" value="${escHtml(p.papel||'')}" ${p.eu?'readonly':''} oninput="famCampo('${p.id}','papel',this.value)" list="famPapeis" placeholder="mãe, padrasto, filha mais velha..."></div>
+    </div>
+    <div class="fr full"><div class="fg"><label>Uma linha sobre essa pessoa</label><input type="text" value="${escHtml(p.obs||'')}" oninput="famCampo('${p.id}','obs',this.value)" placeholder="o que ela disse dessa pessoa — a peneira também lê daqui"></div></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px">
+      ${FAM_SEXOS.map(s=>`<button type="button" class="folha-ch${p.sexo===s.k?' on':''}"${p.sexo===s.k?'':` onclick="famSexo('${p.id}','${s.k}')"`}>${s.rot}</button>`).join('')}
+      <button type="button" class="folha-ch${p.morto?' on':''}" onclick="famMorto('${p.id}')" title="O traço do genograma: a pessoa continua desenhada">${p.morto?'Já partiu':'Marcar como já partiu'}</button>
+      ${p.eu?'<span class="fam-nota" style="margin-left:auto">Esta é ela. O nome vem da ficha.</span>':`<button type="button" class="btn btn-sec btn-sm" style="margin-left:auto;color:var(--danger)" onclick="famTirar('${p.id}')">Tirar do desenho</button>`}
+    </div>
+  </div>
+  <datalist id="famPapeis">${['mãe','pai','madrasta','padrasto','avó materna','avô materno','avó paterna','avô paterno','irmã','irmão','filha','filho','companheiro','companheira'].map(x=>`<option value="${x}">`).join('')}</datalist>`;
+}
+function famContar(){
+  const el=document.getElementById('famConta');
+  if(!el)return;
+  const n=_famPessoas.filter(p=>!p.eu).length;
+  el.textContent=n?(n===1?'1 pessoa desenhada':n+' pessoas desenhadas')+' — salvas junto com a avaliação':(_diagPacSel?'Só ela por enquanto.':'');
+}
+function famRender(){
+  famRenderAdd();famDesenhar();famRenderEditor();famContar();renderFamPeneira();
+}
+
+/* ===== A PENEIRA DA FAMÍLIA =====
+   Mesma regra da folha: reconhece, não decide. Duas portas de entrada —
+   o triângulo desenhado (que abre a estante do Édipo) e as palavras escritas
+   nos papéis e nas linhas de cada figura. Cada achado mostra a procedência. */
+function famTexto(){
+  return _famPessoas.map(p=>[p.papel,p.obs].filter(Boolean).join(' ')).join(' . ');
+}
+function famTemTriangulo(){
+  if(!_famPessoas.some(p=>p.eu))return false;
+  const pais=famLinha(-1).map(p=>semAcento(p.papel||''));
+  return pais.some(s=>s.includes('pai'))&&pais.some(s=>s.includes('mae'));
+}
+function famAchados(){
+  if(typeof psicanaliseTemas==='undefined'||!Array.isArray(psicanaliseTemas))return [];
+  const achados=[], vistos=new Set();
+  const por=(cat,nome,palavra)=>{
+    const ch=cat+'|'+nome;
+    if(vistos.has(ch))return;
+    vistos.add(ch);
+    achados.push({rot:nome,palavra,cat,nome,on:()=>psicanaliseItemMarcado(cat,nome)});
+  };
+  if(famTemTriangulo()){
+    const ed=psicanaliseTemas.find(c=>semAcento(c.categoria).includes('edipo'));
+    if(ed)(ed.itens||[]).forEach(it=>por(ed.categoria,it.nome,'o triângulo desenhado: pai, mãe e ela'));
+  }
+  const n=semAcento(famTexto());
+  if(n.trim()){
+    psicanaliseTemas.forEach(cat=>{
+      (cat.itens||[]).forEach(it=>{
+        const p=folhaAchaChave(n,it.nome);
+        if(p)por(cat.categoria,it.nome,p);
+      });
+    });
+  }
+  return achados;
+}
+function famPeneirar(){
+  _famPenAberta=!_famPenAberta;
+  renderFamPeneira();
+}
+function renderFamPeneira(){
+  const el=document.getElementById('famPeneira');
+  const btn=document.getElementById('famBtnPen');
+  if(!el)return;
+  if(!_famPenAberta){el.innerHTML='';if(btn)btn.classList.remove('btn-pri');return;}
+  if(btn)btn.classList.add('btn-pri');
+  _famAchados=famAchados();
+  if(!_famAchados.length){
+    el.innerHTML='<div class="folha-pen fam-nota">Nada reconhecido ainda. A peneira lê o que está escrito em "quem é" e na linha de cada figura — e o triângulo, quando o pai e a mãe estão desenhados com ela.</div>';
+    return;
+  }
+  const TETO=10;
+  const ordenados=[..._famAchados].sort((a,b)=>(b.on()?1:0)-(a.on()?1:0));
+  const its=ordenados.slice(0,TETO), sobra=_famAchados.length-its.length;
+  let html='<div class="folha-pen"><div class="folha-gr"><div class="folha-gr-t">Temas da Psicanálise'+
+    (sobra?` <span style="font-weight:400;text-transform:none;letter-spacing:0">— mostrando ${its.length} de ${_famAchados.length}; os outros ${sobra} continuam na caixa da Psicanálise</span>`:'')+'</div>';
+  its.forEach(a=>{
+    const i=_famAchados.indexOf(a), marcado=a.on();
+    const tit=marcado?'Já está na avaliação':`Veio de "${a.palavra}" — tocar marca o conceito na Psicanálise`;
+    html+=`<button type="button" class="folha-ch${marcado?' on':''}" title="${escHtml(tit)}"${marcado?'':` onclick="famTocar(${i})"`}>
+      ${marcado?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px"><path d="M5 13l4 4L19 7"/></svg>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:11px;height:11px"><path d="M12 5v14M5 12h14"/></svg>'}
+      ${escHtml(a.rot)}<span class="pl">&ldquo;${escHtml(a.palavra)}&rdquo;</span></button>`;
+  });
+  html+='</div><div class="fam-nota" style="margin-top:8px">O desenho é instrumento, não retrato. Nada entra na ficha sem o seu toque.</div></div>';
+  el.innerHTML=html;
+}
+function famTocar(i){
+  const a=_famAchados[i];
+  if(!a||a.on())return;
+  togglePsicanalise(a.cat,a.nome);
+  _diagJaSalvo=false;
+  renderFamPeneira();
+  atualizarResumoCaixas();
+  if(typeof fioRender==='function')fioRender();
+}
+
 // Idade em anos a partir do nascimento guardado na ficha (aaaa-mm-dd).
 function idadePorNasc(nasc){
   const n=new Date(nasc+'T12:00:00');
@@ -7972,6 +8408,9 @@ async function salvarDiagnostico(){
     emoObs:document.getElementById('diagEmoObs').value,
     // A folha limpa — o texto solto daquele encontro, inteiro como ele escreveu
     folha:folhaTexto().trim(),
+    // Os bonecos — a família como estava desenhada neste encontro. Fica datada
+    // com a avaliação, e o próximo encontro começa com este mesmo desenho.
+    familia:famDados(),
     // Memória da sessão — o que fica deste encontro para a próxima chegada
     sessaoFeito:vMem('diagSessaoFeito'),
     sessaoReacao:vMem('diagSessaoReacao'),
@@ -8010,6 +8449,11 @@ async function salvarDiagnostico(){
     // O texto continua na tela — quem está salvo é o encontro, não a janela.
     const cRasc=folhaChaveRasc();
     if(cRasc)localStorage.removeItem(cRasc);
+    // O desenho da família também virou registro datado. O rascunho local sai
+    // de cena, mas as figuras continuam na tela — e voltam no próximo encontro
+    // pelo caminho do último desenho salvo.
+    const cFam=famChaveRasc();
+    if(cFam)localStorage.removeItem(cFam);
   }catch(e){
     console.error('Erro ao salvar diagnóstico:',e);
     toast('Erro ao salvar avaliação: '+(e.message||'verifique sua conexão'),'#c62828',"erro");
@@ -8035,6 +8479,10 @@ function editarDiagHist(diagId,pacId){
     const fEl=document.getElementById('diagFolha');
     if(fEl)fEl.value=diag.folha||'';
     folhaContar();renderFolhaPeneira();
+    // A família daquele dia, como estava desenhada naquele dia.
+    _famPessoas=Array.isArray(diag.familia)?JSON.parse(JSON.stringify(diag.familia)):[];
+    _famSel=null;_famPenAberta=false;
+    famGarantirEu();famNormalizarOrdem();famRender();
     const btn=document.getElementById('btnSalvarDiag');
     if(btn)btn.innerHTML=EDIT_ICON_HTML+' Salvar Alterações';
     preencherMemSessao(diag);

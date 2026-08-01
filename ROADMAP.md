@@ -334,6 +334,47 @@ para o registro salvo; o rascunho se apaga depois de salvar e o texto fica na te
 **A próxima é a régua de encontros** — os encontros espaçados pelo tempo real entre eles, com a linha
 da Escala de Orientação Emocional. Senha: **"A régua dos encontros"**.
 
+### FEITO — Faixa 3: os bonecos (Clínica v6.8, 01/08/2026)
+
+**A família desenhada, logo abaixo da folha limpa.** É a etapa 4 da ordem de construção — ele
+escolheu acender esta antes da régua de encontros.
+
+**Fileiras de geração, e não folha solta:** avós, pais, ela e os irmãos, filhos. Um botão põe a
+figura na fileira; **arrastar** muda de fileira (o tempo) e de posição na fileira (a ordem entre
+irmãos). Soltar quase no mesmo lugar não é arrasto — é toque, e toque abre a figura para escrever:
+nome, quem é, uma linha sobre a pessoa, a forma da figura (saia, pernas, neutra) e o traço de quem
+já partiu, que é a convenção do genograma. **A pessoa da cadeira já está lá**, com o risco dourado
+sob os pés: não se adiciona, não se apaga e não sai da fileira dela.
+
+**O triângulo aparece sozinho.** Quando o pai e a mãe estão desenhados com ela, duas linhas
+pontilhadas descem dos dois até ela. Não é enfeite: é o que se vê quando a pessoa está entre os dois,
+e é ele que abre a estante do Édipo na peneira.
+
+**A peneira da família, com a mesma regra da folha: reconhece, não decide.** O botão *O que a família
+reconhece* tem duas portas — o triângulo desenhado (que oferece os três itens do Complexo de Édipo,
+com a procedência escrita: *"o triângulo desenhado: pai, mãe e ela"*) e as palavras escritas em
+*quem é* e na linha de cada figura, lidas pelo mesmo motor da folha (`folhaAchaChave`). Cada achado
+mostra de onde veio, e **nada entra na Psicanálise sem o toque dele**. A palavra vale inteira:
+*"projeção"* acende Projeção, *"projeta"* não.
+
+**A família não nasce de novo a cada encontro.** Ela se guarda de três jeitos, nessa ordem: rascunho
+local por pessoa enquanto ele desenha; campo `familia` na avaliação salva (datado, como a folha); e,
+na chegada seguinte, o desenho **vem do último encontro que tinha família**, dizendo de que dia veio.
+Editar uma avaliação antiga mostra a família como estava naquele dia. No papel impresso entra um
+bloco **As pessoas dela**, por geração — o desenho não vai, vai quem estava desenhado.
+
+**Nada traçado no olho.** A figura tem altura `FAM_H` e se reparte em cabeça `H/φ³`, tronco `H/φ²` e
+pernas `H/φ²` — 0,236 + 0,382 + 0,382 = 1 exato. O passo entre fileiras e entre figuras é `H·φ`.
+
+**Conferido em bancada isolada** (as funções reais, com dublês no lugar do DOM e do Supabase, sem
+tocar no banco): 24 provas passaram — a pessoa nasce sozinha no desenho; cada figura cai na sua
+fileira; o triângulo é reconhecido e abre os três itens do Édipo; a peneira acha pela palavra
+inteira e não pela torcida; nada é marcado sozinho e tocar marca; arrastar muda de fileira e entra
+na ordem certa sem buraco nas posições; o rascunho volta por pessoa e não vaza para outra; a família
+vem do último encontro salvo; o "eu" não se apaga; e as três partes da figura fecham em φ.
+
+**A próxima continua sendo a régua de encontros.** Senha: **"A régua dos encontros"**.
+
 ### Decidido em 01/08 sobre o histórico e os bonecos
 
 **O histórico NÃO é espiral nem planta.** As duas foram desenhadas, calculadas e mostradas a ele;
