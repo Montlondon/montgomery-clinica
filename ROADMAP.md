@@ -158,6 +158,80 @@ Se as abas atuais viram camadas do Vitruviano ou continuam existindo ao lado del
 para camadas **na Clínica** (*"ao invés da aba Diagnóstico ser daquela forma"*); no OS, não disse.
 Pergunta para quando acender.
 
+## A planta da síntese — as três gavetas (31/07/2026, senha "Sintetizar")
+
+*Sinal verde dele: "acredito que estamos partindo para um grande avanço". Esta é a planta escrita
+antes da obra, para que nenhuma janela precise redescobri-la.*
+
+### O achado que muda a conta
+
+As doze abas da ficha não são doze coisas do mesmo tipo. São **três pilhas**:
+
+| Pilha | Abas | Natureza |
+|---|---|---|
+| **A pessoa** | Dados, Histórico, Hábitos | muda de ano em ano; não pede data |
+| **A linha** | Sessões, Diagnósticos, Recomendações, Exames | já nasce datado |
+| **A foto sem data** | Queixa, Acupunt., Quiropr., Psic., Complem. | escrita por cima a cada encontro |
+
+**A terceira pilha é a doença da plataforma.** Cinco lugares onde o de antes some. É o mesmo
+problema que ele viu na aba Acupuntura em 31/07 — só que existe cinco vezes.
+
+**E o remédio já está no prédio:** o `salvarDiagnostico()` (`index.html`, ~linha 7529) **já grava
+com data** o pulso, a quiropraxia, a psicanálise, os elementos, os pontos e o auriculo. Aquelas
+abas da ficha não são dados que faltam datar — são **cópias sem data de um dado que já existe
+datado**. A linha do tempo já existe; a ficha é que não olha para ela.
+
+### O princípio, em uma frase
+
+> **Nada é "o agora". Tudo é "o mais recente", e o mais recente tem data.**
+
+### As três gavetas (o destino)
+
+1. **A pessoa** — Dados, Histórico e Hábitos viram uma gaveta só. Retrato de quem ela é.
+2. **A linha** — Sessões como espinha do prontuário; Diagnóstico, Recomendações e Exames deixam de
+   ser abas irmãs e viram **peneiras da mesma linha do tempo**.
+3. **O corpo** — Acupuntura, Quiropraxia e os pontos lidos do Vitruviano. É a gaveta que dissolve
+   cinco abas, e a única que depende de obra grande ([[Vitruviano como lugar único]], acima).
+
+As duas primeiras **não dependem da terceira** para começar. É por isso que a ordem é esta.
+
+### A ordem das velas
+
+- **Vela 1 — dar data ao que não tem.** Uma faixa fina no alto das abas Acupunt., Quiropr. e Psic.
+  mostrando *a última leitura datada* vinda dos `diagnosticos`, com o dia em que foi vista e o
+  caminho de volta para aquele encontro. **Não move nem apaga campo nenhum** — só faz a foto sem
+  data ganhar uma companheira com data. Mesma receita da faixa do Fio (v5.9).
+- **Vela 2 — a linha como espinha.** Sessões passa a mostrar, numa linha só por encontro, o que
+  veio de cada lugar (diagnóstico, recomendação, exame), com peneira em cima.
+- **Vela 3 — juntar a pessoa.** Dados + Histórico + Hábitos numa gaveta só.
+- **Vela 4 — o corpo.** Só quando o Vitruviano estiver pronto para receber.
+
+### O que fica combinado
+
+Nenhum campo é apagado em nenhuma vela. A síntese acontece por **passar a mostrar o que já existe**,
+não por jogar fora. Se em algum passo a conta pedir para apagar algo, a resposta é parar e perguntar.
+
+## Concluído — Clínica v6.4: a última leitura datada, vela 1 da síntese (31/07/2026)
+
+A primeira vela da planta acima. Três abas da ficha — **Acupunt.**, **Quiropr.** e **Psic.** —
+ganharam no alto uma faixa fina com **a última leitura datada**, lida dos `diagnosticos` que já
+estavam no cache (nenhuma consulta nova ao banco; a cota é por egress).
+
+**Nenhum campo foi movido, renomeado ou apagado.** A ficha continua exatamente como era. O que
+mudou é que a foto sem data agora aparece ao lado de uma companheira com data, e há o caminho de
+volta para o encontro em que aquilo foi visto ("Ver o encontro").
+
+**O detalhe que faz a coisa valer:** cada faixa procura a última vez em que **aquela** leitura teve
+alguma coisa — não o último encontro em geral. Um encontro só de conversa não apaga da vista o
+pulso lido três semanas antes. Provado ao vivo: com dois encontros de teste, a Acupuntura apontou
+para 10/07 e a Quiropraxia e a Psicanálise para 28/07, no mesmo paciente.
+
+Código: `renderUltLeitura()` e a tabela `ULT_LEITURA` em `index.html`; chamada em `editarPac()` e
+no `showTab()` das três abas. Estilo `.ult-leitura` (some sozinha quando vazia).
+
+**Próxima vela:** a 2 — a linha como espinha (Sessões mostrando, numa linha por encontro, o que
+veio de cada lugar, com peneira em cima).
+
 ## Concluído — Clínica v6.1: a aba Histórico de sessões (31/07/2026)
 
 Nasceu de um atendimento real. Ele estava com uma paciente na frente, quis lembrar o que tinha

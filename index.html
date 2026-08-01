@@ -91,6 +91,14 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 /* O que foi selecionado mora dentro da própria caixa, sem virar caixa de novo */
 .cx-sel{border-top:1px dashed var(--brd);padding-top:12px}
 .cx-sel .fc{box-shadow:none;background:transparent;padding:0 0 0 11px;border-radius:0;margin-bottom:12px}
+/* A faixa da última leitura datada: a foto sem data ganha uma companheira com data.
+   Nada aqui é campo — é só o que o Diagnóstico já guardou, trazido à vista. */
+.ult-leitura:empty{display:none}
+.ult-leitura{background:var(--beige);border-left:3px solid var(--pri);border-radius:7px;padding:9px 11px;margin-bottom:13px;font-size:12px;line-height:1.65}
+.ult-leitura .ul-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:5px}
+.ult-leitura .ul-qdo{font-weight:700;color:var(--pri-deep);font-size:12px}
+.ult-leitura .ul-cps{color:var(--txt-l)}
+.ult-leitura .ul-vazio{color:var(--txt-l);font-style:italic}
 .cx-sel .fc .fst{font-size:12.5px;border-bottom-width:1px;padding-bottom:5px;margin-bottom:8px}
 .fc.cx-aberta .cx-corpo{display:block}
 @media print{.cx-corpo{display:block!important}.cx-seta,.cx-resumo{display:none!important}}
@@ -891,6 +899,7 @@ window.addEventListener('DOMContentLoaded',()=>{
       </div>
       <div class="tab-panel" id="ta">
         <div class="fst">Acupuntura Balance Método</div>
+        <div id="ultLeituraA" class="ult-leitura"></div>
         <div class="fr"><div class="fg"><label>Língua</label><textarea id="pLg" rows="3" oninput="mudou()"></textarea></div><div class="fg"><label>Pulso</label><textarea id="pPl" rows="3" oninput="mudou()"></textarea></div></div>
         <div class="fr full"><div class="fg"><label>Meridianos</label><textarea id="pMr" rows="2" oninput="mudou()"></textarea></div></div>
         <div class="fr full"><div class="fg"><label>Diagnóstico MTC</label><textarea id="pMTC" rows="3" oninput="mudou()"></textarea></div></div>
@@ -899,6 +908,7 @@ window.addEventListener('DOMContentLoaded',()=>{
       </div>
       <div class="tab-panel" id="tqr">
         <div class="fst">Quiropraxia</div>
+        <div id="ultLeituraQ" class="ult-leitura"></div>
         <div class="fr full"><div class="fg"><label>Avaliação postural</label><textarea id="pPos" rows="3" oninput="mudou()"></textarea></div></div>
         <div class="fr"><div class="fg"><label>Região</label><select id="pReg" onchange="mudou()"><option value="">-</option><option>Cervical C1-C7</option><option>Torácica T1-T12</option><option>Lombar L1-L5</option><option>Sacral/Cóccix</option><option>Múltiplas</option></select></div><div class="fg"><label>Vértebras</label><input type="text" id="pVrt" oninput="mudou()"></div></div>
         <div class="fr full"><div class="fg"><label>Amplitude</label><textarea id="pAmp" rows="2" oninput="mudou()"></textarea></div></div>
@@ -908,6 +918,7 @@ window.addEventListener('DOMContentLoaded',()=>{
       </div>
       <div class="tab-panel" id="tps">
         <div class="fst">Psicanálise</div>
+        <div id="ultLeituraP" class="ult-leitura"></div>
         <div class="fr full"><div class="fg"><label>Demanda</label><textarea id="pDm" rows="3" oninput="mudou()"></textarea></div></div>
         <div class="fr full"><div class="fg"><label>Estado emocional</label><select id="pEmo" onchange="mudou()"><option value="">-</option><option>Estável</option><option>Ansioso(a)</option><option>Deprimido(a)</option><option>Irritado(a)</option><option>Confuso(a)</option><option>Em luto</option><option>Outro</option></select></div></div>
         <div class="fr full"><div class="fg"><label>Histórico emocional</label><textarea id="pHE" rows="3" oninput="mudou()"></textarea></div></div>
@@ -1863,7 +1874,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v6.3 · 31/07';
+const APP_VER='v6.4 · 31/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2563,6 +2574,7 @@ function showTab(id,btn){
   if(id==='trx'&&editId)carregarRxHistPac(editId);
   if(id==='tdg'&&editId)carregarDiagHistPac(editId);
   if(id==='tss'&&editId)carregarSessHistPac(editId);
+  if(id==='ta'||id==='tqr'||id==='tps')renderUltLeitura(editId);
 }
 
 // ===== SAVE STATUS =====
@@ -2739,6 +2751,7 @@ function preencherForm(p){
     document.getElementById('btnRmF').style.display='inline-flex';
   }
 
+  renderUltLeitura(p.id);
   exTemp=p.exames?[...p.exames]:[];renderEx();
   if(p.telefone)atuWA();
   document.getElementById('pCons').checked=true;
@@ -8128,6 +8141,67 @@ async function carregarSessHistPac(pacId){
       ${linha('Para o próximo',d.sessaoProx)}
       ${(!d.sessaoFeito&&!d.sessaoReacao&&!d.sessaoProx)?'<div style="margin-top:6px;font-size:11.5px;color:var(--txt-l);font-style:italic">Sem relato escrito deste encontro.</div>':''}
     </div>`).join('');
+}
+
+// ===== A ÚLTIMA LEITURA DATADA (senha "Sintetizar", vela 1) =====
+// As abas Acupunt., Quiropr. e Psic. da ficha são retratos SEM data: o que se
+// escreve nelas passa por cima do que estava antes. Mas o Diagnóstico já grava
+// as mesmas coisas COM data, encontro por encontro. Esta faixa não move nem
+// apaga campo nenhum — só põe, no alto de cada uma das três, o que foi visto da
+// última vez e o dia em que foi visto, com o caminho de volta àquele encontro.
+// Custo zero de banco: lê o cache que já chegou no login.
+const ULT_LEITURA={
+  A:{el:'ultLeituraA',nome:'acupuntura',partes:d=>{
+    const p=[];
+    if((d.pontos||[]).length)p.push('Pontos: '+d.pontos.join(', '));
+    if((d.elementos||[]).length)p.push('Elementos: '+d.elementos.join(', '));
+    if((d.auriculo||[]).length)p.push('Aurículo: '+d.auriculo.join(', '));
+    if(d.pulsoObs)p.push('Pulso: '+d.pulsoObs);
+    return p;
+  }},
+  Q:{el:'ultLeituraQ',nome:'quiropraxia',partes:d=>{
+    const p=[];
+    if((d.quiro||[]).length)p.push('Ajustes: '+d.quiro.map(q=>q.art).join(', '));
+    if(d.quiroObs)p.push('Observações: '+d.quiroObs);
+    return p;
+  }},
+  P:{el:'ultLeituraP',nome:'psicanálise',partes:d=>{
+    const p=[];
+    if((d.psicanalise||[]).length)p.push('Conceitos: '+d.psicanalise.map(x=>x&&x.nome?x.nome:x).join(', '));
+    if(d.escalaEmocional)p.push('Estado emocional: '+d.escalaEmocional);
+    if(d.emoObs)p.push('Sobre a emoção: '+d.emoObs);
+    return p;
+  }}
+};
+function renderUltLeitura(pacId){
+  const alvos=Object.values(ULT_LEITURA).map(c=>document.getElementById(c.el));
+  alvos.forEach(el=>{if(el)el.innerHTML='';});
+  if(!pacId)return;
+  // Do encontro mais recente para o mais antigo: cada faixa mostra a última vez
+  // em que AQUELA leitura teve alguma coisa — e não o último encontro em geral,
+  // que pode ter sido só de conversa.
+  const doPac=(gD('diagnosticos')||[])
+    .filter(d=>String(d.pacienteId)===String(pacId)&&d.data)
+    .sort((a,b)=>String(b.data).localeCompare(String(a.data)));
+  Object.values(ULT_LEITURA).forEach(cfg=>{
+    const el=document.getElementById(cfg.el);
+    if(!el)return;
+    let achado=null,partes=[];
+    for(const d of doPac){
+      const p=cfg.partes(d);
+      if(p.length){achado=d;partes=p;break;}
+    }
+    if(!achado){
+      el.innerHTML=`<div class="ul-vazio">Nenhuma leitura de ${cfg.nome} registrada no Diagnóstico ainda. O que você escrever aqui é o retrato de hoje, sem data.</div>`;
+      return;
+    }
+    const quando=haQuantoTempo(achado.data);
+    el.innerHTML=`<div class="ul-top">
+        <span class="ul-qdo">Última leitura &middot; ${fd(achado.data)}${quando?' &middot; '+escHtml(quando):''}</span>
+        <button type="button" class="btn btn-sec btn-sm" onclick="verDiagHist('${achado.id}')" title="Abre a avaliação completa daquele dia"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span> Ver o encontro</button>
+      </div>
+      <div class="ul-cps">${partes.map(escHtml).join(' &middot; ')}</div>`;
+  });
 }
 
 // Monta o HTML de leitura (somente exibição) de uma avaliação salva — usado
