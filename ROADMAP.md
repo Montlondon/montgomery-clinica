@@ -436,6 +436,30 @@ cria o filho **dela**.
 **Conferido em bancada isolada** com a família da imagem: Alessandra em 379, o marido em 466, Raquel
 em 422,5 — exatamente no meio dos dois; a barra de irmãos abraça as quatro e deixa o cunhado fora.
 
+### FEITO — o par nasce ao lado, o filho nasce embaixo, e a família amplia (Clínica v7.1, 01/08/2026) — NO AR
+
+**O que ele perguntou:** *"como posso adicionar as pessoas que se conectam com as outras — fulano
+casado com Vanessa, Letícia casada com Chocolate — como eu poderia ir criando quem está ligado a
+quem? E teria como ampliar esta árvore como faço no Vitruviano?"*
+
+**A resposta era um gesto, não um campo.** Na v7.0 o laço existia, mas fazer um casal dava três
+passos: criar a figura na fileira, escrever o nome, e só então apontar o par numa lista. Agora, na
+figura aberta, dois botões:
+- **+ Par de Fulana** — nasce ao lado, com o laço já feito **nos dois sentidos**;
+- **+ Filho(a) desta pessoa** — nasce na fileira de baixo, já debaixo dela (ou do casal).
+
+É o "vou adicionando quem pertence a quem" em um toque. A ordem do trabalho fica sendo: toca em
+quem já está, faz brotar quem falta, escreve o nome.
+
+**A tela cheia é a mesma receita do OS** (`.tcPalco` lá, `.fam-palco` aqui): botão no canto,
+tela inteira, Esc devolve, e onde o navegador não deixa pedir (iPhone) a classe faz por CSS.
+Duas diferenças de propósito: o fundo é o **papel** da Clínica e não o céu escuro do OS, e o
+**editor entra junto no palco** — esta imagem não é para meditar, é para trabalhar dentro dela.
+
+**Conferido em bancada:** o casal dele (249 e 336), a Letícia com o Chocolate (423 e 510), o filho
+do primeiro casal em 292 — o meio exato dos dois; e o palco em 686×675 com o desenho a 82% da
+altura, voltando a 640×371 ao sair.
+
 ### Decidido em 01/08 sobre o histórico e os bonecos
 
 **O histórico NÃO é espiral nem planta.** As duas foram desenhadas, calculadas e mostradas a ele;
