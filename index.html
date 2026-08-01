@@ -1276,7 +1276,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     <div class="fam-cab">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="2.6"/><circle cx="16" cy="7" r="2.6"/><path d="M3.5 19c0-2.5 2-4.4 4.5-4.4s4.5 1.9 4.5 4.4M11.5 19c0-2.5 2-4.4 4.5-4.4s4.5 1.9 4.5 4.4"/></svg>
       As pessoas dela
-      <span style="font-weight:400;font-size:11.5px;color:var(--txt-l)">— arraste para mudar de fileira ou de ordem; toque para escrever</span>
+      <span style="font-weight:400;font-size:11.5px;color:var(--txt-l)">— toque para escrever e dizer de quem essa pessoa é; arraste para mudar de fileira</span>
     </div>
     <div class="fam-add" id="famAdd"></div>
     <div id="famTela"></div>
@@ -1970,7 +1970,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v6.9 · 01/08';
+const APP_VER='v7.0 · 01/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -7977,7 +7977,11 @@ const FAM_GERACOES=[
 ];
 const FAM_RASC='fam_rascunho_';
 
-let _famPessoas=[];      // [{id,nome,papel,sexo,ger,ord,morto,obs,eu}]
+const FAM_ESQ=118;                               // faixa dos rótulos, à esquerda do desenho
+
+let _famPessoas=[];      // [{id,nome,papel,sexo,ger,ord,morto,obs,eu,de,par}]
+let _famPos={};          // id -> x já calculado (o desenho manda, não o índice)
+let _famLarg=FAM_LARG;   // largura viva da prancheta
 let _famSel=null;        // id da figura aberta no editor
 let _famPenAberta=false;
 let _famAchados=[];
@@ -7986,6 +7990,27 @@ const famLinha=g=>_famPessoas.filter(p=>p.ger===g).sort((a,b)=>a.ord-b.ord);
 const famPorId=id=>_famPessoas.find(p=>String(p.id)===String(id))||null;
 function famNormalizarOrdem(){
   FAM_GERACOES.forEach(gr=>famLinha(gr.g).forEach((p,i)=>{p.ord=i;}));
+}
+// Os laços só valem se as pessoas continuarem onde o laço supõe: o pai uma
+// fileira acima, o par na mesma fileira. Quem for arrastado para longe perde
+// o laço — melhor perder do que desenhar uma mentira.
+function famConsertarVinculos(){
+  _famPessoas.forEach(p=>{
+    if(p.de){
+      const pai=famPorId(p.de);
+      if(!pai||pai.ger!==p.ger-1||String(pai.id)===String(p.id))p.de='';
+    }
+    if(p.par){
+      const par=famPorId(p.par);
+      if(!par||par.ger!==p.ger||String(par.id)===String(p.id))p.par='';
+    }
+  });
+  // Par é mão dupla: quem foi apontado aponta de volta.
+  _famPessoas.forEach(p=>{
+    if(!p.par)return;
+    const par=famPorId(p.par);
+    if(par&&String(par.par||'')!==String(p.id))par.par=p.id;
+  });
 }
 // A pessoa da cadeira é a única figura que não se adiciona: ela já está lá.
 function famGarantirEu(){
@@ -8000,7 +8025,7 @@ function famGarantirEu(){
 
 function famDados(){
   return _famPessoas.map(p=>({id:p.id,nome:p.nome||'',papel:p.papel||'',sexo:p.sexo||'n',
-    ger:p.ger,ord:p.ord,morto:!!p.morto,obs:p.obs||'',eu:!!p.eu}));
+    ger:p.ger,ord:p.ord,morto:!!p.morto,obs:p.obs||'',eu:!!p.eu,de:p.de||'',par:p.par||''}));
 }
 function famChaveRasc(){return _diagPacSel?FAM_RASC+_diagPacSel.id:null;}
 function famGuardarRascunho(){
@@ -8043,7 +8068,11 @@ function famLimpar(){
 function famAdicionar(g){
   if(!_diagPacSel){toast('Escolha quem chegou primeiro','#EF6C00',"warn");return;}
   const gr=FAM_GERACOES.find(x=>x.g===g);
-  const p={id:novoId(),nome:'',papel:gr?gr.papel:'',sexo:gr?gr.sexo:'n',ger:g,ord:famLinha(g).length,morto:false,obs:''};
+  const p={id:novoId(),nome:'',papel:gr?gr.papel:'',sexo:gr?gr.sexo:'n',ger:g,ord:famLinha(g).length,morto:false,obs:'',de:'',par:''};
+  // Se há uma figura aberta uma fileira acima, o novo já nasce filho dela —
+  // é o gesto mais comum: abrir a mãe e pôr o filho embaixo.
+  const aberta=famPorId(_famSel);
+  if(aberta&&aberta.ger===g-1){p.de=aberta.id;p.papel='';}
   _famPessoas.push(p);
   _famSel=p.id;
   _diagJaSalvo=false;
@@ -8053,6 +8082,11 @@ function famTirar(id){
   const p=famPorId(id);
   if(!p||p.eu)return;
   _famPessoas=_famPessoas.filter(x=>String(x.id)!==String(id));
+  // Quem ficou não pode continuar apontando para quem saiu do desenho.
+  _famPessoas.forEach(x=>{
+    if(String(x.de||'')===String(id))x.de='';
+    if(String(x.par||'')===String(id))x.par='';
+  });
   if(String(_famSel)===String(id))_famSel=null;
   _diagJaSalvo=false;
   famNormalizarOrdem();famGuardarRascunho();famRender();
@@ -8078,7 +8112,78 @@ function famMorto(id){
 // ===== O DESENHO =====
 function famAltura(){return FAM_TOPO+(FAM_GERACOES.length-1)*FAM_PASSO+FAM_H+30;}
 function famY(g){return FAM_TOPO+(FAM_GERACOES.findIndex(x=>x.g===g))*FAM_PASSO;}
+// Uma unidade é uma figura sozinha ou um par que anda junto — quem faz par
+// não se separa, e por isso o desenho os trata como uma peça só.
+function famUnidades(g){
+  const linha=famLinha(g), feito=new Set(), us=[];
+  linha.forEach(p=>{
+    if(feito.has(String(p.id)))return;
+    feito.add(String(p.id));
+    const par=p.par?linha.find(x=>String(x.id)===String(p.par)&&!feito.has(String(x.id))):null;
+    if(par){feito.add(String(par.id));us.push([p,par]);}
+    else us.push([p]);
+  });
+  return us;
+}
+/* Onde cada figura fica. Antes o lugar vinha só da ordem na fileira — todo
+   mundo no meio da prancheta. Agora quem tem pai apontado nasce debaixo dele,
+   e os irmãos se abrem em torno desse mesmo ponto. Quem não tem pai apontado
+   continua no meio, como antes. No fim ninguém pisa em ninguém: a varredura
+   da esquerda para a direita empurra o que ficou por cima. */
+function famCalcularPos(){
+  _famPos={};
+  const meio=FAM_LARG/2;
+  let min=Infinity,max=-Infinity;
+  FAM_GERACOES.forEach(gr=>{
+    const us=famUnidades(gr.g);
+    if(!us.length)return;
+    const itens=us.map(u=>{
+      const anc=[];
+      u.forEach(p=>{
+        if(!p.de)return;
+        const pai=famPorId(p.de);
+        if(!pai||_famPos[pai.id]==null)return;
+        anc.push(_famPos[pai.id]);
+        if(pai.par&&_famPos[pai.par]!=null)anc.push(_famPos[pai.par]);   // debaixo do casal, no meio dos dois
+      });
+      return {u,larg:u.length*FAM_PASSO,des:anc.length?anc.reduce((a,b)=>a+b,0)/anc.length:null};
+    });
+    // Irmãos do mesmo pai não se empilham: abrem-se em torno dele.
+    const ninhos={};
+    itens.forEach(it=>{if(it.des!=null){const k=it.des.toFixed(1);(ninhos[k]=ninhos[k]||[]).push(it);}});
+    Object.keys(ninhos).forEach(k=>{
+      const gp=ninhos[k], total=gp.reduce((s,it)=>s+it.larg,0);
+      let x=parseFloat(k)-total/2;
+      gp.forEach(it=>{it.des=x+it.larg/2;x+=it.larg;});
+    });
+    // Sem pai apontado: no meio da prancheta, como sempre foi.
+    const soltos=itens.filter(it=>it.des==null);
+    if(soltos.length){
+      const total=soltos.reduce((s,it)=>s+it.larg,0);
+      let x=meio-total/2;
+      soltos.forEach(it=>{it.des=x+it.larg/2;x+=it.larg;});
+    }
+    itens.sort((a,b)=>a.des-b.des);
+    for(let i=1;i<itens.length;i++){
+      const minimo=itens[i-1].des+(itens[i-1].larg+itens[i].larg)/2;
+      if(itens[i].des<minimo)itens[i].des=minimo;
+    }
+    itens.forEach(it=>{
+      let x=it.des-it.larg/2;
+      it.u.forEach(p=>{_famPos[p.id]=x+FAM_PASSO/2;x+=FAM_PASSO;});
+      min=Math.min(min,it.des-it.larg/2);
+      max=Math.max(max,it.des+it.larg/2);
+    });
+  });
+  if(!isFinite(min)){_famLarg=FAM_LARG;return;}
+  _famLarg=Math.max(FAM_LARG,Math.round(FAM_ESQ+(max-min)+30));
+  // A prancheta cresce e o desenho inteiro se recentra — sem perder o prumo
+  // entre pai e filho, porque todos andam o mesmo tanto.
+  const desloc=(FAM_ESQ+(_famLarg-FAM_ESQ)/2)-(min+max)/2;
+  Object.keys(_famPos).forEach(k=>{_famPos[k]+=desloc;});
+}
 function famX(p){
+  if(_famPos[p.id]!=null)return _famPos[p.id];
   const linha=famLinha(p.ger);
   const i=linha.findIndex(x=>String(x.id)===String(p.id));
   return FAM_LARG/2+(i-(linha.length-1)/2)*FAM_PASSO;
@@ -8117,26 +8222,58 @@ function famDesenhar(){
     el.innerHTML='<div class="fam-vazio">Escolha quem chegou no cabeçalho — a família é dela, e o desenho fica guardado com ela.</div>';
     return;
   }
-  famGarantirEu();
-  const alt=famAltura();
-  let svg=`<svg class="fam-tela" viewBox="0 0 ${FAM_LARG} ${alt}" preserveAspectRatio="xMidYMid meet" id="famSvg" style="max-width:${FAM_LARG}px;height:auto;aspect-ratio:${FAM_LARG}/${alt};margin:0 auto">`;
-  // As fileiras: o rótulo à esquerda e a linha fina da geração.
-  const ocupadas=[];
+  famGarantirEu();famConsertarVinculos();famCalcularPos();
+  const alt=famAltura(), larg=_famLarg;
+  let svg=`<svg class="fam-tela" viewBox="0 0 ${larg} ${alt}" preserveAspectRatio="xMidYMid meet" id="famSvg" style="max-width:${larg}px;height:auto;aspect-ratio:${larg}/${alt};margin:0 auto">`;
+  // As fileiras: o rótulo à esquerda e a linha fina da geração — a barra de
+  // irmandade só cobre quem NÃO tem pai apontado; quem tem ganha o próprio fio.
+  const ocupadas=[], meioDe={};
+  // Quem entrou no desenho por ser par de alguém não é irmão de ninguém: fica
+  // de fora da barra de irmandade, ligado só pelo traço do par.
+  const trazidos=new Set();
+  FAM_GERACOES.forEach(gr=>famUnidades(gr.g).forEach(u=>{if(u[1])trazidos.add(String(u[1].id));}));
   FAM_GERACOES.forEach(gr=>{
     const linha=famLinha(gr.g), y=famY(gr.g);
     svg+=`<text x="10" y="${y+FAM_H/2}" font-size="9.5" fill="#B9AF98" font-weight="700" letter-spacing="0.5">${gr.rot.toUpperCase()}</text>`;
     if(!linha.length)return;
     ocupadas.push(gr.g);
-    const xs=linha.map(p=>famX(p));
-    const x1=Math.min(...xs), x2=Math.max(...xs);
-    if(linha.length>1)svg+=`<path d="M${x1} ${y-9} L${x2} ${y-9}" stroke="#E4DCCB" stroke-width="1.2" fill="none"/>`;
-    xs.forEach(x=>{svg+=`<path d="M${x} ${y-9} L${x} ${y-1}" stroke="#E4DCCB" stroke-width="1.2" fill="none"/>`;});
+    const soltos=linha.filter(p=>!p.de&&!trazidos.has(String(p.id)));
+    const xs=(soltos.length?soltos:linha).map(p=>famX(p));
+    meioDe[gr.g]=(Math.min(...xs)+Math.max(...xs))/2;
+    if(soltos.length>1){
+      svg+=`<path d="M${Math.min(...xs)} ${y-9} L${Math.max(...xs)} ${y-9}" stroke="#E4DCCB" stroke-width="1.2" fill="none"/>`;
+      xs.forEach(x=>{svg+=`<path d="M${x} ${y-9} L${x} ${y-1}" stroke="#E4DCCB" stroke-width="1.2" fill="none"/>`;});
+    }
   });
-  // A descendência: a linha que liga uma fileira à seguinte, pelo meio.
+  // A descendência genérica: só entre fileiras onde ninguém apontou pai — e
+  // agora ela cai no meio de quem está desenhado, não no meio da prancheta.
   for(let i=0;i<ocupadas.length-1;i++){
+    if(famLinha(ocupadas[i+1]).some(p=>p.de))continue;
     const ya=famY(ocupadas[i])+FAM_H, yb=famY(ocupadas[i+1])-9;
-    svg+=`<path d="M${FAM_LARG/2} ${ya+6} L${FAM_LARG/2} ${yb}" stroke="#EFE7D6" stroke-width="1.2" fill="none"/>`;
+    const xa=meioDe[ocupadas[i]], xb=meioDe[ocupadas[i+1]];
+    svg+=`<path d="M${xa.toFixed(1)} ${ya+6} L${xa.toFixed(1)} ${((ya+6+yb)/2).toFixed(1)} L${xb.toFixed(1)} ${((ya+6+yb)/2).toFixed(1)} L${xb.toFixed(1)} ${yb}" stroke="#EFE7D6" stroke-width="1.2" fill="none"/>`;
   }
+  // O par: o traço curto na altura do quadril, entre os dois que andam juntos.
+  const feitoPar=new Set();
+  _famPessoas.forEach(p=>{
+    if(!p.par||feitoPar.has(String(p.id)))return;
+    const par=famPorId(p.par);
+    if(!par)return;
+    feitoPar.add(String(p.id));feitoPar.add(String(par.id));
+    const yq=famY(p.ger)+2*FAM_R+FAM_TR;
+    svg+=`<path d="M${famX(p)} ${yq.toFixed(1)} L${famX(par)} ${yq.toFixed(1)}" stroke="#D8CDB6" stroke-width="1.3" fill="none"/>`;
+  });
+  // A filiação: de quem essa figura desce. Desce do pai (ou do meio do casal),
+  // vira na altura da fileira e cai em cima da cabeça do filho.
+  _famPessoas.forEach(p=>{
+    if(!p.de)return;
+    const pai=famPorId(p.de);
+    if(!pai)return;
+    let x0=famX(pai);
+    if(pai.par&&famPorId(pai.par))x0=(x0+famX(famPorId(pai.par)))/2;
+    const ya=famY(pai.ger)+FAM_H+6, yb=famY(p.ger)-9, x1=famX(p);
+    svg+=`<path d="M${x0.toFixed(1)} ${ya} L${x0.toFixed(1)} ${yb} L${x1} ${yb} L${x1} ${famY(p.ger)-1}" stroke="#E4DCCB" stroke-width="1.2" fill="none"/>`;
+  });
   // O TRIÂNGULO — aparece sozinho quando pai e mãe estão desenhados com ela.
   const eu=_famPessoas.find(p=>p.eu);
   const pais=famLinha(-1).filter(p=>{const s=semAcento(p.papel||'');return s.includes('pai')||s.includes('mae');});
@@ -8165,7 +8302,7 @@ function famLigarArrasto(){
       const p=famPorId(g.dataset.fam);
       if(!p)return;
       ev.preventDefault();
-      const esc=svg.getBoundingClientRect().width/FAM_LARG;
+      const esc=svg.getBoundingClientRect().width/_famLarg;
       const x0=ev.clientX, y0=ev.clientY;
       let dx=0,dy=0,moveu=false;
       g.setPointerCapture(ev.pointerId);
@@ -8216,6 +8353,34 @@ function famRenderAdd(){
 }
 
 const FAM_SEXOS=[{k:'f',rot:'Figura de saia'},{k:'m',rot:'Figura de pernas'},{k:'n',rot:'Figura neutra'}];
+// Quem pode ser pai desta figura: a fileira de cima. Quem pode ser par: a
+// mesma fileira. Fora disso o desenho mentiria.
+function famCandidatos(p,campo){
+  const g=campo==='de'?p.ger-1:p.ger;
+  return famLinha(g)
+    .filter(o=>String(o.id)!==String(p.id))
+    .map(o=>({id:o.id,rot:(o.nome||(o.eu&&_diagPacSel?_diagPacSel.nome:'')||'sem nome')+(o.papel?' ('+o.papel+')':'')}));
+}
+function famVinculo(id,campo,valor){
+  const p=famPorId(id);
+  if(!p)return;
+  if(campo==='par'){
+    // Par é mão dupla: o antigo é solto, o novo passa a apontar de volta.
+    const antigo=p.par?famPorId(p.par):null;
+    if(antigo&&String(antigo.par||'')===String(p.id))antigo.par='';
+    p.par=valor||'';
+    const novo=valor?famPorId(valor):null;
+    if(novo){
+      const dele=novo.par?famPorId(novo.par):null;
+      if(dele&&String(dele.id)!==String(p.id))dele.par='';
+      novo.par=p.id;
+    }
+  }else{
+    p.de=valor||'';
+  }
+  _diagJaSalvo=false;
+  famGuardarRascunho();famRender();
+}
 function famRenderEditor(){
   const el=document.getElementById('famEditor');
   if(!el)return;
@@ -8225,6 +8390,16 @@ function famRenderEditor(){
     <div class="fr">
       <div class="fg"><label>Nome</label><input type="text" value="${escHtml(p.nome||'')}" ${p.eu?'readonly':''} oninput="famCampo('${p.id}','nome',this.value)" placeholder="${p.eu?'':'Como ela chama essa pessoa'}"></div>
       <div class="fg"><label>Quem é</label><input type="text" value="${escHtml(p.papel||'')}" ${p.eu?'readonly':''} oninput="famCampo('${p.id}','papel',this.value)" list="famPapeis" placeholder="mãe, padrasto, filha mais velha..."></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Filho(a) de</label><select onchange="famVinculo('${p.id}','de',this.value)">
+        <option value="">— ninguém apontado —</option>
+        ${famCandidatos(p,'de').map(o=>`<option value="${o.id}"${String(p.de||'')===String(o.id)?' selected':''}>${escHtml(o.rot)}</option>`).join('')}
+      </select></div>
+      <div class="fg"><label>Faz par com</label><select onchange="famVinculo('${p.id}','par',this.value)">
+        <option value="">— ninguém —</option>
+        ${famCandidatos(p,'par').map(o=>`<option value="${o.id}"${String(p.par||'')===String(o.id)?' selected':''}>${escHtml(o.rot)}</option>`).join('')}
+      </select></div>
     </div>
     <div class="fr full"><div class="fg"><label>Uma linha sobre essa pessoa</label><input type="text" value="${escHtml(p.obs||'')}" oninput="famCampo('${p.id}','obs',this.value)" placeholder="o que ela disse dessa pessoa — a peneira também lê daqui"></div></div>
     <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px">
