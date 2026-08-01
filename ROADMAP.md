@@ -586,6 +586,33 @@ mente sobre qual é a direita da pessoa.
 corpo, e a pergunta que ele ainda não fechou — se as abas atuais viram camadas do corpo ou
 continuam existindo ao lado dele.
 
+### FEITO — a coluna no papel (Clínica v7.6, 01/08/2026), senha "Acender a coluna no papel"
+
+**Antes da obra, a resposta dele à pergunta que estava aberta:** *"Clicar na vértebra é bem melhor."*
+A faixa 4 passou no teste do atendimento de verdade — é o que autoriza continuar investindo no corpo.
+
+**A coluninha do consultório agora vai embora com o paciente.** No bloco *Quiropraxia* da folha do
+Diagnóstico — a que imprime, exporta em JPG e vai pelo WhatsApp — entrou o mesmo corpo da tela, com
+as vértebras daquele encontro **acesas em azul cheio**, cada uma com uma linha de chamada e o nome
+do nível ao lado (C2, T7, T8, L4, Sacro). Embaixo, uma legenda em uma linha: *"Onde foi ajustado
+hoje"*.
+
+**O mesmo desenho também aparece no histórico da ficha**, ao rever um encontro antigo: rever deixa
+de ser ler nomes de níveis e volta a ser ver onde foi.
+
+**Três honestidades:**
+- **Nenhuma medida nova foi inventada.** `cpSvgPapel` reaproveita o cânone da tela (`CP`,
+  `CP_PERFIL`, `cpVertebras`) — é o mesmo corpo, sem clique.
+- **Sem vértebra marcada, não sai desenho.** Se ele só marcou técnicas de região, o bloco continua
+  como sempre foi, só com a lista escrita. Conferido nos dois casos.
+- **As etiquetas não se atropelam:** quando dois níveis vizinhos são marcados (T7 e T8), a de baixo
+  desce o mínimo necessário para caber. É empurrão calculado, não posição escolhida no olho.
+
+**Peso: zero.** É SVG gerado na hora, sem imagem, sem biblioteca, sem ida ao banco.
+
+**O que fica para depois:** o modo *"mostrar ao paciente"* (tela cheia maior e mais anatômica) e,
+só então, a conversa sobre realismo/3D.
+
 ### O desenho tem dois leitores — dito por ele em 01/08/2026
 
 > *"Eu sempre mostro ao cliente uma coluninha que tenho física em 3D, para que eles entendam

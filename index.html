@@ -2094,7 +2094,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v7.5 · 01/08';
+const APP_VER='v7.6 · 01/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -7175,6 +7175,57 @@ function cpPainel(){
   </div>`;
 }
 
+/* ===== A COLUNA NO PAPEL =====
+   Ele já mostra ao paciente uma coluninha física em 3D para a pessoa entender
+   onde vai ser ajustada. A peça de plástico faz isso melhor do que qualquer
+   tela — mas ela não guarda memória e não vai embora com o paciente. Esta
+   função faz a única parte que falta: a mesma coluna, impressa na folha, com
+   as vértebras daquele encontro acesas. Chega em casa e ele aponta.
+
+   Desenho estático, sem clique, e no mesmo cânone da tela — nenhuma medida
+   nova foi inventada aqui: reaproveita CP, CP_PERFIL e cpVertebras(). */
+function cpSvgPapel(quiroSel,altura){
+  const marcadas=(quiroSel||[]).filter(q=>q.grupo==='Coluna').map(q=>q.art);
+  if(!marcadas.length)return '';
+  const set=new Set(marcadas);
+  const dir=CP_PERFIL.map(([w,y])=>[cpX(w),cpY(y)]);
+  const esq=CP_PERFIL.slice().reverse().map(([w,y])=>[cpX(-w),cpY(y)]);
+  const contorno=cpSuave(dir.concat(esq),true);
+  const braco=lado=>cpSuave([[0.122,0.238],[0.150,0.398],[0.150,0.548],[0.140,0.626]].map(([w,y])=>[cpX(lado*w),cpY(y)]),false);
+  const vts=cpVertebras();
+  // As etiquetas saem na altura da própria vértebra; quando duas ficam perto
+  // demais para caber, a de baixo desce o mínimo necessário. É empurrão
+  // calculado, não posição escolhida no olho.
+  const GAP=32, alvos=vts.filter(v=>set.has(v.id));
+  let ultima=-1e9;
+  const etiquetas=alvos.map(v=>{
+    const y=Math.max(cpY(v.y),ultima+GAP);
+    ultima=y;
+    return {v,y};
+  });
+  const ossos=vts.map(v=>{
+    const on=set.has(v.id);
+    const x=cpX(-v.w/2), y=cpY(v.y-v.h/2), w=v.w*CP.H, h=v.h*CP.H;
+    const fill=on?'#1E3A5F':'#FFFFFF', st=on?'#12243B':'#C4BDAE', sw=on?1.4:1;
+    return v.tri
+      ? `<path d="M${x.toFixed(1)},${y.toFixed(1)} L${(x+w).toFixed(1)},${y.toFixed(1)} L${(x+w*0.5).toFixed(1)},${(y+h).toFixed(1)} Z" fill="${fill}" stroke="${st}" stroke-width="${sw}" stroke-linejoin="round"/>`
+      : `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" rx="${(h*0.34).toFixed(1)}" fill="${fill}" stroke="${st}" stroke-width="${sw}"/>`;
+  }).join('');
+  const marcas=etiquetas.map(({v,y})=>`
+    <path d="M${cpX(v.w/2+0.006).toFixed(1)},${cpY(v.y).toFixed(1)} L${(CP.CX+96).toFixed(1)},${y.toFixed(1)} L${(CP.CX+104).toFixed(1)},${y.toFixed(1)}" fill="none" stroke="#1E3A5F" stroke-width="1"/>
+    <text x="${(CP.CX+109).toFixed(1)}" y="${(y+8).toFixed(1)}" font-family="Georgia,serif" font-size="23" fill="#1E3A5F">${escHtml(v.id)}</text>`).join('');
+  return `<svg viewBox="0 0 ${CP.CX+168} ${CP.ALT}" height="${altura||300}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Coluna vertebral com as vértebras ajustadas neste encontro">
+    <g fill="none" stroke="#ADA595" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="${contorno}"/>
+      <ellipse cx="${CP.CX}" cy="${cpY(0.0625).toFixed(1)}" rx="${(0.0355*CP.H).toFixed(1)}" ry="${(0.0625*CP.H).toFixed(1)}"/>
+      <path d="${braco(1)}"/><path d="${braco(-1)}"/>
+      <path d="M${cpX(-0.026).toFixed(1)},${cpY(0.105).toFixed(1)} L${cpX(-0.043).toFixed(1)},${cpY(0.152).toFixed(1)}"/>
+      <path d="M${cpX(0.026).toFixed(1)},${cpY(0.105).toFixed(1)} L${cpX(0.043).toFixed(1)},${cpY(0.152).toFixed(1)}"/>
+    </g>
+    ${ossos}${marcas}
+  </svg>`;
+}
+
 let _quiroRefAba='raizes';
 function setQuiroRef(aba){
   _quiroRefAba=aba;
@@ -7712,10 +7763,21 @@ function gerarHtmlDiag(diagRec){
   if(quiroSel.length){
     const gr={};
     quiroSel.forEach(q=>{(gr[q.grupo]=gr[q.grupo]||[]).push(q.art);});
+    // A coluninha do consultório indo embora com o paciente: as vértebras
+    // ajustadas hoje, acesas, ao lado da lista escrita. Sai só quando há
+    // vértebra marcada — se ele só marcou técnicas, não há o que desenhar.
+    const desenho=cpSvgPapel(quiroSel,268);
     blocos+=`<div style="border-left:4px solid #1E3A5F;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
       <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">Quiropraxia — ajustado neste encontro</div>
-      ${Object.entries(gr).map(([g,arts])=>`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>${escHtml(g)}:</strong> ${arts.map(escHtml).join(' · ')}</div>`).join('')}
-      ${quiroObsPapel?`<div style="font-size:9pt;line-height:1.5;color:#5a4a1e;background:#FFF8E1;border-radius:6px;padding:6px 9px;margin-top:5px"><strong>Obs.:</strong> ${escHtml(quiroObsPapel)}</div>`:''}
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        ${desenho?`<div style="flex:0 0 auto;width:122px">${desenho}
+          <div style="font-size:7.5pt;color:#7a6a55;text-align:center;line-height:1.4">Onde foi ajustado hoje</div>
+        </div>`:''}
+        <div style="flex:1;min-width:0">
+          ${Object.entries(gr).map(([g,arts])=>`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>${escHtml(g)}:</strong> ${arts.map(escHtml).join(' · ')}</div>`).join('')}
+          ${quiroObsPapel?`<div style="font-size:9pt;line-height:1.5;color:#5a4a1e;background:#FFF8E1;border-radius:6px;padding:6px 9px;margin-top:5px"><strong>Obs.:</strong> ${escHtml(quiroObsPapel)}</div>`:''}
+        </div>
+      </div>
     </div>`;
   }
 
@@ -10022,7 +10084,11 @@ function montarHtmlDiagnostico(diag){
   if((diag.quiro||[]).length){
     const grupos={};
     diag.quiro.forEach(q=>{(grupos[q.grupo]=grupos[q.grupo]||[]).push(q.art);});
-    const corpo=Object.entries(grupos).map(([g,arts])=>`<div style="margin-bottom:6px"><strong>${escHtml(g)}:</strong> ${arts.map(escHtml).join(' · ')}</div>`).join('')+obsBox(diag.quiroObs);
+    // A mesma coluninha do papel: rever um encontro antigo é ver de novo onde
+    // foi ajustado, não só ler os nomes dos níveis.
+    const dsn=cpSvgPapel(diag.quiro,230);
+    const lista=Object.entries(grupos).map(([g,arts])=>`<div style="margin-bottom:6px"><strong>${escHtml(g)}:</strong> ${arts.map(escHtml).join(' · ')}</div>`).join('')+obsBox(diag.quiroObs);
+    const corpo=dsn?`<div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap"><div style="flex:0 0 auto">${dsn}</div><div style="flex:1;min-width:180px">${lista}</div></div>`:lista;
     html+=bloco('var(--pri-deep)','<span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 17.5 17.5 6.5"/><circle cx="5" cy="19" r="2.2"/><circle cx="19" cy="5" r="2.2"/></svg></span>Quiropraxia — ajustado neste encontro',corpo);
   }
 
