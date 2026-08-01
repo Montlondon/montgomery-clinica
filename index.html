@@ -954,7 +954,7 @@ window.addEventListener('DOMContentLoaded',()=>{
            ele precisava abrir uma tela de dez ferramentas. -->
       <div class="tab-panel" id="tss">
         <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span>Histórico de sessões</div>
-        <p style="font-size:12px;color:var(--txt-l);margin-bottom:11px">O relato curto de cada encontro — o que foi feito, como a pessoa reagiu e o que ficou para a próxima. Vem das Memórias de sessão anotadas no Diagnóstico.</p>
+        <p style="font-size:12px;color:var(--txt-l);margin-bottom:11px">A linha do tempo dos encontros. Cada avaliação salva no <strong>Diagnóstico</strong> vira uma sessão aqui, numerada sozinha (Sessão 01, 02, 03...) com a data. O que você marcou naquele dia aparece sem digitar; o relato escrito na caixa <strong>Memória da sessão</strong> vem logo abaixo.</p>
         <div style="margin-bottom:12px"><button type="button" class="btn btn-pri btn-sm" onclick="abrirDiagDaFicha()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13"/><path d="M13 6l6 6-6 6"/></svg></span>Relatar a sessão de hoje</button></div>
         <div id="sessHistLista"><div style="text-align:center;color:var(--txt-l);padding:20px;font-size:13px">Nenhuma sessão relatada ainda.</div></div>
       </div>
@@ -1863,7 +1863,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v6.2 · 31/07';
+const APP_VER='v6.3 · 31/07';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -8088,31 +8088,45 @@ async function carregarDiagHistPac(pacId){
 }
 
 // ===== HISTÓRICO DE SESSÕES POR PACIENTE =====
-// A mesma fonte do histórico de diagnósticos, peneirada: aqui só entra o relato
-// do encontro. Quem quiser o resto abre o Diagnóstico daquele dia pelo botão.
+// A linha do tempo dos encontros: Sessão 01, Sessão 02, contadas sozinhas por
+// numeroDaSessao(). Cada avaliação salva no Diagnóstico vira uma linha aqui.
+// O que foi marcado naquele dia (pontos, ajustes, aurículo, elementos) aparece
+// sem ele digitar nada; o relato escrito, quando existir, vem logo abaixo.
 async function carregarSessHistPac(pacId){
   const el=document.getElementById('sessHistLista');
   if(!el)return;
   let diags=gD('diagnosticos');
   if(!diags.length)diags=await dbGet('diagnosticos',true);
-  const comRelato=diags
+  // A sessão existe por ter acontecido, não por ter sido descrita: toda avaliação
+  // salva vira uma linha aqui, numerada sozinha, mesmo sem uma palavra escrita.
+  const doPac=diags
     .filter(d=>String(d.pacienteId)===String(pacId))
-    .filter(d=>d.sessaoFeito||d.sessaoReacao||d.sessaoProx)
     .sort((a,b)=>b.data.localeCompare(a.data));
-  if(!comRelato.length){
-    el.innerHTML='<div style="text-align:center;color:var(--txt-l);padding:20px;font-size:13px;line-height:1.7">Nenhuma sessão relatada ainda.<br>O relato é escrito na caixa <strong>Memória da sessão</strong>, no fim do Diagnóstico.</div>';
+  if(!doPac.length){
+    el.innerHTML='<div style="text-align:center;color:var(--txt-l);padding:20px;font-size:13px;line-height:1.7">Nenhuma sessão registrada ainda.<br>Cada avaliação salva no <strong>Diagnóstico</strong> vira uma sessão aqui, contada sozinha.</div>';
     return;
   }
   const linha=(rot,txt)=>txt?`<div style="margin-top:6px;font-size:12.5px;line-height:1.65"><strong style="color:var(--pri-deep)">${rot}:</strong> ${escHtml(txt)}</div>`:'';
-  el.innerHTML=comRelato.map(d=>`
+  // O que foi feito sem ele digitar: o que ficou marcado na avaliação daquele dia.
+  const feitoSozinho=d=>{
+    const p=[];
+    if((d.pontos||[]).length)p.push('Pontos: '+d.pontos.join(', '));
+    if((d.quiro||[]).length)p.push('Ajustes: '+d.quiro.map(q=>q.art).join(', '));
+    if((d.auriculo||[]).length)p.push('Aurículo: '+d.auriculo.join(', '));
+    if((d.elementos||[]).length)p.push('Elementos: '+d.elementos.join(', '));
+    return p.length?`<div style="margin-top:6px;font-size:12px;color:var(--txt-l);line-height:1.65">${p.map(escHtml).join(' &middot; ')}</div>`:'';
+  };
+  el.innerHTML=doPac.map(d=>`
     <div style="background:var(--beige);border-radius:8px;padding:12px;margin-bottom:10px;border-left:3px solid var(--pri)">
       <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
         <strong style="color:var(--pri-d);font-size:13px"><span style="display:inline-block;background:var(--pri-deep);color:#fff;border-radius:5px;padding:2px 8px;font-size:11px;letter-spacing:.4px;margin-right:6px">${rotuloSessao(d).toUpperCase()}</span>${fd(d.data)}</strong>
         <button type="button" class="btn btn-sec btn-sm" onclick="verDiagHist('${d.id}')" title="Abre a avaliação completa daquele dia"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span> Ver o diagnóstico do dia</button>
       </div>
+      ${feitoSozinho(d)}
       ${linha('Foi feito',d.sessaoFeito)}
       ${linha('Como reagiu',d.sessaoReacao)}
       ${linha('Para o próximo',d.sessaoProx)}
+      ${(!d.sessaoFeito&&!d.sessaoReacao&&!d.sessaoProx)?'<div style="margin-top:6px;font-size:11.5px;color:var(--txt-l);font-style:italic">Sem relato escrito deste encontro.</div>':''}
     </div>`).join('');
 }
 

@@ -176,6 +176,36 @@ apenas os diagnósticos que têm algum relato escrito — o resto não polui. Ca
 **A imagem:** o Diagnóstico é a bancada; esta aba é o caderno de bordo. Um conta o que se pensou,
 o outro conta o que se fez.
 
+## Concluído — Clínica v6.3: a sessão existe por ter acontecido (31/07/2026)
+
+Ele testou a v6.1 na hora e trouxe o desconforto certo: registrou os pontos na aba *Acupunt.* da
+ficha e nada apareceu na aba Sessões. Duas coisas ficaram claras:
+
+1. **Há dois lugares para registrar pontos, e eles são coisas diferentes.** A aba *Acupunt.* da
+   ficha é o **retrato atual** da pessoa (folha única, sem data, sobrescrita). O Diagnóstico é o
+   **registro do encontro** (com data, vira histórico). Isso ainda confunde e é matéria de aula.
+2. **A sessão não podia depender de ele escrever.** Na v6.1 a linha só nascia se houvesse relato
+   digitado na Memória da sessão.
+
+**O que ele pediu, na fala dele:** *"sessão dia 30-7 o que foi realizado, e a pessoa chega no dia
+6-8, sessão número 2, automaticamente já fica registrado."*
+
+**A descoberta, de novo:** a numeração automática **já existia** — `numeroDaSessao()` conta por
+paciente, em ordem de data, e o selo SESSÃO 01 / SESSÃO 02 já saía na linha. Ele não tinha visto
+porque nada havia sido salvo. Faltava o resto.
+
+**O que mudou na v6.3:**
+
+- **Toda avaliação salva vira uma sessão**, mesmo sem uma palavra escrita. A sessão existe por ter
+  acontecido, não por ter sido descrita.
+- A linha conta sozinha **o que foi marcado naquele dia**: pontos, ajustes de quiropraxia,
+  aurículo e elementos. Sem digitar nada duas vezes.
+- Quando não há relato escrito, sai uma linha discreta: *"Sem relato deste encontro."* — a
+  ausência aparece, em vez de a sessão sumir.
+
+Provado com duas sessões de teste na tela: Sessão 01 · 30/07 com os pontos, Sessão 02 · 06/08 com
+os pontos e o relato. Console limpo.
+
 ## Concluído — Clínica v6.2: o ir-e-voltar, senha "Ir e voltar" (31/07/2026)
 
 Feito na mesma janela, logo depois da v6.1. **A bancada continua sendo uma só.**
