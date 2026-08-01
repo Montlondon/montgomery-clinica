@@ -497,6 +497,31 @@ exatamente sob a Alessandra; a Jéssica exatamente sob o Manoel; o Venâncio no 
 Vanessa; o Dimitre no meio do Venâncio com a Tamires; os pais no meio do vão das quatro crianças; os
 avós no prumo do pai. A prancheta cresceu sozinha de 640 para 801.
 
+### FEITO — a régua de encontros (Clínica v7.3, 01/08/2026)
+
+O pé do Diagnóstico, exatamente como estava escrito aqui embaixo. Duas informações no mesmo
+desenho, porque no atendimento elas são a mesma coisa:
+
+- **Embaixo, a régua:** um traço por encontro, espaçado pelo **tempo real** entre eles. O vão
+  largo mostra sozinho quando a pessoa sumiu — e vão de **45 dias para cima** ganha faixa e aviso
+  (*"3 meses sem vir"*). Isto é informação clínica, não estilo.
+- **Em cima, a linha da Escala de Orientação Emocional** (1 Alegria … 22 Medo), que ele preenche
+  em `diagEscalaEmo` em toda avaliação e **nunca tinha visto desenhada**. Quanto mais alto na tela,
+  mais alto na escala: subir na tela é subir de verdade. As duas espirais aparecem como duas
+  metades da faixa, separadas na linha entre o 7 e o 8.
+- **Clicar num ponto abre o diagnóstico daquele dia** (o mesmo `verDiagHist` do histórico).
+- **O resumo em números** no pé: quantos encontros, quanto tempo de acompanhamento, os degraus
+  (*"17 → 5, subiu 12 degraus"*) e há quanto tempo foi o último.
+
+**Duas honestidades que o desenho guarda.** Encontro **sem escala anotada** não é inventado: fica
+só como traço na régua, e a linha **pula ele pontilhada** — a linha não finge saber o que não foi
+escrito. E nada foi traçado no olho: a altura da faixa é `640/φ²` e o respiro até a régua `φ³` dela;
+os pontos se distribuem **pela data**, nunca por passo igual. O único desvio é declarado no código:
+dois encontros no mesmo dia se afastam 7 px, senão viram um borrão.
+
+**Custo zero de banco:** a régua lê só o cache local (`sessoesDoPac`), nunca o Supabase. Ela se
+redesenha quando a pessoa é escolhida e quando a avaliação é salva.
+
 ### Decidido em 01/08 sobre o histórico e os bonecos
 
 **O histórico NÃO é espiral nem planta.** As duas foram desenhadas, calculadas e mostradas a ele;
