@@ -232,6 +232,27 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .cab-meta{font-size:11.5px;color:var(--txt-l)}
 .cab-acoes{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
 @media(max-width:640px){.cab-acoes{margin-left:0;width:100%}}
+/* A FOLHA LIMPA — a segunda faixa da tela única.
+   Um campo sem rótulo. Escrever primeiro, classificar depois: enquanto ele
+   escuta, a mão escreve solto como se escrevesse num caderno, e só quando ele
+   quiser a peneira mostra o que daquele texto o sistema RECONHECE. Reconhecer
+   não é decidir — cada achado tem a palavra que o acendeu e só entra na ficha
+   se ele tocar. Nenhuma marcação acontece sozinha. */
+.folha{background:#FFFDF7;border:1px solid var(--brd);border-radius:11px;padding:4px 4px 0;margin-bottom:14px;box-shadow:0 1px 4px rgba(43,41,36,.04)}
+.folha-txt{width:100%;border:none!important;background:transparent!important;box-shadow:none!important;resize:vertical;min-height:118px;padding:14px 14px 6px!important;font-family:'Lora',Georgia,serif;font-size:14.5px;line-height:1.85;color:var(--txt)}
+.folha-txt:focus{outline:none}
+.folha-txt::placeholder{color:#B9AF98;font-style:italic}
+.folha-pe{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:7px 12px;border-top:1px solid #EFE7D6}
+.folha-conta{font-size:11px;color:var(--txt-l)}
+.folha-pen{padding:10px 12px 12px;border-top:1px solid #EFE7D6}
+.folha-gr{margin-bottom:9px}
+.folha-gr:last-child{margin-bottom:0}
+.folha-gr-t{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--txt-l);margin-bottom:5px}
+.folha-ch{display:inline-flex;align-items:center;gap:6px;padding:3px 9px;margin:0 5px 5px 0;border-radius:999px;font-size:11.5px;font-weight:600;background:var(--surface);border:1px solid var(--brd);color:var(--txt);cursor:pointer;transition:all .14s;font-family:inherit}
+.folha-ch:hover{background:var(--pri-l);border-color:var(--pri)}
+.folha-ch .pl{font-weight:400;color:var(--txt-l);font-size:10.5px}
+.folha-ch.on{background:#EAF5EC;border-color:#A5CFAC;color:#1B5E20;cursor:default}
+.folha-ch.on:hover{background:#EAF5EC;border-color:#A5CFAC}
 /* O INTERRUPTOR DE TRÊS POSIÇÕES — a peça reaproveitável.
    Nasce sem posição escolhida (ninguém decide por ele) e cada toque grava.
    Tocar de novo na posição acesa desliga: sai a clique como entrou a clique. */
@@ -1215,6 +1236,19 @@ window.addEventListener('DOMContentLoaded',()=>{
     <div id="cabPessoa"></div>
   </div>
 
+  <!-- ===== FAIXA 2: A FOLHA LIMPA =====
+       Sem rótulo de propósito. O rótulo obriga a decidir onde a coisa mora
+       antes de saber o que ela é — e no atendimento a fala vem antes da gaveta. -->
+  <div class="folha no-print" id="folhaBloco">
+    <textarea id="diagFolha" class="folha-txt" rows="5" oninput="folhaMudou()"
+      placeholder="Escreva solto. O que ela disse, o que você viu, o que passou pela sua cabeça. Sem rótulo e sem ordem — classificar vem depois."></textarea>
+    <div class="folha-pe">
+      <span class="folha-conta" id="folhaConta"></span>
+      <button type="button" class="btn btn-sec btn-sm" style="margin-left:auto" id="folhaBtnPen" onclick="folhaPeneirar()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4 2v-8Z"/></svg></span> O que a folha reconhece</button>
+    </div>
+    <div id="folhaPeneira"></div>
+  </div>
+
   <div class="fc no-print" style="margin-bottom:14px">
     <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink,#2B2B2B);margin-bottom:10px"><span style="width:18px;height:18px;color:var(--gold,#C9A84C)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h4M7 12h2M15 8v8M12 16h6"/></svg></span>Calculadora de IMC</div>
     <div class="fr">
@@ -1897,7 +1931,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v6.6 · 01/08';
+const APP_VER='v6.7 · 01/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2574,6 +2608,10 @@ function go(p,el){
       document.getElementById('diagEscalaEmo').value='';
       document.getElementById('diagEmoObs').value='';
       limparMemSessao();
+      // A folha some da tela, mas o rascunho DAQUELA pessoa fica guardado: como
+      // _diagPacSel já foi zerado acima, folhaLimpar não tem chave para apagar.
+      // Quem escolher a mesma pessoa de novo recebe o texto de volta.
+      folhaLimpar();
       renderDiagUltEncontro();
       const b=document.getElementById('btnSalvarDiag');
       if(b)b.innerHTML=SAVE_ICON_HTML+' Salvar Avaliação';
@@ -6103,6 +6141,8 @@ function initDiagnostico(){
     document.getElementById('diagPacId').value='';
   }
   cabRender();
+  folhaContar();
+  renderFolhaPeneira();
 }
 
 // ===== ACUPUNTURA — PONTOS DOS MERIDIANOS (dados em acupuntura-data.js) =====
@@ -7363,6 +7403,16 @@ function gerarHtmlDiag(diagRec){
     </div>`;
   }
 
+  // A folha limpa no papel. Vai inteira e com as quebras de linha preservadas —
+  // é a voz do encontro, e resumir aqui seria reescrever o que ele escreveu.
+  const folhaPapel=diagRec?(diagRec.folha||''):folhaTexto().trim();
+  if(folhaPapel){
+    blocos+=`<div style="border-left:4px solid #8A8578;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
+      <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">A folha</div>
+      <div style="font-size:9.5pt;line-height:1.7;color:#2C2A27;white-space:pre-wrap">${escHtml(folhaPapel)}</div>
+    </div>`;
+  }
+
   // Memória da sessão também no papel — é o que conta o encontro em si
   const memPapel=[
     ['O que foi feito',diagRec?diagRec.sessaoFeito:vMem('diagSessaoFeito')],
@@ -7456,6 +7506,7 @@ function selecionarDiagPac(id,nome){
   document.getElementById('diagPacId').value=id;
   document.getElementById('diagPacLista').style.display='none';
   renderDiagUltEncontro();
+  folhaCarregarRascunho();
 }
 
 /* ===== O CABEÇALHO — a pessoa nasce e a sessão se marca aqui =====
@@ -7557,6 +7608,209 @@ function cabRender(){
     </div>`;
 }
 
+/* ===== A FOLHA LIMPA — escrever primeiro, classificar depois =====
+   Faixa 2 da tela única. O texto é dele e fica inteiro: a peneira não reescreve
+   nada, não resume nada e não marca nada sozinha. Ela só lê o que está escrito,
+   acha as palavras que o sistema já conhece por nome, e OFERECE — com a palavra
+   que a acendeu à vista, do mesmo jeito que os Candidatos mostram a procedência.
+   Nenhum achado entra na ficha sem o toque dele. */
+const FOLHA_RASC='folha_rascunho_';
+const folhaTexto=()=>{const e=document.getElementById('diagFolha');return e?e.value:'';};
+
+function folhaMudou(){
+  _diagJaSalvo=false;
+  folhaContar();
+  folhaGuardarRascunho();
+  if(_folhaPenAberta)renderFolhaPeneira();
+}
+
+function folhaContar(){
+  const el=document.getElementById('folhaConta');
+  if(!el)return;
+  const t=folhaTexto().trim();
+  const n=t?t.split(/\s+/).length:0;
+  el.textContent=n?(n===1?'1 palavra':n+' palavras')+' — salva junto com a avaliação':'';
+}
+
+// Rascunho local por pessoa: a folha é escrita AO VIVO, com o paciente na
+// frente, e só vira registro quando ele salva a avaliação. Uma recarga no meio
+// da sessão não pode levar embora o que foi dito.
+function folhaChaveRasc(){return _diagPacSel?FOLHA_RASC+_diagPacSel.id:null;}
+function folhaGuardarRascunho(){
+  const c=folhaChaveRasc();
+  if(!c)return;
+  const t=folhaTexto();
+  if(t.trim())localStorage.setItem(c,t);else localStorage.removeItem(c);
+}
+function folhaCarregarRascunho(){
+  const el=document.getElementById('diagFolha');
+  if(!el)return;
+  const c=folhaChaveRasc();
+  const g=c?localStorage.getItem(c):null;
+  if(g&&!el.value.trim()){el.value=g;toast('A folha desta pessoa voltou como estava.','#1565C0',"info");}
+  folhaContar();
+  if(_folhaPenAberta)renderFolhaPeneira();
+}
+function folhaLimpar(){
+  const c=folhaChaveRasc();
+  if(c)localStorage.removeItem(c);
+  const el=document.getElementById('diagFolha');
+  if(el)el.value='';
+  _folhaPenAberta=false;
+  folhaContar();
+  renderFolhaPeneira();
+}
+
+// ===== A PENEIRA — o "classificar depois" =====
+let _folhaPenAberta=false;
+let _folhaAchados=[];
+
+function folhaPeneirar(){
+  _folhaPenAberta=!_folhaPenAberta;
+  renderFolhaPeneira();
+}
+
+// Uma expressão só cabe como achado se estiver escrita por inteiro e com
+// fronteira de palavra — "raiva" acha "raiva", mas não acha "raivinha" nem
+// entra no meio de outra palavra. Menos de 4 letras não conta: seria ruído.
+function folhaTem(textoNorm,termo){
+  const t=semAcento(String(termo||'')).trim();
+  if(t.length<4)return false;
+  const esc=t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+  return new RegExp('(^|[^a-z0-9])'+esc+'([^a-z0-9]|$)').test(textoNorm);
+}
+// Um item de catálogo pode ter variantes: "agressividade / violência" são duas
+// palavras que valem sozinhas, e o que está entre parênteses é explicação.
+function folhaVariantes(nome){
+  const limpo=String(nome||'').replace(/\([^)]*\)/g,' ');
+  return limpo.split('/').map(s=>s.trim()).filter(s=>s.length>=4);
+}
+function folhaAcha(textoNorm,nome){
+  return folhaVariantes(nome).find(v=>folhaTem(textoNorm,v))||null;
+}
+/* Os temas da Psicanálise têm nome de conceito, não de fala: ninguém escreve
+   "Sentimento de culpa melancólico" na folha — escreve "culpa". Então aqui a
+   busca é pela PALAVRA-CHAVE do conceito, e não pelo nome inteiro. Uma palavra
+   pode acender vários conceitos de uma vez, e isso é o ponto: é a estante
+   inteira do assunto se abrindo, para ele escolher qual prateleira serve.
+   Palavras curtas e palavras de ligação ficam de fora, senão vira ruído. */
+const FOLHA_LIGACAO=new Set(['sentimento','coisa','mesma','sobre','entre','pela','pelos','como','onde','pelo','para','seus','suas','todo','toda',
+  'tempo','muito','pouco','sempre','nunca','depois','antes','ainda','agora','outra','outro','dentro','forma','parte','vezes','cada','tambem','quando','porque']);
+function folhaAchaChave(textoNorm,nome){
+  const palavras=String(nome||'').replace(/\([^)]*\)/g,' ').split(/[^A-Za-zÀ-ÿ]+/);
+  for(const p of palavras){
+    const s=semAcento(p);
+    if(s.length<5||FOLHA_LIGACAO.has(s))continue;
+    if(folhaTem(textoNorm,p))return p;
+  }
+  return null;
+}
+
+function folhaAchados(){
+  const txt=folhaTexto();
+  if(!txt.trim())return [];
+  const n=semAcento(txt);
+  const achados=[];
+  const banco=(typeof bancoIntegrativoCompleto!=='undefined')?bancoIntegrativoCompleto:null;
+  if(banco){
+    Object.entries(banco.matrizCincoElementos||{}).forEach(([elem,dados])=>{
+      const pE=folhaAcha(n,elem);
+      if(pE)achados.push({g:'elemento',rot:elem,palavra:pE,elem,
+        on:()=>(_diagSelecoes.elementos||[]).includes(elem)});
+      (dados.sintomas||[]).forEach(s=>{
+        const p=folhaAcha(n,s);
+        if(p)achados.push({g:'sintoma-elemento',rot:s,palavra:p,elem,sint:s,
+          on:()=>elementoSintomaMarcado(elem,s)});
+      });
+    });
+    Object.entries(banco.pontosCorpo||{}).forEach(([ponto,dados])=>{
+      const pP=folhaAcha(n,ponto);
+      if(pP)achados.push({g:'ponto',rot:ponto,palavra:pP,ponto,
+        on:()=>(_diagSelecoes.pontos||[]).includes(ponto)});
+      (dados.sintomas||[]).forEach(s=>{
+        const p=folhaAcha(n,s);
+        if(p)achados.push({g:'sintoma-ponto',rot:s,palavra:p,ponto,sint:s,
+          on:()=>(_diagSelecoes.pontoSintomas||[]).some(x=>x.ponto===ponto&&x.sintoma===s)});
+      });
+    });
+  }
+  if(typeof psicanaliseTemas!=='undefined'&&Array.isArray(psicanaliseTemas)){
+    psicanaliseTemas.forEach(cat=>{
+      (cat.itens||[]).forEach(it=>{
+        const p=folhaAchaChave(n,it.nome);
+        if(p)achados.push({g:'psic',rot:it.nome,palavra:p,cat:cat.categoria,nome:it.nome,
+          on:()=>psicanaliseItemMarcado(cat.categoria,it.nome)});
+      });
+    });
+  }
+  return achados;
+}
+
+const FOLHA_GRUPOS=[
+  {g:'sintoma-elemento',t:'Sintomas dos 5 Elementos',pe:'marca o sintoma e acende o elemento'},
+  {g:'elemento',        t:'Elementos',              pe:'acende o elemento na avaliação'},
+  {g:'sintoma-ponto',   t:'Sintomas do corpo',      pe:'marca o sintoma e acende a região'},
+  {g:'ponto',           t:'Regiões do corpo',       pe:'acende a região na avaliação'},
+  {g:'psic',            t:'Temas da Psicanálise',   pe:'marca o conceito na Psicanálise'}
+];
+
+function renderFolhaPeneira(){
+  const el=document.getElementById('folhaPeneira');
+  const btn=document.getElementById('folhaBtnPen');
+  if(!el)return;
+  if(!_folhaPenAberta){el.innerHTML='';if(btn)btn.classList.remove('btn-pri');return;}
+  if(btn)btn.classList.add('btn-pri');
+  _folhaAchados=folhaAchados();
+  if(!_folhaAchados.length){
+    el.innerHTML=`<div class="folha-pen" style="font-size:12px;color:var(--txt-l);line-height:1.6">Nada reconhecido ainda — o que está escrito continua valendo do mesmo jeito. A peneira só enxerga o que já tem nome nos catálogos da casa; a escuta é sua.</div>`;
+    return;
+  }
+  let html='<div class="folha-pen">';
+  FOLHA_GRUPOS.forEach(gr=>{
+    const todos=_folhaAchados.filter(a=>a.g===gr.g);
+    if(!todos.length)return;
+    // Teto por grupo — uma palavra como "culpa" acende muita prateleira de uma
+    // vez. O que fica de fora é DITO, nunca somem em silêncio: os já marcados
+    // vêm primeiro para não desaparecerem atrás do corte.
+    const TETO=10;
+    const ordenados=[...todos].sort((a,b)=>(b.on()?1:0)-(a.on()?1:0));
+    const its=ordenados.slice(0,TETO);
+    const sobra=todos.length-its.length;
+    html+=`<div class="folha-gr"><div class="folha-gr-t">${gr.t}${sobra?` <span style="font-weight:400;text-transform:none;letter-spacing:0">— mostrando ${its.length} de ${todos.length}; escreva mais perto do termo para ver os outros ${sobra}</span>`:''}</div>`;
+    its.forEach(a=>{
+      const i=_folhaAchados.indexOf(a);
+      const marcado=a.on();
+      const tit=marcado?'Já está na avaliação':`Você escreveu "${a.palavra}" — tocar ${gr.pe}`;
+      html+=`<button type="button" class="folha-ch${marcado?' on':''}" title="${escHtml(tit)}"${marcado?'':` onclick="folhaTocar(${i})"`}>
+        ${marcado?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:11px;height:11px"><path d="M5 13l4 4L19 7"/></svg>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:11px;height:11px"><path d="M12 5v14M5 12h14"/></svg>'}
+        ${escHtml(a.rot)}<span class="pl">&ldquo;${escHtml(a.palavra)}&rdquo;</span></button>`;
+    });
+    html+='</div>';
+  });
+  html+=`<div style="font-size:11px;color:var(--txt-l);margin-top:8px;line-height:1.6">Cada achado mostra a palavra que o acendeu. Nada entra na ficha sem o seu toque — a peneira reconhece, não decide.</div></div>`;
+  el.innerHTML=html;
+}
+
+function folhaTocar(i){
+  const a=_folhaAchados[i];
+  if(!a||a.on())return;
+  if(a.g==='elemento')toggleElemento(a.elem);
+  else if(a.g==='sintoma-elemento'){
+    toggleElementoSintoma(a.elem,a.sint);
+    if(!(_diagSelecoes.elementos||[]).includes(a.elem))toggleElemento(a.elem);
+  }
+  else if(a.g==='ponto')togglePonto(a.ponto);
+  else if(a.g==='sintoma-ponto'){
+    togglePontoSintoma(a.ponto,a.sint);
+    if(!(_diagSelecoes.pontos||[]).includes(a.ponto))togglePonto(a.ponto);
+  }
+  else if(a.g==='psic')togglePsicanalise(a.cat,a.nome);
+  _diagJaSalvo=false;
+  renderFolhaPeneira();
+  atualizarResumoCaixas();
+  if(typeof fioRender==='function')fioRender();
+}
+
 // Idade em anos a partir do nascimento guardado na ficha (aaaa-mm-dd).
 function idadePorNasc(nasc){
   const n=new Date(nasc+'T12:00:00');
@@ -7648,6 +7902,7 @@ function limparDiagnostico(){
   document.getElementById('diagEscalaEmo').value='';
   document.getElementById('diagEmoObs').value='';
   limparMemSessao();
+  folhaLimpar();
   _diagJaSalvo=false;
   _diagEditandoId=null;
   const btn=document.getElementById('btnSalvarDiag');
@@ -7715,6 +7970,8 @@ async function salvarDiagnostico(){
     candidatos:[...(_diagSelecoes.candidatos||[])],
     escalaEmocional:document.getElementById('diagEscalaEmo').value,
     emoObs:document.getElementById('diagEmoObs').value,
+    // A folha limpa — o texto solto daquele encontro, inteiro como ele escreveu
+    folha:folhaTexto().trim(),
     // Memória da sessão — o que fica deste encontro para a próxima chegada
     sessaoFeito:vMem('diagSessaoFeito'),
     sessaoReacao:vMem('diagSessaoReacao'),
@@ -7749,6 +8006,10 @@ async function salvarDiagnostico(){
       toast('Avaliação salva no histórico do paciente!',null,"ok");
     }
     _diagJaSalvo=true;
+    // A folha virou registro: o rascunho local não precisa mais guardá-la.
+    // O texto continua na tela — quem está salvo é o encontro, não a janela.
+    const cRasc=folhaChaveRasc();
+    if(cRasc)localStorage.removeItem(cRasc);
   }catch(e){
     console.error('Erro ao salvar diagnóstico:',e);
     toast('Erro ao salvar avaliação: '+(e.message||'verifique sua conexão'),'#c62828',"erro");
@@ -7771,6 +8032,9 @@ function editarDiagHist(diagId,pacId){
     document.getElementById('diagDt').value=diag.data||'';
     document.getElementById('diagEscalaEmo').value=diag.escalaEmocional||'';
     document.getElementById('diagEmoObs').value=diag.emoObs||'';
+    const fEl=document.getElementById('diagFolha');
+    if(fEl)fEl.value=diag.folha||'';
+    folhaContar();renderFolhaPeneira();
     const btn=document.getElementById('btnSalvarDiag');
     if(btn)btn.innerHTML=EDIT_ICON_HTML+' Salvar Alterações';
     preencherMemSessao(diag);
@@ -8177,7 +8441,12 @@ function htmlUltimoEncontro(diag,opts){
     ...(diag.quiro||[]).map(q=>tag(q.art,'#EDE7F6','#4527A0'))
   ].join('');
   const linha=(rot,txt)=>txt?`<div style="margin-top:8px;font-size:12.5px;line-height:1.6"><strong style="color:var(--pri-deep)">${rot}:</strong> ${escHtml(txt)}</div>`:'';
-  const anotacoes=linha('Foi feito',diag.sessaoFeito)+linha('Reagiu',diag.sessaoReacao)+linha('Para hoje',diag.sessaoProx);
+  // A folha daquele dia entra pelo começo — foi a primeira coisa escrita. Aqui
+  // sai um trecho, para a faixa não virar parede; o inteiro está em "Ver tudo".
+  const folhaCurta=(diag.folha||'').trim();
+  const folhaLinha=folhaCurta
+    ?`<div style="margin-top:8px;font-size:12.5px;line-height:1.6;font-family:'Lora',serif;color:var(--txt)"><strong style="color:var(--pri-deep);font-family:inherit">A folha:</strong> ${escHtml(folhaCurta.length>240?folhaCurta.slice(0,240).trim()+'…':folhaCurta)}</div>`:'';
+  const anotacoes=folhaLinha+linha('Foi feito',diag.sessaoFeito)+linha('Reagiu',diag.sessaoReacao)+linha('Para hoje',diag.sessaoProx);
   const emo=diag.escalaEmocional?`<div style="margin-top:8px;font-size:11.5px;color:var(--txt-l)">Estado emocional: ${escHtml(diag.escalaEmocional)}</div>`:'';
   const vazio=(!marcas&&!anotacoes&&!emo)
     ?'<div style="margin-top:8px;font-size:12.5px;color:var(--txt-l)">A avaliação daquele dia foi salva sem marcações nem anotação.</div>':'';

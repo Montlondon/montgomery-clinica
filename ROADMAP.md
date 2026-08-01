@@ -290,6 +290,50 @@ sessão nasce uma vez e a segunda tentativa no mesmo dia é recusada com aviso.
 **A próxima é a folha limpa** — o campo sem rótulo, escrever primeiro e classificar depois.
 Senha: **"A folha limpa"**.
 
+### FEITO — Faixa 2: a folha limpa (Clínica v6.7, 01/08/2026)
+
+**Um campo sem rótulo**, logo abaixo do cabeçalho. Fonte serifada, linha larga, sem caixa em volta:
+parece papel, e é para parecer. O rótulo obriga a decidir onde a coisa mora antes de saber o que ela
+é — e no atendimento a fala vem antes da gaveta.
+
+**O rascunho não se perde.** Enquanto ele escreve, a folha se guarda sozinha no aparelho, **por
+pessoa**. Uma recarga no meio da sessão devolve o texto na hora em que ele escolhe a mesma pessoa de
+novo. Quando a avaliação é salva, a folha vira registro (campo `folha` no diagnóstico) e o rascunho
+local se apaga — o texto continua na tela, quem foi salvo é o encontro.
+
+**A folha sai no papel inteira**, com as quebras de linha preservadas, num bloco próprio antes da
+Memória da sessão. E aparece na faixa do **último encontro** na chegada seguinte, em trecho de até
+240 caracteres, com o inteiro em "Ver tudo". Resumir com máquina seria reescrever o que ele escreveu.
+
+**"Classificar depois" virou a peneira.** Um botão — *O que a folha reconhece* — lê o que está
+escrito e mostra o que o sistema já conhece **por nome**, em cinco grupos: sintomas dos 5 Elementos,
+elementos, sintomas do corpo, regiões do corpo e temas da Psicanálise. Cada achado é um botão que
+carrega **a palavra que o acendeu** à vista, do mesmo jeito que os Candidatos carregam a procedência.
+Tocar marca; não tocar não marca. **Nada entra na ficha sozinho.** Tocar um sintoma marca o sintoma
+*e* acende o elemento (ou a região) dono dele — e isso está escrito no próprio botão, não acontece
+escondido.
+
+**Duas regras de leitura, achadas na bancada:**
+- **Nos catálogos do corpo, a expressão vale inteira e com fronteira de palavra.** "raiva" acha
+  "raiva" e não acha "raivinha"; menos de 4 letras não conta. Itens com barra viram variantes
+  ("agressividade / violência" vale pelas duas), e o que está entre parênteses é explicação, não busca.
+- **Na Psicanálise, a busca é pela palavra-chave, não pelo nome inteiro.** Ninguém escreve
+  "Sentimento de culpa melancólico" na folha — escreve *culpa*. Então uma palavra acende **vários**
+  conceitos de uma vez, e isso é o ponto: é a estante inteira do assunto se abrindo, ele escolhe a
+  prateleira. Palavras de ligação e genéricas ficam de fora por lista (`FOLHA_LIGACAO`) — sem ela,
+  *"o tempo todo"* acendia *"Tempo lógico e sessão de tempo variável"*.
+
+**Teto de 10 por grupo, dito em voz alta.** Quando "culpa" acende mais do que cabe, a faixa escreve
+*"mostrando 10 de 14"*. Nada some em silêncio, e os já marcados vêm primeiro para não sumirem atrás
+do corte.
+
+**Conferido em bancada isolada:** a peneira acha raiva → Madeira, joelho e estalos → Joelho, culpa →
+os sete conceitos de culpa; tocar marca sintoma e elemento juntos e o botão vira marcado; a folha vai
+para o registro salvo; o rascunho se apaga depois de salvar e o texto fica na tela.
+
+**A próxima é a régua de encontros** — os encontros espaçados pelo tempo real entre eles, com a linha
+da Escala de Orientação Emocional. Senha: **"A régua dos encontros"**.
+
 ### Decidido em 01/08 sobre o histórico e os bonecos
 
 **O histórico NÃO é espiral nem planta.** As duas foram desenhadas, calculadas e mostradas a ele;
