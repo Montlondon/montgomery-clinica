@@ -522,6 +522,32 @@ dois encontros no mesmo dia se afastam 7 px, senão viram um borrão.
 **Custo zero de banco:** a régua lê só o cache local (`sessoesDoPac`), nunca o Supabase. Ela se
 redesenha quando a pessoa é escolhida e quando a avaliação é salva.
 
+### FEITO — Faixa 5: a recomendação (Clínica v7.4, 01/08/2026), senha "Acender a Recomendação"
+
+**A quinta das sete faixas está no lugar** — no pé do Diagnóstico, logo acima da régua de encontros,
+exatamente onde o item *Em aberto* recomendava.
+
+**O ponto inteiro da coisa: ela não foi copiada, ela mudou de casa.** Não existe uma segunda receita
+dentro do Diagnóstico. Existe **uma só**, o mesmo formulário de sempre (`#rxCorpo`), que sai da aba
+*Recomendação Terapêutica* e entra no pé do Diagnóstico quando há uma pessoa escolhida — e volta para
+a aba assim que ela é aberta pelo menu lateral. Mesmos campos, mesmo *Salvar*, mesmo registro em
+`prescricoes`. **Um lugar para consertar em vez de dois**, que era o ganho real prometido na conta
+do encolhimento. Zero campo novo, zero linha nova no banco.
+
+**Duas honestidades no caminho:**
+- **O seletor de paciente some dentro do Diagnóstico.** Quem chegou já foi dito no cabeçalho, lá em
+  cima. Deixar um segundo seletor ali seria convidar a misturar duas pessoas na mesma folha.
+- **A folha da receita se zera quando o Diagnóstico troca de pessoa** — e só nesse caso, mais o caso
+  de uma recomendação antiga aberta para *Editar* (salvar ali sobrescreveria o histórico). O que veio
+  da régua de minerais e ervas **da mesma pessoa** fica intacto: foi ele que acabou de trazer.
+
+**O botão do resumo deixou de ser uma porta e virou uma escada:** *"Levar para a recomendação, aqui
+embaixo"*. Ele não muda mais de tela — leva os suplementos marcados na avaliação e desce até o bloco.
+Levar duas vezes não duplica, e o que ele já tinha escrito à mão não é apagado.
+
+**A aba continua viva**, como combinado: as doze não somem de uma vez. Editar, duplicar e as réguas
+de minerais e ervas continuam desaguando nela do mesmo jeito.
+
 ### Decidido em 01/08 sobre o histórico e os bonecos
 
 **O histórico NÃO é espiral nem planta.** As duas foram desenhadas, calculadas e mostradas a ele;
@@ -545,7 +571,8 @@ está entre o pai e a mãe.
 
 ### Em aberto
 
-- Onde exatamente mora a recomendação terapêutica (o Claude recomenda o pé, antes da régua).
+- ~~Onde exatamente mora a recomendação terapêutica~~ — **respondido em 01/08 (v7.4):** o pé do
+  Diagnóstico, antes da régua, com o formulário mudando de casa em vez de ser copiado.
 - Se a folha limpa e os campos classificados convivem (o Claude recomenda que sim, folha primeiro).
 
 ### Sobre encolher o código — a conta honesta

@@ -1184,8 +1184,16 @@ window.addEventListener('DOMContentLoaded',()=>{
   <div class="volta-diag no-print" style="display:none"></div>
   <div class="volta-ficha no-print" style="display:none"></div>
   <div class="fio-elementos no-print" style="max-width:140px"></div>
+  <!-- ===== A MORADA DA RECOMENDAÇÃO =====
+       Faixa 5 da tela única. A receita não foi copiada para dentro do
+       Diagnóstico: ela MUDA DE LUGAR. Este é o berço dela; quando o
+       Diagnóstico abre com uma pessoa escolhida, o bloco inteiro se muda
+       para lá (rxMorada), e volta para cá quando esta página abre. Um
+       formulário só, um lugar só para consertar. -->
+  <div id="rxSlotPresc">
+  <div id="rxCorpo">
   <div class="fc no-print">
-    <div class="fr">
+    <div class="fr" id="rxLinhaPac">
       <div class="fg">
         <label>Paciente</label>
         <div style="position:relative">
@@ -1255,6 +1263,8 @@ window.addEventListener('DOMContentLoaded',()=>{
     </div>
   </div>
   <div class="rx-print" id="rxPrintA"></div>
+  </div><!-- /rxCorpo -->
+  </div><!-- /rxSlotPresc -->
 </section>
 
 <!-- ===== DIAGNÓSTICO INTEGRADO ===== -->
@@ -1519,10 +1529,25 @@ window.addEventListener('DOMContentLoaded',()=>{
     <div id="diagResumo" style="font-size:13px;line-height:1.7"></div>
     <div class="fa" style="margin-top:14px">
       <button type="button" class="btn btn-sec" onclick="limparDiagnostico()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span> Limpar Avaliação</button>
-      <button type="button" class="btn btn-pri" onclick="enviarDiagParaRx()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20C4 14 6 6 16 4c1 6-2 13-10 16Z"/><path d="M7 19c2-4 4-7 8-10"/></svg></span>Enviar para Recomendação Terapêutica</button>
+      <button type="button" class="btn btn-pri" onclick="enviarDiagParaRx()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20C4 14 6 6 16 4c1 6-2 13-10 16Z"/><path d="M7 19c2-4 4-7 8-10"/></svg></span>Levar para a recomendação, aqui embaixo</button>
       <button type="button" class="btn btn-sec" onclick="imprimirDiag()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg></span> Imprimir</button>
       <button type="button" class="btn" id="btnSalvarDiag" onclick="salvarDiagComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;font-weight:700"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.3 2.3L16 9.5"/></svg></span> Salvar Avaliação</button>
     </div>
+  </div>
+
+  <!-- ===== FAIXA 5 — A RECOMENDAÇÃO, no pé, antes da régua =====
+       O bloco inteiro da Recomendação Terapêutica se muda para cá quando há
+       uma pessoa escolhida. Não é cópia: é o mesmo formulário, os mesmos
+       campos, o mesmo Salvar. A aba continua viva e recebe o bloco de volta
+       quando for aberta pelo menu lateral. -->
+  <div class="reg no-print" id="rxNoDiag" style="display:none">
+    <div class="reg-cab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-7 4-13 14-14 0 10-4 14-14 14Z"/><path d="M6 18c2-3 5-6 11-11"/></svg>
+      A recomendação
+      <span style="font-weight:400;font-size:11.5px;color:var(--txt-l)">— o que a pessoa leva para casa, escrito aqui mesmo</span>
+      <span id="rxNoDiagAviso" style="margin-left:auto;font-weight:400;font-size:11.5px;color:var(--txt-l)"></span>
+    </div>
+    <div style="padding:10px 12px 2px;border-top:1px solid #EFE7D6" id="rxSlotDiag"></div>
   </div>
 
   <!-- ===== A RÉGUA DE ENCONTROS — o pé do Diagnóstico =====
@@ -2027,7 +2052,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v7.3 · 01/08';
+const APP_VER='v7.4 · 01/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2657,6 +2682,9 @@ function go(p,el){
   document.getElementById('sidOv').classList.remove('show');
   if(p==='nova-sessao')iniciarPS();
   if(p==='prescricao'){
+    // A receita mora no Diagnóstico enquanto há alguém em atendimento; abrir a
+    // aba a traz de volta para cá. É o mesmo formulário, nunca uma cópia.
+    rxMorada('presc');
     // Se o acesso foi pelo menu lateral (clique real, "el" existe), encerra
     // qualquer edição pendente de uma recomendação antiga, para nunca
     // sobrescrever por engano um registro do histórico de outro paciente.
@@ -6243,6 +6271,7 @@ function initDiagnostico(){
   folhaContar();
   renderFolhaPeneira();
   famRender();
+  rxNoDiagSync();
 }
 
 // ===== ACUPUNTURA — PONTOS DOS MERIDIANOS (dados em acupuntura-data.js) =====
@@ -7691,6 +7720,7 @@ function selecionarDiagPac(id,nome){
   renderDiagUltEncontro();
   folhaCarregarRascunho();
   famCarregar();
+  rxNoDiagSync();
 }
 
 /* ===== O CABEÇALHO — a pessoa nasce e a sessão se marca aqui =====
@@ -8778,24 +8808,70 @@ function limparDiagnostico(){
   renderPulsoCard();renderElementosGrid();renderPontosGrid();initBaguaWheel();renderDiagPainel();
 }
 
+/* ===== FAIXA 5 — A RECOMENDAÇÃO MUDA DE LUGAR =====
+   Regra da tela única: "mudam de lugar, não de conteúdo". Por isso aqui não
+   existe uma segunda receita — existe UMA, que muda de morada. O nó inteiro
+   (#rxCorpo) sai da aba e entra no pé do Diagnóstico, e volta quando a aba
+   for aberta pelo menu. Assim continua havendo um formulário só, um Salvar
+   só, e um lugar só para consertar. */
+function rxMorada(onde){
+  const corpo=document.getElementById('rxCorpo');
+  const alvo=document.getElementById(onde==='diag'?'rxSlotDiag':'rxSlotPresc');
+  if(!corpo||!alvo)return;
+  if(corpo.parentNode!==alvo)alvo.appendChild(corpo);
+  // Dentro do Diagnóstico a pessoa e a data já foram ditas lá em cima: mostrar
+  // um segundo seletor de paciente seria convidar a misturar duas pessoas.
+  const linha=document.getElementById('rxLinhaPac');
+  if(linha)linha.style.display=(onde==='diag')?'none':'';
+}
+
+// Zera a receita da tela, mantendo a pessoa. Usado quando o Diagnóstico troca
+// de paciente: o que estava escrito era de outra pessoa e não pode ficar.
+function rxZerarForm(pacId,pacNome){
+  _rxEditandoId=null;
+  _preencherFormRx({pacienteId:pacId,pacienteNome:pacNome,plantas:[],suplementos:[],minerais:[],durGeral:'',retorno:'',obs:''},dLocal(new Date()));
+  const b1=document.getElementById('btnSalvarRx'),b2=document.getElementById('btnSalvarRxMain');
+  if(b1)b1.innerHTML=SAVE_ICON_HTML+' Salvar Recomendação';
+  if(b2)b2.innerHTML=SAVE_ICON_HTML+' Salvar Recomendação';
+}
+
+// Chamada sempre que o Diagnóstico abre ou troca de pessoa.
+function rxNoDiagSync(){
+  const bloco=document.getElementById('rxNoDiag');
+  if(!bloco)return;
+  if(!_diagPacSel){bloco.style.display='none';return;}
+  bloco.style.display='';
+  rxMorada('diag');
+  // Duas razões para zerar a folha da receita, e só duas: ela é de OUTRA
+  // pessoa, ou é uma recomendação antiga aberta para edição (salvar ali
+  // sobrescreveria o histórico). O que veio da régua de minerais e ervas
+  // desta mesma pessoa fica intacto — foi ele que acabou de trazer.
+  const dono=_rxPacSel&&_rxPacSel.id;
+  if(_rxEditandoId||String(dono||'')!==String(_diagPacSel.id))rxZerarForm(_diagPacSel.id,_diagPacSel.nome);
+  selecionarRxPac(_diagPacSel.id,_diagPacSel.nome,'');
+  const dt=document.getElementById('diagDt').value;
+  if(dt)document.getElementById('rxDt').value=dt;
+  const av=document.getElementById('rxNoDiagAviso');
+  if(av)av.textContent='para '+_diagPacSel.nome;
+}
+
+// O botão do resumo não leva mais para outra tela: a Recomendação está logo
+// abaixo. Ele só desce até ela levando os suplementos marcados na avaliação.
 function enviarDiagParaRx(){
   if(!_diagPacSel){toast('Selecione um paciente primeiro','#EF6C00',"warn");return;}
-  if(temEdicaoPacientePendente()&&!confirm('Você tem alterações não salvas no cadastro deste paciente. Se continuar, elas serão perdidas. Continuar mesmo assim?'))return;
-  // Apenas leva para a tela de Recomendação com o mesmo paciente já selecionado.
-  // Diagnóstico e Recomendação são registros distintos e não compartilham dados.
-  const pacId=_diagPacSel.id,pacNome=_diagPacSel.nome;
+  rxNoDiagSync();
   const supDoDiag=(_diagSelecoes.suplementos||[]).map(s=>({...s}));
-  go('prescricao',null);
-  setTimeout(()=>{
-    selecionarRxPac(pacId,pacNome,'');
-    if(supDoDiag.length){
-      _rxSuplementosSel=supDoDiag;
-      renderRxSupLista();
-      toast(`Paciente e ${supDoDiag.length} suplemento(s) do Diagnóstico já estão na Recomendação.`,null,"planta");
-    } else {
-      toast('Paciente selecionado em Recomendação Terapêutica.',null,"planta");
-    }
-  },200);
+  if(supDoDiag.length){
+    // Não apaga o que ele já escreveu à mão: acrescenta o que ainda não está lá.
+    const jaTem=new Set((_rxSuplementosSel||[]).map(s=>String(s.id!==undefined?s.id:s.nome)));
+    supDoDiag.forEach(s=>{if(!jaTem.has(String(s.id!==undefined?s.id:s.nome)))_rxSuplementosSel.push(s);});
+    renderRxSupLista();
+    toast(`${supDoDiag.length} suplemento(s) do Diagnóstico estão na recomendação, logo abaixo.`,null,"planta");
+  } else {
+    toast('A recomendação está logo abaixo, com esta pessoa.',null,"planta");
+  }
+  const bloco=document.getElementById('rxNoDiag');
+  if(bloco)bloco.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
 async function salvarDiagComProtecao(btn){
