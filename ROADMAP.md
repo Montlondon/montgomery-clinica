@@ -158,6 +158,31 @@ Se as abas atuais viram camadas do Vitruviano ou continuam existindo ao lado del
 para camadas **na Clínica** (*"ao invés da aba Diagnóstico ser daquela forma"*); no OS, não disse.
 Pergunta para quando acender.
 
+## Concluído — Clínica v6.5: os emojis fora da plataforma (01/08/2026)
+
+Ele mandou tirar, e mandou procurar mais: *"e deve ter mais na plataforma"*. Havia.
+
+**Tirados da Clínica (12 lugares):** o aviso de e-mail não autorizado, os dois títulos da Escala de
+Orientação Emocional (as espirais ascendente e descendente), o Método Balance, o Yin e o Yang dos
+6 Sistemas, e os cinco `confirm()` de apagar/substituir dados. Nos avisos nativos do navegador não
+cabe SVG — ali virou texto ("ATENÇÃO:"), que é o certo.
+
+**O que ficou de propósito, e por quê:**
+- **Sinais tipográficos monocromáticos** — `→` (27x), `✓` (10x), `↳` (3x). São pontuação dentro de
+  frases e comentários, não pictogramas coloridos. Se ele quiser, saem numa próxima.
+- **Um `📊` dentro de biblioteca de terceiros minificada** (MIT, uma linha de 54 mil caracteres,
+  linha 1958). É log de performance no console do desenvolvedor, nunca aparece na tela. Mexer ali é
+  risco sem ganho.
+
+**PENDENTE — o Montgomery OS tem 209 ocorrências**, e é preciso mão fina:
+- **NÃO SÃO EMOJI e não podem sair:** os signos `♈…♓`, os planetas `☉ ☽ ☿ ♀ ♂ ♃ ♄`, `★`, `☀`, `✧ ✦`.
+  **São o conteúdo do módulo de Astrologia.** Apagar aquilo destrói o módulo.
+- **São emoji e devem sair:** o bloco de ícones por volta das linhas 4006–4036 de `os/index.html`
+  (🫀 💊 🥗 🔬 💾 ⚡ 👁 🦴 ❤ 🫁 🩺 🧠 🌳 🍄 🌿 🦷 📚 📖 🏃 🔔 👨 👩 👧 🐕 🧬 💧 ✅ ❌), mais `⚠` em 4
+  lugares e `✎` em 3.
+- Script da varredura guardado com a janela; refazer com a faixa Unicode `1F300–1FAFF`, `2600–27BF`,
+  mais o seletor de cor `FE0F`.
+
 ## A tela única — a arquitetura que ele descreveu (01/08/2026, senha "Sintetizar")
 
 *Nove pontos ditos por ele numa conversa de arquitetura, antes de qualquer código. Isto **substitui**
@@ -230,9 +255,30 @@ existe na Clínica e muda de lugar.
 **As doze abas não somem de uma vez.** Ficam vivas enquanto a tela nova cresce ao lado, e só se
 apagam quando ele disser que não sente falta.
 
+### Decidido em 01/08 sobre o histórico e os bonecos
+
+**O histórico NÃO é espiral nem planta.** As duas foram desenhadas, calculadas e mostradas a ele;
+gostou das duas e disse *"acho que não na plataforma"*. Ficam guardadas para uma eventual imagem de
+meditação no OS, nunca na tela de trabalho. **Não repropor.**
+
+**O que vai no pé do Diagnóstico é a régua de encontros:**
+- os encontros em ordem, **espaçados pelo tempo real entre eles** — o vão largo mostra sozinho quando
+  a pessoa sumiu, e a piora seguinte costuma ter a ver. Isto é informação clínica, não estilo: fica
+  mesmo que se tire o resto;
+- **a linha da Escala de Orientação Emocional** (1 = Alegria … 22 = Medo), que ele já preenche em
+  toda avaliação no campo `diagEscalaEmo` e **nunca viu desenhada**;
+- o resumo em números: quantos encontros, quanto tempo de acompanhamento, quantos degraus subiu
+  (*"17 → 5"*), há quanto tempo foi o último;
+- clicar num ponto abre o diagnóstico daquele dia.
+
+**Os bonecos são uma árvore genealógica**, e não uma folha livre: gerações em fileiras (avós, pais,
+a pessoa e irmãos, filhos), figuras que ele adiciona e arrasta. Mais fácil de ler e mais barato de
+construir do que o canvas solto. O triângulo continua aparecendo — ele é o que se vê quando a pessoa
+está entre o pai e a mãe.
+
 ### Em aberto
 
-- Onde exatamente mora a recomendação terapêutica (o Claude recomenda o pé, antes da espiral).
+- Onde exatamente mora a recomendação terapêutica (o Claude recomenda o pé, antes da régua).
 - Se a folha limpa e os campos classificados convivem (o Claude recomenda que sim, folha primeiro).
 
 ### Sobre encolher o código — a conta honesta

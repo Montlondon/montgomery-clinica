@@ -650,7 +650,7 @@ async function cadastrarBiometria(){
 async function entrarNaPlataforma(user){
   // Verifica e-mail autorizado (se vier do Google)
   if(!user.bio&&!ALLOWED_EMAILS.includes(user.email)){
-    setMsg('❌ E-mail não autorizado: '+user.email);
+    setMsg('E-mail não autorizado: '+user.email);
     if(_supaClient)await _supaClient.auth.signOut();
     return;
   }
@@ -1340,7 +1340,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     <div class="fg full">
       <select id="diagEscalaEmo" style="width:100%" onchange="renderDiagPainel()">
         <option value="">Selecione o nível emocional...</option>
-        <optgroup label="🔼 Espiral Ascendente">
+        <optgroup label="Espiral Ascendente">
           <option value="1 - Alegria/Conhecimento/Empoderamento/Liberdade/Amor">1 — Alegria, Conhecimento, Empoderamento, Liberdade, Amor</option>
           <option value="2 - Paixão">2 — Paixão</option>
           <option value="3 - Entusiasmo">3 — Entusiasmo</option>
@@ -1349,7 +1349,7 @@ window.addEventListener('DOMContentLoaded',()=>{
           <option value="6 - Esperança">6 — Esperança</option>
           <option value="7 - Contentamento">7 — Contentamento</option>
         </optgroup>
-        <optgroup label="🔽 Espiral Descendente">
+        <optgroup label="Espiral Descendente">
           <option value="8 - Tédio">8 — Tédio</option>
           <option value="9 - Pessimismo">9 — Pessimismo</option>
           <option value="10 - Frustração/Irritação/Impaciência">10 — Frustração, Irritação, Impaciência</option>
@@ -1874,7 +1874,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v6.4 · 31/07';
+const APP_VER='v6.5 · 01/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2459,7 +2459,7 @@ function cfg(k){return getCfg()[k]||CFG_DEFAULT[k]||'';}
 
 // ===== TOAST =====
 // Ícones modernos (mesmo traço usado nos botões: stroke, sem preenchimento)
-// pra substituir os emojis antigos (⚠️✅🗑️ etc) nos avisos da plataforma.
+// pra substituir os emojis antigos nos avisos da plataforma.
 const TOAST_ICONS={
   ok:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>',
   warn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l9.3 16.2a1 1 0 01-.87 1.5H3.57a1 1 0 01-.87-1.5L12 3.5z"/><line x1="12" y1="9.5" x2="12" y2="14"/><circle cx="12" cy="17" r=".6" fill="currentColor" stroke="none"/></svg>',
@@ -6332,7 +6332,7 @@ function baguaSelecionar(id){
     return `<div class="abc-card" style="${tipo==='yin'?'background:var(--cream)':'border-width:2px'}">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
         <div>
-          <div style="font-family:'Lora',serif;font-weight:600;font-size:14px;color:var(--pri-deep)">${tipo==='yin'?'☯ Yin (interno) — ':'☯ Yang (externo) — '}Sistema ${s.id} — ${s.elemento}</div>
+          <div style="font-family:'Lora',serif;font-weight:600;font-size:14px;color:var(--pri-deep)">${tipo==='yin'?'Yin (interno) — ':'Yang (externo) — '}Sistema ${s.id} — ${s.elemento}</div>
           <div style="font-size:11px;color:var(--ink-soft);margin-bottom:8px">${s.categoria}</div>
         </div>
       </div>
@@ -7045,7 +7045,7 @@ function renderDiagPainel(){
       <div style="font-size:12.5px;line-height:1.7">
         <p style="margin-bottom:7px"><strong>${e.relogio}</strong></p>
         <p style="margin-bottom:7px"><strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-2px"><path d="M9 4a3 3 0 0 0-3 3 3 3 0 0 0-1 5.8A3.2 3.2 0 0 0 7 18a3 3 0 0 0 5 1.8V6"/><path d="M15 4a3 3 0 0 1 3 3 3 3 0 0 1 1 5.8A3.2 3.2 0 0 1 17 18a3 3 0 0 1-5 1.8"/></svg> Psique/Emoções:</strong> ${e.psique}</p>
-        <p style="margin-bottom:5px"><strong>⚖️ Método Balance (Dr. Tan) — 6 Sistemas:</strong></p>
+        <p style="margin-bottom:5px"><strong>Método Balance (Dr. Tan) — 6 Sistemas:</strong></p>
         ${montarTabelaBalance(nome)}
         <p style="margin:9px 0 7px"><strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-2px"><path d="M6.5 17.5 17.5 6.5"/><circle cx="5" cy="19" r="2.2"/><circle cx="19" cy="5" r="2.2"/></svg> Quiropraxia:</strong> ${e.quiro}</p>
         <p><strong><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-2px"><path d="M6 20C4 14 6 6 16 4c1 6-2 13-10 16Z"/><path d="M7 19c2-4 4-7 8-10"/></svg> Fitoterapia sugerida:</strong> ${e.fito}</p>
@@ -7510,7 +7510,7 @@ function limparDiagnostico(){
 
 function enviarDiagParaRx(){
   if(!_diagPacSel){toast('Selecione um paciente primeiro','#EF6C00',"warn");return;}
-  if(temEdicaoPacientePendente()&&!confirm('⚠️ Você tem alterações não salvas no cadastro deste paciente. Se continuar, elas serão perdidas. Continuar mesmo assim?'))return;
+  if(temEdicaoPacientePendente()&&!confirm('Você tem alterações não salvas no cadastro deste paciente. Se continuar, elas serão perdidas. Continuar mesmo assim?'))return;
   // Apenas leva para a tela de Recomendação com o mesmo paciente já selecionado.
   // Diagnóstico e Recomendação são registros distintos e não compartilham dados.
   const pacId=_diagPacSel.id,pacNome=_diagPacSel.nome;
@@ -7609,7 +7609,7 @@ async function salvarDiagnostico(){
 }
 
 function editarDiagHist(diagId,pacId){
-  if(temEdicaoPacientePendente()&&!confirm('⚠️ Você tem alterações não salvas no cadastro deste paciente. Se continuar, elas serão perdidas. Continuar mesmo assim?'))return;
+  if(temEdicaoPacientePendente()&&!confirm('Você tem alterações não salvas no cadastro deste paciente. Se continuar, elas serão perdidas. Continuar mesmo assim?'))return;
   const diag=gD('diagnosticos').find(d=>String(d.id)===String(diagId));
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
@@ -8349,7 +8349,7 @@ function verDiagHist(diagId){
 // avaliação NOVA (registro separado, com data de hoje). A original
 // permanece intacta no histórico — mesmo padrão já usado em Recomendações.
 function duplicarDiagHist(diagId,pacId){
-  if(temEdicaoPacientePendente()&&!confirm('⚠️ Você tem alterações não salvas no cadastro deste paciente. Se continuar, elas serão perdidas. Continuar mesmo assim?'))return;
+  if(temEdicaoPacientePendente()&&!confirm('Você tem alterações não salvas no cadastro deste paciente. Se continuar, elas serão perdidas. Continuar mesmo assim?'))return;
   const diag=gD('diagnosticos').find(d=>String(d.id)===String(diagId));
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
@@ -8507,7 +8507,7 @@ function usarRxComoModelo(rxId){
 // Edição real: abre uma recomendação já salva para alterar e, ao salvar,
 // ATUALIZA o mesmo registro do histórico (não cria um novo).
 function editarRx(rxId){
-  if(temEdicaoPacientePendente()&&!confirm('⚠️ Você tem alterações não salvas no cadastro deste paciente. Se continuar, elas serão perdidas. Continuar mesmo assim?'))return;
+  if(temEdicaoPacientePendente()&&!confirm('Você tem alterações não salvas no cadastro deste paciente. Se continuar, elas serão perdidas. Continuar mesmo assim?'))return;
   const rx=gD('prescricoes').find(r=>String(r.id)===String(rxId));
   if(!rx)return;
   _rxEditandoId=rx.id;
@@ -8525,7 +8525,7 @@ function editarRx(rxId){
 // recomendação NOVA (registro separado, com data de hoje). O original
 // permanece intacto no histórico.
 function duplicarRx(rxId){
-  if(temEdicaoPacientePendente()&&!confirm('⚠️ Você tem alterações não salvas no cadastro deste paciente. Se continuar, elas serão perdidas. Continuar mesmo assim?'))return;
+  if(temEdicaoPacientePendente()&&!confirm('Você tem alterações não salvas no cadastro deste paciente. Se continuar, elas serão perdidas. Continuar mesmo assim?'))return;
   const rxs=gD('prescricoes');
   const rx=rxs.find(r=>String(r.id)===String(rxId));
   if(!rx)return;
@@ -9029,7 +9029,7 @@ function expCSVF(){
 function dl(c,n,t){const b=new Blob([c],{type:t});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=n;a.click();URL.revokeObjectURL(u);}
 async function impJSON(inp){
   const f=inp.files[0];if(!f)return;
-  if(!confirm('⚠️ Substituirá TODOS os dados!\nFez backup? Continuar?')){inp.value='';return;}
+  if(!confirm('ATENÇÃO: substituirá TODOS os dados!\nFez backup? Continuar?')){inp.value='';return;}
   const r=new FileReader();
   r.onload=async e=>{
     try{
@@ -9048,7 +9048,7 @@ async function impJSON(inp){
   r.readAsText(f);inp.value='';
 }
 async function limparTudo(){
-  if(!confirm('🗑️ Apagar TODOS os dados?\nEsta ação é IRREVERSÍVEL!'))return;
+  if(!confirm('Apagar TODOS os dados?\nEsta ação é IRREVERSÍVEL!'))return;
   if(!confirm('Última confirmação: apagar tudo mesmo?'))return;
   ['pacientes','sessoes','rascunho'].forEach(k=>localStorage.removeItem(k));
   _cache={};
@@ -9367,8 +9367,8 @@ async function delPacsSel(){
   const ids=[];
   document.querySelectorAll('.pacCk:checked').forEach(c=>ids.push(+c.dataset.id));
   if(!ids.length){toast('Selecione ao menos um paciente','#EF6C00',"warn");return;}
-  if(!confirm(`⚠️ ATENÇÃO!\n\nExcluir ${ids.length} paciente${ids.length!==1?'s':''} permanentemente?\n\nEsta ação NÃO pode ser desfeita!`))return;
-  if(!confirm(`✋ Tem certeza absoluta?\n\n${ids.length} paciente${ids.length!==1?'s':''} e todos os seus dados serão excluídos para sempre.`))return;
+  if(!confirm(`ATENÇÃO!\n\nExcluir ${ids.length} paciente${ids.length!==1?'s':''} permanentemente?\n\nEsta ação NÃO pode ser desfeita!`))return;
+  if(!confirm(`Tem certeza absoluta?\n\n${ids.length} paciente${ids.length!==1?'s':''} e todos os seus dados serão excluídos para sempre.`))return;
   for(const id of ids){
     await supaReq('DELETE','pacientes',null,`?dados->>id=eq.${id}`);
   }
