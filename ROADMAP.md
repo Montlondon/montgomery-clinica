@@ -586,6 +586,39 @@ mente sobre qual é a direita da pessoa.
 corpo, e a pergunta que ele ainda não fechou — se as abas atuais viram camadas do corpo ou
 continuam existindo ao lado dele.
 
+### O desenho tem dois leitores — dito por ele em 01/08/2026
+
+> *"Eu sempre mostro ao cliente uma coluninha que tenho física em 3D, para que eles entendam
+> aonde eu vou ajustar."*
+
+**Isto muda o rumo do corpo na tela.** A faixa 4 foi construída para **um** leitor: ele, anotando.
+Agora se sabe que há **dois**, com exigências opostas — ele precisa de alvo fácil e leitura rápida;
+o paciente precisa **reconhecer o próprio corpo**. É daqui que vem o pedido de "corpo mais
+realista", e é isto que responde qual realismo vale a pena.
+
+**Não competir com a peça de plástico no que ela faz melhor.** Ela gira na mão dele e é apontada
+com o dedo — nenhuma tela ganha disso, nem em 3D. Mas a tela tem duas coisas que o plástico não tem:
+
+1. **Memória.** A vértebra marcada em dourado, com o que aquele nível inerva escrito ao lado. O
+   plástico não fala.
+2. **Ir embora com o paciente.** A coluna impressa na folha, com os ajustes daquele dia acesos. A
+   pessoa chega em casa e aponta para alguém.
+
+**A ordem recomendada mudou por causa disso** (a de antes punha o realismo em seguida):
+
+1. **A coluna no papel**, com as vértebras ajustadas do dia — barato, usa o desenho que já existe,
+   e é o único pedaço desta história que a coluninha física não faz de jeito nenhum.
+   Senha: **"Acender a coluna no papel"**.
+2. **Um modo "mostrar ao paciente"** — a tela cheia que já existe, com o desenho maior, mais limpo
+   e mais anatômico, para virar o monitor ou o celular para ele.
+3. **Só então o realismo/3D.** Aí passa a existir um leitor que precisa dele, e a conversa sobre os
+   megabytes fica honesta em vez de ser vontade de coisa bonita. A receita do 3D real (three.js +
+   malha do NIH, crânio já provado girando) continua guardada.
+
+**Uma pergunta que vale mais do que as três, e que só ele responde:** clicar na vértebra se mostrou
+melhor do que a caixa, num atendimento de verdade? Se não, realismo seria enfeitar uma porta por
+onde ninguém passa.
+
 ### Decidido em 01/08 sobre o histórico e os bonecos
 
 **O histórico NÃO é espiral nem planta.** As duas foram desenhadas, calculadas e mostradas a ele;
