@@ -255,6 +255,41 @@ existe na Clínica e muda de lugar.
 **As doze abas não somem de uma vez.** Ficam vivas enquanto a tela nova cresce ao lado, e só se
 apagam quando ele disser que não sente falta.
 
+### FEITO — Faixa 1: o cabeçalho (Clínica v6.6, 01/08/2026)
+
+**A primeira das sete faixas está no ar.** No alto do Diagnóstico, antes de tudo, uma faixa
+**"Quem chegou"** com o nome, a data e o horário. É a etapa 1 da ordem de construção.
+
+**O ponto 1 dos nove morreu aqui.** Digitando um nome que não existe, a lista não dá mais um beco
+sem saída ("Nenhum paciente encontrado") — ela abre a porta: *Criar «Fulana»*. A pessoa **nasce ali**,
+só com o nome, e já fica escolhida na bancada. Não é cadastro paralelo: é a mesma tabela `pacientes`,
+com exatamente as mesmas 65 chaves da ficha, todas vazias menos o nome. A ficha completa continua
+inteira e o botão **Abrir a ficha** leva até ela.
+
+**A porta continua aberta mesmo com nomes parecidos.** Se já existe "Ana" e chega "Ana Paula", a
+lista mostra a Ana *e* oferece *"Nenhuma dessas — criar «Ana Paula»"*. Só some quando o nome digitado
+bate exatamente com alguém que já existe — aí criar seria duplicar.
+
+**E a sessão do dia se marca sem sair da tela.** Com a pessoa escolhida, um botão marca a sessão
+naquela data e horário. Pelo **mesmo caminho** da Nova Sessão: mesma tabela `sessoes`, mesma ida ao
+Google pela ponte quando ela está ligada. Não nasceu uma segunda porta que a agenda não reconhecesse.
+Se já existe sessão daquela pessoa naquele dia, o cabeçalho **diz que existe e não cria a segunda** —
+mostra *"Sessão de 01/08/2026 às 14:30 já marcada"*.
+
+**O cabeçalho não decide nada.** Oferece. Valor e forma de pagamento não são chutados: a sessão nasce
+em `pendente` com valor zero e ele completa na agenda quando for a hora.
+
+**Nada foi apagado.** A caixa antiga de "Paciente + Data da avaliação" virou o cabeçalho — mesmos
+campos (`diagPacBusca`, `diagPacId`, `diagDt`), mais o horário. A calculadora de IMC continua onde
+estava, agora abaixo da faixa, porque quem chega vem antes da medida.
+
+**Conferido em bancada isolada** (com os gravadores trocados por dublês, sem tocar no Supabase):
+busca exata esconde a porta de criar; busca parecida a mantém; o paciente nasce com 65 chaves; a
+sessão nasce uma vez e a segunda tentativa no mesmo dia é recusada com aviso.
+
+**A próxima é a folha limpa** — o campo sem rótulo, escrever primeiro e classificar depois.
+Senha: **"A folha limpa"**.
+
 ### Decidido em 01/08 sobre o histórico e os bonecos
 
 **O histórico NÃO é espiral nem planta.** As duas foram desenhadas, calculadas e mostradas a ele;

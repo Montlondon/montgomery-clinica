@@ -215,6 +215,23 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .fio-barra.fechado .fio-chips,.fio-barra.fechado .fio-btn{display:none}
 /* No celular o menu fica fixo no canto de cima; o fio desvia dele. */
 @media(max-width:900px){.fio-barra{top:52px}.fio-tit span{display:none}}
+/* O CABEÇALHO — a primeira faixa da tela única.
+   Quem chegou fica no alto, e a pessoa pode NASCER aqui: se o nome digitado não
+   existe, o cabeçalho oferece criá-la sem sair da tela e já marca a sessão de
+   hoje. Era o ponto 1 dos nove: "não dá para agendar quem ainda não é paciente".
+   A ficha completa continua existindo inteira — o que nasce aqui é só o nome. */
+.cab-diag{background:var(--beige);border:1px solid var(--brd);border-left:4px solid var(--pri-deep);border-radius:11px;padding:12px 14px;margin-bottom:14px}
+.cab-tit{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--pri-deep);margin-bottom:9px}
+.cab-tit svg{width:15px;height:15px}
+.cab-linha{display:flex;gap:11px;flex-wrap:wrap;align-items:flex-end}
+.cab-linha .cab-quem{flex:1 1 260px;min-width:220px}
+.cab-linha .fg{margin-bottom:0}
+.cab-nascer{padding:9px 12px;border-top:1px solid var(--brd);font-size:12.5px;color:var(--txt);display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.cab-pessoa{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:11px;padding-top:10px;border-top:1px dashed var(--brd)}
+.cab-nome{font-family:'Lora',serif;font-size:15px;font-weight:700;color:var(--pri-deep)}
+.cab-meta{font-size:11.5px;color:var(--txt-l)}
+.cab-acoes{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+@media(max-width:640px){.cab-acoes{margin-left:0;width:100%}}
 /* O INTERRUPTOR DE TRÊS POSIÇÕES — a peça reaproveitável.
    Nasce sem posição escolhida (ninguém decide por ele) e cada toque grava.
    Tocar de novo na posição acesa desliga: sai a clique como entrou a clique. */
@@ -1173,6 +1190,31 @@ window.addEventListener('DOMContentLoaded',()=>{
   <!-- O fio: fica aqui em cima, gruda no alto e desce junto com ele. -->
   <div class="fio-barra no-print" id="fioBarra" style="display:none"></div>
 
+  <!-- ===== FAIXA 1: O CABEÇALHO — quem chegou =====
+       Primeira faixa da tela única. A pessoa é escolhida ou NASCE aqui, e a
+       sessão de hoje se marca sem sair da página. -->
+  <div class="cab-diag no-print" id="cabDiag">
+    <div class="cab-tit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6"/></svg>Quem chegou</div>
+    <div class="cab-linha">
+      <div class="fg cab-quem">
+        <label>Nome do paciente</label>
+        <div style="position:relative">
+          <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--txt-l);pointer-events:none;z-index:1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>
+          <input type="text" id="diagPacBusca" placeholder="Digite o nome — se não existir, nasce aqui..."
+            style="padding-left:32px;width:100%"
+            oninput="filtrarDiagPac()"
+            onblur="fecharDiagPacLista()"
+            autocomplete="off">
+          <input type="hidden" id="diagPacId">
+          <div id="diagPacLista" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--cream);border:1px solid var(--brd);border-radius:0 0 7px 7px;box-shadow:var(--shadow);z-index:200;max-height:260px;overflow-y:auto"></div>
+        </div>
+      </div>
+      <div class="fg" style="flex:0 0 150px"><label>Data da avaliação</label><input type="date" id="diagDt" onchange="cabRender()"></div>
+      <div class="fg" style="flex:0 0 116px"><label>Horário</label><input type="time" id="diagHora" onchange="cabRender()"></div>
+    </div>
+    <div id="cabPessoa"></div>
+  </div>
+
   <div class="fc no-print" style="margin-bottom:14px">
     <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink,#2B2B2B);margin-bottom:10px"><span style="width:18px;height:18px;color:var(--gold,#C9A84C)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h4M7 12h2M15 8v8M12 16h6"/></svg></span>Calculadora de IMC</div>
     <div class="fr">
@@ -1180,25 +1222,6 @@ window.addEventListener('DOMContentLoaded',()=>{
       <div class="fg"><label>Altura (m)</label><input type="number" step="0.01" id="imcClAltura" oninput="calcIMCClinica()" placeholder="1.70"></div>
     </div>
     <div id="imcClResultado" style="font-size:13px;color:var(--ink-soft,#8A8578);padding-top:4px">Informe peso e altura.</div>
-  </div>
-
-  <div class="fc no-print">
-    <div class="fr">
-      <div class="fg">
-        <label>Paciente</label>
-        <div style="position:relative">
-          <span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--txt-l);pointer-events:none;z-index:1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></span>
-          <input type="text" id="diagPacBusca" placeholder="Digite o nome do paciente..."
-            style="padding-left:32px;width:100%"
-            oninput="filtrarDiagPac()"
-            onblur="fecharDiagPacLista()"
-            autocomplete="off">
-          <input type="hidden" id="diagPacId">
-          <div id="diagPacLista" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--cream);border:1px solid var(--brd);border-radius:0 0 7px 7px;box-shadow:var(--shadow);z-index:200;max-height:220px;overflow-y:auto"></div>
-        </div>
-      </div>
-      <div class="fg"><label>Data da avaliação</label><input type="date" id="diagDt"></div>
-    </div>
   </div>
 
   <!-- Memória da sessão: o último encontro aparece assim que o paciente é escolhido -->
@@ -1874,7 +1897,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v6.5 · 01/08';
+const APP_VER='v6.6 · 01/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -6079,6 +6102,7 @@ function initDiagnostico(){
     document.getElementById('diagPacBusca').value='';
     document.getElementById('diagPacId').value='';
   }
+  cabRender();
 }
 
 // ===== ACUPUNTURA — PONTOS DOS MERIDIANOS (dados em acupuntura-data.js) =====
@@ -7404,12 +7428,25 @@ function imprimirDiag(diagId){
 }
 
 function filtrarDiagPac(){
-  const q=document.getElementById('diagPacBusca').value.toLowerCase().trim();
+  const cru=document.getElementById('diagPacBusca').value.trim();
+  const q=cru.toLowerCase();
   const lista=document.getElementById('diagPacLista');
-  if(!q){lista.style.display='none';_diagPacSel=null;document.getElementById('diagPacId').value='';return;}
+  if(!q){lista.style.display='none';_diagPacSel=null;document.getElementById('diagPacId').value='';cabRender();return;}
   const pacs=gD('pacientes').filter(p=>p.nome.toLowerCase().includes(q)).slice(0,12);
-  if(!pacs.length){lista.innerHTML='<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Nenhum paciente encontrado</div>';lista.style.display='block';return;}
-  lista.innerHTML=pacs.map(p=>`<div onclick="selecionarDiagPac('${p.id}','${p.nome.replace(/'/g,"\\'")}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${p.nome}</div>`).join('');
+  // Ninguém com esse nome: em vez de um beco sem saída, a porta de nascer.
+  // Esta linha é o ponto 1 dos nove — antes era preciso sair da tela, abrir
+  // "Novo paciente", preencher, salvar e voltar só para marcar a primeira sessão.
+  // Com nomes parecidos na lista, a porta continua aberta — quem chega pode ser
+  // a "Ana Paula" numa casa que já tem uma "Ana" —, mas ela se anuncia de outro jeito.
+  const exato=gD('pacientes').some(p=>p.nome.toLowerCase()===q);
+  const nascer=exato?'':`<div onmousedown="event.preventDefault()" style="padding:9px 12px;border-top:1px solid var(--brd);background:var(--beige)">
+      <button type="button" class="btn btn-pri btn-sm" style="width:100%" onclick="cabNascerPaciente()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9.5" cy="8" r="3.2"/><path d="M3.5 20c0-3.3 2.8-5.8 6-5.8s6 2.5 6 5.8"/><path d="M18.5 8v5M16 10.5h5"/></svg></span> ${pacs.length?'Nenhuma dessas — criar':'Criar'} &laquo;${escHtml(cru)}&raquo;</button>
+      <div style="font-size:11px;color:var(--txt-l);margin-top:5px;line-height:1.5">Nasce só com o nome. A ficha inteira continua lá e pode ser completada depois.</div>
+    </div>`;
+  const cabeca=pacs.length
+    ? pacs.map(p=>`<div onclick="selecionarDiagPac('${p.id}','${p.nome.replace(/'/g,"\\'")}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${escHtml(p.nome)}</div>`).join('')
+    : '<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Ninguém com esse nome ainda.</div>';
+  lista.innerHTML=cabeca+nascer;
   lista.style.display='block';
 }
 function selecionarDiagPac(id,nome){
@@ -7419,6 +7456,116 @@ function selecionarDiagPac(id,nome){
   document.getElementById('diagPacId').value=id;
   document.getElementById('diagPacLista').style.display='none';
   renderDiagUltEncontro();
+}
+
+/* ===== O CABEÇALHO — a pessoa nasce e a sessão se marca aqui =====
+   Faixa 1 da tela única. Duas coisas moram nela e em nenhum outro lugar:
+   1) criar o paciente sem sair do Diagnóstico (só o nome; a ficha completa
+      continua inteira e é a mesma tabela — nada de cadastro paralelo);
+   2) marcar a sessão daquele dia, pelo mesmo caminho da Nova Sessão (mesma
+      tabela `sessoes`, mesma ida ao Google pela ponte), para não nascer uma
+      segunda porta que a agenda não reconheça.
+   O cabeçalho NÃO decide nada: ele só oferece. Se já existe sessão no dia, diz
+   que existe e não cria a segunda. */
+let _cabSalvando=false;
+
+async function cabNascerPaciente(){
+  const nome=document.getElementById('diagPacBusca').value.trim();
+  if(!nome){toast('Escreva o nome primeiro','#EF6C00',"warn");return;}
+  if(_cabSalvando)return;
+  const jaTem=gD('pacientes').find(p=>p.nome.toLowerCase()===nome.toLowerCase());
+  if(jaTem){selecionarDiagPac(jaTem.id,jaTem.nome);toast('Esta pessoa já existia — abri a que já estava aqui.',null,"ok");return;}
+  _cabSalvando=true;
+  try{
+    // Mesma forma de ficha que o formulário grava, com os campos vazios.
+    const d={...coletarDadosVazio(),nome,id:novoId(),dataCadastro:new Date().toLocaleDateString('pt-BR'),foto:'',exames:[]};
+    const pacs=gD('pacientes');pacs.push(d);_cache['pacientes']=pacs;
+    await supaReq('POST','pacientes',[{'user_id':'montgomery','dados':d}]);
+    selecionarDiagPac(d.id,d.nome);
+    document.getElementById('diagPacLista').style.display='none';
+    renderP();atuDash();
+    toast('Paciente criado. Agora dá para marcar a sessão de hoje.',null,"ok");
+  }finally{_cabSalvando=false;}
+}
+
+// A ficha em branco, com as mesmas chaves de coletarDados — para que quem nasce
+// no cabeçalho tenha exatamente o mesmo formato de quem nasce no formulário.
+function coletarDadosVazio(){
+  const d={};
+  Object.keys(coletarDados()).forEach(k=>d[k]='');
+  return d;
+}
+
+// A sessão do dia que está no cabeçalho. Só existe uma por dia por pessoa.
+function cabSessaoDoDia(){
+  if(!_diagPacSel)return null;
+  const dia=document.getElementById('diagDt').value;
+  if(!dia)return null;
+  return gD('sessoes').find(s=>String(s.pacienteId)===String(_diagPacSel.id)&&s.data===dia)||null;
+}
+
+async function cabAgendarSessao(){
+  if(!_diagPacSel){toast('Escolha quem chegou primeiro','#EF6C00',"warn");return;}
+  if(_cabSalvando)return;
+  const dia=document.getElementById('diagDt').value||dLocal(new Date());
+  if(cabSessaoDoDia()){toast('Já existe sessão marcada nesse dia para esta pessoa.','#EF6C00',"warn");cabRender();return;}
+  _cabSalvando=true;
+  try{
+    const pac=gD('pacientes').find(p=>String(p.id)===String(_diagPacSel.id));
+    const nova={id:Date.now(),pacienteId:_diagPacSel.id,pacienteNome:_diagPacSel.nome,pacienteTel:pac?pac.telefone||'':'',
+      data:dia,horario:document.getElementById('diagHora').value||'',procedimentos:'',notas:'',valor:0,formaPgto:'',status:'pendente'};
+    const ss=gD('sessoes');ss.push(nova);_cache['sessoes']=ss;
+    await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':nova}]);
+    if(ponteAtiva())await pontePush(nova.id);
+    atuFin();atuDash();cabRender();
+    toast('Sessão marcada'+(ponteAtiva()?' — e escrita no Google.':'. O valor entra depois na agenda.'),null,"ok");
+  }finally{_cabSalvando=false;}
+}
+
+// Leva à ficha completa da pessoa que está no cabeçalho, guardando a volta.
+async function cabAbrirFicha(){
+  if(!_diagPacSel)return;
+  _voltaFicha=null;renderVoltaFicha();
+  await editarPac(_diagPacSel.id);
+  marcarMenuLateral('pacientes');
+}
+
+function cabRender(){
+  const el=document.getElementById('cabPessoa');
+  if(!el)return;
+  if(!_diagPacSel){el.innerHTML='';return;}
+  const pac=gD('pacientes').find(p=>String(p.id)===String(_diagPacSel.id))||{};
+  const sess=gD('sessoes').filter(s=>String(s.pacienteId)===String(_diagPacSel.id));
+  const doDia=cabSessaoDoDia();
+  const dia=document.getElementById('diagDt').value;
+  const meta=[];
+  if(pac.nascimento)meta.push(idadePorNasc(pac.nascimento));
+  if(pac.telefone)meta.push(escHtml(pac.telefone));
+  meta.push(sess.length?(sess.length===1?'1 sessão registrada':sess.length+' sessões registradas'):'nenhuma sessão ainda');
+  const linhaSessao=doDia
+    ? `<span class="cab-meta" style="color:var(--pri-deep)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;vertical-align:-1.5px"><path d="M5 13l4 4L19 7"/></svg> Sessão de ${fd(doDia.data)}${doDia.horario?' às '+doDia.horario:''} já marcada</span>`
+    : `<button type="button" class="btn btn-pri btn-sm" onclick="cabAgendarSessao()"${dia?'':' disabled'}><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4M12 13v4M10 15h4"/></svg></span> Marcar a sessão deste dia</button>`;
+  el.innerHTML=`<div class="cab-pessoa">
+      <div>
+        <div class="cab-nome">${escHtml(_diagPacSel.nome)}</div>
+        <div class="cab-meta">${meta.join(' &middot; ')}</div>
+      </div>
+      <div class="cab-acoes">
+        ${linhaSessao}
+        <button type="button" class="btn btn-sec btn-sm" onclick="cabAbrirFicha()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span> Abrir a ficha</button>
+      </div>
+    </div>`;
+}
+
+// Idade em anos a partir do nascimento guardado na ficha (aaaa-mm-dd).
+function idadePorNasc(nasc){
+  const n=new Date(nasc+'T12:00:00');
+  if(isNaN(n))return '';
+  const h=new Date();
+  let a=h.getFullYear()-n.getFullYear();
+  const m=h.getMonth()-n.getMonth();
+  if(m<0||(m===0&&h.getDate()<n.getDate()))a--;
+  return a>=0?a+' anos':'';
 }
 /* ===== IR E VOLTAR: da ficha do paciente até a bancada, e de volta =====
    Ele pediu para o Diagnóstico e a Recomendação abrirem DENTRO da ficha. Não
@@ -8049,6 +8196,8 @@ function htmlUltimoEncontro(diag,opts){
 // Faixa na tela de Diagnóstico, assim que o paciente é escolhido.
 // Em edição, ignora a própria avaliação aberta e mostra a anterior a ela.
 function renderDiagUltEncontro(ignorarId){
+  // O cabeçalho é redesenhado junto: toda troca de pessoa passa por aqui.
+  cabRender();
   const el=document.getElementById('diagUltEncontro');
   if(!el)return;
   if(!_diagPacSel){el.style.display='none';el.innerHTML='';return;}
