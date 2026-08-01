@@ -548,6 +548,44 @@ Levar duas vezes não duplica, e o que ele já tinha escrito à mão não é apa
 **A aba continua viva**, como combinado: as doze não somem de uma vez. Editar, duplicar e as réguas
 de minerais e ervas continuam desaguando nela do mesmo jeito.
 
+### FEITO — Faixa 4, primeira vela: o corpo (Clínica v7.5, 01/08/2026), senha "Acender o Corpo"
+
+**A última das cinco começou** — e começou pequena, de propósito. Entre os bonecos e a
+recomendação, o Diagnóstico agora tem um corpo desenhado de costas com a **coluna clicável,
+C1 ao Cóccix**. Toca a vértebra: abre o que aquele nível inerva, o que costuma aparecer quando
+ele está interferido, e o botão de marcar o que foi ajustado hoje.
+
+**Uma camada só nesta vela: a quiropraxia.** Era o combinado — provar primeiro se anotar clicando
+no corpo é mesmo melhor do que anotar na caixa. As outras camadas (meridianos, pontos, órgãos)
+não foram acesas e não estão prometidas.
+
+**Nada foi tirado. Confirmado por ele antes de construir:** a aba de referência da Quiropraxia, o
+**Balanço ABC** e o **Baguá** continuam exatamente onde estavam. O corpo não substituiu nenhuma
+caixa — é **outro caminho para o mesmo dado**. O que se marca na vértebra entra em
+`_diagSelecoes.quiro` como sempre entrou, e aparece no resumo, na ficha e na folha impressa. Marcar
+num lugar acende no outro, nos dois sentidos.
+
+**A visão é de costas, como ele decidiu em 30/07:** de costas os lados coincidem, e o desenho não
+mente sobre qual é a direita da pessoa.
+
+**Nada traçado no olho** — a régua dessa vela:
+- o cânone clássico das **oito cabeças**, com o umbigo a `H/φ` contados dos pés (0,382 H do alto),
+  desenhado como marca tracejada;
+- o palco é um retângulo **φ²** (660 por 252), conferido na tela: a razão medida deu 2,619 contra
+  2,618 de φ²;
+- as vértebras se distribuem **dentro de cada segmento** — 7 cervicais, 12 torácicas, 5 lombares —
+  e não em passo igual pela coluna inteira, porque os segmentos não têm o mesmo comprimento no
+  corpo real;
+- **as larguras também são medida:** um corpo vertebral cervical tem perto de 2,5 cm e um lombar
+  perto de 5 cm; em alguém de 1,75 m isso dá 0,014 e 0,029 da altura. A coluna afina em cima e
+  engrossa embaixo sem que ninguém tenha decidido isso no traço;
+- o contorno passa **exatamente** pelos pontos calculados (Catmull-Rom convertida em Bézier): os
+  pontos vêm do cânone, e a curva só os liga.
+
+**O que fica em aberto para a próxima vela**, se ele quiser seguir: as outras camadas sobre o mesmo
+corpo, e a pergunta que ele ainda não fechou — se as abas atuais viram camadas do corpo ou
+continuam existindo ao lado dele.
+
 ### Decidido em 01/08 sobre o histórico e os bonecos
 
 **O histórico NÃO é espiral nem planta.** As duas foram desenhadas, calculadas e mostradas a ele;
