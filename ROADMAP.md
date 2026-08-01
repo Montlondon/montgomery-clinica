@@ -406,6 +406,36 @@ novo mesmo; e resposta atrasada de um termo velho não escreve na tela.
 **Sobra a mesma falha na busca da Recomendação** (`filtrarRxPac`), que ainda é só-ativos e com
 acento. Mesma receita resolve.
 
+### FEITO — de quem cada boneco é: filiação e par (Clínica v7.0, 01/08/2026) — NO AR
+
+**O que ele pediu, olhando o desenho pronto:** *"mover a Raquel e deixar exatamente abaixo da mãe
+Alessandra; e ao lado da irmã Alessandra, adicionar o marido dela"*. E disse a razão inteira numa
+frase: *"vou adicionando quem pertence a quem"*.
+
+**O que faltava:** a fileira sabia o **tempo** (que geração), a ordem sabia a **sequência** — mas
+nada no desenho sabia **de quem cada pessoa é**. Sem isso, uma sobrinha não tinha como ficar debaixo
+da mãe dela; ficava no meio, como todo mundo.
+
+**O que se acendeu:** dois laços, escolhidos na própria figura ao tocá-la.
+- **Filho(a) de** — só oferece quem está **uma fileira acima**. Quem tem pai apontado nasce
+  **debaixo dele**; se esse pai faz par, nasce **no meio do casal**.
+- **Faz par com** — só oferece quem está na **mesma fileira**, e é mão dupla: apontar um aponta o
+  outro. O par ganha o traço curto na altura do quadril e anda colado, como uma peça só.
+
+**Três cuidados que o desenho pediu para não mentir:**
+1. Quem entrou por ser **par de alguém** fica **fora da barra de irmandade** — o cunhado não é irmão.
+2. Irmãos do mesmo pai **se abrem em torno dele** em vez de empilhar, e uma varredura da esquerda
+   para a direita garante que ninguém pise em ninguém.
+3. Arrastar uma figura para longe **desfaz o laço** que ficou impossível (pai que não está mais uma
+   fileira acima, par que mudou de geração). Melhor perder o laço do que desenhar uma mentira.
+
+A prancheta agora **cresce** quando a família cresce, e o desenho inteiro se recentra sem perder o
+prumo entre pai e filho. Atalho de bancada: com uma figura aberta, o botão da fileira de baixo já
+cria o filho **dela**.
+
+**Conferido em bancada isolada** com a família da imagem: Alessandra em 379, o marido em 466, Raquel
+em 422,5 — exatamente no meio dos dois; a barra de irmãos abraça as quatro e deixa o cunhado fora.
+
 ### Decidido em 01/08 sobre o histórico e os bonecos
 
 **O histórico NÃO é espiral nem planta.** As duas foram desenhadas, calculadas e mostradas a ele;
