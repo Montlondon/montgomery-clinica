@@ -37,6 +37,10 @@ real de consultório, nunca de um exercício.
 
 1. **Tudo se registra no `ROADMAP.md`.** Janelas acabam, o documento não. O que não está
    escrito lá, some. Ao concluir algo, anotar com data e resumo — sem precisar pedir.
+   O diário são três arquivos: o `ROADMAP.md` guarda **só o que ainda respira** (e as pendências
+   no alto, dentro das 60 linhas que o Ronda lê); `00_Nucleo/ROADMAP_ARQUIVO.md` guarda o que já
+   foi entregue, inteiro; `00_Nucleo/TELA_UNICA.md` guarda a planta do Diagnóstico.
+   **Ao concluir, o bloco desce para o arquivo e sai do vivo.**
 2. **Toda entrega sobe a versão** no rodapé visível do `index.html`, em constante única.
 3. **Organização Fibonacci** (0, 1, 2, 3, 5, 8, 13, 21) nas pastas, em todos os projetos.
 4. **Segurança sempre**: Google OAuth + WebAuthn (biometria) em qualquer projeto novo.
