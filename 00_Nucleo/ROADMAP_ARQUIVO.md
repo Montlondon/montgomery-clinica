@@ -9,6 +9,40 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — o rascunho que não envelhecia, e o DNA da Família (Clínica v8.4, 02/08/2026)
+
+**A queixa dele:** duas telas do mesmo Diagnóstico, lado a lado — no celular, vinte pessoas,
+com Regina, Rubens, Luiz e Suzana; no computador, dezessete, e a avó ainda chamada "Catarinha".
+E o pedido: *"As pessoas dela quero que se chame DNA da Família."*
+
+**O que o banco disse antes de qualquer conserto.** Sete avaliações gravadas hoje, todas com
+vinte pessoas, todas com Regina e Rubens dentro. Ou seja: **nada tinha se perdido, e o
+sincronismo estava certo**. Quem estava errado era só o que o computador mostrava.
+
+**A causa.** O desenho por salvar (o rascunho que mora dentro do próprio aparelho) ganhava
+*sempre* de qualquer coisa salva no servidor — sem olhar qual dos dois era mais novo. O
+computador tinha um rascunho antigo, feito antes de tudo, e esse rascunho cobria calado as sete
+gravações que vieram depois. O aviso existia, mas era um toast que passa; o desenho errado ficava.
+
+**O conserto (a mesma regra do MMObras: o relógio ordena, ele decide).**
+
+- O rascunho agora sai com a **hora em que foi escrito** (`{em, gente}`; o formato antigo, só a
+  lista, entra sem hora — e por isso perde de qualquer coisa salva).
+- A avaliação salva agora leva `salvoEm`, a **hora** da gravação e não só o dia. Registros
+  antigos, sem esse carimbo, valem pelo fim do dia deles (23h59).
+- Na chegada, entra na tela **o mais novo dos dois**. O que perde **não some**: fica guardado
+  e volta por um botão.
+- O aviso deixou de ser toast e virou **faixa fixa** no alto do bloco, com o botão
+  "Ver o desenho por salvar deste aparelho" à vista enquanto houver um.
+
+**O nome.** "As pessoas dela" virou **DNA da Família** — na tela e no papel impresso.
+
+**A lição:** *quando dois aparelhos discordam, olhar o banco primeiro.* Duas vezes seguidas
+(v8.3 e v8.4) o dado estava inteiro e o defeito era só de escolha — qual das versões merecia
+a tela.
+
+---
+
 ## Concluído — o empate do mesmo dia (Clínica v8.3, 02/08/2026)
 
 **A queixa dele:** *"digito nos bonequinhos, SALVO, mas não está batendo com os mesmos no site do

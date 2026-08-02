@@ -1354,9 +1354,10 @@ window.addEventListener('DOMContentLoaded',()=>{
   <div class="fam no-print" id="famBloco">
     <div class="fam-cab">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="2.6"/><circle cx="16" cy="7" r="2.6"/><path d="M3.5 19c0-2.5 2-4.4 4.5-4.4s4.5 1.9 4.5 4.4M11.5 19c0-2.5 2-4.4 4.5-4.4s4.5 1.9 4.5 4.4"/></svg>
-      As pessoas dela
+      DNA da Família
       <span style="font-weight:400;font-size:11.5px;color:var(--txt-l)">— toque para escrever e dizer de quem essa pessoa é; arraste para mudar de fileira</span>
     </div>
+    <div id="famAviso"></div>
     <div class="fam-add" id="famAdd"></div>
     <div class="fam-palco" id="famPalco">
       <button type="button" class="fam-tc" onclick="famTelaCheia(this)" title="Ver em tela cheia (Esc volta)" aria-label="Tela cheia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
@@ -2115,7 +2116,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v8.3 · 02/08';
+const APP_VER='v8.4 · 02/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -7971,7 +7972,7 @@ function gerarHtmlDiag(diagRec){
     </div>`;
   }
 
-  // As pessoas dela no papel: vai o DESENHO como estava, e embaixo dele os
+  // O DNA da Família no papel: vai o DESENHO como estava, e embaixo dele os
   // nomes por geração. A árvore é o instrumento — é olhando para ela que o
   // triângulo aparece — e a lista é o que se lê depois, sem precisar decifrar.
   const famPapel=diagRec?(Array.isArray(diagRec.familia)?diagRec.familia:[]):famDados();
@@ -7989,7 +7990,7 @@ function gerarHtmlDiag(diagRec){
     }).filter(Boolean).join('');
     const arvore=famSvgDe(famPapel);
     blocos+=`<div style="border-left:4px solid #8A8578;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
-      <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">As pessoas dela</div>
+      <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">DNA da Família</div>
       ${arvore?`<div style="margin:2px 0 10px">${arvore}</div>`:''}
       ${linhas}
     </div>`;
@@ -8618,6 +8619,7 @@ let _famLarg=FAM_LARG;   // largura viva da prancheta
 let _famSel=null;        // id da figura aberta no editor
 let _famPenAberta=false;
 let _famAchados=[];
+let _famRascGuardado=null;  // o desenho por salvar que perdeu do salvo, à espera
 
 const famLinha=g=>_famPessoas.filter(p=>p.ger===g).sort((a,b)=>a.ord-b.ord);
 const famPorId=id=>_famPessoas.find(p=>String(p.id)===String(id))||null;
@@ -8674,52 +8676,98 @@ function famDados(){
     de:p.de||'',deCasal:!!p.deCasal,par:p.par||'',esperado:!!p.esperado}));
 }
 function famChaveRasc(){return _diagPacSel?FAM_RASC+_diagPacSel.id:null;}
+// O rascunho agora sai daqui com a HORA em que foi escrito. Sem essa hora não
+// há como saber se o desenho por salvar deste aparelho é mais novo ou mais
+// velho do que o que já está salvo — e era isso que fazia o computador mostrar
+// para sempre um desenho antigo enquanto o celular mostrava o certo.
 function famGuardarRascunho(){
   const c=famChaveRasc();
   if(!c)return;
   // Só o "eu" sozinho não é desenho nenhum — não vale guardar.
   const vale=_famPessoas.some(p=>!p.eu);
-  if(vale)localStorage.setItem(c,JSON.stringify(famDados()));else localStorage.removeItem(c);
+  if(vale)localStorage.setItem(c,JSON.stringify({em:Date.now(),gente:famDados()}));
+  else localStorage.removeItem(c);
+}
+// Lê o rascunho nos dois formatos: o novo, com hora; e o antigo, que era só a
+// lista. O antigo entra sem hora (0) — ou seja, perde de qualquer coisa salva.
+function famLerRascunho(){
+  const c=famChaveRasc();
+  if(!c)return null;
+  try{
+    const g=JSON.parse(localStorage.getItem(c)||'null');
+    if(Array.isArray(g)&&g.length)return{em:0,gente:g};
+    if(g&&Array.isArray(g.gente)&&g.gente.length)return{em:+g.em||0,gente:g.gente};
+  }catch(e){}
+  return null;
+}
+// A hora em que um encontro foi gravado. Registros antigos não têm salvoEm:
+// desses só se sabe o dia, e o dia entra ao fim dele (23h59) para que um
+// rascunho do mesmo dia não perca de um encontro salvo de manhã.
+function famHoraDoSalvo(d){
+  if(!d)return 0;
+  if(d.salvoEm){const t=Date.parse(d.salvoEm);if(!isNaN(t))return t;}
+  const t2=Date.parse(String(d.data||'')+'T23:59:59');
+  return isNaN(t2)?0:t2;
+}
+function famQuando(ms){
+  if(!ms)return'';
+  const d=new Date(ms);
+  return fd(d.toISOString().slice(0,10))+' às '+String(d.getHours()).padStart(2,'0')+'h'+String(d.getMinutes()).padStart(2,'0');
 }
 // A família não nasce de novo a cada encontro: ela veio do último desenho.
 // Primeiro o rascunho local (o que ele estava desenhando agora), depois o que
 // ficou guardado na última avaliação que tinha família.
 function famCarregar(){
-  _famPessoas=[];_famSel=null;_famPenAberta=false;
-  const c=famChaveRasc();
+  _famPessoas=[];_famSel=null;_famPenAberta=false;_famRascGuardado=null;
+  const rasc=famLerRascunho();
+  const salvo=_diagPacSel?diagMaisRecente(gD('diagnosticos')
+    .filter(d=>String(d.pacienteId)===String(_diagPacSel.id)&&Array.isArray(d.familia)&&d.familia.length)):null;
+  const hSalvo=famHoraDoSalvo(salvo);
   let de='';
-  if(c){
-    try{
-      const g=JSON.parse(localStorage.getItem(c)||'null');
-      if(Array.isArray(g)&&g.length){_famPessoas=g;de='rascunho';}
-    }catch(e){}
-  }
-  if(!_famPessoas.length&&_diagPacSel){
-    // O último desenho salvo — e "último" aqui precisa desempatar o mesmo dia,
-    // senão o encontro das 9h vence o das 18h (ver diagMaisRecente).
-    const antes=diagMaisRecente(gD('diagnosticos')
-      .filter(d=>String(d.pacienteId)===String(_diagPacSel.id)&&Array.isArray(d.familia)&&d.familia.length));
-    if(antes){_famPessoas=JSON.parse(JSON.stringify(antes.familia));de='ultimo:'+antes.data;}
+  // Quem entra na tela é sempre o MAIS NOVO dos dois. Antes o rascunho local
+  // ganhava sempre, e um desenho por salvar de semanas atrás cobria calado
+  // tudo o que foi gravado depois — no outro aparelho. O que perde não some:
+  // fica guardado aqui e volta por um botão. O relógio ordena, ele decide.
+  if(rasc&&(!salvo||rasc.em>=hSalvo)){
+    _famPessoas=JSON.parse(JSON.stringify(rasc.gente));de='rascunho';
+  }else if(salvo){
+    _famPessoas=JSON.parse(JSON.stringify(salvo.familia));de='salvo';
+    if(rasc)_famRascGuardado=rasc;
   }
   famGarantirEu();famNormalizarOrdem();famRender();
   if(de==='rascunho'){
-    // O rascunho é o que ELE estava desenhando aqui e ainda não salvou: continua
-    // ganhando, porque é trabalho por gravar. Mas se existe um desenho salvo
-    // desta mesma pessoa, ele precisa SABER que não é aquele que está na tela —
-    // senão dois aparelhos mostram famílias diferentes e nada avisa. Quem decide
-    // é ele; a tela só conta o que tem em mãos.
-    const salvo=diagMaisRecente(gD('diagnosticos')
-      .filter(d=>String(d.pacienteId)===String(_diagPacSel.id)&&Array.isArray(d.familia)&&d.familia.length));
+    // O rascunho é o que ELE estava desenhando aqui e ainda não salvou. Se há
+    // um desenho salvo mais antigo, ele precisa SABER que a tela ainda não é o
+    // que os outros aparelhos veem.
     toast(salvo
       ? 'Este é o desenho por salvar deste aparelho. Há outro salvo no encontro de '+fd(salvo.data)+' — salve para que os dois fiquem iguais.'
       : 'A família desta pessoa voltou como estava.','#1565C0',"info");
   }
-  else if(de.startsWith('ultimo:'))toast('A família veio do encontro de '+fd(de.slice(7))+'. Mude o que mudou.','#1565C0',"info");
+  else if(de==='salvo')toast('A família veio do encontro de '+fd(salvo.data)+'. Mude o que mudou.','#1565C0',"info");
+}
+// O aviso vive no alto do bloco, não num toast que passa: enquanto houver um
+// desenho por salvar mais velho do que o salvo, o caminho de volta fica à vista.
+function famRenderAviso(){
+  const el=document.getElementById('famAviso');
+  if(!el)return;
+  if(!_famRascGuardado){el.innerHTML='';return;}
+  el.innerHTML=`<div style="margin:0 12px 9px;padding:8px 10px;border:1px solid #FFE0B2;background:#FFF8E1;border-radius:9px;font-size:11.5px;color:var(--txt);line-height:1.6">
+    Na tela está o desenho salvo, o mesmo que os outros aparelhos mostram.
+    Este aparelho tinha um desenho por salvar${_famRascGuardado.em?' de '+famQuando(_famRascGuardado.em):''}, mais antigo — ele não se perdeu.
+    <button type="button" class="btn btn-sec btn-sm" style="margin-top:7px" onclick="famVoltarRascunho()">Ver o desenho por salvar deste aparelho</button>
+  </div>`;
+}
+function famVoltarRascunho(){
+  if(!_famRascGuardado)return;
+  _famPessoas=JSON.parse(JSON.stringify(_famRascGuardado.gente));
+  _famRascGuardado=null;_famSel=null;
+  famGarantirEu();famNormalizarOrdem();famGuardarRascunho();famRender();
+  toast('Voltou o desenho por salvar deste aparelho. Salve a avaliação para que os dois fiquem iguais.','#1565C0',"info");
 }
 function famLimpar(){
   const c=famChaveRasc();
   if(c)localStorage.removeItem(c);
-  _famPessoas=[];_famSel=null;_famPenAberta=false;_famAchados=[];
+  _famPessoas=[];_famSel=null;_famPenAberta=false;_famAchados=[];_famRascGuardado=null;
   famRender();
 }
 
@@ -9186,7 +9234,7 @@ function famContar(){
   el.textContent=n?(n===1?'1 pessoa desenhada':n+' pessoas desenhadas')+' — salvas junto com a avaliação':(_diagPacSel?'Só ela por enquanto.':'');
 }
 function famRender(){
-  famRenderAdd();famDesenhar();famRenderEditor();famContar();renderFamPeneira();
+  famRenderAviso();famRenderAdd();famDesenhar();famRenderEditor();famContar();renderFamPeneira();
   renderDiagPainel();   // desenhar alguém já basta para o Salvar aparecer
 }
 
@@ -9474,6 +9522,10 @@ async function salvarDiagnostico(){
     pacienteId:_diagPacSel.id,
     pacienteNome:_diagPacSel.nome,
     data:document.getElementById('diagDt').value||dLocal(new Date()),
+    // A HORA da gravação, não só o dia. A data diz de que encontro é a folha;
+    // esta diz quando ela foi para o servidor — é o que deixa qualquer aparelho
+    // saber se o desenho por salvar que ele tem em mãos é novo ou já é passado.
+    salvoEm:new Date().toISOString(),
     elementos:[..._diagSelecoes.elementos],
     pontos:[..._diagSelecoes.pontos],
     elementosObs:{..._diagSelecoes.elementosObs},
@@ -9544,6 +9596,7 @@ async function salvarDiagnostico(){
     // pelo caminho do último desenho salvo.
     const cFam=famChaveRasc();
     if(cFam)localStorage.removeItem(cFam);
+    _famRascGuardado=null;famRenderAviso();
     // E a rede do resto da avaliação: o encontro está no servidor, a rede
     // cumpriu o papel dela e sai de cena.
     diagLimparRascunho();
