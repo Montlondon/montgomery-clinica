@@ -393,6 +393,21 @@ perdi"; senha + ROADMAP + CLAUDE.md resolvem "encheu".
 era o Montgomery; no celular o Claude começava cego. Aula sobre a diferença entre **memória
 pessoal** (fica na máquina) e **contexto do projeto** (viaja junto com o código).
 
+### 13. Peneirar na porta, e não em cada janela (Clínica v8.1 e v8.2, 02/08/2026)
+**Camada 4 (dados) / Camada 1.** A imagem é de casa: dá para tirar o sapato sujo em cada cômodo,
+ou pôr um capacho na porta de entrada. A v8.1 tirou o sapato numa sala — o painel do Diagnóstico
+passou a ignorar um nome que saiu do banco. A v8.2 descobriu que o mesmo pé sujo entrava por
+outras quatro portas, uma delas o **papel impresso na frente do paciente**.
+
+A virada é conceitual e vale para tudo: **o dado guardado no aparelho não é o mesmo dado que
+veio do banco.** Ele tem a mesma cara, mas foi escrito ontem, por uma versão do programa que já
+mudou. Por isso o rascunho agora é peneirado **na entrada**, pelo formato — lista entra em lista,
+registro em registro — em vez de ser conferido em cada tela que o usa.
+
+**A prova real, e é a melhor parte:** o buraco só apareceu quando se inventou um dado *errado* de
+propósito — um elemento chamado "Plutônio". Teste com dado certinho não acha nada, e teste que
+não acha nada foi mal feito.
+
 ---
 
 ## Ideia viva — a terceira aba de Suplementos: o link de onde se compra (30/07/2026)

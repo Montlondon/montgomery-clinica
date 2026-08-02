@@ -2115,7 +2115,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v8.1 · 02/08';
+const APP_VER='v8.2 · 02/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -7576,7 +7576,7 @@ function atualizarObsElemento(nome,valor){
 }
 
 function montarTabelaBalance(nomeElemento){
-  const meridianos=bancoIntegrativoCompleto.meridianosPorElemento[nomeElemento];
+  const meridianos=bancoIntegrativoCompleto.meridianosPorElemento[nomeElemento]||[];
   const sistemas=bancoIntegrativoCompleto.sistemasBalanceNomes;
   let html=`<div style="overflow-x:auto;margin-top:6px"><table style="width:100%;border-collapse:collapse;font-size:11px">
     <thead><tr style="background:var(--pri-l)">
@@ -7863,6 +7863,7 @@ function gerarHtmlDiag(diagRec){
   }
   elementos.forEach(nome=>{
     const e=bancoIntegrativoCompleto.matrizCincoElementos[nome];
+    if(!e)return;                               // nome órfão não pode derrubar o papel na frente do paciente
     const obs=elementosObs[nome]||'';
     const sintomasDoElemento=elementoSintomasSel.filter(s=>s.elemento===nome).map(s=>s.sintoma);
     blocos+=`<div style="border-left:4px solid ${e.cor};padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
@@ -7876,6 +7877,7 @@ function gerarHtmlDiag(diagRec){
   });
   pontos.forEach(nome=>{
     const p=bancoIntegrativoCompleto.pontosCorpo[nome];
+    if(!p)return;                               // idem
     const sintomasDoPonto=pontoSintomasSel.filter(s=>s.ponto===nome).map(s=>s.sintoma);
     blocos+=`<div style="border-left:4px solid #1E3A5F;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
       <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">${p.regiao}</div>
@@ -8364,7 +8366,20 @@ function diagCarregarRascunho(){
   let d=null;
   try{d=JSON.parse(localStorage.getItem(c)||'null');}catch(e){}
   if(!d||diagRascVazio(d))return;
-  Object.keys(d.selecoes||{}).forEach(k=>{_diagSelecoes[k]=d.selecoes[k];});
+  // A peneira do rascunho. O que volta do armário do navegador pode ser velho,
+  // meio gravado ou de uma versão que já mudou de forma — e a tela cai com o
+  // paciente na frente. Aqui só entra o que tem o MESMO formato do campo em
+  // branco: lista entra em lista, registro entra em registro, texto em texto.
+  // Campo que não existe mais fica de fora. É o irmão do "nome órfão" da v8.1:
+  // lá se peneirava um por um na hora de desenhar, aqui se peneira na porta.
+  const molde=_diagSelecoes;
+  Object.keys(d.selecoes||{}).forEach(k=>{
+    if(!(k in molde))return;
+    const novo=d.selecoes[k], vazio=molde[k];
+    if(Array.isArray(vazio)){if(Array.isArray(novo))molde[k]=novo;return;}
+    if(vazio&&typeof vazio==='object'){if(novo&&typeof novo==='object'&&!Array.isArray(novo))molde[k]=novo;return;}
+    if(typeof novo===typeof vazio)molde[k]=novo;
+  });
   const e1=document.getElementById('diagEscalaEmo');if(e1)e1.value=d.escala||'';
   const e2=document.getElementById('diagEmoObs');if(e2)e2.value=d.emoObs||'';
   MEM_CAMPOS.forEach(id=>{const e=document.getElementById(id);if(e&&d.mem)e.value=d.mem[id]||'';});
@@ -9534,7 +9549,7 @@ function editarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])],quiro:[...(diag.quiro||[])],quiroObs:diag.quiroObs||'',candidatos:[...(diag.candidatos||[])],candidatosFora:[]};
+  _diagSelecoes={elementos:[...(diag.elementos||[])],pontos:[...(diag.pontos||[])],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])],quiro:[...(diag.quiro||[])],quiroObs:diag.quiroObs||'',candidatos:[...(diag.candidatos||[])],candidatosFora:[]};
   _diagEditandoId=diag.id;
   _diagJaSalvo=false;
   go('diagnostico',null);
@@ -10434,7 +10449,7 @@ function duplicarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...diag.elementos],pontos:[...diag.pontos],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])],quiro:[...(diag.quiro||[])],quiroObs:diag.quiroObs||'',candidatos:[...(diag.candidatos||[])],candidatosFora:[]};
+  _diagSelecoes={elementos:[...(diag.elementos||[])],pontos:[...(diag.pontos||[])],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])],quiro:[...(diag.quiro||[])],quiroObs:diag.quiroObs||'',candidatos:[...(diag.candidatos||[])],candidatosFora:[]};
   _diagEditandoId=null;
   _diagJaSalvo=false;
   go('diagnostico',null);

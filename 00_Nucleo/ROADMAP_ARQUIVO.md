@@ -9,6 +9,41 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — peneirar os órfãos (Clínica v8.2, 02/08/2026)
+
+A v8.1 achou **um** nome órfão e tapou **um** buraco: o painel do Diagnóstico passou a ignorar
+elemento ou ponto que tivesse saído do banco. Esta senha foi atrás dos **outros lugares onde o
+mesmo dado velho passa** — porque um buraco tapado numa tela não protege as outras quatro.
+
+**Os quatro achados, todos reais no código:**
+
+1. **O papel — o pior deles.** `gerarHtmlDiag` montava os blocos dos Elementos e dos Pontos sem
+   conferir se o nome ainda existe. É a folha que sai impressa **com o paciente na frente**:
+   um nome órfão derrubava o PDF na hora de entregar. Agora ignora o órfão e imprime o resto.
+2. **Editar e duplicar um encontro antigo.** As duas funções faziam `[...diag.elementos]`.
+   Um registro salvo antes desses campos existirem — ou salvo pela metade — quebrava no clique,
+   sem nem abrir a tela. Agora entram com `||[]`, como todos os outros campos já entravam.
+3. **A tabela do Balance.** `montarTabelaBalance` percorria `meridianosPorElemento[nome]` direto.
+   Um elemento sem meridianos no banco derrubava o cartão. Agora cai numa lista vazia.
+4. **A porta do rascunho — a correção que vale mais que as três.** Em vez de tapar buraco por
+   buraco na hora de desenhar, `diagCarregarRascunho` passou a **peneirar na entrada**: só entra
+   o que tem o mesmo formato do campo em branco. Lista entra em lista, registro em registro,
+   texto em texto; campo que não existe mais fica de fora. Um rascunho meio gravado, ou de uma
+   versão em que o campo tinha outra forma, não consegue mais chegar à tela.
+
+**A prova, feita como a da v8.1 — com dado inventado errado de propósito:** um elemento
+"Plutônio", um ponto "Ombro inexistente" e um sistema ABC "ZZ" passaram pelo papel (3.950
+caracteres gerados, sem queda) e pelo painel. E a peneira barrou, um a um: `elementos: null`,
+uma lista onde se esperava registro, o número 42 num campo de texto, e um campo que não existe
+mais — enquanto a lista boa passou. Antes, o mesmo "Plutônio" dava
+*"Cannot read properties of undefined (reading 'cor')"*.
+
+**A regra que fica:** o dado que vem do armário do navegador ou de um registro antigo **não é o
+mesmo dado que veio do banco**. Ele parece igual e não é. Peneirar na porta é mais barato do que
+lembrar de conferir em cada uma das telas — e mais seguro, porque a próxima tela ainda nem existe.
+
+---
+
 ## Concluído — provar a rede (Clínica v8.1, 02/08/2026)
 
 A rede da v8.0 foi testada de verdade, num navegador, com uma pessoa de mentira. O que ficou provado:
