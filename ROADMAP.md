@@ -55,6 +55,27 @@ sem ler isto vai construir telas certas pelo motivo errado.*
 
 ---
 
+## Decidido em 01/08 — o Ronda fica desligado
+
+*"Prefiro da forma como trabalhamos, não tenho tanta necessidade de um agente exclusivo por
+enquanto."*
+
+**O Ronda não roda.** Ele nunca teve relógio — só corria quando chamado — então "desligado"
+significa simplesmente **não chamar**. Nada está rodando, nada gastando, nada esperando.
+
+**O código fica onde está**, em `01_Codigo/agentes/ronda.mjs`, por dois motivos que não têm a ver
+com vigiar repositório:
+
+1. **É a aula.** A Camada 7 do Montgomery Code se apoia nele — as mãos só de leitura, a trava de
+   8 voltas no laço, o motor pequeno para tarefa pequena, e a lição dos US$ 0,17 da corrida que
+   abriu o ROADMAP inteiro. As 85 linhas comentadas valem mais como material didático.
+2. **É a receita.** No dia em que fizer falta, o molde está pronto e testado.
+
+**Não propor ligar o Ronda, nem sugerir agente próprio, sem ele pedir.** Irmão da regra de que o
+Ronda não tem despertador: *"as ideias vêm sem que eu pense nelas."*
+
+---
+
 ## Decidido em 01/08 — o Obsidian fica como está
 
 *"Estou contente como ele é, pode zerar a dúvida sobre plugin."*
