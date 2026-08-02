@@ -40,6 +40,35 @@ sem ler isto vai construir telas certas pelo motivo errado.*
 
 ---
 
+## Concluído — a primeira aula montada de verdade: 2.4, conflito não é erro (OS v5.7, 01/08/2026)
+
+**Senha "Montar a aula" — primeira vela acesa.** A grade tinha 35 aulas e o método de cinco passos;
+agora existe **uma aula escrita pelo método inteiro**, e ela serve de forma para as próximas.
+
+**Aula 2.4 — Conflito não é erro**, na Camada 2 (âncora `aula-2-4`), nos cinco passos:
+1. **A imagem** — duas pessoas escrevendo na mesma linha do prontuário; quem costura não escolhe
+   o ombro no chute, para e chama. Adivinhar seria pior que avisar: seria erro com cara de certo.
+2. **O conceito** — conflito acontece **por linha, não por arquivo**; as três marcas
+   (`<<<<<<< HEAD`, `=======`, `>>>>>>>`) traduzidas uma a uma; resolver = apagar as marcas e
+   decidir; e a saída que sempre existe, `git merge --abort`. Nada se perde num conflito.
+3. **O código real** — os **três conflitos de ontem**, do merge da estante do Kindle: a linha do
+   `APP_VERSION`, o topo do ROADMAP e o fim do `.gitignore`. O que eles ensinam junto:
+   **não conflitou obra com obra** — conflitou sempre *o lugar por onde toda mudança passa*.
+   Daí a regra prática: **o conflito não nasceu do código, nasceu dos três dias de espera.**
+4. **O passo seu** — `git log --merges --oneline -5`, que só lê: achar o encontro da estante.
+5. **A prova** — escrever no caderno por que o Git para em vez de escolher sozinho.
+
+A frase que fechou: *a ferramenta que para e pergunta é irmã da tela que mostra e não decide* —
+a aula caiu dentro da tese sem ser forçada.
+
+O inglês já estava pronto para ela: a palavra **conflict** (`/ˈkɒnflɪkt/`) já apontava para 2.4 no
+glossário e agora aparece embaixo do nome da aula na grade. Na grade, 2.4 passou de *na fila* para
+**acesa** — de 7 aulas acesas para 8.
+
+**O que fica de método para as próximas:** a matéria-prima boa é o erro que já aconteceu na tela
+dele. As aulas 2.5 (main sujo), 2.6 (o peso invisível) e 2.7 (a receita, não os ingredientes)
+estão na mesma situação — texto pronto no catálogo abaixo, esperando ser montado. Uma por sessão.
+
 ## Concluído — o IPA entra no glossário e a estante finalmente casa (OS v5.6 / Clínica v7.8, 01/08/2026)
 
 **Senha "Casar a estante" — cumprida.** O galho do Kindle, escrito em 29/07 e nunca juntado, entrou
