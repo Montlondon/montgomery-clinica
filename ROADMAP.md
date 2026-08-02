@@ -119,8 +119,18 @@ que ninguém chamasse aquilo de aula de idioma). O caminho mais barato e mais pr
 **o inglês entrar no que ele já faz**, não virar uma décima terceira aba: os termos técnicos que
 aparecem no trabalho, e talvez uma seção no OS quando houver matéria acumulada.
 
-*A decisão é dele:* aba própria no OS, ou o inglês como camada do Montgomery Code? Senha:
-**"Acender o inglês"**.
+**RESPONDIDO por ele no mesmo dia:** *"sobre inglês no Montgomery Code você tem razão, unir dois
+conhecimentos em um só lugar."* **O inglês é camada do Montgomery Code, não aba nova.** Não abrir
+projeto "Montgomery Inglês" separado. Senha: **"Acender o inglês"** — e agora ela já sabe onde mora.
+
+*Sobre o Obsidian, ele acrescentou:* o vídeo falava do **Claude integrado dentro do Obsidian**, e
+**ele mesmo quer pesquisar melhor antes**. Fica esperando decisão dele — não construir nada, não
+insistir. O que já está honestamente esclarecido: existem dois caminhos diferentes com o mesmo nome.
+**(a) O Claude Code lendo e escrevendo a pasta do Obsidian** — é só uma pasta de `.md` no
+computador; funciona hoje, sem instalar nada, sem custo além do que ele já paga.
+**(b) Um plugin de IA dentro do Obsidian** — a conversa acontece na janela do Obsidian, é bonito,
+mas em geral pede chave de API própria, com conta e cobrança por uso separadas. A diferença que
+importa para o bolso dele é essa, não a tela.
 
 ---
 
