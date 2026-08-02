@@ -1062,6 +1062,74 @@ nova, nenhum peso novo na cota.
 
 **Fora do escopo, de propósito:** Dropshipping/OneDrop.
 
+## Concluído — OS v5.5: o inglês como camada do Code, senha "Acender o inglês" (01/08/2026)
+
+**Antes da obra, um achado que importa mais do que ela:** o **OS v5.4 (o curso) estava pronto desde
+30/07 e nunca tinha sido publicado** — ficou num galho que ninguém juntou ao tronco. O que estava
+no ar era o **OS v3.4**. Aula viva, e das caras: *entregar não é terminar de escrever; é juntar,
+empurrar e conferir no ar.* Isto vira a aula **5.2 — Subir e olhar**, e reforça a **2.3 — a escada
+da entrega**. Fica a regra: **ao fim de toda sessão, conferir se algum galho ficou para trás.**
+Nesta subida o curso foi junto, então **v5.4 e v5.5 entraram no ar no mesmo empurrão.**
+
+**Decisão dele que guiou o desenho:** *"unir dois conhecimentos em um só lugar."* Então **não existe
+aba de inglês e não existe projeto Montgomery Inglês.** O inglês é bloco dentro do Montgomery Code,
+entre o método e a grade.
+
+**O contato é constante porque não depende de ele decidir estudar** — eram três portas e todas
+abrem sozinhas:
+1. **A palavra desta visita.** Cada entrada na aba do Code o recebe com uma palavra: o som escrito
+   em português (*commit* = cã-MÍT), o que ela quer dizer, e uma frase de verdade
+   (*"Commit only the file you need."*). **Gira por contagem de visitas, não por relógio** — nada
+   aqui fica esperando o tempo passar, na mesma regra do Ronda.
+2. **Cada aula da grade mostra as suas palavras**, embaixo do nome, com o som ao passar o dedo.
+   Ele encontra o inglês olhando o curso, sem procurar por ele.
+3. **O glossário vivo** — as 24 palavras abertas, cada uma com aula, som, sentido e frase.
+
+**Nenhuma palavra foi escolhida por ser útil em geral.** Todas as 24 são do trabalho dele: commit,
+branch, merge, push, pull, deploy, ship, repository, remote, conflict, build, log, error, console,
+server, request, response, database, query, row, key, token, login, backup. Cada uma amarrada à
+aula onde ela aparece — conferido: **nenhuma aponta para aula inexistente**.
+
+**O som é do próprio aparelho** (`speechSynthesis`), sem serviço nem chave. Onde não houver voz em
+inglês instalada, o botão **diz isso** em vez de fingir que falou.
+
+**Peso: zero.** Texto e uma constante; nada de imagem, biblioteca ou banco.
+
+**O que fica em aberto:** a palavra gira, mas o curso ainda não sabe quais ele já domina — um
+"já sei esta" é a próxima vela natural, se ele quiser. E o inglês pode entrar nas aulas escritas
+(não só na grade) conforme cada uma for montada, o que casa com a senha **"Montar a aula"**.
+
+## Concluído — OS v5.4: o Montgomery Code vira curso de verdade (30/07/2026)
+
+Pedido dele, com estas palavras: *"eu gostaria na verdade que eu tivesse aulas como uma pessoa
+que aprende realmente em uma faculdade, com passo a passo e metodologias."* Até aqui as aulas
+eram boas mas **soltas** — nasciam do trabalho do dia, cada uma com a sua forma. Faltava a coisa
+que uma faculdade tem e um punhado de aulas não tem: **grade, método e pré-requisito.**
+
+Entraram dois blocos novos no topo da aba, antes da trilha das sete camadas:
+
+**O método — cinco passos, sempre na mesma ordem.** (1) a imagem, antes de qualquer termo;
+(2) o conceito, o nome certo dito uma vez; (3) o código real, apontado dentro dos sistemas dele,
+nunca exemplo inventado; (4) o passo seu, exercício de dois minutos com as mãos dele no teclado;
+(5) **a prova** — ele escreve no caderno com as palavras dele, e sem isso a aula não fecha.
+Mais as quatro regras da casa: pré-requisito de verdade (só fecha com prova escrita), uma vela
+de cada vez, aula viva (o que acontece no trabalho vira aula na hora) e nada de teatro.
+
+**A grade — o curso inteiro aberto.** Sete módulos, cada um com objetivo e pré-requisito
+declarados, e **35 aulas numeradas** (1.1, 1.2, 2.1...) com o estado de cada uma: *acesa* (7,
+podem ser lidas hoje, com o link "abrir" que leva até ela), *na fila* (11 — as que já estão
+escritas neste ROADMAP, no catálogo lá embaixo, esperando ser montadas) e *plantada* (as demais,
+ainda por escrever). Cada aula tem caixinha; marcar guarda em `mos_code_grade` neste aparelho, e
+uma barra no alto mostra quantas já têm prova escrita.
+
+Detalhe que importa para o futuro: **a grade é dado, não texto** — mora na constante `GRADE` no
+JavaScript. Aula nova entra numa linha e a tela se refaz sozinha. As 11 aulas "na fila" saíram
+diretamente do catálogo *Matéria-prima para aulas do Montgomery Code*: o que estava só no ROADMAP
+agora aparece na tela dele, numerado e no módulo certo.
+
+Conferido no navegador antes de subir: 7 módulos montam, a barra conta 35, a caixinha grava e
+volta, e os links "abrir" acendem a Camada 2 e a Camada 7 (e a Camada 1, que mora na Escola).
+
 ## Concluído — OS v5.3: a Camada 7 acesa e o primeiro agente (30/07/2026)
 
 A pergunta foi "como funciona este negócio de agentes?" e virou picanha: em vez de só explicar,

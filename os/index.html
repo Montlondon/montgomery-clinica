@@ -1738,6 +1738,48 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     <p>O nosso caderno vivo. Aqui a gente desce às camadas de baixo do código &mdash; do osso ao telhado &mdash; usando os seus próprios sistemas como livro-texto. Sem pressa, sem porta trancada. Quem entende o alicerce para de depender e passa a criar.</p>
   </div>
 
+  <!-- O MÉTODO -->
+  <div class="bloco" id="metodo">
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16M4 12h16M4 19h10"/><circle cx="19" cy="19" r="2"/></svg>O método &middot; como cada aula acontece</h2>
+    <p style="color:var(--cinza);font-size:0.9rem;margin-bottom:var(--f3)">Aqui não tem aula solta. Toda aula deste curso segue os mesmos <b>cinco passos</b>, sempre na mesma ordem &mdash; e o quinto é o único que prova que a aula funcionou.</p>
+    <div class="cards" style="margin-bottom:var(--f3)">
+      <div class="card"><h3>1 &middot; A imagem</h3><p style="font-size:0.85rem;color:var(--texto)">Uma metáfora antes de qualquer termo técnico. O osso, a pele e o músculo; a receita e os ingredientes; o cadeado, o teto e a cerca. Se a imagem não vier primeiro, a palavra não gruda.</p></div>
+      <div class="card"><h3>2 &middot; O conceito</h3><p style="font-size:0.85rem;color:var(--texto)">Só agora o nome certo, dito devagar e uma vez só. O nome serve para você conversar com outras pessoas &mdash; e para pesquisar sozinho depois.</p></div>
+      <div class="card"><h3>3 &middot; O código real</h3><p style="font-size:0.85rem;color:var(--texto)">A mesma coisa apontada dentro dos <b>seus</b> sistemas: a linha exata da Clínica, do OS ou do MMObras. Nunca exemplo inventado &mdash; o livro-texto é o que você já construiu.</p></div>
+      <div class="card"><h3>4 &middot; O passo seu</h3><p style="font-size:0.85rem;color:var(--texto)">Um exercício pequeno, de dois minutos, com as suas mãos no teclado. É a diferença entre entender e saber. O erro que aparecer na sua tela vale mais que dez explicações certas.</p></div>
+      <div class="card"><h3>5 &middot; A prova</h3><p style="font-size:0.85rem;color:var(--texto)">Você escreve no caderno, aqui embaixo, <b>com as suas palavras</b>. Sem isso a aula não fecha. Explicar é a única prova de que se entendeu.</p></div>
+    </div>
+    <h3 style="color:var(--dourado);font-size:0.95rem;margin:var(--f2) 0 10px">As quatro regras da casa</h3>
+    <div style="display:grid;gap:8px;margin-bottom:var(--f3)">
+      <div style="padding:10px 14px;border-left:2px solid var(--dourado);font-size:0.87rem;color:var(--texto)"><b style="color:var(--azul)">Pré-requisito de verdade.</b> Nenhuma aula abre sem a de baixo firme &mdash; e "firme" quer dizer com a prova escrita no caderno, não com a leitura feita.</div>
+      <div style="padding:10px 14px;border-left:2px solid var(--dourado);font-size:0.87rem;color:var(--texto)"><b style="color:var(--azul)">Uma vela de cada vez.</b> Uma aula por sessão. Quem acende a próxima é você &mdash; o curso espera, não empurra.</div>
+      <div style="padding:10px 14px;border-left:2px solid var(--dourado);font-size:0.87rem;color:var(--texto)"><b style="color:var(--azul)">Aula viva.</b> Quando algo acontece de verdade no trabalho &mdash; um conflito, um erro, uma conta cara &mdash; aquilo vira aula na hora e entra na grade. É por isso que a grade cresce.</div>
+      <div style="padding:10px 14px;border-left:2px solid var(--dourado);font-size:0.87rem;color:var(--texto)"><b style="color:var(--azul)">Nada de teatro.</b> Se algo não dá, a aula diz que não dá. Não existe crédito por decorar palavra bonita.</div>
+    </div>
+    <p style="font-family:'Lora',serif;font-style:italic;font-size:1.1rem;color:var(--azul);text-align:center;margin:var(--f2) 0 0">Aula boa não é a que você acompanhou &mdash; é a que você consegue contar depois.</p>
+  </div>
+
+  <!-- O INGLÊS — camada do curso, não aba à parte.
+       Decisão dele em 01/08: "unir dois conhecimentos em um só lugar". -->
+  <div class="bloco" id="ingles">
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18"/></svg>O inglês &middot; as palavras que você já usa</h2>
+    <p style="color:var(--cinza);font-size:0.9rem;margin-bottom:var(--f3)">Isto não é um curso de idioma &mdash; é a mesma aula, dita também na língua em que ela nasceu. <b>Você já sabe mais do que pensa:</b> commit, push, deploy e ship você usa toda semana. Aqui elas ganham o som e uma frase de verdade, dessas que aparecem na sua tela. Uma palavra o recebe a cada visita, e as outras ficam logo abaixo, à mão.</p>
+    <h3 style="color:var(--dourado);font-size:0.95rem;margin:0 0 10px">A palavra desta visita</h3>
+    <div id="ingHoje" style="margin-bottom:var(--f3)"></div>
+    <h3 style="color:var(--dourado);font-size:0.95rem;margin:0 0 10px">O glossário vivo</h3>
+    <div id="ingLista" class="cards"></div>
+    <p style="font-family:'Lora',serif;font-style:italic;color:var(--cinza);text-align:center;margin-top:var(--f3);font-size:0.9rem">Ninguém aprende uma língua estudando-a &mdash; aprende usando-a em algo de que gosta.</p>
+  </div>
+
+  <!-- A GRADE -->
+  <div class="bloco" id="grade">
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12"/></svg>A grade &middot; o curso inteiro, aula por aula</h2>
+    <p style="color:var(--cinza);font-size:0.9rem;margin-bottom:var(--f2)">Sete módulos, do alicerce ao telhado. Cada módulo tem o seu <b>objetivo</b>, o seu <b>pré-requisito</b> e as suas aulas numeradas &mdash; as que já vivem no ar e as que já estão escritas na fila, esperando a sua vez. Marque a caixinha quando a prova estiver escrita no caderno: o curso guarda o seu caminho neste aparelho.</p>
+    <div id="gradeBarra" style="margin-bottom:var(--f3)"></div>
+    <div id="gradeLista"></div>
+    <p style="font-family:'Lora',serif;font-style:italic;color:var(--cinza);text-align:center;margin-top:var(--f3);font-size:0.9rem">Faculdade nenhuma se faz em uma noite &mdash; se faz em muitas noites seguidas, cada uma pequena.</p>
+  </div>
+
   <!-- A TRILHA -->
   <div class="bloco" id="trilha">
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M4 7l8-5 8 5M4 7v10l8 5 8-5V7"/></svg>A trilha &middot; as sete camadas</h2>
@@ -2012,8 +2054,9 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v5.3';
-const APP_VERSION_NOTA='a Camada 7 do Montgomery Code acende: o que é um agente de verdade — o laço de quatro passos (pensa, usa uma mão, vê o resultado, gira de novo), as três travas que impedem estrago (allowedTools como cadeado, maxTurns como teto, cwd como cerca), o que ele custa e por que o tamanho do arquivo é que encarece, e o Ronda, o primeiro agente do Montgomery, sessenta linhas em 01_Codigo/agentes que leem o ROADMAP e dizem o preço da corrida';
+const APP_VERSION='v5.5';
+const APP_VERSION_NOTA='o Montgomery Code deixa de ser aulas soltas e vira curso: o método de cinco passos que toda aula segue (a imagem, o conceito, o codigo real dos seus proprios sistemas, o passo seu e a prova escrita com as suas palavras) mais as quatro regras da casa, e a grade inteira aberta — sete modulos com objetivo e pre-requisito, trinta e cinco aulas numeradas dizendo quais estao acesas, quais ja estao na fila e quais foram plantadas, com caixinha por aula e a barra do quanto ja tem prova escrita, guardada neste aparelho';
+const APP_VERSION_NOTA_V53='a Camada 7 do Montgomery Code acende: o que é um agente de verdade — o laço de quatro passos (pensa, usa uma mão, vê o resultado, gira de novo), as três travas que impedem estrago (allowedTools como cadeado, maxTurns como teto, cwd como cerca), o que ele custa e por que o tamanho do arquivo é que encarece, e o Ronda, o primeiro agente do Montgomery, sessenta linhas em 01_Codigo/agentes que leem o ROADMAP e dizem o preço da corrida';
 const APP_VERSION_NOTA_V52='a Camada 2 do Montgomery Code aprende a escada da entrega: merge, push, deploy e ship em quatro degraus, o que cada palavra promete de verdade, por que o deploy acontece sozinho e por que ship nao e comando nenhum, as quatro maneiras de dizer "faz o merge e sobe" em ingles, e a aula viva do push das ervas do Brasil (f9b93d7..6846ce2) com o ultimo cuidado: subir e olhar';
 const APP_VERSION_NOTA_V51='a Camada 2 do Montgomery Code ganha o ramo e o encontro: o que são branch e merge ditos com a folha de rascunho do prontuário — o galho onde se erra à vontade sem que o site no ar se mexa, o merge como a transcrição para a evolução oficial, as duas maneiras de o encontro acontecer (fast-forward e conflito) e a leitura linha por linha do merge de hoje, o da senha Acender as Ervas';
 const APP_VERSION_NOTA_V50='os desenhos saem da caixinha: o Cubo de Metatron, os 5 sólidos, o átomo de carbono, o corpo vitruviano, a Árvore da Vida e a roda do zodíaco ganham um canto para tocar e tomar a tela inteira — fundo escuro, sem menu, sem barra lateral, só a imagem; Esc devolve. E o palco dos sólidos, se ninguém escolheu nada, já entra girando o tetraedro: tela cheia não fica parada esperando clique';
@@ -2065,7 +2108,12 @@ function go(sec,el){
   if(el)el.classList.add('active');
   else{const a=document.querySelector('nav a[data-sec="'+sec+'"]');if(a)a.classList.add('active');}
   if(window.innerWidth<=900)fecharSB();
+  // Cada entrada no Montgomery Code vira uma palavra nova em inglês. Gira por
+  // visita, não por relógio — o contato é constante sem nada ficar esperando.
   renderTudo();
+  // A palavra desta visita é a que ele está vendo agora; o passo fica guardado
+  // para a próxima vez que ele entrar.
+  if(sec==='code')ingAvancarVisita();
 }
 // ===== TELA CHEIA NOS DESENHOS =====
 // Os desenhos vivos do OS não são ilustração: são imagens de meditação. Um toque
@@ -5453,7 +5501,7 @@ function renderEsqueleto(){
 }
 
 // ===== RENDER GERAL =====
-function renderTudo(){renderPerfis();renderInicio();renderVitais();renderProtocolos();renderCrono();renderExames();renderNutricao();renderColuna();renderEsqueleto();renderArvoreSVG();renderArvoreTabela();renderMapa();renderMetafisica();renderNumerologia();renderAstrologia();renderVera();renderCode();}
+function renderTudo(){renderPerfis();renderInicio();renderVitais();renderProtocolos();renderCrono();renderExames();renderNutricao();renderColuna();renderEsqueleto();renderArvoreSVG();renderArvoreTabela();renderMapa();renderMetafisica();renderNumerologia();renderAstrologia();renderVera();renderCode();renderGrade();renderIngles();}
 
 // ===== MONTGOMERY CODE — o caderno vivo de aprendizagem =====
 // A trilha das sete camadas: cada cartão é uma porta.
@@ -5505,6 +5553,239 @@ function delNotaCode(id){
   gravar(K.code,ler(K.code).filter(n=>n.id!==id));
   renderCode();
 }
+// ===== A GRADE DO MONTGOMERY CODE =====
+// A ementa como dado, não como texto solto no HTML: aula nova entra aqui e a tela se refaz.
+// status: 'acesa' = a aula existe e pode ser lida agora | 'fila' = já escrita no ROADMAP,
+// esperando ser montada | 'plantada' = ainda por escrever. alvo/onde = para onde o link leva.
+const GRADE=[
+ {n:1,nome:'A Web',sub:'Fundação',objetivo:'Entender do que uma página é feita e por que o navegador obedece.',pre:'Nenhum — este é o chão.',
+  aulas:[
+   {id:'1.1',t:'O motor próprio',d:'Site estático × motor vivo: a vitrine e a cozinha. Por que a Anatomia nunca dá erro e a Clínica consome cota.',st:'acesa',onde:'escola'},
+   {id:'1.2',t:'Os três materiais da web',d:'HTML o osso, CSS a pele, JavaScript o músculo.',st:'acesa',onde:'escola',alvo:'aula-materiais'},
+   {id:'1.3',t:'A tag e a árvore do documento',d:'Por que tudo abre e fecha, e por que a página é uma árvore — o mesmo desenho da Árvore da Vida.',st:'plantada'},
+   {id:'1.4',t:'O seletor — como o CSS acha a coisa',d:'Classe, id e a cascata. Lido no CSS real do OS.',st:'plantada'},
+   {id:'1.5',t:'O evento e a função',d:'O que acontece entre o seu clique e a tela mudar. Lido num onclick do seu próprio sistema.',st:'plantada'},
+   {id:'1.6',t:'Ler o erro sem medo',d:'O console do navegador: onde o erro diz o arquivo, a linha e o motivo. A aula que tira a dependência.',st:'plantada'}]},
+ {n:2,nome:'Git & GitHub',sub:'A ferramenta do artesão',objetivo:'Guardar decisões, errar à vontade num galho e publicar sem susto.',pre:'Módulo 1 — saber o que é um arquivo de código.',
+  aulas:[
+   {id:'2.1',t:'O que o Git guarda',d:'Ele não guarda arquivos: guarda decisões. Commit, repositório, remote — lidos no seu próprio git log.',st:'acesa',onde:'code',alvo:'camada-2'},
+   {id:'2.2',t:'O ramo e o encontro',d:'Branch e merge ditos com a folha de rascunho do prontuário.',st:'acesa',onde:'code',alvo:'camada-2'},
+   {id:'2.3',t:'A escada da entrega',d:'Merge, push, deploy e ship — o que cada palavra promete de verdade.',st:'acesa',onde:'code',alvo:'camada-2'},
+   {id:'2.4',t:'Conflito não é erro',d:'É o Git se recusando a adivinhar. Ler as marcas cruas e traduzir cada uma.',st:'fila'},
+   {id:'2.5',t:'Trabalhar com o main sujo',d:'Commitar só o arquivo necessário. Por que git add -A no main já doeu.',st:'fila'},
+   {id:'2.6',t:'O peso invisível',d:'Os 291 MB que quase entraram no repositório, e a pergunta que virou hábito: quanto isso pesa?',st:'fila'},
+   {id:'2.7',t:'A receita, não os ingredientes',d:'Por que o git guarda o package.json e não as peças — e o npm install como ir ao mercado.',st:'fila'}]},
+ {n:3,nome:'Servidor & nuvem',sub:'A cozinha',objetivo:'Saber onde cada coisa roda e quem paga a conta de cada uma.',pre:'Módulo 1 — a diferença entre vitrine e motor.',
+  aulas:[
+   {id:'3.1',t:'Frente e fundos',d:'O que o navegador faz e o que só o servidor pode fazer.',st:'plantada'},
+   {id:'3.2',t:'O que é uma API',d:'A janelinha do pedido: você grita o pedido, a cozinha devolve o prato pronto.',st:'plantada'},
+   {id:'3.3',t:'Ligado 24 horas não é o que parece',d:'Sob demanda, por relógio e sempre ligado — e por que o Ronda não tem relógio.',st:'fila'},
+   {id:'3.4',t:'O endereço — domínio, DNS e HTTPS',d:'Como o nome vira máquina, e o que o cadeado da barra realmente promete.',st:'plantada'}]},
+ {n:4,nome:'Banco de dados',sub:'A gaveta',objetivo:'Guardar e buscar dado de gente real sem vazar e sem estourar cota.',pre:'Módulo 3 — entender que o dado mora fora do navegador.',
+  aulas:[
+   {id:'4.1',t:'Tabela, linha e coluna',d:'A gaveta, a ficha e o campo. Lido nas tabelas reais do seu Supabase.',st:'plantada'},
+   {id:'4.2',t:'A consulta — pedir só o que se vai usar',d:'select, filtro e limite. A diferença entre pedir a gaveta inteira e pedir uma ficha.',st:'plantada'},
+   {id:'4.3',t:'RLS — a regra que protege cada dado',d:'Por que a chave pública pode viver no navegador sem perigo quando o RLS está de pé.',st:'plantada'},
+   {id:'4.4',t:'Egress — o que realmente estourou a cota',d:'Não foi o tamanho guardado, foi o quanto se leu. A aula que nasceu do aperto de agosto.',st:'plantada'}]},
+ {n:5,nome:'Deploy',sub:'A publicação',objetivo:'Levar do seu computador ao mundo e conferir que chegou.',pre:'Módulo 2 — saber commitar e empurrar.',
+  aulas:[
+   {id:'5.1',t:'Do seu computador ao mundo',d:'Vercel e GitHub Pages: quem monta a página quando você empurra.',st:'plantada'},
+   {id:'5.2',t:'Subir e olhar',d:'A disciplina de conferir no site de verdade, nunca no arquivo local.',st:'plantada'},
+   {id:'5.3',t:'A versão no rodapé',d:'Por que toda entrega sobe um número, e por que ele mora numa constante só.',st:'plantada'}]},
+ {n:6,nome:'Segurança',sub:'O escudo',objetivo:'Proteger o que é de paciente — e saber o que nunca pode viver no navegador.',pre:'Módulo 4 — saber onde o dado mora.',
+  aulas:[
+   {id:'6.1',t:'Login e sessão',d:'Google OAuth: quem garante que é você, e por quanto tempo.',st:'plantada'},
+   {id:'6.2',t:'O que nunca vive no código do navegador',d:'Chave secreta × chave pública. Tudo que vai ao navegador é visível a quem quiser olhar.',st:'plantada'},
+   {id:'6.3',t:'Biometria — WebAuthn',d:'Por que a digital não viaja: o aparelho assina, o servidor só confere.',st:'plantada'},
+   {id:'6.4',t:'Credencial é do programa, não da pessoa',d:'Por que o SDK pediu login mesmo com você logado no Claude do dia a dia.',st:'fila'}]},
+ {n:7,nome:'APIs & IA',sub:'O telhado',objetivo:'Pôr inteligência dentro das suas ferramentas, com trava e com preço na mão.',pre:'Módulo 3 e Módulo 6 — a cozinha e o escudo.',
+  aulas:[
+   {id:'7.1',t:'O laço de quatro passos',d:'Pensa, usa uma mão, vê o resultado, gira de novo. Não tem mágica: é um while.',st:'acesa',onde:'code',alvo:'camada-7'},
+   {id:'7.2',t:'As três travas',d:'allowedTools o cadeado, maxTurns o teto, cwd a cerca.',st:'acesa',onde:'code',alvo:'camada-7'},
+   {id:'7.3',t:'Agente não é chat — a diferença das mãos',d:'Chat responde; agente vai lá e faz. A diferença não é inteligência, é ferramenta.',st:'fila'},
+   {id:'7.4',t:'Cada agente tem a própria janela',d:'Nasce em branco, vive vinte segundos e morre — e por isso não sabe de nada além do que está escrito.',st:'fila'},
+   {id:'7.5',t:'O preço mora no tamanho do que se abre',d:'US$ 0,1706 contra US$ 0,0508 na mesma tarefa. Agente caro costuma ser sintoma de pedido vago.',st:'fila'},
+   {id:'7.6',t:'Stand by, hibernar e continuar',d:'Programa parado não pensa. E retomar restaura, não aumenta.',st:'fila'},
+   {id:'7.7',t:'O arquivo que faz a conversa não começar do zero',d:'Memória pessoal fica na máquina; contexto do projeto viaja junto com o código.',st:'fila'}]}
+];
+const K_GRADE='mos_code_grade';
+function gradeFeitas(){try{return JSON.parse(localStorage.getItem(K_GRADE))||[]}catch(e){return[]}}
+function gradeMarcar(id){
+  const f=gradeFeitas();const i=f.indexOf(id);
+  if(i>=0)f.splice(i,1);else f.push(id);
+  localStorage.setItem(K_GRADE,JSON.stringify(f));
+  renderGrade();
+}
+const GRADE_ST={acesa:['Acesa','var(--verde)'],fila:['Na fila','var(--dourado)'],plantada:['Plantada','var(--cinza)']};
+function renderGrade(){
+  const lista=document.getElementById('gradeLista');if(!lista)return;
+  const feitas=gradeFeitas();
+  const todas=GRADE.reduce((s,m)=>s+m.aulas.length,0);
+  const acesas=GRADE.reduce((s,m)=>s+m.aulas.filter(a=>a.st==='acesa').length,0);
+  const feitasN=GRADE.reduce((s,m)=>s+m.aulas.filter(a=>feitas.indexOf(a.id)>=0).length,0);
+  const pct=todas?Math.round(feitasN/todas*100):0;
+  const barra=document.getElementById('gradeBarra');
+  if(barra)barra.innerHTML=
+    '<div style="display:flex;justify-content:space-between;align-items:baseline;font-size:0.8rem;color:var(--cinza);margin-bottom:6px">'+
+      '<span><b style="color:var(--azul);font-size:0.95rem">'+feitasN+'</b> de '+todas+' aulas com a prova escrita</span>'+
+      '<span>'+acesas+' acesas hoje &middot; '+pct+'%</span></div>'+
+    '<div style="height:7px;border-radius:4px;background:rgba(27,58,92,0.08);overflow:hidden">'+
+      '<div style="height:100%;width:'+pct+'%;background:var(--verde);border-radius:4px;transition:width .4s"></div></div>';
+  lista.innerHTML=GRADE.map(m=>{
+    const mFeitas=m.aulas.filter(a=>feitas.indexOf(a.id)>=0).length;
+    const completo=mFeitas===m.aulas.length;
+    return '<div style="border:1px solid '+(completo?'rgba(74,124,89,0.4)':'rgba(27,58,92,0.10)')+';border-radius:11px;padding:var(--f3);margin-bottom:var(--f2);'+(completo?'background:rgba(74,124,89,0.04)':'')+'">'+
+      '<div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">'+
+        '<span style="font-family:\'Lora\',serif;font-size:1.3rem;color:var(--dourado)">'+m.n+'</span>'+
+        '<b style="color:var(--azul);font-size:1.02rem">'+esc(m.nome)+'</b>'+
+        '<span style="font-size:0.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--cinza)">'+esc(m.sub)+'</span>'+
+        '<span style="margin-left:auto;font-size:0.75rem;color:'+(completo?'var(--verde)':'var(--cinza)')+'">'+mFeitas+'/'+m.aulas.length+'</span>'+
+      '</div>'+
+      '<p style="font-size:0.85rem;color:var(--texto);margin:8px 0 2px"><b style="color:var(--dourado)">Objetivo:</b> '+esc(m.objetivo)+'</p>'+
+      '<p style="font-size:0.8rem;color:var(--cinza);margin:0 0 10px"><b>Pré-requisito:</b> '+esc(m.pre)+'</p>'+
+      '<div style="display:grid;gap:6px">'+m.aulas.map(a=>{
+        const feita=feitas.indexOf(a.id)>=0, st=GRADE_ST[a.st];
+        return '<div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;border-radius:9px;background:'+(feita?'rgba(74,124,89,0.07)':'rgba(27,58,92,0.03)')+'">'+
+          '<input type="checkbox" '+(feita?'checked':'')+' onchange="gradeMarcar(\''+a.id+'\')" title="Marcar quando a prova estiver escrita no caderno" style="margin-top:3px;cursor:pointer">'+
+          '<div style="flex:1;min-width:0">'+
+            '<div style="font-size:0.88rem;color:var(--azul)"><span style="font-family:\'Courier New\',monospace;color:var(--dourado);margin-right:6px">'+a.id+'</span><b>'+esc(a.t)+'</b>'+
+              (a.st==='acesa'?' <a onclick="gradeIr(\''+(a.onde||'code')+'\',\''+(a.alvo||'')+'\')" style="color:var(--verde);cursor:pointer;font-size:0.76rem;margin-left:6px">abrir &rarr;</a>':'')+
+            '</div>'+
+            '<div style="font-size:0.8rem;color:var(--cinza);margin-top:2px">'+esc(a.d)+'</div>'+
+            // O inglês da aula aparece aqui, sem ele precisar procurar: é a
+            // camada, não uma aula à parte.
+            (ingDaAula(a.id).length
+              ? '<div style="font-size:0.76rem;color:var(--dourado);margin-top:4px">em inglês: '+
+                  ingDaAula(a.id).map(p=>'<span title="'+esc(p.som)+' &middot; '+esc(p.pt)+'" style="cursor:help;border-bottom:1px dotted rgba(198,160,74,0.6)">'+esc(p.en)+'</span>').join(' &middot; ')+
+                '</div>'
+              : '')+
+          '</div>'+
+          '<span style="font-size:0.66rem;letter-spacing:.07em;text-transform:uppercase;color:'+st[1]+';white-space:nowrap;margin-top:3px">'+st[0]+'</span>'+
+        '</div>';
+      }).join('')+'</div></div>';
+  }).join('');
+}
+/* ===== O INGLÊS COMO CAMADA DO CURSO =====
+   Decisão dele (01/08/2026): "unir dois conhecimentos em um só lugar."
+   Não existe aba de inglês, não existe curso de idioma. O inglês mora aqui
+   porque ele JÁ o encontra todo dia — commit, push, deploy não são vocabulário
+   de escola, são as palavras do trabalho dele.
+
+   O contato é constante porque não depende de ele decidir estudar:
+   1) uma palavra o recebe a cada visita ao Montgomery Code (gira sozinha, sem
+      relógio: conta visitas, não tempo);
+   2) cada aula da grade mostra as suas palavras em inglês, embaixo do nome;
+   3) o glossário inteiro fica aberto, com o som e uma frase real.
+   Nada de lista de vocabulário solta: toda palavra aqui aparece numa frase que
+   ele de fato lê ou ouve trabalhando.
+
+   O som usa a voz do próprio aparelho (speechSynthesis). Onde não houver voz em
+   inglês instalada, o botão diz isso em vez de fingir que falou. */
+const INGLES=[
+ {en:'commit',   som:'cã-MÍT',        aula:'2.1', pt:'guardar uma decisão no Git, com o motivo escrito junto',
+  frase:'Commit only the file you need.', tr:'Comite só o arquivo de que você precisa.'},
+ {en:'branch',   som:'brêntch',       aula:'2.2', pt:'galho — uma linha de trabalho à parte, onde se erra à vontade',
+  frase:'I opened a branch for this change.', tr:'Abri um galho para esta mudança.'},
+ {en:'merge',    som:'mârdj',         aula:'2.2', pt:'juntar o galho de volta ao tronco',
+  frase:'Merge the branch into main.', tr:'Junte o galho ao tronco principal.'},
+ {en:'push',     som:'púch',          aula:'2.3', pt:'empurrar o que está no seu computador para o GitHub',
+  frase:'Push it and the site builds itself.', tr:'Empurre, e o site se monta sozinho.'},
+ {en:'pull',     som:'púl',           aula:'2.3', pt:'puxar para o seu computador o que está lá fora',
+  frase:'Pull before you start working.', tr:'Puxe antes de começar a trabalhar.'},
+ {en:'deploy',   som:'di-PLÓI',       aula:'2.3', pt:'publicar de verdade — a Vercel montando a sua página',
+  frase:'The deploy takes about a minute.', tr:'A publicação leva perto de um minuto.'},
+ {en:'ship',     som:'chip',          aula:'2.3', pt:'entregar ao mundo; a palavra que diz "está no ar, use"',
+  frase:'We shipped version 7.7 today.', tr:'Entregamos a versão 7.7 hoje.'},
+ {en:'repository',som:'ri-PÓ-zi-tó-ri',aula:'2.1',pt:'o repositório — a casa do projeto inteiro, com toda a história',
+  frase:'The repository keeps every decision.', tr:'O repositório guarda cada decisão.'},
+ {en:'remote',   som:'ri-MÔUT',       aula:'2.1', pt:'a cópia que vive longe, no GitHub',
+  frase:'Check which remote you are pushing to.', tr:'Confira para qual remoto você está empurrando.'},
+ {en:'conflict', som:'CÃN-flict',     aula:'2.4', pt:'quando duas mãos mudaram a mesma linha e o Git se recusa a adivinhar',
+  frase:'A conflict is not an error.', tr:'Conflito não é erro.'},
+ {en:'build',    som:'bíld',          aula:'5.1', pt:'a montagem da página antes de ela ir ao ar',
+  frase:'The build failed — read the log.', tr:'A montagem falhou — leia o registro.'},
+ {en:'log',      som:'lóg',           aula:'1.6', pt:'o registro do que aconteceu, linha por linha',
+  frase:'The log says which line broke.', tr:'O registro diz qual linha quebrou.'},
+ {en:'error',    som:'É-ror',         aula:'1.6', pt:'o erro — e ele quase sempre diz o arquivo, a linha e o motivo',
+  frase:'Read the error before changing anything.', tr:'Leia o erro antes de mudar qualquer coisa.'},
+ {en:'console',  som:'cãn-SÔUL',      aula:'1.6', pt:'a janelinha do navegador onde o erro fala',
+  frase:'Open the console and look.', tr:'Abra o console e olhe.'},
+ {en:'server',   som:'SÂR-ver',       aula:'3.1', pt:'a máquina que fica ligada esperando pedidos — a cozinha',
+  frase:'Only the server can keep a secret.', tr:'Só o servidor consegue guardar um segredo.'},
+ {en:'request',  som:'ri-QUÉST',      aula:'3.2', pt:'o pedido que sai do navegador',
+  frase:'Every request costs something.', tr:'Todo pedido custa alguma coisa.'},
+ {en:'response', som:'ris-PÓNS',      aula:'3.2', pt:'a resposta que volta',
+  frase:'The response came back empty.', tr:'A resposta voltou vazia.'},
+ {en:'database', som:'DÊI-ta-bêis',   aula:'4.1', pt:'o banco de dados — a gaveta das fichas',
+  frase:'The database is not on your computer.', tr:'O banco de dados não está no seu computador.'},
+ {en:'query',    som:'QUÍ-ri',        aula:'4.2', pt:'a consulta — pedir só o que se vai usar',
+  frase:'Ask for one row, not the whole table.', tr:'Peça uma linha, não a tabela inteira.'},
+ {en:'row',      som:'rôu',           aula:'4.1', pt:'a linha da tabela; uma ficha',
+  frase:'One row for each item.', tr:'Uma linha para cada coisa.'},
+ {en:'key',      som:'kí',            aula:'6.2', pt:'a chave; e há a pública e a secreta',
+  frase:'A secret key never lives in the browser.', tr:'Chave secreta nunca vive no navegador.'},
+ {en:'token',    som:'TÔU-ken',       aula:'6.1', pt:'o crachá temporário que prova quem você é',
+  frase:'The token expires after one hour.', tr:'O crachá vence depois de uma hora.'},
+ {en:'login',    som:'LÓG-in',        aula:'6.1', pt:'a entrada — quem garante que é você',
+  frase:'Sign in with Google.', tr:'Entre com o Google.'},
+ {en:'backup',   som:'BÉK-âp',        aula:'5.2', pt:'a cópia guardada para quando algo der errado',
+  frase:'A backup nobody tested is a hope, not a backup.',
+  tr:'Backup que ninguém testou é esperança, não backup.'}
+];
+
+const K_ING='mos_ingles_visita';
+function ingPalavraDaVisita(){
+  // Gira por CONTAGEM DE VISITAS, não por relógio: nada aqui espera o tempo passar.
+  let n=0; try{n=parseInt(localStorage.getItem(K_ING)||'0',10)||0;}catch(e){}
+  return INGLES[n%INGLES.length];
+}
+function ingAvancarVisita(){
+  try{const n=(parseInt(localStorage.getItem(K_ING)||'0',10)||0)+1;localStorage.setItem(K_ING,String(n));}catch(e){}
+}
+function ingFalar(en,bt){
+  if(!('speechSynthesis' in window)){if(bt)bt.textContent='este aparelho não fala';return;}
+  const vozes=speechSynthesis.getVoices()||[];
+  const voz=vozes.find(v=>/^en/i.test(v.lang));
+  if(!voz&&vozes.length){if(bt)bt.textContent='sem voz em inglês aqui';return;}
+  const u=new SpeechSynthesisUtterance(en);
+  u.lang='en-US'; if(voz)u.voice=voz; u.rate=0.85;
+  speechSynthesis.cancel(); speechSynthesis.speak(u);
+}
+function ingCartao(p,destaque){
+  return '<div style="border:1px solid '+(destaque?'rgba(198,160,74,0.45)':'rgba(27,58,92,0.10)')+';border-radius:11px;padding:var(--f3);'+(destaque?'background:rgba(198,160,74,0.05)':'')+'">'+
+    '<div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap">'+
+      '<b style="font-family:\'Lora\',serif;font-size:1.35rem;color:var(--azul)">'+esc(p.en)+'</b>'+
+      '<span style="font-family:\'Courier New\',monospace;font-size:0.82rem;color:var(--dourado)">'+esc(p.som)+'</span>'+
+      '<button onclick="ingFalar(\''+esc(p.en)+'\',this)" style="margin-left:auto;background:none;border:1px solid rgba(27,58,92,0.18);border-radius:999px;padding:3px 12px;font-size:0.72rem;color:var(--cinza);cursor:pointer">ouvir</button>'+
+    '</div>'+
+    '<div style="font-size:0.86rem;color:var(--texto);margin-top:6px">'+esc(p.pt)+'</div>'+
+    '<div style="margin-top:9px;padding-left:10px;border-left:2px solid rgba(27,58,92,0.15)">'+
+      '<div style="font-size:0.88rem;color:var(--azul)">'+esc(p.frase)+'</div>'+
+      '<div style="font-size:0.78rem;color:var(--cinza);margin-top:2px">'+esc(p.tr)+'</div>'+
+    '</div>'+
+    '<div style="font-size:0.7rem;letter-spacing:.06em;text-transform:uppercase;color:var(--cinza);margin-top:9px">aula '+esc(p.aula)+'</div>'+
+  '</div>';
+}
+function renderIngles(){
+  const hoje=document.getElementById('ingHoje');
+  if(hoje)hoje.innerHTML=ingCartao(ingPalavraDaVisita(),true);
+  const lista=document.getElementById('ingLista');
+  if(lista)lista.innerHTML=INGLES.map(p=>ingCartao(p,false)).join('');
+}
+// As palavras de cada aula, para a grade mostrar sem que ele precise procurar.
+function ingDaAula(id){return INGLES.filter(p=>p.aula===id);}
+
+// A grade abre a aula onde ela mora — a Camada 1 vive na aba da Escola.
+function gradeIr(onde,alvo){
+  if(onde!=='code')go(onde);
+  if(!alvo){if(onde==='escola')return;return;}
+  setTimeout(()=>{
+    const el=document.getElementById(alvo);if(!el)return;
+    el.scrollIntoView({behavior:'smooth',block:'start'});
+    el.classList.remove('camada-alvo');void el.offsetWidth;el.classList.add('camada-alvo');
+  },60);
+}
+
 function renderCode(){
   const cont=document.getElementById('codeNotas');if(!cont)return;
   const notas=ler(K.code).slice().sort((a,b)=>(b.data||'').localeCompare(a.data||''));
