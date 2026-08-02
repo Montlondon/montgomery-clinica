@@ -9,6 +9,48 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — os anéis, o balão e o panorama (Clínica v8.6, 02/08/2026)
+
+**O que ele decidiu**, respondendo às três perguntas de 02/08: *"Pode. O anel mostra de forma que
+ele seja mostrado com um clique, vejo o balão e vice-versa ele encolhe. Ou se achar melhor a marca
+que desenha melhor a peneira, ou um ou outro, ou os dois mesmo. Então ponha o dado em volta da
+pessoa."* E mais um pedido: *"um botão visualizar DNA da Família e imprimir em formato JPG
+panorama e em formato organograma whimsical."*
+
+**São os dois, porque fazem trabalhos diferentes:**
+
+- **O anel é a marca.** Arcos coloridos em volta da cabeça, escolhidos de uma lista de nove.
+  Não precisa ser lido: de longe já se vê que naquela casa corre coração, ou rim. As cores são
+  os **5 Elementos** — assim a família conversa sozinha com a roda do Diagnóstico. As quatro
+  que não são elemento (mente, tumor, dependência, partiu cedo) têm cor própria e não fingem ser.
+  Os arcos se distribuem **por arco e não por ângulo**: uma marca ou nove, cada uma ocupa o
+  mesmo tanto de volta.
+- **O balão é a palavra.** Um clique abre ao lado da figura, outro encolhe — exatamente como ele
+  descreveu. Ali cabe a frase dela, do jeito que foi contada.
+- **A peneira agora lê as marcas também**, não só as palavras: o anel é dado.
+
+**O panorama.** Botão **Visualizar o DNA**: abre tudo de uma vez em tela cheia. Mas *não* com
+vinte balões flutuando — vinte balões se cobrem uns aos outros e o desenho vira ruído. O que
+pesa desce para um painel embaixo da árvore, **"O QUE PESA NESTA CASA"**, em duas colunas, na
+ordem das gerações — que é a ordem em que a herança corre. O painel entra na impressão e no JPG.
+
+**JPG panorama.** O SVG vira imagem de verdade pelo canvas. Testado com vinte pessoas:
+2036 × 1412 px, **157 KB** — grande o bastante para ler, leve o bastante para mandar por WhatsApp.
+
+**Whimsical — o que dá e o que não dá.** A Clínica **não consegue** criar o quadro no Whimsical
+sozinha: isso pediria uma conta e uma chave de acesso dela lá dentro, que não existe. O que
+funciona, e está feito: o botão **Whimsical** copia a árvore no formato de indentação que o
+Whimsical entende; lá, num mapa mental, colar monta o organograma inteiro de uma vez. Sai
+encaixado por geração, com casal na mesma linha (`Venicio — pai · Coração e vasos + Hélia — mãe`)
+e os filhos indentados abaixo.
+
+**O sentido, que é o que não pode se perder** (dito por ele): o anel não fecha diagnóstico. É para
+mostrar a desarmonia que corre na casa e **conscientizar o paciente de que ele não precisa ficar
+preso a diagnósticos** — se buscar o caminho de volta, na luz, corrige qualquer desarmonia. Se
+mudar. A ferramenta mostra e nunca decide.
+
+---
+
 ## Concluído — o dedo sem querer: voltar e travar (Clínica v8.5, 02/08/2026)
 
 **A ressalva dele:** *"Adicione uma função voltar, quando sem querer passo o dedo no celular e

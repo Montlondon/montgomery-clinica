@@ -1370,6 +1370,9 @@ window.addEventListener('DOMContentLoaded',()=>{
       <span class="fam-nota" id="famConta"></span>
       <button type="button" class="btn btn-sec btn-sm" style="margin-left:auto" id="famBtnVoltar" onclick="famVoltar()" title="Desfaz o último gesto no desenho"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></span> Voltar</button>
       <button type="button" class="btn btn-sec btn-sm" id="famBtnTrava" onclick="famTravar()"></button>
+      <button type="button" class="btn btn-sec btn-sm" id="famBtnVer" onclick="famVisualizar()"></button>
+      <button type="button" class="btn btn-sec btn-sm" onclick="famBaixarJPG()" title="Salva o desenho como imagem panorama, para mandar ou guardar"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4-4m4 4 4-4"/><path d="M4 17v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2"/></svg></span> JPG</button>
+      <button type="button" class="btn btn-sec btn-sm" onclick="famCopiarWhimsical()" title="Copia a árvore no formato que o Whimsical entende — lá é só colar num mapa mental"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M15 9V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h3"/></svg></span> Whimsical</button>
       <button type="button" class="btn btn-sec btn-sm" id="famBtnPen" onclick="famPeneirar()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4 2v-8Z"/></svg></span> O que a família reconhece</button>
     </div>
     <div id="famPeneira"></div>
@@ -2120,7 +2123,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v8.5 · 02/08';
+const APP_VER='v8.6 · 02/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -8631,6 +8634,7 @@ let _famRascGuardado=null;  // o desenho por salvar que perdeu do salvo, à espe
 const FAM_PASSOS_MAX=25;
 let _famPassos=[];          // as versões anteriores do desenho, a mais nova por último
 let _famTravado=(localStorage.getItem('fam_travado')==='1');
+let _famBaloesTodos=false;  // o panorama: todos os balões abertos de uma vez
 // Guarda o desenho como está ANTES de um gesto que muda alguma coisa.
 function famGuardarPasso(){
   _famPassos.push(JSON.stringify(famDados()));
@@ -8643,6 +8647,103 @@ function famVoltar(){
   _famSel=null;_diagJaSalvo=false;
   famGarantirEu();famNormalizarOrdem();famGuardarRascunho();famRender();
   toast('Voltou um passo.','#1565C0',"info");
+}
+/* ===== VISUALIZAR O DNA — o desenho inteiro, com tudo aberto =====
+   No dia a dia o balão abre um de cada vez, senão a tela vira ruído. Mas há a
+   hora de OLHAR a família toda junta: aí todos os balões abrem, o desenho vai
+   para a tela cheia, e o que corre naquela casa aparece de uma vez. */
+function famVisualizar(){
+  if(!_famPessoas.length){toast('Não há ninguém desenhado ainda.','#EF6C00',"warn");return;}
+  _famBaloesTodos=!_famBaloesTodos;
+  _famSel=null;
+  famRender();
+  const palco=document.getElementById('famPalco');
+  const cheio=palco&&(palco.classList.contains('fam-cheio')||document.fullscreenElement===palco);
+  const bt=document.querySelector('#famPalco .fam-tc');
+  if(bt&&_famBaloesTodos&&!cheio)famTelaCheia(bt);
+  else if(bt&&!_famBaloesTodos&&cheio)famSairCheia(palco);
+  if(_famBaloesTodos)toast('Panorama aberto: todos os balões à vista. Clique de novo para encolher.','#1565C0',"info");
+}
+// O desenho vira imagem de verdade — JPG panorama, largo, que abre em qualquer
+// aparelho e vai por WhatsApp. O caminho é o mesmo de sempre: o SVG desenhado
+// dentro de uma tela (canvas), e a tela virando arquivo.
+function famBaixarJPG(){
+  const svgEl=document.getElementById('famSvg');
+  if(!svgEl){toast('Não há desenho para salvar.','#EF6C00',"warn");return;}
+  const vb=(svgEl.getAttribute('viewBox')||'').split(/\s+/).map(Number);
+  const larg=vb[2]||FAM_LARG, alt=vb[3]||400;
+  const escala=Math.min(3,Math.max(2,1800/larg));   // grande o bastante para ler, leve o bastante para mandar
+  const copia=svgEl.cloneNode(true);
+  copia.setAttribute('width',larg);copia.setAttribute('height',alt);
+  copia.setAttribute('style','');
+  copia.setAttribute('xmlns','http://www.w3.org/2000/svg');
+  // O fundo creme entra como retângulo: JPG não tem transparência, e sem isso
+  // o desenho sai sobre preto.
+  copia.insertAdjacentHTML('afterbegin',`<rect x="0" y="0" width="${larg}" height="${alt}" fill="#FFFDF7"/>`);
+  const txt=new XMLSerializer().serializeToString(copia);
+  const img=new Image();
+  img.onload=()=>{
+    const cv=document.createElement('canvas');
+    cv.width=Math.round(larg*escala);cv.height=Math.round(alt*escala);
+    const cx=cv.getContext('2d');
+    cx.fillStyle='#FFFDF7';cx.fillRect(0,0,cv.width,cv.height);
+    cx.drawImage(img,0,0,cv.width,cv.height);
+    const nome='DNA-da-Familia-'+semAcento(String((_diagPacSel&&_diagPacSel.nome)||'paciente')).replace(/[^A-Za-z0-9]+/g,'-')+'.jpg';
+    const a=document.createElement('a');
+    a.href=cv.toDataURL('image/jpeg',0.92);
+    a.download=nome;
+    a.click();
+    toast('JPG salvo: '+nome,null,"ok");
+  };
+  img.onerror=()=>toast('Não deu para virar imagem neste navegador.','#c62828',"erro");
+  img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(txt);
+}
+/* O organograma no Whimsical. Transparência: a Clínica NÃO consegue criar o
+   quadro no Whimsical sozinha — isso pediria uma conta e uma chave de acesso
+   dela lá dentro, que não existe. O que dá para fazer, e funciona, é preparar
+   o texto no formato que o Whimsical entende e pôr na área de transferência:
+   lá, num mapa mental, "colar" monta a árvore inteira de uma vez. */
+function famCopiarWhimsical(){
+  if(!_famPessoas.length){toast('Não há ninguém desenhado ainda.','#EF6C00',"warn");return;}
+  famConsertarVinculos();
+  const nomeDe=p=>famNomeDe(p);
+  const detalhe=p=>{
+    const ms=famMarcasDe(p).map(m=>m.rot);
+    const t=[p.papel,ms.join(', '),String(p.obs||'').trim()].filter(Boolean);
+    return t.length?' — '+t.join(' · '):'';
+  };
+  const filhosDe=p=>_famPessoas.filter(f=>String(f.de||'')===String(p.id))
+    .sort((a,b)=>(a.ger-b.ger)||(a.ord-b.ord));
+  const linhas=[];
+  const escrever=(p,nivel,vistos)=>{
+    if(vistos.has(String(p.id)))return;
+    vistos.add(String(p.id));
+    const par=p.par?famPorId(p.par):null;
+    const cab=nomeDe(p)+detalhe(p)+(par?'  +  '+nomeDe(par)+detalhe(par):'');
+    linhas.push('  '.repeat(nivel)+'- '+cab);
+    if(par)vistos.add(String(par.id));
+    const fs=filhosDe(p).concat(par?filhosDe(par):[]);
+    const jaFoi=new Set();
+    fs.forEach(f=>{if(jaFoi.has(String(f.id)))return;jaFoi.add(String(f.id));escrever(f,nivel+1,vistos);});
+  };
+  const vistos=new Set();
+  // Começa por quem não tem pai apontado — o topo de cada ramo.
+  _famPessoas.slice().sort((a,b)=>(a.ger-b.ger)||(a.ord-b.ord))
+    .forEach(p=>{if(!p.de)escrever(p,1,vistos);});
+  _famPessoas.forEach(p=>escrever(p,1,vistos));   // quem sobrou, órfão de ramo
+  const txt='DNA da Família — '+((_diagPacSel&&_diagPacSel.nome)||'')+'\n'+linhas.join('\n');
+  const feito=()=>toast('Copiado. No Whimsical, abra um mapa mental (mind map) e cole — a árvore monta sozinha.',null,"ok");
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).then(feito,()=>famCopiarNaMao(txt));
+  }else famCopiarNaMao(txt);
+}
+function famCopiarNaMao(txt){
+  const ta=document.createElement('textarea');
+  ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');toast('Copiado. No Whimsical, abra um mapa mental e cole.',null,"ok");}
+  catch(e){toast('Não deu para copiar sozinho neste navegador.','#c62828',"erro");}
+  document.body.removeChild(ta);
 }
 function famTravar(){
   _famTravado=!_famTravado;
@@ -8705,7 +8806,8 @@ function famGarantirEu(){
 function famDados(){
   return _famPessoas.map(p=>({id:p.id,nome:p.nome||'',papel:p.papel||'',sexo:p.sexo||'n',
     ger:p.ger,ord:p.ord,morto:!!p.morto,obs:p.obs||'',eu:!!p.eu,
-    de:p.de||'',deCasal:!!p.deCasal,par:p.par||'',esperado:!!p.esperado}));
+    de:p.de||'',deCasal:!!p.deCasal,par:p.par||'',esperado:!!p.esperado,
+    marcas:Array.isArray(p.marcas)?p.marcas.slice():[]}));
 }
 function famChaveRasc(){return _diagPacSel?FAM_RASC+_diagPacSel.id:null;}
 // O rascunho agora sai daqui com a HORA em que foi escrito. Sem essa hora não
@@ -8750,7 +8852,7 @@ function famQuando(ms){
 // Primeiro o rascunho local (o que ele estava desenhando agora), depois o que
 // ficou guardado na última avaliação que tinha família.
 function famCarregar(){
-  _famPessoas=[];_famSel=null;_famPenAberta=false;_famRascGuardado=null;_famPassos=[];
+  _famPessoas=[];_famSel=null;_famPenAberta=false;_famRascGuardado=null;_famPassos=[];_famBaloesTodos=false;
   const rasc=famLerRascunho();
   const salvo=_diagPacSel?diagMaisRecente(gD('diagnosticos')
     .filter(d=>String(d.pacienteId)===String(_diagPacSel.id)&&Array.isArray(d.familia)&&d.familia.length)):null;
@@ -8799,7 +8901,7 @@ function famVoltarRascunho(){
 function famLimpar(){
   const c=famChaveRasc();
   if(c)localStorage.removeItem(c);
-  _famPessoas=[];_famSel=null;_famPenAberta=false;_famAchados=[];_famRascGuardado=null;_famPassos=[];
+  _famPessoas=[];_famSel=null;_famPenAberta=false;_famAchados=[];_famRascGuardado=null;_famPassos=[];_famBaloesTodos=false;
   famRender();
 }
 
@@ -8992,6 +9094,7 @@ function famFiguraSVG(p){
   return `<g class="fam-fig" data-fam="${p.id}">
     ${sel?`<rect x="${(x-FAM_PASSO/2+4).toFixed(1)}" y="${y-9}" width="${FAM_PASSO-8}" height="${FAM_H+34}" rx="9" fill="var(--pri-l)" stroke="var(--pri)" stroke-width="1"/>`:''}
     <g fill="none" stroke="${cor}" stroke-width="${esp}" stroke-linecap="round" stroke-linejoin="round"${p.esperado?' stroke-dasharray="3 3" opacity=".75"':''}>${d}</g>
+    ${famAnelSVG(p,x,y+FAM_R)}
     ${p.eu?`<path d="M${(x-FAM_BR*1.5).toFixed(1)} ${pe+5} L${(x+FAM_BR*1.5).toFixed(1)} ${pe+5}" stroke="var(--gold,#C9A84C)" stroke-width="2" stroke-linecap="round"/>`:''}
     <text x="${x}" y="${pe+17}" text-anchor="middle" font-size="10.5" font-weight="${p.eu?'700':'600'}" fill="#2B2924">${escHtml(nome)}</text>
     <text x="${x}" y="${pe+28}" text-anchor="middle" font-size="9.5" fill="#8A8578">${escHtml(papel)}</text>
@@ -9018,7 +9121,7 @@ function famDesenhar(){
    ficava para trás. Uma função só monta o SVG; a tela e a folha bebem dela. */
 function famMontarSvg(){
   famGarantirEu();famConsertarVinculos();famCalcularPos();
-  const alt=famAltura(), larg=_famLarg;
+  const alt=famAltura()+(_famBaloesTodos?famPainelAltura():0), larg=_famLarg;
   let svg=`<svg class="fam-tela" viewBox="0 0 ${larg} ${alt}" preserveAspectRatio="xMidYMid meet" id="famSvg" style="max-width:${larg}px;height:auto;aspect-ratio:${larg}/${alt};margin:0 auto">`;
   // As fileiras: o rótulo à esquerda e a linha fina da geração — a barra de
   // irmandade só cobre quem NÃO tem pai apontado; quem tem ganha o próprio fio.
@@ -9080,6 +9183,13 @@ function famMontarSvg(){
     });
   }
   _famPessoas.forEach(p=>{svg+=famFiguraSVG(p);});
+  // O balão de um clique vai por ÚLTIMO, para ficar por cima de todo mundo.
+  const aberta=famPorId(_famSel);
+  if(aberta&&!_famBaloesTodos)svg+=famBalaoSVG(aberta,larg,famAltura());
+  // No panorama não há balão flutuante: vinte balões soltos se cobrem uns aos
+  // outros e o desenho vira ruído. O que pesa em cada um desce para um painel
+  // embaixo da árvore — que nunca colide, imprime bem e entra no JPG.
+  if(_famBaloesTodos)svg+=famPainelSVG(larg,famAltura()+6);
   svg+='</svg>';
   return {svg:svg,temTri:temTri};
 }
@@ -9088,15 +9198,16 @@ function famMontarSvg(){
 // guardada num encontro antigo. Empresta o desenho por um instante e devolve
 // tudo como estava: nada do papel pode mexer no que está na tela.
 function famSvgDe(lista){
-  const guardaP=_famPessoas, guardaS=_famSel, guardaL=_famLarg;
+  const guardaP=_famPessoas, guardaS=_famSel, guardaL=_famLarg, guardaB=_famBaloesTodos;
   try{
     _famPessoas=JSON.parse(JSON.stringify(lista||[]));
     _famSel=null;                               // no papel ninguém está selecionado
+    _famBaloesTodos=true;                       // no papel, tudo aberto: ninguém clica numa folha
     // A prancheta é larga e a folha é estreita: o desenho encolhe para caber
     // inteiro, sem cortar ninguém (o viewBox cuida da proporção).
     return famMontarSvg().svg.replace('height:auto','height:auto;width:100%');
   }catch(e){return '';}
-  finally{_famPessoas=guardaP;_famSel=guardaS;_famLarg=guardaL;}
+  finally{_famPessoas=guardaP;_famSel=guardaS;_famLarg=guardaL;_famBaloesTodos=guardaB;}
 }
 
 // Arrastar: a fileira em que a figura for solta vira a geração dela, e a
@@ -9167,6 +9278,173 @@ function famRenderAdd(){
 }
 
 const FAM_SEXOS=[{k:'f',rot:'Figura de saia'},{k:'m',rot:'Figura de pernas'},{k:'n',rot:'Figura neutra'}];
+
+/* ===== O ANEL E O BALÃO — o que pesa em volta da pessoa =====
+   Ele pediu duas coisas e disse "ou uma, ou outra, ou as duas mesmo". São as
+   duas, porque fazem trabalhos diferentes:
+
+   O ANEL é a MARCA: arcos coloridos em volta da cabeça, escolhidos de uma
+   lista curta. Não precisa ser lido — de longe já se vê que naquela casa corre
+   coração, ou rim. É o que a peneira consegue reconhecer, e é o que deixa a
+   herança aparecer de uma vez, com o paciente olhando junto.
+
+   O BALÃO é a PALAVRA: um clique abre, outro clique encolhe. Ali cabe a frase
+   dele — "morreu de aneurisma, já teve derrame" — do jeito que a pessoa contou.
+   A marca desenha; o texto explica. Nenhuma das duas fecha diagnóstico.
+
+   As cores são os 5 Elementos, os mesmos do resto da Clínica: assim o desenho
+   da família conversa sozinho com a roda do Diagnóstico. As quatro últimas não
+   são elemento e não fingem ser — têm cor própria, mais apagada. */
+const FAM_MARCAS=[
+  {k:'fogo', rot:'Coração e vasos', cor:'#C0392B', ex:'pressão, infarto, AVC, aneurisma'},
+  {k:'agua', rot:'Rim e ossos',     cor:'#2C5F8A', ex:'renal, bexiga, coluna, audição'},
+  {k:'madeira',rot:'Fígado e vista',cor:'#4A7A3A', ex:'fígado, vesícula, raiva, vista'},
+  {k:'metal',rot:'Pulmão e pele',   cor:'#7C8A93', ex:'respiratório, pele, intestino grosso'},
+  {k:'terra',rot:'Digestivo',       cor:'#B08A3E', ex:'estômago, pâncreas, diabetes, peso'},
+  {k:'mente',rot:'Mente e emoção',  cor:'#6E5AA0', ex:'depressão, ansiedade, luto que não passou'},
+  {k:'tumor',rot:'Tumor',           cor:'#7B3F5E', ex:'câncer, de qualquer lugar'},
+  {k:'vicio',rot:'Dependência',     cor:'#A0522D', ex:'álcool, remédio, outra substância'},
+  {k:'cedo', rot:'Partiu cedo',     cor:'#5A5A5A', ex:'a morte que chegou antes da hora'}
+];
+const famMarcaDe=k=>FAM_MARCAS.find(m=>m.k===k)||null;
+const famMarcasDe=p=>(Array.isArray(p&&p.marcas)?p.marcas:[]).map(famMarcaDe).filter(Boolean);
+function famMarcar(id,k){
+  const p=famPorId(id);
+  if(!p)return;
+  famGuardarPasso();
+  const atual=Array.isArray(p.marcas)?p.marcas.slice():[];
+  const i=atual.indexOf(k);
+  if(i>=0)atual.splice(i,1);else atual.push(k);
+  p.marcas=atual;
+  _diagJaSalvo=false;
+  famGuardarRascunho();famRender();
+}
+// O anel: um arco por marca, em volta da cabeça. Distribuídos POR ARCO e não
+// por ângulo — cada marca ocupa o mesmo tanto de volta, com um vão igual entre
+// elas, seja uma marca ou nove. O anel abre no alto e corre no sentido do
+// relógio, para que a primeira marca escolhida caia sempre no mesmo lugar.
+function famAnelSVG(p,x,yCabeca){
+  const ms=famMarcasDe(p);
+  if(!ms.length)return'';
+  const R=FAM_R+3.6, vao=ms.length>1?10:0, fatia=360/ms.length-vao;
+  const arco=(a0,a1)=>{
+    const r0=(a0-90)*Math.PI/180, r1=(a1-90)*Math.PI/180;
+    const gr=(a1-a0)>180?1:0;
+    return `M${(x+R*Math.cos(r0)).toFixed(2)} ${(yCabeca+R*Math.sin(r0)).toFixed(2)}`
+         + ` A${R.toFixed(2)} ${R.toFixed(2)} 0 ${gr} 1 ${(x+R*Math.cos(r1)).toFixed(2)} ${(yCabeca+R*Math.sin(r1)).toFixed(2)}`;
+  };
+  return ms.map((m,i)=>{
+    const a0=i*(360/ms.length)+vao/2, a1=a0+fatia;
+    // Uma marca sozinha vira anel inteiro: o arco de 360 graus não se desenha,
+    // então nesse caso é um círculo mesmo.
+    if(ms.length===1)return `<circle cx="${x}" cy="${yCabeca}" r="${R.toFixed(2)}" fill="none" stroke="${m.cor}" stroke-width="2.1" opacity=".92"/>`;
+    return `<path d="${arco(a0,a1)}" fill="none" stroke="${m.cor}" stroke-width="2.1" stroke-linecap="round" opacity=".92"/>`;
+  }).join('');
+}
+// Quebra um texto em linhas de no máximo n letras, sem cortar palavra no meio.
+function famQuebrar(txt,n){
+  const linhas=[];let atual='';
+  String(txt||'').split(/\s+/).filter(Boolean).forEach(w=>{
+    if(!atual)atual=w;
+    else if((atual+' '+w).length<=n)atual+=' '+w;
+    else{linhas.push(atual);atual=w;}
+  });
+  if(atual)linhas.push(atual);
+  return linhas;
+}
+// O balão: as marcas por extenso e a frase dela, ao lado da figura. Só abre
+// para quem está com alguma coisa escrita — balão vazio é ar gasto na tela.
+function famBalaoSVG(p,larg,altTela){
+  const ms=famMarcasDe(p);
+  const obs=String(p.obs||'').trim();
+  if(!ms.length&&!obs)return'';
+  const linhasObs=obs?famQuebrar(obs,30):[];
+  const alt=12+ms.length*13+(linhasObs.length?6+linhasObs.length*12:0);
+  const L=176, x=famX(p), y=famY(p.ger);
+  // Nasce à direita; se não couber na prancheta, vira para a esquerda.
+  let bx=x+FAM_BR*1.6+8;
+  if(bx+L>larg-6)bx=x-FAM_BR*1.6-8-L;
+  if(bx<4)bx=4;
+  // E sobe se estourar o pé da prancheta — balão cortado não conta nada.
+  let by=y-6;
+  if(altTela&&by+alt>altTela-4)by=Math.max(4,altTela-4-alt);
+  let d=`<g class="fam-balao" style="pointer-events:none">
+    <path d="M${x} ${(y+FAM_R).toFixed(1)} L${bx<x?bx+L:bx} ${(by+14).toFixed(1)}" stroke="#D9CFB8" stroke-width="1" fill="none"/>
+    <rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${L}" height="${alt}" rx="8" fill="#FFFDF7" stroke="#D9CFB8" stroke-width="1"/>`;
+  let ty=by+15;
+  ms.forEach(m=>{
+    d+=`<circle cx="${(bx+11).toFixed(1)}" cy="${(ty-3.5).toFixed(1)}" r="3.6" fill="none" stroke="${m.cor}" stroke-width="2"/>`;
+    d+=`<text x="${(bx+20).toFixed(1)}" y="${ty.toFixed(1)}" font-size="9.5" font-weight="600" fill="${m.cor}">${escHtml(m.rot)}</text>`;
+    ty+=13;
+  });
+  if(linhasObs.length){
+    ty+=4;
+    linhasObs.forEach(l=>{d+=`<text x="${(bx+11).toFixed(1)}" y="${ty.toFixed(1)}" font-size="9" fill="#6B6357">${escHtml(l)}</text>`;ty+=12;});
+  }
+  return d+'</g>';
+}
+/* O PAINEL DO PANORAMA — o que pesa na casa, pessoa por pessoa, embaixo da
+   árvore. Duas colunas, na ordem das gerações: quem veio antes primeiro, que é
+   a ordem em que a herança corre. */
+function famPainelGente(){
+  return _famPessoas
+    .filter(p=>famMarcasDe(p).length||String(p.obs||'').trim())
+    .sort((a,b)=>(a.ger-b.ger)||(a.ord-b.ord));
+}
+function famPainelLinhas(p,colLarg){
+  const ms=famMarcasDe(p);
+  const obs=String(p.obs||'').trim();
+  const cab=famNomeDe(p)+(p.papel?' · '+p.papel:'');
+  const n=Math.max(16,Math.floor((colLarg-24)/5.1));   // quantas letras cabem na coluna
+  return {cab:famCurto(cab,Math.floor(n*1.05)),marcas:ms,obs:obs?famQuebrar(obs,n):[]};
+}
+function famPainelMedidas(){
+  const gente=famPainelGente();
+  const cols=(_famLarg>=760&&gente.length>3)?2:1;
+  const pad=14, vao=16;
+  const colLarg=(_famLarg-pad*2-(cols-1)*vao)/cols;
+  const altDe=p=>{const l=famPainelLinhas(p,colLarg);return 14+l.marcas.length*12+l.obs.length*11+8;};
+  return {gente,cols,pad,vao,colLarg,altDe};
+}
+function famPainelAltura(){
+  const m=famPainelMedidas();
+  if(!m.gente.length)return 0;
+  // A coluna mais alta manda: as pessoas caem em fatias iguais entre as colunas.
+  const porCol=Math.ceil(m.gente.length/m.cols);
+  let maior=0;
+  for(let c=0;c<m.cols;c++){
+    let h=0;
+    m.gente.slice(c*porCol,(c+1)*porCol).forEach(p=>{h+=m.altDe(p);});
+    maior=Math.max(maior,h);
+  }
+  return 34+maior+10;
+}
+function famPainelSVG(larg,y0){
+  const m=famPainelMedidas();
+  if(!m.gente.length)return'';
+  const porCol=Math.ceil(m.gente.length/m.cols);
+  let d=`<g class="fam-painel">
+    <path d="M${m.pad} ${y0} L${larg-m.pad} ${y0}" stroke="#E4DCCB" stroke-width="1"/>
+    <text x="${m.pad}" y="${y0+18}" font-size="10" font-weight="700" fill="#B9AF98" letter-spacing="0.5">O QUE PESA NESTA CASA</text>`;
+  for(let c=0;c<m.cols;c++){
+    const x=m.pad+c*(m.colLarg+m.vao);
+    let y=y0+34;
+    m.gente.slice(c*porCol,(c+1)*porCol).forEach(p=>{
+      const l=famPainelLinhas(p,m.colLarg);
+      d+=`<text x="${x}" y="${(y+8).toFixed(1)}" font-size="10" font-weight="700" fill="#2B2924">${escHtml(l.cab)}</text>`;
+      let ty=y+8;
+      l.marcas.forEach(mk=>{
+        ty+=12;
+        d+=`<circle cx="${(x+4).toFixed(1)}" cy="${(ty-3.4).toFixed(1)}" r="3.4" fill="none" stroke="${mk.cor}" stroke-width="2"/>`;
+        d+=`<text x="${(x+13).toFixed(1)}" y="${ty.toFixed(1)}" font-size="9.5" font-weight="600" fill="${mk.cor}">${escHtml(mk.rot)}</text>`;
+      });
+      l.obs.forEach(li=>{ty+=11;d+=`<text x="${(x+4).toFixed(1)}" y="${ty.toFixed(1)}" font-size="9" fill="#6B6357">${escHtml(li)}</text>`;});
+      y+=m.altDe(p);
+    });
+  }
+  return d+'</g>';
+}
+
 // Quem pode ser pai desta figura: a fileira de cima. Quem pode ser par: a
 // mesma fileira. Fora disso o desenho mentiria.
 const famNomeDe=o=>o.nome||(o.eu&&_diagPacSel?_diagPacSel.nome:'')||'sem nome';
@@ -9254,6 +9532,17 @@ function famRenderEditor(){
       </select></div>
     </div>
     <div class="fr full"><div class="fg"><label>Uma linha sobre essa pessoa</label><input type="text" value="${escHtml(p.obs||'')}" oninput="famCampo('${p.id}','obs',this.value)" placeholder="o que ela disse dessa pessoa — a peneira também lê daqui"></div></div>
+    <div style="margin-top:9px">
+      <label style="display:block;font-size:11px;font-weight:600;color:var(--txt-l);margin-bottom:5px">O que pesa nessa pessoa — vira anel em volta da cabeça</label>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        ${FAM_MARCAS.map(m=>{
+          const on=(p.marcas||[]).indexOf(m.k)>=0;
+          return `<button type="button" class="folha-ch${on?' on':''}" onclick="famMarcar('${p.id}','${m.k}')" title="${escHtml(m.ex)}" style="${on?`border-color:${m.cor};color:${m.cor}`:''}">
+            <span style="display:inline-block;width:7px;height:7px;border-radius:50%;border:2px solid ${m.cor};margin-right:5px;vertical-align:middle"></span>${escHtml(m.rot)}</button>`;
+        }).join('')}
+      </div>
+      <div class="fam-nota" style="margin-top:5px">A marca desenha e a peneira lê; a linha acima explica com as palavras dela. Nenhuma das duas fecha diagnóstico.</div>
+    </div>
     <div class="fam-add" style="padding:9px 0 0">
       <button type="button" onclick="famBrotar('${p.id}','par')" title="Nasce ao lado, já ligado a esta pessoa">+ Par de ${escHtml(famCurto(p.nome||(p.eu&&_diagPacSel?_diagPacSel.nome:'')||'quem está aberto',14))}</button>
       ${FAM_GERACOES.some(x=>x.g===p.ger+1)?`<button type="button" onclick="famBrotar('${p.id}','filho')" title="Nasce na fileira de baixo, já como filho(a) desta pessoa">+ Filho(a) desta pessoa</button>`:''}
@@ -9295,6 +9584,15 @@ function famRenderPe(){
     bt.style.borderColor=_famTravado?'var(--pri)':'';
     bt.style.background=_famTravado?'var(--pri-l)':'';
   }
+  const bver=document.getElementById('famBtnVer');
+  if(bver){
+    bver.innerHTML=`<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.6"/></svg></span> ${_famBaloesTodos?'Encolher os balões':'Visualizar o DNA'}`;
+    bver.title=_famBaloesTodos
+      ? 'Fecha os balões e volta ao desenho do dia a dia.'
+      : 'Abre todos os balões de uma vez, em tela cheia — a família toda à vista.';
+    bver.style.borderColor=_famBaloesTodos?'var(--pri)':'';
+    bver.style.background=_famBaloesTodos?'var(--pri-l)':'';
+  }
 }
 function famRender(){
   famRenderPe();famRenderAviso();famRenderAdd();famDesenhar();famRenderEditor();famContar();renderFamPeneira();
@@ -9325,7 +9623,9 @@ function famEscCheia(e){if(e.key==='Escape')document.querySelectorAll('.fam-palc
    o triângulo desenhado (que abre a estante do Édipo) e as palavras escritas
    nos papéis e nas linhas de cada figura. Cada achado mostra a procedência. */
 function famTexto(){
-  return _famPessoas.map(p=>[p.papel,p.obs].filter(Boolean).join(' ')).join(' . ');
+  // As marcas entram junto: o anel é dado, e a peneira lê dado — não só palavra.
+  return _famPessoas.map(p=>[p.papel,p.obs,famMarcasDe(p).map(m=>m.rot+' '+m.ex).join(' ')]
+    .filter(Boolean).join(' ')).join(' . ');
 }
 function famTemTriangulo(){
   if(!_famPessoas.some(p=>p.eu))return false;
