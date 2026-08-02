@@ -13,7 +13,8 @@ A planta da tela do Diagnóstico mora em [`00_Nucleo/TELA_UNICA.md`](00_Nucleo/T
 - **Prateleira** — falta ele escrever as primeiras linhas de "Onde comprar" (bloco abaixo).
 - **Nunca o relógio decide** — senha aberta, MMObras.
 - **Montgomery Code** — seguir montando as aulas da grade; matéria-prima acumulada abaixo.
-- **Ideias vivas** — Vitruviano como lugar único, as três portas de 01/08, Ortomolecular,
+- **Ideias vivas** — os anéis do DNA da Família (02/08), Vitruviano como lugar único,
+  as três portas de 01/08, Ortomolecular,
   terceira aba de Suplementos, o botão do que deu certo, as ideias da Maly.
 - **Em planejamento / Pendências** — as duas listas antigas, mais abaixo, ainda valem.
 
@@ -131,6 +132,44 @@ O protótipo do desenho continua guardado em `Claude_Main_Clean` e no commit `aa
 apagado; só parou de puxar trabalho.
 
 </details>
+
+---
+
+## Ideia viva — os anéis do DNA da Família (02/08/2026)
+
+*Dita por ele depois da v8.5, sem pedido de execução. O nome ainda não está achado: ele mesmo
+disse "anéis, ou balões, não sei que nome eu dou para esta ideia". Fica registrada com as
+palavras dele, porque o nome certo costuma vir depois da imagem.*
+
+> *"Futuramente quero que haja anéis, ou balões, não sei que nome eu dou para esta ideia, de forma
+> que eu posso escrever alguns dados sobre esta pessoa. Ex. Meu pai Venicio morreu de aneurisma,
+> já teve derrame cerebral. Mãe Hélia renal crônica. Isto facilitaria para dar um atendimento
+> global ao paciente e conscientizá-lo que não precisa ficar preso em diagnósticos, e que se ele
+> buscar o caminho de volta na árvore buscando a luz ele corrige qualquer desarmonia se ele
+> mudar, óbvio."*
+
+**O que já existe e serve de chão:** cada figura já tem `obs` — a linha escrita dela. O que falta
+não é o dado, é a **visita**: hoje só se lê o que está escrito abrindo a figura, uma por vez.
+
+**O que a ideia pede, em uma frase:** que o que pesa numa pessoa da família **apareça em volta
+dela no desenho**, sem abrir nada — para que a herança seja vista de uma vez, com o paciente
+olhando junto.
+
+**Perguntas a fazer a ele antes de construir (não decidir sozinho):**
+
+- O anel mostra **o que está escrito** (texto solto) ou **marcas escolhidas** de uma lista
+  (cardiovascular, renal, metabólico, emocional…)? Marca escolhida desenha melhor e peneira;
+  texto solto respeita a fala de quem conta. Talvez os dois: a marca desenha, o texto explica.
+- O anel fica **sempre visível** ou só quando se pede? Vinte figuras com anel cheio viram ruído.
+- A cor do anel deve falar **elemento** (os 5 Elementos, que ele já usa em tudo) ou **sistema**?
+  Se for elemento, o desenho da família passa a conversar sozinho com a roda do Diagnóstico.
+
+**O sentido, que é o que não pode se perder:** o anel não é para fechar diagnóstico nem para dizer
+"você vai ter isto também". É para **mostrar a desarmonia que corre na casa** e abrir a conversa
+do caminho de volta. Vale o cuidado da tese: a ferramenta **mostra e nunca decide**.
+
+**Cuidado guardado:** isto é dado de saúde de gente que **não é paciente** — pai, mãe, irmãos.
+Fica dentro da ficha da pessoa atendida, e é para o atendimento dela.
 
 ---
 

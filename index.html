@@ -267,6 +267,8 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .fam-tela{display:block;width:100%;touch-action:none;user-select:none;border-top:1px solid #EFE7D6;background:#FFFDF7}
 .fam-fig{cursor:grab}
 .fam-fig.puxando{cursor:grabbing;opacity:.85}
+/* Travado: a mão deixa de ser a de puxar. O toque continua abrindo a figura. */
+.fam-travado .fam-fig{cursor:pointer}
 .fam-vazio{padding:14px 12px;font-size:12px;color:var(--txt-l);line-height:1.6;border-top:1px solid #EFE7D6}
 .fam-ed{padding:10px 12px 12px;border-top:1px solid #EFE7D6;background:var(--beige)}
 .fam-ed .fr{margin-bottom:0}
@@ -1366,7 +1368,9 @@ window.addEventListener('DOMContentLoaded',()=>{
     </div>
     <div class="fam-pe">
       <span class="fam-nota" id="famConta"></span>
-      <button type="button" class="btn btn-sec btn-sm" style="margin-left:auto" id="famBtnPen" onclick="famPeneirar()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4 2v-8Z"/></svg></span> O que a família reconhece</button>
+      <button type="button" class="btn btn-sec btn-sm" style="margin-left:auto" id="famBtnVoltar" onclick="famVoltar()" title="Desfaz o último gesto no desenho"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></span> Voltar</button>
+      <button type="button" class="btn btn-sec btn-sm" id="famBtnTrava" onclick="famTravar()"></button>
+      <button type="button" class="btn btn-sec btn-sm" id="famBtnPen" onclick="famPeneirar()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4 2v-8Z"/></svg></span> O que a família reconhece</button>
     </div>
     <div id="famPeneira"></div>
   </div>
@@ -2116,7 +2120,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v8.4 · 02/08';
+const APP_VER='v8.5 · 02/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -8620,6 +8624,34 @@ let _famSel=null;        // id da figura aberta no editor
 let _famPenAberta=false;
 let _famAchados=[];
 let _famRascGuardado=null;  // o desenho por salvar que perdeu do salvo, à espera
+// O DEDO SEM QUERER. Arrastar é bom e fica. Mas um roçar de dedo no celular
+// bagunçava a árvore sem volta, ainda mais com o paciente olhando junto. Duas
+// respostas: um caminho de volta (os passos guardados) e uma tranca para as
+// horas em que a tela é para MOSTRAR, não para mexer.
+const FAM_PASSOS_MAX=25;
+let _famPassos=[];          // as versões anteriores do desenho, a mais nova por último
+let _famTravado=(localStorage.getItem('fam_travado')==='1');
+// Guarda o desenho como está ANTES de um gesto que muda alguma coisa.
+function famGuardarPasso(){
+  _famPassos.push(JSON.stringify(famDados()));
+  if(_famPassos.length>FAM_PASSOS_MAX)_famPassos.shift();
+}
+function famVoltar(){
+  const s=_famPassos.pop();
+  if(!s){toast('Não há passo para desfazer.','#EF6C00',"warn");return;}
+  _famPessoas=JSON.parse(s);
+  _famSel=null;_diagJaSalvo=false;
+  famGarantirEu();famNormalizarOrdem();famGuardarRascunho();famRender();
+  toast('Voltou um passo.','#1565C0',"info");
+}
+function famTravar(){
+  _famTravado=!_famTravado;
+  localStorage.setItem('fam_travado',_famTravado?'1':'0');
+  famRender();
+  toast(_famTravado
+    ? 'Figuras travadas: pode mostrar sem medo. Toque ainda abre para ler.'
+    : 'Figuras soltas: já dá para arrastar de novo.','#1565C0',"info");
+}
 
 const famLinha=g=>_famPessoas.filter(p=>p.ger===g).sort((a,b)=>a.ord-b.ord);
 const famPorId=id=>_famPessoas.find(p=>String(p.id)===String(id))||null;
@@ -8718,7 +8750,7 @@ function famQuando(ms){
 // Primeiro o rascunho local (o que ele estava desenhando agora), depois o que
 // ficou guardado na última avaliação que tinha família.
 function famCarregar(){
-  _famPessoas=[];_famSel=null;_famPenAberta=false;_famRascGuardado=null;
+  _famPessoas=[];_famSel=null;_famPenAberta=false;_famRascGuardado=null;_famPassos=[];
   const rasc=famLerRascunho();
   const salvo=_diagPacSel?diagMaisRecente(gD('diagnosticos')
     .filter(d=>String(d.pacienteId)===String(_diagPacSel.id)&&Array.isArray(d.familia)&&d.familia.length)):null;
@@ -8767,7 +8799,7 @@ function famVoltarRascunho(){
 function famLimpar(){
   const c=famChaveRasc();
   if(c)localStorage.removeItem(c);
-  _famPessoas=[];_famSel=null;_famPenAberta=false;_famAchados=[];_famRascGuardado=null;
+  _famPessoas=[];_famSel=null;_famPenAberta=false;_famAchados=[];_famRascGuardado=null;_famPassos=[];
   famRender();
 }
 
@@ -8779,6 +8811,7 @@ function famAdicionar(g){
   // é o gesto mais comum: abrir a mãe e pôr o filho embaixo.
   const aberta=famPorId(_famSel);
   if(aberta&&aberta.ger===g-1){p.de=aberta.id;p.papel='';}
+  famGuardarPasso();
   _famPessoas.push(p);
   _famSel=p.id;
   _diagJaSalvo=false;
@@ -8787,6 +8820,7 @@ function famAdicionar(g){
 function famTirar(id){
   const p=famPorId(id);
   if(!p||p.eu)return;
+  famGuardarPasso();
   _famPessoas=_famPessoas.filter(x=>String(x.id)!==String(id));
   // Quem ficou não pode continuar apontando para quem saiu do desenho.
   _famPessoas.forEach(x=>{
@@ -9076,6 +9110,11 @@ function famLigarArrasto(){
       const p=famPorId(g.dataset.fam);
       if(!p)return;
       ev.preventDefault();
+      // Travado, o toque continua abrindo a figura para ler e escrever — o que
+      // não acontece mais é a figura sair do lugar por um roçar de dedo.
+      if(_famTravado){
+        _famSel=String(_famSel)===String(p.id)?null:p.id;famRender();return;
+      }
       const esc=svg.getBoundingClientRect().width/_famLarg;
       const x0=ev.clientX, y0=ev.clientY;
       let dx=0,dy=0,moveu=false;
@@ -9107,6 +9146,7 @@ function famLigarArrasto(){
         const outros=famLinha(alvo).filter(o=>String(o.id)!==String(p.id));
         const xsOutros=outros.map(o=>famX(o));
         const pos=xsOutros.filter(x=>x<xFinal).length;
+        famGuardarPasso();   // o desenho de antes deste arrasto, para o caso de ter sido sem querer
         p.ger=alvo;
         outros.forEach((o,i)=>{o.ord=i;});
         p.ord=pos-0.5;
@@ -9233,8 +9273,31 @@ function famContar(){
   const n=_famPessoas.filter(p=>!p.eu).length;
   el.textContent=n?(n===1?'1 pessoa desenhada':n+' pessoas desenhadas')+' — salvas junto com a avaliação':(_diagPacSel?'Só ela por enquanto.':'');
 }
+// Os dois botões do pé: o caminho de volta e a tranca. Cinza quando não há
+// passo para desfazer; a tranca diz o que ela É agora, não o que ela faria.
+function famRenderPe(){
+  const palco=document.getElementById('famPalco');
+  if(palco)palco.classList.toggle('fam-travado',_famTravado);
+  const bv=document.getElementById('famBtnVoltar');
+  if(bv){
+    bv.disabled=!_famPassos.length;
+    bv.style.opacity=_famPassos.length?'1':'.45';
+  }
+  const bt=document.getElementById('famBtnTrava');
+  if(bt){
+    const cad=_famTravado
+      ? '<path d="M7 11V8a5 5 0 0 1 10 0v3"/><rect x="4.5" y="11" width="15" height="9.5" rx="2"/>'
+      : '<path d="M8 11V7.5a4.5 4.5 0 0 1 8.7-1.6"/><rect x="4.5" y="11" width="15" height="9.5" rx="2"/>';
+    bt.innerHTML=`<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${cad}</svg></span> ${_famTravado?'Travadas':'Travar'}`;
+    bt.title=_famTravado
+      ? 'As figuras estão travadas: o toque abre, mas ninguém sai do lugar. Clique para soltar.'
+      : 'Trava as figuras para mostrar ao paciente sem mover nada sem querer.';
+    bt.style.borderColor=_famTravado?'var(--pri)':'';
+    bt.style.background=_famTravado?'var(--pri-l)':'';
+  }
+}
 function famRender(){
-  famRenderAviso();famRenderAdd();famDesenhar();famRenderEditor();famContar();renderFamPeneira();
+  famRenderPe();famRenderAviso();famRenderAdd();famDesenhar();famRenderEditor();famContar();renderFamPeneira();
   renderDiagPainel();   // desenhar alguém já basta para o Salvar aparecer
 }
 

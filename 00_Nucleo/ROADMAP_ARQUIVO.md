@@ -9,6 +9,32 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — o dedo sem querer: voltar e travar (Clínica v8.5, 02/08/2026)
+
+**A ressalva dele:** *"Adicione uma função voltar, quando sem querer passo o dedo no celular e
+movo um dos bonequinhos, bagunça a árvore. Gosto da opção mover bonequinho, mantenha. E outro
+botão bloquear bonequinho, para evitar que sem querer eu mova quando estou mostrando a pessoa."*
+
+Duas respostas para o mesmo roçar de dedo — e **arrastar continua existindo**, ele pediu que
+ficasse.
+
+- **Voltar.** Guarda até 25 versões do desenho, uma antes de cada gesto que muda alguma coisa
+  (arrastar, adicionar, tirar). O botão fica cinza quando não há passo a desfazer. Os passos
+  zeram ao trocar de pessoa: cada família tem a própria memória curta.
+- **Travar.** Botão no pé do bloco, com cadeado fechado/aberto. Travado, nenhuma figura sai do
+  lugar — mas o **toque continua abrindo** a figura para ler e escrever, que é justamente o que
+  se faz mostrando ao paciente. A tranca é lembrada no aparelho (`fam_travado`): quem trava no
+  celular acha travado da próxima vez.
+
+**Provado na tela:** simulado um arrasto sem querer (a mãe foi parar na fileira dos netos), o
+Voltar devolveu a árvore idêntica ao que era; a tranca alterna o cadeado, o rótulo e a mão do
+cursor.
+
+**A ideia que ficou para depois:** os anéis/balões com o que pesa em cada pessoa da família —
+registrada inteira, com as palavras dele, no `ROADMAP.md`.
+
+---
+
 ## Concluído — o rascunho que não envelhecia, e o DNA da Família (Clínica v8.4, 02/08/2026)
 
 **A queixa dele:** duas telas do mesmo Diagnóstico, lado a lado — no celular, vinte pessoas,
