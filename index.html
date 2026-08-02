@@ -2114,7 +2114,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v7.8 · 01/08';
+const APP_VER='v7.9 · 02/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -6225,7 +6225,7 @@ const CX_DIAG=[
 // Os três campos da Memória da sessão, na ordem em que aparecem na caixa
 const MEM_CAMPOS=['diagSessaoFeito','diagSessaoReacao','diagSessaoProx'];
 const vMem=id=>{const e=document.getElementById(id);return e?e.value.trim():'';};
-function memSessaoMudou(){_diagJaSalvo=false;atualizarResumoCaixas();}
+function memSessaoMudou(){_diagJaSalvo=false;atualizarResumoCaixas();renderDiagPainel();}
 function limparMemSessao(){MEM_CAMPOS.forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});}
 function preencherMemSessao(diag){
   const e1=document.getElementById('diagSessaoFeito'),e2=document.getElementById('diagSessaoReacao'),e3=document.getElementById('diagSessaoProx');
@@ -7597,7 +7597,14 @@ function montarTabelaBalance(nomeElemento){
 function renderDiagPainel(){
   const painel=document.getElementById('diagPainel');
   const resumoBox=document.getElementById('diagResumoBox');
-  const temAlgo=pulsoChaves().length||_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length||(_diagSelecoes.auriculo||[]).length||(_diagSelecoes.bagua||[]).length||(_diagSelecoes.psicanalise||[]).length||(_diagSelecoes.elementoSintomas||[]).length||(_diagSelecoes.pontoSintomas||[]).length||(_diagSelecoes.quiro||[]).length;
+  // Um encontro pode ter sido só de conversa: a folha escrita, a família
+  // desenhada, a memória da sessão. Isso TAMBÉM é avaliação — e enquanto não
+  // contava aqui, a caixa do Resumo ficava fechada e o botão Salvar nem
+  // aparecia. O que foi digitado no celular morria naquele aparelho.
+  const temFolha=folhaTexto().trim().length>0;
+  const temFamilia=_famPessoas.some(p=>!p.eu);
+  const temMemoria=MEM_CAMPOS.some(id=>{const e=document.getElementById(id);return e&&e.value.trim();});
+  const temAlgo=temFolha||temFamilia||temMemoria||pulsoChaves().length||_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length||(_diagSelecoes.auriculo||[]).length||(_diagSelecoes.bagua||[]).length||(_diagSelecoes.psicanalise||[]).length||(_diagSelecoes.elementoSintomas||[]).length||(_diagSelecoes.pontoSintomas||[]).length||(_diagSelecoes.quiro||[]).length;
   atualizarResumoCaixas();   // os títulos das caixas fechadas contam o que mudou
   if(!temAlgo){
     // Avaliação limpa: as caixas também esvaziam, senão sobra resto de antes
@@ -8259,6 +8266,7 @@ function folhaMudou(){
   folhaContar();
   folhaGuardarRascunho();
   if(_folhaPenAberta)renderFolhaPeneira();
+  renderDiagPainel();   // escrever já basta: o Resumo abre e o Salvar aparece
 }
 
 function folhaContar(){
@@ -9023,6 +9031,7 @@ function famContar(){
 }
 function famRender(){
   famRenderAdd();famDesenhar();famRenderEditor();famContar();renderFamPeneira();
+  renderDiagPainel();   // desenhar alguém já basta para o Salvar aparecer
 }
 
 /* TELA CHEIA — a mesma receita dos desenhos do OS (.tcPalco lá, .fam-palco

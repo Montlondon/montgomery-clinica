@@ -9,6 +9,34 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — o botão que não aparecia (Clínica v7.9, 02/08/2026)
+
+**Achado usando de verdade.** Ele digitou no celular e não encontrou o mesmo texto no computador.
+Não era sincronismo quebrado: era **botão escondido**.
+
+O que se descobriu, lendo:
+
+1. **O que você desenha e escreve fica num rascunho local até salvar.** A folha limpa e as pessoas
+   dela moram no armário do próprio navegador (`localStorage`, `folhaGuardarRascunho` e
+   `famGuardarRascunho`). Só o clique em **Salvar Avaliação** manda o encontro inteiro — com a
+   família dentro — para o servidor. Não existe sincronismo contínuo: é uma **foto tirada no clique**.
+2. **A caixa "Resumo da Avaliação" — onde o botão Salvar mora — só abria se houvesse escolha
+   clínica** (pulso, elemento, ponto, ABC, suplemento, aurículo, Baguá, psicanálise, vértebra).
+   A família **não contava**. A folha **não contava**. A memória da sessão **não contava**.
+
+Logo: um encontro que foi **só de conversa e de bonecos** não tinha botão de salvar na tela.
+O que foi escrito no celular morria naquele aparelho.
+
+**A correção (uma vela):** `renderDiagPainel()` agora conta também a folha escrita, a família com
+alguém além dela mesma, e os três campos da memória da sessão. E os três caminhos passaram a
+chamar o painel na hora — `folhaMudou()`, `famRender()` e `memSessaoMudou()`: escrever uma palavra
+ou desenhar uma figura **já faz o Salvar aparecer**.
+
+Conferido na tela, não de memória: folha com texto abre o Resumo e fecha ao apagar; família só com
+"ela mesma" não abre (mesma regra do rascunho), com a mãe desenhada abre; memória da sessão abre.
+
+---
+
 ## Concluído — a aula 2.6, o peso invisível (OS v5.9, 01/08/2026)
 
 **Terceira vela da senha "Montar a aula".** A **2.6 — o peso invisível** montada pelos cinco passos
