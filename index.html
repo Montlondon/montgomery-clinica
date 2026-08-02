@@ -325,6 +325,22 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .cp-aj{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:5px 7px;border-radius:6px;font-size:12px;line-height:1.55}
 .cp-palco:fullscreen,.cp-palco.fam-cheio{background:var(--cream);display:flex;align-items:center;justify-content:center}
 .cp-palco:fullscreen .cp-tela,.cp-palco.fam-cheio .cp-tela{height:94vh!important}
+.cp-mostrar{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--brd);background:#FDFAF6;color:var(--pri-d);
+  border-radius:999px;padding:4px 12px;font:inherit;font-size:11.5px;font-weight:600;cursor:pointer}
+.cp-mostrar:hover{border-color:var(--gold,#C9A84C)}
+.cp-mostrar svg{width:14px;height:14px}
+/* MOSTRAR AO PACIENTE — a tela do outro leitor. Nada de botão de marcar aqui:
+   quem olha é a pessoa, e ela só precisa reconhecer o próprio corpo. */
+.cpp{position:fixed;inset:0;z-index:9000;background:var(--cream,#FBF7EF);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px}
+.cpp-tela{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center}
+.cpp-svg{height:100%;max-height:78vh;width:auto;max-width:96vw}
+.cpp-vt{cursor:pointer}
+.cpp-legenda{flex:0 0 auto;max-width:760px;text-align:center;min-height:64px}
+.cpp-nivel{font-family:Georgia,serif;font-size:26px;font-weight:700;color:#1E3A5F;display:flex;gap:10px;align-items:baseline;justify-content:center}
+.cpp-nivel span{font-family:inherit;font-size:13px;font-weight:400;color:var(--txt-l)}
+.cpp-txt{font-size:16px;line-height:1.6;color:var(--ink,#2B2B2B);margin-top:6px}
+.cpp-sair{position:absolute;top:14px;right:16px;border:1px solid var(--brd);background:#FFF;color:var(--pri-d);border-radius:999px;padding:6px 16px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
+@media(max-width:640px){.cpp-svg{max-height:70vh}.cpp-nivel{font-size:21px}.cpp-txt{font-size:14.5px}}
 /* O INTERRUPTOR DE TRÊS POSIÇÕES — a peça reaproveitável.
    Nasce sem posição escolhida (ninguém decide por ele) e cada toque grava.
    Tocar de novo na posição acesa desliga: sai a clique como entrou a clique. */
@@ -1369,6 +1385,10 @@ window.addEventListener('DOMContentLoaded',()=>{
       O corpo — a coluna, de costas
       <span style="font-weight:400;font-size:11.5px;color:var(--txt-l)">— toque na vértebra: ela abre o que aquele nível inerva e o que se ajusta ali</span>
       <span id="corpoConta" style="margin-left:auto;font-weight:400;font-size:11.5px;color:var(--txt-l)"></span>
+      <button type="button" class="cp-mostrar" onclick="cpPacienteAbrir()" title="Corpo grande e limpo, para virar a tela para o paciente (Esc volta)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.5"/></svg>
+        Mostrar ao paciente
+      </button>
     </div>
     <div class="cp-linha">
       <div class="fam-palco cp-palco" id="corpoPalco">
@@ -2094,7 +2114,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v7.6 · 01/08';
+const APP_VER='v7.7 · 01/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -7225,6 +7245,136 @@ function cpSvgPapel(quiroSel,altura){
     ${ossos}${marcas}
   </svg>`;
 }
+
+/* ===== MOSTRAR AO PACIENTE =====
+   O desenho tem dois leitores, e eles pedem coisas opostas. A tela de trabalho
+   foi feita para ELE: alvo fácil, vértebra pequena, painel do lado. Esta aqui
+   é para o PACIENTE: corpo grande, nada de botão, e só o que ele precisa
+   reconhecer — o próprio corpo e onde foi mexido hoje.
+
+   Não compete com a coluninha de plástico no que ela faz melhor (girar na mão
+   e ser apontada com o dedo). Faz o que o plástico não faz: mostra o nome do
+   nível e o que ele inerva, na hora, na frente da pessoa.
+
+   Mais anatômico, mas nada traçado no olho: as costelas saem de cada torácica
+   e param na largura real do corpo naquela altura (interpolada do CP_PERFIL),
+   as escápulas ocupam T2-T7 e as asas do ilíaco nascem no sacro. Mesmo cânone
+   da tela e do papel — CP, CP_PERFIL e cpVertebras(). */
+
+// Meia-largura do corpo naquela altura, lida do próprio perfil (não é chute:
+// é o mesmo contorno que já desenha o corpo, interpolado entre dois pontos).
+function cpLarg(f){
+  const P=CP_PERFIL.slice(0,9); // o lado direito, que desce do ombro ao pé
+  if(f<=P[0][1])return P[0][0];
+  for(let i=0;i<P.length-1;i++){
+    const [w0,y0]=P[i], [w1,y1]=P[i+1];
+    if(f<=y1)return w0+(w1-w0)*((f-y0)/(y1-y0||1));
+  }
+  return P[P.length-1][0];
+}
+
+let _cpPacSel=null; // vértebra tocada durante a conversa com o paciente
+
+function cpPacienteSvg(){
+  const marcadas=new Set((_diagSelecoes.quiro||[]).filter(q=>q.grupo==='Coluna').map(q=>q.art));
+  const dir=CP_PERFIL.map(([w,y])=>[cpX(w),cpY(y)]);
+  const esq=CP_PERFIL.slice().reverse().map(([w,y])=>[cpX(-w),cpY(y)]);
+  const contorno=cpSuave(dir.concat(esq),true);
+  const braco=lado=>cpSuave([[0.122,0.238],[0.150,0.398],[0.150,0.548],[0.140,0.626]].map(([w,y])=>[cpX(lado*w),cpY(y)]),false);
+  const vts=cpVertebras();
+
+  // As costelas: uma por torácica, de cada lado. Sai da borda da vértebra,
+  // desce e para pouco antes do contorno — que é onde a costela para de verdade.
+  const costelas=vts.filter(v=>v.reg==='Torácica').map((v,i,arr)=>{
+    const t=i/(arr.length-1), lat=cpLarg(v.y)*(0.90-0.16*t), queda=0.018+0.026*t;
+    return [1,-1].map(s=>`<path d="M${cpX(s*v.w*0.5).toFixed(1)},${cpY(v.y).toFixed(1)} Q${cpX(s*lat*0.80).toFixed(1)},${cpY(v.y-0.004).toFixed(1)} ${cpX(s*lat).toFixed(1)},${cpY(v.y+queda).toFixed(1)}"/>`).join('');
+  }).join('');
+
+  // As escápulas ocupam de T2 a T7, como no corpo real.
+  const escapula=s=>cpSuave([[0.030,0.247],[0.108,0.252],[0.118,0.290],[0.052,0.318]].map(([w,y])=>[cpX(s*w),cpY(y)]),true);
+  // As asas do ilíaco nascem na altura do sacro e abrem para fora.
+  const iliaco=s=>cpSuave([[0.020,0.443],[0.088,0.452],[0.096,0.482],[0.036,0.492]].map(([w,y])=>[cpX(s*w),cpY(y)]),true);
+
+  const ossos=vts.map(v=>{
+    const on=marcadas.has(v.id), sel=_cpPacSel===v.id;
+    const x=cpX(-v.w/2), y=cpY(v.y-v.h/2), w=v.w*CP.H, h=v.h*CP.H;
+    const fill=on?'#1E3A5F':'#FFFFFF', st=sel?'#C9A84C':(on?'#12243B':'#BDB6A7'), sw=sel?2.4:(on?1.5:1.1);
+    const forma=v.tri
+      ? `<path d="M${x.toFixed(1)},${y.toFixed(1)} L${(x+w).toFixed(1)},${y.toFixed(1)} L${(x+w*0.5).toFixed(1)},${(y+h).toFixed(1)} Z" fill="${fill}" stroke="${st}" stroke-width="${sw}" stroke-linejoin="round"/>`
+      : `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" rx="${(h*0.34).toFixed(1)}" fill="${fill}" stroke="${st}" stroke-width="${sw}"/>`;
+    return `<g class="cpp-vt" onclick="cpPacTocar('${v.id}')">
+      <rect x="${(CP.CX-CP.H*0.075).toFixed(1)}" y="${(y-1.5).toFixed(1)}" width="${(CP.H*0.15).toFixed(1)}" height="${(h+3).toFixed(1)}" fill="transparent"/>
+      ${forma}</g>`;
+  }).join('');
+
+  // As etiquetas dos níveis ajustados hoje, com o mesmo empurrão calculado do
+  // papel: quando duas ficam perto demais, a de baixo desce o mínimo que cabe.
+  const GAP=30; let ultima=-1e9;
+  const marcas=vts.filter(v=>marcadas.has(v.id)).map(v=>{
+    const y=Math.max(cpY(v.y),ultima+GAP); ultima=y;
+    return `<path d="M${cpX(v.w/2+0.006).toFixed(1)},${cpY(v.y).toFixed(1)} L${(CP.CX+92).toFixed(1)},${y.toFixed(1)} L${(CP.CX+100).toFixed(1)},${y.toFixed(1)}" fill="none" stroke="#1E3A5F" stroke-width="1.1"/>
+      <text x="${(CP.CX+106).toFixed(1)}" y="${(y+8).toFixed(1)}" font-family="Georgia,serif" font-size="24" fill="#1E3A5F">${escHtml(v.id)}</text>`;
+  }).join('');
+
+  return `<svg class="cpp-svg" viewBox="0 0 ${CP.CX+170} ${CP.ALT}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Coluna vertebral, visão de costas, para mostrar ao paciente">
+    <g fill="none" stroke="#B6AF9F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="${contorno}"/>
+      <ellipse cx="${CP.CX}" cy="${cpY(0.0625).toFixed(1)}" rx="${(0.0355*CP.H).toFixed(1)}" ry="${(0.0625*CP.H).toFixed(1)}"/>
+      <path d="${braco(1)}"/><path d="${braco(-1)}"/>
+      <path d="M${cpX(-0.026).toFixed(1)},${cpY(0.105).toFixed(1)} L${cpX(-0.043).toFixed(1)},${cpY(0.152).toFixed(1)}"/>
+      <path d="M${cpX(0.026).toFixed(1)},${cpY(0.105).toFixed(1)} L${cpX(0.043).toFixed(1)},${cpY(0.152).toFixed(1)}"/>
+    </g>
+    <g fill="none" stroke="#D6CFBF" stroke-width="1.2" stroke-linecap="round">${costelas}</g>
+    <g fill="none" stroke="#CFC8B8" stroke-width="1.3" stroke-linejoin="round">
+      <path d="${escapula(1)}"/><path d="${escapula(-1)}"/>
+      <path d="${iliaco(1)}"/><path d="${iliaco(-1)}"/>
+    </g>
+    ${ossos}${marcas}
+  </svg>`;
+}
+
+function cpPacDesenhar(){
+  const tela=document.getElementById('cpPacTela');
+  if(tela)tela.innerHTML=cpPacienteSvg();
+  const leg=document.getElementById('cpPacLegenda');
+  if(!leg)return;
+  const n=(_diagSelecoes.quiro||[]).filter(q=>q.grupo==='Coluna').length;
+  if(_cpPacSel){
+    const v=cpVertebras().find(x=>x.id===_cpPacSel), r=cpRaiz(_cpPacSel);
+    leg.innerHTML=`<div class="cpp-nivel">${escHtml(r?r.nivel:_cpPacSel)}<span>${escHtml(v?v.reg:'')}</span></div>
+      ${r?`<div class="cpp-txt"><strong>Daqui saem os nervos para</strong> ${escHtml(r.inerva)}</div>`
+         :`<div class="cpp-txt">Nível da coluna ${escHtml(_cpPacSel)}.</div>`}`;
+  } else {
+    leg.innerHTML=`<div class="cpp-txt">${n?'Em azul, onde foi ajustado hoje. Toque em qualquer vértebra para ver o que sai dali.':'Toque numa vértebra para ver o que sai daquele nível.'}</div>`;
+  }
+}
+function cpPacTocar(id){_cpPacSel=(_cpPacSel===id)?null:id;cpPacDesenhar();}
+
+function cpPacienteAbrir(){
+  let el=document.getElementById('cpPaciente');
+  if(!el){
+    el=document.createElement('div');
+    el.id='cpPaciente'; el.className='cpp'; el.setAttribute('role','dialog');
+    el.innerHTML=`<button type="button" class="cpp-sair" onclick="cpPacienteFechar()" aria-label="Voltar">Voltar</button>
+      <div class="cpp-tela" id="cpPacTela"></div>
+      <div class="cpp-legenda" id="cpPacLegenda"></div>`;
+    document.body.appendChild(el);
+  }
+  _cpPacSel=null;
+  el.style.display='flex';
+  document.addEventListener('keydown',cpPacEsc);
+  const pede=el.requestFullscreen||el.webkitRequestFullscreen;
+  if(pede){try{const r=pede.call(el);if(r&&r.catch)r.catch(()=>{});}catch(e){}}
+  cpPacDesenhar();
+}
+function cpPacienteFechar(){
+  const el=document.getElementById('cpPaciente');
+  if(el)el.style.display='none';
+  document.removeEventListener('keydown',cpPacEsc);
+  if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen();
+  else if(document.webkitFullscreenElement&&document.webkitExitFullscreen)document.webkitExitFullscreen();
+}
+function cpPacEsc(e){if(e.key==='Escape')cpPacienteFechar();}
 
 let _quiroRefAba='raizes';
 function setQuiroRef(aba){

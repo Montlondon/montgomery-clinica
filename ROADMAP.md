@@ -83,6 +83,47 @@ apagado; só parou de puxar trabalho.
 
 </details>
 
+## Ideia viva — três portas que ele abriu em 01/08/2026
+
+*Ditas por ele numa janela de trabalho, sem pedido de execução. Ficam registradas inteiras para
+não sumirem — e para que a ordem entre elas seja escolhida por ele, não pelo acaso.*
+
+> *"Estou sentindo hoje uma sensação de que poderíamos fazer muito mais coisas com você. Comecei a
+> assistir alguns vídeos no YouTube que falam sobre Code e integração com Obsidian, para realmente
+> criar a ideia de segundo cérebro."*
+
+**1. Obsidian como segundo cérebro, com o Claude Code dentro.** É a mesma vontade já registrada em
+*Segundo cérebro* — o que muda é ter aparecido um caminho concreto. O Obsidian é uma pasta de
+arquivos `.md` no computador dele: o Claude Code lê e escreve nessa pasta com as mesmas mãos com que
+lê o `ROADMAP.md` hoje, **sem servidor, sem mensalidade, sem API nova**. Os links `[[assim]]` do
+Obsidian são exatamente os que a memória do Claude já usa.
+
+*A pergunta honesta antes de qualquer obra, e ela é dele:* **o segundo cérebro é o ROADMAP crescido,
+ou é outra coisa?** Hoje o `ROADMAP.md` já é o cérebro dos projetos, e tem dois leitores (ele e os
+agentes). Se o Obsidian entrar sem essa resposta, nascem dois cérebros e nenhum confiável.
+Senha: **"Abrir o segundo cérebro"**.
+
+**2. As aulas do Montgomery Code, montadas de verdade.** A grade das 35 aulas existe (`GRADE`, OS
+v5.4) e o método de cinco passos também. O que ele pediu agora é **montar as aulas**, não mais só a
+prateleira. Vale começar pelas camadas já acesas (1, 2 e 7) e pela fila de matéria-prima que este
+documento já guarda mais abaixo — cada bloco de lá nasceu de um erro real na tela dele, que é o
+que a aula precisa ter. Senha: **"Montar a aula"**.
+
+**3. Montgomery Inglês — projeto novo (ideia).** *"Duas coisas que quero aprender: Montgomery Code,
+e melhorar meu inglês."* Fica registrado como **ideia**, não como obra iniciada.
+
+*O que já se sabe sem construir nada:* o inglês dele não precisa de mais um aplicativo de repetição —
+ele já tem um professor que conversa em inglês o dia inteiro e conhece o vocabulário da vida dele
+(merge, push, deploy, ship — a Camada 2 do Code já ensinou essas quatro palavras **em inglês**, sem
+que ninguém chamasse aquilo de aula de idioma). O caminho mais barato e mais provável de durar é
+**o inglês entrar no que ele já faz**, não virar uma décima terceira aba: os termos técnicos que
+aparecem no trabalho, e talvez uma seção no OS quando houver matéria acumulada.
+
+*A decisão é dele:* aba própria no OS, ou o inglês como camada do Montgomery Code? Senha:
+**"Acender o inglês"**.
+
+---
+
 ## Ideia viva — o Vitruviano como o lugar único (30/07/2026)
 
 **Não é obra, é ideia.** Registrada no dia em que ele fechou que a Árvore fica só no OS, e nasce
@@ -636,8 +677,7 @@ com o dedo — nenhuma tela ganha disso, nem em 3D. Mas a tela tem duas coisas q
 1. **A coluna no papel**, com as vértebras ajustadas do dia — barato, usa o desenho que já existe,
    e é o único pedaço desta história que a coluninha física não faz de jeito nenhum.
    Senha: **"Acender a coluna no papel"**.
-2. **Um modo "mostrar ao paciente"** — a tela cheia que já existe, com o desenho maior, mais limpo
-   e mais anatômico, para virar o monitor ou o celular para ele.
+2. ~~**Um modo "mostrar ao paciente"**~~ — **FEITO em 01/08 (v7.7)**, logo abaixo.
 3. **Só então o realismo/3D.** Aí passa a existir um leitor que precisa dele, e a conversa sobre os
    megabytes fica honesta em vez de ser vontade de coisa bonita. A receita do 3D real (three.js +
    malha do NIH, crânio já provado girando) continua guardada.
@@ -645,6 +685,51 @@ com o dedo — nenhuma tela ganha disso, nem em 3D. Mas a tela tem duas coisas q
 **Uma pergunta que vale mais do que as três, e que só ele responde:** clicar na vértebra se mostrou
 melhor do que a caixa, num atendimento de verdade? Se não, realismo seria enfeitar uma porta por
 onde ninguém passa.
+
+### FEITO — Mostrar ao paciente (Clínica v7.7, 01/08/2026), senha "Acender o segundo leitor"
+
+**O segundo leitor ganhou tela própria.** No cabeçalho do bloco *O corpo* há agora o botão
+**Mostrar ao paciente**: abre em tela cheia um corpo grande, sem nenhum botão de marcar, para virar
+o monitor ou o celular para a pessoa. `Esc` ou *Voltar* fecha e nada se perde.
+
+**Não é o desenho de trabalho aumentado — é outro desenho, para outro olho:**
+- **as vértebras ajustadas hoje saem em azul cheio**, cada uma com linha de chamada e o nome do
+  nível ao lado (o mesmo empurrão calculado do papel: vizinhas não se atropelam);
+- **tocar em qualquer vértebra** — marcada ou não — escreve embaixo, em letra grande, o nível e
+  *"Daqui saem os nervos para..."*. É o que a coluninha de plástico não faz: ela não fala;
+- **nada de marcar aqui.** Quem está olhando é o paciente. Anotar continua sendo na tela de
+  trabalho, e nenhum dado se cria ou se apaga neste modo.
+
+**Mais anatômico, e nada traçado no olho:**
+- **24 costelas**, uma por torácica de cada lado, saindo da própria vértebra e parando na largura
+  real do corpo naquela altura — a largura é **interpolada do `CP_PERFIL`**, o mesmo contorno que
+  já desenha o corpo (`cpLarg()`), e não um valor escolhido. Conferido na tela: **nenhuma costela
+  passa do contorno**;
+- **escápulas de T2 a T7** e **asas do ilíaco nascendo na altura do sacro**, como no corpo real;
+- resto do cânone intacto: `CP`, `CP_PERFIL` e `cpVertebras()`, os mesmos da tela e do papel.
+  **Nenhuma medida nova foi inventada.**
+
+**Peso: zero.** SVG gerado na hora, sem imagem, sem biblioteca, sem ida ao banco.
+
+### Decidido em 01/08 — as abas viram camadas do corpo
+
+**A pergunta que estava aberta desde a v7.5 foi respondida por ele:** *"acredito que virar camada do
+corpo seria mais interessante."*
+
+**O rumo, então:** o corpo deixa de ser mais uma caixa e passa a ser **o lugar** do Diagnóstico, com
+as abas de hoje virando camadas sobre o mesmo desenho — quiropraxia (acesa), meridianos, pontos,
+órgãos, 5 Elementos. Isto casa com o *"Vitruviano como lugar único"* já escrito mais abaixo: **camadas
+em vez de abas.**
+
+**Três cuidados que ficam registrados antes de qualquer obra:**
+1. **Uma camada de cada vez, e cada uma provada no atendimento** antes da seguinte — foi assim que a
+   quiropraxia se provou (*"clicar na vértebra é bem melhor"*).
+2. **Nada se apaga enquanto a camada não provar que substitui.** A aba só sai depois que ele disser
+   que não sente falta — a mesma regra do resto da casa.
+3. **A visão é de costas** para a coluna, mas meridianos e pontos precisam de **frente e costas**.
+   O OS já resolveu isso no Vitruviano (toggle frente/costas) — a receita existe e se reaproveita.
+
+Senha para a próxima: **"Acender a segunda camada"**.
 
 ### Decidido em 01/08 sobre o histórico e os bonecos
 
