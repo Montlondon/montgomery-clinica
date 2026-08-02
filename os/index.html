@@ -1910,6 +1910,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 3 2.5 15 0 18M12 3c-2.5 3-2.5 15 0 18"/></svg>O inglês &middot; as palavras que você já usa</h2>
     <p style="color:var(--cinza);font-size:0.9rem;margin-bottom:var(--f3)">Isto não é um curso de idioma &mdash; é a mesma aula, dita também na língua em que ela nasceu. <b>Você já sabe mais do que pensa:</b> commit, push, deploy e ship você usa toda semana. Aqui elas ganham o som e uma frase de verdade, dessas que aparecem na sua tela. Uma palavra o recebe a cada visita, e as outras ficam logo abaixo, à mão.</p>
     <p style="color:var(--cinza);font-size:0.9rem;margin-bottom:var(--f3)"><b style="color:var(--azul)">Cada palavra traz o som escrito duas vezes</b>, e as duas servem para coisas diferentes. Em azul, entre barras, o <b>IPA</b> &mdash; o Alfabeto Fonético Internacional: um símbolo, um som, sempre o mesmo em qualquer língua do mundo. <span style="font-family:'Courier New',monospace;color:var(--azul)">/kəˈmɪt/</span> diz que o acento cai no fim e que o primeiro <i>e</i> quase some &mdash; aquele <span style="font-family:'Courier New',monospace">ə</span> é o <i>schwa</i>, a vogal preguiçosa que o inglês usa em toda sílaba fraca. Em dourado, a muleta à brasileira, para você dizer em voz alta hoje sem estudar nada.</p>
+    <p style="color:var(--cinza);font-size:0.9rem;margin-bottom:var(--f3)"><b style="color:var(--azul)">E o sotaque daqui é o seu.</b> Todo IPA deste glossário está na pronúncia <b>britânica</b> &mdash; a que você trouxe de Londres. Dá para ver na própria escrita: <span style="font-family:'Courier New',monospace;color:var(--azul)">/brɑːntʃ/</span> tem o <i>a</i> longo e aberto de <i>branch</i> à inglesa; <span style="font-family:'Courier New',monospace;color:var(--azul)">/ˈerə/</span> termina em <b>schwa</b> e não em <i>r</i>, porque em Londres o <i>r</i> do fim não se pronuncia. Um americano escreveria <span style="font-family:'Courier New',monospace">/ˈerər/</span>. Não há certo e errado entre os dois &mdash; há o que o seu ouvido já reconhece, e é esse que está aqui.</p>
     <p style="color:var(--cinza);font-size:0.9rem;margin-bottom:var(--f3)"><b style="color:var(--dourado)">Por que o IPA vale a pena para você:</b> ele é para o som o que a nota é para a música &mdash; você deixa de depender de ouvir alguém para saber como se fala. E é o mesmo tipo de gesto que a coluna faz na Clínica: <b>medir em vez de adivinhar</b>.</p>
     <h3 style="color:var(--dourado);font-size:0.95rem;margin:0 0 10px">A palavra desta visita</h3>
     <div id="ingHoje" style="margin-bottom:var(--f3)"></div>
@@ -2134,6 +2135,59 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     <p style="font-size:0.9rem;margin-bottom:var(--f3)">No caderno aqui embaixo, escreva com as suas palavras: <b>por que o Git para em vez de escolher sozinho</b> &mdash; e o que aconteceria com o seu trabalho se ele escolhesse. Enquanto isso n&atilde;o estiver escrito, a aula fica aberta.</p>
     <p style="font-family:'Lora',serif;font-style:italic;color:var(--cinza);text-align:center;margin:0 0 var(--f3);font-size:0.9rem">A ferramenta que para e pergunta &eacute; irm&atilde; da tela que mostra e n&atilde;o decide.</p>
 
+    <!-- AULA 2.5 — montada em 01/08/2026. Matéria-prima: o main dele vive com arquivos de outras
+         sessões, e a prova viva é o commit da própria aula 2.4, feito com dois arquivos nomeados. -->
+    <h3 style="color:var(--azul);font-size:1rem;margin:var(--f3) 0 var(--f2)" id="aula-2-5">Aula 2.5 &middot; Trabalhar com o <code style="font-family:'Courier New',monospace;color:var(--dourado);font-size:0.95rem">main</code> sujo</h3>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">A aula anterior ensinou que o Git n&atilde;o adivinha. Esta ensina o outro lado: <b>quem n&atilde;o pode adivinhar &eacute; voc&ecirc;</b>, na hora de dizer o que entra numa entrega. E o perigo aqui n&atilde;o &eacute; um comando dif&iacute;cil &mdash; &eacute; um comando f&aacute;cil demais.</p>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">1 &middot; A imagem</h4>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">A sua bancada no fim de um dia cheio: a ficha do paciente das quatro, um caderno aberto de outra coisa, um envelope que ainda nem &eacute; de ningu&eacute;m. <b>Nada disso &eacute; sujeira</b> &mdash; &eacute; trabalho em andamento, e trabalho em andamento tem cara de bagun&ccedil;a. O erro n&atilde;o &eacute; ter a bancada assim. O erro &eacute; <b>pegar tudo o que est&aacute; em cima dela e guardar de uma vez s&oacute;</b> dentro do prontu&aacute;rio de um paciente. Aquilo tudo vai ficar l&aacute;, com o nome dele, para sempre, e ningu&eacute;m vai entender por qu&ecirc;.</p>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">O bra&ccedil;o que varre a bancada inteira para dentro da gaveta chama-se <code style="font-family:'Courier New',monospace;color:var(--dourado)">git add -A</code>.</p>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">2 &middot; O conceito</h4>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)">"<b>Sujo</b>" (<i>dirty</i>) &eacute; s&oacute; o nome de um estado, sem nenhuma acusa&ccedil;&atilde;o dentro: quer dizer que h&aacute; coisa mexida na <b>mesa de trabalho</b> que ainda n&atilde;o foi guardada. Voc&ecirc; j&aacute; conhece as tr&ecirc;s mesas da se&ccedil;&atilde;o l&aacute; em cima; aqui elas ganham utilidade pr&aacute;tica. O que h&aacute; em cima da mesa &eacute; de dois tipos:</p>
+    <div class="cards" style="grid-template-columns:1fr 1fr;margin-bottom:var(--f2)">
+      <div class="card"><h3>modificado</h3><div class="sub">modified</div><p style="font-size:0.85rem;color:var(--texto)">Um arquivo que o Git j&aacute; conhece e que voc&ecirc; mexeu. Ele sabe exatamente o que mudou &mdash; e sabe voltar atr&aacute;s.</p></div>
+      <div class="card"><h3>solto</h3><div class="sub">untracked</div><p style="font-size:0.85rem;color:var(--texto)">Um arquivo que o Git <b>nunca viu</b>. Ele n&atilde;o guarda nada dele, nem sabe que existe. &Eacute; aqui que moram os arquivos pesados que ningu&eacute;m queria subir.</p></div>
+    </div>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)">A ferramenta que l&ecirc; a bancada &eacute; <code style="font-family:'Courier New',monospace;color:var(--dourado)">git status</code>. Ela <b>s&oacute; olha</b> &mdash; n&atilde;o muda nada, nunca. E a diferen&ccedil;a que sustenta a aula inteira &eacute; esta:</p>
+    <div style="display:grid;gap:8px;margin-bottom:var(--f2)">
+      <div style="display:flex;gap:12px;align-items:flex-start;border-left:3px solid var(--verde);padding-left:12px">
+        <code style="font-family:'Courier New',monospace;color:var(--verde);font-size:0.9rem;min-width:150px">git add arquivo.html</code>
+        <p style="font-size:0.88rem;margin:0"><b>Voc&ecirc; nomeia.</b> S&oacute; aquele arquivo sobe na bandeja. O resto da bancada fica onde estava, intocado.</p>
+      </div>
+      <div style="display:flex;gap:12px;align-items:flex-start;border-left:3px solid #b04a3a;padding-left:12px">
+        <code style="font-family:'Courier New',monospace;color:#b04a3a;font-size:0.9rem;min-width:150px">git add -A</code>
+        <p style="font-size:0.88rem;margin:0"><b>O bra&ccedil;o que varre.</b> Tudo o que estiver mexido <b>e</b> tudo o que estiver solto entra de uma vez &mdash; inclusive o que voc&ecirc; nem lembrava que estava ali.</p>
+      </div>
+    </div>
+    <div style="border:1px solid rgba(201,168,76,0.4);border-radius:11px;background:rgba(201,168,76,0.06);padding:var(--f3);margin-bottom:var(--f3)">
+      <p style="font-size:0.9rem;margin:0"><b style="color:var(--dourado)">A regra da casa, em uma linha:</b> no <code style="font-family:'Courier New',monospace">main</code>, <b>nomeie sempre</b>. <code style="font-family:'Courier New',monospace;color:var(--azul)">git add -A</code> serve para quando a bancada &eacute; s&oacute; daquela obra &mdash; num galho rec&eacute;m-aberto, por exemplo. No tronco, onde mora o que est&aacute; no ar, ele &eacute; a maneira mais f&aacute;cil de publicar sem querer uma coisa que voc&ecirc; nem sabia que tinha.</p>
+    </div>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">3 &middot; O c&oacute;digo real &mdash; o commit desta aula, h&aacute; poucos minutos</h4>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)">A aula 2.4, que voc&ecirc; acabou de ler, foi guardada assim &mdash; e repare que n&atilde;o h&aacute; nenhum <code style="font-family:'Courier New',monospace">-A</code> em lugar nenhum:</p>
+    <div style="background:var(--bege);border:1px solid rgba(27,58,92,0.12);border-radius:11px;padding:var(--f3);font-family:'Courier New',monospace;font-size:0.82rem;line-height:2;overflow-x:auto;margin-bottom:var(--f2)">
+      <div style="color:var(--azul)">git add os/index.html ROADMAP.md</div>
+      <div style="color:var(--azul)">git commit -m "Aula 2.4 montada..."</div>
+      <div style="margin-top:10px"><span style="color:var(--cinza)"># e antes do merge, a bancada do tronco foi lida:</span></div>
+      <div style="color:var(--azul)">git status --porcelain</div>
+      <div style="color:var(--verde)">&nbsp;&nbsp;<span style="color:var(--cinza)">(nenhuma linha &mdash; a bancada estava vazia)</span></div>
+    </div>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)"><b>Dois arquivos nomeados</b>, e mais nada. Isso &eacute; uma escolha, feita antes de digitar: <em>o que esta entrega &eacute;?</em> Ela &eacute; a aula 2.4 &mdash; ent&atilde;o entram o arquivo do OS e o di&aacute;rio. Se houvesse dez coisas mexidas na pasta, o commit continuaria exatamente igual.</p>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)"><b>E o segundo comando ensina o resto:</b> <code style="font-family:'Courier New',monospace;color:var(--dourado)">--porcelain</code> pede a resposta enxuta, uma linha por arquivo &mdash; quando n&atilde;o volta nenhuma, a bancada est&aacute; limpa. Hoje ela estava, e por isso o encontro foi imediato: <b>Fast-forward</b>. Num dia de bancada cheia, o Git teria parado antes de come&ccedil;ar, dizendo que aquele arquivo mexido seria atropelado pelo merge. E isso, de novo, n&atilde;o &eacute; erro: &eacute; ele protegendo o &uacute;nico trabalho seu que ainda n&atilde;o est&aacute; guardado em lugar nenhum.</p>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">4 &middot; O passo seu</h4>
+    <div style="border:1px solid rgba(201,168,76,0.4);border-radius:11px;background:rgba(201,168,76,0.06);padding:var(--f3);margin-bottom:var(--f3)">
+      <p style="font-size:0.9rem;margin:0 0 8px">Dois minutos, e este comando <b>s&oacute; l&ecirc;</b> &mdash; n&atilde;o muda uma v&iacute;rgula. No terminal, dentro da pasta do reposit&oacute;rio:</p>
+      <p style="font-family:'Courier New',monospace;color:var(--azul);font-size:0.88rem;margin:0 0 8px">git status --short</p>
+      <p style="font-size:0.9rem;margin:0">Cada linha &eacute; uma coisa em cima da sua bancada. A letra na frente diz o qu&ecirc;: <code style="font-family:'Courier New',monospace">M</code> de <i>modified</i>, mexido; <code style="font-family:'Courier New',monospace">??</code> de solto, nunca visto. S&oacute; conte quantas linhas s&atilde;o e olhe os nomes. Voc&ecirc; vai reconhecer sess&otilde;es antigas ali &mdash; e vai entender, sem que ningu&eacute;m explique, por que varrer tudo de uma vez seria uma m&aacute; ideia.</p>
+    </div>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">5 &middot; A prova</h4>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">No caderno, com as suas palavras: <b>o que voc&ecirc; viu na sua bancada</b>, e por que <code style="font-family:'Courier New',monospace">git add -A</code> no tronco &eacute; perigoso justamente por ser o comando mais c&ocirc;modo. Se conseguir explicar isso a algu&eacute;m, a aula fechou.</p>
+    <p style="font-family:'Lora',serif;font-style:italic;color:var(--cinza);text-align:center;margin:0 0 var(--f3);font-size:0.9rem">Bancada cheia n&atilde;o &eacute; desleixo &mdash; &eacute; trabalho vivo. O cuidado est&aacute; em escolher o que sai dela.</p>
+
     <h3 style="color:var(--azul);font-size:1rem;margin:0 0 var(--f2)">O vocabul&aacute;rio m&iacute;nimo</h3>
     <div class="cards" style="margin-bottom:var(--f3)">
       <div class="card"><h3>repositório</h3><p style="font-size:0.85rem;color:var(--texto)">A pasta do projeto <b>com</b> o livro de histórico dentro. Você tem vários: o do OS, o da Clínica, o do MMObras.</p></div>
@@ -2258,8 +2312,9 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v5.7';
-const APP_VERSION_NOTA='a primeira aula montada de verdade pelo metodo dos cinco passos: 2.4 — conflito nao e erro, e sim o Git se recusando a adivinhar. A imagem das duas maos escrevendo na mesma linha do prontuario, as tres marcas cruas traduzidas uma a uma, os tres conflitos reais do merge da estante do Kindle (a linha da versao, o topo do ROADMAP e o fim do .gitignore) e o que eles ensinam — o que conflita nao e a obra, e o lugar por onde toda mudanca passa; mais a saida que sempre existe (merge --abort) e um passo seu que so le';
+const APP_VERSION='v5.8';
+const APP_VERSION_NOTA='a aula 2.5 — trabalhar com o tronco sujo — montada pelos cinco passos: a bancada cheia no fim do dia nao e desleixo, e trabalho vivo, e o perigo nao e um comando dificil, e o mais comodo de todos (git add -A). Modificado e solto, o git status que so olha, e a prova viva do commit da aula anterior, feito com dois arquivos nomeados e a bancada do tronco lida antes do merge. Mais quatro palavras novas no glossario (dirty, clean, untracked, stage) e a nota que faltava: o IPA daqui e britanico, o sotaque que ele trouxe de Londres';
+const APP_VERSION_NOTA_V57='a primeira aula montada de verdade pelo metodo dos cinco passos: 2.4 — conflito nao e erro, e sim o Git se recusando a adivinhar. A imagem das duas maos escrevendo na mesma linha do prontuario, as tres marcas cruas traduzidas uma a uma, os tres conflitos reais do merge da estante do Kindle (a linha da versao, o topo do ROADMAP e o fim do .gitignore) e o que eles ensinam — o que conflita nao e a obra, e o lugar por onde toda mudanca passa; mais a saida que sempre existe (merge --abort) e um passo seu que so le';
 const APP_VERSION_NOTA_V56='a estante do Kindle finalmente entra no ar: o Hua Hu Ching, escrito em 29/07, tinha ficado num galho sem ser juntado — sobe agora junto com o glossario vivo do ingles, e o Montgomery Code passa a mostrar o som e uma frase real de cada palavra do trabalho';
 const APP_VERSION_NOTA_V42='abre-se a estante do Kindle: o Hua Hu Ching, os últimos ensinamentos de Lao-Tzu, entra na Espiritualidade em catorze blocos — a dualidade como enfermidade, o ego que é um macaco, a cadeia de cinco elos que fabrica sofrimento, as três energias no corpo e os oito degraus que terminam apontando para o I Ching. E o eco que ninguém esperava: o não-forçar de Lao-Tzu e o desimpedir-se do analista são o mesmo gesto, descoberto duas vezes em caminhos que nunca se cruzaram';
 const APP_VERSION_NOTA_V54='o Montgomery Code deixa de ser aulas soltas e vira curso: o método de cinco passos que toda aula segue (a imagem, o conceito, o codigo real dos seus proprios sistemas, o passo seu e a prova escrita com as suas palavras) mais as quatro regras da casa, e a grade inteira aberta — sete modulos com objetivo e pre-requisito, trinta e cinco aulas numeradas dizendo quais estao acesas, quais ja estao na fila e quais foram plantadas, com caixinha por aula e a barra do quanto ja tem prova escrita, guardada neste aparelho';
@@ -5779,7 +5834,7 @@ const GRADE=[
    {id:'2.2',t:'O ramo e o encontro',d:'Branch e merge ditos com a folha de rascunho do prontuário.',st:'acesa',onde:'code',alvo:'camada-2'},
    {id:'2.3',t:'A escada da entrega',d:'Merge, push, deploy e ship — o que cada palavra promete de verdade.',st:'acesa',onde:'code',alvo:'camada-2'},
    {id:'2.4',t:'Conflito não é erro',d:'É o Git se recusando a adivinhar. Ler as marcas cruas e traduzir cada uma, nos três conflitos reais do merge da estante.',st:'acesa',onde:'code',alvo:'aula-2-4'},
-   {id:'2.5',t:'Trabalhar com o main sujo',d:'Commitar só o arquivo necessário. Por que git add -A no main já doeu.',st:'fila'},
+   {id:'2.5',t:'Trabalhar com o main sujo',d:'Commitar só o arquivo necessário. Modificado, solto e o braço que varre a bancada — lido no commit da aula anterior.',st:'acesa',onde:'code',alvo:'aula-2-5'},
    {id:'2.6',t:'O peso invisível',d:'Os 291 MB que quase entraram no repositório, e a pergunta que virou hábito: quanto isso pesa?',st:'fila'},
    {id:'2.7',t:'A receita, não os ingredientes',d:'Por que o git guarda o package.json e não as peças — e o npm install como ir ao mercado.',st:'fila'}]},
  {n:3,nome:'Servidor & nuvem',sub:'A cozinha',objetivo:'Saber onde cada coisa roda e quem paga a conta de cada uma.',pre:'Módulo 1 — a diferença entre vitrine e motor.',
@@ -5909,6 +5964,14 @@ const INGLES=[
   frase:'Check which remote you are pushing to.', tr:'Confira para qual remoto você está empurrando.'},
  {en:'conflict', som:'CÃN-flict',     aula:'2.4', ipa:'/ˈkɒnflɪkt/', pt:'quando duas mãos mudaram a mesma linha e o Git se recusa a adivinhar',
   frase:'A conflict is not an error.', tr:'Conflito não é erro.'},
+ {en:'dirty',    som:'DÂR-ti',        aula:'2.5', ipa:'/ˈdɜːti/', pt:'sujo — com coisa mexida e ainda não guardada; não é acusação, é estado',
+  frase:'Never add everything on a dirty main.', tr:'Nunca guarde tudo de uma vez num tronco sujo.'},
+ {en:'clean',    som:'clín',          aula:'2.5', ipa:'/kliːn/', pt:'limpo — nada mexido esperando; é o estado em que o merge não trava',
+  frase:'Is your working tree clean?', tr:'A sua bancada está limpa?'},
+ {en:'untracked',som:'ân-TRÉKT',      aula:'2.5', ipa:'/ʌnˈtrækt/', pt:'solto — arquivo que o Git nunca viu e não guarda',
+  frase:'Untracked files are not in the repository.', tr:'Arquivo solto não está no repositório.'},
+ {en:'stage',    som:'stêidj',        aula:'2.5', ipa:'/steɪdʒ/', pt:'pôr na bandeja — escolher o que entra nesta entrega',
+  frase:'Stage only what belongs to this change.', tr:'Ponha na bandeja só o que é desta mudança.'},
  {en:'build',    som:'bíld',          aula:'5.1', ipa:'/bɪld/', pt:'a montagem da página antes de ela ir ao ar',
   frase:'The build failed — read the log.', tr:'A montagem falhou — leia o registro.'},
  {en:'log',      som:'lóg',           aula:'1.6', ipa:'/lɒɡ/', pt:'o registro do que aconteceu, linha por linha',

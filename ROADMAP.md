@@ -40,6 +40,33 @@ sem ler isto vai construir telas certas pelo motivo errado.*
 
 ---
 
+## Concluído — a aula 2.5 e o sotaque de Londres (OS v5.8, 01/08/2026)
+
+**Segunda vela da senha "Montar a aula".** A **2.5 — trabalhar com o `main` sujo** montada pelos
+cinco passos (âncora `aula-2-5`):
+
+1. **A imagem** — a bancada no fim de um dia cheio. Bancada cheia **não é desleixo, é trabalho
+   vivo**; o erro é varrer tudo para dentro do prontuário de um paciente só.
+2. **O conceito** — *modificado* × *solto* (`untracked`), o `git status` que só olha, e a diferença
+   que sustenta a aula: `git add arquivo` (você nomeia) contra `git add -A` (o braço que varre).
+   **O perigo não é um comando difícil — é o mais cômodo de todos.**
+3. **O código real** — o commit da própria aula 2.4, feito minutos antes: `git add os/index.html
+   ROADMAP.md`, dois arquivos nomeados; e o `git status --porcelain` vazio antes do merge, que foi
+   o que permitiu o Fast-forward. Entrou junto o porquê de o Git travar um merge com bancada suja:
+   ele está protegendo o único trabalho que ainda não está guardado em lugar nenhum.
+4. **O passo seu** — `git status --short`, que só lê: contar as linhas e reconhecer as sessões
+   antigas ali.
+5. **A prova** — explicar por que o comando mais cômodo é o mais perigoso no tronco.
+
+**O inglês ganhou quatro palavras:** *dirty*, *clean*, *untracked* e *stage*, todas ligadas a 2.5.
+Glossário em 28 palavras; grade com **9 aulas acesas**.
+
+**Ele contou que morou em Londres**, e isso virou uma nota escrita na seção do inglês: o IPA do
+glossário é **britânico**, e dá para provar dentro da própria escrita — `/brɑːntʃ/` com o *a* longo,
+`/ˈerə/` terminando em schwa e não em *r*, porque em Londres o *r* do fim não soa (um americano
+escreveria `/ˈerər/`). Não há certo e errado entre os dois; **há o ouvido que ele já tem**, e é esse
+que está no sistema. Ver [[user_ama_o_ipa]].
+
 ## Concluído — a primeira aula montada de verdade: 2.4, conflito não é erro (OS v5.7, 01/08/2026)
 
 **Senha "Montar a aula" — primeira vela acesa.** A grade tinha 35 aulas e o método de cinco passos;
