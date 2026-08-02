@@ -9,6 +9,42 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — o segundo laço: quando a mesma pessoa é duas coisas (Clínica v8.7, 02/08/2026)
+
+**O adendo dele:** *"No bonequinho Venicio, ele é meu pai, e ao mesmo tempo ele é irmão de Rubens,
+e Rubens é pai da minha esposa Vanessa, e Vanessa é minha prima. Seria interessante no nome do
+bonequinho ter mais opções, por exemplo prima, amiga, conhecida — porque disso sai um pouco do
+DNA, mas atendendo a pessoa ela cita pessoas que estão nas conexões dela e que estão causando mal
+para elas."*
+
+Ele achou o limite do desenho: **a árvore de gerações só sabe desenhar UM laço por pessoa** — de
+quem se é filho, com quem se faz par. A vida dele não cabe nisso, e o desenho estava dizendo menos
+do que a pessoa contava.
+
+**As três respostas:**
+
+- **O segundo laço.** Cada figura pode apontar UM segundo laço para qualquer outra, em qualquer
+  fileira, com o nome que ele der ("irmão de", "prima de", "chefe de"). Vira um fio dourado
+  pontilhado, curvo, por baixo das figuras, com a palavra dele no meio. **Não tira ninguém do
+  lugar**: o desenho continua obedecendo às gerações; o segundo laço só conta o que também é
+  verdade. A prancheta cresce sozinha para a barriga do fio não sair cortada.
+- **Os papéis.** A lista passou de 14 para **64**: parentesco por inteiro (meio-irmã, enteado,
+  madrinha, compadre, mãe de criação) e, principalmente, **quem não é sangue** — amiga, vizinho,
+  chefe, colega, sócia, conhecida, quem cuida dela. O campo continua livre: a lista é atalho,
+  não gaiola.
+- **A marca "Pesa nela hoje"** (magenta). Não é herança de corpo: é o que a pessoa citou no
+  atendimento como estando fazendo mal a ela **agora**. Muita vez nem é família. Entra no anel
+  porque pesa, e pesar é o que o anel conta.
+
+O segundo laço aparece em tudo: no fio do desenho, no painel do panorama, na peneira e no
+organograma do Whimsical (`Venicio — pai · irmão de Rubens · Coração e vasos`).
+
+**Provado com o caso dele:** Venicio pai e irmão do Rubens; Vanessa esposa e prima; e uma chefe
+que não é da família, com o anel magenta. Os dois fios saem escritos e o organograma sai contando
+os dois laços.
+
+---
+
 ## Concluído — os anéis, o balão e o panorama (Clínica v8.6, 02/08/2026)
 
 **O que ele decidiu**, respondendo às três perguntas de 02/08: *"Pode. O anel mostra de forma que

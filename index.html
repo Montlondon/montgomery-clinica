@@ -2123,7 +2123,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v8.6 · 02/08';
+const APP_VER='v8.7 · 02/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -8709,7 +8709,9 @@ function famCopiarWhimsical(){
   const nomeDe=p=>famNomeDe(p);
   const detalhe=p=>{
     const ms=famMarcasDe(p).map(m=>m.rot);
-    const t=[p.papel,ms.join(', '),String(p.obs||'').trim()].filter(Boolean);
+    const o=p.laco?famPorId(p.laco):null;
+    const laco=o?((p.lacoRot||'também é').trim()+' '+nomeDe(o)):'';
+    const t=[p.papel,laco,ms.join(', '),String(p.obs||'').trim()].filter(Boolean);
     return t.length?' — '+t.join(' · '):'';
   };
   const filhosDe=p=>_famPessoas.filter(f=>String(f.de||'')===String(p.id))
@@ -8773,6 +8775,12 @@ function famConsertarVinculos(){
       const par=famPorId(p.par);
       if(!par||par.ger!==p.ger||String(par.id)===String(p.id))p.par='';
     }
+    // O segundo laço pode apontar para qualquer fileira — só não pode apontar
+    // para quem saiu do desenho, nem para a própria pessoa.
+    if(p.laco){
+      const o=famPorId(p.laco);
+      if(!o||String(o.id)===String(p.id)){p.laco='';p.lacoRot='';}
+    }
   });
   // Par é mão dupla: quem foi apontado aponta de volta.
   _famPessoas.forEach(p=>{
@@ -8807,7 +8815,8 @@ function famDados(){
   return _famPessoas.map(p=>({id:p.id,nome:p.nome||'',papel:p.papel||'',sexo:p.sexo||'n',
     ger:p.ger,ord:p.ord,morto:!!p.morto,obs:p.obs||'',eu:!!p.eu,
     de:p.de||'',deCasal:!!p.deCasal,par:p.par||'',esperado:!!p.esperado,
-    marcas:Array.isArray(p.marcas)?p.marcas.slice():[]}));
+    marcas:Array.isArray(p.marcas)?p.marcas.slice():[],
+    laco:p.laco||'',lacoRot:p.lacoRot||''}));
 }
 function famChaveRasc(){return _diagPacSel?FAM_RASC+_diagPacSel.id:null;}
 // O rascunho agora sai daqui com a HORA em que foi escrito. Sem essa hora não
@@ -8960,7 +8969,21 @@ function famEsperado(id){
 }
 
 // ===== O DESENHO =====
-function famAltura(){return FAM_TOPO+(famGerVis().length-1)*FAM_PASSO+FAM_H+30;}
+function famAltura(){return FAM_TOPO+(famGerVis().length-1)*FAM_PASSO+FAM_H+30+famLacoFolga();}
+// O fio do segundo laço faz barriga para baixo. Se ele nasce na última fileira,
+// a prancheta precisa crescer o tanto da barriga — senão o fio sai cortado.
+function famLacoFolga(){
+  const base=FAM_TOPO+(famGerVis().length-1)*FAM_PASSO+FAM_H+30;
+  let maior=0;
+  _famPessoas.forEach(p=>{
+    const o=p.laco?famPorId(p.laco):null;
+    if(!o||String(o.id)===String(p.id))return;
+    const y1=famY(p.ger)+FAM_H+32, y2=famY(o.ger)+FAM_H+32;
+    const dist=Math.hypot(famX(o)-famX(p),y2-y1);
+    maior=Math.max(maior,Math.max(y1,y2)+Math.min(60,14+dist/6)+10-base);
+  });
+  return Math.max(0,Math.round(maior));
+}
 function famY(g){
   const v=famGerVis(), i=v.findIndex(x=>x.g===g);
   return FAM_TOPO+(i<0?0:i)*FAM_PASSO;
@@ -9182,6 +9205,9 @@ function famMontarSvg(){
       svg+=`<path d="M${famX(p)} ${famY(-1)+FAM_H} L${xEu} ${yEu-FAM_R-4}" stroke="var(--gold,#C9A84C)" stroke-width="1.2" stroke-dasharray="3 4" fill="none" opacity=".85"/>`;
     });
   }
+  // Os segundos laços vão ANTES das figuras: são fio de fundo, não devem passar
+  // por cima de cabeça nenhuma.
+  _famPessoas.forEach(p=>{if(p.laco)svg+=famLacoSVG(p);});
   _famPessoas.forEach(p=>{svg+=famFiguraSVG(p);});
   // O balão de um clique vai por ÚLTIMO, para ficar por cima de todo mundo.
   const aberta=famPorId(_famSel);
@@ -9279,6 +9305,24 @@ function famRenderAdd(){
 
 const FAM_SEXOS=[{k:'f',rot:'Figura de saia'},{k:'m',rot:'Figura de pernas'},{k:'n',rot:'Figura neutra'}];
 
+/* Os papéis que a lista oferece. Cresceu porque a vida dele é assim: o pai que
+   é irmão do sogro, a esposa que é prima. E porque, atendendo, a pessoa cita
+   gente que não é sangue nenhum — a amiga, o chefe, o vizinho — e que está
+   pesando nela agora. O campo continua LIVRE: a lista é atalho, não gaiola. */
+const FAM_PAPEIS=[
+  'mãe','pai','madrasta','padrasto','mãe de criação','pai de criação',
+  'avó materna','avô materno','avó paterna','avô paterno','bisavó','bisavô',
+  'irmã','irmão','meio-irmã','meio-irmão','irmã de criação','irmão de criação',
+  'filha','filho','enteada','enteado','neta','neto',
+  'companheiro','companheira','esposo','esposa','ex-marido','ex-esposa',
+  'prima','primo','tia','tio','sobrinha','sobrinho',
+  'sogra','sogro','cunhada','cunhado','nora','genro','comadre','compadre',
+  'madrinha','padrinho','afilhada','afilhado',
+  'amiga','amigo','melhor amiga','melhor amigo','vizinha','vizinho',
+  'colega de trabalho','chefe','sócia','sócio','professora','professor',
+  'conhecida','conhecido','quem cuida dela','quem ela cuida'
+];
+
 /* ===== O ANEL E O BALÃO — o que pesa em volta da pessoa =====
    Ele pediu duas coisas e disse "ou uma, ou outra, ou as duas mesmo". São as
    duas, porque fazem trabalhos diferentes:
@@ -9304,8 +9348,50 @@ const FAM_MARCAS=[
   {k:'mente',rot:'Mente e emoção',  cor:'#6E5AA0', ex:'depressão, ansiedade, luto que não passou'},
   {k:'tumor',rot:'Tumor',           cor:'#7B3F5E', ex:'câncer, de qualquer lugar'},
   {k:'vicio',rot:'Dependência',     cor:'#A0522D', ex:'álcool, remédio, outra substância'},
-  {k:'cedo', rot:'Partiu cedo',     cor:'#5A5A5A', ex:'a morte que chegou antes da hora'}
+  {k:'cedo', rot:'Partiu cedo',     cor:'#5A5A5A', ex:'a morte que chegou antes da hora'},
+  // Esta não é herança de corpo: é o que a pessoa citou no atendimento como
+  // estando pesando nela AGORA. Muita vez nem é sangue — é a amiga, o chefe.
+  // Entra no anel porque pesa, e pesar é o que o anel conta.
+  {k:'pesa', rot:'Pesa nela hoje',  cor:'#C2185B', ex:'esta pessoa está fazendo mal a ela agora'}
 ];
+/* ===== O SEGUNDO LAÇO — quando a mesma pessoa é duas coisas =====
+   A árvore de gerações só sabe desenhar UM laço: de quem se é filho, com quem
+   se faz par. A vida dele não cabe nisso — o pai é irmão do sogro, a esposa é
+   prima. E o desenho, sem isso, dizia menos do que a pessoa contou.
+
+   Então cada figura pode apontar UM segundo laço para qualquer outra, em
+   qualquer fileira, com o nome que ELE der. Vira um fio pontilhado curvo, por
+   baixo das figuras, com a palavra dele no meio. Não muda o lugar de ninguém:
+   o desenho continua obedecendo às gerações — o segundo laço só conta o que
+   também é verdade. */
+function famLacar(id,campo,valor){
+  const p=famPorId(id);
+  if(!p)return;
+  famGuardarPasso();
+  if(campo==='com'){p.laco=valor||'';if(!valor)p.lacoRot='';}
+  else p.lacoRot=valor;
+  _diagJaSalvo=false;
+  famGuardarRascunho();famRender();
+}
+// O fio do segundo laço: uma curva que sai de baixo de uma figura e chega em
+// baixo da outra, com a barriga proporcional à distância — perto, quase reta;
+// longe, uma volta larga que não corta ninguém pelo meio.
+function famLacoSVG(p){
+  const o=p.laco?famPorId(p.laco):null;
+  if(!o||String(o.id)===String(p.id))return'';
+  const x1=famX(p), y1=famY(p.ger)+FAM_H+32;
+  const x2=famX(o), y2=famY(o.ger)+FAM_H+32;
+  const dist=Math.hypot(x2-x1,y2-y1);
+  const barriga=Math.min(60,14+dist/6);
+  const mx=(x1+x2)/2, my=Math.max(y1,y2)+barriga;
+  const rot=String(p.lacoRot||'também é').trim();
+  return `<g class="fam-laco" style="pointer-events:none">
+    <path d="M${x1.toFixed(1)} ${y1.toFixed(1)} Q${mx.toFixed(1)} ${my.toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}"
+      fill="none" stroke="#C9A84C" stroke-width="1.1" stroke-dasharray="2 4" opacity=".9"/>
+    <text x="${mx.toFixed(1)}" y="${(my-barriga/2+3).toFixed(1)}" text-anchor="middle" font-size="8.5"
+      fill="#9C8547">${escHtml(famCurto(rot,34))}</text>
+  </g>`;
+}
 const famMarcaDe=k=>FAM_MARCAS.find(m=>m.k===k)||null;
 const famMarcasDe=p=>(Array.isArray(p&&p.marcas)?p.marcas:[]).map(famMarcaDe).filter(Boolean);
 function famMarcar(id,k){
@@ -9388,7 +9474,7 @@ function famBalaoSVG(p,larg,altTela){
    a ordem em que a herança corre. */
 function famPainelGente(){
   return _famPessoas
-    .filter(p=>famMarcasDe(p).length||String(p.obs||'').trim())
+    .filter(p=>famMarcasDe(p).length||String(p.obs||'').trim()||p.laco)
     .sort((a,b)=>(a.ger-b.ger)||(a.ord-b.ord));
 }
 function famPainelLinhas(p,colLarg){
@@ -9396,7 +9482,10 @@ function famPainelLinhas(p,colLarg){
   const obs=String(p.obs||'').trim();
   const cab=famNomeDe(p)+(p.papel?' · '+p.papel:'');
   const n=Math.max(16,Math.floor((colLarg-24)/5.1));   // quantas letras cabem na coluna
-  return {cab:famCurto(cab,Math.floor(n*1.05)),marcas:ms,obs:obs?famQuebrar(obs,n):[]};
+  // O segundo laço entra como linha de texto, junto com a frase dela.
+  const o=p.laco?famPorId(p.laco):null;
+  const corpo=[o?((p.lacoRot||'também é').trim()+' '+famNomeDe(o)):'',obs].filter(Boolean).join(' — ');
+  return {cab:famCurto(cab,Math.floor(n*1.05)),marcas:ms,obs:corpo?famQuebrar(corpo,n):[]};
 }
 function famPainelMedidas(){
   const gente=famPainelGente();
@@ -9532,6 +9621,16 @@ function famRenderEditor(){
       </select></div>
     </div>
     <div class="fr full"><div class="fg"><label>Uma linha sobre essa pessoa</label><input type="text" value="${escHtml(p.obs||'')}" oninput="famCampo('${p.id}','obs',this.value)" placeholder="o que ela disse dessa pessoa — a peneira também lê daqui"></div></div>
+    <div class="fr">
+      <div class="fg"><label>Também é, de alguém</label><select onchange="famLacar('${p.id}','com',this.value)">
+        <option value="">— nenhum segundo laço —</option>
+        ${_famPessoas.filter(o=>String(o.id)!==String(p.id))
+          .sort((a,b)=>(a.ger-b.ger)||(a.ord-b.ord))
+          .map(o=>`<option value="${o.id}"${String(p.laco||'')===String(o.id)?' selected':''}>${escHtml(famNomeDe(o))}${o.papel?' ('+escHtml(o.papel)+')':''}</option>`).join('')}
+      </select></div>
+      <div class="fg"><label>E o que é dela</label><input type="text" value="${escHtml(p.lacoRot||'')}" ${p.laco?'':'disabled'} oninput="famCampo('${p.id}','lacoRot',this.value)" placeholder="irmão de, primo de, chefe de..."></div>
+    </div>
+    <div class="fam-nota" style="margin-top:-4px;margin-bottom:8px">A árvore só sabe desenhar um laço por pessoa. O segundo laço conta o resto — o pai que é irmão do sogro, a esposa que é prima — sem tirar ninguém do lugar.</div>
     <div style="margin-top:9px">
       <label style="display:block;font-size:11px;font-weight:600;color:var(--txt-l);margin-bottom:5px">O que pesa nessa pessoa — vira anel em volta da cabeça</label>
       <div style="display:flex;gap:5px;flex-wrap:wrap">
@@ -9554,7 +9653,7 @@ function famRenderEditor(){
       ${p.eu?'<span class="fam-nota" style="margin-left:auto">Esta é ela. O nome vem da ficha.</span>':`<button type="button" class="btn btn-sec btn-sm" style="margin-left:auto;color:var(--danger)" onclick="famTirar('${p.id}')">Tirar do desenho</button>`}
     </div>
   </div>
-  <datalist id="famPapeis">${['mãe','pai','madrasta','padrasto','avó materna','avô materno','avó paterna','avô paterno','irmã','irmão','filha','filho','companheiro','companheira'].map(x=>`<option value="${x}">`).join('')}</datalist>`;
+  <datalist id="famPapeis">${FAM_PAPEIS.map(x=>`<option value="${x}">`).join('')}</datalist>`;
 }
 function famContar(){
   const el=document.getElementById('famConta');
@@ -9624,7 +9723,7 @@ function famEscCheia(e){if(e.key==='Escape')document.querySelectorAll('.fam-palc
    nos papéis e nas linhas de cada figura. Cada achado mostra a procedência. */
 function famTexto(){
   // As marcas entram junto: o anel é dado, e a peneira lê dado — não só palavra.
-  return _famPessoas.map(p=>[p.papel,p.obs,famMarcasDe(p).map(m=>m.rot+' '+m.ex).join(' ')]
+  return _famPessoas.map(p=>[p.papel,p.obs,p.lacoRot,famMarcasDe(p).map(m=>m.rot+' '+m.ex).join(' ')]
     .filter(Boolean).join(' ')).join(' . ');
 }
 function famTemTriangulo(){
