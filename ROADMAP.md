@@ -288,6 +288,26 @@ teoria de livro, é coisa que aconteceu na tela dele. Escrever uma de cada vez, 
 agentes. O Ronda lê só as 60 primeiras linhas. Por isso este catálogo mora aqui embaixo e não lá
 em cima: *onde a coisa fica no arquivo passou a importar.* Isso, sozinho, já é uma aula.
 
+### 0. Onde eu estou de pé — o `cd` (dúvida real dele, 01/08/2026)
+**Camada 2, e provavelmente antes de tudo.** Ele perguntou, com todas as letras: *"sempre tenho
+dificuldade aonde eu rodo este comando, aonde em qual arquivo devo estar para rodar este comando"*.
+
+A confusão não é de terminal — é de **categoria**: ele procura um *arquivo* onde o comando se
+digita. Comando não mora em arquivo. Arquivo é papel, guarda coisa escrita; comando se dá **numa
+sala**, e a sala é o terminal.
+
+**A metáfora que funcionou:** o terminal está sempre **parado em alguma pasta**, como quem está de
+pé em algum cômodo da casa — e isso é invisível, o que é exatamente a causa da dúvida. Daí as duas
+maneiras de falar: **endereço curto** (`rm -rf node_modules` = "apaga a caixa *daqui*", depende de
+onde você está) e **endereço completo** (`rm -rf "C:/.../agentes/node_modules"` = "apaga a caixa
+daquele quarto, naquele andar, naquela casa", não depende de nada).
+
+Ensina: `cd`, `pwd`, caminho relativo vs. absoluto, e por que os comandos que eu entrego vêm sempre
+com o endereço inteiro e num bloco com botão de rodar — para ele nunca precisar saber onde está de
+pé. **A prova real:** foi apagando os 291 MB do `node_modules` do Ronda que a dúvida apareceu.
+
+---
+
 ### 1. Agente não é chat — a diferença das mãos
 **Camada 7.** Chat responde; agente vai lá e faz. A diferença não é inteligência, é **ferramenta**.
 Prova viva: o Ronda estendeu a mão cinco vezes (`Read`, `Read`, `Grep`, `Read`, `Read`) sem
