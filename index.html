@@ -2123,7 +2123,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v8.8 · 02/08';
+const APP_VER='v8.9 · 02/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -8711,7 +8711,7 @@ function famCopiarWhimsical(){
     const ms=famMarcasDe(p).map(m=>famMarcaEscrita(p,m));
     const o=p.laco?famPorId(p.laco):null;
     const laco=o?((p.lacoRot||'também é').trim()+' '+nomeDe(o)):'';
-    const t=[p.papel,laco,ms.join(', '),String(p.obs||'').trim()].filter(Boolean);
+    const t=[p.papel,famIdadeRot(p),laco,ms.join(', '),String(p.obs||'').trim()].filter(Boolean);
     return t.length?' — '+t.join(' · '):'';
   };
   const filhosDe=p=>_famPessoas.filter(f=>String(f.de||'')===String(p.id))
@@ -8815,6 +8815,7 @@ function famDados(){
   return _famPessoas.map(p=>({id:p.id,nome:p.nome||'',papel:p.papel||'',sexo:p.sexo||'n',
     ger:p.ger,ord:p.ord,morto:!!p.morto,obs:p.obs||'',eu:!!p.eu,
     de:p.de||'',deCasal:!!p.deCasal,par:p.par||'',esperado:!!p.esperado,
+    nasc:p.nasc||'',fim:p.fim||'',
     marcas:Array.isArray(p.marcas)?p.marcas.slice():[],
     notas:Object.assign({},p.notas||{}),
     laco:p.laco||'',lacoRot:p.lacoRot||''}));
@@ -8950,6 +8951,12 @@ function famCampo(id,campo,valor){
   _diagJaSalvo=false;
   famGuardarRascunho();
   famDesenhar();          // o desenho acompanha; o editor não se redesenha por baixo do cursor
+  // A idade é a única linha do editor que muda enquanto ele digita — ela se
+  // atualiza sozinha, sem redesenhar o campo por baixo do cursor.
+  if(campo==='nasc'||campo==='fim'){
+    const n=document.getElementById('famNotaIdade');
+    if(n)n.textContent=famIdadeRot(p)||'Só o ano já basta — a idade sai aproximada.';
+  }
   famContar();
 }
 function famSexo(id,s){
@@ -9114,7 +9121,12 @@ function famFiguraSVG(p){
   // Quem já partiu leva o traço do genograma — a pessoa continua no desenho.
   if(p.morto)d+=`<path d="M${(x-FAM_BR*1.4).toFixed(1)} ${y-3} L${(x+FAM_BR*1.4).toFixed(1)} ${pe+3}" stroke-width="1.2"/>`;
   const nome=famCurto(p.nome||(p.eu?_diagPacSel&&_diagPacSel.nome:''),15);
-  const papel=famCurto(p.papel,17);
+  // A idade anda junto de quem a pessoa é, na mesma linha: "mãe · 62". Cabe
+  // porque o papel encolhe quando há idade — duas linhas embaixo do boneco já
+  // é o limite do vão entre as fileiras.
+  const idade=famIdadeCurta(p);
+  const papelCurto=famCurto(p.papel,idade?11:17);
+  const papel=papelCurto?(idade?papelCurto+' · '+idade:papelCurto):idade;
   return `<g class="fam-fig" data-fam="${p.id}">
     ${sel?`<rect x="${(x-FAM_PASSO/2+4).toFixed(1)}" y="${y-9}" width="${FAM_PASSO-8}" height="${FAM_H+34}" rx="9" fill="var(--pri-l)" stroke="var(--pri)" stroke-width="1"/>`:''}
     <g fill="none" stroke="${cor}" stroke-width="${esp}" stroke-linecap="round" stroke-linejoin="round"${p.esperado?' stroke-dasharray="3 3" opacity=".75"':''}>${d}</g>
@@ -9546,7 +9558,8 @@ function famPainelGente(){
 function famPainelLinhas(p,colLarg){
   const ms=famMarcasDe(p);
   const obs=String(p.obs||'').trim();
-  const cab=famNomeDe(p)+(p.papel?' · '+p.papel:'');
+  const idade=famIdadeRot(p);
+  const cab=famNomeDe(p)+(p.papel?' · '+p.papel:'')+(idade?' · '+idade:'');
   const n=Math.max(16,Math.floor((colLarg-24)/5.1));   // quantas letras cabem na coluna
   // O segundo laço entra como linha de texto, junto com a frase dela.
   const o=p.laco?famPorId(p.laco):null;
@@ -9690,6 +9703,12 @@ function famRenderEditor(){
         <option value="">— ninguém —</option>
         ${famCandidatos(p,'par').map(o=>`<option value="${o.v}"${String(p.par||'')===o.v?' selected':''}>${escHtml(o.rot)}</option>`).join('')}
       </select></div>
+    </div>
+    <div class="fr">
+      <div class="fg"><label>Nasceu em</label><input type="text" value="${escHtml(p.nasc||'')}" oninput="famCampo('${p.id}','nasc',this.value)" placeholder="${p.eu?'vem da ficha — só escreva se quiser mudar':'1957, 03/1957 ou 04/03/1957'}">
+        <div class="fam-nota" id="famNotaIdade" style="margin-top:3px">${famIdadeRot(p)?escHtml(famIdadeRot(p)):'Só o ano já basta — a idade sai aproximada.'}</div></div>
+      ${p.morto?`<div class="fg"><label>Partiu em</label><input type="text" value="${escHtml(p.fim||'')}" oninput="famCampo('${p.id}','fim',this.value)" placeholder="2019, 07/2019 ou 12/07/2019">
+        <div class="fam-nota" style="margin-top:3px">Com este ano, a idade embaixo do boneco vira a que ficou.</div></div>`:'<div class="fg"></div>'}
     </div>
     <div class="fr full"><div class="fg"><label>Uma linha sobre essa pessoa</label><input type="text" value="${escHtml(p.obs||'')}" oninput="famCampo('${p.id}','obs',this.value)" placeholder="o que ela disse dessa pessoa — a peneira também lê daqui"></div></div>
     <div class="fr">
@@ -9886,6 +9905,61 @@ function idadePorNasc(nasc){
   const m=h.getMonth()-n.getMonth();
   if(m<0||(m===0&&h.getDate()<n.getDate()))a--;
   return a>=0?a+' anos':'';
+}
+
+/* ===== A IDADE DAS COISAS =====
+   Ninguém lembra a data inteira da avó. Lembra o ano — às vezes nem isso, só
+   "por volta de". Então a data aqui pode vir pela metade: 1957, 03/1957,
+   04/03/1957 ou 1957-03-04. Quem só tem o ano ganha idade aproximada, e a tela
+   diz que é aproximada com um til. O que não dá para saber fica em branco:
+   nenhuma idade é inventada. */
+function dataFrouxa(txt){
+  const s=String(txt||'').trim();
+  if(!s)return null;
+  let m;
+  if(m=s.match(/^(\d{4})-(\d{1,2})(?:-(\d{1,2}))?$/))return{a:+m[1],m:+m[2],d:+(m[3]||0)};
+  if(m=s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/))return{a:+m[3],m:+m[2],d:+m[1]};
+  if(m=s.match(/^(\d{1,2})\/(\d{4})$/))return{a:+m[2],m:+m[1],d:0};
+  if(m=s.match(/^(\d{4})$/))return{a:+m[1],m:0,d:0};
+  return null;
+}
+const hojeFrouxo=()=>{const h=new Date();return{a:h.getFullYear(),m:h.getMonth()+1,d:h.getDate()};};
+// Anos completos entre duas datas frouxas. Onde falta mês ou dia, entra o
+// primeiro — é o único palpite que não envelhece ninguém à toa.
+function anosEntreFrouxo(n,f){
+  if(!n||!f)return null;
+  let a=f.a-n.a;
+  const mn=n.m||1, mf=f.m||1;
+  if(mf<mn||(mf===mn&&(f.d||1)<(n.d||1)))a--;
+  return a>=0?a:null;
+}
+// A idade de uma figura do desenho. Quem já partiu para de contar no ano em que
+// partiu — a idade dele é a que ficou. O "eu" não precisa digitar nada: o
+// nascimento dela já está na ficha.
+function famIdadeDe(p){
+  if(!p)return null;
+  let nasc=dataFrouxa(p.nasc);
+  if(!nasc&&p.eu&&_diagPacSel){
+    const pac=gD('pacientes').find(x=>String(x.id)===String(_diagPacSel.id));
+    if(pac&&pac.nascimento)nasc=dataFrouxa(pac.nascimento);
+  }
+  if(!nasc)return null;
+  const fim=p.morto?dataFrouxa(p.fim):hojeFrouxo();
+  if(!fim)return null;
+  const a=anosEntreFrouxo(nasc,fim);
+  if(a===null)return null;
+  return {anos:a,aprox:!nasc.m||!fim.m,morto:!!p.morto};
+}
+// O jeito curto, que cabe embaixo do boneco.
+function famIdadeCurta(p){
+  const i=famIdadeDe(p);
+  return i?(i.aprox?'~':'')+i.anos:'';
+}
+// O jeito por extenso, que vai para o painel e para a folha.
+function famIdadeRot(p){
+  const i=famIdadeDe(p);
+  if(!i)return '';
+  return (i.aprox?'cerca de ':'')+i.anos+' anos'+(i.morto?' ao partir':'');
 }
 /* ===== IR E VOLTAR: da ficha do paciente até a bancada, e de volta =====
    Ele pediu para o Diagnóstico e a Recomendação abrirem DENTRO da ficha. Não

@@ -9,6 +9,41 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — a idade das coisas (Clínica v8.9, 02/08/2026)
+
+**O pedido dele:** *"a idade das coisas"* — e, entre as leituras possíveis, a que ele escolheu:
+**a idade das pessoas**.
+
+**O que já existia:** o cabeçalho do Diagnóstico já dizia a idade de quem chegou, calculada do
+nascimento da ficha. Quem não tinha idade nenhuma era a **família desenhada** — os bonecos do DNA
+da Família traziam nome e papel, e mais nada. E é justamente ali que a idade conta história: o pai
+que partiu aos 62, a irmã que tem a idade que ela tinha quando aquilo aconteceu.
+
+**O que foi feito:**
+
+1. **Cada boneco pode ter um nascimento.** Campo "Nasceu em" no editor da figura.
+2. **A data pode vir pela metade.** Ninguém lembra o dia do nascimento da avó. Aceita `1957`,
+   `03/1957`, `04/03/1957` e `1957-03-04`. Quem só sabe o ano ganha idade **aproximada**, marcada
+   com um til embaixo do boneco (`~69`) e com "cerca de" por extenso. O que não dá para saber fica
+   em branco: **nenhuma idade é inventada**.
+3. **Quem já partiu para de contar.** Ao marcar "já partiu", aparece o campo "Partiu em" — e a
+   idade vira a que ficou: *"cerca de 62 anos ao partir"*.
+4. **O "eu" não digita nada.** O nascimento dela já está na ficha; o boneco dela busca lá sozinho.
+   Se ele escrever algo no campo, o que ele escreveu manda.
+5. **A idade anda junto do papel**, na mesma linha embaixo do boneco (`mãe · 62`), e o papel
+   encolhe para caber — duas linhas embaixo da figura é o limite do vão entre as fileiras.
+6. **Vai junto para todo lado:** o painel "O que pesa nesta casa" (que entra no JPG e na folha
+   impressa) e o texto copiado para o Whimsical agora trazem a idade.
+
+**Onde mora:** `dataFrouxa`, `anosEntreFrouxo`, `famIdadeDe`, `famIdadeCurta` e `famIdadeRot`,
+logo abaixo de `idadePorNasc`. Os campos `nasc` e `fim` entraram em `famDados`, e por isso viajam
+no rascunho e no que se salva com a avaliação.
+
+**Conferido:** ano só, data inteira, data pela metade, quem partiu, texto que não é data nenhuma
+e o boneco dela — todos deram o que deviam dar.
+
+---
+
 ## Concluído — o anel próprio e a anotação (Clínica v8.8, 02/08/2026)
 
 **O pedido dele, na senha "Vestir o anel":** *"Em 'o que pesa nessa pessoa', teria como eu
