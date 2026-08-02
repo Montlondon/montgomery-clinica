@@ -40,6 +40,36 @@ sem ler isto vai construir telas certas pelo motivo errado.*
 
 ---
 
+## Concluído — a aula 2.6, o peso invisível (OS v5.9, 01/08/2026)
+
+**Terceira vela da senha "Montar a aula".** A **2.6 — o peso invisível** montada pelos cinco passos
+(âncora `aula-2-6`):
+
+1. **A imagem** — a maleta do atendimento fora. Entra o essencial; **a maca não viaja**, e nem por
+   isso deixa de existir. O `.gitignore` é a lista do que não viaja — e o mais importante dele é o
+   que ele **não** faz: não apaga nada, só faz o Git parar de vigiar e de oferecer.
+2. **O conceito** — existem **três pesos diferentes** e eles não são o mesmo: o do histórico (o
+   grave, porque fica para sempre), o da página (o que o navegador baixa, que se conserta quando
+   quiser) e o do agente (o tamanho do que a IA abre, já dito na Camada 7). No meio, a regra dura:
+   **o Git não esquece** — apagar depois some da pasta e continua no livro, por isso a lista se
+   escreve antes.
+3. **O código real** — o `.gitignore` dele, medido nesta janela e não de memória: `node_modules/`
+   segurando **291 MB** (as peças de terceiro que o Ronda baixou), `21_Backups/` com 7,1 MB,
+   `03_Biblioteca/`, `.vercel`, `.netlify`, `.obsidian/`. Entrou a lição do **comentário que
+   envelheceu**: a linha dele diz "42 MB parados na entrada do main" e hoje são 7,1 — o número
+   venceu, o porquê não. E o caso da logomarca que viajava **seis vezes** dentro do arquivo: virou
+   `icon-512.jpg` de 40 KB chamado pelo nome, e a Clínica caiu de 1568 KB para 777 KB sem perder
+   um pixel.
+4. **O passo seu** — dois comandos que só leem: `git count-objects -vH` (a linha `size-pack` é o
+   peso de toda a história, o que uma pessoa baixa ao clonar) e `git status --short` para
+   **procurar `node_modules` e não achar**. Esse silêncio é o `.gitignore` trabalhando: a coisa
+   mais útil que ele faz é não aparecer.
+5. **A prova** — por que apagar o arquivo depois não resolve, e o que da pasta dele hoje entraria
+   na lista do que não viaja.
+
+**O inglês ganhou quatro palavras:** *ignore*, *dependency*, *asset* e *bloat*, todas ligadas a 2.6.
+Glossário em 32 palavras; grade com **10 aulas acesas**.
+
 ## Concluído — a aula 2.5 e o sotaque de Londres (OS v5.8, 01/08/2026)
 
 **Segunda vela da senha "Montar a aula".** A **2.5 — trabalhar com o `main` sujo** montada pelos

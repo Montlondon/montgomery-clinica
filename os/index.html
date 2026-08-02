@@ -2188,6 +2188,51 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     <p style="font-size:0.9rem;margin-bottom:var(--f3)">No caderno, com as suas palavras: <b>o que voc&ecirc; viu na sua bancada</b>, e por que <code style="font-family:'Courier New',monospace">git add -A</code> no tronco &eacute; perigoso justamente por ser o comando mais c&ocirc;modo. Se conseguir explicar isso a algu&eacute;m, a aula fechou.</p>
     <p style="font-family:'Lora',serif;font-style:italic;color:var(--cinza);text-align:center;margin:0 0 var(--f3);font-size:0.9rem">Bancada cheia n&atilde;o &eacute; desleixo &mdash; &eacute; trabalho vivo. O cuidado est&aacute; em escolher o que sai dela.</p>
 
+    <!-- AULA 2.6 — montada em 01/08/2026. Matéria-prima: o .gitignore real do repositório, medido
+         nesta janela: node_modules 291 MB, 21_Backups 7,1 MB, e a foto que entrou seis vezes. -->
+    <h3 style="color:var(--azul);font-size:1rem;margin:var(--f3) 0 var(--f2)" id="aula-2-6">Aula 2.6 &middot; O peso invis&iacute;vel</h3>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">A aula passada foi sobre <b>escolher o que entra</b> numa entrega. Esta &eacute; sobre a pergunta que vem antes da escolha, e que voc&ecirc; j&aacute; faz sem nome: <b>quanto isso pesa?</b> Porque no Git existe uma coisa que n&atilde;o existe no consult&oacute;rio &mdash; o que entra uma vez fica para sempre, mesmo depois de apagado.</p>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">1 &middot; A imagem</h4>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">Voc&ecirc; vai atender fora e faz a maleta. Entra o essencial: as agulhas, a ficha, o que n&atilde;o se improvisa. <b>N&atilde;o entra a maca</b> &mdash; e n&atilde;o porque a maca seja ruim. Ela &eacute; &oacute;tima; ela s&oacute; n&atilde;o viaja. Continua na sala, inteira, esperando voc&ecirc; voltar.</p>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">O <code style="font-family:'Courier New',monospace;color:var(--dourado)">.gitignore</code> &eacute; a <b>lista do que n&atilde;o viaja</b>. Um arquivo de texto, uma linha por coisa. E o mais importante dele &eacute; o que ele <em>n&atilde;o</em> faz: <b>ele n&atilde;o apaga nada</b>. O arquivo continua no seu computador, do mesmo jeito. O Git s&oacute; para de vigiar e para de oferecer.</p>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">2 &middot; O conceito &mdash; existem tr&ecirc;s pesos, e eles n&atilde;o s&atilde;o o mesmo</h4>
+    <div class="cards" style="margin-bottom:var(--f2)">
+      <div class="card"><h3>o peso do hist&oacute;rico</h3><div class="sub">o mais grave</div><p style="font-size:0.85rem;color:var(--texto)">O que foi commitado uma vez fica no livro <b>para sempre</b>, mesmo apagado depois. Quem clonar o projeto daqui a dez anos baixa aquilo junto. &Eacute; o &uacute;nico peso que n&atilde;o tem volta f&aacute;cil.</p></div>
+      <div class="card"><h3>o peso da p&aacute;gina</h3><div class="sub">o que o paciente sente</div><p style="font-size:0.85rem;color:var(--texto)">O que o navegador baixa toda vez que algu&eacute;m abre. Este voc&ecirc; conserta quando quiser &mdash; e j&aacute; consertou.</p></div>
+      <div class="card"><h3>o peso do agente</h3><div class="sub">o que aparece na conta</div><p style="font-size:0.85rem;color:var(--texto)">O tamanho do que uma IA abre para trabalhar. J&aacute; est&aacute; dito na Camada 7: encarece o arquivo grande, nunca o tempo pensando.</p></div>
+    </div>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">O primeiro &eacute; o desta aula. E a regra dura, dita sem rodeio: <b>o Git n&atilde;o esquece</b>. Ele foi feito para nunca perder nada &mdash; essa &eacute; a virtude dele, e &eacute; exatamente por isso que um engano de peso &eacute; caro. Apagar o arquivo depois n&atilde;o resolve: some da pasta, continua no livro. Por isso a lista do que n&atilde;o viaja se escreve <b>antes</b>, e n&atilde;o depois.</p>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">3 &middot; O c&oacute;digo real &mdash; a sua lista, medida agora</h4>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)">Este &eacute; o <code style="font-family:'Courier New',monospace">.gitignore</code> do seu reposit&oacute;rio, e ao lado o que cada linha est&aacute; segurando fora do livro neste momento &mdash; medido nesta janela, n&atilde;o de mem&oacute;ria:</p>
+    <div style="background:var(--bege);border:1px solid rgba(27,58,92,0.12);border-radius:11px;padding:var(--f3);font-family:'Courier New',monospace;font-size:0.82rem;line-height:1.9;overflow-x:auto;margin-bottom:var(--f2)">
+      <div style="color:var(--azul)">node_modules/<span style="color:#b04a3a;float:right">291 MB</span></div>
+      <div style="color:var(--azul)">21_Backups/<span style="color:var(--cinza);float:right">7,1 MB</span></div>
+      <div style="color:var(--azul)">03_Biblioteca/<span style="color:var(--cinza);float:right">os livros</span></div>
+      <div style="color:var(--azul)">.vercel &nbsp; .netlify &nbsp; .obsidian/<span style="color:var(--cinza);float:right">recado de ferramenta</span></div>
+    </div>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)"><b>Os 291 MB s&atilde;o do Ronda.</b> Quando o seu primeiro agente nasceu, ele precisou de pe&ccedil;as prontas &mdash; e um comando s&oacute; baixou 291 MB de coisa de terceiros para dentro da pasta. Nada daquilo &eacute; seu, e tudo aquilo pode ser baixado de novo em trinta segundos por qualquer pessoa. Guardar aquilo no livro seria como fotocopiar a farm&aacute;cia inteira e grampear no prontu&aacute;rio.</p>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)">Repare tamb&eacute;m no <b>coment&aacute;rio</b> que voc&ecirc; deixou escrito ali, come&ccedil;ando com <code style="font-family:'Courier New',monospace">#</code>: <em>"foto do dado, n&atilde;o c&oacute;digo. 42 MB parados na entrada do main."</em> No dia em que a linha foi escrita eram 42 MB; hoje s&atilde;o 7,1. O n&uacute;mero envelheceu &mdash; a raz&atilde;o, n&atilde;o. Isso &eacute; um coment&aacute;rio bom: ele guarda o <b>porqu&ecirc;</b>, e o porqu&ecirc; n&atilde;o vence.</p>
+    <div style="border:1px solid rgba(74,124,89,0.4);border-radius:11px;background:rgba(74,124,89,0.06);padding:var(--f3);margin-bottom:var(--f3)">
+      <p style="font-size:0.9rem;margin:0"><b style="color:var(--verde)">E o dia em que a conta chegou.</b> A Cl&iacute;nica carregava a mesma logomarca <b>seis vezes</b> escrita por dentro do pr&oacute;prio arquivo. Uma foto virou <code style="font-family:'Courier New',monospace">icon-512.jpg</code>, com <b>40 KB</b>, chamada pelo nome nos seis lugares &mdash; e a p&aacute;gina caiu de <b>1568 KB para 777 KB</b> sem perder um pixel. A imagem n&atilde;o mudou. Mudou quantas vezes ela viajava.</p>
+    </div>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">4 &middot; O passo seu</h4>
+    <div style="border:1px solid rgba(201,168,76,0.4);border-radius:11px;background:rgba(201,168,76,0.06);padding:var(--f3);margin-bottom:var(--f3)">
+      <p style="font-size:0.9rem;margin:0 0 8px">Dois comandos que <b>s&oacute; leem</b>. O primeiro pesa o livro inteiro:</p>
+      <p style="font-family:'Courier New',monospace;color:var(--azul);font-size:0.88rem;margin:0 0 10px">git count-objects -vH</p>
+      <p style="font-size:0.9rem;margin:0 0 10px">Na linha <code style="font-family:'Courier New',monospace">size-pack</code> est&aacute; o peso de toda a hist&oacute;ria do projeto, comprimida. &Eacute; o que uma pessoa baixa ao clonar. Guarde o n&uacute;mero na cabe&ccedil;a e olhe de novo daqui a um m&ecirc;s.</p>
+      <p style="font-size:0.9rem;margin:0 0 8px">O segundo &eacute; a prova do sil&ecirc;ncio. Rode na pasta do reposit&oacute;rio:</p>
+      <p style="font-family:'Courier New',monospace;color:var(--azul);font-size:0.88rem;margin:0 0 8px">git status --short</p>
+      <p style="font-size:0.9rem;margin:0">Procure <code style="font-family:'Courier New',monospace">node_modules</code> na lista. <b>Voc&ecirc; n&atilde;o vai achar</b> &mdash; e s&atilde;o 291 MB sentados ali na pasta, neste segundo. Esse sil&ecirc;ncio &eacute; o <code style="font-family:'Courier New',monospace">.gitignore</code> trabalhando. A coisa mais &uacute;til que ele faz &eacute; n&atilde;o aparecer.</p>
+    </div>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">5 &middot; A prova</h4>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">No caderno, com as suas palavras: <b>por que apagar o arquivo depois n&atilde;o resolve</b> &mdash; e qual coisa da sua pasta, hoje, voc&ecirc; poria na lista do que n&atilde;o viaja se ainda n&atilde;o estivesse l&aacute;. Enquanto isso n&atilde;o estiver escrito, a aula fica aberta.</p>
+    <p style="font-family:'Lora',serif;font-style:italic;color:var(--cinza);text-align:center;margin:0 0 var(--f3);font-size:0.9rem">Ignorar, aqui, &eacute; um cuidado: &eacute; dizer o que fica em casa, para que a viagem seja leve.</p>
+
     <h3 style="color:var(--azul);font-size:1rem;margin:0 0 var(--f2)">O vocabul&aacute;rio m&iacute;nimo</h3>
     <div class="cards" style="margin-bottom:var(--f3)">
       <div class="card"><h3>repositório</h3><p style="font-size:0.85rem;color:var(--texto)">A pasta do projeto <b>com</b> o livro de histórico dentro. Você tem vários: o do OS, o da Clínica, o do MMObras.</p></div>
@@ -2312,8 +2357,9 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v5.8';
-const APP_VERSION_NOTA='a aula 2.5 — trabalhar com o tronco sujo — montada pelos cinco passos: a bancada cheia no fim do dia nao e desleixo, e trabalho vivo, e o perigo nao e um comando dificil, e o mais comodo de todos (git add -A). Modificado e solto, o git status que so olha, e a prova viva do commit da aula anterior, feito com dois arquivos nomeados e a bancada do tronco lida antes do merge. Mais quatro palavras novas no glossario (dirty, clean, untracked, stage) e a nota que faltava: o IPA daqui e britanico, o sotaque que ele trouxe de Londres';
+const APP_VERSION='v5.9';
+const APP_VERSION_NOTA='a aula 2.6 — o peso invisivel — montada pelos cinco passos: a maleta do atendimento fora, onde a maca nao viaja e nem por isso deixa de existir. O .gitignore como lista do que nao viaja (e que nao apaga nada), os tres pesos que nao sao o mesmo (o do historico, o da pagina, o do agente) e a regra dura no meio: o Git nao esquece, entao a lista se escreve antes. O codigo real e a lista dele medida nesta janela — os 291 MB do Ronda, os 7,1 MB dos backups, o comentario que envelheceu no numero mas nao na razao — mais a logomarca que viajava seis vezes e virou 40 KB chamados pelo nome. O passo seu pesa o livro inteiro e depois procura node_modules na lista para nao achar: esse silencio e a prova. Quatro palavras novas no glossario (ignore, dependency, asset, bloat)';
+const APP_VERSION_NOTA_V58='a aula 2.5 — trabalhar com o tronco sujo — montada pelos cinco passos: a bancada cheia no fim do dia nao e desleixo, e trabalho vivo, e o perigo nao e um comando dificil, e o mais comodo de todos (git add -A). Modificado e solto, o git status que so olha, e a prova viva do commit da aula anterior, feito com dois arquivos nomeados e a bancada do tronco lida antes do merge. Mais quatro palavras novas no glossario (dirty, clean, untracked, stage) e a nota que faltava: o IPA daqui e britanico, o sotaque que ele trouxe de Londres';
 const APP_VERSION_NOTA_V57='a primeira aula montada de verdade pelo metodo dos cinco passos: 2.4 — conflito nao e erro, e sim o Git se recusando a adivinhar. A imagem das duas maos escrevendo na mesma linha do prontuario, as tres marcas cruas traduzidas uma a uma, os tres conflitos reais do merge da estante do Kindle (a linha da versao, o topo do ROADMAP e o fim do .gitignore) e o que eles ensinam — o que conflita nao e a obra, e o lugar por onde toda mudanca passa; mais a saida que sempre existe (merge --abort) e um passo seu que so le';
 const APP_VERSION_NOTA_V56='a estante do Kindle finalmente entra no ar: o Hua Hu Ching, escrito em 29/07, tinha ficado num galho sem ser juntado — sobe agora junto com o glossario vivo do ingles, e o Montgomery Code passa a mostrar o som e uma frase real de cada palavra do trabalho';
 const APP_VERSION_NOTA_V42='abre-se a estante do Kindle: o Hua Hu Ching, os últimos ensinamentos de Lao-Tzu, entra na Espiritualidade em catorze blocos — a dualidade como enfermidade, o ego que é um macaco, a cadeia de cinco elos que fabrica sofrimento, as três energias no corpo e os oito degraus que terminam apontando para o I Ching. E o eco que ninguém esperava: o não-forçar de Lao-Tzu e o desimpedir-se do analista são o mesmo gesto, descoberto duas vezes em caminhos que nunca se cruzaram';
@@ -5835,7 +5881,7 @@ const GRADE=[
    {id:'2.3',t:'A escada da entrega',d:'Merge, push, deploy e ship — o que cada palavra promete de verdade.',st:'acesa',onde:'code',alvo:'camada-2'},
    {id:'2.4',t:'Conflito não é erro',d:'É o Git se recusando a adivinhar. Ler as marcas cruas e traduzir cada uma, nos três conflitos reais do merge da estante.',st:'acesa',onde:'code',alvo:'aula-2-4'},
    {id:'2.5',t:'Trabalhar com o main sujo',d:'Commitar só o arquivo necessário. Modificado, solto e o braço que varre a bancada — lido no commit da aula anterior.',st:'acesa',onde:'code',alvo:'aula-2-5'},
-   {id:'2.6',t:'O peso invisível',d:'Os 291 MB que quase entraram no repositório, e a pergunta que virou hábito: quanto isso pesa?',st:'fila'},
+   {id:'2.6',t:'O peso invisível',d:'Os 291 MB que ficam de fora, a lista do que não viaja e a regra dura: o Git não esquece.',st:'acesa',onde:'code',alvo:'aula-2-6'},
    {id:'2.7',t:'A receita, não os ingredientes',d:'Por que o git guarda o package.json e não as peças — e o npm install como ir ao mercado.',st:'fila'}]},
  {n:3,nome:'Servidor & nuvem',sub:'A cozinha',objetivo:'Saber onde cada coisa roda e quem paga a conta de cada uma.',pre:'Módulo 1 — a diferença entre vitrine e motor.',
   aulas:[
@@ -5972,6 +6018,14 @@ const INGLES=[
   frase:'Untracked files are not in the repository.', tr:'Arquivo solto não está no repositório.'},
  {en:'stage',    som:'stêidj',        aula:'2.5', ipa:'/steɪdʒ/', pt:'pôr na bandeja — escolher o que entra nesta entrega',
   frase:'Stage only what belongs to this change.', tr:'Ponha na bandeja só o que é desta mudança.'},
+ {en:'ignore',   som:'ig-NÓR',        aula:'2.6', ipa:'/ɪɡˈnɔː/', pt:'ignorar — dizer ao Git que não olhe para aquilo; não apaga nada',
+  frase:'We ignore node_modules on purpose.', tr:'A gente ignora node_modules de propósito.'},
+ {en:'dependency',som:'di-PEN-den-si',aula:'2.6', ipa:'/dɪˈpendənsi/', pt:'peça de terceiro que o seu programa usa; não é sua, e se baixa de novo',
+  frase:'Dependencies do not belong in the repository.', tr:'Dependência não mora no repositório.'},
+ {en:'asset',    som:'É-set',         aula:'2.6', ipa:'/ˈæset/', pt:'o que não é código e viaja junto: foto, ícone, fonte, som',
+  frase:'That asset weighs more than the page.', tr:'Aquele arquivo pesa mais que a página inteira.'},
+ {en:'bloat',    som:'blôut',         aula:'2.6', ipa:'/bləʊt/', pt:'o inchaço — peso que entrou sem ninguém decidir que devia entrar',
+  frase:'The repo is bloated with old backups.', tr:'O repositório está inchado de backup antigo.'},
  {en:'build',    som:'bíld',          aula:'5.1', ipa:'/bɪld/', pt:'a montagem da página antes de ela ir ao ar',
   frase:'The build failed — read the log.', tr:'A montagem falhou — leia o registro.'},
  {en:'log',      som:'lóg',           aula:'1.6', ipa:'/lɒɡ/', pt:'o registro do que aconteceu, linha por linha',
