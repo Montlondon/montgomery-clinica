@@ -9,6 +9,28 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — provar a rede (Clínica v8.1, 02/08/2026)
+
+A rede da v8.0 foi testada de verdade, num navegador, com uma pessoa de mentira. O que ficou provado:
+
+1. **Grava.** Marcar elemento, ponto, observação de pulso e o campo emocional cria a chave
+   `diag_rascunho_<id>` no aparelho.
+2. **Volta.** Recarregando a página do zero — o que o celular faz sozinho ao trocar de aplicativo —
+   e escolhendo a mesma pessoa, tudo reapareceu, com o aviso de que ainda não foi salvo.
+3. **Não mistura.** Trocando para outra pessoa a tela nasce limpa; voltando na primeira, o que era
+   dela estava lá; indo na segunda de novo, o que era da segunda. Cada pessoa tem a sua rede.
+
+**O erro que o teste achou** (o valor do teste está aqui): se um rascunho guardado tivesse o nome de
+um ponto ou de um elemento que **saiu do banco** — porque foi renomeado numa entrega futura —
+o painel do Diagnóstico quebrava inteiro na tela, com o paciente na frente. O rascunho de ontem
+derrubando a sessão de hoje. Agora o nome órfão é simplesmente ignorado: o resto da ficha aparece
+normalmente. O bloco do ABC já tinha essa guarda; os dos elementos e dos pontos não tinham.
+
+Aula guardada: **o teste que não acha nada foi mal feito.** Foi um dado inventado errado — um ponto
+que não existia — que revelou o buraco real.
+
+---
+
 ## Concluído — a rede embaixo do que se digita (Clínica v8.0, 02/08/2026)
 
 Três velas na mesma janela, todas nascidas da mesma pergunta dele: *"existe auto save em tudo

@@ -2115,7 +2115,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v8.0 · 02/08';
+const APP_VER='v8.1 · 02/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -7646,6 +7646,7 @@ function renderDiagPainel(){
   const hPulso=html;html='';
   _diagSelecoes.elementos.forEach(nome=>{
     const e=bancoIntegrativoCompleto.matrizCincoElementos[nome];
+    if(!e)return;                               // nome que saiu do banco não derruba a tela
     const obsAtual=_diagSelecoes.elementosObs[nome]||'';
     html+=`<div class="fc" style="border-left:5px solid ${e.cor}">
       <div class="fst" style="color:${e.cor}"><span style="display:inline-flex;width:16px;height:16px;vertical-align:-3px">${e.icone}</span> ${e.titulo}</div>
@@ -7671,6 +7672,7 @@ function renderDiagPainel(){
   const hElementos=html;html='';
   _diagSelecoes.pontos.forEach(nome=>{
     const p=bancoIntegrativoCompleto.pontosCorpo[nome];
+    if(!p)return;                               // idem: rascunho antigo não pode quebrar o Diagnóstico
     html+=`<div class="fc" style="border-left:5px solid var(--pri)">
       <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1.6"/><path d="M11.3 7v3.5l-2.2 2v3M12.7 10.5V14l2.2 2v3"/><circle cx="9" cy="13" r="1.2"/><circle cx="15" cy="16.5" r="1.2"/></svg></span>${p.regiao}</div>
       <div style="font-size:12.5px;line-height:1.7">
