@@ -18,12 +18,14 @@ const RAIZ = path.resolve(AQUI, "..", "..");
 
 // 3) O PEDIDO. Uma tarefa so, bem estreita — agente barato.
 //    ATENCAO — a licao mais cara desta pasta:
-//    o ROADMAP tem 207 KB. Mandar "leia o ROADMAP" fez o agente abrir
+//    o ROADMAP tinha 207 KB. Mandar "leia o ROADMAP" fez o agente abrir
 //    o arquivo inteiro, em quatro pedacos, e custou US$ 0,17 numa corrida so.
-//    A secao "Proximo" mora no comeco. Entao a gente pede SO o comeco.
+//    Desde 01/08/2026 (senha "Emagrecer o diario") o arquivo vivo tem 67 KB
+//    e o pendente mora nas 20 primeiras linhas, na secao "O que esta pendente
+//    agora". Mesmo assim seguimos pedindo SO o comeco: e o habito que barateia.
 const PEDIDO = `
 Leia APENAS as primeiras 60 linhas de ROADMAP.md (use Read com limit: 60).
-E onde mora a secao "Proximo". Nao leia o resto: o arquivo tem 207 KB.
+E onde mora a secao "O que esta pendente agora". Nao leia o resto.
 Liste em portugues, no maximo 5 itens, o que ainda esta PENDENTE.
 Para cada um: uma linha curta, comecando com "-".
 Nao abra nenhum outro arquivo. Nao sugira nada. So a lista.
