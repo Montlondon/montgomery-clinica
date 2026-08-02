@@ -9,6 +9,39 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — a rede embaixo do que se digita (Clínica v8.0, 02/08/2026)
+
+Três velas na mesma janela, todas nascidas da mesma pergunta dele: *"existe auto save em tudo
+que eu digito?"*. **Não existia** — o levantamento achou os buracos.
+
+**1. O rascunho do Diagnóstico inteiro.** A folha e a família já tinham rede; o resto não tinha
+nenhuma. Pulso, elementos, pontos, ABC, aurículo, Baguá, psicanálise, vértebras, suplementos,
+candidatos, escala emocional e memória da sessão viviam só na memória viva da página — e o
+celular descarrega a página sozinho quando ele troca de aplicativo. Agora tudo isso é guardado
+por pessoa, meio segundo depois do último toque (`diagGuardarRascunho`), e volta sozinho ao
+escolher a pessoa de novo, com a faixa azul avisando que ainda não foi salva.
+
+Três cuidados que o teste exigiu:
+- **Trocar de pessoa não vaza.** Ao mudar de paciente, o que estava marcado é gravado no
+  rascunho de quem saiu e a tela zera. Antes as marcas de uma ficavam na tela da outra.
+- **Editando encontro antigo, o rascunho não se mete** — senão a pessoa reapareceria amanhã com
+  o passado dela na tela.
+- **Isto não é sincronismo.** Quem faz o celular e o computador se encontrarem continua sendo o
+  **Salvar Avaliação**; a rede só impede a perda dentro do aparelho.
+
+**2. O botão Visualizar.** Ele sentiu falta e tinha razão: só existia *Imprimir*, que abria a
+janela e disparava a impressão sozinha — não havia como **olhar antes de gastar papel**. Agora a
+mesma folha (o mesmo `gerarHtmlDiag`, nada desenhado duas vezes) aparece na tela, com Imprimir ao
+lado.
+
+**3. A árvore dos bonecos no papel.** Até aqui a impressão levava só a lista de nomes por
+geração — a imagem, que é o instrumento (é olhando para ela que o triângulo aparece), ficava para
+trás. O desenho virou função (`famMontarSvg` / `famSvgDe`) e agora vai inteiro para a folha,
+encolhido para caber, com a lista embaixo. Conferido em imagem: gerações rotuladas, o traço
+pontilhado do triângulo, quem já partiu com o traço do genograma.
+
+---
+
 ## Concluído — o botão que não aparecia (Clínica v7.9, 02/08/2026)
 
 **Achado usando de verdade.** Ele digitou no celular e não encontrou o mesmo texto no computador.

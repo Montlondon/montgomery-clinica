@@ -1575,7 +1575,7 @@ window.addEventListener('DOMContentLoaded',()=>{
         </optgroup>
       </select>
     </div>
-    <div class="fg full" style="margin-top:10px"><label>Observações sobre o estado emocional</label><textarea id="diagEmoObs" rows="2"></textarea></div>
+    <div class="fg full" style="margin-top:10px"><label>Observações sobre o estado emocional</label><textarea id="diagEmoObs" rows="2" oninput="_diagJaSalvo=false;diagGuardarRascunho()"></textarea></div>
   </div>
 
   <div class="fc">
@@ -1592,6 +1592,7 @@ window.addEventListener('DOMContentLoaded',()=>{
     <div class="fa" style="margin-top:14px">
       <button type="button" class="btn btn-sec" onclick="limparDiagnostico()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span> Limpar Avaliação</button>
       <button type="button" class="btn btn-pri" onclick="enviarDiagParaRx()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20C4 14 6 6 16 4c1 6-2 13-10 16Z"/><path d="M7 19c2-4 4-7 8-10"/></svg></span>Levar para a recomendação, aqui embaixo</button>
+      <button type="button" class="btn btn-sec" onclick="visualizarDiag()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span> Visualizar</button>
       <button type="button" class="btn btn-sec" onclick="imprimirDiag()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg></span> Imprimir</button>
       <button type="button" class="btn" id="btnSalvarDiag" onclick="salvarDiagComProtecao(this)" style="background:var(--pri-d);color:#fff;border:none;font-weight:700"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.3 2.3L16 9.5"/></svg></span> Salvar Avaliação</button>
     </div>
@@ -2114,7 +2115,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v7.9 · 02/08';
+const APP_VER='v8.0 · 02/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2784,6 +2785,10 @@ function go(p,el){
       // Se a avaliação está sendo zerada, não existe mais para onde voltar:
       // a faixa some junto, para nunca prometer uma volta que não existe.
       _cdVolta=null;
+      // O último toque pode não ter chegado ao armário ainda (a gravação espera
+      // meio segundo). Grava agora, enquanto a chave da pessoa ainda existe.
+      clearTimeout(_diagRascTimer);
+      diagGravarRasc(diagChaveRasc());
       _diagEditandoId=null;
       _diagPacSel=null;
       _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:'',candidatos:[],candidatosFora:[]};
@@ -6970,7 +6975,7 @@ function togglePulsoNaPos(key,id){
   if(i>=0)r[key].splice(i,1);else r[key].push(id);
   _diagJaSalvo=false;sincPulso();renderPulsoCard();renderDiagPainel();
 }
-function atualizarObsPulso(valor){_diagSelecoes.pulsoObs=valor;}
+function atualizarObsPulso(valor){_diagSelecoes.pulsoObs=valor;_diagJaSalvo=false;diagGuardarRascunho();}
 function filtrarPulsoPos(key){
   const inp=document.getElementById('pbq_'+key),lista=document.getElementById('pbl_'+key);
   if(!inp||!lista)return;
@@ -7037,7 +7042,7 @@ function toggleQuiro(grupo,art){
   // O corpo e a aba mostram o mesmo dado: marcar num lugar acende no outro.
   if(typeof cpDesenhar==='function'){cpDesenhar();cpPainel();}
 }
-function atualizarObsQuiro(v){_diagSelecoes.quiroObs=v;_diagJaSalvo=false;}
+function atualizarObsQuiro(v){_diagSelecoes.quiroObs=v;_diagJaSalvo=false;diagGuardarRascunho();}
 // O botão de marcar/desmarcar, igual nas duas abas
 function btnQuiro(grupo,art,on){
   return `<button type="button" class="btn ${on?'btn-pri':'btn-sec'} btn-sm" style="flex-shrink:0;padding:2px 9px;font-size:10.5px" onclick="toggleQuiro(${jsq(grupo)},${jsq(art)})">${on?'marcado':'+ marcar'}</button>`;
@@ -7561,6 +7566,7 @@ function atualizarQtdDiagSup(idx,qtd){
 }
 function atualizarObsAuriculo(valor){
   _diagSelecoes.auriculoObs=valor;
+  _diagJaSalvo=false;diagGuardarRascunho();
 }
 function atualizarObsElemento(nome,valor){
   _diagSelecoes.elementosObs[nome]=valor;
@@ -7606,6 +7612,7 @@ function renderDiagPainel(){
   const temMemoria=MEM_CAMPOS.some(id=>{const e=document.getElementById(id);return e&&e.value.trim();});
   const temAlgo=temFolha||temFamilia||temMemoria||pulsoChaves().length||_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length||(_diagSelecoes.auriculo||[]).length||(_diagSelecoes.bagua||[]).length||(_diagSelecoes.psicanalise||[]).length||(_diagSelecoes.elementoSintomas||[]).length||(_diagSelecoes.pontoSintomas||[]).length||(_diagSelecoes.quiro||[]).length;
   atualizarResumoCaixas();   // os títulos das caixas fechadas contam o que mudou
+  diagGuardarRascunho();     // toda mudança passa por aqui: a rede é uma só
   if(!temAlgo){
     // Avaliação limpa: as caixas também esvaziam, senão sobra resto de antes
     ['pulso','elementos','pontos','abc','sup','auriculo','bagua','quiroref'].forEach(k=>entregarNaCaixa(k,''));
@@ -7960,8 +7967,9 @@ function gerarHtmlDiag(diagRec){
     </div>`;
   }
 
-  // As pessoas dela no papel. O desenho não vai — vai quem estava desenhado,
-  // por geração, que é o que se lê depois sem precisar da tela.
+  // As pessoas dela no papel: vai o DESENHO como estava, e embaixo dele os
+  // nomes por geração. A árvore é o instrumento — é olhando para ela que o
+  // triângulo aparece — e a lista é o que se lê depois, sem precisar decifrar.
   const famPapel=diagRec?(Array.isArray(diagRec.familia)?diagRec.familia:[]):famDados();
   const famVale=famPapel.filter(p=>!p.eu&&(p.nome||p.papel));
   if(famVale.length){
@@ -7975,8 +7983,10 @@ function gerarHtmlDiag(diagRec){
       }).join('; ');
       return `<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>${rot[g]}:</strong> ${nomes}</div>`;
     }).filter(Boolean).join('');
+    const arvore=famSvgDe(famPapel);
     blocos+=`<div style="border-left:4px solid #8A8578;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
       <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">As pessoas dela</div>
+      ${arvore?`<div style="margin:2px 0 10px">${arvore}</div>`:''}
       ${linhas}
     </div>`;
   }
@@ -8029,6 +8039,23 @@ function gerarHtmlDiag(diagRec){
     </div>
   </div>`;
 }
+/* VISUALIZAR — olhar a folha antes de gastar papel. Até aqui, o único jeito de
+   ver como a avaliação de hoje ia sair era mandar imprimir: a janela abria e
+   disparava a impressão sozinha. Agora a mesma folha (o mesmo gerarHtmlDiag,
+   nada desenhado duas vezes) aparece na tela, e daí ele decide imprimir. */
+function visualizarDiag(){
+  if(!_diagPacSel){toast('Selecione um paciente primeiro','#EF6C00',"warn");return;}
+  document.getElementById('modC').innerHTML=`
+    <h3 style="color:var(--pri-d);margin-bottom:10px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;vertical-align:-3px"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg> Como esta avaliação vai sair no papel</h3>
+    <div style="font-size:12px;color:var(--txt-l);margin-bottom:12px">${escHtml(_diagPacSel.nome)}${_diagJaSalvo?'':' · ainda não salva'}</div>
+    <div style="overflow-x:auto">${gerarHtmlDiag(null)}</div>
+    <div style="display:flex;gap:7px;justify-content:flex-end;margin-top:13px">
+      <button class="btn btn-sec btn-sm" onclick="fMod()">Fechar</button>
+      <button class="btn btn-sec btn-sm" onclick="imprimirDiag()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1.5"/><path d="M6 17v4h12v-4"/></svg></span> Imprimir</button>
+    </div>`;
+  document.getElementById('modP').classList.add('show');
+}
+
 function imprimirDiag(diagId){
   let diagRec=null;
   if(diagId){
@@ -8130,6 +8157,14 @@ async function escolherDiagPac(id){
   selecionarDiagPac(p.id,p.nome);
 }
 function selecionarDiagPac(id,nome){
+  // Trocar de pessoa: o que estava marcado é da pessoa anterior. Guarda no
+  // rascunho DELA (com a chave antiga, antes da troca) e limpa a tela, para
+  // que nada de uma caia na ficha da outra. Ao voltar nela, tudo reaparece.
+  if(_diagPacSel&&String(_diagPacSel.id)!==String(id)){
+    clearTimeout(_diagRascTimer);
+    diagGravarRasc(diagChaveRasc());
+    diagZerarSelecoes();
+  }
   _diagPacSel={id,nome};
   _diagJaSalvo=false;
   document.getElementById('diagPacBusca').value=nome;
@@ -8138,6 +8173,7 @@ function selecionarDiagPac(id,nome){
   renderDiagUltEncontro();
   folhaCarregarRascunho();
   famCarregar();
+  diagCarregarRascunho();
   rxNoDiagSync();
 }
 
@@ -8267,6 +8303,73 @@ function folhaMudou(){
   folhaGuardarRascunho();
   if(_folhaPenAberta)renderFolhaPeneira();
   renderDiagPainel();   // escrever já basta: o Resumo abre e o Salvar aparece
+}
+
+/* ===== O RASCUNHO DO DIAGNÓSTICO INTEIRO =====
+   A folha e a família já tinham rede; o resto da avaliação não tinha nenhuma.
+   Pulso, elementos, pontos, ABC, aurículo, Baguá, psicanálise, vértebras,
+   suplementos, candidatos, escala emocional e memória da sessão viviam só na
+   memória viva da página — e o celular descarrega a página sozinho quando ele
+   troca de aplicativo. Um encontro inteiro podia sumir sem aviso.
+   Mesma receita das outras duas: guarda por pessoa, no aparelho, ao vivo; e
+   sai de cena no instante em que a avaliação é salva de verdade. Isto NÃO é
+   sincronismo entre aparelhos — quem faz o celular e o computador se
+   encontrarem continua sendo o Salvar Avaliação. */
+const DIAG_RASC='diag_rascunho_';
+let _diagRascTimer=null;
+function diagChaveRasc(){return _diagPacSel?DIAG_RASC+_diagPacSel.id:null;}
+function diagRascVazio(d){
+  if(!d)return true;
+  const s=d.selecoes||{};
+  const temSel=Object.keys(s).some(k=>{
+    if(k==='candidatosFora')return false;      // o que ele dispensou é da hora
+    const v=s[k];
+    if(Array.isArray(v))return v.length>0;
+    if(v&&typeof v==='object')return Object.keys(v).length>0;
+    return !!(v&&String(v).trim());
+  });
+  return !temSel&&!(d.escala||'').trim()&&!(d.emoObs||'').trim()&&!MEM_CAMPOS.some(id=>(d.mem&&d.mem[id]||'').trim());
+}
+function diagGravarRasc(c){
+  // Editando um encontro antigo, o rascunho não se mete: aquilo já é registro,
+  // e gravá-lo como "avaliação de hoje por salvar" faria a pessoa reaparecer
+  // amanhã com o passado dela na tela.
+  if(!c||_diagEditandoId)return;
+  const mem={};MEM_CAMPOS.forEach(id=>{mem[id]=vMem(id);});
+  const d={selecoes:_diagSelecoes,escala:vDiag('diagEscalaEmo'),emoObs:vDiag('diagEmoObs'),mem:mem};
+  try{
+    if(diagRascVazio(d))localStorage.removeItem(c);
+    else localStorage.setItem(c,JSON.stringify(d));
+  }catch(e){}                                   // armário cheio não pode travar o atendimento
+}
+function diagGuardarRascunho(){
+  clearTimeout(_diagRascTimer);
+  // Meio segundo depois do último toque: marcar dez pontos seguidos grava uma
+  // vez só, e não dez.
+  _diagRascTimer=setTimeout(()=>diagGravarRasc(diagChaveRasc()),500);
+}
+const vDiag=id=>{const e=document.getElementById(id);return e?e.value:'';};
+function diagLimparRascunho(){
+  clearTimeout(_diagRascTimer);
+  const c=diagChaveRasc();
+  if(c)localStorage.removeItem(c);
+}
+// Só entra em avaliação NOVA e ainda intocada: quem está editando um encontro
+// antigo (ou já marcou algo) não pode ser atropelado pelo rascunho.
+function diagCarregarRascunho(){
+  const c=diagChaveRasc();
+  if(!c||_diagEditandoId)return;
+  let d=null;
+  try{d=JSON.parse(localStorage.getItem(c)||'null');}catch(e){}
+  if(!d||diagRascVazio(d))return;
+  Object.keys(d.selecoes||{}).forEach(k=>{_diagSelecoes[k]=d.selecoes[k];});
+  const e1=document.getElementById('diagEscalaEmo');if(e1)e1.value=d.escala||'';
+  const e2=document.getElementById('diagEmoObs');if(e2)e2.value=d.emoObs||'';
+  MEM_CAMPOS.forEach(id=>{const e=document.getElementById(id);if(e&&d.mem)e.value=d.mem[id]||'';});
+  _diagJaSalvo=false;
+  renderPulsoCard();renderElementosGrid();renderPontosGrid();initBaguaWheel();renderDiagPainel();
+  if(typeof cpDesenhar==='function'){cpDesenhar();cpPainel();}
+  toast('A avaliação desta pessoa voltou como estava. Ainda não foi salva.','#1565C0',"info");
 }
 
 function folhaContar(){
@@ -8792,6 +8895,17 @@ function famDesenhar(){
     el.innerHTML='<div class="fam-vazio">Escolha quem chegou no cabeçalho — a família é dela, e o desenho fica guardado com ela.</div>';
     return;
   }
+  const r=famMontarSvg();
+  el.innerHTML=r.svg;
+  if(r.temTri)el.insertAdjacentHTML('beforeend','<div class="fam-nota" style="padding:0 12px 8px">O triângulo está desenhado: o pai, a mãe e ela.</div>');
+  famLigarArrasto();
+}
+
+/* O desenho virou texto — e por isso pode ir para o papel. Antes, a árvore só
+   existia dentro da tela: quem imprimia recebia a lista de nomes por geração,
+   e a imagem (que é o instrumento, o que faz o triângulo aparecer sozinho)
+   ficava para trás. Uma função só monta o SVG; a tela e a folha bebem dela. */
+function famMontarSvg(){
   famGarantirEu();famConsertarVinculos();famCalcularPos();
   const alt=famAltura(), larg=_famLarg;
   let svg=`<svg class="fam-tela" viewBox="0 0 ${larg} ${alt}" preserveAspectRatio="xMidYMid meet" id="famSvg" style="max-width:${larg}px;height:auto;aspect-ratio:${larg}/${alt};margin:0 auto">`;
@@ -8856,9 +8970,22 @@ function famDesenhar(){
   }
   _famPessoas.forEach(p=>{svg+=famFiguraSVG(p);});
   svg+='</svg>';
-  el.innerHTML=svg;
-  if(temTri)el.insertAdjacentHTML('beforeend','<div class="fam-nota" style="padding:0 12px 8px">O triângulo está desenhado: o pai, a mãe e ela.</div>');
-  famLigarArrasto();
+  return {svg:svg,temTri:temTri};
+}
+
+// A árvore de uma lista qualquer de pessoas — a de agora ou a que ficou
+// guardada num encontro antigo. Empresta o desenho por um instante e devolve
+// tudo como estava: nada do papel pode mexer no que está na tela.
+function famSvgDe(lista){
+  const guardaP=_famPessoas, guardaS=_famSel, guardaL=_famLarg;
+  try{
+    _famPessoas=JSON.parse(JSON.stringify(lista||[]));
+    _famSel=null;                               // no papel ninguém está selecionado
+    // A prancheta é larga e a folha é estreita: o desenho encolhe para caber
+    // inteiro, sem cortar ninguém (o viewBox cuida da proporção).
+    return famMontarSvg().svg.replace('height:auto','height:auto;width:100%');
+  }catch(e){return '';}
+  finally{_famPessoas=guardaP;_famSel=guardaS;_famLarg=guardaL;}
 }
 
 // Arrastar: a fileira em que a figura for solta vira a geração dela, e a
@@ -9214,12 +9341,18 @@ function fecharDiagPacLista(){
   setTimeout(()=>document.getElementById('diagPacLista').style.display='none',200);
 }
 
+// As marcas da avaliação de volta ao zero — sem perguntar nada e sem mexer no
+// rascunho guardado. Quem pergunta é quem chama.
+function diagZerarSelecoes(){
+  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:'',candidatos:[],candidatosFora:[]};
+  const e1=document.getElementById('diagEscalaEmo');if(e1)e1.value='';
+  const e2=document.getElementById('diagEmoObs');if(e2)e2.value='';
+  limparMemSessao();
+}
 function limparDiagnostico(){
   if(!confirm('Limpar toda a avaliação atual?'))return;
-  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:'',candidatos:[],candidatosFora:[]};
-  document.getElementById('diagEscalaEmo').value='';
-  document.getElementById('diagEmoObs').value='';
-  limparMemSessao();
+  diagLimparRascunho();      // limpar de propósito apaga a rede junto
+  diagZerarSelecoes();
   folhaLimpar();
   _diagJaSalvo=false;
   _diagEditandoId=null;
@@ -9382,6 +9515,9 @@ async function salvarDiagnostico(){
     // pelo caminho do último desenho salvo.
     const cFam=famChaveRasc();
     if(cFam)localStorage.removeItem(cFam);
+    // E a rede do resto da avaliação: o encontro está no servidor, a rede
+    // cumpriu o papel dela e sai de cena.
+    diagLimparRascunho();
     // O encontro de hoje já é história: a régua ganha o ponto na hora.
     reguaRender();
   }catch(e){
