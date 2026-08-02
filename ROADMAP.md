@@ -1066,7 +1066,8 @@ nova, nenhum peso novo na cota.
 
 **Antes da obra, um achado que importa mais do que ela:** o **OS v5.4 (o curso) estava pronto desde
 30/07 e nunca tinha sido publicado** — ficou num galho que ninguém juntou ao tronco. O que estava
-no ar era o **OS v3.4**. Aula viva, e das caras: *entregar não é terminar de escrever; é juntar,
+no ar era o **OS v5.3** (conferido no `APP_VERSION`
+do commit que estava publicado). Aula viva, e das caras: *entregar não é terminar de escrever; é juntar,
 empurrar e conferir no ar.* Isto vira a aula **5.2 — Subir e olhar**, e reforça a **2.3 — a escada
 da entrega**. Fica a regra: **ao fim de toda sessão, conferir se algum galho ficou para trás.**
 Nesta subida o curso foi junto, então **v5.4 e v5.5 entraram no ar no mesmo empurrão.**
