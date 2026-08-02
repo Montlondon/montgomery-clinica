@@ -2123,7 +2123,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v8.7 · 02/08';
+const APP_VER='v8.8 · 02/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -8708,7 +8708,7 @@ function famCopiarWhimsical(){
   famConsertarVinculos();
   const nomeDe=p=>famNomeDe(p);
   const detalhe=p=>{
-    const ms=famMarcasDe(p).map(m=>m.rot);
+    const ms=famMarcasDe(p).map(m=>famMarcaEscrita(p,m));
     const o=p.laco?famPorId(p.laco):null;
     const laco=o?((p.lacoRot||'também é').trim()+' '+nomeDe(o)):'';
     const t=[p.papel,laco,ms.join(', '),String(p.obs||'').trim()].filter(Boolean);
@@ -8816,6 +8816,7 @@ function famDados(){
     ger:p.ger,ord:p.ord,morto:!!p.morto,obs:p.obs||'',eu:!!p.eu,
     de:p.de||'',deCasal:!!p.deCasal,par:p.par||'',esperado:!!p.esperado,
     marcas:Array.isArray(p.marcas)?p.marcas.slice():[],
+    notas:Object.assign({},p.notas||{}),
     laco:p.laco||'',lacoRot:p.lacoRot||''}));
 }
 function famChaveRasc(){return _diagPacSel?FAM_RASC+_diagPacSel.id:null;}
@@ -9392,15 +9393,75 @@ function famLacoSVG(p){
       fill="#9C8547">${escHtml(famCurto(rot,34))}</text>
   </g>`;
 }
-const famMarcaDe=k=>FAM_MARCAS.find(m=>m.k===k)||null;
+/* O ANEL PRÓPRIO. As nove marcas da lista são as que se repetem em quase toda
+   casa. Mas a casa dele não é quase toda casa: ele pediu para poder criar o
+   anel que faltar, com o nome dele. Um anel próprio é guardado dentro da
+   própria marca, no formato "livre:#COR:Rótulo" — assim ele viaja junto com o
+   desenho, sem precisar de tabela nova nem de outra viagem ao banco.
+
+   E A ANOTAÇÃO. "Morreu de aneurisma" é a marca; "aos 62" é a anotação. Uma
+   coisa é o que houve, outra é quando. O anel não tem onde escrever um número,
+   então o número aparece onde há espaço: no balão, no painel e no papel. */
+const FAM_CORES_LIVRES=['#8E6E53','#2F6F6B','#8C5AA8','#3F6FA8','#9B7B1E','#6B7F3A','#A8523F','#4F5B6B'];
+function famMarcaDe(k){
+  const s=String(k||'');
+  if(s.indexOf('livre:')===0){
+    const p=s.split(':');
+    const cor=p[1]||'#6B6357', rot=p.slice(2).join(':')||'Anel próprio';
+    return {k:s,rot:rot,cor:cor,ex:'anel que ele mesmo criou',livre:true};
+  }
+  return FAM_MARCAS.find(m=>m.k===s)||null;
+}
 const famMarcasDe=p=>(Array.isArray(p&&p.marcas)?p.marcas:[]).map(famMarcaDe).filter(Boolean);
+// A anotação de uma marca naquela pessoa: "aos 62", "desde 2019", "há 3 anos".
+const famNotaDe=(p,k)=>String((p&&p.notas&&p.notas[k])||'').trim();
+// Pelo ÍNDICE, e não pela chave: o anel próprio guarda o rótulo dentro da
+// chave, e um apóstrofo no rótulo ("mãe d'água") quebraria o onclick.
+function famNotaMarcaI(id,i,valor){
+  const p=famPorId(id), m=famMarcasDe(p)[i];
+  if(m)famNotaMarca(id,m.k,valor);
+}
+function famTirarAnelI(id,i){
+  const p=famPorId(id), m=famMarcasDe(p)[i];
+  if(m)famMarcar(id,m.k);
+}
+function famNotaMarca(id,k,valor){
+  const p=famPorId(id);
+  if(!p)return;
+  if(!p.notas)p.notas={};
+  p.notas[k]=valor;
+  _diagJaSalvo=false;
+  famGuardarRascunho();famDesenhar();
+}
+// O rótulo como ele aparece escrito: a marca e, se houver, a anotação junto.
+function famMarcaEscrita(p,m){
+  const n=famNotaDe(p,m.k);
+  return m.rot+(n?' — '+n:'');
+}
+function famAnelProprio(id){
+  const p=famPorId(id);
+  if(!p)return;
+  const rot=(prompt('Que anel falta nessa pessoa?\n\nEscreva com as suas palavras — vira um anel novo, com cor própria.\nExemplo: "surdez de nascença", "acidente de moto".')||'').trim();
+  if(!rot)return;
+  // Os dois-pontos separam as partes do anel guardado: se ele escrever um, o
+  // rótulo se parte no meio. Vira travessão, que é o que ele quis dizer.
+  const limpo=rot.replace(/:/g,' —').slice(0,40);
+  const usadas=(p.marcas||[]).map(famMarcaDe).filter(m=>m&&m.livre).length;
+  const cor=FAM_CORES_LIVRES[usadas%FAM_CORES_LIVRES.length];
+  famGuardarPasso();
+  p.marcas=(Array.isArray(p.marcas)?p.marcas:[]).concat('livre:'+cor+':'+limpo);
+  _diagJaSalvo=false;
+  famGuardarRascunho();famRender();
+}
 function famMarcar(id,k){
   const p=famPorId(id);
   if(!p)return;
   famGuardarPasso();
   const atual=Array.isArray(p.marcas)?p.marcas.slice():[];
   const i=atual.indexOf(k);
-  if(i>=0)atual.splice(i,1);else atual.push(k);
+  // Tirando o anel, a anotação dele sai junto: nota sem anel não conta nada.
+  if(i>=0){atual.splice(i,1);if(p.notas)delete p.notas[k];}
+  else atual.push(k);
   p.marcas=atual;
   _diagJaSalvo=false;
   famGuardarRascunho();famRender();
@@ -9445,7 +9506,10 @@ function famBalaoSVG(p,larg,altTela){
   const obs=String(p.obs||'').trim();
   if(!ms.length&&!obs)return'';
   const linhasObs=obs?famQuebrar(obs,30):[];
-  const alt=12+ms.length*13+(linhasObs.length?6+linhasObs.length*12:0);
+  // O rótulo com a anotação junto pode ficar comprido: aí ele quebra em duas
+  // linhas dentro do balão, em vez de sair pela borda.
+  const linhasM=ms.map(m=>famQuebrar(famMarcaEscrita(p,m),28));
+  const alt=12+linhasM.reduce((s,l)=>s+l.length*12,0)+(linhasObs.length?6+linhasObs.length*12:0)+2;
   const L=176, x=famX(p), y=famY(p.ger);
   // Nasce à direita; se não couber na prancheta, vira para a esquerda.
   let bx=x+FAM_BR*1.6+8;
@@ -9458,10 +9522,12 @@ function famBalaoSVG(p,larg,altTela){
     <path d="M${x} ${(y+FAM_R).toFixed(1)} L${bx<x?bx+L:bx} ${(by+14).toFixed(1)}" stroke="#D9CFB8" stroke-width="1" fill="none"/>
     <rect x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${L}" height="${alt}" rx="8" fill="#FFFDF7" stroke="#D9CFB8" stroke-width="1"/>`;
   let ty=by+15;
-  ms.forEach(m=>{
+  ms.forEach((m,i)=>{
     d+=`<circle cx="${(bx+11).toFixed(1)}" cy="${(ty-3.5).toFixed(1)}" r="3.6" fill="none" stroke="${m.cor}" stroke-width="2"/>`;
-    d+=`<text x="${(bx+20).toFixed(1)}" y="${ty.toFixed(1)}" font-size="9.5" font-weight="600" fill="${m.cor}">${escHtml(m.rot)}</text>`;
-    ty+=13;
+    linhasM[i].forEach((l,j)=>{
+      d+=`<text x="${(bx+20).toFixed(1)}" y="${ty.toFixed(1)}" font-size="9.5" font-weight="${j?'400':'600'}" fill="${m.cor}">${escHtml(l)}</text>`;
+      ty+=12;
+    });
   });
   if(linhasObs.length){
     ty+=4;
@@ -9485,14 +9551,17 @@ function famPainelLinhas(p,colLarg){
   // O segundo laço entra como linha de texto, junto com a frase dela.
   const o=p.laco?famPorId(p.laco):null;
   const corpo=[o?((p.lacoRot||'também é').trim()+' '+famNomeDe(o)):'',obs].filter(Boolean).join(' — ');
-  return {cab:famCurto(cab,Math.floor(n*1.05)),marcas:ms,obs:corpo?famQuebrar(corpo,n):[]};
+  // Cada marca vira uma ou mais linhas, com a anotação junto ("aos 62").
+  const marcas=ms.map(m=>({cor:m.cor,linhas:famQuebrar(famMarcaEscrita(p,m),n-2)}));
+  return {cab:famCurto(cab,Math.floor(n*1.05)),marcas:marcas,obs:corpo?famQuebrar(corpo,n):[]};
 }
 function famPainelMedidas(){
   const gente=famPainelGente();
   const cols=(_famLarg>=760&&gente.length>3)?2:1;
   const pad=14, vao=16;
   const colLarg=(_famLarg-pad*2-(cols-1)*vao)/cols;
-  const altDe=p=>{const l=famPainelLinhas(p,colLarg);return 14+l.marcas.length*12+l.obs.length*11+8;};
+  const altDe=p=>{const l=famPainelLinhas(p,colLarg);
+    return 14+l.marcas.reduce((s,m)=>s+m.linhas.length*12,0)+l.obs.length*11+8;};
   return {gente,cols,pad,vao,colLarg,altDe};
 }
 function famPainelAltura(){
@@ -9523,9 +9592,11 @@ function famPainelSVG(larg,y0){
       d+=`<text x="${x}" y="${(y+8).toFixed(1)}" font-size="10" font-weight="700" fill="#2B2924">${escHtml(l.cab)}</text>`;
       let ty=y+8;
       l.marcas.forEach(mk=>{
-        ty+=12;
-        d+=`<circle cx="${(x+4).toFixed(1)}" cy="${(ty-3.4).toFixed(1)}" r="3.4" fill="none" stroke="${mk.cor}" stroke-width="2"/>`;
-        d+=`<text x="${(x+13).toFixed(1)}" y="${ty.toFixed(1)}" font-size="9.5" font-weight="600" fill="${mk.cor}">${escHtml(mk.rot)}</text>`;
+        mk.linhas.forEach((li,j)=>{
+          ty+=12;
+          if(!j)d+=`<circle cx="${(x+4).toFixed(1)}" cy="${(ty-3.4).toFixed(1)}" r="3.4" fill="none" stroke="${mk.cor}" stroke-width="2"/>`;
+          d+=`<text x="${(x+13).toFixed(1)}" y="${ty.toFixed(1)}" font-size="9.5" font-weight="${j?'400':'600'}" fill="${mk.cor}">${escHtml(li)}</text>`;
+        });
       });
       l.obs.forEach(li=>{ty+=11;d+=`<text x="${(x+4).toFixed(1)}" y="${ty.toFixed(1)}" font-size="9" fill="#6B6357">${escHtml(li)}</text>`;});
       y+=m.altDe(p);
@@ -9639,7 +9710,17 @@ function famRenderEditor(){
           return `<button type="button" class="folha-ch${on?' on':''}" onclick="famMarcar('${p.id}','${m.k}')" title="${escHtml(m.ex)}" style="${on?`border-color:${m.cor};color:${m.cor}`:''}">
             <span style="display:inline-block;width:7px;height:7px;border-radius:50%;border:2px solid ${m.cor};margin-right:5px;vertical-align:middle"></span>${escHtml(m.rot)}</button>`;
         }).join('')}
+        <button type="button" class="folha-ch" onclick="famAnelProprio('${p.id}')" title="Cria um anel que não está na lista, com as palavras dele">+ Anel próprio</button>
       </div>
+      ${famMarcasDe(p).length?`<div style="margin-top:8px;border-top:1px solid #EFE7D6;padding-top:8px">
+        <label style="display:block;font-size:11px;font-weight:600;color:var(--txt-l);margin-bottom:5px">E o que anotar em cada anel — a idade, o ano, o quanto faz</label>
+        ${famMarcasDe(p).map((m,i)=>`<div style="display:flex;align-items:center;gap:7px;margin-bottom:5px">
+          <span style="display:inline-block;width:9px;height:9px;border-radius:50%;border:2px solid ${m.cor};flex-shrink:0"></span>
+          <span style="font-size:11.5px;font-weight:600;color:${m.cor};min-width:104px">${escHtml(m.rot)}</span>
+          <input type="text" style="flex:1;min-width:120px" value="${escHtml(famNotaDe(p,m.k))}" oninput="famNotaMarcaI('${p.id}',${i},this.value)" placeholder="aos 62, desde 2019, há 3 anos...">
+          ${m.livre?`<button type="button" class="btn btn-sec btn-sm" style="color:var(--danger)" onclick="famTirarAnelI('${p.id}',${i})" title="Tira este anel próprio">Tirar</button>`:''}
+        </div>`).join('')}
+      </div>`:''}
       <div class="fam-nota" style="margin-top:5px">A marca desenha e a peneira lê; a linha acima explica com as palavras dela. Nenhuma das duas fecha diagnóstico.</div>
     </div>
     <div class="fam-add" style="padding:9px 0 0">
@@ -9723,7 +9804,8 @@ function famEscCheia(e){if(e.key==='Escape')document.querySelectorAll('.fam-palc
    nos papéis e nas linhas de cada figura. Cada achado mostra a procedência. */
 function famTexto(){
   // As marcas entram junto: o anel é dado, e a peneira lê dado — não só palavra.
-  return _famPessoas.map(p=>[p.papel,p.obs,p.lacoRot,famMarcasDe(p).map(m=>m.rot+' '+m.ex).join(' ')]
+  return _famPessoas.map(p=>[p.papel,p.obs,p.lacoRot,
+    famMarcasDe(p).map(m=>famMarcaEscrita(p,m)+' '+(m.ex||'')).join(' ')]
     .filter(Boolean).join(' ')).join(' . ');
 }
 function famTemTriangulo(){

@@ -9,6 +9,36 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — o anel próprio e a anotação (Clínica v8.8, 02/08/2026)
+
+**O pedido dele, na senha "Vestir o anel":** *"Em 'o que pesa nessa pessoa', teria como eu
+adicionar um anel? Por exemplo, meu pai Venicio morreu de aneurisma, e se eu quiser anotar
+qualquer coisa que seja uma idade, por exemplo, morreu com tantos anos."* E, no mesmo fôlego:
+*"Estou sentindo que é a árvore realmente ganhando sentido."*
+
+**São duas coisas, e as duas foram feitas:**
+
+- **O anel próprio.** As nove marcas da lista são as que se repetem em quase toda casa — mas a
+  casa dele não é quase toda casa. O botão **+ Anel próprio** pergunta o que falta, e ele
+  escreve com as palavras dele ("surdez de nascença", "acidente de moto"). Cada anel próprio
+  ganha uma cor de uma roda de oito, então dois anéis próprios nunca saem iguais. Fica guardado
+  dentro da própria marca (`livre:#COR:Rótulo`) — viaja junto com o desenho, sem tabela nova nem
+  outra viagem ao banco.
+- **A anotação em cada anel.** "Morreu de aneurisma" é a marca; **"aos 62" é a anotação**. Uma
+  coisa é o que houve, outra é quando. O anel não tem onde escrever um número, então o número
+  aparece onde há espaço: no balão, no painel do panorama, na peneira, no papel e no organograma
+  do Whimsical — *"Coração e vasos — aneurisma, morreu aos 62"*.
+
+**Cuidados que o teste pegou:** o rótulo do anel próprio vai para dentro de uma chave separada
+por dois-pontos, então dois-pontos digitados por ele viram travessão (era o que ele quis dizer
+mesmo). E os campos passaram a ser chamados **pelo índice, não pela chave** — um apóstrofo no
+rótulo ("mãe d'água") quebraria o `onclick`. Tirando o anel, a anotação sai junto.
+
+**Provado:** cinco anéis numa cabeça só (dois deles próprios, com cores diferentes), o painel
+lendo tudo inteiro, e o Whimsical saindo com as anotações.
+
+---
+
 ## Concluído — o segundo laço: quando a mesma pessoa é duas coisas (Clínica v8.7, 02/08/2026)
 
 **O adendo dele:** *"No bonequinho Venicio, ele é meu pai, e ao mesmo tempo ele é irmão de Rubens,
