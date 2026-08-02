@@ -9,6 +9,42 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — o empate do mesmo dia (Clínica v8.3, 02/08/2026)
+
+**A queixa dele:** *"digito nos bonequinhos, SALVO, mas não está batendo com os mesmos no site do
+computador"* — os dois aparelhos na mesma versão.
+
+**Não era sincronismo, e nada se perdeu.** Olhando o banco: os seis encontros de hoje da mesma
+pessoa (ids 27 a 32) estão lá, **todos com as 20 figuras**, todos com `data = 2026-08-02`. O
+celular subiu tudo, certinho. O erro estava na hora de **escolher qual desenho mostrar**.
+
+**A causa, exata.** `famCarregar` pegava o último desenho assim:
+`.sort((a,b)=>String(b.data).localeCompare(String(a.data)))[0]`. Com seis avaliações no **mesmo
+dia**, a comparação devolve zero para todas — empate. E, num empate, a ordenação preserva a ordem
+em que os registros chegaram do banco (`id` crescente). Resultado: `[0]` era o encontro **mais
+antigo** do dia, o das primeiras horas. O computador mostrava fielmente o desenho da manhã
+enquanto o celular mostrava o da tarde.
+
+A prova de que era isso: entre o encontro 27 e o 32, as mesmas 20 pessoas — mas Chafik, Raquel e
+Letícia saíram da fileira dos avós para a fileira dela, e Jéssica subiu de netos para filhos.
+Exatamente "não bate".
+
+**O que mudou.** Nasceu `diagMaisRecente()`: a data continua mandando, e o **empate se desfaz pela
+ordem de gravação** — entre iguais, quem está mais adiante na lista foi salvo depois. A mesma
+função consertou `ultimoEncontroDoPac`, que tinha o **mesmo empate** e fazia a faixa "Último
+encontro" mostrar a primeira sessão do dia em vez da última.
+
+**Um segundo caminho para o mesmo susto, agora visível.** O rascunho local (`fam_rascunho_<id>`)
+ganha do desenho salvo — e deve ganhar, porque é trabalho por gravar. Só que ele ganhava **calado**,
+com um aviso que parecia confirmação. Agora, se existe desenho salvo daquela pessoa, o aviso diz:
+*"Este é o desenho por salvar deste aparelho. Há outro salvo no encontro de ..."*. A tela conta o
+que tem em mãos; quem decide é ele — irmão da regra *"nunca o relógio decide"* do MMObras.
+
+**A aula:** empate é decisão. Toda ordenação por data tem um empate escondido, e o empate escolhe
+sozinho se ninguém escolher por ele.
+
+---
+
 ## Concluído — peneirar os órfãos (Clínica v8.2, 02/08/2026)
 
 A v8.1 achou **um** nome órfão e tapou **um** buraco: o painel do Diagnóstico passou a ignorar

@@ -393,6 +393,25 @@ perdi"; senha + ROADMAP + CLAUDE.md resolvem "encheu".
 era o Montgomery; no celular o Claude começava cego. Aula sobre a diferença entre **memória
 pessoal** (fica na máquina) e **contexto do projeto** (viaja junto com o código).
 
+### 14. Empate é decisão (Clínica v8.3, 02/08/2026)
+**Camada 4 (dados).** A queixa dele foi *"salvo no celular, não bate no computador"* — e a
+primeira suspeita de qualquer um seria sincronismo. Não era: o banco tinha tudo. O erro era
+**escolher qual dos seis encontros do mesmo dia mostrar**.
+
+Ordenar por data parece resolver, mas seis registros com a mesma data **empatam**, e no empate a
+ordenação devolve a ordem em que os dados chegaram — no caso, o encontro mais antigo do dia.
+A tela mostrava o desenho da manhã com fidelidade absoluta, e por isso parecia mentira.
+
+**A imagem:** ordenar é pôr em fila. Quando dois têm a mesma senha, alguém decide — e se você não
+disser quem, o acaso diz. **Todo `sort` por data tem um segundo critério escondido; ou você o
+escolhe, ou ele escolhe por você.**
+
+**A prova real:** as mesmas 20 pessoas nos dois registros, mas três delas em fileiras diferentes.
+E o diagnóstico só apareceu porque se foi olhar o **banco**, não o código — a suspeita errada
+(sincronismo) teria custado horas.
+
+---
+
 ### 13. Peneirar na porta, e não em cada janela (Clínica v8.1 e v8.2, 02/08/2026)
 **Camada 4 (dados) / Camada 1.** A imagem é de casa: dá para tirar o sapato sujo em cada cômodo,
 ou pôr um capacho na porta de entrada. A v8.1 tirou o sapato numa sala — o painel do Diagnóstico

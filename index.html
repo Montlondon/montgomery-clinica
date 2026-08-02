@@ -2115,7 +2115,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v8.2 · 02/08';
+const APP_VER='v8.3 · 02/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -8695,13 +8695,25 @@ function famCarregar(){
     }catch(e){}
   }
   if(!_famPessoas.length&&_diagPacSel){
-    const antes=gD('diagnosticos')
-      .filter(d=>String(d.pacienteId)===String(_diagPacSel.id)&&Array.isArray(d.familia)&&d.familia.length)
-      .sort((a,b)=>String(b.data||'').localeCompare(String(a.data||'')))[0];
+    // O último desenho salvo — e "último" aqui precisa desempatar o mesmo dia,
+    // senão o encontro das 9h vence o das 18h (ver diagMaisRecente).
+    const antes=diagMaisRecente(gD('diagnosticos')
+      .filter(d=>String(d.pacienteId)===String(_diagPacSel.id)&&Array.isArray(d.familia)&&d.familia.length));
     if(antes){_famPessoas=JSON.parse(JSON.stringify(antes.familia));de='ultimo:'+antes.data;}
   }
   famGarantirEu();famNormalizarOrdem();famRender();
-  if(de==='rascunho')toast('A família desta pessoa voltou como estava.','#1565C0',"info");
+  if(de==='rascunho'){
+    // O rascunho é o que ELE estava desenhando aqui e ainda não salvou: continua
+    // ganhando, porque é trabalho por gravar. Mas se existe um desenho salvo
+    // desta mesma pessoa, ele precisa SABER que não é aquele que está na tela —
+    // senão dois aparelhos mostram famílias diferentes e nada avisa. Quem decide
+    // é ele; a tela só conta o que tem em mãos.
+    const salvo=diagMaisRecente(gD('diagnosticos')
+      .filter(d=>String(d.pacienteId)===String(_diagPacSel.id)&&Array.isArray(d.familia)&&d.familia.length));
+    toast(salvo
+      ? 'Este é o desenho por salvar deste aparelho. Há outro salvo no encontro de '+fd(salvo.data)+' — salve para que os dois fiquem iguais.'
+      : 'A família desta pessoa voltou como estava.','#1565C0',"info");
+  }
   else if(de.startsWith('ultimo:'))toast('A família veio do encontro de '+fd(de.slice(7))+'. Mude o que mudou.','#1565C0',"info");
 }
 function famLimpar(){
@@ -9934,13 +9946,22 @@ function rotuloSessao(diag){
   return n?'Sessão '+String(n).padStart(2,'0'):'Sessão';
 }
 
+// Qual destes encontros é o mais recente. A DATA SOZINHA NÃO RESOLVE: várias
+// avaliações da mesma pessoa no mesmo dia empatam, e um empate devolvia calado
+// a PRIMEIRA do dia, não a última. Foi assim que o desenho feito no celular
+// deixou de bater com o do computador — nada se perdeu, a tela é que mostrava
+// a versão errada do mesmo dia.
+// O desempate é a ordem de gravação: o cache chega do banco em id crescente,
+// então, entre datas iguais, quem está mais adiante na lista foi salvo depois.
+function diagMaisRecente(lista){
+  return (lista||[]).reduce((m,d)=>(!m||String(d.data||'')>=String(m.data||''))?d:m,null);
+}
 function ultimoEncontroDoPac(pacId,ignorarId){
   if(!pacId)return null;
   const doPac=(gD('diagnosticos')||[]).filter(d=>
     String(d.pacienteId)===String(pacId)&&d.data&&String(d.id)!==String(ignorarId||' ')
   );
-  doPac.sort((a,b)=>String(b.data).localeCompare(String(a.data)));
-  return doPac[0]||null;
+  return diagMaisRecente(doPac);
 }
 
 // "há 12 dias", "ontem", "há 3 meses" — o tempo que passou, em voz humana
