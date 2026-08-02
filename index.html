@@ -2114,7 +2114,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v7.7 · 01/08';
+const APP_VER='v7.8 · 01/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -7485,7 +7485,8 @@ function togglePsicanalise(categoria,nome){
 }
 let _psicAnaliseBusca='';
 function filtrarPsicanalise(){
-  _psicAnaliseBusca=(document.getElementById('psicAnaliseBusca').value||'').toLowerCase();
+  // semAcento: quem procura "silencio" tem que achar "silêncio"
+  _psicAnaliseBusca=semAcento(document.getElementById('psicAnaliseBusca').value||'');
   renderPsicanalise();
 }
 // Prepara um texto para viajar dentro de onclick="funcao('...')": escapa a barra,
@@ -7497,7 +7498,7 @@ function renderPsicanalise(){
   const q=_psicAnaliseBusca;
   let html='';
   psicanaliseTemas.forEach(cat=>{
-    const itens=q?cat.itens.filter(i=>i.nome.toLowerCase().includes(q)||i.desc.toLowerCase().includes(q)||cat.categoria.toLowerCase().includes(q)):cat.itens;
+    const itens=q?cat.itens.filter(i=>semAcento(i.nome).includes(q)||semAcento(i.desc).includes(q)||semAcento(cat.categoria).includes(q)):cat.itens;
     if(!itens.length)return;
     html+=`<div style="margin-bottom:14px">
       <div style="font-size:11.5px;font-weight:700;color:var(--pri-d);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid var(--brd)">${escHtml(cat.categoria)}</div>`;
