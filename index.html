@@ -266,10 +266,13 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
    no atendimento esses campos quase nunca são o assunto — mas quando são,
    corrigir um telefone não pode custar sair da tela.
    Abrir a dobra não grava nada: mostrar não é marcar. Só o botão grava. */
-.cab-dobra{margin-top:11px;padding-top:11px;border-top:1px dashed var(--brd)}
-.cab-dobra .fst{margin-top:0}
-.cab-dobra .fst:not(:first-child){margin-top:16px}
-.cab-dobra .fr{margin-bottom:0}
+.cab-dobra{margin-top:13px;padding-top:14px;border-top:1px dashed var(--brd)}
+/* A dobra usa a MESMA marcenaria da ficha (.fst / .fr / .fg) e não mexe em
+   nada dela. A primeira versão apertava as linhas com `margin-bottom:0` e
+   trocava os pares de campo — ficou pior de ler do que a aba original, e ele
+   viu na hora. Aqui só o respiro do segundo título é ajustado, porque na
+   dobra ele tem vizinho em cima. */
+.cab-dobra .fst:not(:first-child){margin-top:20px}
 .cab-dobra-pe{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:13px}
 .cab-dobra-nota{font-size:11.5px;color:var(--txt-l);line-height:1.55;flex:1 1 220px}
 /* A FOLHA LIMPA — a segunda faixa da tela única.
@@ -1424,39 +1427,40 @@ window.addEventListener('DOMContentLoaded',()=>{
     <div class="cab-dobra" id="cabDobra" style="display:none">
       <div class="fst">Dados Pessoais</div>
       <div class="fr">
+        <div class="fg"><label>Nome</label><input type="text" id="cdN" readonly title="O nome se corrige na ficha: trocá-lo mexe também na agenda, no histórico e no Google." style="cursor:not-allowed;opacity:.7"></div>
         <div class="fg"><label>Email</label><input type="email" id="cdE" oninput="cabDobraMudou()"></div>
-        <div class="fg"><label>Nascimento</label><input type="date" id="cdNasc" oninput="cabDobraMudou()"></div>
       </div>
       <div class="fr">
         <div class="fg"><label>Telefone / WhatsApp</label>
           <div style="display:flex;gap:6px"><input type="tel" id="cdT" placeholder="(00) 00000-0000" style="flex:1" oninput="cabDobraMudou();cabDobraWA()"><a id="cdWA" href="#" target="_blank" class="btn btn-wa btn-sm" style="display:none"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8.4 8.4 0 0 1-12.2 7.5L4 20l1.1-4.1a8.4 8.4 0 1 1 15.4-4.4Z"/><path d="M8.5 10.3c0 3.4 2.8 6.2 6.2 6.2"/></svg></span></a></div>
         </div>
+        <div class="fg"><label>Nascimento</label><input type="date" id="cdNasc" oninput="cabDobraMudou()"></div>
+      </div>
+      <div class="fr">
         <div class="fg"><label>Gênero</label><select id="cdG" onchange="cabDobraMudou()"><option value="">-</option><option>Masculino</option><option>Feminino</option><option>Outro</option><option>Prefiro não dizer</option></select></div>
+        <div class="fg"><label>Religião</label><input type="text" id="cdRl" oninput="cabDobraMudou()"></div>
       </div>
       <div class="fr">
         <div class="fg"><label>Profissão</label><input type="text" id="cdPr" oninput="cabDobraMudou()"></div>
         <div class="fg"><label>Estado Civil</label><select id="cdEC" onchange="cabDobraMudou()"><option value="">-</option><option>Solteiro(a)</option><option>Casado(a)</option><option>Divorciado(a)</option><option>Viúvo(a)</option><option>União Estável</option></select></div>
       </div>
-      <div class="fr">
-        <div class="fg"><label>Religião</label><input type="text" id="cdRl" oninput="cabDobraMudou()"></div>
-        <div class="fg"><label>Cidade</label><input type="text" id="cdCid" oninput="cabDobraMudou()"></div>
-      </div>
       <div class="fr full"><div class="fg"><label>Endereço</label><input type="text" id="cdEnd" oninput="cabDobraMudou()"></div></div>
       <div class="fr">
+        <div class="fg"><label>Cidade</label><input type="text" id="cdCid" oninput="cabDobraMudou()"></div>
         <div class="fg"><label>Estado</label><input type="text" id="cdEst" oninput="cabDobraMudou()"></div>
-        <div class="fg"><label>CEP</label><input type="text" id="cdCep" oninput="cabDobraMudou()"></div>
       </div>
       <div class="fr">
+        <div class="fg"><label>CEP</label><input type="text" id="cdCep" oninput="cabDobraMudou()"></div>
         <div class="fg"><label>Emergência</label><input type="text" id="cdCE" oninput="cabDobraMudou()"></div>
-        <div class="fg"><label>Tel. Emergência</label><input type="tel" id="cdTE" oninput="cabDobraMudou()"></div>
       </div>
+      <div class="fr full"><div class="fg"><label>Tel. Emergência</label><input type="tel" id="cdTE" oninput="cabDobraMudou()"></div></div>
 
       <div class="fst">Histórico Médico</div>
-      <div class="fr full"><div class="fg"><label>Doenças</label><textarea id="cdDo" rows="2" oninput="cabDobraMudou()"></textarea></div></div>
-      <div class="fr full"><div class="fg"><label>Medicamentos</label><textarea id="cdMd" rows="2" oninput="cabDobraMudou()"></textarea></div></div>
-      <div class="fr"><div class="fg"><label>Alergias</label><textarea id="cdAl" rows="2" oninput="cabDobraMudou()"></textarea></div><div class="fg"><label>Cirurgias</label><textarea id="cdCi" rows="2" oninput="cabDobraMudou()"></textarea></div></div>
+      <div class="fr full"><div class="fg"><label>Doenças</label><textarea id="cdDo" rows="3" oninput="cabDobraMudou()"></textarea></div></div>
+      <div class="fr full"><div class="fg"><label>Medicamentos</label><textarea id="cdMd" rows="3" oninput="cabDobraMudou()"></textarea></div></div>
+      <div class="fr full"><div class="fg"><label>Alergias</label><textarea id="cdAl" rows="2" oninput="cabDobraMudou()"></textarea></div></div>
+      <div class="fr full"><div class="fg"><label>Cirurgias</label><textarea id="cdCi" rows="2" oninput="cabDobraMudou()"></textarea></div></div>
       <div class="fr full"><div class="fg"><label>Histórico familiar</label><textarea id="cdHF" rows="2" oninput="cabDobraMudou()"></textarea></div></div>
-      <p style="font-size:11.5px;color:var(--txt-l);margin:6px 0 0">O que corre na família também se desenha nos bonecos, ali embaixo — lá a marca fica visível em quem a carrega.</p>
       <div class="fr">
         <div class="fg"><label>Gestante?</label><select id="cdGt" onchange="cabDobraMudou()"><option value="">N/A</option><option>Sim</option><option>Não</option></select></div>
         <div class="fg"><label>Semanas</label><input type="text" id="cdSm" oninput="cabDobraMudou()"></div>
@@ -2262,7 +2266,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v10.0 · 03/08';
+const APP_VER='v10.1 · 03/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -8742,6 +8746,10 @@ function cabDobraAlternar(){
 
 function cabDobraPreencher(){
   const pac=_diagPacSel?(gD('pacientes').find(p=>String(p.id)===String(_diagPacSel.id))||{}):{};
+  // O nome aparece para o desenho ficar igual ao da ficha, mas é só leitura e
+  // fica fora do mapa: quem grava nome é a ficha, que avisa a agenda e o Google.
+  const nm=document.getElementById('cdN');
+  if(nm)nm.value=pac.nome||(_diagPacSel?_diagPacSel.nome:'')||'';
   Object.keys(CAB_DOBRA).forEach(id=>{
     const e=document.getElementById(id);
     if(e)e.value=pac[CAB_DOBRA[id]]||'';
