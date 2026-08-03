@@ -117,6 +117,10 @@ tronco e o cálculo de baixo para cima. Mexer neles é o mais caro dos quatro.
 
 **Faixa 6 → Faixa 2 → Faixa 4 → Faixa 3.** Da mais barata e mais reveladora para a mais delicada.
 
+> **FEITAS — as quatro, em 03/08/2026 (Clínica v10.2), senha "As quatro faixas".**
+> A ordem foi cumprida como estava escrita. O que ficou de pé em cada uma está logo abaixo,
+> em *"FEITO — as quatro faixas do atendimento"*.
+
 **Mas nenhuma delas é a primeira.** Antes vem **fechar a corrente da sessão** — nesse mesmo
 atendimento ele saiu com conduta clara e **não tinha onde registrar**. Aprofundar a entrada antes
 de consertar a saída é fazer porta mais bonita para um corredor que não leva a lugar nenhum.
@@ -129,6 +133,48 @@ aqui que a v9.8 não estava no `main` — e estava, o `main` andou entre a confe
 **Num dia de várias janelas trabalhando ao mesmo tempo, "eu conferi" tem prazo de validade curto.**
 A conferência certa é `git log main` **na hora de agir**, não a de meia hora atrás. E quem está
 atrasado costuma ser o *worktree*, não o `main`.
+
+### FEITO — as quatro faixas do atendimento (Clínica v10.2, 03/08/2026)
+
+*Senha "As quatro faixas". As quatro que o caso pediu, na ordem escrita: 6, 2, 4, 3.
+Nenhuma faixa nova, nenhuma tela nova, nenhuma tabela nova. A rede passou nas quatro.*
+
+**Faixa 6 — a régua começa antes do primeiro encontro.** A régua desenhava encontros; agora
+desenha também a vida. Um marco pode ser **a cena que fundou**, uma **reativação** ou **o peso
+de fora** (com data de início e de fim, ou em curso). A régua ganhou uma **dobra**: à esquerda a
+vida, à direita os encontros, duas escalas de tempo no mesmo desenho — e a dobra é *desenhada*,
+nunca disfarçada, porque numa régua só trinta anos de vida e três meses de acompanhamento
+cairiam um em cima do outro. A vida fica com 1/φ² da largura.
+**As três honestidades:** marco sem data **não entra** no desenho (fica listado dizendo que não
+tem lugar no tempo); ano e idade viram data **aproximada**, e o desenho diz isso (traço
+pontilhado e til antes do número); idade só vira data se a ficha tiver o nascimento — sem ele,
+a conta seria chute com cara de precisão. Irmã da regra de nunca inventar idade.
+**Onde mora:** no campo `marcos` da própria pessoa. Entrou na lista leve de propósito (junto com
+`gatilhos` e `frases`): pedir a ficha inteira só para desenhar traria foto e exames junto, que é
+o que estourava a cota. Vazio, o campo custa quinze bytes por linha.
+
+**Faixa 2 — a folha guarda o que se repete, e a frase que ficou.** Dentro da folha limpa:
+os **gatilhos**, uma lista por pessoa que só cresce e que ele escreve (nada é sugerido); e as
+**frases dela** — marcar um trecho *dentro* do que já está escrito e vê-lo voltar na chegada
+seguinte, com a data do dia em que foi dita. É seleção de texto, não campo novo: sem trecho
+marcado, a casa não adivinha qual foi. Vivem na ficha da **pessoa**, não na avaliação do dia —
+é por atravessarem os encontros que existem.
+
+**Faixa 4 — ao lado da marca, o que ela diz.** Uma linha ao lado de cada marca do encontro —
+a vértebra, a região, o sinal do elemento, o sintoma do ponto. *"Dor na perna = impossibilidade
+de movimento"* é o caso inteiro numa linha, e até aqui essa linha não tinha morada. Aparece em
+dois lugares: no painel do corpo, ao lado da vértebra marcada, e no cartão **"O que a marca diz"**
+dentro da Sessão. Vai para o papel junto. Escrita por ele, **nunca sugerida** — sem lista de
+significados e sem completar automático. Mora na avaliação do dia (`leituras`), porque a mesma
+vértebra pode dizer uma coisa hoje e outra daqui a três meses.
+
+**Faixa 3 — a marca que corre na família.** Os anéis já sabiam marcar uma pessoa; faltava dizer
+*"esta pessoa tem o mesmo"*. Cada anel ganhou **"Corre na família"**: um escolhedor com todo o
+desenho, e o mesmo anel entra em quem mais tiver — um toque por pessoa, nada se espalha sozinho.
+E ganhou o **ver**: a marca que aparece em duas pessoas ou mais recebe um **halo** da própria cor
+no desenho, e o pé da faixa passa a dizer *"corre na família: pânico em 3"*. Reconhecer não é
+decidir — a casa mostra que se repete; quem lê a repetição é ele. Nenhum campo novo: é o mesmo
+`marcas` de sempre.
 
 ### Duas regras que ele fechou nesta conversa
 

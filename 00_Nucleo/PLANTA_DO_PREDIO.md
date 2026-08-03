@@ -1,6 +1,6 @@
 # A planta do prédio — onde mora cada coisa no `index.html` da Clínica
 
-O `index.html` tem **12.200 linhas**. Ninguém sobe andar por andar.
+O `index.html` tem **13.450 linhas**. Ninguém sobe andar por andar.
 Este documento é a placa de cada porta: você diz o andar, e se chega lá num pulo.
 
 > **Como usar:** diga o nome da faixa ou da seção. Exemplo:
@@ -34,26 +34,30 @@ menos de 3% do prédio.
 
 | Faixa | Desenho (HTML) | Eletricidade (JS) | Pintura (CSS) |
 |---|---|---|---|
-| **abertura** da seção | 1305 | 6198 | — |
-| **1 — o cabeçalho** (quem chegou) | 1314 | 8192 | — |
-| **2 — a folha limpa** (escrever primeiro) | 1339 | 8303 | — |
-| ↳ o rascunho do Diagnóstico inteiro | — | 8320 | — |
-| ↳ a peneira (classificar depois) | — | 8437 | — |
-| **3 — os bonecos** (a família) | 1352 | 8587 | **256** |
-| ↳ visualizar o DNA (desenho inteiro) | — | 8651 | — |
-| ↳ o desenho propriamente dito | — | 8979 | — |
-| ↳ o anel e o balão | — | 9339 | — |
-| ↳ o segundo laço | — | 9370 | — |
-| ↳ a peneira da família | — | 9820 | — |
-| ↳ a idade das coisas | — | 9910 | — |
-| **4 — o corpo** (a coluna de costas) | 1381 | 7059 | — |
-| ↳ a coluna no papel | — | 7211 | — |
-| ↳ mostrar ao paciente | — | 7262 | — |
-| **5 — a recomendação** | 1609 | 10059 | — |
-| ↳ minerais na recomendação | — | 10273 | — |
-| ↳ suplementos na recomendação | — | 10296 | — |
-| ↳ histórico por paciente | — | 10494 | — |
-| **a régua de encontros** (o pé) | 1624 | 10715 | — |
+| **abertura** da seção | 1435 | 6481 | — |
+| **1 — o cabeçalho** (quem chegou) | 1444 | 8759 | — |
+| **2 — a folha limpa** (escrever primeiro) | 1521 | 8956 | — |
+| ↳ o rascunho do Diagnóstico inteiro | — | 8973 | — |
+| ↳ **os gatilhos e as frases dela** (faixa 2, v10.2) | 1533 | **11917** | **290** |
+| ↳ a peneira (classificar depois) | — | 9090 | — |
+| **3 — os bonecos** (a família) | 1541 | 8873 | **314** |
+| ↳ **a marca que corre na família** (faixa 3, v10.2) | — | **10441** | — |
+| ↳ visualizar o DNA (desenho inteiro) | — | 9304 | — |
+| ↳ o desenho propriamente dito | — | 9632 | — |
+| ↳ o anel e o balão | — | 9992 | — |
+| ↳ o segundo laço | — | 10023 | — |
+| ↳ a peneira da família | — | 10646 | — |
+| ↳ a idade das coisas | — | 10736 | — |
+| **4 — o corpo** (a coluna de costas) | 1570 | 7470 | — |
+| ↳ **o que a marca diz** (faixa 4, v10.2) | — | **7432** | **395** |
+| ↳ a coluna no papel | — | 7629 | — |
+| ↳ mostrar ao paciente | — | 7680 | — |
+| **5 — a recomendação** | 1768 | 10885 | — |
+| ↳ minerais na recomendação | — | 11107 | — |
+| ↳ suplementos na recomendação | — | 11133 | — |
+| ↳ histórico por paciente | — | 12036 | — |
+| **a régua de encontros** (o pé) | 1804 | 11529 | — |
+| ↳ **os marcos da vida** (faixa 6, v10.2) | 1817 | **11726** | **403** |
 
 ### Dentro da Faixa 4 — as camadas do corpo
 

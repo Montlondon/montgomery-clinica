@@ -9,6 +9,54 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — as quatro faixas que o atendimento pediu (Clínica v10.2, 03/08/2026)
+
+*Senha "As quatro faixas". Nasceu de um atendimento real trazido por ele: trauma de confinamento
+na infância, virado pânico com agorafobia na vida adulta, somatizado em dor, e agudizado por um
+fato externo em curso na vida de um familiar. Sete coisas faltaram à plataforma naquele dia, e
+o achado que organizou tudo foi que **nenhuma delas pedia faixa nova**: as sete caíam em quatro
+faixas já desenhadas. A ordem foi cumprida como estava escrita — 6, 2, 4, 3 — da mais barata e
+mais reveladora para a mais delicada. A planta inteira está no `TELA_UNICA.md`.*
+
+**Faixa 6 — a régua começa antes do primeiro encontro.** A régua desenhava encontros; agora
+desenha também a vida: a cena que fundou, as reativações e o peso de fora (com datas próprias,
+ou em curso). A régua ganhou uma **dobra** — à esquerda a vida, à direita os encontros, duas
+escalas de tempo no mesmo desenho, e a dobra é *desenhada*, nunca disfarçada: numa régua só,
+trinta anos de vida e três meses de acompanhamento cairiam um em cima do outro. A vida fica com
+1/φ² da largura, e sem nenhum marco o desenho continua exatamente como era, pixel por pixel.
+Três honestidades: marco sem data não entra no desenho (fica listado, dizendo que não tem lugar
+no tempo); ano e idade viram data **aproximada**, e o desenho diz isso — pontilhado e com til;
+idade só vira data se a ficha tiver o nascimento, senão a conta seria chute com cara de precisão.
+Mora no campo `marcos` da pessoa.
+
+**Faixa 2 — a folha guarda o que se repete, e a frase que ficou.** Os **gatilhos**, uma lista por
+pessoa que só cresce, escrita por ele; e as **frases dela**, um trecho marcado *dentro* do que já
+está escrito, que volta na chegada seguinte com a data do dia em que foi dita. Sem trecho marcado
+a casa não adivinha qual foi: a imagem é da pessoa e a escolha é dele. Moram na ficha da pessoa
+(`gatilhos`, `frases`), não na avaliação do dia — é por atravessarem os encontros que existem.
+
+**Faixa 4 — ao lado da marca, o que ela diz.** Uma linha ao lado de cada marca do encontro: a
+vértebra, a região, o sinal do elemento, o sintoma do ponto. *"Dor na perna = impossibilidade de
+movimento"* é o caso inteiro numa linha, e não tinha morada. Aparece no painel do corpo, ao lado
+da vértebra marcada, e no cartão "O que a marca diz" dentro da Sessão; vai para o papel junto.
+Nunca sugerida: sem lista de significados e sem completar automático. Mora na avaliação do dia
+(`leituras`), porque a mesma vértebra pode dizer uma coisa hoje e outra daqui a três meses.
+
+**Faixa 3 — a marca que corre na família.** Cada anel ganhou "Corre na família": um escolhedor
+com todo o desenho, e o mesmo anel entra em quem mais tiver — um toque por pessoa, nada se
+espalha sozinho pela árvore. E ganhou o ver: a marca em duas pessoas ou mais recebe um **halo**
+da própria cor, e o pé da faixa passa a dizer *"corre na família: pânico em 3"*. Reconhecer não é
+decidir. Nenhum campo novo: é o mesmo `marcas` de sempre.
+
+**O cuidado de peso desta entrega.** Os três campos novos da pessoa (`marcos`, `gatilhos`,
+`frases`) entraram na **lista leve** do lazy-load. Foi decisão consciente: a régua e a folha
+precisam deles para desenhar, e pedir a ficha inteira de cada pessoa só para isso traria foto e
+exames junto — que é exatamente o que estourava a cota de egress. Vazios, custam quinze bytes por
+linha. Para **gravar**, os três seguem a receita da dobra do cabeçalho: baixar a ficha inteira
+primeiro e só então gravar, porque gravar o leve seria apagar o pesado.
+
+---
+
 ## Concluído — fechar a corrente da sessão (Clínica v9.8, 03/08/2026)
 
 Nasceu do consultório: ele viu na tela, com paciente na frente, que não conseguia registrar
