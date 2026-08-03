@@ -2144,7 +2144,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v9.1 · 03/08';
+const APP_VER='v9.2 · 03/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -3166,8 +3166,8 @@ function toggleFiltroTriagem(){
   filtrarP();
 }
 function filtrarP(){
-  const b=document.getElementById('busP').value.toLowerCase();
-  let pacs=pacsAtual().filter(p=>(p.nome||'').toLowerCase().includes(b)||(p.telefone||'').includes(b)||(p.queixa||'').toLowerCase().includes(b));
+  const b=semAcento(document.getElementById('busP').value);
+  let pacs=pacsAtual().filter(p=>semAcento(p.nome).includes(b)||(p.telefone||'').includes(b)||semAcento(p.queixa).includes(b));
   if(_filtroTriagem)pacs=pacs.filter(p=>p.triagem);
   renderP(pacs);
 }
@@ -3912,8 +3912,8 @@ function imprimirSuplementos(){
   setTimeout(()=>{win.print();setTimeout(()=>win.close(),800);},400);
 }
 function renderSuplementos(){
-  const b=(document.getElementById('busSup')||{}).value?.toLowerCase()||'';
-  let lista=gD('suplementos').filter(p=>p.nome.toLowerCase().includes(b)||(p.fornecedor||'').toLowerCase().includes(b));
+  const b=semAcento((document.getElementById('busSup')||{}).value||'');
+  let lista=gD('suplementos').filter(p=>semAcento(p.nome).includes(b)||semAcento(p.fornecedor).includes(b));
   lista=lista.sort((a,b2)=>a.nome.localeCompare(b2.nome,'pt-BR'));
   document.getElementById('cntSup').textContent=lista.length;
   document.getElementById('supVazio').style.display=gD('suplementos').length?'none':'block';
@@ -5259,16 +5259,18 @@ async function ptApagar(id){
   toast('Fora da prateleira','#c62828',"trash");
 }
 function ptTrocarAlvo(a){_ptAlvo=a;_ptEditId=null;renderPtPainel();}
-function ptFiltrar(){_ptBusca=(v('ptBusca')||'').toLowerCase();renderPtLista();}
+// Guarda o que ele digitou como digitou — a caixa se redesenha com este valor.
+// Quem tira o acento é a comparação, lá no renderPtLista.
+function ptFiltrar(){_ptBusca=v('ptBusca')||'';renderPtLista();}
 
 // O que ele já vende no catálogo Produtos, ao lado do link de fora. Casamento
 // por nome, sem esperteza: se o nome do produto do catálogo aparece na linha,
 // aparece aqui — e a decisão continua sendo dele.
 function ptCatalogo(termos){
-  const alvo=termos.filter(Boolean).map(t=>String(t).toLowerCase());
+  const alvo=termos.filter(Boolean).map(t=>semAcento(String(t)));
   if(!alvo.length)return [];
   return gD('suplementos').filter(p=>{
-    const n=String(p.nome||'').toLowerCase();
+    const n=semAcento(String(p.nome||''));
     return alvo.some(t=>t.length>3&&(n.includes(t)||t.includes(n)));
   });
 }
@@ -5337,8 +5339,8 @@ function renderPtPainel(){
 
 function renderPtLista(){
   const el=document.getElementById('ptLista');if(!el)return;
-  const b=_ptBusca;
-  const lista=ptLinks().filter(l=>!b||[l.nome,l.produto,l.loja,l.forma,l.obs].some(x=>String(x||'').toLowerCase().includes(b)))
+  const b=semAcento(_ptBusca);
+  const lista=ptLinks().filter(l=>!b||[l.nome,l.produto,l.loja,l.forma,l.obs].some(x=>semAcento(String(x||'')).includes(b)))
     .sort((a,b2)=>String(a.nome||'').localeCompare(String(b2.nome||''))||String(a.produto||'').localeCompare(String(b2.produto||'')));
   if(!lista.length){el.innerHTML='<p class="mn-vazio">A prateleira está vazia. Nenhum produto vem de fábrica aqui: cada linha é uma que você conferiu e aprovou.</p>';return;}
   el.innerHTML=`<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">
@@ -6186,10 +6188,10 @@ function carregarRxSel(){
 }
 
 function filtrarRxPac(){
-  const q=document.getElementById('rxPacBusca').value.toLowerCase().trim();
+  const q=semAcento(document.getElementById('rxPacBusca').value.trim());
   const lista=document.getElementById('rxPacLista');
   if(!q){lista.style.display='none';_rxPacSel=null;document.getElementById('rxPacId').value='';return;}
-  const pacs=gD('pacientes').filter(p=>p.nome.toLowerCase().includes(q)).slice(0,12);
+  const pacs=gD('pacientes').filter(p=>semAcento(p.nome).includes(q)).slice(0,12);
   if(!pacs.length){lista.innerHTML='<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Nenhum paciente encontrado</div>';lista.style.display='block';return;}
   lista.innerHTML=pacs.map(p=>`<div onclick="selecionarRxPac('${p.id}','${p.nome.replace(/'/g,"\\'")}','${(p.telefone||'').replace(/'/g,"\\'")}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${p.nome}${p.telefone?`<span style="color:var(--txt-l);font-size:11px;margin-left:8px">${p.telefone}</span>`:''}</div>`).join('');
   lista.style.display='block';
@@ -6393,10 +6395,10 @@ function setAcuMeridiano(sig){
   initAcupuntura();
 }
 function filtrarAcuPontos(){
-  const q=document.getElementById('acuBusca').value.trim().toLowerCase();
+  const q=semAcento(document.getElementById('acuBusca').value.trim());
   if(!q){renderAcuPontos(acupunturaPontosDoMeridiano(_acuMeridianoSel));return;}
   const res=ACUPUNTURA_PONTOS.filter(p=>
-    (p.py+' '+p.pt+' '+p.en+' '+p.ind+' '+p.fn+' '+p.m+'-'+p.n+' '+ACUPUNTURA_MERIDIANOS[p.m].deadman+'-'+p.n).toLowerCase().includes(q));
+    semAcento(p.py+' '+p.pt+' '+p.en+' '+p.ind+' '+p.fn+' '+p.m+'-'+p.n+' '+ACUPUNTURA_MERIDIANOS[p.m].deadman+'-'+p.n).includes(q));
   renderAcuPontos(res.slice(0,40),true);
 }
 function renderAcuPontos(lista,busca){
@@ -6788,10 +6790,10 @@ function setAuriculoModo(modo){
 }
 
 function filtrarAuriculoProtocolo(){
-  const q=document.getElementById('auriculoProtocoloBusca').value.toLowerCase().trim();
+  const q=semAcento(document.getElementById('auriculoProtocoloBusca').value.trim());
   const lista=document.getElementById('auriculoProtocoloLista');
   if(!q){lista.style.display='none';return;}
-  const itens=auriculoProtocolos.filter(p=>p.titulo.toLowerCase().includes(q)).slice(0,12);
+  const itens=auriculoProtocolos.filter(p=>semAcento(p.titulo).includes(q)).slice(0,12);
   if(!itens.length){lista.innerHTML='<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Nenhum protocolo encontrado</div>';lista.style.display='block';return;}
   lista.innerHTML=itens.map(p=>`<div onclick="selecionarAuriculoProtocolo('${p.id}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${escHtml(p.titulo)}</div>`).join('');
   lista.style.display='block';
@@ -6805,10 +6807,10 @@ function selecionarAuriculoProtocolo(id){
 }
 
 function filtrarAuriculoPonto(){
-  const q=document.getElementById('auriculoPontoBusca').value.toLowerCase().trim();
+  const q=semAcento(document.getElementById('auriculoPontoBusca').value.trim());
   const lista=document.getElementById('auriculoPontoLista');
   if(!q){lista.style.display='none';return;}
-  const itens=auriculoPontos.filter(p=>p.nome.toLowerCase().includes(q)).slice(0,12);
+  const itens=auriculoPontos.filter(p=>semAcento(p.nome).includes(q)||semAcento(p.grupo).includes(q)).slice(0,12);
   if(!itens.length){lista.innerHTML='<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Nenhum ponto encontrado</div>';lista.style.display='block';return;}
   lista.innerHTML=itens.map(p=>`<div onclick="selecionarAuriculoPonto('${p.id}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${escHtml(p.nome)} <span style="color:var(--txt-l);font-size:11px">— ${escHtml(p.grupo)}</span></div>`).join('');
   lista.style.display='block';
@@ -7563,11 +7565,11 @@ function toggleSistemaAbc(id,m){
   renderDiagPainel();
 }
 function filtrarDiagSup(){
-  const q=document.getElementById('diagSupBusca').value.toLowerCase().trim();
+  const q=semAcento(document.getElementById('diagSupBusca').value.trim());
   const lista=document.getElementById('diagSupLista');
   if(!q){lista.style.display='none';return;}
   const usados=new Set(_diagSelecoes.suplementos.map(s=>String(s.id)));
-  const itens=gD('suplementos').filter(p=>p.nome.toLowerCase().includes(q)&&!usados.has(String(p.id))).slice(0,12);
+  const itens=gD('suplementos').filter(p=>semAcento(p.nome).includes(q)&&!usados.has(String(p.id))).slice(0,12);
   if(!itens.length){lista.innerHTML='<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Nenhum produto encontrado</div>';lista.style.display='block';return;}
   lista.innerHTML=itens.map(p=>`<div onclick="selecionarDiagSup('${p.id}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${escHtml(nomeCap(p.nome))}<span style="color:var(--txt-l);font-size:11px;margin-left:8px">${fm(p.preco)}</span></div>`).join('');
   lista.style.display='block';
@@ -10432,10 +10434,10 @@ function renderRxMinerais(){
 let _rxSuplementosSel=[];
 function popularRxSupSel(){} // mantido por compatibilidade; a busca agora é por digitação (filtrarRxSup)
 function filtrarRxSup(){
-  const q=document.getElementById('rxSupBusca').value.toLowerCase().trim();
+  const q=semAcento(document.getElementById('rxSupBusca').value.trim());
   const lista=document.getElementById('rxSupListaBusca');
   if(!q){lista.style.display='none';document.getElementById('rxSupSel').value='';return;}
-  const itens=gD('suplementos').filter(p=>p.nome.toLowerCase().includes(q)).slice(0,12);
+  const itens=gD('suplementos').filter(p=>semAcento(p.nome).includes(q)).slice(0,12);
   if(!itens.length){lista.innerHTML='<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Nenhum produto encontrado</div>';lista.style.display='block';return;}
   lista.innerHTML=itens.map(p=>`<div onclick="selecionarRxSup('${p.id}','${p.nome.replace(/'/g,"\\'")}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--brd)" onmouseover="this.style.background='var(--pri-l)'" onmouseout="this.style.background=''">${escHtml(nomeCap(p.nome))}<span style="color:var(--txt-l);font-size:11px;margin-left:8px">${fm(p.preco)}${p.estoque<=0?' (sem estoque)':''}</span></div>`).join('');
   lista.style.display='block';
@@ -11392,13 +11394,13 @@ function _preencherFormRx(rx,dataParaUsar){
 // João e carrega só plantas/suplementos/duração/obs, SEM trocar o
 // paciente selecionado (Maria continua selecionada, só o conteúdo entra).
 async function filtrarRxModelo(){
-  const q=document.getElementById('rxModeloBusca').value.toLowerCase().trim();
+  const q=semAcento(document.getElementById('rxModeloBusca').value.trim());
   const lista=document.getElementById('rxModeloLista');
   if(!q){lista.style.display='none';return;}
   let todas=gD('prescricoes');
   if(!todas.length)todas=await dbGet('prescricoes',true);
-  if(document.getElementById('rxModeloBusca').value.toLowerCase().trim()!==q)return; // usuário já digitou outra coisa enquanto carregava
-  const rxs=todas.filter(r=>(r.pacienteNome||'').toLowerCase().includes(q)).sort((a,b)=>b.data.localeCompare(a.data)).slice(0,15);
+  if(semAcento(document.getElementById('rxModeloBusca').value.trim())!==q)return; // usuário já digitou outra coisa enquanto carregava
+  const rxs=todas.filter(r=>semAcento(r.pacienteNome).includes(q)).sort((a,b)=>b.data.localeCompare(a.data)).slice(0,15);
   if(!rxs.length){lista.innerHTML='<div style="padding:8px 12px;color:var(--txt-l);font-size:13px">Nenhuma recomendação encontrada</div>';lista.style.display='block';return;}
   lista.innerHTML=rxs.map(r=>{
     const resumo=(r.plantas||[]).map(p=>p.nome).concat((r.suplementos||[]).map(s=>nomeCap(s.nome))).join(', ')||'(sem itens)';

@@ -14,6 +14,8 @@ O mapa de onde mora cada coisa dentro do `index.html` mora em
 
 - **Prateleira** — falta ele escrever as primeiras linhas de "Onde comprar" (bloco abaixo).
 - **Nunca o relógio decide** — senha aberta, MMObras.
+- **Sem acento** — as buscas de dentro já foram varridas (v9.2). Sobra a busca de paciente da
+  Recomendação (`filtrarRxPac`), que ainda não enxerga os arquivados.
 - **Montgomery Code** — seguir montando as aulas da grade; matéria-prima acumulada abaixo.
 - **Ideias vivas** — Vitruviano como lugar único, as três portas de 01/08, Ortomolecular,
   terceira aba de Suplementos, o botão do que deu certo, as ideias da Maly.
