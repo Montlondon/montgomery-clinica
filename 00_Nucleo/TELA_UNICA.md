@@ -48,6 +48,88 @@ Uma página só, de cima para baixo, sem aba nenhuma:
 6. **A espiral** — o histórico, desenhado.
 7. **A memória da sessão** — já existe e vira o fecho natural da página.
 
+### O que o atendimento pediu e a planta ainda não tem (03/08/2026)
+
+*Nasceu de uma sessão de verdade, trazida por ele. **Registrado sem nada que identifique a pessoa:**
+o repositório é público em potencial e a transcrição não entra aqui — fica só o que a plataforma
+não soube guardar. O caso era um trauma de confinamento na infância, virado pânico com agorafobia
+na vida adulta, somatizado em dor, e agudizado por um fato externo em curso na vida de um familiar.*
+
+**O achado que organiza tudo: nenhum dos sete buracos pede faixa nova.** Todos caem em quatro
+faixas que já estão desenhadas. Não é planta nova — é a planta se aprofundando.
+
+| # | O que faltou | Onde mora |
+|---|---|---|
+| 1 | **A cena que fundou** — data, idade, quem estava junto, o símbolo | Faixa 6 |
+| 2 | **As reativações** — a mesma cena batendo de novo em outras épocas | Faixa 6 |
+| 3 | **O peso de fora** — fato externo em curso, com datas próprias que mudam | Faixa 6 |
+| 4 | **O sintoma e o que ele diz** — *"dor na perna = impossibilidade de movimento"* | Faixa 4 |
+| 5 | **Os gatilhos** — a lista curta que se repete e vai crescendo | Faixa 2 |
+| 6 | **A frase dela** — as imagens que a pessoa entrega prontas | Faixa 2 |
+| 7 | **A marca que corre na família** — a irmã com a mesma fobia | Faixa 3 |
+
+#### Faixa 6 — a régua começa antes do primeiro encontro
+
+Hoje a régua desenha **encontros**. O que o caso pediu é que ela desenhe **a vida**: a cena que
+fundou tem data e idade; as reativações são a mesma cena batendo em outras épocas; o peso de fora
+é um fato em curso, com datas próprias que mudam entre um encontro e outro.
+
+**Por que aqui e não em campo novo:** a régua já sabe espaçar pelo tempo real e já aceita uma
+segunda informação por cima (a linha da Escala Emocional). Falta só ela **começar antes do primeiro
+traço** e aceitar marcos que não são sessões. É a faixa mais barata das quatro, e é a que muda mais
+o que se enxerga: sem ela, a piora do sintoma parece aleatória.
+
+**A honestidade que a régua já tem vale aqui inteira:** marco sem data não se inventa. Idade
+aproximada é idade aproximada, e o desenho tem que dizer isso — irmão da regra de nunca inventar
+idade.
+
+#### Faixa 4 — ao lado da marca, o que ela diz
+
+A casa marca o sintoma (região, elemento, vértebra) e **não guarda a leitura**. Mas a leitura é o
+trabalho: *"dor na perna = impossibilidade de movimento"* é o caso inteiro numa linha. É o sintoma
+como porta — e a porta não tem onde ser escrita.
+
+**Uma linha ao lado da marca, escrita por ele, nunca sugerida pela máquina.** Vale para a vértebra,
+para o sintoma e para a região. Irmão do ponto 3 da tese: a ferramenta mostra, não conclui.
+
+#### Faixa 2 — a folha guarda o que se repete, e a frase que ficou
+
+Dois acréscimos, os mais baratos de todos, os dois dentro da folha limpa:
+
+- **Os gatilhos** — uma lista por pessoa que só cresce. Não é campo classificado: é o que volta em
+  toda sessão e hoje se redigita ou se perde.
+- **A frase dela** — marcar um trecho **dentro** do que já está escrito e vê-lo voltar na chegada
+  seguinte. É seleção de texto, não campo novo. Ele pensa por imagens; quando a pessoa entrega uma
+  pronta, ela não pode se dissolver em quatro mil caracteres.
+
+**A regra da peneira continua valendo:** reconhecer não é decidir. Marcar a frase é gesto dele.
+
+#### Faixa 3 — a marca que corre na família
+
+A irmã com a mesma fobia e o irmão com pânico depois de ficar preso são o que **valida** o trauma
+como sistêmico — a informação mais forte do caso. Os bonecos não sabem dizer *"esta pessoa tem o
+mesmo sintoma"*, nem acender a marca em três figuras da mesma fileira.
+
+**Fica por último de propósito.** Os bonecos são a peça mais delicada da casa: filiação, par,
+tronco e o cálculo de baixo para cima. Mexer neles é o mais caro dos quatro.
+
+#### A ordem, e o que vem antes de tudo
+
+**Faixa 6 → Faixa 2 → Faixa 4 → Faixa 3.** Da mais barata e mais reveladora para a mais delicada.
+
+**Mas nenhuma delas é a primeira.** Antes vem **fechar a corrente da sessão** — nesse mesmo
+atendimento ele saiu com conduta clara e **não tinha onde registrar**. Aprofundar a entrada antes
+de consertar a saída é fazer porta mais bonita para um corredor que não leva a lugar nenhum.
+**E ela já está fechada.** Confirmado por ele em 03/08, olhando o rodapé: *"eu já estou na
+Montgomery Saúde Integrativa · v9.8"*. A corrente foi soldada em outra janela e **está no `main`
+e no ar** (commit `61ff6a9`). **Estas quatro faixas são, então, a próxima obra da tela única.**
+
+*Lição de bancada guardada junto, porque custou uma correção nesta mesma janela:* eu tinha escrito
+aqui que a v9.8 não estava no `main` — e estava, o `main` andou entre a conferência e a escrita.
+**Num dia de várias janelas trabalhando ao mesmo tempo, "eu conferi" tem prazo de validade curto.**
+A conferência certa é `git log main` **na hora de agir**, não a de meia hora atrás. E quem está
+atrasado costuma ser o *worktree*, não o `main`.
+
 ### Duas regras que ele fechou nesta conversa
 
 - **Tudo que existe hoje no Diagnóstico permanece.** A obra é de lugar, não de conteúdo. Nenhum campo

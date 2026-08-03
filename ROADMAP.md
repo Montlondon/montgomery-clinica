@@ -104,6 +104,18 @@ atendimento sentir diferença, o passo foi longe demais. E depois de cada passo:
      dizendo o número do encontro e servindo de direção de conduta no fim da consulta.
   **É obra pequena, mas é obra** (código novo). Vale furar a fila da semana de organização:
   é dor de consultório real, e a plataforma existe para atender.
+- **As quatro faixas que o atendimento pediu** (03/08/2026 — nasceu de uma sessão real trazida por
+  ele). Sete coisas que ele precisou anotar e não tinham onde: a **cena que fundou**, as
+  **reativações**, o **peso de fora**, **o que o sintoma diz**, os **gatilhos**, **a frase dela** e
+  **a marca que corre na família**. Nenhuma pede faixa nova — todas caem em quatro que já estão
+  desenhadas: **6 → 2 → 4 → 3**, nessa ordem.
+  **A planta inteira está em [`00_Nucleo/TELA_UNICA.md`](00_Nucleo/TELA_UNICA.md)**, na seção
+  *"O que o atendimento pediu e a planta ainda não tem"* — anonimizada, porque **transcrição de
+  atendimento não entra no repositório**.
+  **A fila está livre:** a corrente da sessão já foi fechada (**v9.8**, no `main` e no ar,
+  confirmado por ele no rodapé em 03/08). **Estas quatro faixas são a próxima obra da tela única.**
+  *Cuidado prático: este worktree ficou atrás do `main`. Atualizar antes de encostar no
+  `index.html` — e conferir `git log main` na hora de agir, não antes.*
 - **Ideias vivas** — Vitruviano como lugar único, as três portas de 01/08, Ortomolecular,
   terceira aba de Suplementos, o botão do que deu certo, as ideias da Maly.
 - **Em planejamento / Pendências** — as duas listas antigas, mais abaixo, ainda valem.
