@@ -630,3 +630,63 @@ Dados que o cabeçalho ainda não cobre.
   não protege contra "ficou pior de usar".
 
 **Senha da primeira engolida: "A pessoa inteira no cabeçalho".**
+
+---
+
+## A reunião do pé do Diagnóstico (03/08/2026) — decidido por ele, olhando a tela
+
+*Veio da senha "A tela que engole a ficha", passando bloco a bloco pelo fim da avaliação.
+Nada disto foi construído ainda: é planta.*
+
+### O que ele aprovou como está, e não se toca
+
+- **A recomendação** (Faixa 5, HTML 1661) — "esta parte ok".
+- **A régua de encontros** (HTML 1676) — "esta parte ok". *Acerto pequeno anotado para depois:
+  o desenho fica espremido na metade direita e as datas se sobrepõem no eixo.*
+
+### A Escala de Orientação Emocional — fica, e vira clicável
+
+**Primeiro ele mandou retirar; depois de ver a própria régua, decidiu manter.** O motivo mudou
+tudo: a linha da escala **já está desenhada** na régua — os degraus ligados e o rodapé contando
+*"12 → 1 subiu 11 degraus · 17 encontros sem a escala anotada"*.
+
+**O problema nunca foi a escala — era o gesto.** Em 19 encontros ela foi anotada 2 vezes. Um
+`<select>` de 22 opções (HTML 1608), no meio da avaliação, pede que ele pare, abra e leia uma
+lista comprida bem na hora em que está com a pessoa na frente.
+
+**A decisão dele: o bloco fica, e passa a ser clicável.** Os 22 níveis à vista, um toque marca —
+sem abrir lista. As duas espirais (ascendente 1–7, descendente 8–22) já existem no `select` e
+dão a leitura de cor e de posição sozinhas. **O que se grava não muda:** continua sendo
+`diagEscalaEmo`, o mesmo valor de sempre, e por isso nem a régua nem as avaliações antigas
+sentem. É obra de gesto, não de dado.
+
+### A Memória da sessão — vai para dentro do encontro numerado
+
+Dito por ele: *"Memória da sessão, vamos ter apenas as sessões numeradas."* Os três campos
+(`diagSessaoFeito`, `diagSessaoReacao`, `diagSessaoProx`, HTML 1644–1646) deixam de ser bloco
+solto no pé da avaliação e passam a viver **dentro do encontro numerado**, na régua — o mesmo
+lugar onde a escala vai morar. **O encontro numerado vira o lugar do que ficou daquele dia.**
+
+**Ponta solta a confirmar com ele:** hoje esses três campos alimentam o *"último encontro"* que
+aparece na chegada do paciente (HTML 1009, `renderUltEncontro`) — aquilo que ele pediu para ver
+**antes** de atender. Se continua, passa a ler da sessão numerada e nada muda para ele.
+
+### A caixa de anotação da Psicanálise — a decisão que falta
+
+Ele pediu "uma caixa para anotação" no bloco Psicanálise (HTML 1595). A casa já sabe fazer de
+duas maneiras, e nenhuma precisa ser inventada:
+
+- **caixa única do bloco** — o padrão `quiroObs` (7931): um texto só, gravado com a avaliação;
+- **anotação por conceito marcado** — o padrão `elementosObs` (7825): a caixa nasce quando o item
+  é marcado e fica presa a ele. Hoje `togglePsicanalise` (7653) guarda `{categoria, nome}`;
+  ganharia uma terceira chave, e o PDF (8101), que imprime só os nomes, imprimiria a nota junto.
+
+**Recomendação do Claude:** a segunda, e por motivo clínico — "Recalcamento" sozinho não diz nada
+seis meses depois; *"aparece quando ela fala do pai, sempre muda de assunto"* diz. **Com um
+cuidado:** a lista rola dentro de 400px e tem 59 itens em 11 categorias; anotação dentro da lista
+some. O certo é a lista continuar só de marcar, e os marcados subirem para um bloco *"O que foi
+identificado nesta sessão"*, cada um com sua linha.
+
+**A resposta dele — "manter apenas a do alto no início" — ficou com duas leituras**, e está por
+esclarecer: ou é a caixa única no alto do bloco, ou é nenhuma caixa nova (a folha limpa lá em
+cima já é o lugar de escrever).

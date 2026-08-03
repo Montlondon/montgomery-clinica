@@ -99,6 +99,19 @@ atendimento sentir diferença, o passo foi longe demais. E depois de cada passo:
   provada no atendimento; **mostrar não é marcar**; e a dobra tem que herdar o carregamento por
   pedaço do `showTab` (2895), senão o egress paga a conta.
   **É obra, não arrumação.** Senha da primeira: **"A pessoa inteira no cabeçalho"**.
+  **A reunião do pé do Diagnóstico (03/08, olhando a tela)** — inteira em `TELA_UNICA.md`.
+  Em resumo: **Recomendação e régua ficam como estão** (aprovadas por ele). **A Escala de
+  Orientação Emocional fica e vira clicável** — ele mandou tirar, viu a própria régua desenhando
+  a linha (*"12 → 1 subiu 11 degraus · 17 encontros sem a escala anotada"*) e voltou atrás: o
+  problema era o gesto, não a escala. Um `select` de 22 opções no meio da avaliação foi anotado
+  2 vezes em 19 encontros. O valor gravado (`diagEscalaEmo`) **não muda** — nem a régua nem as
+  avaliações antigas sentem. **A Memória da sessão desce para dentro do encontro numerado**, na
+  régua, junto da escala: o encontro vira o lugar do que ficou daquele dia.
+  **Duas decisões dele ainda faltam:** (a) a caixa de anotação da Psicanálise — caixa única do
+  bloco ou anotação por conceito marcado; (b) se o *"último encontro"* na chegada do paciente
+  (`renderUltEncontro`, HTML 1009) continua depois que a memória mudar de casa.
+  *Acerto pequeno anotado de passagem: na régua o desenho fica espremido na metade direita e as
+  datas se sobrepõem no eixo.*
 - **Abas com títulos no Montgomery Code** (ideia dele, 03/08) — navegar por aba nomeada em vez
   de rolar a biblioteca comprida. Para depois; não misturar com a roda.
 - **A corrente quebrada da sessão** (visto por ele na tela em 03/08 — PRIORIDADE, nasceu do
