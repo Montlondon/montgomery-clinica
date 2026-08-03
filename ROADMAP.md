@@ -31,6 +31,8 @@ barato. Não pular.*
    das abas para a entrada e escrever as **duas armadilhas de nome** (`.ev-card` é da Agenda;
    `.fio-elementos` não é o fio da teia). Provado pela lista ordenada **e** pela rede.
    **Faltam os módulos maiores** — o Diagnóstico (as faixas), a Agenda e a Recomendação.
+   *A rede, a v9.5 e a v9.6 entraram no `main` em 03/08 e estão no ar (rodapé `v9.6 · 03/08`,
+   conferido no site). Nada mais mora fora do `main`.*
 3. **Enxugar o repetido** — só depois de reunido dá para ver o que é cópia. Medir, nunca supor.
 4. **Dar encaixe às peças** — trocar os `onclick` por escuta no código e as funções globais por
    módulos com `import`/`export`. É o que permite levar o Financeiro para outro app.
