@@ -343,6 +343,24 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .fam-palco:fullscreen .fam-tela,.fam-palco.fam-cheio .fam-tela{
   max-width:96vw!important;width:auto!important;height:82vh!important;border-top:none}
 .fam-palco:fullscreen .fam-ed,.fam-palco.fam-cheio .fam-ed{flex:0 0 auto}
+/* A ESCALA QUE SE TOCA — os 22 degraus à vista, um toque marca.
+   Antes era um <select> de 22 opções: em 19 encontros foi anotado 2 vezes.
+   O problema nunca foi a escala, era o gesto — parar, abrir e ler uma lista
+   comprida com a pessoa na frente. Aqui a lista já está aberta, e as duas
+   espirais se leem pela cor, do mesmo jeito que a régua as desenha. */
+.esc-grupo{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--txt-l);margin:2px 0 7px}
+.esc-grupo:not(:first-child){margin-top:13px}
+.esc-grade{display:flex;flex-wrap:wrap;gap:6px}
+.esc-d{display:flex;align-items:center;gap:6px;padding:6px 10px 6px 7px;border:1px solid var(--brd);border-radius:20px;
+  background:var(--cream);cursor:pointer;font-size:12px;color:var(--txt);line-height:1.25;text-align:left;transition:background .12s,border-color .12s}
+.esc-d:hover{background:var(--pri-l);border-color:var(--pri)}
+.esc-n{flex:0 0 auto;width:19px;height:19px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  font-size:9.5px;font-weight:700;background:#F1EADC;color:#8A8578}
+.esc-sobe .esc-n{background:var(--pri-l);color:var(--pri-deep)}
+.esc-desce .esc-n{background:#F6EFE2;color:#A8895A}
+.esc-d[aria-pressed="true"]{background:var(--pri-deep);border-color:var(--pri-deep);color:#fff;font-weight:600}
+.esc-d[aria-pressed="true"] .esc-n{background:rgba(255,255,255,.22);color:#fff}
+.esc-pe{font-size:11.5px;color:var(--txt-l);margin-top:10px}
 /* A RÉGUA DE ENCONTROS — mesma marcenaria da faixa dos bonecos (.fam), para
    que o pé do Diagnóstico não pareça outro programa. */
 .reg{background:var(--cream);border:1px solid var(--brd);border-radius:11px;margin-bottom:14px;box-shadow:0 1px 4px rgba(43,41,36,.04)}
@@ -1604,46 +1622,12 @@ window.addEventListener('DOMContentLoaded',()=>{
   <div class="fc">
     <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 3v5h-5"/></svg></span>Escala de Orientação Emocional</div>
     <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">Registro do estado emocional predominante do paciente nesta avaliação.</p>
-    <div class="fg full">
-      <select id="diagEscalaEmo" style="width:100%" onchange="renderDiagPainel()">
-        <option value="">Selecione o nível emocional...</option>
-        <optgroup label="Espiral Ascendente">
-          <option value="1 - Alegria/Conhecimento/Empoderamento/Liberdade/Amor">1 — Alegria, Conhecimento, Empoderamento, Liberdade, Amor</option>
-          <option value="2 - Paixão">2 — Paixão</option>
-          <option value="3 - Entusiasmo">3 — Entusiasmo</option>
-          <option value="4 - Crença/Expectativa positiva">4 — Crença, Expectativa positiva</option>
-          <option value="5 - Otimismo">5 — Otimismo</option>
-          <option value="6 - Esperança">6 — Esperança</option>
-          <option value="7 - Contentamento">7 — Contentamento</option>
-        </optgroup>
-        <optgroup label="Espiral Descendente">
-          <option value="8 - Tédio">8 — Tédio</option>
-          <option value="9 - Pessimismo">9 — Pessimismo</option>
-          <option value="10 - Frustração/Irritação/Impaciência">10 — Frustração, Irritação, Impaciência</option>
-          <option value="11 - Sobrecarregado">11 — Sobrecarregado</option>
-          <option value="12 - Desapontamento">12 — Desapontamento</option>
-          <option value="13 - Dúvida">13 — Dúvida</option>
-          <option value="14 - Preocupação">14 — Preocupação</option>
-          <option value="15 - Culpa">15 — Culpa</option>
-          <option value="16 - Desencorajamento">16 — Desencorajamento</option>
-          <option value="17 - Raiva">17 — Raiva</option>
-          <option value="18 - Vingança">18 — Vingança</option>
-          <option value="19 - Ódio/Raiva">19 — Ódio, Raiva</option>
-          <option value="20 - Ciúme">20 — Ciúme</option>
-          <option value="21 - Indignidade/Insegurança/Culpa">21 — Indignidade, Insegurança, Culpa</option>
-          <option value="22 - Medo/Tristeza/Depressão/Impotência/Vítima">22 — Medo, Tristeza, Depressão, Impotência, Vítima</option>
-        </optgroup>
-      </select>
-    </div>
+    <!-- O valor gravado continua sendo `diagEscalaEmo`, com as mesmas 22 frases
+         de sempre — por isso nem a régua nem as avaliações antigas sentem.
+         Só o gesto mudou: a lista já está aberta, e um toque marca. -->
+    <input type="hidden" id="diagEscalaEmo">
+    <div id="diagEscalaGrade"></div>
     <div class="fg full" style="margin-top:10px"><label>Observações sobre o estado emocional</label><textarea id="diagEmoObs" rows="2" oninput="_diagJaSalvo=false;diagGuardarRascunho()"></textarea></div>
-  </div>
-
-  <div class="fc">
-    <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span>Memória da sessão</div>
-    <p style="font-size:12px;color:var(--txt-l);margin-bottom:12px">O que fica deste encontro. Na próxima chegada deste paciente, isto aparece diante dos seus olhos antes do atendimento.</p>
-    <div class="fr full"><div class="fg"><label>O que foi feito no atendimento</label><textarea id="diagSessaoFeito" rows="3" placeholder="Ajustes, pontos agulhados, técnicas, orientações dadas..." oninput="memSessaoMudou()"></textarea></div></div>
-    <div class="fr full"><div class="fg"><label>Como o paciente reagiu</label><textarea id="diagSessaoReacao" rows="2" placeholder="O que ele sentiu durante e ao final da sessão..." oninput="memSessaoMudou()"></textarea></div></div>
-    <div class="fr full"><div class="fg"><label>Para o próximo encontro</label><textarea id="diagSessaoProx" rows="2" placeholder="O que retomar, o que observar, o que ainda falta tratar..." oninput="memSessaoMudou()"></textarea></div></div>
   </div>
 
   <!-- ===== A SESSÃO — a ponta da corrente =====
@@ -1675,6 +1659,27 @@ window.addEventListener('DOMContentLoaded',()=>{
       <span id="rxNoDiagAviso" style="margin-left:auto;font-weight:400;font-size:11.5px;color:var(--txt-l)"></span>
     </div>
     <div style="padding:10px 12px 2px;border-top:1px solid #EFE7D6" id="rxSlotDiag"></div>
+  </div>
+
+  <!-- ===== O ENCONTRO DE HOJE — o que ficou daquele dia =====
+       A Memória da sessão saiu do meio da avaliação e desceu para cá, colada
+       na régua: o encontro numerado vira o lugar do que ficou daquele dia.
+       Os três campos são os mesmos de sempre (`diagSessaoFeito`,
+       `diagSessaoReacao`, `diagSessaoProx`) — nada de dado mudou, só de lugar.
+       Fica antes da régua e não dentro dela porque a régua só aparece quando
+       já existem encontros, e o primeiro atendimento também precisa escrever. -->
+  <div class="reg no-print" id="encontroHoje" style="display:none">
+    <div class="reg-cab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>
+      O encontro de hoje<span id="encHojeNum" style="font-weight:400;font-size:11.5px;color:var(--txt-l)"></span>
+      <span id="encHojeEsc" style="margin-left:auto;font-weight:400;font-size:11.5px;color:var(--txt-l)"></span>
+    </div>
+    <div style="padding:11px 13px 4px;border-top:1px solid #EFE7D6">
+      <div class="fr full"><div class="fg"><label>O que foi feito no atendimento</label><textarea id="diagSessaoFeito" rows="3" placeholder="Ajustes, pontos agulhados, técnicas, orientações dadas..." oninput="memSessaoMudou()"></textarea></div></div>
+      <div class="fr full"><div class="fg"><label>Como o paciente reagiu</label><textarea id="diagSessaoReacao" rows="2" placeholder="O que ele sentiu durante e ao final da sessão..." oninput="memSessaoMudou()"></textarea></div></div>
+      <div class="fr full"><div class="fg"><label>Para o próximo encontro</label><textarea id="diagSessaoProx" rows="2" placeholder="O que retomar, o que observar, o que ainda falta tratar..." oninput="memSessaoMudou()"></textarea></div></div>
+      <p style="font-size:11.5px;color:var(--txt-l);margin:2px 0 10px">Isto fica guardado neste encontro. Quando você quiser ver o que ficou de um dia, toque no ponto dele na régua abaixo — a tela não empurra mais nada na chegada.</p>
+    </div>
   </div>
 
   <!-- ===== A RÉGUA DE ENCONTROS — o pé do Diagnóstico =====
@@ -2194,7 +2199,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v9.8 · 03/08';
+const APP_VER='v9.9 · 03/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2872,7 +2877,7 @@ function go(p,el){
       document.getElementById('diagPacBusca').value='';
       document.getElementById('diagPacId').value='';
       document.getElementById('diagDt').value='';
-      document.getElementById('diagEscalaEmo').value='';
+      document.getElementById('diagEscalaEmo').value='';renderEscalaEmo();
       document.getElementById('diagEmoObs').value='';
       limparMemSessao();
       // A folha some da tela, mas o rascunho DAQUELA pessoa fica guardado: como
@@ -6379,16 +6384,62 @@ const CX_DIAG=[
   {k:'sup',      el:'diagSupBusca',       resumo:()=>cxConta((_diagSelecoes.suplementos||[]).length,'suplemento','suplementos')},
   {k:'auriculo', el:'auriculoMapaCompleto',resumo:()=>cxConta((_diagSelecoes.auriculo||[]).length,'ponto','pontos')},
   {k:'psic',     el:'psicAnaliseConteudo',resumo:()=>cxConta((_diagSelecoes.psicanalise||[]).length,'conceito','conceitos')},
-  {k:'emo',      el:'diagEscalaEmo',      resumo:()=>{
-    const s=document.getElementById('diagEscalaEmo');
-    return (s&&s.value)?(s.options[s.selectedIndex].text||'').trim():'';
-  }},
+  {k:'emo',      el:'diagEscalaEmo',      resumo:()=>escEmoRotulo(vDiagEsc())},
   {k:'memoria',  el:'diagSessaoFeito',    resumo:()=>cxConta(MEM_CAMPOS.filter(id=>vMem(id)).length,'anotação','anotações')}
 ];
 // Os três campos da Memória da sessão, na ordem em que aparecem na caixa
 const MEM_CAMPOS=['diagSessaoFeito','diagSessaoReacao','diagSessaoProx'];
 const vMem=id=>{const e=document.getElementById(id);return e?e.value.trim():'';};
 function memSessaoMudou(){_diagJaSalvo=false;atualizarResumoCaixas();renderDiagPainel();}
+
+/* ===== A ESCALA QUE SE TOCA =====
+   Os 22 degraus à vista, um toque marca, um segundo toque desmarca. O valor
+   guardado é a MESMA frase que o antigo <select> gravava — a régua, o PDF e
+   todas as avaliações já salvas continuam lendo o que sempre leram. Só o gesto
+   mudou. As duas espirais (1–7 ascendente, 8–22 descendente) se separam pela
+   cor, do mesmo jeito que a régua já as desenha. */
+const ESC_EMO=['1 - Alegria/Conhecimento/Empoderamento/Liberdade/Amor','2 - Paixão','3 - Entusiasmo',
+  '4 - Crença/Expectativa positiva','5 - Otimismo','6 - Esperança','7 - Contentamento',
+  '8 - Tédio','9 - Pessimismo','10 - Frustração/Irritação/Impaciência','11 - Sobrecarregado',
+  '12 - Desapontamento','13 - Dúvida','14 - Preocupação','15 - Culpa','16 - Desencorajamento',
+  '17 - Raiva','18 - Vingança','19 - Ódio/Raiva','20 - Ciúme','21 - Indignidade/Insegurança/Culpa',
+  '22 - Medo/Tristeza/Depressão/Impotência/Vítima'];
+const vDiagEsc=()=>{const e=document.getElementById('diagEscalaEmo');return e?e.value:'';};
+// O rótulo humano sai do próprio valor: "10 - Frustração/Irritação" vira
+// "10 — Frustração, Irritação". Nada é escrito duas vezes.
+function escEmoRotulo(val){
+  const p=String(val||'').split(' - ');
+  return p.length<2?'':p[0]+' — '+p.slice(1).join(' - ').replace(/\//g,', ');
+}
+function renderEscalaEmo(){
+  const el=document.getElementById('diagEscalaGrade');
+  if(!el)return;
+  const atual=vDiagEsc();
+  const botao=v=>{
+    const n=parseInt(v,10);
+    const marcado=(v===atual);
+    return `<button type="button" class="esc-d ${n<=7?'esc-sobe':'esc-desce'}" aria-pressed="${marcado}"
+      onclick="escalaEmoTocar(${n})"><span class="esc-n">${n}</span>${escHtml(escEmoRotulo(v).split(' — ')[1])}</button>`;
+  };
+  el.innerHTML=`<div class="esc-grupo">Espiral ascendente</div>
+    <div class="esc-grade">${ESC_EMO.slice(0,7).map(botao).join('')}</div>
+    <div class="esc-grupo">Espiral descendente</div>
+    <div class="esc-grade">${ESC_EMO.slice(7).map(botao).join('')}</div>
+    <div class="esc-pe">${atual?'Marcado: <strong>'+escHtml(escEmoRotulo(atual))+'</strong> — toque de novo para desmarcar.':'Nada marcado nesta avaliação. Encontro sem escala não é inventado: a régua deixa o vão pontilhado.'}</div>`;
+}
+// Um toque marca; o mesmo toque de novo desmarca. Desmarcar tem que existir:
+// sem ele, um clique errado vira dado gravado que ninguém consegue tirar.
+function escalaEmoTocar(n){
+  const e=document.getElementById('diagEscalaEmo');
+  if(!e)return;
+  const v=ESC_EMO[n-1]||'';
+  e.value=(e.value===v)?'':v;
+  _diagJaSalvo=false;
+  renderEscalaEmo();
+  atualizarResumoCaixas();
+  diagGuardarRascunho();
+  renderDiagPainel();
+}
 function limparMemSessao(){MEM_CAMPOS.forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});}
 function preencherMemSessao(diag){
   const e1=document.getElementById('diagSessaoFeito'),e2=document.getElementById('diagSessaoReacao'),e3=document.getElementById('diagSessaoProx');
@@ -6490,6 +6541,7 @@ function atualizarResumoCaixas(){
 
 function initDiagnostico(){
   prepararCaixasDiag();
+  renderEscalaEmo();
   renderPulsoCard();
   renderElementosGrid();
   renderPontosGrid();
@@ -8071,6 +8123,24 @@ function sessaoNumero(){
   }
   return ds.length+1;                    // o de hoje ainda não está gravado
 }
+/* O cabeçalho do encontro de hoje: o número que ele vai receber e a escala
+   marcada, se houver. Só aparece com alguém escolhido — sem pessoa não há
+   encontro, e três campos vazios no pé da tela só ocupam lugar. */
+function renderEncontroHoje(){
+  const box=document.getElementById('encontroHoje');
+  if(!box)return;
+  if(!_diagPacSel){box.style.display='none';return;}
+  box.style.display='';
+  const n=sessaoNumero();
+  const num=document.getElementById('encHojeNum');
+  if(num)num.textContent=n?(_diagEditandoId?' — encontro nº '+n+', em edição':' — será o '+n+'º encontro'):'';
+  const esc=document.getElementById('encHojeEsc');
+  if(esc){
+    const v=vDiagEsc();
+    esc.textContent=v?escEmoRotulo(v):'sem escala anotada neste encontro';
+  }
+}
+
 function sessaoRender(vazio){
   const resumo=document.getElementById('diagResumo');
   if(!resumo)return;
@@ -8080,6 +8150,7 @@ function sessaoRender(vazio){
     const n=sessaoNumero();
     numEl.textContent=n?(_diagEditandoId?'encontro nº '+n+' (em edição)':n+'º encontro com '+(_diagPacSel?_diagPacSel.nome.split(' ')[0]:'')):'';
   }
+  renderEncontroHoje();
   if(acoes)acoes.style.display=vazio?'none':'';
   if(vazio){
     resumo.innerHTML='<p style="font-size:12.5px;color:var(--txt-l);font-style:italic">Nada marcado ainda neste encontro. O que você for clicando nas caixas acima aparece aqui — e é isto que vai para a ficha.</p>';
@@ -8691,7 +8762,7 @@ function diagCarregarRascunho(){
     if(vazio&&typeof vazio==='object'){if(novo&&typeof novo==='object'&&!Array.isArray(novo))molde[k]=novo;return;}
     if(typeof novo===typeof vazio)molde[k]=novo;
   });
-  const e1=document.getElementById('diagEscalaEmo');if(e1)e1.value=d.escala||'';
+  const e1=document.getElementById('diagEscalaEmo');if(e1)e1.value=d.escala||'';renderEscalaEmo();
   const e2=document.getElementById('diagEmoObs');if(e2)e2.value=d.emoObs||'';
   MEM_CAMPOS.forEach(id=>{const e=document.getElementById(id);if(e&&d.mem)e.value=d.mem[id]||'';});
   _diagJaSalvo=false;
@@ -10457,7 +10528,7 @@ function fecharDiagPacLista(){
 // rascunho guardado. Quem pergunta é quem chama.
 function diagZerarSelecoes(){
   _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],acuPontos:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:'',candidatos:[],candidatosFora:[]};
-  const e1=document.getElementById('diagEscalaEmo');if(e1)e1.value='';
+  const e1=document.getElementById('diagEscalaEmo');if(e1)e1.value='';renderEscalaEmo();
   const e2=document.getElementById('diagEmoObs');if(e2)e2.value='';
   limparMemSessao();
 }
@@ -10662,7 +10733,7 @@ function editarDiagHist(diagId,pacId){
     document.getElementById('diagPacBusca').value=_diagPacSel.nome;
     document.getElementById('diagPacId').value=_diagPacSel.id;
     document.getElementById('diagDt').value=diag.data||'';
-    document.getElementById('diagEscalaEmo').value=diag.escalaEmocional||'';
+    document.getElementById('diagEscalaEmo').value=diag.escalaEmocional||'';renderEscalaEmo();
     document.getElementById('diagEmoObs').value=diag.emoObs||'';
     const fEl=document.getElementById('diagFolha');
     if(fEl)fEl.value=diag.folha||'';
@@ -11088,31 +11159,28 @@ function htmlUltimoEncontro(diag,opts){
   </div>`;
 }
 
-// Faixa na tela de Diagnóstico, assim que o paciente é escolhido.
-// Em edição, ignora a própria avaliação aberta e mostra a anterior a ela.
+/* Decidido por ele em 03/08: o aviso do último encontro na CHEGADA sai.
+   *"Quero apenas que fique registrado sessões, dentro de Diagnóstico no final
+   da página; se eu precisar, vou até lá e vejo o histórico."* O que ficou da
+   sessão passada mora num lugar só — o encontro numerado, no pé, e a régua ao
+   lado dele. A função continua existindo porque redesenha o cabeçalho e a
+   régua (muita gente a chama); só não empurra mais nada na cara dele.
+   `htmlUltimoEncontro` segue viva: é ela que desenha o dia quando ele TOCA
+   num ponto da régua — mostrar quando pedem é outra coisa que interromper. */
 function renderDiagUltEncontro(ignorarId){
   // O cabeçalho é redesenhado junto: toda troca de pessoa passa por aqui.
   cabRender();
   // E a régua também: ela é a mesma pessoa vista pelo tempo inteiro.
   reguaRender();
+  renderEncontroHoje();
   const el=document.getElementById('diagUltEncontro');
-  if(!el)return;
-  if(!_diagPacSel){el.style.display='none';el.innerHTML='';return;}
-  const diag=ultimoEncontroDoPac(_diagPacSel.id,ignorarId||_diagEditandoId);
-  el.style.display='block';
-  el.innerHTML=diag
-    ? htmlUltimoEncontro(diag,{comBotao:true})
-    : `<div class="fc" style="border-left:4px solid var(--pri);background:var(--beige)"><div style="font-size:12.5px;color:var(--txt-l)">${ICO_MEMORIA} Primeiro encontro registrado com <strong style="color:var(--pri-deep)">${escHtml(_diagPacSel.nome)}</strong>. O que você anotar hoje aparece aqui na próxima chegada.</div></div>`;
+  if(el){el.style.display='none';el.innerHTML='';}
 }
-
-// Faixa no cadastro do paciente, ao abrir a ficha para editar.
+// Na ficha do paciente, mesma decisão: o aviso automático sai. A faixa fica
+// vazia e escondida; quem quiser o histórico vai à régua, no pé do Diagnóstico.
 function renderUltEncontro(pacId){
   const el=document.getElementById('ultEncontro');
-  if(!el)return;
-  const diag=pacId?ultimoEncontroDoPac(pacId):null;
-  if(!diag){el.style.display='none';el.innerHTML='';return;}
-  el.style.display='block';
-  el.innerHTML=htmlUltimoEncontro(diag,{comBotao:true});
+  if(el){el.style.display='none';el.innerHTML='';}
 }
 
 /* ===== A RÉGUA DE ENCONTROS — o pé do Diagnóstico =====
@@ -11558,7 +11626,7 @@ function duplicarDiagHist(diagId,pacId){
     document.getElementById('diagPacBusca').value=_diagPacSel.nome;
     document.getElementById('diagPacId').value=_diagPacSel.id;
     document.getElementById('diagDt').value=dLocal(new Date());
-    document.getElementById('diagEscalaEmo').value=diag.escalaEmocional||'';
+    document.getElementById('diagEscalaEmo').value=diag.escalaEmocional||'';renderEscalaEmo();
     document.getElementById('diagEmoObs').value=diag.emoObs||'';
     const btn=document.getElementById('btnSalvarDiag');
     if(btn)btn.innerHTML=SAVE_ICON_HTML+' Salvar Avaliação';
