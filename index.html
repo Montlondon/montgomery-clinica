@@ -1646,10 +1646,14 @@ window.addEventListener('DOMContentLoaded',()=>{
     <div class="fr full"><div class="fg"><label>Para o próximo encontro</label><textarea id="diagSessaoProx" rows="2" placeholder="O que retomar, o que observar, o que ainda falta tratar..." oninput="memSessaoMudou()"></textarea></div></div>
   </div>
 
-  <div class="fc" id="diagResumoBox" style="display:none">
-    <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M9 12h6M9 16h6"/></svg></span>Resumo da Avaliação</div>
+  <!-- ===== A SESSÃO — a ponta da corrente =====
+       Esta faixa é a saída do encontro: o que foi visto, o que vai ser usado e
+       como a pessoa está. Fica SEMPRE aberta, mesmo vazia — quando some, ele
+       não tem onde olhar no fim da consulta para dizer a conduta em voz alta. -->
+  <div class="fc" id="diagResumoBox">
+    <div class="fst"><span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1"/><path d="M9 12h6M9 16h6"/></svg></span>A Sessão<span id="diagSessaoNum" style="font-size:12px;font-weight:400;color:var(--txt-l);margin-left:8px"></span></div>
     <div id="diagResumo" style="font-size:13px;line-height:1.7"></div>
-    <div class="fa" style="margin-top:14px">
+    <div class="fa" id="diagSessaoAcoes" style="margin-top:14px">
       <button type="button" class="btn btn-sec" onclick="limparDiagnostico()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-13"/><path d="M9 7V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg></span> Limpar Avaliação</button>
       <button type="button" class="btn btn-pri" onclick="enviarDiagParaRx()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 20C4 14 6 6 16 4c1 6-2 13-10 16Z"/><path d="M7 19c2-4 4-7 8-10"/></svg></span>Levar para a recomendação, aqui embaixo</button>
       <button type="button" class="btn btn-sec" onclick="visualizarDiag()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></span> Visualizar</button>
@@ -2190,7 +2194,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v9.7 · 03/08';
+const APP_VER='v9.8 · 03/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2863,7 +2867,7 @@ function go(p,el){
       diagGravarRasc(diagChaveRasc());
       _diagEditandoId=null;
       _diagPacSel=null;
-      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:'',candidatos:[],candidatosFora:[]};
+      _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],acuPontos:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:'',candidatos:[],candidatosFora:[]};
       _diagJaSalvo=false;
       document.getElementById('diagPacBusca').value='';
       document.getElementById('diagPacId').value='';
@@ -4960,6 +4964,11 @@ function cdFoco(){
   });
   (_diagSelecoes.sistemasAbc||[]).forEach(id=>meridianos.add(id));
   (_diagSelecoes.bagua||[]).forEach(b=>{if(b&&b.meridiano)meridianos.add(b.meridiano);});
+  // O ponto de agulha tambem aponta: P-7 puxa o meridiano do Pulmao para o fio.
+  (_diagSelecoes.acuPontos||[]).forEach(p=>{
+    const m=acuMeridiano12(p&&p.m);
+    if(MERIDIANO_ELEMENTO_WUXING[m])meridianos.add(m);   // VC e VG ficam de fora: nao sao dos 12
+  });
   elementos.forEach(e=>{if(ELEMENTO_MERIDIANO_ABC[e])meridianos.add(ELEMENTO_MERIDIANO_ABC[e]);});
   // E o caminho de volta: meridiano marcado acende o elemento dele. É a
   // correspondência Wu Xing padrão, a mesma tabela que o resto da tela usa —
@@ -6340,7 +6349,7 @@ function fecharRxPacLista(){
 let _diagPacSel=null;
 let _diagJaSalvo=false;
 let _diagEditandoId=null; // id do diagnóstico em edição (null = nova avaliação)
-let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:'',candidatos:[],candidatosFora:[]}; // guarda o que foi clicado nesta avaliação + anotações por elemento
+let _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],acuPontos:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:'',candidatos:[],candidatosFora:[]}; // guarda o que foi clicado nesta avaliação + anotações por elemento
 
 // Dados (bancoIntegrativoCompleto, CATALOGO_SUPLEMENTOS_INICIAL, sistemasABC) movidos para dados-clinicos.js
 
@@ -6365,7 +6374,7 @@ const CX_DIAG=[
   {k:'pontos',   el:'pontosGrid',         resumo:()=>cxConta((_diagSelecoes.pontos||[]).length,'ponto','pontos')},
   {k:'quiroref', el:'quiroRefConteudo',   resumo:()=>cxConta((_diagSelecoes.quiro||[]).length,'ajuste','ajustes')||'referência'},
   {k:'abc',      el:'abcTabelaBody',      resumo:()=>cxConta((_diagSelecoes.sistemasAbc||[]).length,'sistema','sistemas')},
-  {k:'acu',      el:'acuResultado',       resumo:()=>'referência'},
+  {k:'acu',      el:'acuResultado',       resumo:()=>cxConta((_diagSelecoes.acuPontos||[]).length,'ponto','pontos')||'referência'},
   {k:'bagua',    el:'baguaWheel',         resumo:()=>cxConta((_diagSelecoes.bagua||[]).length,'síndrome','síndromes')},
   {k:'sup',      el:'diagSupBusca',       resumo:()=>cxConta((_diagSelecoes.suplementos||[]).length,'suplemento','suplementos')},
   {k:'auriculo', el:'auriculoMapaCompleto',resumo:()=>cxConta((_diagSelecoes.auriculo||[]).length,'ponto','pontos')},
@@ -6534,14 +6543,29 @@ function filtrarAcuPontos(){
     semAcento(p.py+' '+p.pt+' '+p.en+' '+p.ind+' '+p.fn+' '+p.m+'-'+p.n+' '+ACUPUNTURA_MERIDIANOS[p.m].deadman+'-'+p.n).includes(q));
   renderAcuPontos(res.slice(0,40),true);
 }
+// A ultima lista desenhada — para poder redesenhar sem perder a busca em curso
+// quando um ponto entra ou sai da ficha.
+let _acuUltimaLista=[],_acuUltimaBusca=false;
+function acuRedesenhar(){
+  const el=document.getElementById('acuResultado');
+  if(!el)return;
+  // Quem estava aberto continua aberto: redesenhar nao pode fechar a gaveta que
+  // ele estava lendo com o paciente na frente.
+  const abertos=[...el.querySelectorAll('details[open]')].map(d=>d.dataset.cod);
+  renderAcuPontos(_acuUltimaLista,_acuUltimaBusca);
+  abertos.forEach(c=>{const d=el.querySelector(`details[data-cod="${c}"]`);if(d)d.open=true;});
+}
 function renderAcuPontos(lista,busca){
   const el=document.getElementById('acuResultado');
+  _acuUltimaLista=lista;_acuUltimaBusca=!!busca;
   if(!lista.length){el.innerHTML='<p style="font-size:12px;color:var(--txt-l)">Nenhum ponto encontrado. Vela 1 cobre Pulmão, Intestino Grosso e Estômago — os demais meridianos chegam nas próximas velas.</p>';return;}
   el.innerHTML=lista.map(p=>{
     const md=ACUPUNTURA_MERIDIANOS[p.m], cod=md.deadman+'-'+p.n;
-    return `<details style="border:1px solid var(--brd);border-left:3px solid ${md.cor};border-radius:7px;padding:7px 11px;margin-bottom:6px;background:var(--cream)">
+    const naFicha=acuPontoMarcado(cod);
+    return `<details data-cod="${cod}" style="border:1px solid ${naFicha?md.cor:'var(--brd)'};border-left:3px solid ${md.cor};border-radius:7px;padding:7px 11px;margin-bottom:6px;background:var(--cream)">
       <summary style="cursor:pointer;font-size:12.5px;display:flex;flex-wrap:wrap;gap:8px;align-items:baseline">
         <strong style="color:${md.cor}">${cod}</strong>
+        ${naFicha?'<span style="font-size:10px;padding:1px 7px;border-radius:8px;background:'+md.cor+';color:#fff">nesta sessão</span>':''}
         <span>${p.py} <span style="font-family:serif">${p.hz}</span></span>
         <span style="color:var(--txt-l)">"${p.pt}"</span>
         ${busca?`<span style="font-size:10.5px;color:var(--txt-l)">(${md.nome})</span>`:''}
@@ -6551,6 +6575,7 @@ function renderAcuPontos(lista,busca){
         <div><strong>Localização:</strong> ${p.loc}</div>
         <div><strong>Funções:</strong> ${p.fn}</div>
         <div><strong>Indicações:</strong> ${p.ind}</div>
+        <button type="button" class="btn ${naFicha?'btn-dan':'btn-pri'} btn-sm" style="margin-top:7px;margin-right:6px" onclick="toggleAcuPonto('${p.m}',${p.n})">${naFicha?'Tirar deste atendimento':'Usar neste atendimento'}</button>
         <a href="${acupunturaDeadmanURL(p.m,p.n)}" target="_blank" rel="noopener" class="btn btn-sec btn-sm" style="margin-top:7px;display:inline-flex;align-items:center;gap:5px;text-decoration:none">
           <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h6v6M20 4 11 13"/><path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6"/></svg>
           Ver no Deadman</a>
@@ -6764,6 +6789,9 @@ function baguaSelecionar(id){
       </div>
       ${abcBonecoSVG(s,m)}
       <div style="font-size:12px;margin-bottom:8px;text-align:center"><strong>Meridianos de balanço:</strong> ${outros.join(', ')||'—'}</div>
+      <div style="text-align:center;margin-bottom:10px">
+        <button type="button" class="btn ${(_diagSelecoes.sistemasAbc||[]).includes(s.id)?'btn-dan':'btn-pri'} btn-sm" onclick="baguaToggleSistema('${s.id}')">${(_diagSelecoes.sistemasAbc||[]).includes(s.id)?'Tirar o sistema '+s.id+' da sessão':'Usar o sistema '+s.id+' nesta sessão'}</button>
+      </div>
       <div style="font-size:11.5px;color:var(--ink-soft);margin-bottom:6px"><strong>Sintomas/síndromes (clique para adicionar à ficha):</strong></div>
       <div style="display:flex;gap:6px;flex-wrap:wrap">
         ${(s.sindromes||[]).map(sd=>{
@@ -6784,6 +6812,19 @@ function baguaToggleSindrome(meridiano,sindrome){
   const i=_diagSelecoes.bagua.findIndex(b=>b.meridiano===meridiano&&b.sindrome===sindrome);
   if(i>=0)_diagSelecoes.bagua.splice(i,1);
   else _diagSelecoes.bagua.push({meridiano,sindrome});
+  if(_baguaSel)baguaSelecionar(_baguaSel);
+  if(document.getElementById('abcTabelaBody'))abcRenderTabela();
+  renderDiagPainel();
+}
+// ELO 2: escolher o sistema tambem fica. Antes, quem abria o Bagua, achava o
+// sistema certo e nao clicava em nenhuma sindrome saia sem nada gravado — o
+// gesto principal era o unico que nao contava. E o mesmo balde dos Sistemas ABC
+// (`sistemasAbc`), nao uma lista nova: as duas telas ja falavam a mesma lingua.
+function baguaToggleSistema(id){
+  if(!_diagSelecoes.sistemasAbc)_diagSelecoes.sistemasAbc=[];
+  const i=_diagSelecoes.sistemasAbc.indexOf(id);
+  if(i>=0)_diagSelecoes.sistemasAbc.splice(i,1);else _diagSelecoes.sistemasAbc.push(id);
+  _diagJaSalvo=false;
   if(_baguaSel)baguaSelecionar(_baguaSel);
   if(document.getElementById('abcTabelaBody'))abcRenderTabela();
   renderDiagPainel();
@@ -7624,6 +7665,37 @@ function togglePonto(nome){
   renderPontosGrid();
   renderDiagPainel();
 }
+// ===== A CORRENTE DA SESSAO — ELO 1: o ponto de agulha vai para a ficha =====
+// A grade pequena (pontosGrid) fala de REGIAO do corpo (musculo, tendao, ajuste).
+// A base trilingue fala de PONTO DE AGULHA (P-7, Lieque). Sao dois assuntos, e
+// por isso duas listas: `pontos` continua sendo a regiao, `acuPontos` e a agulha.
+// Da sigla do meridiano daqui para a sigla dos 12 do resto da casa: a base de
+// Acupuntura escreve CS e TR; o Balanco ABC e o Bagua escrevem PC e TA.
+const ACU_MERID_12={CS:'PC',TR:'TA'};
+const acuMeridiano12=m=>ACU_MERID_12[m]||m;
+function acuPontoMarcado(cod){
+  return (_diagSelecoes.acuPontos||[]).some(p=>p.cod===cod);
+}
+function toggleAcuPonto(m,n){
+  if(!_diagSelecoes.acuPontos)_diagSelecoes.acuPontos=[];
+  const md=(typeof ACUPUNTURA_MERIDIANOS!=='undefined')?ACUPUNTURA_MERIDIANOS[m]:null;
+  const cod=(md?md.deadman:m)+'-'+n;
+  const i=_diagSelecoes.acuPontos.findIndex(p=>p.cod===cod);
+  if(i>=0)_diagSelecoes.acuPontos.splice(i,1);
+  else{
+    const p=(typeof ACUPUNTURA_PONTOS!=='undefined')?ACUPUNTURA_PONTOS.find(x=>x.m===m&&x.n===n):null;
+    _diagSelecoes.acuPontos.push({cod,m,n,py:p?p.py:'',pt:p?p.pt:'',mer:md?md.nome:m});
+  }
+  _diagJaSalvo=false;
+  if(typeof renderAcuPontos==='function'&&document.getElementById('acuResultado'))acuRedesenhar();
+  renderDiagPainel();
+}
+function removerAcuPonto(cod){
+  _diagSelecoes.acuPontos=(_diagSelecoes.acuPontos||[]).filter(p=>p.cod!==cod);
+  _diagJaSalvo=false;
+  if(document.getElementById('acuResultado'))acuRedesenhar();
+  renderDiagPainel();
+}
 function elementoSintomaMarcado(elemento,sintoma){
   return (_diagSelecoes.elementoSintomas||[]).some(s=>s.elemento===elemento&&s.sintoma===sintoma);
 }
@@ -7785,13 +7857,18 @@ function renderDiagPainel(){
   const temFolha=folhaTexto().trim().length>0;
   const temFamilia=_famPessoas.some(p=>!p.eu);
   const temMemoria=MEM_CAMPOS.some(id=>{const e=document.getElementById(id);return e&&e.value.trim();});
-  const temAlgo=temFolha||temFamilia||temMemoria||pulsoChaves().length||_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length||(_diagSelecoes.auriculo||[]).length||(_diagSelecoes.bagua||[]).length||(_diagSelecoes.psicanalise||[]).length||(_diagSelecoes.elementoSintomas||[]).length||(_diagSelecoes.pontoSintomas||[]).length||(_diagSelecoes.quiro||[]).length;
+  const temAlgo=temFolha||temFamilia||temMemoria||pulsoChaves().length||_diagSelecoes.elementos.length||_diagSelecoes.pontos.length||(_diagSelecoes.sistemasAbc||[]).length||(_diagSelecoes.suplementos||[]).length||(_diagSelecoes.auriculo||[]).length||(_diagSelecoes.bagua||[]).length||(_diagSelecoes.acuPontos||[]).length||(_diagSelecoes.psicanalise||[]).length||(_diagSelecoes.elementoSintomas||[]).length||(_diagSelecoes.pontoSintomas||[]).length||(_diagSelecoes.quiro||[]).length;
   atualizarResumoCaixas();   // os títulos das caixas fechadas contam o que mudou
   diagGuardarRascunho();     // toda mudança passa por aqui: a rede é uma só
   if(!temAlgo){
     // Avaliação limpa: as caixas também esvaziam, senão sobra resto de antes
-    ['pulso','elementos','pontos','abc','sup','auriculo','bagua','quiroref'].forEach(k=>entregarNaCaixa(k,''));
-    painel.style.display='none';resumoBox.style.display='none';fioRender();return;
+    ['pulso','elementos','pontos','abc','sup','auriculo','bagua','quiroref','acu'].forEach(k=>entregarNaCaixa(k,''));
+    painel.style.display='none';
+    // A Sessão continua na tela, vazia e dizendo isso. O que sai é a fileira de
+    // botões: não se salva um encontro em branco.
+    resumoBox.style.display='block';
+    sessaoRender(true);
+    fioRender();return;
   }
   painel.style.display='block';
   resumoBox.style.display='block';
@@ -7864,6 +7941,19 @@ function renderDiagPainel(){
     </div>`;
   });
   const hPontos=html;html='';
+  // Os pontos de agulha desta sessao, dentro da propria caixa da Acupuntura
+  if((_diagSelecoes.acuPontos||[]).length){
+    html+=`<div class="fc" style="border-left:5px solid var(--pri-deep)">
+      <div class="fst">Agulhas desta sessão</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        ${_diagSelecoes.acuPontos.map(p=>`<span style="display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:4px 9px;border-radius:8px;border:1px solid var(--pri-deep);background:var(--cream)">
+          <strong>${escHtml(p.cod)}</strong> ${escHtml(p.py||'')}${p.mer?' <span style="color:var(--ink-soft)">· '+escHtml(p.mer)+'</span>':''}
+          <button type="button" class="btn btn-dan btn-sm" style="padding:1px 7px" onclick="removerAcuPonto(${jsq(p.cod)})">×</button>
+        </span>`).join('')}
+      </div>
+    </div>`;
+  }
+  const hAcu=html;html='';
   (_diagSelecoes.sistemasAbc||[]).forEach(id=>{
     const s=sistemasABC.find(x=>x.id===id);
     if(!s)return;
@@ -7958,35 +8048,74 @@ function renderDiagPainel(){
   entregarNaCaixa('sup',hSup);
   entregarNaCaixa('auriculo',hAuriculo);
   entregarNaCaixa('bagua',hBagua);
+  entregarNaCaixa('acu',hAcu);
   entregarNaCaixa('quiroref',hQuiro);
   painel.innerHTML=html;
   fioRender();   // o fio conta o mesmo que as caixas — e conta lá em cima
 
-  // Resumo compacto
+  sessaoRender(false);   // a ponta da corrente: a faixa da Sessao
+}
+
+/* ===== A SESSÃO — o que vai para este encontro =====
+   Antes isto era o "Resumo da Avaliação": uma lista corrida que só nascia
+   depois que algo fosse marcado. Agora é a faixa da Sessão, sempre na tela e
+   agrupada pelo que ele precisa dizer em voz alta no fim da consulta:
+   o que foi VISTO, o que vai ser USADO e COMO a pessoa está. */
+function sessaoNumero(){
+  if(!_diagPacSel)return 0;
+  const ds=(gD('diagnosticos')||[]).filter(d=>String(d.pacienteId)===String(_diagPacSel.id))
+    .sort((a,b)=>String(a.data||'').localeCompare(String(b.data||'')));
+  if(_diagEditandoId){
+    const i=ds.findIndex(d=>String(d.id)===String(_diagEditandoId));
+    return i>=0?i+1:ds.length;
+  }
+  return ds.length+1;                    // o de hoje ainda não está gravado
+}
+function sessaoRender(vazio){
   const resumo=document.getElementById('diagResumo');
-  const partes=[];
-  if(_diagSelecoes.elementos.length)partes.push(`<strong>Elementos:</strong> ${_diagSelecoes.elementos.join(', ')}`);
-  if(_diagSelecoes.pontos.length)partes.push(`<strong>Pontos:</strong> ${_diagSelecoes.pontos.join(', ')}`);
-  if((_diagSelecoes.sistemasAbc||[]).length)partes.push(`<strong>Sistemas ABC:</strong> ${_diagSelecoes.sistemasAbc.join(', ')}`);
-  if((_diagSelecoes.suplementos||[]).length)partes.push(`<strong>Suplementos:</strong> ${_diagSelecoes.suplementos.map(s=>nomeCap(s.nome)).join(', ')}`);
+  if(!resumo)return;
+  const acoes=document.getElementById('diagSessaoAcoes');
+  const numEl=document.getElementById('diagSessaoNum');
+  if(numEl){
+    const n=sessaoNumero();
+    numEl.textContent=n?(_diagEditandoId?'encontro nº '+n+' (em edição)':n+'º encontro com '+(_diagPacSel?_diagPacSel.nome.split(' ')[0]:'')):'';
+  }
+  if(acoes)acoes.style.display=vazio?'none':'';
+  if(vazio){
+    resumo.innerHTML='<p style="font-size:12.5px;color:var(--txt-l);font-style:italic">Nada marcado ainda neste encontro. O que você for clicando nas caixas acima aparece aqui — e é isto que vai para a ficha.</p>';
+    return;
+  }
+  const visto=[],usado=[],estado=[];
+  if(_diagSelecoes.elementos.length)visto.push(`<strong>Elementos:</strong> ${_diagSelecoes.elementos.join(', ')}`);
   // Pulso em uma linha, mas dizendo o que é de onde: "Cun esq.: Corda, Rápido · Chi dir.: Fraco"
-  if(pulsoChaves().length)partes.push(`<strong>Pulso:</strong> ${pulsoChaves().map(k=>{
+  if(pulsoChaves().length)visto.push(`<strong>Pulso:</strong> ${pulsoChaves().map(k=>{
     const ids=(_diagSelecoes.pulsoPorPos||{})[k]||[];
     const i=pulsoPosicoes[k];
     const onde=k==='geral'?'geral':(i?i.pos+' '+(i.punho==='Esquerdo'?'esq.':'dir.'):k);
     const quais=ids.map(id=>pulsosPorId[id]?pulsosPorId[id].nome:id).join(', ');
     return `${onde}: ${quais||'—'}`;
   }).join(' · ')}`);
-  if((_diagSelecoes.auriculo||[]).length)partes.push(`<strong>Auriculoterapia:</strong> ${_diagSelecoes.auriculo.map(id=>auriculoPontosPorId[id]?auriculoPontosPorId[id].nome:id).join(', ')}`);
-  if((_diagSelecoes.bagua||[]).length)partes.push(`<strong>Bagua:</strong> ${_diagSelecoes.bagua.map(b=>b.sindrome).join(', ')}`);
-  if((_diagSelecoes.elementoSintomas||[]).length)partes.push(`<strong>Sinais (5 Elementos):</strong> ${_diagSelecoes.elementoSintomas.map(s=>s.sintoma).join(', ')}`);
-  if((_diagSelecoes.pontoSintomas||[]).length)partes.push(`<strong>Sintomas (Pontos do Corpo):</strong> ${_diagSelecoes.pontoSintomas.map(s=>s.sintoma).join(', ')}`);
-  if((_diagSelecoes.psicanalise||[]).length)partes.push(`<strong>Psicanálise:</strong> ${_diagSelecoes.psicanalise.map(p=>p.nome).join(', ')}`);
-  if((_diagSelecoes.quiro||[]).length)partes.push(`<strong>Quiropraxia (ajustado):</strong> ${_diagSelecoes.quiro.map(q=>escHtml(q.art)).join(', ')}`);
-  if((_diagSelecoes.candidatos||[]).length)partes.push(`<strong>Candidatos aceitos:</strong> ${_diagSelecoes.candidatos.map(c=>escHtml(c.nome)).join(', ')}`);
+  if((_diagSelecoes.bagua||[]).length)visto.push(`<strong>Síndromes (Baguá):</strong> ${_diagSelecoes.bagua.map(b=>escHtml(b.sindrome)).join(', ')}`);
+  if((_diagSelecoes.elementoSintomas||[]).length)visto.push(`<strong>Sinais (5 Elementos):</strong> ${_diagSelecoes.elementoSintomas.map(s=>escHtml(s.sintoma)).join(', ')}`);
+  if((_diagSelecoes.pontoSintomas||[]).length)visto.push(`<strong>Sintomas (Pontos do Corpo):</strong> ${_diagSelecoes.pontoSintomas.map(s=>escHtml(s.sintoma)).join(', ')}`);
+  if((_diagSelecoes.psicanalise||[]).length)visto.push(`<strong>Psicanálise:</strong> ${_diagSelecoes.psicanalise.map(p=>escHtml(p.nome)).join(', ')}`);
+  if((_diagSelecoes.acuPontos||[]).length)usado.push(`<strong>Agulhas:</strong> ${_diagSelecoes.acuPontos.map(p=>escHtml(p.cod)+(p.py?' ('+escHtml(p.py)+')':'')).join(', ')}`);
+  if(_diagSelecoes.pontos.length)usado.push(`<strong>Regiões do corpo:</strong> ${_diagSelecoes.pontos.join(', ')}`);
+  if((_diagSelecoes.sistemasAbc||[]).length)usado.push(`<strong>Sistemas ABC:</strong> ${_diagSelecoes.sistemasAbc.join(', ')}`);
+  if((_diagSelecoes.auriculo||[]).length)usado.push(`<strong>Auriculoterapia:</strong> ${_diagSelecoes.auriculo.map(id=>auriculoPontosPorId[id]?auriculoPontosPorId[id].nome:id).join(', ')}`);
+  if((_diagSelecoes.quiro||[]).length)usado.push(`<strong>Quiropraxia (ajustado):</strong> ${_diagSelecoes.quiro.map(q=>escHtml(q.art)).join(', ')}`);
+  if((_diagSelecoes.suplementos||[]).length)usado.push(`<strong>Suplementos:</strong> ${_diagSelecoes.suplementos.map(s=>nomeCap(s.nome)).join(', ')}`);
+  if((_diagSelecoes.candidatos||[]).length)usado.push(`<strong>Candidatos aceitos:</strong> ${_diagSelecoes.candidatos.map(c=>escHtml(c.nome)).join(', ')}`);
   const emo=document.getElementById('diagEscalaEmo').value;
-  if(emo)partes.push(`<strong>Estado emocional:</strong> ${emo}`);
-  resumo.innerHTML=partes.map(p=>`<p style="margin-bottom:5px">${p}</p>`).join('');
+  if(emo)estado.push(`<strong>Estado emocional:</strong> ${escHtml(emo)}`);
+  const memProx=vMem('diagSessaoProx');
+  if(memProx)estado.push(`<strong>Para o próximo encontro:</strong> ${escHtml(memProx)}`);
+  const grupo=(tit,arr)=>arr.length?`<div style="margin-bottom:11px">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--pri-d);margin-bottom:4px">${tit}</div>
+    ${arr.map(p=>`<p style="margin-bottom:4px">${p}</p>`).join('')}
+  </div>`:'';
+  resumo.innerHTML=grupo('O que foi visto',visto)+grupo('O que vai ser usado',usado)+grupo('Como ele está',estado)
+    ||'<p style="font-size:12.5px;color:var(--txt-l);font-style:italic">Este encontro tem só o que foi escrito (folha, família ou memória da sessão).</p>';
 }
 
 function gerarHtmlDiag(diagRec){
@@ -8007,6 +8136,7 @@ function gerarHtmlDiag(diagRec){
   const auriculoSel=diagRec?(diagRec.auriculo||[]):(_diagSelecoes.auriculo||[]);
   const auriculoObs=diagRec?(diagRec.auriculoObs||''):(_diagSelecoes.auriculoObs||'');
   const baguaSel=diagRec?(diagRec.bagua||[]):(_diagSelecoes.bagua||[]);
+  const acuPontosSel=diagRec?(diagRec.acuPontos||[]):(_diagSelecoes.acuPontos||[]);
   const elementoSintomasSel=diagRec?(diagRec.elementoSintomas||[]):(_diagSelecoes.elementoSintomas||[]);
   const pontoSintomasSel=diagRec?(diagRec.pontoSintomas||[]):(_diagSelecoes.pontoSintomas||[]);
   const psicAnaliseSel=diagRec?(diagRec.psicanalise||[]):(_diagSelecoes.psicanalise||[]);
@@ -8062,6 +8192,12 @@ function gerarHtmlDiag(diagRec){
       ${sintomasDoPonto.length?`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27;margin-top:3px"><strong>Sintomas identificados:</strong> ${sintomasDoPonto.map(escHtml).join(', ')}</div>`:''}
     </div>`;
   });
+  if(acuPontosSel.length){
+    blocos+=`<div style="border-left:4px solid #1E3A5F;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
+      <div style="font-size:11.5pt;font-weight:700;color:#1E3A5F;margin-bottom:5px">Pontos de Acupuntura</div>
+      ${acuPontosSel.map(p=>`<div style="font-size:9.5pt;line-height:1.6;color:#2C2A27"><strong>${escHtml(p.cod)}</strong>${p.py?' — '+escHtml(p.py):''}${p.pt?' ("'+escHtml(p.pt)+'")':''}${p.mer?' · '+escHtml(p.mer):''}</div>`).join('')}
+    </div>`;
+  }
   sistemasAbcSel.forEach(id=>{
     const s=sistemasABC.find(x=>x.id===id);if(!s)return;
     blocos+=`<div style="border-left:4px solid #7a5c1e;padding:10px 14px;margin-bottom:12px;background:#fff;border-radius:8px">
@@ -10320,7 +10456,7 @@ function fecharDiagPacLista(){
 // As marcas da avaliação de volta ao zero — sem perguntar nada e sem mexer no
 // rascunho guardado. Quem pergunta é quem chama.
 function diagZerarSelecoes(){
-  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:'',candidatos:[],candidatosFora:[]};
+  _diagSelecoes={elementos:[],pontos:[],elementosObs:{},sistemasAbc:[],suplementos:[],auriculo:[],auriculoObs:'',pulso:[],pulsoPos:[],pulsoPorPos:{},pulsoObs:'',bagua:[],acuPontos:[],elementoSintomas:[],pontoSintomas:[],psicanalise:[],quiro:[],quiroObs:'',candidatos:[],candidatosFora:[]};
   const e1=document.getElementById('diagEscalaEmo');if(e1)e1.value='';
   const e2=document.getElementById('diagEmoObs');if(e2)e2.value='';
   limparMemSessao();
@@ -10437,6 +10573,11 @@ async function salvarDiagnostico(){
     pulsoPorPos:JSON.parse(JSON.stringify(_diagSelecoes.pulsoPorPos||{})),
     pulsoObs:_diagSelecoes.pulsoObs||'',
     bagua:[...(_diagSelecoes.bagua||[])],
+    // Os pontos de agulha escolhidos na base trilingue. Vao guardados INTEIROS
+    // (codigo, pinyin, traducao) e nao so pela sigla: a base de Acupuntura so
+    // desce quando alguem abre a caixa, e a folha impressa nao pode depender
+    // de um arquivo que talvez nem tenha sido baixado.
+    acuPontos:JSON.parse(JSON.stringify(_diagSelecoes.acuPontos||[])),
     elementoSintomas:[...(_diagSelecoes.elementoSintomas||[])],
     pontoSintomas:[...(_diagSelecoes.pontoSintomas||[])],
     psicanalise:[...(_diagSelecoes.psicanalise||[])],
@@ -10513,7 +10654,7 @@ function editarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...(diag.elementos||[])],pontos:[...(diag.pontos||[])],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])],quiro:[...(diag.quiro||[])],quiroObs:diag.quiroObs||'',candidatos:[...(diag.candidatos||[])],candidatosFora:[]};
+  _diagSelecoes={elementos:[...(diag.elementos||[])],pontos:[...(diag.pontos||[])],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],acuPontos:[...(diag.acuPontos||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])],quiro:[...(diag.quiro||[])],quiroObs:diag.quiroObs||'',candidatos:[...(diag.candidatos||[])],candidatosFora:[]};
   _diagEditandoId=diag.id;
   _diagJaSalvo=false;
   go('diagnostico',null);
@@ -11339,6 +11480,12 @@ function montarHtmlDiagnostico(diag){
     html+=bloco('var(--pri-deep)','<span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9"/></svg></span>Bagua — Acupuntura',corpo);
   }
 
+  // --- Pontos de Acupuntura usados naquele encontro ---
+  if((diag.acuPontos||[]).length){
+    const corpo=diag.acuPontos.map(p=>`<div style="padding:3px 0"><strong>${escHtml(p.cod)}</strong> ${escHtml(p.py||'')} <span style="color:var(--txt-l);font-size:11.5px">${escHtml(p.pt||'')}${p.mer?' · '+escHtml(p.mer):''}</span></div>`).join('');
+    html+=bloco('var(--pri-deep)','<span class="ic-md"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19 19 5"/><path d="M16 5h3v3"/><circle cx="7" cy="17" r="2"/></svg></span>Pontos de Acupuntura',corpo);
+  }
+
   // --- Psicanálise, agrupada por categoria ---
   if((diag.psicanalise||[]).length){
     const grupos={};
@@ -11403,7 +11550,7 @@ function duplicarDiagHist(diagId,pacId){
   if(!diag)return;
   const pac=gD('pacientes').find(p=>String(p.id)===String(pacId));
   _diagPacSel={id:pacId,nome:pac?pac.nome:diag.pacienteNome};
-  _diagSelecoes={elementos:[...(diag.elementos||[])],pontos:[...(diag.pontos||[])],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])],quiro:[...(diag.quiro||[])],quiroObs:diag.quiroObs||'',candidatos:[...(diag.candidatos||[])],candidatosFora:[]};
+  _diagSelecoes={elementos:[...(diag.elementos||[])],pontos:[...(diag.pontos||[])],elementosObs:{...(diag.elementosObs||{})},sistemasAbc:[...(diag.sistemasAbc||[])],suplementos:[...(diag.suplementos||[])],auriculo:[...(diag.auriculo||[])],auriculoObs:diag.auriculoObs||'',pulso:[...(diag.pulso||[])],pulsoPos:[...(diag.pulsoPos||[])],pulsoPorPos:pulsoMigrar(diag),pulsoObs:diag.pulsoObs||'',bagua:[...(diag.bagua||[])],acuPontos:[...(diag.acuPontos||[])],elementoSintomas:[...(diag.elementoSintomas||[])],pontoSintomas:[...(diag.pontoSintomas||[])],psicanalise:[...(diag.psicanalise||[])],quiro:[...(diag.quiro||[])],quiroObs:diag.quiroObs||'',candidatos:[...(diag.candidatos||[])],candidatosFora:[]};
   _diagEditandoId=null;
   _diagJaSalvo=false;
   go('diagnostico',null);

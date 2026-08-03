@@ -73,8 +73,9 @@ atendimento sentir diferença, o passo foi longe demais. E depois de cada passo:
   em vez de inventar outra. **Cuidado que já custou decisão antes:** densidade. Doze sistemas
   vezes meridianos vezes síndromes vezes 361 pontos não cabem numa roda só sem virar borrão;
   lembrar do **teto de nove anéis**, que nasceu de ver, não de supor.
-  **Ordem certa: depois de "Fechar a corrente da sessão".** A roda é a *entrada*; a Sessão é a
-  *saída*. Entrada bonita sem saída que registre não serve para o atendimento.
+  **A ordem já está cumprida: "Fechar a corrente da sessão" foi entregue em 03/08 (v9.8).**
+  A roda é a *entrada*; a Sessão é a *saída*, e a saída já registra. O caminho está livre —
+  e a faixa da Sessão é o lugar onde o que for clicado na roda vai aparecer.
   **É obra, não arrumação** — muda por fora, e a rede não protege contra "ficou pior de usar".
   **Ampliação dele, na mesma janela: camadas em vez de anéis fixos.** Interruptores no alto da
   roda (mostrar meridianos · ABC · órgãos · vísceras · emoções), e o que está aceso aparece.
@@ -87,23 +88,6 @@ atendimento sentir diferença, o passo foi longe demais. E depois de cada passo:
   folha limpa: reconhecer não é decidir.
 - **Abas com títulos no Montgomery Code** (ideia dele, 03/08) — navegar por aba nomeada em vez
   de rolar a biblioteca comprida. Para depois; não misturar com a roda.
-- **A corrente quebrada da sessão** (visto por ele na tela em 03/08 — PRIORIDADE, nasceu do
-  atendimento). Ele não consegue registrar o que vai **usar** no encontro. São três elos:
-  1. **Duas listas de pontos, e a que ele usa não marca.** A grade `pontosGrid` (render 7179)
-     tem clique e grava via `togglePonto` (7620). Mas a **base trilíngue** — a tela que ele
-     abre, com pinyin/Deadman (HTML 1543, render ~6534) — é **só consulta**: nenhum cartão
-     leva o ponto para a ficha. *Correção de uma nota anterior minha, que dizia que clicar já
-     gravava: vale só para a grade pequena.* Falta um "usar neste atendimento" no cartão.
-  2. **O Baguá guarda a síndrome, não o sistema.** `toggleBagua` (6783) grava
-     `{meridiano, síndrome}` — se ele escolhe o sistema e não clica numa síndrome, **nada
-     fica**. E não há como somar pontos dentro do sistema escolhido.
-  3. **A "aba Sessão" que ele pediu já existe em embrião:** `diagResumoBox` (1649), que já
-     monta "Pontos:" (7969) e "Bagua:" (7981) e fica sempre aberto (6427). Só que nasce
-     escondido e só aparece se houver algo marcado — como o elo 1 está quebrado, ele nunca
-     enche. Falta virar **faixa de Sessão** de verdade: sempre visível, agrupada por assunto,
-     dizendo o número do encontro e servindo de direção de conduta no fim da consulta.
-  **É obra pequena, mas é obra** (código novo). Vale furar a fila da semana de organização:
-  é dor de consultório real, e a plataforma existe para atender.
 - **Ideias vivas** — Vitruviano como lugar único, as três portas de 01/08, Ortomolecular,
   terceira aba de Suplementos, o botão do que deu certo, as ideias da Maly.
 - **Em planejamento / Pendências** — as duas listas antigas, mais abaixo, ainda valem.

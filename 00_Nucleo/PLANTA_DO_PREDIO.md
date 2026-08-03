@@ -288,6 +288,22 @@ morando na navegação. Mover exigiria **criar uma função nova** — ou seja, 
 só lugar. Numa arrumação que promete "nada muda por fora", isso não cabe. Fica anotado para
 a etapa 4 (dar encaixe às peças), onde mexer no código é o serviço.
 
+### A corrente da sessão (v9.8, 03/08/2026) — onde mora cada elo
+
+| Coisa | Placa / nome | O que é |
+|---|---|---|
+| a agulha vai para a ficha | `===== A CORRENTE DA SESSAO — ELO 1 =====` | `toggleAcuPonto`, `acuPontoMarcado`, `removerAcuPonto` |
+| o botão no cartão trilíngue | `renderAcuPontos` | "Usar neste atendimento"; `acuRedesenhar` guarda quem estava aberto |
+| o sistema do Baguá fica | `baguaToggleSistema` | despeja no mesmo `sistemasAbc` do Balanço ABC |
+| a faixa da Sessão | `===== A SESSÃO — o que vai para este encontro =====` | `sessaoRender` e `sessaoNumero`; o desenho é `diagResumoBox` |
+
+**Duas listas de ponto, de propósito:** `_diagSelecoes.pontos` é **região do corpo**
+(músculo, tendão, ajuste — a grade `pontosGrid`); `_diagSelecoes.acuPontos` é **agulha**
+(P-7, Lieque — a base trilíngue). Nomes parecidos, assuntos diferentes.
+
+**Sigla de meridiano tem dois dialetos:** a base de Acupuntura escreve `CS` e `TR`; o
+Balanço ABC e o Baguá escrevem `PC` e `TA`. O tradutor é `ACU_MERID_12`/`acuMeridiano12`.
+
 ### Duas armadilhas de nome (custaram tempo; ficam escritas)
 
 - **`.ev-card` não é erva** — é o cartãozinho de evento da **Agenda** (perto da placa

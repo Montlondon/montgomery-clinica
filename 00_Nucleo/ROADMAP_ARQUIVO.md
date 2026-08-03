@@ -9,6 +9,49 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — fechar a corrente da sessão (Clínica v9.8, 03/08/2026)
+
+Nasceu do consultório: ele viu na tela, com paciente na frente, que não conseguia registrar
+o que ia **usar** no encontro. Eram três elos partidos, e os três foram soldados.
+
+**Elo 1 — a agulha não ia para a ficha.** A base trilíngue (pinyin, tradução, Deadman) era
+só consulta: 361 pontos para ler e nenhum jeito de dizer "vou usar este hoje". Agora cada
+cartão tem **"Usar neste atendimento"**, e o ponto escolhido acende uma placa *nesta sessão*
+no próprio cartão. As duas listas continuam separadas de propósito, porque falam de coisas
+diferentes: `pontos` é **região do corpo** (músculo, tendão, ajuste); `acuPontos` é **agulha**.
+O ponto vai guardado inteiro (código, pinyin, tradução, meridiano) e não só pela sigla — a
+gaveta da Acupuntura só desce quando alguém abre a caixa, e a folha impressa não podia
+depender de um arquivo que talvez nem tivesse sido baixado.
+E a agulha **puxa o fio**: L.I.-4 acende o meridiano IG e, por Wu Xing, o elemento Metal nos
+candidatos. As siglas se entendem — a base escreve CS e TR, o resto da casa escreve PC e TA.
+
+**Elo 2 — o Baguá guardava a síndrome, não o sistema.** Quem achava o sistema certo e não
+clicava em nenhuma síndrome saía com a ficha vazia: o gesto principal era o único que não
+contava. Agora cada cartão do Baguá tem **"Usar o sistema X nesta sessão"**, e ele despeja no
+**mesmo balde dos Sistemas ABC** (`sistemasAbc`) — não numa lista nova. As duas telas já
+falavam a mesma língua; só faltava o botão.
+
+**Elo 3 — o "Resumo da Avaliação" virou a faixa da Sessão.** Antes ela nascia escondida e só
+aparecia se houvesse algo marcado — e como o elo 1 estava quebrado, quase nunca enchia. Agora
+está **sempre na tela**, diz **de que encontro é** ("3º encontro com Ana"), e vem agrupada
+pelo que ele precisa falar em voz alta no fim da consulta: **o que foi visto** (elementos,
+pulso, síndromes, sinais, sintomas, psicanálise), **o que vai ser usado** (agulhas, regiões,
+sistemas, auriculo, quiropraxia, suplementos, candidatos aceitos) e **como ele está** (escala
+emocional e o "para o próximo encontro"). Vazia, ela não fica muda: diz o que fazer. A fileira
+de botões é que some quando não há nada — não se salva um encontro em branco.
+
+O ponto de agulha entrou em todos os lugares onde um achado precisa aparecer: a caixa da
+Acupuntura, a faixa da Sessão, a folha impressa e o Histórico daquele encontro. E na rede da
+gravação: rascunho local, Salvar, Editar e Duplicar.
+
+**Provado na tela**, com o servidor local rodando: L.I.-4 clicado guardou
+`{cod:'L.I.-4', py:'Hegu', mer:'Intestino Grosso'}`, a gaveta aberta continuou aberta depois
+do redesenho, o botão virou "Tirar deste atendimento", a caixa da Acupuntura mostrou "Agulhas
+desta sessão" e o fio recebeu o meridiano. O Baguá gravou o sistema F sem nenhuma síndrome
+clicada. As 11 provas da rede passaram.
+
+---
+
 ## Concluído — juntar os Suplementos (Clínica v9.6, 03/08/2026)
 
 Passo 2 da semana de organização, segundo módulo. Senha "Juntar os Suplementos".
