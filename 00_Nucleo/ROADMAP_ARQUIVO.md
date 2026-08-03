@@ -19,7 +19,7 @@ pra mexer em uma parte específica, por exemplo apenas na parte de diagnóstico?
 ancorado e troca-se com `Edit`. E os dois prédios são separados — a Clínica tem 12.200 linhas
 (1,08 MB) em `index.html`; o OS tem 6.329 (604 KB) em `os/index.html`. Um não pesa dentro do outro.
 
-**A planta do prédio.** Nasceu `00_Nucleo/PLANTA_DO_PREDIO.md`: as **118 placas** do `index.html`
+**A planta do prédio.** Nasceu `00_Nucleo/PLANTA_DO_PREDIO.md`: as **119 placas** do `index.html`
 da Clínica mapeadas com linha e nome, separadas por camada (CSS 21–591, HTML 595–2176, JS
 2210–12200), com uma tabela por faixa do Diagnóstico apontando onde mora a pele, o osso e o músculo
 de cada uma. O Diagnóstico inteiro cabe em 338 linhas — 2,8% do arquivo. Apontada no `ROADMAP.md`

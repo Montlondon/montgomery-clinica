@@ -176,6 +176,20 @@ Se o assunto for **um desses dados**, o `index.html` nem precisa ser aberto.
 
 ---
 
+## Levantar a planta de novo (Windows / PowerShell)
+
+Quando os números envelhecerem, é este comando que redesenha o mapa. O terminal do Montgomery
+é **PowerShell** — `grep` não existe lá; o equivalente é `Select-String`.
+
+```
+[Console]::OutputEncoding=[Text.Encoding]::UTF8; Select-String -Path 'C:\Montgomery\Clinica\Backup\Files_Claude_repo\index.html' -Pattern '=====' -Encoding UTF8 | Select-Object LineNumber, Line | Format-Table -AutoSize -Wrap
+```
+
+O `-Encoding UTF8` não é enfeite: sem ele os acentos saem quebrados (*família* vira *fam?lia*).
+Hoje o comando devolve **119 placas**.
+
+---
+
 ## A regra de ouro
 
 Quanto mais precisa a porta, mais barata a corrida.
