@@ -2144,7 +2144,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v9.3 · 03/08';
+const APP_VER='v9.4 · 03/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2213,9 +2213,16 @@ document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
         tirar foto de nada. Saiu daqui para o arquivo html2canvas-pro.js, ao lado,
         e agora só é buscada no primeiro clique que precisa dela (carregarHtml2Canvas).
         Continua vindo do nosso próprio servidor, sem depender de CDN de fora. -->
+<!-- ===== Os três vizinhos (03/08/2026) =====
+     Estas tabelas desciam TODAS em toda visita, mesmo quando ninguém abria a
+     gaveta delas. Agora só `dados-clinicos.js` continua vindo na porta, porque
+     é o que o Diagnóstico precisa para se desenhar. Os outros esperam ser
+     chamados — ver `carregarDados()` mais abaixo:
+       acupuntura-data.js   105 KB  quando ele abre a caixa da Acupuntura
+       dados-psicanalise.js  95 KB  logo depois da tela aparecer (a peneira usa)
+       fitoterapia-data.js   37 KB  quando ele abre as ervas ou a receita
+       dados-quiropraxia.js  30 KB  quando ele abre o corpo ou a Quiropraxia -->
 <script src="dados-clinicos.js"></script>
-<script src="acupuntura-data.js"></script>
-<script src="fitoterapia-data.js"></script>
 
 <script>
 const SAVE_ICON_HTML='<span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M8.5 12.5l2.3 2.3L16 9.5"/></svg></span>';
@@ -4367,7 +4374,20 @@ const EV_CAMPOS=[
 
 let _evSel=null,_evPacSel=null,_evEscolha={quantidades:null,formas:null,frequencias:null,duracoes:null,momentos:null};
 
-const evLista=()=>(typeof fitoterapiaErvas!=='undefined'?fitoterapiaErvas:[]);
+// A estante de ervas (37 KB) não desce mais na porta: a primeira pessoa que
+// pedir a lista puxa a gaveta, e quando ela chega as telas que dependem dela se
+// redesenham sozinhas. Um único lugar cuida disso — todo mundo aqui chama
+// `evLista()`, ninguém lê `fitoterapiaErvas` direto.
+const evLista=()=>{
+  if(typeof fitoterapiaErvas!=='undefined')return fitoterapiaErvas;
+  carregarDados('fitoterapia').then(evRedesenhar).catch(e=>console.warn(e.message));
+  return [];
+};
+function evRedesenhar(){
+  ['renderEvGrid','renderEvPainel','renderEvFormulas','renderPtPainel','renderLgPainel','renderDiagPainel']
+    .forEach(nome=>{const f=window[nome];if(typeof f==='function')f();});
+  if(typeof editId!=='undefined'&&editId&&typeof renderEvFicha==='function')renderEvFicha(editId);
+}
 // Duas procedências na mesma estante. A erva da MTC se chama pelo pinyin e traz
 // sabor, natureza e meridiano; a erva do Brasil se chama pelo nome popular e
 // traz parte usada e forma de preparo. O botão, a régua, a ficha e o caminho
@@ -4447,7 +4467,7 @@ function evOrigemBotoes(){
 function renderEvGrid(){
   const el=document.getElementById('evGrid');if(!el)return;
   const todas=evLista();
-  if(!todas.length){el.innerHTML='<p class="mn-vazio">A base de ervas não carregou (fitoterapia-data.js).</p>';return;}
+  if(!todas.length){el.innerHTML='<p class="mn-vazio">Buscando a estante de ervas...</p>';return;}
   const q=semAcento(((document.getElementById('evBusca')||{}).value||'').trim().toLowerCase());
   const filtra=e=>(_evOrigemFiltro==='todas'||evOrigem(e)===_evOrigemFiltro)
     &&(!q||[e.nome_pinyin,e.nome_popular,e.nome_cientifico,e.categoria,e.acoes,e.indicacoes,e.parte_usada,e.forma_tradicional].some(x=>semAcento(String(x||'').toLowerCase()).includes(q)));
@@ -6273,8 +6293,21 @@ function cxGuardar(){
 }
 function cxToggle(fc){
   fc.classList.toggle('cx-aberta');
+  if(fc.classList.contains('cx-aberta'))cxAcordar(fc.dataset.cx);
   cxGuardar();
   atualizarResumoCaixas();
+}
+// Três caixas do Diagnóstico moram sobre tabelas que agora só descem quando
+// alguém puxa a gaveta. Elas se desenham na hora em que a caixa abre — não
+// mais todas de uma vez, no instante em que o Diagnóstico aparece.
+const CX_GAVETA={
+  quiroref :()=>renderQuiroRef(),
+  acu      :()=>initAcupuntura(),
+  psic     :()=>renderPsicanalise()
+};
+function cxAcordar(chave){
+  const f=CX_GAVETA[chave];
+  if(f)f();
 }
 function prepararCaixasDiag(){
   if(_cxPreparadas)return;
@@ -6297,7 +6330,7 @@ function prepararCaixasDiag(){
     cab.insertAdjacentHTML('beforeend','<span class="cx-resumo"></span>'+CX_SETA);
     cab.addEventListener('click',()=>cxToggle(fc));
     cab.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();cxToggle(fc);}});
-    if(abertas.includes(fc.dataset.cx))fc.classList.add('cx-aberta');
+    if(abertas.includes(fc.dataset.cx)){fc.classList.add('cx-aberta');cxAcordar(fc.dataset.cx);}
   });
   atualizarResumoCaixas();
 }
@@ -6343,13 +6376,12 @@ function initDiagnostico(){
   renderPulsoCard();
   renderElementosGrid();
   renderPontosGrid();
-  renderQuiroRef();
   renderDiagPainel();
   initBalancoABC();
-  initAcupuntura();
   initBaguaWheel();
   renderAuriculoMapaCompleto();
-  renderPsicanalise();
+  // Quiropraxia, Acupuntura e Psicanálise não se desenham mais aqui: quem as
+  // acorda é a caixa delas, ao abrir (cxAcordar, em prepararCaixasDiag/cxToggle).
   if(!document.getElementById('diagDt').value)document.getElementById('diagDt').value=dLocal(new Date());
   if(!_diagPacSel){
     document.getElementById('diagPacBusca').value='';
@@ -6369,6 +6401,8 @@ let _acuMeridianoSel='IG'; // começa no Intestino Grosso (L.I.-4 é o mais usad
 function initAcupuntura(){
   const grid=document.getElementById('acuMeridianoGrid');
   if(!grid)return;
+  // A gaveta dos meridianos (105 KB) só desce aqui, quando alguém abre a caixa.
+  if(!comDados('acupuntura',initAcupuntura)){grid.innerHTML='<span class="mn-vazio">Buscando os meridianos...</span>';return;}
   const disponiveis=new Set(ACUPUNTURA_PONTOS.map(p=>p.m));
   grid.innerHTML=Object.keys(ACUPUNTURA_MERIDIANOS).map(sig=>{
     const md=ACUPUNTURA_MERIDIANOS[sig], tem=disponiveis.has(sig);
@@ -6386,6 +6420,7 @@ function setAcuMeridiano(sig){
 }
 function filtrarAcuPontos(){
   const q=semAcento(document.getElementById('acuBusca').value.trim());
+  if(!comDados('acupuntura',filtrarAcuPontos))return;
   if(!q){renderAcuPontos(acupunturaPontosDoMeridiano(_acuMeridianoSel));return;}
   const res=ACUPUNTURA_PONTOS.filter(p=>
     semAcento(p.py+' '+p.pt+' '+p.en+' '+p.ind+' '+p.fn+' '+p.m+'-'+p.n+' '+ACUPUNTURA_MERIDIANOS[p.m].deadman+'-'+p.n).includes(q));
@@ -7198,6 +7233,11 @@ function cpTocar(id){
 function cpPainel(){
   const el=document.getElementById('corpoPainel');
   if(!el)return;
+  // Tocou numa vértebra: é aqui que a gaveta da coluna faz falta de verdade.
+  if(_cpSel&&!comDados('quiropraxia',cpPainel)){
+    el.innerHTML='<div class="cp-vazio">Buscando a referência da coluna...</div>';
+    return;
+  }
   if(!_cpSel){
     el.innerHTML=`<div class="cp-vazio">Toque numa vértebra para ver o que aquele nível inerva, o que costuma aparecer quando ele está interferido, e marcar o que você ajustou hoje.
       <br><br>É a mesma anotação da aba <strong>Quiropraxia</strong> — só que pelo corpo. O que você marcar aqui aparece lá, no resumo e na folha impressa.</div>`;
@@ -7410,7 +7450,9 @@ function setQuiroRef(aba){
 }
 function renderQuiroRef(){
   const el=document.getElementById('quiroRefConteudo');
-  if(!el||typeof QUIROPRAXIA_REF==='undefined')return;
+  if(!el)return;
+  // A gaveta da coluna (30 KB) só desce quando ele abre a caixa ou toca o corpo.
+  if(!comDados('quiropraxia',renderQuiroRef)){el.innerHTML='<p class="mn-vazio">Buscando a referência da coluna...</p>';return;}
   const Q=QUIROPRAXIA_REF, esc=s=>String(s).replace(/</g,'&lt;');
   const fonteEl=document.getElementById('quiroFonte');
   if(fonteEl)fonteEl.innerHTML='Referência consultável durante o diagnóstico. Fonte: <em>'+esc(Q.fonte)+'</em>. Não substitui diagnóstico médico.';
@@ -7521,6 +7563,7 @@ function psicArg(s){return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'").r
 function renderPsicanalise(){
   const cont=document.getElementById('psicAnaliseConteudo');
   if(!cont)return;
+  if(!comDados('psicanalise',renderPsicanalise)){cont.innerHTML='<p class="mn-vazio">Buscando os conceitos...</p>';return;}
   const q=_psicAnaliseBusca;
   let html='';
   psicanaliseTemas.forEach(cat=>{
@@ -11462,6 +11505,61 @@ async function delRxHist(rxId){
   if(editId)carregarRxHistPac(editId);
   toast('Removido do histórico','#c62828',"trash");
 }
+
+// ===== As gavetas que só abrem quando alguém puxa (03/08/2026) =====
+// Mesmo princípio do html2canvas logo abaixo, agora para as tabelas de referência.
+// Cada gaveta sabe dizer se já está aberta (`pronto`) — e como o arquivo declara
+// os dados com `const` no topo, `typeof` só responde "undefined" enquanto ele
+// não desceu. Uma vez aberta, fica aberta: o segundo clique é instantâneo.
+const _GAVETAS={
+  acupuntura :{arq:'acupuntura-data.js',   pronto:()=>typeof ACUPUNTURA_PONTOS!=='undefined'},
+  fitoterapia:{arq:'fitoterapia-data.js',  pronto:()=>typeof fitoterapiaErvas!=='undefined'},
+  psicanalise:{arq:'dados-psicanalise.js', pronto:()=>typeof psicanaliseTemas!=='undefined'},
+  quiropraxia:{arq:'dados-quiropraxia.js', pronto:()=>typeof QUIROPRAXIA_REF!=='undefined'}
+};
+const _gavetaPromessa={};
+function gavetaAberta(nome){const g=_GAVETAS[nome];return !!g&&g.pronto();}
+function carregarDados(nome){
+  const g=_GAVETAS[nome];
+  if(!g)return Promise.reject(new Error('gaveta desconhecida: '+nome));
+  if(g.pronto())return Promise.resolve();
+  if(_gavetaPromessa[nome])return _gavetaPromessa[nome];
+  _gavetaPromessa[nome]=new Promise((res,rej)=>{
+    const s=document.createElement('script');
+    s.src=g.arq;
+    s.onload=()=>g.pronto()?res():rej(new Error('Arquivo veio, mas os dados não: '+g.arq));
+    s.onerror=()=>rej(new Error('Não foi possível carregar '+g.arq));
+    document.head.appendChild(s);
+  });
+  // Se falhar, esquece a tentativa para que o próximo clique tente de novo
+  _gavetaPromessa[nome].catch(()=>{_gavetaPromessa[nome]=null;});
+  return _gavetaPromessa[nome];
+}
+// O atalho que as telas usam. Devolve `true` quando a gaveta já está aberta e o
+// desenho pode seguir agora mesmo. Quando ainda não está, puxa a gaveta, marca
+// `redesenhar` para quando ela chegar, e devolve `false` — o desenho de agora se
+// contenta com um aviso curto, e nunca deixa a tela em branco calada.
+function comDados(nome,redesenhar){
+  if(gavetaAberta(nome))return true;
+  carregarDados(nome).then(redesenhar).catch(e=>console.warn(e.message));
+  return false;
+}
+// A Psicanálise é a única que o Diagnóstico usa sem ninguém pedir: a peneira da
+// folha limpa e os achados do DNA da Família leem os 59 itens. Por isso ela não
+// espera clique — sai do caminho da primeira pintura e vem logo em seguida,
+// enquanto ele ainda está lendo a tela.
+window.addEventListener('load',()=>{
+  const puxar=()=>carregarDados('psicanalise')
+    .then(()=>{
+      // Se ele já estava numa dessas telas quando a gaveta chegou, redesenha:
+      // a peneira e os achados da família leem os 59 itens.
+      ['renderPsicanalise','renderFolhaPeneira','renderFamPeneira']
+        .forEach(nome=>{const f=window[nome];if(typeof f==='function')f();});
+    })
+    .catch(()=>{});
+  if(window.requestIdleCallback)requestIdleCallback(puxar,{timeout:3000});
+  else setTimeout(puxar,300);
+});
 
 // Carregar html2canvas-pro só na hora em que alguém vai de fato tirar uma foto
 // da tela. A primeira tentativa é o arquivo da nossa própria casa (mesmo servidor,

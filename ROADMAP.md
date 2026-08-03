@@ -22,9 +22,9 @@ barato. Não pular.*
    grande desta semana. Antes do passo 2, montar uma **conferência automática mínima**: uma
    página que abre a Clínica e verifica que as portas principais ainda respondem.
    Meia hora de trabalho; troca "eu acho que não quebrou" por "eu sei que não quebrou".
-1. **Aliviar a porta** — os três vizinhos (`dados-clinicos.js` 245 KB, `acupuntura-data.js`
-   105 KB, `fitoterapia-data.js` 37 KB) só descem quando o corpo ou a receita abrem.
-   Mesmo truque da v9.3. **387 KB**, baixo risco. *Senha "Os três vizinhos".*
+1. ~~**Aliviar a porta** — os três vizinhos.~~ **FEITO em 03/08 (v9.4).** A porta caiu de
+   1.225 KB para 964 KB; 172 KB nunca mais descem numa visita comum. O bloco inteiro está
+   no `ROADMAP_ARQUIVO.md`.
 2. **Juntar o que está espalhado** — o Financeiro mora em **9 salas**. Antes de virar peça,
    ele precisa virar **um lugar só**. Vale para cada módulo: reunir antes de cortar.
 3. **Enxugar o repetido** — só depois de reunido dá para ver o que é cópia. Medir, nunca supor.
@@ -45,13 +45,9 @@ atendimento sentir diferença, o passo foi longe demais. E depois de cada passo:
 - **Nunca o relógio decide** — senha aberta, MMObras.
 - **Sem acento** — as buscas de dentro já foram varridas (v9.2). Sobra a busca de paciente da
   Recomendação (`filtrarRxPac`), que ainda não enxerga os arquivados.
-- **Os três vizinhos** — `dados-clinicos.js` (245 KB), `acupuntura-data.js` (105 KB) e
-  `fitoterapia-data.js` (37 KB) descem em toda visita. São **387 KB de tabelas** que o
-  Diagnóstico só precisa quando se abre o corpo ou a receita. Mesmo truque da v9.3
-  (`carregarHtml2Canvas`), baixo risco, vale quase o dobro do que já se ganhou.
-  *Carregar as abas com preguiça, ideia dele em 03/08:* possível, mas rende só ~110 KB
-  (Financeiro, Configurações, Psicanálise, Suplementos) — o Diagnóstico puxa quase todo o
-  resto. Os três vizinhos vêm primeiro.
+- **A rede embaixo do trapézio** — o passo 0 do foco, e o único risco grande da semana:
+  ainda não existe conferência automática nenhuma. Agora que a Clínica tem quatro gavetas
+  que chegam depois da tela, a rede vale mais ainda: ela conferiria que cada gaveta abre.
 - **Montgomery Code** — seguir montando as aulas da grade; matéria-prima acumulada abaixo.
   A **Aula 1.8 (A peça que não solta)** foi acesa em 03/08 (OS v6.2) e é a base teórica do
   foco acima: escopo, a mesa única, e por que o LEGO ainda não tem encaixe.

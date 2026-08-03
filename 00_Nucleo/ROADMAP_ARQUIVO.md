@@ -9,6 +9,46 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — os três vizinhos (Clínica v9.4, 03/08/2026)
+
+Passo 1 da semana de organização, cumprido. Três tabelas de referência desciam em **toda visita**,
+mesmo quando ninguém abria a gaveta delas. Medido antes de mexer, e por dentro — a lição da v9.3.
+
+**O que se mediu.** `dados-clinicos.js` tinha 245 KB, mas não era um bloco só: 95 KB eram a
+Psicanálise, 83 KB a Auriculoterapia, 30 KB a Quiropraxia, e o resto (banco integrativo, sistemas
+ABC, pulsos, catálogo) somava 37 KB. Não adiantava adiar o arquivo inteiro: metade dele o
+Diagnóstico precisa para se desenhar.
+
+**O corte.** `dados-clinicos.js` virou três: ele mesmo (120 KB, continua vindo na porta),
+`dados-psicanalise.js` (95 KB) e `dados-quiropraxia.js` (30 KB).
+
+**Quem vem quando:**
+
+| Arquivo | Peso | Quando desce |
+|---|---|---|
+| `dados-clinicos.js` | 120 KB | na porta — o Diagnóstico precisa dele para existir |
+| `dados-psicanalise.js` | 95 KB | logo depois da tela pintar, sem esperar clique |
+| `acupuntura-data.js` | 105 KB | quando ele abre a caixa da Acupuntura |
+| `fitoterapia-data.js` | 37 KB | quando alguém pede a lista de ervas |
+| `dados-quiropraxia.js` | 30 KB | quando ele abre o corpo ou a Quiropraxia |
+
+**A porta: 1.225 KB → 964 KB.** Dos 261 KB que saíram, **172 KB nunca descem** numa visita em que
+ele não abre acupuntura, ervas nem coluna. Os outros 95 KB (Psicanálise) ainda vêm, mas depois da
+tela aparecer — porque a peneira da folha limpa e os achados do DNA da Família leem os 59 itens
+sem ninguém pedir. Adiar isso até o clique tiraria achados do meio do atendimento, em silêncio.
+Foi decisão consciente: sair do caminho crítico, não sumir.
+
+**A peça nova.** `carregarDados(nome)` e `comDados(nome, redesenhar)` — o mesmo desenho do
+`carregarHtml2Canvas` da v9.3, agora para quatro gavetas. Cada tela que depende de uma gaveta
+mostra "Buscando..." e se redesenha sozinha quando ela chega. As caixas do Diagnóstico acordam a
+gaveta ao abrir (`cxAcordar`), e não mais todas de uma vez em `initDiagnostico`.
+
+**Conferido rodando**, gaveta por gaveta: 31 categorias e 210 itens de Psicanálise, 26 raízes da
+coluna, 14 meridianos, 45 ervas, 8 fórmulas, 28 pulsos, 64 pontos auriculares, 12 sistemas ABC.
+Nada se perdeu no corte. Console limpo.
+
+---
+
 ## Concluído — a mala aberta na porta (Clínica v9.3, 03/08/2026)
 
 *Ele perguntou: "mede de onde vem todo este peso". A medida achou o culpado num tijolo só.*
