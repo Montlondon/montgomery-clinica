@@ -116,6 +116,24 @@ atendimento sentir diferença, o passo foi longe demais. E depois de cada passo:
   se prova no atendimento mais rápido). Senha: **"A escala que se toca"**.
   *Acerto pequeno anotado de passagem: na régua o desenho fica espremido na metade direita e as
   datas se sobrepõem no eixo.*
+- **A aba do microfone** (ideia dele, 03/08 — **futura**, só registrada). Gravar o áudio da
+  sessão, e **a própria pessoa dizendo que autoriza**, no começo da gravação. Ele já tem o
+  primeiro áudio de hoje, com autorização da paciente.
+  **A parte bonita da ideia é justamente a autorização gravada:** o consentimento deixa de ser
+  papel assinado e vira a voz dela, com data, dentro do próprio arquivo que ela autorizou. Isso
+  é mais forte do que qualquer caixinha marcada, e é barato — trinta segundos de voz pesam pouco.
+  **Três coisas honestas, para a ideia não nascer torta:**
+  1. **Peso.** Uma sessão de uma hora dá dezenas de MB. A cota do Supabase é uma só para a
+     Clínica e o MMObras, e o que estoura é *egress*. Áudio de sessão **não pode** morar lá do
+     mesmo jeito que uma foto de exame — ou se guarda fora, ou se guarda só o texto.
+  2. **Virar texto custa e sai de casa.** Não existe transcrição boa rodando dentro do navegador
+     dele: o áudio teria que ser enviado a um serviço (Whisper e semelhantes), o que significa
+     **conteúdo de sessão psicanalítica saindo do computador**. Isso é decisão dele, não técnica,
+     e precisa estar clara antes de qualquer linha de código.
+  3. **Áudio de sessão é prontuário**, e dado de saúde do tipo mais sensível que existe. Guarda,
+     prazo e quem pode ouvir têm que ser decididos junto com o resto — não depois.
+  **Caminho barato que dá para pensar primeiro:** guardar só a **autorização falada** (curta) e a
+  **transcrição/resumo** do que importa, e não o áudio inteiro. Conversar antes de construir.
 - **Abas com títulos no Montgomery Code** (ideia dele, 03/08) — navegar por aba nomeada em vez
   de rolar a biblioteca comprida. Para depois; não misturar com a roda.
 - **A corrente quebrada da sessão** (visto por ele na tela em 03/08 — PRIORIDADE, nasceu do
