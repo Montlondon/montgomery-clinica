@@ -10,6 +10,29 @@ O mapa de onde mora cada coisa dentro do `index.html` mora em
 > este documento não. O que não está escrito aqui, some. **Ao concluir**, o bloco desce para o
 > arquivo e some daqui: o diário fica magro de propósito.
 
+## O FOCO — a semana de organização (decidido por ele em 03/08/2026)
+
+*Ele deu autorização máxima para dizer honestamente o que fazer, e escolheu isto como maior foco
+a partir de hoje. A ordem abaixo é de dependência, não de gosto: cada passo torna o seguinte
+barato. Não pular.*
+
+1. **Aliviar a porta** — os três vizinhos (`dados-clinicos.js` 245 KB, `acupuntura-data.js`
+   105 KB, `fitoterapia-data.js` 37 KB) só descem quando o corpo ou a receita abrem.
+   Mesmo truque da v9.3. **387 KB**, baixo risco. *Senha "Os três vizinhos".*
+2. **Juntar o que está espalhado** — o Financeiro mora em **9 salas**. Antes de virar peça,
+   ele precisa virar **um lugar só**. Vale para cada módulo: reunir antes de cortar.
+3. **Enxugar o repetido** — só depois de reunido dá para ver o que é cópia. Medir, nunca supor.
+4. **Dar encaixe às peças** — trocar os `onclick` por escuta no código e as funções globais por
+   módulos com `import`/`export`. É o que permite levar o Financeiro para outro app.
+   **Esta é a etapa cara; as três de cima têm que estar feitas.**
+5. **A escola com abas laterais** — o Montgomery Code no formato do OS, para ele abrir e estudar
+   quando estiver inspirado. Pode andar em paralelo: não depende de nenhuma das outras.
+6. **As biografias e os CLAUDE.md** — rever o que os Claudes sabem dele; o `CLAUDE.md` e a
+   memória envelheceram em pontos.
+
+**A regra da semana:** *refatorar é arrumar por dentro sem mudar nada por fora.* Se o
+atendimento sentir diferença, o passo foi longe demais. E depois de cada passo: subir e olhar.
+
 ## O que está pendente agora
 
 - **Prateleira** — falta ele escrever as primeiras linhas de "Onde comprar" (bloco abaixo).
@@ -24,6 +47,8 @@ O mapa de onde mora cada coisa dentro do `index.html` mora em
   (Financeiro, Configurações, Psicanálise, Suplementos) — o Diagnóstico puxa quase todo o
   resto. Os três vizinhos vêm primeiro.
 - **Montgomery Code** — seguir montando as aulas da grade; matéria-prima acumulada abaixo.
+  A **Aula 1.8 (A peça que não solta)** foi acesa em 03/08 (OS v6.2) e é a base teórica do
+  foco acima: escopo, a mesa única, e por que o LEGO ainda não tem encaixe.
 - **Ideias vivas** — Vitruviano como lugar único, as três portas de 01/08, Ortomolecular,
   terceira aba de Suplementos, o botão do que deu certo, as ideias da Maly.
 - **Em planejamento / Pendências** — as duas listas antigas, mais abaixo, ainda valem.
