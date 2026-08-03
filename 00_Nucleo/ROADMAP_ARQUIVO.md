@@ -9,6 +9,47 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — a rede embaixo do trapézio (03/08/2026)
+
+Passo 0 da semana de organização, cumprido — e cumprido **antes** dos passos que mexem no
+prédio, que era a razão de ele existir. Até hoje a única forma de saber que a Clínica tinha
+quebrado era descobrir no meio de um atendimento, com o paciente na frente.
+
+**O que nasceu.** `01_Codigo/conferencia/conferir.mjs` — uma conferência automática que se roda
+num comando, em um segundo, sem internet, sem login, sem navegador, sem chave de API e sem
+gastar um centavo (não tem Claude nenhum dentro dela: é código lendo arquivo). Mãos só de
+leitura, como o Ronda.
+
+```bash
+node 01_Codigo/conferencia/conferir.mjs
+```
+
+**As onze provas.** O peso da porta; o `APP_VER` no lugar; **a eletricidade liga** — o
+JavaScript inteiro passa pelo `vm.Script`, que é o mesmo leitor do Chrome, sem executar nada,
+e é o que pega a tela em branco; os arquivos que a porta chama existem mesmo; **as quatro
+gavetas da v9.4**, uma prova cada, conferindo que o arquivo veio *e* que a palavra-sentinela
+está lá dentro (`ACUPUNTURA_PONTOS`, `fitoterapiaErvas`, `psicanaliseTemas`, `QUIROPRAXIA_REF`);
+as 12 abas do paciente têm painel para onde ir; e **os 278 nomes chamados por `onclick` têm
+dono** no código — esta é a rede da semana de organização, a que acende quando se renomeia ou
+se move uma função e sobra um botão apontando para o nada.
+
+**A lista das gavetas ela lê do próprio `index.html`**, não de uma cópia: quando nascer uma
+quinta gaveta, a conferência já a confere sozinha, sem ninguém lembrar de atualizar nada.
+
+**A prova de que a rede funciona.** Uma rede que nunca foi testada é decoração. Quebramos de
+propósito: `filtrarPsicanalise` virou `filtrarPsicanaliseXX` e o `APP_VER` perdeu o `=`. Ela
+acusou as três falhas na hora, pelo nome, e o `index.html` foi restaurado em seguida.
+
+**O que ela não pega, dito na cara.** Não sabe se um cálculo está certo, se a cor ficou feia, se
+o Supabase respondeu, se a tela ficou torta no celular. Ela pega **o que quebra calado** — que é
+exatamente o que dá medo de refatorar. O resto continua sendo **subir e olhar**.
+
+**Quando rodar:** antes de todo `git push`. Depois de subir, a rede chega tarde.
+
+Toda a explicação em [`01_Codigo/conferencia/LEIA-ME.md`](../01_Codigo/conferencia/LEIA-ME.md).
+
+---
+
 ## Concluído — juntar o Financeiro (Clínica v9.5, 03/08/2026)
 
 Passo 2 da semana de organização, cumprido. Senha "Juntar o Financeiro".

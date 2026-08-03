@@ -16,12 +16,9 @@ O mapa de onde mora cada coisa dentro do `index.html` mora em
 a partir de hoje. A ordem abaixo é de dependência, não de gosto: cada passo torna o seguinte
 barato. Não pular.*
 
-0. **A rede embaixo do trapézio** *(eu acrescentei; ele não pediu — e é a mais importante)*.
-   Hoje não existe **nenhuma** forma de saber que algo quebrou a não ser ele descobrir no meio
-   de um atendimento. Mexer em 12.300 linhas com paciente na frente e sem rede é o único risco
-   grande desta semana. Antes do passo 2, montar uma **conferência automática mínima**: uma
-   página que abre a Clínica e verifica que as portas principais ainda respondem.
-   Meia hora de trabalho; troca "eu acho que não quebrou" por "eu sei que não quebrou".
+0. ~~**A rede embaixo do trapézio.**~~ **FEITA em 03/08.** Onze provas em um segundo, sem
+   internet e sem custo. Rodar **antes de todo push**, daqui em diante:
+   `node 01_Codigo/conferencia/conferir.mjs`. O bloco inteiro está no `ROADMAP_ARQUIVO.md`.
 1. ~~**Aliviar a porta** — os três vizinhos.~~ **FEITO em 03/08 (v9.4).** A porta caiu de
    1.225 KB para 964 KB; 172 KB nunca mais descem numa visita comum. O bloco inteiro está
    no `ROADMAP_ARQUIVO.md`.
@@ -40,7 +37,8 @@ barato. Não pular.*
    memória envelheceram em pontos.
 
 **A regra da semana:** *refatorar é arrumar por dentro sem mudar nada por fora.* Se o
-atendimento sentir diferença, o passo foi longe demais. E depois de cada passo: subir e olhar.
+atendimento sentir diferença, o passo foi longe demais. E depois de cada passo:
+**conferir a rede, subir e olhar** — `node 01_Codigo/conferencia/conferir.mjs`.
 
 ## O que está pendente agora
 
@@ -48,9 +46,6 @@ atendimento sentir diferença, o passo foi longe demais. E depois de cada passo:
 - **Nunca o relógio decide** — senha aberta, MMObras.
 - **Sem acento** — as buscas de dentro já foram varridas (v9.2). Sobra a busca de paciente da
   Recomendação (`filtrarRxPac`), que ainda não enxerga os arquivados.
-- **A rede embaixo do trapézio** — o passo 0 do foco, e o único risco grande da semana:
-  ainda não existe conferência automática nenhuma. Agora que a Clínica tem quatro gavetas
-  que chegam depois da tela, a rede vale mais ainda: ela conferiria que cada gaveta abre.
 - **Montgomery Code** — seguir montando as aulas da grade; matéria-prima acumulada abaixo.
   A **Aula 1.8 (A peça que não solta)** foi acesa em 03/08 (OS v6.2) e é a base teórica do
   foco acima: escopo, a mesa única, e por que o LEGO ainda não tem encaixe.
@@ -328,6 +323,16 @@ teoria de livro, é coisa que aconteceu na tela dele. Escrever uma de cada vez, 
 **Uma observação que virou regra:** este arquivo agora tem dois leitores — o Montgomery e os
 agentes. O Ronda lê só as 60 primeiras linhas. Por isso este catálogo mora aqui embaixo e não lá
 em cima: *onde a coisa fica no arquivo passou a importar.* Isso, sozinho, já é uma aula.
+
+### 0-bis. A rede embaixo do trapézio — por que se testa (nasceu em 03/08/2026)
+**Camada 2 ou 3, e cabe logo depois da Aula 1.8 (a peça que não solta).** O trapezista voa igual
+com rede e sem rede — a diferença é o que acontece quando ele erra. A aula tem a prova real já
+vivida: quebramos a Clínica de propósito (uma função renomeada, um `=` a menos) e a conferência
+acusou as três falhas pelo nome, em um segundo. Os dois pontos que a aula precisa carregar:
+(1) **teste é a permissão de mexer** — sem rede, refatorar é coragem; com rede, é trabalho;
+(2) **rede não testada é decoração** — a primeira coisa que se faz com uma rede nova é quebrar
+alguma coisa de propósito para ver se ela grita. E a metáfora do `vm.Script`: dá para ver que
+falta uma palavra na receita **sem sujar panela**.
 
 ### 0. Onde eu estou de pé — o `cd` (dúvida real dele, 01/08/2026)
 **Camada 2, e provavelmente antes de tudo.** Ele perguntou, com todas as letras: *"sempre tenho
