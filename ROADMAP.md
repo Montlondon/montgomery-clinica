@@ -16,6 +16,12 @@ O mapa de onde mora cada coisa dentro do `index.html` mora em
 a partir de hoje. A ordem abaixo é de dependência, não de gosto: cada passo torna o seguinte
 barato. Não pular.*
 
+0. **A rede embaixo do trapézio** *(eu acrescentei; ele não pediu — e é a mais importante)*.
+   Hoje não existe **nenhuma** forma de saber que algo quebrou a não ser ele descobrir no meio
+   de um atendimento. Mexer em 12.300 linhas com paciente na frente e sem rede é o único risco
+   grande desta semana. Antes do passo 2, montar uma **conferência automática mínima**: uma
+   página que abre a Clínica e verifica que as portas principais ainda respondem.
+   Meia hora de trabalho; troca "eu acho que não quebrou" por "eu sei que não quebrou".
 1. **Aliviar a porta** — os três vizinhos (`dados-clinicos.js` 245 KB, `acupuntura-data.js`
    105 KB, `fitoterapia-data.js` 37 KB) só descem quando o corpo ou a receita abrem.
    Mesmo truque da v9.3. **387 KB**, baixo risco. *Senha "Os três vizinhos".*
