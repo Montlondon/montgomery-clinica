@@ -85,6 +85,20 @@ atendimento sentir diferença, o passo foi longe demais. E depois de cada passo:
   **clique no item** (ponto, sistema, emoção) é que entra na Sessão. Se os dois se misturarem,
   ligar uma camada para ver vai sujar a ficha sem ele ter decidido — mesma regra da peneira da
   folha limpa: reconhecer não é decidir.
+- **A tela que engole a ficha** (senha dele, 03/08) — o ponto 8 dos nove virando obra: a aba
+  Diagnóstico **é** a ficha. **A planta está desenhada em `00_Nucleo/TELA_UNICA.md`, no fim.**
+  Achado da planta: as "doze abas" que ele sempre citou **não são as do menu** — são as doze de
+  dentro da ficha do paciente, na barra `mTabs` (`index.html` 1023), e o número bate exato.
+  **Cinco já foram engolidas sem ninguém ter chamado assim:** Queixa virou a folha limpa,
+  Psicanálise virou os bonecos, Quiropraxia virou a coluna, Recomendações virou a Faixa 5,
+  Diagnósticos e Sessões viraram a régua. **Sobram sete.** A ordem escrita: (1) Dados e
+  Histórico viram dobra do cabeçalho, (2) Hábitos e Complementares descem para as faixas que já
+  existem, (3) Acupuntura **não** vira faixa — é a roda, e encontra a senha da roda aqui,
+  (4) Exames por último, e talvez fique onde está.
+  **Regras herdadas:** nada se apaga enquanto a camada não provar que substitui; uma de cada vez,
+  provada no atendimento; **mostrar não é marcar**; e a dobra tem que herdar o carregamento por
+  pedaço do `showTab` (2895), senão o egress paga a conta.
+  **É obra, não arrumação.** Senha da primeira: **"A pessoa inteira no cabeçalho"**.
 - **Abas com títulos no Montgomery Code** (ideia dele, 03/08) — navegar por aba nomeada em vez
   de rolar a biblioteca comprida. Para depois; não misturar com a roda.
 - **A corrente quebrada da sessão** (visto por ele na tela em 03/08 — PRIORIDADE, nasceu do

@@ -553,3 +553,80 @@ psicanálise) e não saem.
 Diagnóstico já grava datado. Um lugar só significa **menos dado lido por paciente** — e o que estoura
 a cota do Supabase é *egress*, não tamanho de tela. O segundo ganho não se mede em KB: **um lugar
 para consertar em vez de dois.**
+
+---
+
+## A planta da senha "A tela que engole a ficha" (03/08/2026)
+
+*Escrita antes de qualquer código, a pedido dele. É o ponto 8 dos nove — "as doze abas poderiam nem
+existir" — deixando de ser desejo e virando planta com linhas exatas.*
+
+### O achado: as "doze abas" não são as do menu
+
+Ele sempre disse **doze**, e o número está certo — mas não são as páginas da lateral. São as **abas
+de dentro da ficha do paciente**, todas na mesma barra `mTabs` (`index.html` 1023), e são
+**exatamente doze**:
+
+| # | Aba | `id` | Botão | Painel |
+|---|---|---|---|---|
+| 1 | Dados | `tp` | 1024 | 1036 |
+| 2 | Queixa | `tq` | 1025 | 1054 |
+| 3 | Histórico | `th` | 1026 | 1062 |
+| 4 | Hábitos | `thb` | 1027 | 1071 |
+| 5 | Acupuntura | `ta` | 1028 | 1080 |
+| 6 | Quiropraxia | `tqr` | 1029 | 1089 |
+| 7 | Psicanálise | `tps` | 1030 | 1099 |
+| 8 | Complementares | `tc` | 1031 | 1109 |
+| 9 | Exames | `tex` | 1032 | 1124 |
+| 10 | Recomendações | `trx` | 1033 | 1131 |
+| 11 | Diagnósticos | `tdg` | 1034 | 1137 |
+| 12 | Sessões | `tss` | 1035 | 1146 |
+
+O interruptor é `showTab` (2895), que além de trocar o painel **acende conteúdo sob demanda** em
+cinco delas (`tc`, `trx`, `tdg`, `tss` e a última leitura de `ta`/`tqr`/`tps`). Isso é bom: quer
+dizer que a ficha já sabe carregar por pedaço, e engolir não obriga a ler tudo de uma vez.
+
+### O que já foi engolido, sem ninguém ter chamado assim
+
+Cinco das doze **já têm morada no Diagnóstico** — a obra andou por outro nome:
+
+| Aba da ficha | Onde já vive no Diagnóstico |
+|---|---|
+| Queixa (`tq`) | Faixa 2, a folha limpa (HTML 1391) — escrever solto, classificar depois |
+| Psicanálise (`tps`) | Faixa 3, os bonecos (HTML 1404) |
+| Quiropraxia (`tqr`) | Faixa 4, o corpo — a coluna C1–Cóccix (HTML 1433) |
+| Recomendações (`trx`) | Faixa 5, a recomendação (HTML 1661) |
+| Diagnósticos + Sessões (`tdg`, `tss`) | A régua de encontros (HTML 1676) |
+
+**Sobram sete:** Dados, Histórico, Hábitos, Acupuntura, Complementares, Exames — e o pedaço de
+Dados que o cabeçalho ainda não cobre.
+
+### As três engolidas que faltam, em ordem de dependência
+
+1. **A pessoa inteira no cabeçalho.** Hoje a Faixa 1 (HTML 1366) tem só nome, data e horário, e
+   quem quer o resto sai da tela pelo botão *Abrir a ficha* (`cabAbrirFicha`, 8465). A engolida é
+   os **Dados** e o **Histórico** virarem uma dobra do próprio cabeçalho — fechada por padrão,
+   porque no atendimento eles quase nunca são o assunto, mas ali, sem trocar de página.
+2. **Hábitos e Complementares descem para as faixas que já existem.** Hábitos é matéria da folha
+   e da conduta; Complementares (`tc`, que já carrega minerais e ervas por paciente) é matéria da
+   Faixa 5, onde a Recomendação já mora. Nenhuma tela nova.
+3. **Acupuntura é a roda, não uma faixa.** A aba `ta` não deve virar faixa: ela é o assunto de
+   *"A roda que engole as listas"* (ROADMAP), que já tem planta própria em anéis e camadas. As
+   duas senhas se encontram aqui — e a ordem é a que já está escrita lá: **primeiro fechar a
+   corrente da sessão**, depois a roda.
+4. **Exames fica por último**, e talvez fique onde está: é a única que lida com arquivo e imagem,
+   e não é gesto de consulta, é gesto de arquivo.
+
+### As regras que esta obra herda, e não pode furar
+
+- **Tudo que existe permanece.** A ficha não morre; ela deixa de ser o único caminho. A aba só se
+  apaga quando ele disser que não sente falta — mesma regra da coluna e das camadas do corpo.
+- **Uma engolida de cada vez, provada no atendimento** antes da seguinte.
+- **Mostrar não é marcar.** Uma dobra que se abre para consultar não pode gravar nada — a mesma
+  linha decidida na roda e na peneira da folha limpa.
+- **Egress antes de estética.** Engolir não pode significar ler a ficha inteira toda vez que ele
+  abre o Diagnóstico. O `showTab` já carrega por pedaço; a dobra tem que herdar isso.
+- **É obra, não arrumação** — muda por fora, e a rede (`node 01_Codigo/conferencia/conferir.mjs`)
+  não protege contra "ficou pior de usar".
+
+**Senha da primeira engolida: "A pessoa inteira no cabeçalho".**
