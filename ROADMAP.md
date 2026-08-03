@@ -61,12 +61,21 @@ atendimento sentir diferença, o passo foi longe demais. E depois de cada passo:
 - **Montgomery Code** — seguir montando as aulas da grade; matéria-prima acumulada abaixo.
   A **Aula 1.8 (A peça que não solta)** foi acesa em 03/08 (OS v6.2) e é a base teórica do
   foco acima: escopo, a mesa única, e por que o LEGO ainda não tem encaixe.
-- **A roda que engole a lista** (ideia dele, 03/08) — juntar **Acupuntura (pontos)** dentro do
-  **Baguá**, acabando com as duas abas. O argumento é forte e é técnico: as duas já falam a
-  língua do **meridiano** (o Baguá guarda `{meridiano, síndrome}`; cada ponto pertence a um
-  meridiano), e o código já as mistura no mesmo balde para alimentar os candidatos (~4957).
-  A tela só não conta a verdade que os dados já contam. **Não fazer antes da etapa 4:** é obra,
-  não arrumação — muda por fora, e a rede não protege contra "ficou pior de usar".
+- **A roda que engole as listas** (ideia dele, 03/08, ampliada na mesma janela) — fazer do
+  **Baguá** o lugar único, em **anéis**: cada órgão/víscera da roda guardando dentro de si os
+  **meridianos**, os **pontos** e as **síndromes**, e absorvendo também o **Balanço Método
+  (Sistemas ABC)**. Hoje são três caixas separadas: Acupuntura (pontos), Baguá e Balanço ABC.
+  **O argumento é técnico, não estético: as três já são a mesma coisa por baixo.** Todas
+  falam a língua do **meridiano** e todas despejam no mesmo balde para gerar os candidatos —
+  pontos e Baguá em ~4957–4962, os sistemas ABC em **4941**. São três telas por causa da
+  história (foram feitas em épocas diferentes), não por causa do assunto.
+  A linguagem de **anel** já existe na casa, nos bonecos da família — reaproveitar a metáfora
+  em vez de inventar outra. **Cuidado que já custou decisão antes:** densidade. Doze sistemas
+  vezes meridianos vezes síndromes vezes 361 pontos não cabem numa roda só sem virar borrão;
+  lembrar do **teto de nove anéis**, que nasceu de ver, não de supor.
+  **Ordem certa: depois de "Fechar a corrente da sessão".** A roda é a *entrada*; a Sessão é a
+  *saída*. Entrada bonita sem saída que registre não serve para o atendimento.
+  **É obra, não arrumação** — muda por fora, e a rede não protege contra "ficou pior de usar".
 - **A corrente quebrada da sessão** (visto por ele na tela em 03/08 — PRIORIDADE, nasceu do
   atendimento). Ele não consegue registrar o que vai **usar** no encontro. São três elos:
   1. **Duas listas de pontos, e a que ele usa não marca.** A grade `pontosGrid` (render 7179)
