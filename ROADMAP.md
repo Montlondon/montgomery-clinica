@@ -26,7 +26,11 @@ barato. Não pular.*
    pontos para **três quarteirões** (pintura, desenho, eletricidade) mais quatro portas
    marcadas. Nenhuma linha de código mudou — só de lugar, e isso foi provado. O mapa está
    no `PLANTA_DO_PREDIO.md`; o bloco inteiro, no `ROADMAP_ARQUIVO.md`.
-   **Falta fazer o mesmo com os outros módulos** — Suplementos é o próximo natural.
+   ~~E os **Suplementos**.~~ **FEITO em 03/08 (v9.6).** Achado bom: os Suplementos já
+   moravam quase juntos — o serviço foi **marcar** os três quarteirões, subir o interruptor
+   das abas para a entrada e escrever as **duas armadilhas de nome** (`.ev-card` é da Agenda;
+   `.fio-elementos` não é o fio da teia). Provado pela lista ordenada **e** pela rede.
+   **Faltam os módulos maiores** — o Diagnóstico (as faixas), a Agenda e a Recomendação.
 3. **Enxugar o repetido** — só depois de reunido dá para ver o que é cópia. Medir, nunca supor.
 4. **Dar encaixe às peças** — trocar os `onclick` por escuta no código e as funções globais por
    módulos com `import`/`export`. É o que permite levar o Financeiro para outro app.

@@ -31,6 +31,9 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;min-height:100vh}
 h1,h2,h3,.serif{font-family:'Lora',serif}
+/* A faixinha listrada dos 5 Elementos — menu, prescrição e Diagnóstico. Apesar
+   do nome, NÃO é o fio da teia (esse é `.fio-barra`, na pintura dos Suplementos):
+   fica aqui em cima, junto do enfeite da casa, porque é enfeite da casa. */
 .fio-elementos{height:4px;border-radius:4px;background:linear-gradient(90deg,#6B8F5C 0 20%,#C1573B 20% 40%,#D9A441 40% 60%,#9A968E 60% 80%,#4C6E8C 80% 100%);margin:20px 0}
 .layout{display:flex;flex:1}
 
@@ -142,6 +145,17 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
    não serem apagadas pelo showTab() da ficha do paciente, que varre .tab-panel. */
 .pg-panel{display:none}.pg-panel.active{display:block}
 
+/* ===== SUPLEMENTOS — a pintura, num lugar só (03/08/2026) =====
+   Daqui até o fim do fio (a regra do celular, logo antes da placa do CABEÇALHO)
+   é tudo Suplementos: minerais, ervas, candidatos e o fio. Nenhuma outra mancha
+   deste assunto mora em outro canto da folha de estilo.
+
+   DUAS ARMADILHAS DE NOME, escritas para ninguém mover a peça errada:
+   · `.ev-card` (lá pela placa do CALENDÁRIO) NÃO é erva — é o cartãozinho de
+     evento da Agenda. Mesmo prefixo, outro bairro.
+   · `.fio-elementos` (lá em cima, junto do reset) NÃO é o fio da teia — é a
+     faixinha listrada dos 5 Elementos, usada no menu, na prescrição e no
+     Diagnóstico. O fio da teia é `.fio-barra` e mora aqui embaixo.        ===== */
 /* MINERAIS — a régua de doses */
 .mn-grid{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
 .mn-el{display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:62px;padding:7px 9px;border:1px solid var(--brd);border-radius:10px;background:#FDFAF6;cursor:pointer;transition:all .16s;font-family:inherit}
@@ -1823,7 +1837,12 @@ window.addEventListener('DOMContentLoaded',()=>{
   </div>
 </div>
 
-<!-- ===== SUPLEMENTOS ===== -->
+<!-- ===== SUPLEMENTOS — o desenho, num lugar só (03/08/2026) =====
+     A página e o seu modal, um colado no outro, com as cinco abas dentro:
+     Produtos · Minerais · Ervas · Onde comprar · Ligações. Não há desenho de
+     Suplementos em nenhum outro ponto da folha.
+     O modal "editar venda de suplemento", que fica logo acima, é do Financeiro:
+     venda é dinheiro, e mora no quarteirão do dinheiro. -->
 <section class="page" id="pg-suplementos">
   <div class="page-header"><h1><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v4l2 2v10a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9l2-2Z"/><path d="M9 3h6M9 12h6"/></svg></span>Suplementos</h1>
     <div style="display:flex;gap:6px;flex-wrap:wrap" id="supAcoesProdutos">
@@ -1919,6 +1938,10 @@ window.addEventListener('DOMContentLoaded',()=>{
     </div>
   </div>
 
+  <!-- ===== LIGAÇÕES — a teia de onde saem os candidatos =====
+       A quinta aba, e a única que não prescreve nada: aqui não se escolhe dose,
+       escreve-se o que puxa o quê. É a raiz dos Candidatos que aparecem no
+       Diagnóstico — e nasce vazia de propósito, porque a ligação é dele. -->
   <div class="pg-panel" id="sp-ligacoes">
     <div class="fc">
       <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:4px">A teia de ligações — de onde os candidatos do Diagnóstico saem.</p>
@@ -2147,7 +2170,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v9.5 · 03/08';
+const APP_VER='v9.6 · 03/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -2796,6 +2819,7 @@ function go(p,el){
   // A faixa do último encontro segue sempre a ficha que está aberta de fato
   if(p==='novo-paciente')renderUltEncontro(editId);
   if(p==='financeiro'){atuFin();initFinScope();}
+  // Porta de entrada da página de Suplementos (a casa é o quarteirão dela).
   if(p==='suplementos'){renderSuplementos();renderMnGrid();renderMnPainel();}
   cdRenderVolta();   // a porta de saída aparece em qualquer página que a tenha
   if(p==='pacientes')renderP();
@@ -3916,7 +3940,40 @@ async function registrarVendaSuplementos(rx){
   await dbAdd('vendas_suplementos',venda);
 }
 
-// ===== SUPLEMENTOS (catálogo / estoque) =====
+// ===== SUPLEMENTOS — a eletricidade, num lugar só (03/08/2026) =====
+// Daqui até a placa "GOOGLE AGENDA" é tudo Suplementos: nada de outro assunto
+// mora no meio, e nada deste assunto mora fora. São oito ruas do mesmo bairro,
+// nesta ordem: o catálogo, os minerais, a ponte para a recomendação, as ervas,
+// o desfecho, a teia e os candidatos, o fio, e a prateleira.
+//
+// AS PORTAS QUE FICARAM NA PAREDE DE FORA (decisão, não sobra) — porta tem que
+// estar do lado por onde se entra:
+//   · o link do menu e o `go('suplementos')` da navegação;
+//   · o Diagnóstico entra pela busca dele (`filtrarDiagSup` e as quatro irmãs,
+//     lá pela placa da PSICANÁLISE, junto dos outros gestos do Diagnóstico);
+//   · a Recomendação entra por `_rxSuplementosSel` e `_rxMineraisSel`, na placa
+//     "SUPLEMENTOS NA RECOMENDAÇÃO";
+//   · a venda e o estoque descontado são do Financeiro (`registrarVendaSuplementos`),
+//     e o Backup guarda a tabela `minerais` por conta dele.
+// Cada uma dessas tem placa apontando para cá.
+
+// O interruptor das cinco abas da página. Governa a tela inteira, por isso mora
+// na entrada do quarteirão (até 03/08/2026 estava enterrado no meio dos minerais).
+function showSupTab(id,btn){
+  document.querySelectorAll('#pg-suplementos .pg-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('#supTabs button').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  // Os botões do cabeçalho (Exportar/Imprimir/Novo) são do catálogo de produtos.
+  document.getElementById('supAcoesProdutos').style.display=(id==='sp-produtos')?'flex':'none';
+  if(id==='sp-minerais'){renderMnGrid();renderMnPainel();}
+  if(id==='sp-ervas'){renderEvGrid();renderEvPainel();renderEvFormulas();}
+  if(id==='sp-prateleira'){renderPtPainel();}
+  if(id==='sp-ligacoes'){renderLgPainel();}
+  cdRenderVolta();
+}
+
+// O CATÁLOGO / ESTOQUE — a primeira das oito ruas.
 // Exporta o catálogo de suplementos como .csv (abre direto no Excel/Google Sheets),
 // pensado pra compartilhar a lista de estoque com quem faz a compra (ex: esposa).
 function exportarSuplementosCsv(){
@@ -4115,19 +4172,8 @@ async function mnGravarRegua(chave,patch){
   renderMnGrid();renderMnPainel();
 }
 
-function showSupTab(id,btn){
-  document.querySelectorAll('#pg-suplementos .pg-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('#supTabs button').forEach(b=>b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  btn.classList.add('active');
-  // Os botões do cabeçalho (Exportar/Imprimir/Novo) são do catálogo de produtos.
-  document.getElementById('supAcoesProdutos').style.display=(id==='sp-produtos')?'flex':'none';
-  if(id==='sp-minerais'){renderMnGrid();renderMnPainel();}
-  if(id==='sp-ervas'){renderEvGrid();renderEvPainel();renderEvFormulas();}
-  if(id==='sp-prateleira'){renderPtPainel();}
-  if(id==='sp-ligacoes'){renderLgPainel();}
-  cdRenderVolta();
-}
+// O interruptor das abas mudou de casa em 03/08/2026: subiu para a entrada do
+// quarteirão, logo abaixo da placa "SUPLEMENTOS — a eletricidade, num lugar só".
 
 function renderMnGrid(){
   const g=document.getElementById('mnGrid');if(!g)return;
@@ -7639,6 +7685,9 @@ function toggleSistemaAbc(id,m){
   abcFiltrarMeridiano(m);
   renderDiagPainel();
 }
+// A porta do Diagnóstico para a estante: estas cinco funções ficam aqui, junto
+// dos outros gestos do Diagnóstico, porque o que elas mexem é `_diagSelecoes`.
+// Só o catálogo vem de fora — a casa dele é o quarteirão dos Suplementos.
 function filtrarDiagSup(){
   const q=semAcento(document.getElementById('diagSupBusca').value.trim());
   const lista=document.getElementById('diagSupLista');
@@ -10483,6 +10532,9 @@ function addPlanta(){
 }
 
 // ===== MINERAIS NA RECOMENDAÇÃO =====
+// PORTA, não casa: fica aqui de propósito. O que estas linhas guardam é da
+// Recomendação (a lista desta folha), e só o catálogo vem de fora. A casa dos
+// minerais é o quarteirão "SUPLEMENTOS — a eletricidade, num lugar só".
 // Guardados em estado (e não só no DOM) porque chegam de fora: a régua da aba
 // Minerais empurra uma linha pronta para cá. O texto digitado só atualiza o
 // estado, sem redesenhar — redesenhar a cada tecla arrancaria o cursor da mão
@@ -10506,6 +10558,9 @@ function renderRxMinerais(){
 }
 
 // ===== SUPLEMENTOS NA RECOMENDAÇÃO =====
+// A outra porta da Recomendação para a estante: a lista é desta folha, o
+// catálogo é do quarteirão dos Suplementos. A venda que nasce daqui é do
+// Financeiro (`registrarVendaSuplementos`).
 let _rxSuplementosSel=[];
 function popularRxSupSel(){} // mantido por compatibilidade; a busca agora é por digitação (filtrarRxSup)
 function filtrarRxSup(){

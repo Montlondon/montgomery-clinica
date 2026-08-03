@@ -9,6 +9,57 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — juntar os Suplementos (Clínica v9.6, 03/08/2026)
+
+Passo 2 da semana de organização, segundo módulo. Senha "Juntar os Suplementos".
+
+**A surpresa boa.** Esperava-se o espalhamento do Financeiro e encontrou-se o contrário: os
+Suplementos **já moravam quase juntos**. A eletricidade inteira — catálogo, minerais, a ponte
+para a recomendação, ervas, o desfecho, a teia, o fio e a prateleira — já era um trecho
+contínuo de 1.500 linhas, sem nada de outro assunto no meio. O desenho já era uma peça só.
+Então o trabalho não foi mudar coisas de lugar: foi **dar nome ao que já estava reunido**,
+para que a próxima pessoa (ou o próximo Claude) não desmonte sem saber.
+
+*A aula que sobrou: nem todo módulo espalhado está espalhado. Vale medir antes de arrastar —
+arrastar código são é como trocar um pneu bom.*
+
+**O que se fez.**
+- **Três placas de quarteirão**, uma por camada: pintura na 148, desenho em 1840–1971,
+  eletricidade em 3943–5469. Cada uma diz onde começa, onde acaba, e o que **não** mora lá.
+- **A única peça fora de lugar mudou de casa:** `showSupTab`, o interruptor das cinco abas,
+  estava enterrado no meio dos minerais. Interruptor da tela inteira mora na entrada — subiu
+  para a cabeça do quarteirão, com bilhete no lugar antigo.
+- **A aba Ligações ganhou placa.** Era a única das cinco sem uma, e é a mais difícil de
+  entender de fora: é a única que não prescreve nada, só escreve o que puxa o quê.
+- **As portas ficaram na parede por onde se entra**, cada uma com placa apontando para casa:
+  o link do menu e o `go('suplementos')`; a busca do Diagnóstico (`filtrarDiagSup` e as quatro
+  irmãs); as duas listas da Recomendação (`_rxSuplementosSel`, `_rxMineraisSel`); e a venda,
+  que é do Financeiro.
+
+**As duas armadilhas de nome** — o achado que mais vale, porque é o tipo de coisa que quebra
+a Clínica calada num refactor futuro. Duas peças têm prefixo de Suplementos e não são:
+
+| Parece | É |
+|---|---|
+| `.ev-card` — "erva" | o cartãozinho de evento da **Agenda** |
+| `.fio-elementos` — "o fio" | a faixinha listrada dos **5 Elementos** (menu, prescrição, Diagnóstico) |
+
+As duas ficaram escritas na pintura, no `PLANTA_DO_PREDIO.md`, e onde cada uma mora.
+
+**A prova, agora em dois andares.** A lista ordenada das 12.448 linhas, antes e depois: só
+diferem nos comentários novos e no `APP_VER` — nenhuma linha de código mudou, nasceu ou se
+perdeu. E, pela primeira vez, **a rede também** (`node 01_Codigo/conferencia/conferir.mjs`):
+onze portas conferidas, nenhuma quebrada, os 278 nomes chamados por `onclick` todos com dono
+— é essa prova que pegaria o `showSupTab` se ele tivesse se perdido na mudança.
+
+**Um detalhe de bastidor:** esta janela nasceu da v9.4, e o Financeiro juntado e a rede
+moravam em ramos separados, nenhum deles no `main`. Foram trazidos para cá antes de começar —
+senão a arrumação teria sido feita por cima de um passado velho.
+
+**Fica pendente:** os módulos maiores — o Diagnóstico (as faixas), a Agenda e a Recomendação.
+
+---
+
 ## Concluído — a rede embaixo do trapézio (03/08/2026)
 
 Passo 0 da semana de organização, cumprido — e cumprido **antes** dos passos que mexem no

@@ -17,7 +17,7 @@ Todo arquivo HTML tem três coisas empilhadas. É como uma casa:
 
 | Camada | O que é | Onde mora aqui |
 |---|---|---|
-| **CSS** — a pintura | cor, tamanho, posição | linhas **21–591** (e mais pedaços soltos) |
+| **CSS** — a pintura | cor, tamanho, posição | linhas **21–605** (e mais pedaços soltos) |
 | **HTML** — a planta baixa | o desenho, as caixas, os botões | linhas **595–2176** |
 | **JavaScript** — a eletricidade | o que acontece quando se clica | linhas **2210–12200** |
 
@@ -98,11 +98,12 @@ menos de 3% do prédio.
 | **financeiro** (o quarteirão — ver abaixo) | **1667** |
 | ↳ aba clínica / aba pessoal | 1677 / 1753 |
 | modais de despesa e de venda | 1784 / 1808 |
-| suplementos | 1802 |
-| ↳ minerais (régua de doses) | 1847 |
-| ↳ ervas (posologia) | 1861 |
-| ↳ onde comprar (a prateleira) | 1881 |
-| modal suplemento | 1907 |
+| **suplementos** (o quarteirão: 1840–1971) | **1840** |
+| ↳ minerais (régua de doses) | 1890 |
+| ↳ ervas (posologia) | 1904 |
+| ↳ onde comprar (a prateleira) | 1924 |
+| ↳ ligações (a teia dos candidatos) | 1941 |
+| modal suplemento (fim do quarteirão) | 1954 |
 | sobre / formação | 1927 |
 | configurações | 1936 |
 | backup | 2054 |
@@ -138,14 +139,16 @@ menos de 3% do prédio.
 | ↳ clínica / pessoal | 3461 |
 | ↳ documento com marca (PDF/JPG) | 3826 |
 | ↳ as duas peças que voltaram para casa | 3880 |
-| suplementos (catálogo / estoque) | 3859 |
-| minerais — a régua de doses | 3974 |
-| a ponte: da régua para a recomendação | 4285 |
-| ervas — a posologia | 4332 |
-| o desfecho — segundo andar da teia | 4645 |
-| a teia de ligações e os candidatos | 4779 |
-| o fio (a teia acompanhando a página) | 4995 |
-| a prateleira — onde comprar | 5188 |
+| **suplementos — o quarteirão inteiro (3943–5469)** | **3943** |
+| ↳ o interruptor das abas (`showSupTab`) | 3962 |
+| ↳ catálogo / estoque | 3977 |
+| ↳ minerais — a régua de doses | 4091 |
+| ↳ a ponte: da régua para a recomendação | 4391 |
+| ↳ ervas — a posologia | 4438 |
+| ↳ o desfecho — segundo andar da teia | 4764 |
+| ↳ a teia de ligações e os candidatos | 4898 |
+| ↳ o fio (a teia acompanhando a página) | 5114 |
+| ↳ a prateleira — onde comprar | 5307 |
 | Google Agenda | 5349 |
 | a Ponte com o Google (dois sentidos) | 5372 |
 | ↳ o sentido de volta | 5615 |
@@ -243,4 +246,24 @@ O preço mora no tamanho do que se abre, não no tempo de pensar.
 
 ---
 
-*Planta levantada em 02/08/2026, sobre a v8.9. Os números andam; as placas não.*
+## Os módulos já reunidos
+
+Um módulo **reunido** tem três quarteirões, um por camada, e nada do assunto fora deles.
+O que fica fora é **porta** — e porta tem placa dizendo para onde vai.
+
+| Módulo | Pintura | Desenho | Eletricidade |
+|---|---|---|---|
+| **Financeiro** (v9.5) | 444 | 1667–1822 | 3386–3918 |
+| **Suplementos** (v9.6) | 148–231 | 1840–1971 | 3943–5469 |
+
+### Duas armadilhas de nome (custaram tempo; ficam escritas)
+
+- **`.ev-card` não é erva** — é o cartãozinho de evento da **Agenda** (perto da placa
+  do CALENDÁRIO). Mesmo prefixo `ev-`, outro bairro.
+- **`.fio-elementos` não é o fio da teia** — é a faixinha listrada dos 5 Elementos, no
+  menu, na prescrição e no Diagnóstico. O fio da teia é `.fio-barra`.
+
+---
+
+*Planta levantada em 02/08/2026, sobre a v8.9; quarteirões do Financeiro e dos Suplementos
+redesenhados em 03/08 (v9.6). Os números andam; as placas não.*
