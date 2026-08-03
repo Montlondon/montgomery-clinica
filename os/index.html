@@ -2031,6 +2031,76 @@ tr:hover td{background:rgba(201,168,76,0.05)}
 
     <p style="font-family:'Lora',serif;font-style:italic;font-size:1.1rem;color:var(--azul);text-align:center;margin:var(--f2) 0">Arquivo grande não se lê &mdash; se atravessa pela porta certa.</p>
     <p style="text-align:center;margin-top:var(--f2)"><a onclick="document.getElementById('trilha').scrollIntoView({behavior:'smooth',block:'start'})" style="color:var(--azul);cursor:pointer;font-size:0.82rem">&uarr; voltar ao mapa das camadas</a></p>
+
+    <h3 style="color:var(--azul);font-size:1rem;margin:var(--f3) 0 var(--f2)" id="aula-1-8">Aula 1.8 &middot; A peça que não solta</h3>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">Esta aula nasceu de uma pergunta sua, em 03/08: <em>"a construção da Clínica é considerada tecnologia de ponta?"</em> &mdash; e de um desejo que veio junto: <b>poder pegar o Financeiro da Clínica e encaixar noutro app, como peça de LEGO.</b> A resposta às duas coisas é a mesma palavra, e ela é o assunto de hoje: <b>escopo</b>.</p>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">1 &middot; A imagem</h4>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">Imagine o consultório com <b>uma mesa só</b>, enorme, e todas as fichas de todos os pacientes abertas sobre ela ao mesmo tempo. Nada está errado: você sabe onde cada uma está, e trabalha bem assim há anos. Mas duas coisas passam a ser verdade sem que ninguém decida:</p>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">A primeira: <b>se chegarem duas fichas com o mesmo nome, a segunda cobre a primeira</b> &mdash; e ninguém ouve nada. A segunda, mais silenciosa: <b>você não consegue entregar uma ficha a alguém sem levar a mesa junto</b>, porque cada uma está apoiada nas outras.</p>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">O seu LEGO é exatamente isto. Peça de LEGO tem <b>encaixe</b>: um lugar por onde ela se liga, e nenhum outro. O que a Clínica tem hoje não são peças &mdash; são <b>desenhos sobre a mesma mesa</b>. Lindos, funcionando, mas colados pelo apoio.</p>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">2 &middot; O conceito &mdash; escopo é o tamanho do quarto de cada nome</h4>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)">Todo nome que você cria em JavaScript mora em algum lugar. <b>Escopo</b> é o nome desse lugar &mdash; e ele tem três tamanhos:</p>
+    <div class="cards" style="margin-bottom:var(--f2)">
+      <div class="card"><h3>a mesa (global)</h3><div class="sub">todo mundo vê</div><p style="font-size:0.85rem;color:var(--texto)">O nome existe para a página inteira. Qualquer trecho, de qualquer parte, pode chamá-lo &mdash; e pode substituí-lo. <b>É onde vivem as suas 620 funções.</b></p></div>
+      <div class="card"><h3>a gaveta (função)</h3><div class="sub">só quem está dentro</div><p style="font-size:0.85rem;color:var(--texto)">O que você declara dentro de uma função morre com ela. Isso você já usa o tempo todo, sem chamar pelo nome.</p></div>
+      <div class="card"><h3>a sala (módulo)</h3><div class="sub">o que a Clínica ainda não tem</div><p style="font-size:0.85rem;color:var(--texto)">Um arquivo que guarda os próprios nomes e só deixa sair o que ele <b>exporta</b>. Quem quiser usar, <b>importa</b> pelo nome. É o encaixe do LEGO.</p></div>
+    </div>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">A regra da mesa é curta e não perdoa: <b>o último a falar ganha</b>. Dois nomes iguais, e o segundo apaga o primeiro sem aviso, sem erro, sem linha vermelha no console. A página continua abrindo. Só que uma das duas coisas parou de existir.</p>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">3 &middot; O código real &mdash; a sua Clínica, medida hoje</h4>
+    <div style="background:var(--bege);border:1px solid rgba(27,58,92,0.12);border-radius:11px;padding:var(--f3);font-family:'Courier New',monospace;font-size:0.82rem;line-height:1.9;overflow-x:auto;margin-bottom:var(--f2)">
+      <div style="color:var(--azul)">funções na mesa<span style="color:#b04a3a;float:right">620</span></div>
+      <div style="color:var(--azul)">nomes repetidos<span style="color:var(--verde);float:right">0</span></div>
+      <div style="color:var(--azul)">onclick escrito dentro do botão<span style="color:#b04a3a;float:right">373</span></div>
+      <div style="color:var(--azul)">import / export (salas)<span style="color:#b04a3a;float:right">0</span></div>
+    </div>
+    <div style="border:1px solid rgba(74,124,89,0.4);border-radius:11px;background:rgba(74,124,89,0.06);padding:var(--f3);margin-bottom:var(--f3)">
+      <p style="font-size:0.9rem;margin:0"><b style="color:var(--verde)">Comece pela linha verde, porque ela é sua.</b> Eu esperava achar nomes repetidos &mdash; com 620 funções numa mesa só, colisão é o normal. Contei: <b>zero</b>. Nenhuma função da Clínica engole outra. Isso não foi sorte: foi você nomeando com cuidado, uma a uma, durante meses. A aula não é uma correção. É o mapa de um risco que <b>ainda não te mordeu</b>.</p>
+    </div>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">Agora a linha que explica o resto: <b>373 <code style="font-family:'Courier New',monospace;color:var(--dourado)">onclick</code></b>. Quando você escreve <code style="font-family:'Courier New',monospace">onclick="atuFin()"</code> dentro de um botão, o navegador vai procurar <code style="font-family:'Courier New',monospace">atuFin</code> <b>na mesa</b> &mdash; é o único lugar onde ele sabe olhar. Ou seja: os 373 botões <b>obrigam</b> as funções a serem globais. Não é descuido; é consequência. Uma escolha lá atrás decidiu esta.</p>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)"><b>E o LEGO?</b> Fui atrás do Financeiro para ver se ele sai inteiro. Ele não mora num lugar &mdash; mora em <b>nove</b>:</p>
+    <div style="background:var(--bege);border:1px solid rgba(27,58,92,0.12);border-radius:11px;padding:var(--f3);font-family:'Courier New',monospace;font-size:0.8rem;line-height:1.8;overflow-x:auto;margin-bottom:var(--f2)">
+      <div style="color:var(--azul)">FINANCEIRO CLÍNICA / PESSOAL<span style="color:var(--cinza);float:right">125 linhas</span></div>
+      <div style="color:var(--azul)">ABA CLÍNICA &nbsp;·&nbsp; ABA PESSOAL<span style="color:var(--cinza);float:right">34</span></div>
+      <div style="color:var(--azul)">FINANCEIRO (documento com marca)<span style="color:var(--cinza);float:right">22</span></div>
+      <div style="color:var(--azul)">MODAL DESPESA &nbsp;·&nbsp; MODAL VENDA<span style="color:var(--cinza);float:right">14</span></div>
+      <div style="color:var(--azul)">+ 3 salas menores<span style="color:var(--cinza);float:right">espalhadas</span></div>
+    </div>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">E o núcleo dele, de 75 linhas, tem <b>4 funções próprias</b> e precisa de <b>9 de fora</b> para respirar: <code style="font-family:'Courier New',monospace;font-size:0.85rem">supaReq, dbGravar, toast, waUrl, verEvento, editarSessao, abrirGA, pontePush, ponteCancelar</code>. Repare no que essa lista conta: <b>o Financeiro sabe da agenda, sabe do WhatsApp, sabe da Ponte do Google.</b> Ele não é uma peça &mdash; é um desenho que se apoia em oito outros.</p>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">Então a resposta honesta ao seu sonho: <b>o LEGO é possível e é a direção certa, mas as peças ainda não têm encaixe.</b> Levar o Financeiro para outro app hoje seria levar a mesa. O trabalho não é inventar nada novo &mdash; é <b>juntar o que está espalhado</b> e depois <b>cortar os fios que não precisavam existir</b>. Nessa ordem, nunca ao contrário.</p>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">4 &middot; O passo seu &mdash; ver a mesa com os próprios olhos</h4>
+    <div style="border:1px solid rgba(201,168,76,0.4);border-radius:11px;background:rgba(201,168,76,0.06);padding:var(--f3);margin-bottom:var(--f3)">
+      <p style="font-size:0.9rem;margin:0 0 10px">Abra a <b>Clínica</b> no computador e aperte <b>F12</b> &mdash; a mesma janelinha da aula de ler o erro sem medo. Vá na aba <b>Console</b> e digite, sem parênteses:</p>
+      <p style="font-family:'Courier New',monospace;color:var(--azul);font-size:0.88rem;margin:0 0 10px">atuFin</p>
+      <p style="font-size:0.9rem;margin:0 0 10px">Vai aparecer a função inteira, o código dela. Agora digite:</p>
+      <p style="font-family:'Courier New',monospace;color:var(--azul);font-size:0.88rem;margin:0 0 10px">window.atuFin</p>
+      <p style="font-size:0.9rem;margin:0 0 10px"><b>Aparece a mesma coisa.</b> Essa é a prova de que ela está na mesa: <code style="font-family:'Courier New',monospace">window</code> <b>é</b> a mesa. Tudo que é global é uma coisa pendurada nela.</p>
+      <p style="font-size:0.9rem;margin:0">Agora a demonstração que fecha a aula &mdash; e pode fazer sem medo, nada é salvo, basta recarregar depois. Digite:</p>
+      <p style="font-family:'Courier New',monospace;color:var(--azul);font-size:0.88rem;margin:10px 0">atuFin = 42</p>
+      <p style="font-size:0.9rem;margin:0"><b>Nenhum erro.</b> Nenhum aviso. Você acabou de trocar uma função da sua plataforma por um número, e a página nem piscou. Recarregue e está tudo de volta. Foi isso que a aula quis te mostrar: <em>na mesa, o último a falar ganha &mdash; em silêncio.</em></p>
+    </div>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">5 &middot; A prova</h4>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">No caderno, com as suas palavras: <b>por que os 373 <code style="font-family:'Courier New',monospace">onclick</code> obrigam as funções a viverem na mesa</b> &mdash; e qual seria, na sua opinião de dono, a <b>primeira peça</b> da Clínica a virar LEGO de verdade. A resposta certa não existe; a sua vale mais, porque você é quem usa. Enquanto não estiver escrito, a aula fica aberta.</p>
+    <p style="font-family:'Lora',serif;font-style:italic;color:var(--cinza);text-align:center;margin:0 0 var(--f3);font-size:0.9rem">Peça de LEGO não é a que tem forma bonita &mdash; é a que sabe onde termina.</p>
+
+    <h3 style="color:var(--azul);font-size:1rem;margin:0 0 var(--f2)">O vocabulário mínimo</h3>
+    <div class="cards" style="margin-bottom:var(--f3)">
+      <div class="card"><h3>escopo</h3><p style="font-size:0.85rem;color:var(--texto)">O tamanho do quarto onde um nome existe. Global, de função, ou de módulo.</p></div>
+      <div class="card"><h3>global</h3><p style="font-size:0.85rem;color:var(--texto)">Na mesa: visível à página inteira. Em inglês diz-se que a coisa está <em>on the global scope</em>.</p></div>
+      <div class="card"><h3>window</h3><p style="font-size:0.85rem;color:var(--texto)">O objeto que <b>é</b> a mesa. Toda função global é uma gaveta dele.</p></div>
+      <div class="card"><h3>módulo</h3><p style="font-size:0.85rem;color:var(--texto)">Um arquivo que guarda os próprios nomes. Nada sai sem <code style="font-family:'Courier New',monospace;color:var(--dourado)">export</code>, nada entra sem <code style="font-family:'Courier New',monospace;color:var(--dourado)">import</code>.</p></div>
+      <div class="card"><h3>acoplamento</h3><p style="font-size:0.85rem;color:var(--texto)">O quanto uma parte precisa das outras para funcionar. O Financeiro precisa de 9 &mdash; isso é acoplamento alto.</p></div>
+      <div class="card"><h3>refatorar</h3><p style="font-size:0.85rem;color:var(--texto)">Arrumar por dentro <b>sem mudar nada por fora</b>. O paciente não vê diferença; a casa fica outra. É o trabalho da semana de organização.</p></div>
+      <div class="card"><h3>colisão de nome</h3><p style="font-size:0.85rem;color:var(--texto)">Dois nomes iguais na mesa; o segundo apaga o primeiro em silêncio. Você tem zero &mdash; por cuidado, não por sorte.</p></div>
+      <div class="card"><h3>vanilla</h3><p style="font-size:0.85rem;color:var(--texto)">Baunilha: sem framework, sem bibliotecas. É como a Clínica é feita &mdash; e por isso ela não apodrece.</p></div>
+    </div>
+
+    <p style="font-family:'Lora',serif;font-style:italic;font-size:1.1rem;color:var(--azul);text-align:center;margin:var(--f2) 0">A mesa aguenta tudo. É por isso que ela não avisa quando não deveria.</p>
+    <p style="text-align:center;margin-top:var(--f2)"><a onclick="document.getElementById('trilha').scrollIntoView({behavior:'smooth',block:'start'})" style="color:var(--azul);cursor:pointer;font-size:0.82rem">&uarr; voltar ao mapa das camadas</a></p>
   </div>
 
   <!-- CAMADA 2 · GIT & GITHUB -->
@@ -2444,7 +2514,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v6.1';
+const APP_VERSION='v6.2';
 const APP_VERSION_NOTA='a aula 1.7 — entrar pela porta certa — e a primeira aula da Camada 1 dentro do Montgomery Code, que ate hoje so existia na Escola. Nasceu de uma pergunta dele: mexer na Clinica obriga a percorrer o HTML inteiro? Nao obriga. Achar a parede, olhar a parede, trocar o azulejo — procurar e de graca e cego, ler custa e enxerga um pedaco, trocar exige mira perfeita, e quem inverte a ordem paga o predio inteiro para achar uma sala. O codigo real e o predio dele medido nesta janela: a Clinica com 12.200 linhas e o OS com 6.329 sao dois predios separados, e o Diagnostico inteiro cabe em 338 linhas, 2,8% do arquivo. A aula 1.2 volta de outro jeito — osso, pele e musculo nao estao misturados, moram em andares diferentes. As 119 placas do arquivo viraram a planta do predio, em 00_Nucleo/PLANTA_DO_PREDIO.md, e o passo dele faz o predio inteiro aparecer numa tela sem abrir o predio (Select-String, no idioma do Windows). O numero da linha envelhece; a placa, nao. E a v6.1 conserta o proprio passo dela: o comando entregue era grep, do idioma Unix, e o terminal dele e o PowerShell — nao rodou. O erro ficou impresso na aula em vez de ser apagado, porque a licao e boa: o terminal e uma sala, e cada sala fala um idioma. O passo agora vai em Select-String com -Encoding UTF8 (sem ele, familia sai fam?lia), mais o cano explicado. De quebra, a contagem estava errada: sao 119 placas, nao 118';
 const APP_VERSION_NOTA_V59='a aula 2.6 — o peso invisivel — montada pelos cinco passos: a maleta do atendimento fora, onde a maca nao viaja e nem por isso deixa de existir. O .gitignore como lista do que nao viaja (e que nao apaga nada), os tres pesos que nao sao o mesmo (o do historico, o da pagina, o do agente) e a regra dura no meio: o Git nao esquece, entao a lista se escreve antes. O codigo real e a lista dele medida nesta janela — os 291 MB do Ronda, os 7,1 MB dos backups, o comentario que envelheceu no numero mas nao na razao — mais a logomarca que viajava seis vezes e virou 40 KB chamados pelo nome. O passo seu pesa o livro inteiro e depois procura node_modules na lista para nao achar: esse silencio e a prova. Quatro palavras novas no glossario (ignore, dependency, asset, bloat)';
 const APP_VERSION_NOTA_V58='a aula 2.5 — trabalhar com o tronco sujo — montada pelos cinco passos: a bancada cheia no fim do dia nao e desleixo, e trabalho vivo, e o perigo nao e um comando dificil, e o mais comodo de todos (git add -A). Modificado e solto, o git status que so olha, e a prova viva do commit da aula anterior, feito com dois arquivos nomeados e a bancada do tronco lida antes do merge. Mais quatro palavras novas no glossario (dirty, clean, untracked, stage) e a nota que faltava: o IPA daqui e britanico, o sotaque que ele trouxe de Londres';
@@ -5962,7 +6032,8 @@ const GRADE=[
    {id:'1.4',t:'O seletor — como o CSS acha a coisa',d:'Classe, id e a cascata. Lido no CSS real do OS.',st:'plantada'},
    {id:'1.5',t:'O evento e a função',d:'O que acontece entre o seu clique e a tela mudar. Lido num onclick do seu próprio sistema.',st:'plantada'},
    {id:'1.6',t:'Ler o erro sem medo',d:'O console do navegador: onde o erro diz o arquivo, a linha e o motivo. A aula que tira a dependência.',st:'plantada'},
-   {id:'1.7',t:'Entrar pela porta certa',d:'Procurar, ler com âncora, trocar o azulejo. Como se mexe numa parte só de um arquivo de 12.200 linhas — lido na Clínica de verdade.',st:'acesa',onde:'code',alvo:'aula-1-7'}]},
+   {id:'1.7',t:'Entrar pela porta certa',d:'Procurar, ler com âncora, trocar o azulejo. Como se mexe numa parte só de um arquivo de 12.200 linhas — lido na Clínica de verdade.',st:'acesa',onde:'code',alvo:'aula-1-7'},
+   {id:'1.8',t:'A peça que não solta',d:'Escopo, a mesa única e os 373 onclick. Por que o Financeiro ainda não sai inteiro — e o que falta para o LEGO ter encaixe.',st:'acesa',onde:'code',alvo:'aula-1-8'}]},
  {n:2,nome:'Git & GitHub',sub:'A ferramenta do artesão',objetivo:'Guardar decisões, errar à vontade num galho e publicar sem susto.',pre:'Módulo 1 — saber o que é um arquivo de código.',
   aulas:[
    {id:'2.1',t:'O que o Git guarda',d:'Ele não guarda arquivos: guarda decisões. Commit, repositório, remote — lidos no seu próprio git log.',st:'acesa',onde:'code',alvo:'camada-2'},
