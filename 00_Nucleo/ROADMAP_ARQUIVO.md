@@ -9,6 +9,30 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — o teto de nove anéis (Clínica v9.1, 03/08/2026)
+
+*Senha "Ver os anéis". A janela mostrou o desenho real dos anéis ampliado — um boneco com um anel,
+com três, com seis, com doze — e, vendo os doze, ele decidiu: **nove no máximo**.*
+
+A razão é a do desenho, não a do código: cada anel a mais estreita a fatia de todos os outros.
+Com nove ainda se distingue um arco do outro na cabeça do boneco; passando disso o vão come a cor
+e o anel deixa de contar o que veio contar.
+
+- `FAM_MAX_ANEIS=9` e `famCabeMaisAnel()`, guardando `famMarcar` e `famAnelProprio` — vale para os
+  dois grupos somados: herança de corpo **mais** os 5 Elementos.
+- Tirar um anel nunca é barrado; só entrar o décimo.
+- Os chips que ficaram de fora chegam **apagados** no painel do boneco: o teto se vê antes de
+  tentar, em vez de aparecer só como recado depois do toque.
+
+**Conferido ao vivo** no arquivo real: com nove, barra; com oito, deixa entrar; um chip apagado
+com nove marcados. No ar (`e90c38e`).
+
+*Nesta mesma janela ele achou que a busca de Suplementos não estava trazendo o estoque — e logo
+em seguida voltou a funcionar. Nada foi mexido ali. Se repetir, o lugar de olhar é
+`renderSuplementos()` (a busca olha nome e fornecedor, sem tirar acento).*
+
+---
+
 ## Concluído — senha "Arrumar o quadro" (Clínica v9.0, 02/08/2026)
 
 *O painel que abre ao clicar num boneco do DNA da Família. Os dois incômodos que ele apontou,
