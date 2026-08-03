@@ -255,6 +255,38 @@ O que fica fora é **porta** — e porta tem placa dizendo para onde vai.
 |---|---|---|---|
 | **Financeiro** (v9.5) | 444 | 1667–1822 | 3386–3918 |
 | **Suplementos** (v9.6) | 148–231 | 1840–1971 | 3943–5469 |
+| **Diagnóstico** (v9.7) | 232–404 | 1356–1693 | 6332–11429 |
+
+### O quarteirão do DIAGNÓSTICO (juntado em 03/08/2026, v9.7)
+
+Achado bom, igual ao dos Suplementos: **o Diagnóstico já morava quase todo junto**.
+O desenho era uma tela só e a eletricidade era um continente contínuo de quase 5.000
+linhas. Espalhada mesmo estava só a **pintura** — as caixas que abrem e fecham e a
+faixa da última leitura viviam a 150 linhas de casa, no meio dos formulários.
+
+O serviço foi: **trazer a pintura órfã** para o quarteirão, e **marcar as três paredes**
+que ninguém enxergava — o fim do desenho (antes do Financeiro) e o fim da eletricidade
+(antes de `verRxHist`). Nenhuma linha de código mudou; provado pela lista ordenada.
+
+**A fronteira que ficou de propósito:** a **Recomendação** (Faixa 5) é do Diagnóstico,
+mas *muda de lugar* — o berço dela é a Prescrição. Ela e o histórico de receitas ficaram
+fora do quarteirão, com placa dizendo por quê. **Juntá-la é serviço à parte, ainda não feito.**
+
+### As portas do Diagnóstico (ficam onde estão)
+
+| Porta | O que faz |
+|---|---|
+| menu lateral | `go('diagnostico')` |
+| barra de baixo (celular) | `go('diagnostico')` |
+| aba `tdg` na ficha do paciente | `carregarDiagHistPac` — o histórico |
+| berço da Recomendação (Prescrição) | o bloco que se muda quando o Diagnóstico abre |
+| a zeragem ao entrar, dentro de `go()` | **não é porta: é cômodo morando fora** — ver abaixo |
+
+**A peça que não deu para mudar:** ao entrar no Diagnóstico, cerca de 35 linhas dentro da
+função `go()` zeram o estado (`_diagSelecoes`, `_diagPacSel`, os campos). É Diagnóstico
+morando na navegação. Mover exigiria **criar uma função nova** — ou seja, mudar código, não
+só lugar. Numa arrumação que promete "nada muda por fora", isso não cabe. Fica anotado para
+a etapa 4 (dar encaixe às peças), onde mexer no código é o serviço.
 
 ### Duas armadilhas de nome (custaram tempo; ficam escritas)
 

@@ -30,9 +30,15 @@ barato. Não pular.*
    moravam quase juntos — o serviço foi **marcar** os três quarteirões, subir o interruptor
    das abas para a entrada e escrever as **duas armadilhas de nome** (`.ev-card` é da Agenda;
    `.fio-elementos` não é o fio da teia). Provado pela lista ordenada **e** pela rede.
-   **Faltam os módulos maiores** — o Diagnóstico (as faixas), a Agenda e a Recomendação.
-   *A rede, a v9.5 e a v9.6 entraram no `main` em 03/08 e estão no ar (rodapé `v9.6 · 03/08`,
-   conferido no site). Nada mais mora fora do `main`.*
+   ~~E o **Diagnóstico**.~~ **FEITO em 03/08 (v9.7).** Outro achado bom: já morava quase
+   todo junto — o desenho era uma tela só e a eletricidade, um continente de quase 5.000
+   linhas. Espalhada estava só a **pintura** (as caixas e a última leitura, largadas no meio
+   dos formulários). O serviço foi trazer essa pintura e **marcar as três paredes**.
+   Duas coisas ficaram de fora, com placa dizendo por quê: a **Recomendação** (Faixa 5, que
+   muda de lugar e tem berço na Prescrição) e a **zeragem dentro de `go()`** — essa só sai
+   criando função nova, o que é a etapa 4, não esta.
+   **Faltam a Agenda e a Recomendação.**
+   *A rede, a v9.5, a v9.6 e a v9.7 estão no `main` e no ar. Nada mora fora do `main`.*
 3. **Enxugar o repetido** — só depois de reunido dá para ver o que é cópia. Medir, nunca supor.
 4. **Dar encaixe às peças** — trocar os `onclick` por escuta no código e as funções globais por
    módulos com `import`/`export`. É o que permite levar o Financeiro para outro app.

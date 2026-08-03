@@ -83,28 +83,8 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 /* FORMS */
 .fc{background:#FDFAF6;border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
 .fst{font-size:13.5px;font-weight:700;color:var(--pri-d);margin-bottom:12px;padding-bottom:7px;border-bottom:2px solid var(--pri-l);display:flex;align-items:center;gap:6px}
-/* Caixas que abrem e fecham (Diagnóstico) — fechadas ao chegar, e a Clínica lembra */
-.fst.cx-cab{cursor:pointer;user-select:none;margin-bottom:0;padding-bottom:9px}
-.fc.cx-aberta .fst.cx-cab{margin-bottom:12px}
-.cx-seta{width:14px;height:14px;flex:0 0 14px;margin-left:auto;transition:transform .18s ease;color:var(--pri-d);opacity:.7}
-.fc.cx-aberta .cx-seta{transform:rotate(90deg)}
-.cx-resumo{font-weight:500;font-size:11.5px;color:var(--txt-l);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-left:8px;min-width:0}
-.fc.cx-aberta .cx-resumo{display:none}
-.cx-corpo{display:none}
-/* O que foi selecionado mora dentro da própria caixa, sem virar caixa de novo */
-.cx-sel{border-top:1px dashed var(--brd);padding-top:12px}
-.cx-sel .fc{box-shadow:none;background:transparent;padding:0 0 0 11px;border-radius:0;margin-bottom:12px}
-/* A faixa da última leitura datada: a foto sem data ganha uma companheira com data.
-   Nada aqui é campo — é só o que o Diagnóstico já guardou, trazido à vista. */
-.ult-leitura:empty{display:none}
-.ult-leitura{background:var(--beige);border-left:3px solid var(--pri);border-radius:7px;padding:9px 11px;margin-bottom:13px;font-size:12px;line-height:1.65}
-.ult-leitura .ul-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:5px}
-.ult-leitura .ul-qdo{font-weight:700;color:var(--pri-deep);font-size:12px}
-.ult-leitura .ul-cps{color:var(--txt-l)}
-.ult-leitura .ul-vazio{color:var(--txt-l);font-style:italic}
-.cx-sel .fc .fst{font-size:12.5px;border-bottom-width:1px;padding-bottom:5px;margin-bottom:8px}
-.fc.cx-aberta .cx-corpo{display:block}
-@media print{.cx-corpo{display:block!important}.cx-seta,.cx-resumo{display:none!important}}
+/* As caixas do Diagnóstico e a última leitura moravam aqui, no meio dos
+   formulários. Mudaram para o quarteirão do DIAGNÓSTICO (03/08/2026). */
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px}
 .fr.full{grid-template-columns:1fr}.fr.tri{grid-template-columns:1fr 1fr 1fr}
 .fg{display:flex;flex-direction:column;min-width:0}
@@ -229,6 +209,40 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .fio-barra.fechado .fio-chips,.fio-barra.fechado .fio-btn{display:none}
 /* No celular o menu fica fixo no canto de cima; o fio desvia dele. */
 @media(max-width:900px){.fio-barra{top:52px}.fio-tit span{display:none}}
+/* ===== DIAGNÓSTICO — a pintura, num lugar só (03/08/2026) =====
+   Daqui até o interruptor de três posições é tudo Diagnóstico, na ordem em que
+   a tela é lida de cima para baixo: as caixas, a última leitura, o cabeçalho
+   (faixa 1), a folha (faixa 2), os bonecos (faixa 3), a régua do pé e o corpo
+   (faixa 4). O que ficou de fora é de propósito: a faixinha `.fio-elementos`
+   (lá em cima, com o enfeite da casa) é do menu e da prescrição também.
+   Cuidado: `.fam-*` é a família dos bonecos; `.fmini` e `.folha` não são
+   parentes apesar do começo parecido.                                ===== */
+
+/* As caixas que abrem e fecham — fechadas ao chegar, e a Clínica lembra.
+   Vieram do meio dos formulários nesta arrumação; continuam depois de
+   `.fc` e `.fst`, que é de onde herdam. */
+.fst.cx-cab{cursor:pointer;user-select:none;margin-bottom:0;padding-bottom:9px}
+.fc.cx-aberta .fst.cx-cab{margin-bottom:12px}
+.cx-seta{width:14px;height:14px;flex:0 0 14px;margin-left:auto;transition:transform .18s ease;color:var(--pri-d);opacity:.7}
+.fc.cx-aberta .cx-seta{transform:rotate(90deg)}
+.cx-resumo{font-weight:500;font-size:11.5px;color:var(--txt-l);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-left:8px;min-width:0}
+.fc.cx-aberta .cx-resumo{display:none}
+.cx-corpo{display:none}
+/* O que foi selecionado mora dentro da própria caixa, sem virar caixa de novo */
+.cx-sel{border-top:1px dashed var(--brd);padding-top:12px}
+.cx-sel .fc{box-shadow:none;background:transparent;padding:0 0 0 11px;border-radius:0;margin-bottom:12px}
+.cx-sel .fc .fst{font-size:12.5px;border-bottom-width:1px;padding-bottom:5px;margin-bottom:8px}
+.fc.cx-aberta .cx-corpo{display:block}
+@media print{.cx-corpo{display:block!important}.cx-seta,.cx-resumo{display:none!important}}
+/* A faixa da última leitura datada: a foto sem data ganha uma companheira com data.
+   Nada aqui é campo — é só o que o Diagnóstico já guardou, trazido à vista. */
+.ult-leitura:empty{display:none}
+.ult-leitura{background:var(--beige);border-left:3px solid var(--pri);border-radius:7px;padding:9px 11px;margin-bottom:13px;font-size:12px;line-height:1.65}
+.ult-leitura .ul-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;margin-bottom:5px}
+.ult-leitura .ul-qdo{font-weight:700;color:var(--pri-deep);font-size:12px}
+.ult-leitura .ul-cps{color:var(--txt-l)}
+.ult-leitura .ul-vazio{color:var(--txt-l);font-style:italic}
+
 /* O CABEÇALHO — a primeira faixa da tela única.
    Quem chegou fica no alto, e a pessoa pode NASCER aqui: se o nome digitado não
    existe, o cabeçalho oferece criá-la sem sair da tela e já marca a sessão de
@@ -1678,6 +1692,12 @@ window.addEventListener('DOMContentLoaded',()=>{
   </div>
 </section>
 
+<!-- ===== FIM DO DESENHO DO DIAGNÓSTICO — a tela única acaba aqui =====
+     Da placa DIAGNÓSTICO INTEGRADO até esta linha é uma tela só, na ordem das
+     faixas. As entradas ficam de fora, cada uma na parede onde a pessoa entra:
+     o menu lateral, a barra do celular, a aba do histórico dentro da ficha do
+     paciente e o berço da Recomendação, na Prescrição.               ===== -->
+
 <!-- ===== FINANCEIRO ===== -->
 <section class="page" id="pg-financeiro">
   <div class="page-header"><h1><span class="ph-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6.5" width="18" height="13" rx="2.2"/><path d="M3 10.5h18"/><circle cx="16.3" cy="14.3" r="1.1" fill="currentColor" stroke="none"/></svg></span>Financeiro</h1></div>
@@ -2170,7 +2190,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v9.6 · 03/08';
+const APP_VER='v9.7 · 03/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -11413,6 +11433,12 @@ async function delDiagHist(diagId,pacId){
   toast('Removido do histórico','#c62828',"trash");
 }
 
+// ===== FIM DO QUARTEIRÃO DO DIAGNÓSTICO — daqui para baixo é a RECOMENDAÇÃO =====
+//   A eletricidade do Diagnóstico começa na placa DIAGNÓSTICO INTEGRADO e acaba
+//   logo acima, em `duplicarDiagHist`. O que vem agora (`verRxHist`, as duas
+//   `_preencher*` e o reaproveitar receita) é da Recomendação — que é a Faixa 5
+//   do Diagnóstico, mas MUDA DE LUGAR: o berço dela é a Prescrição. Por isso
+//   ficou de fora do quarteirão; juntá-la é serviço à parte, ainda não feito.
 function verRxHist(rxId){
   const rx=gD('prescricoes').find(r=>String(r.id)===String(rxId));
   if(!rx)return;
