@@ -671,7 +671,7 @@ lugar onde a escala vai morar. **O encontro numerado vira o lugar do que ficou d
 aparece na chegada do paciente (HTML 1009, `renderUltEncontro`) — aquilo que ele pediu para ver
 **antes** de atender. Se continua, passa a ler da sessão numerada e nada muda para ele.
 
-### A caixa de anotação da Psicanálise — a decisão que falta
+### A caixa de anotação da Psicanálise — DECIDIDO por ele em 03/08
 
 Ele pediu "uma caixa para anotação" no bloco Psicanálise (HTML 1595). A casa já sabe fazer de
 duas maneiras, e nenhuma precisa ser inventada:
@@ -687,6 +687,29 @@ cuidado:** a lista rola dentro de 400px e tem 59 itens em 11 categorias; anotaç
 some. O certo é a lista continuar só de marcar, e os marcados subirem para um bloco *"O que foi
 identificado nesta sessão"*, cada um com sua linha.
 
-**A resposta dele — "manter apenas a do alto no início" — ficou com duas leituras**, e está por
-esclarecer: ou é a caixa única no alto do bloco, ou é nenhuma caixa nova (a folha limpa lá em
-cima já é o lugar de escrever).
+**A decisão dele, esclarecida: as duas, e a segunda também clicável.**
+
+1. **A caixa no alto do bloco** — uma só, antes da lista de conceitos. É o lugar do que ele pensou
+   da sessão como um todo, e ele disse que *"é suficiente"* como base.
+2. **A anotação por conceito, aberta por clique.** Não nasce aberta: o conceito marcado ganha um
+   toque que abre a linha de anotação. **É a mesma regra da escala clicável** — o gesto é um
+   toque, e nada pede atenção antes de ser chamado. Sem isso, 59 conceitos com caixa aberta
+   viram um paredão.
+
+**Fica valendo o cuidado do paredão:** a lista rolante continua **só de marcar**; os conceitos
+marcados sobem para um bloco *"O que foi identificado nesta sessão"*, fora da rolagem, e é lá
+que o clique abre a anotação de cada um. `togglePsicanalise` (7653) ganha a terceira chave, e o
+PDF (8101) passa a imprimir a nota embaixo do nome.
+
+### O último encontro na chegada — DECIDIDO: sai
+
+Dito por ele: *"quero apenas que fique registrado sessões, dentro de Diagnóstico no final da
+página depois de recomendações; se eu precisar, vou até lá e vejo o histórico do que eu fiz na
+sessão anterior."*
+
+**O aviso automático na chegada do paciente (HTML 1009, `renderUltEncontro`) sai.** O que ficou da
+sessão passada mora **num lugar só** — o encontro numerado, no pé do Diagnóstico, depois da
+Recomendação, onde a régua já está. Ele vai lá quando quiser; a tela não empurra.
+
+*É a mesma regra que vem se repetindo em toda esta reunião: **a ferramenta oferece, não decide** —
+e agora também **não interrompe**.*

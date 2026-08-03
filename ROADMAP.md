@@ -107,9 +107,13 @@ atendimento sentir diferença, o passo foi longe demais. E depois de cada passo:
   2 vezes em 19 encontros. O valor gravado (`diagEscalaEmo`) **não muda** — nem a régua nem as
   avaliações antigas sentem. **A Memória da sessão desce para dentro do encontro numerado**, na
   régua, junto da escala: o encontro vira o lugar do que ficou daquele dia.
-  **Duas decisões dele ainda faltam:** (a) a caixa de anotação da Psicanálise — caixa única do
-  bloco ou anotação por conceito marcado; (b) se o *"último encontro"* na chegada do paciente
-  (`renderUltEncontro`, HTML 1009) continua depois que a memória mudar de casa.
+  **As duas últimas decisões saíram em 03/08:** (a) a Psicanálise ganha **as duas** anotações —
+  a caixa única no alto do bloco **e** a nota por conceito, esta **aberta por clique**, com os
+  marcados subindo para um bloco fora da lista rolante; (b) o *"último encontro"* na chegada do
+  paciente (`renderUltEncontro`, HTML 1009) **sai** — o que ficou da sessão passada mora num
+  lugar só, o encontro numerado no pé do Diagnóstico, e ele vai lá quando quiser.
+  **A planta está fechada. A ordem de construção: a escala clicável primeiro** (a menor, e a que
+  se prova no atendimento mais rápido). Senha: **"A escala que se toca"**.
   *Acerto pequeno anotado de passagem: na régua o desenho fica espremido na metade direita e as
   datas se sobrepõem no eixo.*
 - **Abas com títulos no Montgomery Code** (ideia dele, 03/08) — navegar por aba nomeada em vez
