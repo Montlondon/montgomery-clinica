@@ -795,3 +795,169 @@ Recomendação, onde a régua já está. Ele vai lá quando quiser; a tela não 
 
 *É a mesma regra que vem se repetindo em toda esta reunião: **a ferramenta oferece, não decide** —
 e agora também **não interrompe**.*
+
+---
+
+## A reunião das fotos — o veredicto faixa por faixa (03/08/2026)
+
+*Ele passou o Diagnóstico inteiro em fotos, dizendo de cada faixa o que fica, o que morre e o que
+vira desenho. Escrito em outra janela e recuperado aqui para não se perder.*
+
+
+*Depois de fechar as doze abas, ele passou o Diagnóstico inteiro em fotos, dizendo de cada faixa
+o que fica, o que morre e o que vira desenho. Isto é o veredicto dele, na ordem em que veio.*
+
+| Faixa | Veredicto |
+|---|---|
+| **A folha limpa** | **amou** — fica como está; é a única que não pede nada em troca |
+| **DNA da Família** | **amou demais** — fica, e melhora (ver abaixo) |
+| **O corpo — a coluna de costas** | **não gostou** |
+| **Calculadora de IMC** | **gosta** — fica |
+| **Último encontro** | muda de lugar: **vai para o fim da tela** |
+| **Pulso — Pulsologia** | fica, **melhora depois** |
+| **5 Elementos** | **entra no Baguá**, na ordem de geração |
+| **Pontos do Corpo / Quiropraxia** | **vira geometria (esqueleto)**; informação boa, mal arrumada |
+| **Balanço Método (ABC)** | quatro telas para uma pergunta só |
+| **Baguá — Diagnóstico Circular** | **"aqui poderia conter tudo"** |
+| **Metatron com o Vitruviano** | a outra forma do lugar único |
+| **Suplementos e Auriculoterapia** | **ok** — ficam |
+
+#### Os bonecos: o que muda (a parte mais trabalhada da reunião)
+
+*"Era assim que eu pensava atendendo: ia anotando todas as pessoas que faziam com que a pessoa
+perdia energia. E é assim mesmo na vida real."*
+
+1. **Mais parentescos** — hoje são cinco botões (avô/avó, pai/mãe, irmão/irmã, filho/filha,
+   neto/neta). Faltam tio, tia, sobrinho, sobrinha, primo. Boa parte disso a árvore já sabe por
+   dedução (tio é irmão do pai): é dar o nome certo ao que já existe.
+2. **Mudar o galho** — mover para a esquerda e para a direita **dentro da fileira**. Hoje só se
+   arrasta entre gerações. Com **70 pessoas desenhadas**, sem isso quem importa some no meio.
+3. **Geometria, não régua** — decidido por ele: fileira por geração cresce sempre para o lado e
+   fica comprida. A geometria cresce **em volta**: a pessoa no centro, os outros em anéis, mais
+   perto quem pesa mais. É o princípio da roda, aplicado às pessoas dela.
+4. **Nem toda pessoa que pesa é parente.** *"Na empresa X acontece isso com fulano, que é do setor
+   tal."* Numa árvore genealógica esse fulano **não tem galho**. Numa geometria de anéis ele tem
+   lugar: alguém perto, com um peso, num grupo que não é a família.
+5. **Lugares desenhados** — a correção dele, e é o coração da coisa: *"eu costumava desenhar; se
+   falasse de igreja eu desenhava uma igreja, e dentro da igreja eu colocava os contextos,
+   síndrome de Estocolmo etc."* Então os bonecos são **três coisas**: os **lugares** (a igreja, a
+   empresa, a casa), as **pessoas** dentro deles, e o **que acontece ali** — que não é pessoa nem
+   parentesco, é **fenômeno**. Estocolmo não é gente: é o nome do que prende. Hoje não existe onde
+   escrever isso.
+6. **Pode crescer, desde que tenha lógica.** Não é ficar pequeno. Setenta figuras soltas é ruído;
+   setenta repartidas em cinco lugares desenhados é legível — **o olho acha o lugar primeiro.**
+
+**O critério que ele deu para qualquer versão nova:** *"é muita informação para mapear, difícil até
+para a pessoa identificar onde deve mudar ou prestar atenção — por isso ela vem até aqui."* O
+desenho tem que **mostrar onde olhar**. Se ficar tão cheio quanto a cabeça dela, não serviu.
+
+#### Por que a faixa do corpo não agradou (motivos objetivos, não gosto)
+
+- O corpo é um **selo minúsculo** no canto; o resto da faixa é espaço vazio.
+- No lugar do desenho há **dois parágrafos de instrução** — quando a tela precisa explicar como se
+  usa, o desenho não se explicou.
+- É **só a coluna, só de costas** — uma peça do corpo, não o corpo.
+- O texto ainda promete *"aparece lá na aba Quiropraxia"*, uma aba que morreu nesta reunião.
+
+**O padrão apareceu três vezes** (coluna, pulsologia, auriculoterapia): a **mesma instrução escrita
+duas vezes** na mesma faixa. Explicação repetida ocupa mais lugar que o desenho — é um dos maiores
+ganhos de espaço da tela nova.
+
+#### O que a base de quiropraxia tem de verdade (medido, não suposto)
+
+Em `dados-quiropraxia.js`: **26 raízes** (C1 ao Cóccix, com o que inerva e os efeitos), **45
+técnicas de ajuste** em **7 grupos de membros** (mão, punho, cotovelo, ombro, pé, tornozelo, joelho
+e quadril — cada uma com articulação, movimentos e os passos da manobra), **6 testes** e os
+fundamentos. É material de **esqueleto**, não de tabela: cada linha está presa a um lugar do corpo.
+
+Os botões de região estão hoje **em ordem nenhuma** (Joelho, Lombar, Cervical, Torácica, Cotovelo,
+Pelve, Sacroilíaca, Tornozelo). Num esqueleto o problema some: **o corpo já é a ordem.**
+
+**Correção ao passo 7:** eu havia dito que músculo e tendão não existem. Meio certo — o que existe
+é **articulação e manobra**, bem detalhado; músculo e tendão **nomeados** realmente não estão. E a
+tela promete *"músculos, tendões, ajustes e canal energético"*: **a interface promete mais do que o
+dado tem.** A tela nova não pode repetir isso.
+
+#### O Balanço ABC: quatro telas, uma pergunta
+
+Tabela completa, filtro por meridiano, coluna Relação/Lógica e o bonequinho — **as quatro respondem
+a mesma pergunta**: *qual meridiano está afetado, quais quatro tratar e onde no corpo.* Três são
+roupas erradas (linha, botão, parágrafo). **A quarta é a certa: o bonequinho com os meridianos nos
+braços e nas pernas.** Não é inventar organização nova — é jogar fora duas roupas.
+
+#### O Baguá e o Vitruviano: duas faces do mesmo lugar único
+
+A roda **já engoliu** o Balanço ABC e as síndromes, e já traz o **relógio dos órgãos** (inclusive
+quem está de plantão) e o corpo no centro. Falta engolir os **pontos** e os **5 Elementos** — os
+dois mandados para dentro dela nesta reunião.
+
+- **A roda organiza por tempo e ciclo** (o relógio, a geração dos Elementos).
+- **O Vitruviano organiza por lugar no corpo** (onde dói, onde se agulha).
+- **Metatron é a malha que segura os dois.** Qual é a porta de entrada é decisão de projeto,
+  ainda não tomada.
+
+Sobre a imagem do Vitruviano do OS (musculatura à vista, as 10 Sefirot no eixo, os Elementos nos
+cantos, os pontos descendo pela coluna): **é o lugar único, e não precisa de legenda nenhuma.**
+Duas ressalvas honestas:
+
+- **Músculo ali é imagem, não é dado.** A figura mostra a musculatura, mas o sistema não sabe o
+  nome de nenhum músculo — não dá para tocar num e ele responder.
+- **Ele está de costas.** Resolve coluna e Bexiga; deixa de fora Estômago, Vaso Concepção, o
+  abdômen inteiro. **Uma face só não segura os doze meridianos** — frente e costas são camadas do
+  mesmo boneco, não dois desenhos. E fica de pé o problema já registrado do **espelhamento**: a
+  direita dele é a esquerda de quem olha, e "braço esquerdo: IG" é instrução de agulha.
+
+#### Achados soltos que valem conferir depois
+
+- A faixa "Último encontro" mostrava **Sessão 19 salva sem marcações nem anotação**. Entender se
+  foi teste dele ou se alguma coisa não gravou.
+- "Último encontro" não é faixa própria: é a **primeira linha da linha do tempo**, no pé.
+- O IMC pede **data**: 70 kg hoje contra 74 há seis meses é o que diz alguma coisa. Número solto,
+  pelo critério dele mesmo, é o que ele chamou de *"nada de dinamismo"*.
+
+---
+
+## FEITO — "A escala que se toca" (Clínica v9.9, 03/08/2026)
+
+Três coisas, todas decididas por ele na reunião do pé:
+
+1. **A escala virou toque.** O `<select>` de 22 opções saiu. Os 22 degraus ficam à vista, em duas
+   espirais separadas pela cor (ascendente 1–7, descendente 8–22); um toque marca, o mesmo toque
+   de novo desmarca. **Desmarcar precisou existir:** sem ele, um clique errado vira dado gravado
+   que ninguém consegue tirar. **O valor guardado não mudou** — continua a mesma frase que o
+   `<select>` gravava em `diagEscalaEmo`, e por isso a régua, o PDF e as avaliações antigas não
+   sentiram nada. O rótulo visível sai do próprio valor (`escEmoRotulo`), então nada é escrito
+   duas vezes.
+2. **A Memória da sessão desceu para o encontro numerado.** Os três campos saíram do meio da
+   avaliação e viraram a faixa **"O encontro de hoje"**, colada em cima da régua, com o número que
+   o encontro vai receber e a escala marcada no cabeçalho dela. *Ficou **antes** da régua e não
+   dentro dela por um motivo prático: a régua só aparece quando já existem encontros, e o primeiro
+   atendimento também precisa escrever.*
+3. **A chegada parou de empurrar.** `renderDiagUltEncontro` e `renderUltEncontro` não mostram mais
+   o aviso do último encontro. `htmlUltimoEncontro` **continua viva** — é ela que desenha o dia
+   quando ele **toca** num ponto da régua. Mostrar quando pedem é outra coisa que interromper.
+
+**Pintura** 346 · **desenho** 1620 e 1680 · **eletricidade** 6390 e 11162.
+
+## FEITO — "A pessoa inteira no cabeçalho" (Clínica v10.0, 03/08/2026)
+
+A primeira engolida da senha "A tela que engole a ficha". As abas **Dados** e **Histórico** viraram
+uma **dobra do cabeçalho**, fechada por padrão, aberta pelo botão *"A pessoa inteira"*.
+
+- **Vinte campos**, os mesmos nomes da ficha (`CAB_DOBRA`), gravados na mesma tabela. Não existe
+  cadastro paralelo.
+- **Egress:** mostrar **não lê nada do banco**. Todos esses campos já vêm na lista leve
+  (`PAC_LIGHT_KEYS`), então abrir a dobra custa zero. A ficha completa só desce na hora de
+  **gravar** (`fetchPacFull`) — porque o banco grava `dados` por inteiro, e gravar o leve apagaria
+  a foto e os exames. **Este era o buraco de verdade, e está tapado.**
+- **Mostrar não é marcar:** abrir a dobra não grava nada; só o botão *"Guardar na ficha"* grava, e
+  ele só acende quando algo mudou.
+- **O Nome ficou de fora de propósito** — é o campo de busca acima, e trocá-lo mexe na agenda, no
+  histórico e no Google (`renomearPaciente`). Continua sendo serviço da ficha.
+- Junto do "Histórico familiar" ficou escrito que a mesma marca se desenha nos bonecos, ali
+  embaixo — a sobreposição achada na reunião das fotos, agora dita na tela.
+
+**As abas Dados e Histórico não foram apagadas.** Regra herdada: nada se apaga enquanto a camada
+não provar que substitui, no atendimento.
+
+**Pintura** 262 · **desenho** 1418 · **eletricidade** 8716.

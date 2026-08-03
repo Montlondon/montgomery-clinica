@@ -54,6 +54,10 @@ atendimento sentir diferença, o passo foi longe demais. E depois de cada passo:
 
 ## O que está pendente agora
 
+- **As quatro faixas que o atendimento pediu** — **a obra da vez.** As outras duas senhas da tela
+  única saíram em 03/08: *"A escala que se toca"* (**v9.9**) e *"A pessoa inteira no cabeçalho"*
+  (**v10.0**). Ordem escrita e não cumprida ainda: **Faixa 6 → Faixa 2 → Faixa 4 → Faixa 3**.
+  A planta inteira está em `00_Nucleo/TELA_UNICA.md`. **Nenhuma das quatro foi construída.**
 - **Prateleira** — falta ele escrever as primeiras linhas de "Onde comprar" (bloco abaixo).
 - **Nunca o relógio decide** — senha aberta, MMObras.
 - **Sem acento** — as buscas de dentro já foram varridas (v9.2). Sobra a busca de paciente da
