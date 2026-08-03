@@ -9,6 +9,40 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — varrer o acento das buscas de dentro (Clínica v9.2, 03/08/2026)
+
+*Senha "sem acento": "aos poucos vamos varrendo tudo".*
+
+A busca de paciente do banco já era sem acento desde 27/07 (a coluna `busca_nome`), e a do
+cabeçalho do Diagnóstico desde a v6.9. Mas **dez buscas de dentro da página** ainda comparavam
+letra a letra: quem digitasse "jose", "antonio" ou "cranio" não achava nada.
+
+Todas passam a comparar por `semAcento()` — o mesmo helper de sempre, uma linha em cada:
+
+| Onde | Função |
+|---|---|
+| Lista de pacientes (nome e queixa) | `filtrarP` |
+| Catálogo de Suplementos (nome e fornecedor) | `renderSuplementos` |
+| Paciente da Recomendação | `filtrarRxPac` |
+| Produto da Recomendação | `filtrarRxSup` |
+| Modelo de recomendação anterior | `filtrarRxModelo` |
+| Produto no Diagnóstico | `filtrarDiagSup` |
+| Pontos de acupuntura (os 361) | `filtrarAcuPontos` |
+| Protocolo de auriculoterapia | `filtrarAuriculoProtocolo` |
+| Ponto de auriculoterapia (agora acha pelo grupo também) | `filtrarAuriculoPonto` |
+| Prateleira "Onde comprar" | `ptFiltrar` / `renderPtLista` / `ptCatalogo` |
+
+**Um cuidado que apareceu no caminho:** a busca da prateleira guardava o termo *já rebaixado* na
+variável `_ptBusca`, e essa mesma variável volta para dentro da caixa quando a tabela se redesenha.
+Se ela guardasse o termo sem acento, "José" viraria "jose" **na tela dele enquanto digita**. Agora
+guarda o que ele escreveu como escreveu; quem tira o acento é a comparação, não a memória.
+
+**O que ainda sobra:** a busca de paciente da Recomendação (`filtrarRxPac`) continua olhando **só
+os ativos** — quem foi arquivado não aparece ali. É a outra metade da receita da v6.9
+(`buscarPacPicker` + selo ARQUIVADO), e fica para a próxima varrida.
+
+---
+
 ## Concluído — o teto de nove anéis (Clínica v9.1, 03/08/2026)
 
 *Senha "Ver os anéis". A janela mostrou o desenho real dos anéis ampliado — um boneco com um anel,

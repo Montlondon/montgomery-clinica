@@ -227,6 +227,8 @@ novo mesmo; e resposta atrasada de um termo velho não escreve na tela.
 
 **Sobra a mesma falha na busca da Recomendação** (`filtrarRxPac`), que ainda é só-ativos e com
 acento. Mesma receita resolve.
+*Atualizado em 03/08/2026 (v9.2): o acento saiu — `filtrarRxPac` já compara com `semAcento`.
+Continua só-ativos; falta a metade do banco (`buscarPacPicker` + selo ARQUIVADO).*
 
 ### FEITO — de quem cada boneco é: filiação e par (Clínica v7.0, 01/08/2026) — NO AR
 
