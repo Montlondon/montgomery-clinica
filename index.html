@@ -441,27 +441,16 @@ tr:hover td{background:#EEF2F7}
 .btn-sm{padding:4px 9px;font-size:11.5px}
 .fa{display:flex;gap:8px;justify-content:flex-end;margin-top:14px;padding-top:12px;border-top:1px solid var(--brd);flex-wrap:wrap}
 
-/* FINANCEIRO */
+/* ===== FINANCEIRO — a pintura, num lugar só (03/08/2026) =====
+   Antes esta pintura morava em dois pedaços separados por outro assunto.
+   O que é do Financeiro está tudo aqui; o que era interruptor de Configurações
+   foi devolvido para a placa de Configurações, mais abaixo. */
 .fg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin-bottom:14px}
 .fc-card{background:#fff;border-radius:var(--radius);padding:14px;text-align:center;box-shadow:var(--shadow)}
 .fc-card.g{border-top:4px solid var(--pri)}.fc-card.o{border-top:4px solid var(--warn)}.fc-card.b{border-top:4px solid var(--info)}.fc-card.p{border-top:4px solid #7B1FA2}
 .fc-card h4{font-size:10px;color:var(--txt-l);text-transform:uppercase;margin-bottom:5px}
 .fc-card .fv{font-size:18px;font-weight:700}
 .fc-card.g .fv{color:var(--pri)}.fc-card.o .fv{color:var(--warn)}.fc-card.b .fv{color:var(--info)}.fc-card.p .fv{color:#7B1FA2}
-
-/* BALANÇO MÉTODO ABC */
-.seg{display:flex;gap:4px;background:var(--bg);border-radius:11px;padding:4px;width:fit-content;margin-bottom:14px}
-.seg button{border:none;background:none;padding:8px 16px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
-.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
-.tw-zebra tbody tr:nth-child(even) td{background:var(--bg)}
-#abcTabela.abc-logica-off .abc-logica-col{display:none}
-.abc-merid-btn{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:8px 0;font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;text-align:center}
-.abc-merid-btn:hover{background:var(--bg)}
-.abc-merid-btn.on{background:var(--pri-deep);color:#fff;border-color:var(--pri-deep)}
-.abc-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow)}
-.abc-boneco{width:100%;max-width:160px;display:block;margin:0 auto 10px}
-
-/* FINANCEIRO CLÍNICA/PESSOAL */
 .seg-scope{display:flex;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:5px;width:fit-content;margin-bottom:18px}
 .seg-scope button{border:none;background:none;padding:9px 22px;border-radius:9px;font-size:13.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;font-family:'Inter',sans-serif;display:flex;align-items:center;gap:7px}
 .seg-scope button svg{width:16px;height:16px}
@@ -477,6 +466,20 @@ tr:hover td{background:#EEF2F7}
 .linha-fin .valor-item{font-family:'Lora',serif;font-weight:600;font-size:14px;white-space:nowrap}
 .linha-fin .valor-item.clay{color:#8A4B2C}
 .linha-fin .valor-item.green{color:#3F5C33}
+
+/* BALANÇO MÉTODO ABC */
+.seg{display:flex;gap:4px;background:var(--bg);border-radius:11px;padding:4px;width:fit-content;margin-bottom:14px}
+.seg button{border:none;background:none;padding:8px 16px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--ink-soft);cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.tw-zebra tbody tr:nth-child(even) td{background:var(--bg)}
+#abcTabela.abc-logica-off .abc-logica-col{display:none}
+.abc-merid-btn{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:8px 0;font-size:12.5px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;text-align:center}
+.abc-merid-btn:hover{background:var(--bg)}
+.abc-merid-btn.on{background:var(--pri-deep);color:#fff;border-color:var(--pri-deep)}
+.abc-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;box-shadow:var(--shadow)}
+.abc-boneco{width:100%;max-width:160px;display:block;margin:0 auto 10px}
+
+/* INTERRUPTORES — usados pelas Configurações (a pintura do Financeiro subiu) */
 .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line)}
 .toggle-row:last-child{border-bottom:none}
 .toggle-row .desc{font-size:13.5px;font-weight:600}
@@ -2144,7 +2147,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v9.4 · 03/08';
+const APP_VER='v9.5 · 03/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -3872,6 +3875,45 @@ async function compartilharDespesas(escopo,formato){
       canvas.toBlob(b=>{if(b)compartilharArquivo(b,nomeBase+'.jpg','image/jpeg');},'image/jpeg',0.92);
     }
   }catch(e){console.error(e);toast(`Erro ao gerar: ${e.message||e}`,'#c62828',"erro");}
+}
+
+// ===== FINANCEIRO: as duas peças que moravam longe (juntadas em 03/08/2026) =====
+// A planilha do Financeiro (Excel). O botão que a chama fica na tela de Backup,
+// mas o que ela exporta é daqui — por isso ela passou a morar aqui.
+function expCSVF(){
+  const ss=gD('sessoes');if(!ss.length){toast('Sem sessões','#EF6C00',"warn");return;}
+  const h=['Data','Paciente','Procedimento','Valor','Pagamento','Status'];
+  const r=ss.sort((a,b)=>new Date(b.data)-new Date(a.data)).map(s=>[fd(s.data),s.pacienteNome,s.procedimentos,s.valor.toFixed(2).replace('.',','),s.formaPgto,s.status].map(z=>`"${z||''}"`).join(','));
+  dl('\uFEFF'+[h.join(','),...r].join('\n'),'financeiro_montgomery_'+new Date().toISOString().slice(0,10)+'.csv','text/csv');toast('Exportado!',null,"cifrao");
+}
+
+// Desconta o estoque dos produtos usados e registra a venda no Financeiro
+// (status "pendente" — Montgomery marca como recebido quando o cliente paga).
+// Quem chama é a Recomendação, lá embaixo; a venda, porém, é assunto daqui.
+async function registrarVendaSuplementos(rx){
+  // Atualiza só os produtos usados, um a um — nunca reescrever a tabela toda.
+  const catalogo=gD('suplementos');
+  for(const usado of rx.suplementos){
+    const p=catalogo.find(x=>String(x.id)===String(usado.id));
+    if(!p)continue;
+    const atualizado={...p,estoque:Math.max(0,p.estoque-usado.qtd)};
+    await dbGravar('suplementos',usado.id,atualizado);
+  }
+  _cache['suplementos']=catalogo.map(p=>{
+    const usado=rx.suplementos.find(s=>String(s.id)===String(p.id));
+    return usado?{...p,estoque:Math.max(0,p.estoque-usado.qtd)}:p;
+  });
+  const venda={
+    id:novoId(),
+    pacienteId:rx.pacienteId,
+    pacienteNome:rx.pacienteNome,
+    recomendacaoId:rx.id,
+    data:rx.data,
+    itens:[...rx.suplementos],
+    valor:rx.valorSuplementos,
+    status:'pendente'
+  };
+  await dbAdd('vendas_suplementos',venda);
 }
 
 // ===== SUPLEMENTOS (catálogo / estoque) =====
@@ -10710,33 +10752,8 @@ async function salvarRxHistorico(){
   _rxJaSalvo=true;
 }
 
-// Desconta o estoque dos produtos usados e registra a venda no Financeiro
-// (status "pendente" — Montgomery marca como recebido quando o cliente paga).
-async function registrarVendaSuplementos(rx){
-  // Atualiza só os produtos usados, um a um — nunca reescrever a tabela toda.
-  const catalogo=gD('suplementos');
-  for(const usado of rx.suplementos){
-    const p=catalogo.find(x=>String(x.id)===String(usado.id));
-    if(!p)continue;
-    const atualizado={...p,estoque:Math.max(0,p.estoque-usado.qtd)};
-    await dbGravar('suplementos',usado.id,atualizado);
-  }
-  _cache['suplementos']=catalogo.map(p=>{
-    const usado=rx.suplementos.find(s=>String(s.id)===String(p.id));
-    return usado?{...p,estoque:Math.max(0,p.estoque-usado.qtd)}:p;
-  });
-  const venda={
-    id:novoId(),
-    pacienteId:rx.pacienteId,
-    pacienteNome:rx.pacienteNome,
-    recomendacaoId:rx.id,
-    data:rx.data,
-    itens:[...rx.suplementos],
-    valor:rx.valorSuplementos,
-    status:'pendente'
-  };
-  await dbAdd('vendas_suplementos',venda);
-}
+// A venda que nasce de uma Recomendação é registrada por `registrarVendaSuplementos`,
+// que mudou de casa em 03/08/2026: agora mora no quarteirão do FINANCEIRO.
 
 async function carregarRxHistPac(pacId){
   let rxs=gD('prescricoes');
@@ -12042,12 +12059,8 @@ function expCSVP(){
   const r=p.map(x=>[x.nome,x.email,x.telefone,x.nascimento,x.genero,x.profissao,x.cidade,x.estado,(x.queixa||'').replace(/,/g,';').replace(/\n/g,' '),x.dataCadastro].map(z=>`"${z||''}"`).join(','));
   dl('\uFEFF'+[h.join(','),...r].join('\n'),'pacientes_montgomery_'+new Date().toISOString().slice(0,10)+'.csv','text/csv');toast('Exportado!',null,"clip");
 }
-function expCSVF(){
-  const ss=gD('sessoes');if(!ss.length){toast('Sem sessões','#EF6C00',"warn");return;}
-  const h=['Data','Paciente','Procedimento','Valor','Pagamento','Status'];
-  const r=ss.sort((a,b)=>new Date(b.data)-new Date(a.data)).map(s=>[fd(s.data),s.pacienteNome,s.procedimentos,s.valor.toFixed(2).replace('.',','),s.formaPgto,s.status].map(z=>`"${z||''}"`).join(','));
-  dl('\uFEFF'+[h.join(','),...r].join('\n'),'financeiro_montgomery_'+new Date().toISOString().slice(0,10)+'.csv','text/csv');toast('Exportado!',null,"cifrao");
-}
+// O botão "Financeiro (Excel)" desta tela chama `expCSVF`, que mudou de casa em
+// 03/08/2026: agora mora no quarteirão do FINANCEIRO, junto das outras exportações.
 function dl(c,n,t){const b=new Blob([c],{type:t});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=n;a.click();URL.revokeObjectURL(u);}
 async function impJSON(inp){
   const f=inp.files[0];if(!f)return;

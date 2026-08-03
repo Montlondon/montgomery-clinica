@@ -25,8 +25,11 @@ barato. Não pular.*
 1. ~~**Aliviar a porta** — os três vizinhos.~~ **FEITO em 03/08 (v9.4).** A porta caiu de
    1.225 KB para 964 KB; 172 KB nunca mais descem numa visita comum. O bloco inteiro está
    no `ROADMAP_ARQUIVO.md`.
-2. **Juntar o que está espalhado** — o Financeiro mora em **9 salas**. Antes de virar peça,
-   ele precisa virar **um lugar só**. Vale para cada módulo: reunir antes de cortar.
+2. ~~**Juntar o que está espalhado** — o Financeiro.~~ **FEITO em 03/08 (v9.5).** De nove
+   pontos para **três quarteirões** (pintura, desenho, eletricidade) mais quatro portas
+   marcadas. Nenhuma linha de código mudou — só de lugar, e isso foi provado. O mapa está
+   no `PLANTA_DO_PREDIO.md`; o bloco inteiro, no `ROADMAP_ARQUIVO.md`.
+   **Falta fazer o mesmo com os outros módulos** — Suplementos é o próximo natural.
 3. **Enxugar o repetido** — só depois de reunido dá para ver o que é cópia. Medir, nunca supor.
 4. **Dar encaixe às peças** — trocar os `onclick` por escuta no código e as funções globais por
    módulos com `import`/`export`. É o que permite levar o Financeiro para outro app.

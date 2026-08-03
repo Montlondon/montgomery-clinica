@@ -95,9 +95,9 @@ menos de 3% do prédio.
 | prescrição | 1216 |
 | ↳ a morada da recomendação | 1222 |
 | **diagnóstico integrado** | **1305** |
-| financeiro | 1643 |
-| ↳ aba clínica / aba pessoal | 1653 / 1729 |
-| modais de despesa e de venda | 1760 / 1784 |
+| **financeiro** (o quarteirão — ver abaixo) | **1667** |
+| ↳ aba clínica / aba pessoal | 1677 / 1753 |
+| modais de despesa e de venda | 1784 / 1808 |
 | suplementos | 1802 |
 | ↳ minerais (régua de doses) | 1847 |
 | ↳ ervas (posologia) | 1861 |
@@ -134,9 +134,10 @@ menos de 3% do prédio.
 | corrigir o nome em toda a plataforma | 3077 |
 | render pacientes / ver / selecionar | 3137 / 3161 / 3212 |
 | sessão | 3305 |
-| financeiro | 3366 |
-| ↳ clínica / pessoal | 3441 |
-| ↳ documento com marca (PDF/JPG) | 3806 |
+| **financeiro** (o quarteirão — ver abaixo) | **3386** |
+| ↳ clínica / pessoal | 3461 |
+| ↳ documento com marca (PDF/JPG) | 3826 |
+| ↳ as duas peças que voltaram para casa | 3880 |
 | suplementos (catálogo / estoque) | 3859 |
 | minerais — a régua de doses | 3974 |
 | a ponte: da régua para a recomendação | 4285 |
@@ -161,6 +162,46 @@ menos de 3% do prédio.
 | VCF (contatos) | 11862 |
 | deletar pacientes em massa | 12005 |
 | helpers / init | 12183 / 12189 |
+
+---
+
+## O quarteirão do FINANCEIRO (juntado em 03/08/2026, v9.5)
+
+Antes, o Financeiro morava espalhado por nove pontos do prédio. Agora ele tem **três
+quarteirões** — um por camada — e mais nada. É o passo 2 da semana de organização:
+*reunir antes de cortar.*
+
+| Camada | Onde | O que tem |
+|---|---|---|
+| **pintura** (CSS) | **444** | os cartões do resumo, a chave clínica/pessoal, as linhas de lançamento |
+| **desenho** (HTML) | **1667–1822** | a tela, as duas abas e os dois modais |
+| **eletricidade** (JS) | **3386–3918** | resumo, clínica/pessoal, despesas, vendas, documento com marca, as duas exportações |
+
+### As quatro portas de fora
+
+Estas **não** são o Financeiro — são as **entradas** dele. Porta tem que ficar na parede
+onde a pessoa entra, então elas ficam onde estão, cada uma com placa apontando para casa.
+
+| Porta | Linha | O que faz |
+|---|---|---|
+| menu lateral | 925 | `go('financeiro')` |
+| barra de baixo (celular) | 2162 | `go('financeiro')` |
+| Configurações — dois interruptores | 2004 / 2017 | mostrar a aba Pessoal; mostrar a dica |
+| Backup — botão "Financeiro (Excel)" | 2110 | chama `expCSVF`, que agora mora no quarteirão |
+
+### O que mudou de casa nesta arrumação
+
+| Peça | Morava | Mora agora |
+|---|---|---|
+| pintura `.seg-scope` / `.linha-fin` | 464, depois do Balanço ABC | junto do resto da pintura, 444 |
+| `.toggle-row` / `.switch` | dentro da pintura do Financeiro | placa própria de interruptores, 482 |
+| `expCSVF` (planilha Excel) | 12023, dentro do Backup | 3883 |
+| `registrarVendaSuplementos` | 10713, dentro da Recomendação | 3893 |
+
+**Nenhuma linha de código foi alterada** — só de lugar. A prova: as linhas do arquivo
+ordenadas em ordem alfabética são idênticas antes e depois, menos os comentários novos.
+
+---
 
 ### Os vizinhos — arquivos separados
 

@@ -9,6 +9,49 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — juntar o Financeiro (Clínica v9.5, 03/08/2026)
+
+Passo 2 da semana de organização, cumprido. Senha "Juntar o Financeiro".
+
+**A imagem.** O Financeiro era uma caixa de ferramentas com as chaves espalhadas pela casa:
+uma na gaveta da cozinha, duas no quarto, uma na garagem. Ninguém consegue levar essa caixa
+para outro lugar — porque ela não é uma caixa, é um espalhamento. Antes de cortar o repetido
+(passo 3) e antes de dar encaixe às peças (passo 4), ele precisava virar **um lugar só**.
+
+**Onde ele morava.** Nove pontos: duas manchas de pintura (CSS) separadas por outro assunto
+no meio; a tela e os dois modais (esses já vizinhos); três blocos de eletricidade; e mais duas
+funções perdidas longe — `expCSVF`, a planilha do Financeiro, morando dentro do Backup, e
+`registrarVendaSuplementos`, que cria a venda, morando dentro da Recomendação. Fora isso,
+quatro botões de entrada espalhados pelo prédio.
+
+**O que se fez.**
+- As duas manchas de pintura viraram **uma só**, na linha 444. No caminho apareceu um engano
+  antigo: `.toggle-row` e `.switch` estavam dentro da pintura do Financeiro, mas são de
+  Configurações — voltaram para a placa delas.
+- As duas funções perdidas vieram para o fim do quarteirão (linhas 3883 e 3893), cada uma
+  deixando no lugar antigo um **bilhete** dizendo para onde foi.
+- As quatro portas de fora (menu, barra de baixo, dois interruptores em Configurações, botão
+  no Backup) **ficaram onde estavam** — porta tem que estar na parede por onde se entra. Cada
+  uma ganhou placa apontando para casa. Isso foi decisão consciente, não sobra.
+
+**O resultado.** De nove pontos para **três quarteirões**, um por camada:
+pintura na 444, desenho em 1667–1822, eletricidade em 3386–3918.
+
+**A prova, já que a rede do passo 0 ainda não existe.** Antes de mexer, guardou-se a lista de
+todas as 12.435 linhas do `index.html` em ordem alfabética. Depois de mexer, gerou-se a mesma
+lista. As duas são **idênticas**, exceto pelos comentários novos: nenhuma linha de código foi
+alterada, acrescentada ou perdida — só mudou de lugar. Isso é aritmética, não confiança.
+Depois disso, a Clínica foi aberta no navegador: zero erros no console, `APP_VER` em v9.5,
+as dez funções do Financeiro respondendo, e as regras de CSS todas presentes na mesma conta.
+
+**A aula que sobrou.** *Provar sem rede é possível, mas caro e só serve para mudança de lugar.*
+Uma conferência automática (passo 0) valeria para qualquer mudança, não só para esta.
+
+**Fica pendente:** fazer o mesmo com os outros módulos. Suplementos é o próximo natural —
+o catálogo, os minerais, as ervas e a prateleira também moram em pedaços.
+
+---
+
 ## Concluído — os três vizinhos (Clínica v9.4, 03/08/2026)
 
 Passo 1 da semana de organização, cumprido. Três tabelas de referência desciam em **toda visita**,
