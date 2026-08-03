@@ -9,6 +9,49 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — a mala aberta na porta (Clínica v9.3, 03/08/2026)
+
+*Ele perguntou: "mede de onde vem todo este peso". A medida achou o culpado num tijolo só.*
+
+O `index.html` estava com 1.056 KB. Medindo por dentro: **81% era JavaScript**, e dentro disso
+havia um único bloco de **221 KB que não era código nosso** — a biblioteca `html2canvas-pro`,
+colada inteira em 11 linhas, que serve só para tirar "foto" da tela (a imagem/PDF da
+Recomendação, do Diagnóstico e do Financeiro).
+
+Ela descia em **toda visita**, mesmo quando ninguém ia tirar foto de nada. Um quinto do arquivo
+carregado à toa só para abrir a agenda.
+
+**A imagem:** era como sair de casa todo dia com a máquina fotográfica na mala, mesmo nos dias
+em que não se tira nenhuma foto.
+
+O que mudou:
+
+| Antes | Depois |
+|---|---|
+| 221 KB embutidos no `index.html` | arquivo próprio, `html2canvas-pro.js`, ao lado |
+| baixado em toda visita | só no primeiro clique que precisa dele |
+| `carregarHtml2Canvas()` só tentava CDN de fora | tenta **primeiro o nosso servidor**; o CDN vira rede de segurança |
+| — | uma vez carregado fica na memória: o segundo clique é instantâneo |
+
+Os quatro lugares que chamavam a biblioteca direto passam a pedi-la antes:
+`compartilharDespesas`, `capturarRxComoCanvas`, `capturarElementoCanvas` e `encaminharDiagPdf`.
+Se todas as fontes falharem, a tentativa é esquecida para que o clique seguinte tente de novo.
+
+**A exigência antiga foi respeitada.** A razão de ela ter sido embutida em primeiro lugar era
+não depender de CDN externo (a rede de alguém bloqueava esses domínios). Continua não
+dependendo — o arquivo vem do nosso próprio domínio.
+
+`index.html`: **1.056 KB → 841 KB**.
+
+Conferido no ar em https://montgomery-clinica.vercel.app — v9.3 no rodapé, a biblioteca não
+aparece na porta de entrada, e no primeiro clique ela chega de
+`montgomery-clinica.vercel.app/html2canvas-pro.js`, com a foto saindo igual a antes.
+
+**A lição, que vale para a próxima:** peso quase nunca está espalhado. Antes de emagrecer
+qualquer coisa, medir — as 121 salas do arquivo somavam menos que um tijolo só, de fora.
+
+---
+
 ## Concluído — varrer o acento das buscas de dentro (Clínica v9.2, 03/08/2026)
 
 *Senha "sem acento": "aos poucos vamos varrendo tudo".*

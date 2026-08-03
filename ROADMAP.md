@@ -16,6 +16,13 @@ O mapa de onde mora cada coisa dentro do `index.html` mora em
 - **Nunca o relógio decide** — senha aberta, MMObras.
 - **Sem acento** — as buscas de dentro já foram varridas (v9.2). Sobra a busca de paciente da
   Recomendação (`filtrarRxPac`), que ainda não enxerga os arquivados.
+- **Os três vizinhos** — `dados-clinicos.js` (245 KB), `acupuntura-data.js` (105 KB) e
+  `fitoterapia-data.js` (37 KB) descem em toda visita. São **387 KB de tabelas** que o
+  Diagnóstico só precisa quando se abre o corpo ou a receita. Mesmo truque da v9.3
+  (`carregarHtml2Canvas`), baixo risco, vale quase o dobro do que já se ganhou.
+  *Carregar as abas com preguiça, ideia dele em 03/08:* possível, mas rende só ~110 KB
+  (Financeiro, Configurações, Psicanálise, Suplementos) — o Diagnóstico puxa quase todo o
+  resto. Os três vizinhos vêm primeiro.
 - **Montgomery Code** — seguir montando as aulas da grade; matéria-prima acumulada abaixo.
 - **Ideias vivas** — Vitruviano como lugar único, as três portas de 01/08, Ortomolecular,
   terceira aba de Suplementos, o botão do que deu certo, as ideias da Maly.
