@@ -61,6 +61,15 @@ atendimento sentir diferença, o passo foi longe demais. E depois de cada passo:
 - **Montgomery Code** — seguir montando as aulas da grade; matéria-prima acumulada abaixo.
   A **Aula 1.8 (A peça que não solta)** foi acesa em 03/08 (OS v6.2) e é a base teórica do
   foco acima: escopo, a mesa única, e por que o LEGO ainda não tem encaixe.
+- **A roda que engole a lista** (ideia dele, 03/08) — juntar **Acupuntura (pontos)** dentro do
+  **Baguá**, acabando com as duas abas. O argumento é forte e é técnico: as duas já falam a
+  língua do **meridiano** (o Baguá guarda `{meridiano, síndrome}`; cada ponto pertence a um
+  meridiano), e o código já as mistura no mesmo balde para alimentar os candidatos (~4957).
+  A tela só não conta a verdade que os dados já contam. **Não fazer antes da etapa 4:** é obra,
+  não arrumação — muda por fora, e a rede não protege contra "ficou pior de usar".
+  *Já existe, e ele talvez não saiba:* clicar num ponto **já grava** na ficha do Diagnóstico e
+  volta ao reabrir. O que falta é a caixa fechada mostrar **quais** pontos, em vez de só contar
+  quantos — esse é um ajuste de minutos, e vale fazer antes de qualquer obra.
 - **Ideias vivas** — Vitruviano como lugar único, as três portas de 01/08, Ortomolecular,
   terceira aba de Suplementos, o botão do que deu certo, as ideias da Maly.
 - **Em planejamento / Pendências** — as duas listas antigas, mais abaixo, ainda valem.
