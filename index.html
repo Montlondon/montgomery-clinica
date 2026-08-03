@@ -260,6 +260,18 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .cab-meta{font-size:11.5px;color:var(--txt-l)}
 .cab-acoes{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
 @media(max-width:640px){.cab-acoes{margin-left:0;width:100%}}
+/* A DOBRA DA PESSOA — a aba Dados e a aba Histórico dentro do cabeçalho.
+   Não é cópia: são os mesmos campos, do mesmo paciente, na mesma tabela. A
+   ficha continua inteira lá; aqui ela é uma dobra, FECHADA por padrão, porque
+   no atendimento esses campos quase nunca são o assunto — mas quando são,
+   corrigir um telefone não pode custar sair da tela.
+   Abrir a dobra não grava nada: mostrar não é marcar. Só o botão grava. */
+.cab-dobra{margin-top:11px;padding-top:11px;border-top:1px dashed var(--brd)}
+.cab-dobra .fst{margin-top:0}
+.cab-dobra .fst:not(:first-child){margin-top:16px}
+.cab-dobra .fr{margin-bottom:0}
+.cab-dobra-pe{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:13px}
+.cab-dobra-nota{font-size:11.5px;color:var(--txt-l);line-height:1.55;flex:1 1 220px}
 /* A FOLHA LIMPA — a segunda faixa da tela única.
    Um campo sem rótulo. Escrever primeiro, classificar depois: enquanto ele
    escuta, a mão escreve solto como se escrevesse num caderno, e só quando ele
@@ -1404,6 +1416,57 @@ window.addEventListener('DOMContentLoaded',()=>{
       <div class="fg" style="flex:0 0 116px"><label>Horário</label><input type="time" id="diagHora" onchange="cabRender()"></div>
     </div>
     <div id="cabPessoa"></div>
+
+    <!-- A DOBRA: a aba Dados e a aba Histórico, engolidas pelo cabeçalho.
+         Nasce fechada. O NOME não se repete aqui de propósito: ele é o campo
+         de busca acima, e trocá-lo mexe na agenda, no histórico e no Google
+         (`renomearPaciente`) — isso continua sendo serviço da ficha. -->
+    <div class="cab-dobra" id="cabDobra" style="display:none">
+      <div class="fst">Dados Pessoais</div>
+      <div class="fr">
+        <div class="fg"><label>Email</label><input type="email" id="cdE" oninput="cabDobraMudou()"></div>
+        <div class="fg"><label>Nascimento</label><input type="date" id="cdNasc" oninput="cabDobraMudou()"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>Telefone / WhatsApp</label>
+          <div style="display:flex;gap:6px"><input type="tel" id="cdT" placeholder="(00) 00000-0000" style="flex:1" oninput="cabDobraMudou();cabDobraWA()"><a id="cdWA" href="#" target="_blank" class="btn btn-wa btn-sm" style="display:none"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 11.5a8.4 8.4 0 0 1-12.2 7.5L4 20l1.1-4.1a8.4 8.4 0 1 1 15.4-4.4Z"/><path d="M8.5 10.3c0 3.4 2.8 6.2 6.2 6.2"/></svg></span></a></div>
+        </div>
+        <div class="fg"><label>Gênero</label><select id="cdG" onchange="cabDobraMudou()"><option value="">-</option><option>Masculino</option><option>Feminino</option><option>Outro</option><option>Prefiro não dizer</option></select></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>Profissão</label><input type="text" id="cdPr" oninput="cabDobraMudou()"></div>
+        <div class="fg"><label>Estado Civil</label><select id="cdEC" onchange="cabDobraMudou()"><option value="">-</option><option>Solteiro(a)</option><option>Casado(a)</option><option>Divorciado(a)</option><option>Viúvo(a)</option><option>União Estável</option></select></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>Religião</label><input type="text" id="cdRl" oninput="cabDobraMudou()"></div>
+        <div class="fg"><label>Cidade</label><input type="text" id="cdCid" oninput="cabDobraMudou()"></div>
+      </div>
+      <div class="fr full"><div class="fg"><label>Endereço</label><input type="text" id="cdEnd" oninput="cabDobraMudou()"></div></div>
+      <div class="fr">
+        <div class="fg"><label>Estado</label><input type="text" id="cdEst" oninput="cabDobraMudou()"></div>
+        <div class="fg"><label>CEP</label><input type="text" id="cdCep" oninput="cabDobraMudou()"></div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>Emergência</label><input type="text" id="cdCE" oninput="cabDobraMudou()"></div>
+        <div class="fg"><label>Tel. Emergência</label><input type="tel" id="cdTE" oninput="cabDobraMudou()"></div>
+      </div>
+
+      <div class="fst">Histórico Médico</div>
+      <div class="fr full"><div class="fg"><label>Doenças</label><textarea id="cdDo" rows="2" oninput="cabDobraMudou()"></textarea></div></div>
+      <div class="fr full"><div class="fg"><label>Medicamentos</label><textarea id="cdMd" rows="2" oninput="cabDobraMudou()"></textarea></div></div>
+      <div class="fr"><div class="fg"><label>Alergias</label><textarea id="cdAl" rows="2" oninput="cabDobraMudou()"></textarea></div><div class="fg"><label>Cirurgias</label><textarea id="cdCi" rows="2" oninput="cabDobraMudou()"></textarea></div></div>
+      <div class="fr full"><div class="fg"><label>Histórico familiar</label><textarea id="cdHF" rows="2" oninput="cabDobraMudou()"></textarea></div></div>
+      <p style="font-size:11.5px;color:var(--txt-l);margin:6px 0 0">O que corre na família também se desenha nos bonecos, ali embaixo — lá a marca fica visível em quem a carrega.</p>
+      <div class="fr">
+        <div class="fg"><label>Gestante?</label><select id="cdGt" onchange="cabDobraMudou()"><option value="">N/A</option><option>Sim</option><option>Não</option></select></div>
+        <div class="fg"><label>Semanas</label><input type="text" id="cdSm" oninput="cabDobraMudou()"></div>
+      </div>
+
+      <div class="cab-dobra-pe">
+        <span class="cab-dobra-nota" id="cdNota">É a mesma ficha — o que se corrige aqui aparece lá.</span>
+        <button type="button" class="btn btn-pri btn-sm" id="cdBtnSalvar" onclick="cabDobraSalvar()" disabled><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M8 4v5h7V4M8 20v-6h8v6"/></svg></span> Guardar na ficha</button>
+      </div>
+    </div>
   </div>
 
   <!-- ===== FAIXA 2: A FOLHA LIMPA =====
@@ -2199,7 +2262,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v9.9 · 03/08';
+const APP_VER='v10.0 · 03/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -8561,6 +8624,9 @@ function selecionarDiagPac(id,nome){
   famCarregar();
   diagCarregarRascunho();
   rxNoDiagSync();
+  // Trocou de pessoa: se a dobra está aberta, ela passa a mostrar os dados de
+  // QUEM chegou agora — nunca os da pessoa anterior.
+  if(_cabDobraAberta)cabDobraPreencher();
 }
 
 /* ===== O CABEÇALHO — a pessoa nasce e a sessão se marca aqui =====
@@ -8647,10 +8713,91 @@ async function cabAbrirFicha(){
   marcarMenuLateral('pacientes');
 }
 
+/* ===== A DOBRA DA PESSOA — as abas Dados e Histórico, engolidas =====
+   Primeira das engolidas da senha "A tela que engole a ficha". Os mesmos
+   campos, o mesmo paciente, a mesma tabela — não existe cadastro paralelo.
+
+   Egress: para MOSTRAR não se lê nada do banco. Todos estes campos já vêm na
+   lista leve (`PAC_LIGHT_KEYS`), então abrir a dobra custa zero. A ficha
+   completa só desce na hora de GRAVAR (`fetchPacFull`) — porque o banco grava
+   `dados` por inteiro, e gravar o leve apagaria a foto e os exames.
+
+   Mostrar não é marcar: abrir a dobra não grava nada. Só o botão grava. */
+let _cabDobraAberta=false, _cabDobraSuja=false, _cabDobraSalvando=false;
+
+// id do campo aqui -> nome do campo na ficha
+const CAB_DOBRA={cdE:'email',cdT:'telefone',cdNasc:'nascimento',cdG:'genero',
+  cdRl:'religiao',cdPr:'profissao',cdEC:'estadoCivil',cdEnd:'endereco',cdCid:'cidade',
+  cdEst:'estado',cdCep:'cep',cdCE:'contatoEmerg',cdTE:'telEmerg',
+  cdDo:'doencas',cdMd:'medicamentos',cdAl:'alergias',cdCi:'cirurgias',
+  cdHF:'histFamiliar',cdGt:'gestante',cdSm:'semanas'};
+
+function cabDobraAlternar(){
+  _cabDobraAberta=!_cabDobraAberta;
+  if(_cabDobraAberta)cabDobraPreencher();
+  const el=document.getElementById('cabDobra');
+  if(el)el.style.display=_cabDobraAberta?'block':'none';
+  cabRender();
+}
+
+function cabDobraPreencher(){
+  const pac=_diagPacSel?(gD('pacientes').find(p=>String(p.id)===String(_diagPacSel.id))||{}):{};
+  Object.keys(CAB_DOBRA).forEach(id=>{
+    const e=document.getElementById(id);
+    if(e)e.value=pac[CAB_DOBRA[id]]||'';
+  });
+  _cabDobraSuja=false;
+  cabDobraPe();
+  cabDobraWA();
+}
+
+function cabDobraMudou(){_cabDobraSuja=true;cabDobraPe();}
+
+function cabDobraPe(){
+  const b=document.getElementById('cdBtnSalvar');
+  if(b)b.disabled=!_cabDobraSuja||_cabDobraSalvando;
+  const n=document.getElementById('cdNota');
+  if(n)n.textContent=_cabDobraSuja
+    ? 'Mudou aqui e ainda não foi guardado.'
+    : 'É a mesma ficha — o que se corrige aqui aparece lá.';
+}
+
+function cabDobraWA(){
+  const b=document.getElementById('cdWA');
+  if(!b)return;
+  const u=waUrl(v('cdT'));
+  if(u==='#'){b.style.display='none';return;}
+  b.href=u;b.style.display='inline-flex';
+}
+
+async function cabDobraSalvar(){
+  if(!_diagPacSel||_cabDobraSalvando)return;
+  _cabDobraSalvando=true;cabDobraPe();
+  try{
+    // A ficha inteira primeiro: a lista da tela é leve (sem foto nem exames),
+    // e o banco grava `dados` por inteiro. Gravar o leve seria apagar o pesado.
+    const pac=await fetchPacFull(_diagPacSel.id);
+    if(!pac){toast('Não consegui abrir a ficha para guardar','#c62828',"erro");return;}
+    Object.keys(CAB_DOBRA).forEach(id=>{pac[CAB_DOBRA[id]]=v(id);});
+    const dSave={...pac};delete dSave._full;
+    const ok=await dbGravar('pacientes',pac.id,dSave);
+    if(ok===false)return;
+    _cabDobraSuja=false;
+    renderP();atuDash();cabRender();
+    toast('Guardado na ficha.',null,"ok");
+  }finally{_cabDobraSalvando=false;cabDobraPe();}
+}
+
 function cabRender(){
   const el=document.getElementById('cabPessoa');
   if(!el)return;
-  if(!_diagPacSel){el.innerHTML='';return;}
+  // Sem ninguém escolhido não há pessoa para mostrar: a dobra fecha junto.
+  if(!_diagPacSel){
+    el.innerHTML='';
+    _cabDobraAberta=false;
+    const cd=document.getElementById('cabDobra');if(cd)cd.style.display='none';
+    return;
+  }
   const pac=gD('pacientes').find(p=>String(p.id)===String(_diagPacSel.id))||{};
   const sess=gD('sessoes').filter(s=>String(s.pacienteId)===String(_diagPacSel.id));
   const doDia=cabSessaoDoDia();
@@ -8669,6 +8816,7 @@ function cabRender(){
       </div>
       <div class="cab-acoes">
         ${linhaSessao}
+        <button type="button" class="btn btn-sec btn-sm" onclick="cabDobraAlternar()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"/><path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6"/></svg></span> ${_cabDobraAberta?'Fechar a pessoa':'A pessoa inteira'}</button>
         <button type="button" class="btn btn-sec btn-sm" onclick="cabAbrirFicha()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></span> Abrir a ficha</button>
       </div>
     </div>`;
