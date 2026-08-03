@@ -2144,7 +2144,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v9.0 · 02/08';
+const APP_VER='v9.1 · 03/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -9498,6 +9498,7 @@ function famMarcaEscrita(p,m){
 function famAnelProprio(id){
   const p=famPorId(id);
   if(!p)return;
+  if(!famCabeMaisAnel(p))return;
   const rot=(prompt('Que anel falta nessa pessoa?\n\nEscreva com as suas palavras — vira um anel novo, com cor própria.\nExemplo: "surdez de nascença", "acidente de moto".')||'').trim();
   if(!rot)return;
   // Os dois-pontos separam as partes do anel guardado: se ele escrever um, o
@@ -9510,9 +9511,21 @@ function famAnelProprio(id){
   _diagJaSalvo=false;
   famGuardarRascunho();famRender();
 }
+// O TETO DE NOVE. Cada anel a mais estreita a fatia de todos os outros: com
+// nove ainda se distingue um arco do outro a olho, na cabeça do boneco. Daí
+// para cima o vão come a cor e o anel deixa de contar o que veio contar.
+const FAM_MAX_ANEIS=9;
+function famCabeMaisAnel(p){
+  const n=(Array.isArray(p&&p.marcas)?p.marcas:[]).length;
+  if(n<FAM_MAX_ANEIS)return true;
+  toast(`Nove anéis é o limite desta pessoa. Tire um para pôr outro — acima de nove os arcos ficam finos demais para se distinguirem.`,'#EF6C00',"warn");
+  return false;
+}
 function famMarcar(id,k){
   const p=famPorId(id);
   if(!p)return;
+  const jaTem=(Array.isArray(p.marcas)?p.marcas:[]).indexOf(k)>=0;
+  if(!jaTem&&!famCabeMaisAnel(p))return;
   famGuardarPasso();
   const atual=Array.isArray(p.marcas)?p.marcas.slice():[];
   const i=atual.indexOf(k);
@@ -9789,9 +9802,13 @@ function famCrescer(t){
 // Uma fileira de botões de anel: o mesmo desenho para as marcas de herança e
 // para os 5 Elementos, mudando só a lista que entra.
 function famChipsAnel(p,lista){
+  // Com os nove ocupados, os que ficaram de fora chegam apagados: o teto se vê
+  // antes de tentar, em vez de aparecer só como recado depois do toque.
+  const cheio=(Array.isArray(p.marcas)?p.marcas:[]).length>=FAM_MAX_ANEIS;
   return lista.map(m=>{
     const on=(p.marcas||[]).indexOf(m.k)>=0;
-    return `<button type="button" class="folha-ch${on?' on':''}" onclick="famMarcar('${p.id}','${m.k}')" title="${escHtml(m.ex)}" style="${on?`border-color:${m.cor};color:${m.cor}`:''}">
+    const fora=cheio&&!on;
+    return `<button type="button" class="folha-ch${on?' on':''}" onclick="famMarcar('${p.id}','${m.k}')" title="${escHtml(fora?'Nove anéis é o limite — tire um para pôr este':m.ex)}" style="${on?`border-color:${m.cor};color:${m.cor}`:''}${fora?';opacity:.4':''}">
       <span style="display:inline-block;width:7px;height:7px;border-radius:50%;border:2px solid ${m.cor};margin-right:5px;vertical-align:middle"></span>${escHtml(m.rot)}</button>`;
   }).join('');
 }
