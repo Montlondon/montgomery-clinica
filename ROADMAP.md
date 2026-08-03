@@ -76,6 +76,17 @@ atendimento sentir diferença, o passo foi longe demais. E depois de cada passo:
   **Ordem certa: depois de "Fechar a corrente da sessão".** A roda é a *entrada*; a Sessão é a
   *saída*. Entrada bonita sem saída que registre não serve para o atendimento.
   **É obra, não arrumação** — muda por fora, e a rede não protege contra "ficou pior de usar".
+  **Ampliação dele, na mesma janela: camadas em vez de anéis fixos.** Interruptores no alto da
+  roda (mostrar meridianos · ABC · órgãos · vísceras · emoções), e o que está aceso aparece.
+  *É o mesmo pensamento do Vitruviano como lugar único, chegando pela segunda vez por outra
+  porta* — aba obriga a escolher um assunto; camada deixa montar a vista daquele caso.
+  **A distinção a respeitar, decidida antes de existir código:** *mostrar* e *marcar* são
+  gestos diferentes. O **interruptor** só decide o que **aparece** — não registra nada. O
+  **clique no item** (ponto, sistema, emoção) é que entra na Sessão. Se os dois se misturarem,
+  ligar uma camada para ver vai sujar a ficha sem ele ter decidido — mesma regra da peneira da
+  folha limpa: reconhecer não é decidir.
+- **Abas com títulos no Montgomery Code** (ideia dele, 03/08) — navegar por aba nomeada em vez
+  de rolar a biblioteca comprida. Para depois; não misturar com a roda.
 - **A corrente quebrada da sessão** (visto por ele na tela em 03/08 — PRIORIDADE, nasceu do
   atendimento). Ele não consegue registrar o que vai **usar** no encontro. São três elos:
   1. **Duas listas de pontos, e a que ele usa não marca.** A grade `pontosGrid` (render 7179)
