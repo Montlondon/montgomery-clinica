@@ -86,6 +86,55 @@ atendimento sentir diferença, o passo foi longe demais. E depois de cada passo:
   **clique no item** (ponto, sistema, emoção) é que entra na Sessão. Se os dois se misturarem,
   ligar uma camada para ver vai sujar a ficha sem ele ter decidido — mesma regra da peneira da
   folha limpa: reconhecer não é decidir.
+- **A tela que engole a ficha** (senha dele, 03/08) — o ponto 8 dos nove virando obra: a aba
+  Diagnóstico **é** a ficha. **A planta está desenhada em `00_Nucleo/TELA_UNICA.md`, no fim.**
+  Achado da planta: as "doze abas" que ele sempre citou **não são as do menu** — são as doze de
+  dentro da ficha do paciente, na barra `mTabs` (`index.html` 1023), e o número bate exato.
+  **Cinco já foram engolidas sem ninguém ter chamado assim:** Queixa virou a folha limpa,
+  Psicanálise virou os bonecos, Quiropraxia virou a coluna, Recomendações virou a Faixa 5,
+  Diagnósticos e Sessões viraram a régua. **Sobram sete.** A ordem escrita: (1) Dados e
+  Histórico viram dobra do cabeçalho, (2) Hábitos e Complementares descem para as faixas que já
+  existem, (3) Acupuntura **não** vira faixa — é a roda, e encontra a senha da roda aqui,
+  (4) Exames por último, e talvez fique onde está.
+  **Regras herdadas:** nada se apaga enquanto a camada não provar que substitui; uma de cada vez,
+  provada no atendimento; **mostrar não é marcar**; e a dobra tem que herdar o carregamento por
+  pedaço do `showTab` (2895), senão o egress paga a conta.
+  **É obra, não arrumação.** Senha da primeira: **"A pessoa inteira no cabeçalho"**.
+  **A reunião do pé do Diagnóstico (03/08, olhando a tela)** — inteira em `TELA_UNICA.md`.
+  Em resumo: **Recomendação e régua ficam como estão** (aprovadas por ele). **A Escala de
+  Orientação Emocional fica e vira clicável** — ele mandou tirar, viu a própria régua desenhando
+  a linha (*"12 → 1 subiu 11 degraus · 17 encontros sem a escala anotada"*) e voltou atrás: o
+  problema era o gesto, não a escala. Um `select` de 22 opções no meio da avaliação foi anotado
+  2 vezes em 19 encontros. O valor gravado (`diagEscalaEmo`) **não muda** — nem a régua nem as
+  avaliações antigas sentem. **A Memória da sessão desce para dentro do encontro numerado**, na
+  régua, junto da escala: o encontro vira o lugar do que ficou daquele dia.
+  **As duas últimas decisões saíram em 03/08:** (a) a Psicanálise ganha **as duas** anotações —
+  a caixa única no alto do bloco **e** a nota por conceito, esta **aberta por clique**, com os
+  marcados subindo para um bloco fora da lista rolante; (b) o *"último encontro"* na chegada do
+  paciente (`renderUltEncontro`, HTML 1009) **sai** — o que ficou da sessão passada mora num
+  lugar só, o encontro numerado no pé do Diagnóstico, e ele vai lá quando quiser.
+  **A planta está fechada. A ordem de construção: a escala clicável primeiro** (a menor, e a que
+  se prova no atendimento mais rápido). Senha: **"A escala que se toca"**.
+  *Acerto pequeno anotado de passagem: na régua o desenho fica espremido na metade direita e as
+  datas se sobrepõem no eixo.*
+- **A aba do microfone** (ideia dele, 03/08 — **futura**, só registrada). Gravar o áudio da
+  sessão, e **a própria pessoa dizendo que autoriza**, no começo da gravação. Ele já tem o
+  primeiro áudio de hoje, com autorização da paciente.
+  **A parte bonita da ideia é justamente a autorização gravada:** o consentimento deixa de ser
+  papel assinado e vira a voz dela, com data, dentro do próprio arquivo que ela autorizou. Isso
+  é mais forte do que qualquer caixinha marcada, e é barato — trinta segundos de voz pesam pouco.
+  **Três coisas honestas, para a ideia não nascer torta:**
+  1. **Peso.** Uma sessão de uma hora dá dezenas de MB. A cota do Supabase é uma só para a
+     Clínica e o MMObras, e o que estoura é *egress*. Áudio de sessão **não pode** morar lá do
+     mesmo jeito que uma foto de exame — ou se guarda fora, ou se guarda só o texto.
+  2. **Virar texto custa e sai de casa.** Não existe transcrição boa rodando dentro do navegador
+     dele: o áudio teria que ser enviado a um serviço (Whisper e semelhantes), o que significa
+     **conteúdo de sessão psicanalítica saindo do computador**. Isso é decisão dele, não técnica,
+     e precisa estar clara antes de qualquer linha de código.
+  3. **Áudio de sessão é prontuário**, e dado de saúde do tipo mais sensível que existe. Guarda,
+     prazo e quem pode ouvir têm que ser decididos junto com o resto — não depois.
+  **Caminho barato que dá para pensar primeiro:** guardar só a **autorização falada** (curta) e a
+  **transcrição/resumo** do que importa, e não o áudio inteiro. Conversar antes de construir.
 - **Abas com títulos no Montgomery Code** (ideia dele, 03/08) — navegar por aba nomeada em vez
   de rolar a biblioteca comprida. Para depois; não misturar com a roda.
 - **Ideias vivas** — Vitruviano como lugar único, as três portas de 01/08, Ortomolecular,

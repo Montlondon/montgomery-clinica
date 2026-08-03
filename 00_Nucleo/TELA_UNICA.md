@@ -553,3 +553,163 @@ psicanálise) e não saem.
 Diagnóstico já grava datado. Um lugar só significa **menos dado lido por paciente** — e o que estoura
 a cota do Supabase é *egress*, não tamanho de tela. O segundo ganho não se mede em KB: **um lugar
 para consertar em vez de dois.**
+
+---
+
+## A planta da senha "A tela que engole a ficha" (03/08/2026)
+
+*Escrita antes de qualquer código, a pedido dele. É o ponto 8 dos nove — "as doze abas poderiam nem
+existir" — deixando de ser desejo e virando planta com linhas exatas.*
+
+### O achado: as "doze abas" não são as do menu
+
+Ele sempre disse **doze**, e o número está certo — mas não são as páginas da lateral. São as **abas
+de dentro da ficha do paciente**, todas na mesma barra `mTabs` (`index.html` 1023), e são
+**exatamente doze**:
+
+| # | Aba | `id` | Botão | Painel |
+|---|---|---|---|---|
+| 1 | Dados | `tp` | 1024 | 1036 |
+| 2 | Queixa | `tq` | 1025 | 1054 |
+| 3 | Histórico | `th` | 1026 | 1062 |
+| 4 | Hábitos | `thb` | 1027 | 1071 |
+| 5 | Acupuntura | `ta` | 1028 | 1080 |
+| 6 | Quiropraxia | `tqr` | 1029 | 1089 |
+| 7 | Psicanálise | `tps` | 1030 | 1099 |
+| 8 | Complementares | `tc` | 1031 | 1109 |
+| 9 | Exames | `tex` | 1032 | 1124 |
+| 10 | Recomendações | `trx` | 1033 | 1131 |
+| 11 | Diagnósticos | `tdg` | 1034 | 1137 |
+| 12 | Sessões | `tss` | 1035 | 1146 |
+
+O interruptor é `showTab` (2895), que além de trocar o painel **acende conteúdo sob demanda** em
+cinco delas (`tc`, `trx`, `tdg`, `tss` e a última leitura de `ta`/`tqr`/`tps`). Isso é bom: quer
+dizer que a ficha já sabe carregar por pedaço, e engolir não obriga a ler tudo de uma vez.
+
+### O que já foi engolido, sem ninguém ter chamado assim
+
+Cinco das doze **já têm morada no Diagnóstico** — a obra andou por outro nome:
+
+| Aba da ficha | Onde já vive no Diagnóstico |
+|---|---|
+| Queixa (`tq`) | Faixa 2, a folha limpa (HTML 1391) — escrever solto, classificar depois |
+| Psicanálise (`tps`) | Faixa 3, os bonecos (HTML 1404) |
+| Quiropraxia (`tqr`) | Faixa 4, o corpo — a coluna C1–Cóccix (HTML 1433) |
+| Recomendações (`trx`) | Faixa 5, a recomendação (HTML 1661) |
+| Diagnósticos + Sessões (`tdg`, `tss`) | A régua de encontros (HTML 1676) |
+
+**Sobram sete:** Dados, Histórico, Hábitos, Acupuntura, Complementares, Exames — e o pedaço de
+Dados que o cabeçalho ainda não cobre.
+
+### As três engolidas que faltam, em ordem de dependência
+
+1. **A pessoa inteira no cabeçalho.** Hoje a Faixa 1 (HTML 1366) tem só nome, data e horário, e
+   quem quer o resto sai da tela pelo botão *Abrir a ficha* (`cabAbrirFicha`, 8465). A engolida é
+   os **Dados** e o **Histórico** virarem uma dobra do próprio cabeçalho — fechada por padrão,
+   porque no atendimento eles quase nunca são o assunto, mas ali, sem trocar de página.
+2. **Hábitos e Complementares descem para as faixas que já existem.** Hábitos é matéria da folha
+   e da conduta; Complementares (`tc`, que já carrega minerais e ervas por paciente) é matéria da
+   Faixa 5, onde a Recomendação já mora. Nenhuma tela nova.
+3. **Acupuntura é a roda, não uma faixa.** A aba `ta` não deve virar faixa: ela é o assunto de
+   *"A roda que engole as listas"* (ROADMAP), que já tem planta própria em anéis e camadas. As
+   duas senhas se encontram aqui — e a ordem é a que já está escrita lá: **primeiro fechar a
+   corrente da sessão**, depois a roda.
+4. **Exames fica por último**, e talvez fique onde está: é a única que lida com arquivo e imagem,
+   e não é gesto de consulta, é gesto de arquivo.
+
+### As regras que esta obra herda, e não pode furar
+
+- **Tudo que existe permanece.** A ficha não morre; ela deixa de ser o único caminho. A aba só se
+  apaga quando ele disser que não sente falta — mesma regra da coluna e das camadas do corpo.
+- **Uma engolida de cada vez, provada no atendimento** antes da seguinte.
+- **Mostrar não é marcar.** Uma dobra que se abre para consultar não pode gravar nada — a mesma
+  linha decidida na roda e na peneira da folha limpa.
+- **Egress antes de estética.** Engolir não pode significar ler a ficha inteira toda vez que ele
+  abre o Diagnóstico. O `showTab` já carrega por pedaço; a dobra tem que herdar isso.
+- **É obra, não arrumação** — muda por fora, e a rede (`node 01_Codigo/conferencia/conferir.mjs`)
+  não protege contra "ficou pior de usar".
+
+**Senha da primeira engolida: "A pessoa inteira no cabeçalho".**
+
+---
+
+## A reunião do pé do Diagnóstico (03/08/2026) — decidido por ele, olhando a tela
+
+*Veio da senha "A tela que engole a ficha", passando bloco a bloco pelo fim da avaliação.
+Nada disto foi construído ainda: é planta.*
+
+### O que ele aprovou como está, e não se toca
+
+- **A recomendação** (Faixa 5, HTML 1661) — "esta parte ok".
+- **A régua de encontros** (HTML 1676) — "esta parte ok". *Acerto pequeno anotado para depois:
+  o desenho fica espremido na metade direita e as datas se sobrepõem no eixo.*
+
+### A Escala de Orientação Emocional — fica, e vira clicável
+
+**Primeiro ele mandou retirar; depois de ver a própria régua, decidiu manter.** O motivo mudou
+tudo: a linha da escala **já está desenhada** na régua — os degraus ligados e o rodapé contando
+*"12 → 1 subiu 11 degraus · 17 encontros sem a escala anotada"*.
+
+**O problema nunca foi a escala — era o gesto.** Em 19 encontros ela foi anotada 2 vezes. Um
+`<select>` de 22 opções (HTML 1608), no meio da avaliação, pede que ele pare, abra e leia uma
+lista comprida bem na hora em que está com a pessoa na frente.
+
+**A decisão dele: o bloco fica, e passa a ser clicável.** Os 22 níveis à vista, um toque marca —
+sem abrir lista. As duas espirais (ascendente 1–7, descendente 8–22) já existem no `select` e
+dão a leitura de cor e de posição sozinhas. **O que se grava não muda:** continua sendo
+`diagEscalaEmo`, o mesmo valor de sempre, e por isso nem a régua nem as avaliações antigas
+sentem. É obra de gesto, não de dado.
+
+### A Memória da sessão — vai para dentro do encontro numerado
+
+Dito por ele: *"Memória da sessão, vamos ter apenas as sessões numeradas."* Os três campos
+(`diagSessaoFeito`, `diagSessaoReacao`, `diagSessaoProx`, HTML 1644–1646) deixam de ser bloco
+solto no pé da avaliação e passam a viver **dentro do encontro numerado**, na régua — o mesmo
+lugar onde a escala vai morar. **O encontro numerado vira o lugar do que ficou daquele dia.**
+
+**Ponta solta a confirmar com ele:** hoje esses três campos alimentam o *"último encontro"* que
+aparece na chegada do paciente (HTML 1009, `renderUltEncontro`) — aquilo que ele pediu para ver
+**antes** de atender. Se continua, passa a ler da sessão numerada e nada muda para ele.
+
+### A caixa de anotação da Psicanálise — DECIDIDO por ele em 03/08
+
+Ele pediu "uma caixa para anotação" no bloco Psicanálise (HTML 1595). A casa já sabe fazer de
+duas maneiras, e nenhuma precisa ser inventada:
+
+- **caixa única do bloco** — o padrão `quiroObs` (7931): um texto só, gravado com a avaliação;
+- **anotação por conceito marcado** — o padrão `elementosObs` (7825): a caixa nasce quando o item
+  é marcado e fica presa a ele. Hoje `togglePsicanalise` (7653) guarda `{categoria, nome}`;
+  ganharia uma terceira chave, e o PDF (8101), que imprime só os nomes, imprimiria a nota junto.
+
+**Recomendação do Claude:** a segunda, e por motivo clínico — "Recalcamento" sozinho não diz nada
+seis meses depois; *"aparece quando ela fala do pai, sempre muda de assunto"* diz. **Com um
+cuidado:** a lista rola dentro de 400px e tem 59 itens em 11 categorias; anotação dentro da lista
+some. O certo é a lista continuar só de marcar, e os marcados subirem para um bloco *"O que foi
+identificado nesta sessão"*, cada um com sua linha.
+
+**A decisão dele, esclarecida: as duas, e a segunda também clicável.**
+
+1. **A caixa no alto do bloco** — uma só, antes da lista de conceitos. É o lugar do que ele pensou
+   da sessão como um todo, e ele disse que *"é suficiente"* como base.
+2. **A anotação por conceito, aberta por clique.** Não nasce aberta: o conceito marcado ganha um
+   toque que abre a linha de anotação. **É a mesma regra da escala clicável** — o gesto é um
+   toque, e nada pede atenção antes de ser chamado. Sem isso, 59 conceitos com caixa aberta
+   viram um paredão.
+
+**Fica valendo o cuidado do paredão:** a lista rolante continua **só de marcar**; os conceitos
+marcados sobem para um bloco *"O que foi identificado nesta sessão"*, fora da rolagem, e é lá
+que o clique abre a anotação de cada um. `togglePsicanalise` (7653) ganha a terceira chave, e o
+PDF (8101) passa a imprimir a nota embaixo do nome.
+
+### O último encontro na chegada — DECIDIDO: sai
+
+Dito por ele: *"quero apenas que fique registrado sessões, dentro de Diagnóstico no final da
+página depois de recomendações; se eu precisar, vou até lá e vejo o histórico do que eu fiz na
+sessão anterior."*
+
+**O aviso automático na chegada do paciente (HTML 1009, `renderUltEncontro`) sai.** O que ficou da
+sessão passada mora **num lugar só** — o encontro numerado, no pé do Diagnóstico, depois da
+Recomendação, onde a régua já está. Ele vai lá quando quiser; a tela não empurra.
+
+*É a mesma regra que vem se repetindo em toda esta reunião: **a ferramenta oferece, não decide** —
+e agora também **não interrompe**.*
