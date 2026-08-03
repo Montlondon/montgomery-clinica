@@ -1934,7 +1934,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     <p style="color:var(--cinza);font-size:0.9rem;margin-bottom:var(--f3)">Toda casa se levanta do alicerce ao telhado. O código é igual. A gente sobe uma camada por vez &mdash; e cada uma só se apoia na de baixo, já entendida.</p>
     <p style="color:var(--dourado);font-size:0.82rem;margin:calc(-1 * var(--f2)) 0 var(--f3)">Clique na camada para ir direto até ela.</p>
     <div class="cards">
-      <div class="card click card-camada" onclick="irCamada(1)"><h3><span class="semaforo s-verde"></span>1 &middot; A Web</h3><div class="sub">Fundação</div><p style="font-size:0.85rem;color:var(--texto)">HTML (o osso), CSS (a pele), JavaScript (o músculo). Como o navegador lê os três e monta a página.</p><p style="font-size:0.78rem;color:var(--verde);margin-top:8px">Acesa &mdash; a aula vive na Escola.</p></div>
+      <div class="card click card-camada" onclick="irCamada(1)"><h3><span class="semaforo s-verde"></span>1 &middot; A Web</h3><div class="sub">Fundação</div><p style="font-size:0.85rem;color:var(--texto)">HTML (o osso), CSS (a pele), JavaScript (o músculo). Como o navegador lê os três e monta a página &mdash; e como se acha uma coisa só dentro de um arquivo enorme.</p><p style="font-size:0.78rem;color:var(--verde);margin-top:8px">Acesa &mdash; a 1.7 aqui; as duas primeiras na Escola.</p></div>
       <div class="card click card-camada" onclick="irCamada(2)"><h3><span class="semaforo s-verde"></span>2 &middot; Git &amp; GitHub</h3><div class="sub">A ferramenta do artesão</div><p style="font-size:0.85rem;color:var(--texto)">Versionar, commit, push. O repositório como a memória do código. Você já usa &mdash; agora vai entender por dentro.</p><p style="font-size:0.78rem;color:var(--verde);margin-top:8px">Onde estamos.</p></div>
       <div class="card click card-camada" onclick="irCamada(3)"><h3><span class="semaforo s-neutro"></span>3 &middot; Servidor &amp; nuvem</h3><div class="sub">A cozinha</div><p style="font-size:0.85rem;color:var(--texto)">Frente x fundos, o que é uma API, por que a lógica sensível fica no servidor. A cozinha que a Escola já apresentou.</p></div>
       <div class="card click card-camada" onclick="irCamada(4)"><h3><span class="semaforo s-neutro"></span>4 &middot; Banco de dados</h3><div class="sub">A gaveta</div><p style="font-size:0.85rem;color:var(--texto)">Tabelas, linhas, colunas e o RLS (a regra que protege cada dado por usuário). Ensinado no seu Supabase real.</p></div>
@@ -1944,6 +1944,85 @@ tr:hover td{background:rgba(201,168,76,0.05)}
     </div>
     <div id="camadaAviso" style="display:none;border:1px solid rgba(201,168,76,0.4);border-radius:11px;background:rgba(201,168,76,0.06);padding:var(--f2) var(--f3);margin-top:var(--f3);font-size:0.88rem;color:var(--texto)"></div>
     <p style="font-family:'Lora',serif;font-style:italic;font-size:1.1rem;color:var(--azul);text-align:center;margin:var(--f3) 0 0">Cada resposta abre uma porta &mdash; nunca a tranca.</p>
+  </div>
+
+  <!-- CAMADA 1 · A WEB -->
+  <div class="bloco" id="camada-1" style="border-color:rgba(74,124,89,0.4)">
+    <h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="1.5"/><path d="M3 9h18M8 9v12M12 13h6M12 17h4"/></svg>Camada 1 &middot; A Web <span style="font-size:0.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--verde);margin-left:8px">Acesa</span></h2>
+    <p style="color:var(--cinza);font-size:0.9rem;margin-bottom:var(--f3)">As duas primeiras aulas desta camada &mdash; <b>o motor próprio</b> e <b>os três materiais da web</b> &mdash; vivem na <a onclick="go('escola')" style="color:var(--azul);cursor:pointer">Escola</a>, porque nasceram lá. Esta aqui é a sétima, e ela só fazia sentido depois que os seus arquivos ficassem grandes de verdade. Ficaram.</p>
+
+    <h3 style="color:var(--azul);font-size:1rem;margin:var(--f3) 0 var(--f2)" id="aula-1-7">Aula 1.7 &middot; Entrar pela porta certa</h3>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">Esta aula nasceu de uma pergunta sua, em 02/08/2026: <em>"sempre que mexermos na Clínica temos que percorrer o HTML integral? Ou dá pra mexer só numa parte, por exemplo o Diagnóstico?"</em> A resposta curta é <b>não</b> &mdash; e a resposta longa é a aula.</p>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">1 &middot; A imagem</h4>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)">Você não reforma uma casa demolindo. Você <b>acha a parede</b>, <b>olha a parede</b> e <b>troca o azulejo</b>. Três movimentos, nessa ordem, sempre.</p>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">Um arquivo grande é um prédio. E um prédio se atravessa de duas maneiras: subindo andar por andar até achar a sala &mdash; ou <b>lendo a placa da porta</b>. As duas chegam ao mesmo lugar. Só uma delas gasta a corrida inteira no elevador.</p>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">2 &middot; O conceito &mdash; três ferramentas, três movimentos</h4>
+    <div class="cards" style="margin-bottom:var(--f2)">
+      <div class="card"><h3>1 &middot; Bater na parede</h3><div class="sub"><code style="font-family:'Courier New',monospace;color:var(--dourado)">Grep</code> &mdash; procurar</div><p style="font-size:0.85rem;color:var(--texto)">Procura uma palavra e devolve <b>só o número da linha</b>. Não abre nada. É o mais barato que existe &mdash; custa quase zero. É bater na parede para ouvir onde passa o cano.</p></div>
+      <div class="card"><h3>2 &middot; Abrir a janela</h3><div class="sub"><code style="font-family:'Courier New',monospace;color:var(--dourado)">Read</code> com âncora &mdash; ler</div><p style="font-size:0.85rem;color:var(--texto)">Ler aceita duas instruções que quase ninguém usa: <b>de onde começar</b> e <b>quantas linhas</b>. Em vez de abrir 12.200 linhas, abre 30. É a janela, não a parede toda.</p></div>
+      <div class="card"><h3>3 &middot; Trocar o azulejo</h3><div class="sub"><code style="font-family:'Courier New',monospace;color:var(--dourado)">Edit</code> &mdash; substituir</div><p style="font-size:0.85rem;color:var(--texto)">Não reescreve o arquivo: procura <b>um trecho exato</b> e troca por outro. Se o trecho não existir, ou aparecer duas vezes, ele <b>recusa</b>. Essa recusa é irmã do conflito da Aula 2.4 &mdash; é a ferramenta se negando a adivinhar.</p></div>
+    </div>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">Repare que os três movimentos são <b>cada vez mais caros e cada vez mais estreitos</b>. Procurar é grátis e cego. Ler custa e enxerga um pedaço. Trocar custa pouco mas exige mira perfeita. Quem inverte a ordem &mdash; abre tudo primeiro para depois procurar &mdash; paga o prédio inteiro para achar uma sala.</p>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">3 &middot; O código real &mdash; o seu prédio, medido agora</h4>
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)">A Clínica e o OS são <b>dois prédios separados</b>, em terrenos diferentes. Um não pesa dentro do outro:</p>
+    <div style="background:var(--bege);border:1px solid rgba(27,58,92,0.12);border-radius:11px;padding:var(--f3);font-family:'Courier New',monospace;font-size:0.82rem;line-height:1.9;overflow-x:auto;margin-bottom:var(--f2)">
+      <div style="color:var(--azul)">index.html &nbsp;&mdash;&nbsp; a Clínica<span style="color:var(--cinza);float:right">12.200 linhas &middot; 1,08 MB</span></div>
+      <div style="color:var(--azul)">os/index.html &nbsp;&mdash;&nbsp; o Montgomery OS<span style="color:var(--cinza);float:right">6.329 linhas &middot; 604 KB</span></div>
+      <div style="color:var(--azul)">dados-clinicos.js<span style="color:var(--cinza);float:right">251 KB</span></div>
+      <div style="color:var(--azul)">acupuntura-data.js<span style="color:var(--cinza);float:right">107 KB</span></div>
+      <div style="color:var(--azul)">fitoterapia-data.js<span style="color:var(--cinza);float:right">37 KB</span></div>
+    </div>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">Os três <code style="font-family:'Courier New',monospace">.js</code> do fim são <b>vizinhos, não moradores</b>: a Clínica os chama de fora. Se o assunto for um ponto de acupuntura, o <code style="font-family:'Courier New',monospace">index.html</code> nem precisa ser aberto.</p>
+
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)">E dentro do prédio da Clínica, o Diagnóstico inteiro &mdash; o coração dela, as cinco faixas &mdash; cabe em <b>338 linhas</b>, da 1305 à 1642. São <b>2,8%</b> do arquivo:</p>
+    <div style="background:var(--bege);border:1px solid rgba(27,58,92,0.12);border-radius:11px;padding:var(--f3);font-family:'Courier New',monospace;font-size:0.82rem;line-height:1.9;overflow-x:auto;margin-bottom:var(--f2)">
+      <div style="color:var(--cinza)">1305 &nbsp; &lt;!-- ===== DIAGNÓSTICO INTEGRADO ===== --&gt;</div>
+      <div style="color:var(--azul)">1314 &nbsp; FAIXA 1 &mdash; o cabeçalho, quem chegou</div>
+      <div style="color:var(--azul)">1339 &nbsp; FAIXA 2 &mdash; a folha limpa</div>
+      <div style="color:var(--azul)">1352 &nbsp; FAIXA 3 &mdash; os bonecos</div>
+      <div style="color:var(--azul)">1381 &nbsp; FAIXA 4 &mdash; o corpo</div>
+      <div style="color:var(--azul)">1609 &nbsp; FAIXA 5 &mdash; a recomendação</div>
+      <div style="color:var(--azul)">1624 &nbsp; a régua de encontros</div>
+      <div style="color:var(--cinza)">1643 &nbsp; &lt;!-- ===== FINANCEIRO ===== --&gt;</div>
+    </div>
+
+    <div style="border:1px solid rgba(74,124,89,0.4);border-radius:11px;background:rgba(74,124,89,0.06);padding:var(--f3);margin-bottom:var(--f3)">
+      <p style="font-size:0.9rem;margin:0 0 10px"><b style="color:var(--verde);">Aqui a Aula 1.2 volta e faz sentido de outro jeito.</b> Osso, pele e músculo não estão misturados: eles moram em <b>andares diferentes</b> do arquivo.</p>
+      <div style="font-family:'Courier New',monospace;font-size:0.82rem;line-height:1.9">
+        <div style="color:var(--azul)">CSS &mdash; a pele<span style="color:var(--cinza);float:right">linhas 21 a 591</span></div>
+        <div style="color:var(--azul)">HTML &mdash; o osso<span style="color:var(--cinza);float:right">linhas 595 a 2176</span></div>
+        <div style="color:var(--azul)">JavaScript &mdash; o músculo<span style="color:var(--cinza);float:right">linhas 2210 a 12200</span></div>
+      </div>
+      <p style="font-size:0.9rem;margin:10px 0 0">Por isso mexer numa faixa costuma tocar <b>dois ou três pontos distantes</b>. Os bonecos, por exemplo: a pele na linha 256, o osso na 1352, o músculo na 8587. Ainda assim são três pontos &mdash; não 12.200 linhas.</p>
+    </div>
+
+    <p style="font-size:0.9rem;margin-bottom:var(--f2)"><b>E as placas nas portas.</b> O seu arquivo tem <b>118 comentários</b> escritos assim:</p>
+    <p style="font-family:'Courier New',monospace;color:var(--azul);font-size:0.86rem;margin:0 0 var(--f2)">/* ===== A IDADE DAS COISAS ===== */</p>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">Cada um deles é uma placa. Foram escritos para <b>você</b> se achar depois &mdash; e acabaram servindo de mapa para a máquina também. É a mesma lição do comentário da Aula 2.6: <b>o número envelhece, o porquê não</b>. A linha 9910 pode virar 9950 na próxima entrega; a frase <em>A IDADE DAS COISAS</em> continua a mesma.</p>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">4 &middot; O passo seu</h4>
+    <div style="border:1px solid rgba(201,168,76,0.4);border-radius:11px;background:rgba(201,168,76,0.06);padding:var(--f3);margin-bottom:var(--f3)">
+      <p style="font-size:0.9rem;margin:0 0 10px">Um comando que <b>só lê</b>. Ele conta quantas placas existem no seu prédio:</p>
+      <p style="font-family:'Courier New',monospace;color:var(--azul);font-size:0.86rem;margin:0 0 10px">grep -c "=====" index.html</p>
+      <p style="font-size:0.9rem;margin:0 0 10px">Depois peça para ele <b>mostrar</b> as placas, com o número de cada porta:</p>
+      <p style="font-family:'Courier New',monospace;color:var(--azul);font-size:0.86rem;margin:0 0 10px">grep -n "=====" index.html</p>
+      <p style="font-size:0.9rem;margin:0">O <code style="font-family:'Courier New',monospace">-n</code> é <em>number</em>: pede o número da linha junto. Você vai ver o prédio inteiro descrito em uma tela &mdash; sem ter aberto o prédio. <b>Isso é o primeiro movimento acontecendo na sua mão.</b></p>
+    </div>
+    <p style="font-size:0.82rem;color:var(--cinza);margin-bottom:var(--f3)">Rode na pasta do repositório: <code style="font-family:'Courier New',monospace">C:\Montgomery\Clinica\Backup\Files_Claude_repo</code></p>
+
+    <h4 style="color:var(--dourado);font-size:0.9rem;margin:0 0 8px">5 &middot; A prova</h4>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">No caderno, com as suas palavras: <b>por que procurar é mais barato do que ler</b> &mdash; e qual foi a placa que mais te surpreendeu quando o prédio inteiro apareceu na tela. Enquanto isso não estiver escrito, a aula fica aberta.</p>
+
+    <div style="border:1px solid rgba(201,168,76,0.4);border-radius:11px;background:rgba(201,168,76,0.06);padding:var(--f3);margin-bottom:var(--f3)">
+      <p style="font-size:0.9rem;margin:0"><b style="color:var(--dourado)">O que isto muda no seu dia.</b> Você não precisa decorar número de linha nenhum &mdash; basta <b>nomear a porta</b>. Compare os dois pedidos: <em>"arruma a Clínica"</em> obriga a caçar o prédio inteiro; <em>"na idade das coisas, o til aparece até quando a data é completa"</em> é um pulo. É o mesmo enunciado da Aula 7.5, dito por outro lado: <b>agente caro costuma ser sintoma de pedido vago</b>. O preço mora no tamanho do que se abre, nunca no tempo de pensar.</p>
+    </div>
+    <p style="font-size:0.9rem;margin-bottom:var(--f3)">A planta completa do prédio &mdash; as 118 portas com a linha de cada uma &mdash; mora no repositório, em <code style="font-family:'Courier New',monospace;color:var(--dourado)">00_Nucleo/PLANTA_DO_PREDIO.md</code>.</p>
+
+    <p style="font-family:'Lora',serif;font-style:italic;font-size:1.1rem;color:var(--azul);text-align:center;margin:var(--f2) 0">Arquivo grande não se lê &mdash; se atravessa pela porta certa.</p>
+    <p style="text-align:center;margin-top:var(--f2)"><a onclick="document.getElementById('trilha').scrollIntoView({behavior:'smooth',block:'start'})" style="color:var(--azul);cursor:pointer;font-size:0.82rem">&uarr; voltar ao mapa das camadas</a></p>
   </div>
 
   <!-- CAMADA 2 · GIT & GITHUB -->
@@ -2357,7 +2436,7 @@ tr:hover td{background:rgba(201,168,76,0.05)}
    ============================================================ */
 
 // ===== VERSÃO — fonte única (atualize só aqui a cada release) =====
-const APP_VERSION='v5.9';
+const APP_VERSION='v6.0';
 const APP_VERSION_NOTA='a aula 2.6 — o peso invisivel — montada pelos cinco passos: a maleta do atendimento fora, onde a maca nao viaja e nem por isso deixa de existir. O .gitignore como lista do que nao viaja (e que nao apaga nada), os tres pesos que nao sao o mesmo (o do historico, o da pagina, o do agente) e a regra dura no meio: o Git nao esquece, entao a lista se escreve antes. O codigo real e a lista dele medida nesta janela — os 291 MB do Ronda, os 7,1 MB dos backups, o comentario que envelheceu no numero mas nao na razao — mais a logomarca que viajava seis vezes e virou 40 KB chamados pelo nome. O passo seu pesa o livro inteiro e depois procura node_modules na lista para nao achar: esse silencio e a prova. Quatro palavras novas no glossario (ignore, dependency, asset, bloat)';
 const APP_VERSION_NOTA_V58='a aula 2.5 — trabalhar com o tronco sujo — montada pelos cinco passos: a bancada cheia no fim do dia nao e desleixo, e trabalho vivo, e o perigo nao e um comando dificil, e o mais comodo de todos (git add -A). Modificado e solto, o git status que so olha, e a prova viva do commit da aula anterior, feito com dois arquivos nomeados e a bancada do tronco lida antes do merge. Mais quatro palavras novas no glossario (dirty, clean, untracked, stage) e a nota que faltava: o IPA daqui e britanico, o sotaque que ele trouxe de Londres';
 const APP_VERSION_NOTA_V57='a primeira aula montada de verdade pelo metodo dos cinco passos: 2.4 — conflito nao e erro, e sim o Git se recusando a adivinhar. A imagem das duas maos escrevendo na mesma linha do prontuario, as tres marcas cruas traduzidas uma a uma, os tres conflitos reais do merge da estante do Kindle (a linha da versao, o topo do ROADMAP e o fim do .gitignore) e o que eles ensinam — o que conflita nao e a obra, e o lugar por onde toda mudanca passa; mais a saida que sempre existe (merge --abort) e um passo seu que so le';
@@ -5814,7 +5893,7 @@ function renderTudo(){renderPerfis();renderInicio();renderVitais();renderProtoco
 // ===== MONTGOMERY CODE — o caderno vivo de aprendizagem =====
 // A trilha das sete camadas: cada cartão é uma porta.
 const CAMADAS={
-  1:{nome:'A Web',    onde:'escola', alvo:'aula-materiais'},
+  1:{nome:'A Web',    onde:'code', alvo:'camada-1'},
   2:{nome:'Git & GitHub', onde:'code', alvo:'camada-2'},
   3:{nome:'Servidor & nuvem'},
   4:{nome:'Banco de dados'},
@@ -5873,7 +5952,8 @@ const GRADE=[
    {id:'1.3',t:'A tag e a árvore do documento',d:'Por que tudo abre e fecha, e por que a página é uma árvore — o mesmo desenho da Árvore da Vida.',st:'plantada'},
    {id:'1.4',t:'O seletor — como o CSS acha a coisa',d:'Classe, id e a cascata. Lido no CSS real do OS.',st:'plantada'},
    {id:'1.5',t:'O evento e a função',d:'O que acontece entre o seu clique e a tela mudar. Lido num onclick do seu próprio sistema.',st:'plantada'},
-   {id:'1.6',t:'Ler o erro sem medo',d:'O console do navegador: onde o erro diz o arquivo, a linha e o motivo. A aula que tira a dependência.',st:'plantada'}]},
+   {id:'1.6',t:'Ler o erro sem medo',d:'O console do navegador: onde o erro diz o arquivo, a linha e o motivo. A aula que tira a dependência.',st:'plantada'},
+   {id:'1.7',t:'Entrar pela porta certa',d:'Procurar, ler com âncora, trocar o azulejo. Como se mexe numa parte só de um arquivo de 12.200 linhas — lido na Clínica de verdade.',st:'acesa',onde:'code',alvo:'aula-1-7'}]},
  {n:2,nome:'Git & GitHub',sub:'A ferramenta do artesão',objetivo:'Guardar decisões, errar à vontade num galho e publicar sem susto.',pre:'Módulo 1 — saber o que é um arquivo de código.',
   aulas:[
    {id:'2.1',t:'O que o Git guarda',d:'Ele não guarda arquivos: guarda decisões. Commit, repositório, remote — lidos no seu próprio git log.',st:'acesa',onde:'code',alvo:'camada-2'},

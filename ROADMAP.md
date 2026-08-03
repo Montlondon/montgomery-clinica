@@ -3,6 +3,8 @@
 Documento vivo: **só o que ainda respira**. O que já foi entregue mora em
 [`00_Nucleo/ROADMAP_ARQUIVO.md`](00_Nucleo/ROADMAP_ARQUIVO.md), inteiro, sem resumo.
 A planta da tela do Diagnóstico mora em [`00_Nucleo/TELA_UNICA.md`](00_Nucleo/TELA_UNICA.md).
+O mapa de onde mora cada coisa dentro do `index.html` mora em
+[`00_Nucleo/PLANTA_DO_PREDIO.md`](00_Nucleo/PLANTA_DO_PREDIO.md) — **ler antes de mexer no arquivo**.
 
 > **Regra da casa:** tudo tem que ser registrado aqui. As janelas de conversa têm limite e acabam —
 > este documento não. O que não está escrito aqui, some. **Ao concluir**, o bloco desce para o

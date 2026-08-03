@@ -62,8 +62,9 @@ Sempre **subir e olhar**: conferir no site de verdade, não no arquivo local.
 
 - O `main` local costuma estar **sujo** (arquivos modificados de outras sessões).
   Commitar **só o arquivo necessário**. Nunca `git add -A` no main.
-- O `index.html` da Clínica é **enorme**. Abrir ele inteiro é caro. Procurar com `Grep`
-  antes de ler com `Read`.
+- O `index.html` da Clínica é **enorme** (12.200 linhas). Abrir ele inteiro é caro.
+  A planta de onde mora cada coisa está em `00_Nucleo/PLANTA_DO_PREDIO.md` — ler ela primeiro.
+  Depois, procurar com `Grep` pelo texto da placa (`===== ... =====`) e só então `Read` com âncora.
 - Supabase: a cota é **uma só** para a Clínica e o MMObras, e o que estoura é *egress* —
   nunca ler tabelas inteiras.
 

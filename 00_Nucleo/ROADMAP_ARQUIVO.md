@@ -9,6 +9,37 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — entrar pela porta certa (planta do prédio + OS v6.0, 02/08/2026)
+
+**A pergunta dele:** *"sempre que mexermos na Clínica temos que percorrer o HTML integral? Ou dá
+pra mexer em uma parte específica, por exemplo apenas na parte de diagnóstico?"* — e, logo depois:
+*"essas 12 mil linhas no index é devido o Montgomery OS estar junto?"*
+
+**A resposta às duas.** Não se percorre o arquivo inteiro: procura-se com `Grep`, lê-se com `Read`
+ancorado e troca-se com `Edit`. E os dois prédios são separados — a Clínica tem 12.200 linhas
+(1,08 MB) em `index.html`; o OS tem 6.329 (604 KB) em `os/index.html`. Um não pesa dentro do outro.
+
+**A planta do prédio.** Nasceu `00_Nucleo/PLANTA_DO_PREDIO.md`: as **118 placas** do `index.html`
+da Clínica mapeadas com linha e nome, separadas por camada (CSS 21–591, HTML 595–2176, JS
+2210–12200), com uma tabela por faixa do Diagnóstico apontando onde mora a pele, o osso e o músculo
+de cada uma. O Diagnóstico inteiro cabe em 338 linhas — 2,8% do arquivo. Apontada no `ROADMAP.md`
+e no `CLAUDE.md`, para que qualquer Claude leia a planta antes de entrar no prédio.
+
+**A aula.** Virou a **Aula 1.7 · Entrar pela porta certa**, primeira aula da Camada 1 dentro do
+Montgomery Code (antes a Camada 1 só existia na Escola). Os cinco passos: a imagem (achar a parede,
+olhar a parede, trocar o azulejo), o conceito (as três ferramentas, cada vez mais caras e mais
+estreitas), o código real (os dois prédios medidos, as faixas do Diagnóstico, os três andares de
+osso/pele/músculo), o passo dele (`grep -c` e `grep -n` no próprio arquivo) e a prova.
+
+A aula amarra três coisas já ditas: a Aula 1.2 (os três materiais viram três *andares*), o
+comentário da Aula 2.6 (o número envelhece, o porquê não) e a Aula 7.5 (o preço mora no tamanho do
+que se abre). O `irCamada(1)` agora leva ao Code, não mais à Escola.
+
+**Conferido no ar:** OS **v6.0**, zero erro no console, grade em 36 aulas / 11 acesas, o cartão da
+Camada 1 abrindo direto na 1.7.
+
+---
+
 ## Concluído — a idade das coisas (Clínica v8.9, 02/08/2026)
 
 **O pedido dele:** *"a idade das coisas"* — e, entre as leituras possíveis, a que ele escolheu:
