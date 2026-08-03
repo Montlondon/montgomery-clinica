@@ -9,6 +9,41 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — senha "Arrumar o quadro" (Clínica v9.0, 02/08/2026)
+
+*O painel que abre ao clicar num boneco do DNA da Família. Os dois incômodos que ele apontou,
+mais o que ele pediu de carona ao ver o desenho.*
+
+**1. Estava comprido demais.** O painel era uma pilha só de campos, e ele rolava tudo para achar
+o que queria. Virou **quatro blocos com título** — *Quem é* · *Os laços* · *As datas* · *O que
+pesa* — cada um abre e fecha a clique. *Quem é* e *O que pesa* chegam abertos; os outros dois
+chegam dobrados, contando no próprio título o que guardam ("par com José", "cerca de 69 anos").
+A Clínica lembra como ele deixou (`famBlocosAbertos` no `localStorage`). Mesma receita das caixas
+do Diagnóstico. **Nenhum campo saiu: só mudaram de andar.**
+
+**2. O campo de anotação era pequeno.** A linha estreita ao lado do nome do anel não cabia a
+frase que a pessoa contou — e é a frase que importa ali. Agora o nome do anel sobe (com o ponto
+da cor) e embaixo vem um campo de largura inteira que **cresce com o texto** (`.fam-cresce` +
+`famCrescer`). A mesma moldura e o mesmo foco azul dos outros campos. "Uma linha sobre essa
+pessoa" ganhou o mesmo tratamento.
+
+**3. Os 5 Elementos no boneco** (pedido dele ao ver o desenho). Dentro de *O que pesa*, um segundo
+grupo: **Madeira · Fogo · Terra · Metal · Água**, nas cores dos 5 Elementos do resto da Clínica
+(fonte única — lidas de `matrizCincoElementos`, sem cor repetida à mão). Servem para ele apontar
+o **desequilíbrio energético que ELE vê** naquela pessoa — coisa diferente da herança de corpo
+que a paciente contou. Por isso o anel delas sai **tracejado** no desenho: a olho, no boneco, não
+se confunde com a herança. Guardadas com a chave `el:` dentro do mesmo `p.marcas`, então o balão,
+a peneira, o papel e o desenho passaram a lê-las sem nenhuma mudança.
+
+**De carona:** a metade de baixo do painel, que vestia diferente (estilo solto por dentro,
+rótulos de 11px à mão), passou a usar o `.fr`/`.fg`/`<label>` da casa.
+
+**O jeito:** o desenho foi mostrado antes de aplicar, lado a lado com o de hoje. Ele aprovou e
+pediu os Elementos na mesma resposta — foi a decisão certa; o pedido novo não teria aparecido se
+o quadro tivesse chegado pronto.
+
+---
+
 ## Concluído — entrar pela porta certa (planta do prédio + OS v6.0, 02/08/2026)
 
 **A pergunta dele:** *"sempre que mexermos na Clínica temos que percorrer o HTML integral? Ou dá

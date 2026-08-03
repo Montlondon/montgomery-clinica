@@ -271,9 +271,30 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .fam-travado .fam-fig{cursor:pointer}
 .fam-vazio{padding:14px 12px;font-size:12px;color:var(--txt-l);line-height:1.6;border-top:1px solid #EFE7D6}
 .fam-ed{padding:10px 12px 12px;border-top:1px solid #EFE7D6;background:var(--beige)}
-.fam-ed .fr{margin-bottom:0}
 .fam-pe{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:7px 12px;border-top:1px solid #EFE7D6}
 .fam-nota{font-size:11px;color:var(--txt-l);line-height:1.6}
+/* O quadro do boneco em blocos. O painel era uma pilha só, e ele rolava tudo
+   para achar o que queria. Agora são quatro assuntos com título — quem é, os
+   laços, as datas, o que pesa — e os menos usados chegam dobrados, dizendo no
+   próprio título o que guardam dentro. Mesma receita das caixas do Diagnóstico. */
+.fam-bl{border:1px solid var(--brd);border-radius:8px;background:var(--surface);margin-bottom:8px}
+.fam-bl-t{display:flex;align-items:center;gap:7px;padding:7px 10px;cursor:pointer;user-select:none;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--txt-l)}
+.fam-bl-r{font-weight:600;text-transform:none;letter-spacing:0;font-size:11px;color:var(--txt-l);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1}
+.fam-bl-s{width:13px;height:13px;flex:0 0 13px;margin-left:auto;transition:transform .18s ease;opacity:.65;color:var(--pri-d)}
+.fam-bl.ab .fam-bl-s{transform:rotate(90deg)}
+.fam-bl.ab .fam-bl-r{display:none}
+.fam-bl-c{display:none;padding:0 10px 10px}
+.fam-bl.ab .fam-bl-c{display:block}
+.fam-bl-c .fr:last-child{margin-bottom:0}
+/* O campo que cresce com o texto: a frase que a pessoa contou não cabia numa
+   linha estreita — e é justamente a frase que importa. Mesma moldura, mesmo
+   foco azul dos outros campos; só a altura é que acompanha o que se escreve. */
+.fg textarea.fam-cresce{resize:none;overflow:hidden;line-height:1.5;min-height:0}
+.fam-anel{margin-bottom:7px}
+.fam-anel:last-child{margin-bottom:0}
+.fam-anel-t{display:flex;align-items:center;gap:6px;margin-bottom:3px;font-size:11.5px;font-weight:600}
+.fam-anel-t .pt{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+@media print{.fam-bl-c{display:block!important}.fam-bl-s{display:none!important}}
 /* O PALCO: mesma receita do Vitruviano no OS — um toque no canto e o desenho
    toma a tela inteira, Esc devolve. Aqui o fundo é o papel da Clínica, e não
    o céu escuro do OS: esta imagem não é para meditar, é para trabalhar nela.
@@ -2123,7 +2144,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v8.9 · 02/08';
+const APP_VER='v9.0 · 02/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -9415,6 +9436,29 @@ function famLacoSVG(p){
    coisa é o que houve, outra é quando. O anel não tem onde escrever um número,
    então o número aparece onde há espaço: no balão, no painel e no papel. */
 const FAM_CORES_LIVRES=['#8E6E53','#2F6F6B','#8C5AA8','#3F6FA8','#9B7B1E','#6B7F3A','#A8523F','#4F5B6B'];
+/* ===== OS 5 ELEMENTOS NO BONECO — o que ele VÊ, não o que a pessoa contou =====
+   As marcas de cima são herança de corpo: o que houve naquela pessoa. Estas
+   cinco são outra coisa — o desequilíbrio energético que ELE enxerga ali, no
+   atendimento. Por isso vivem em grupo próprio, com as mesmas cores dos 5
+   Elementos do resto da Clínica (fonte única: matrizCincoElementos), e o anel
+   delas é TRACEJADO: a olho, no desenho, não se confunde com a herança.
+   A chave leva o prefixo "el:" para não bater com as marcas de órgão. */
+const FAM_ELEM=(()=>{
+  const base=[
+    {k:'madeira',rot:'Madeira',ex:'Fígado e Vesícula — raiva, rigidez, o não soltar',cor:'#2E7D32'},
+    {k:'fogo',   rot:'Fogo',   ex:'Coração e Intestino Delgado — alegria demais ou de menos',cor:'#c62828'},
+    {k:'terra',  rot:'Terra',  ex:'Baço-Pâncreas e Estômago — preocupação que rumina',cor:'#C47A1E'},
+    {k:'metal',  rot:'Metal',  ex:'Pulmão e Intestino Grosso — tristeza, luto, o que não se solta',cor:'#616161'},
+    {k:'agua',   rot:'Água',   ex:'Rim e Bexiga — medo, falta de reserva',cor:'#1565C0'}
+  ];
+  // A cor vem do banco quando ele já estiver carregado; a de cima é o mesmo
+  // valor, guardado aqui só para o desenho nunca ficar sem cor.
+  try{
+    const m=bancoIntegrativoCompleto.matrizCincoElementos;
+    base.forEach(e=>{const b=m[e.rot];if(b&&b.cor)e.cor=b.cor;});
+  }catch(e){}
+  return base.map(e=>({k:'el:'+e.k,rot:e.rot,cor:e.cor,ex:e.ex,elem:true,trac:true}));
+})();
 function famMarcaDe(k){
   const s=String(k||'');
   if(s.indexOf('livre:')===0){
@@ -9422,6 +9466,7 @@ function famMarcaDe(k){
     const cor=p[1]||'#6B6357', rot=p.slice(2).join(':')||'Anel próprio';
     return {k:s,rot:rot,cor:cor,ex:'anel que ele mesmo criou',livre:true};
   }
+  if(s.indexOf('el:')===0)return FAM_ELEM.find(m=>m.k===s)||null;
   return FAM_MARCAS.find(m=>m.k===s)||null;
 }
 const famMarcasDe=p=>(Array.isArray(p&&p.marcas)?p.marcas:[]).map(famMarcaDe).filter(Boolean);
@@ -9496,8 +9541,10 @@ function famAnelSVG(p,x,yCabeca){
     const a0=i*(360/ms.length)+vao/2, a1=a0+fatia;
     // Uma marca sozinha vira anel inteiro: o arco de 360 graus não se desenha,
     // então nesse caso é um círculo mesmo.
-    if(ms.length===1)return `<circle cx="${x}" cy="${yCabeca}" r="${R.toFixed(2)}" fill="none" stroke="${m.cor}" stroke-width="2.1" opacity=".92"/>`;
-    return `<path d="${arco(a0,a1)}" fill="none" stroke="${m.cor}" stroke-width="2.1" stroke-linecap="round" opacity=".92"/>`;
+    // O elemento que ele VÊ vem tracejado; a herança de corpo, inteira.
+    const tr=m.trac?' stroke-dasharray="3.4 2.8"':'';
+    if(ms.length===1)return `<circle cx="${x}" cy="${yCabeca}" r="${R.toFixed(2)}" fill="none" stroke="${m.cor}" stroke-width="2.1"${tr} opacity=".92"/>`;
+    return `<path d="${arco(a0,a1)}" fill="none" stroke="${m.cor}" stroke-width="2.1" stroke-linecap="round"${tr} opacity=".92"/>`;
   }).join('');
 }
 // Quebra um texto em linhas de no máximo n letras, sem cortar palavra no meio.
@@ -9684,16 +9731,89 @@ function famVinculo(id,campo,valor){
   _diagJaSalvo=false;
   famGuardarRascunho();famRender();
 }
+/* ===== O QUADRO DO BONECO, EM BLOCOS =====
+   Era uma pilha só de campos: ele rolava o painel inteiro para achar o que
+   queria. Agora são quatro assuntos com título — quem é, os laços, as datas,
+   o que pesa — e cada um abre e fecha a clique, lembrando de uma vez para a
+   outra como ele deixou. Fechado, o título conta o que guarda dentro.
+   Nenhum campo saiu: só mudaram de andar. */
+const FAM_BL_KEY='famBlocosAbertos';
+let _famBlocos=(()=>{
+  try{const g=JSON.parse(localStorage.getItem(FAM_BL_KEY));if(g&&typeof g==='object')return g;}catch(e){}
+  return {quem:1,lacos:0,datas:0,pesa:1};
+})();
+function famBloco(k,el){
+  const bl=el&&el.parentNode;
+  if(!bl)return;
+  const ab=!bl.classList.contains('ab');
+  bl.classList.toggle('ab',ab);
+  _famBlocos[k]=ab?1:0;
+  try{localStorage.setItem(FAM_BL_KEY,JSON.stringify(_famBlocos));}catch(e){}
+  // Ao fechar, o título volta a contar o que tem dentro — e o que tem dentro
+  // pode ter mudado enquanto a gaveta estava aberta.
+  if(!ab){
+    const r=bl.querySelector('.fam-bl-r');
+    if(r)r.textContent=famResumoBloco(famPorId(_famSel),k);
+  }
+  if(ab)bl.querySelectorAll('.fam-cresce').forEach(famCrescer);
+}
+function famResumoBloco(p,k){
+  if(!p)return'';
+  if(k==='quem')return[famNomeDe(p),p.papel].filter(Boolean).join(' · ');
+  if(k==='lacos'){
+    const a=[], de=p.de?famPorId(p.de):null, par=p.par?famPorId(p.par):null, l=p.laco?famPorId(p.laco):null;
+    if(de)a.push('filho(a) de '+famCurto(famNomeDe(de),16));
+    if(par)a.push('par com '+famCurto(famNomeDe(par),16));
+    if(l)a.push((p.lacoRot||'também é')+' '+famCurto(famNomeDe(l),16));
+    return a.join(' · ')||'nenhum laço apontado';
+  }
+  if(k==='datas')return famIdadeRot(p)||(p.nasc?String(p.nasc):'sem data');
+  if(k==='pesa'){
+    const n=famMarcasDe(p).length;
+    return n?(n===1?'1 anel':n+' anéis'):'nenhum anel';
+  }
+  return'';
+}
+const FAM_SETA='<svg class="fam-bl-s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>';
+function famBl(p,k,titulo,dentro){
+  return `<div class="fam-bl${_famBlocos[k]?' ab':''}">
+    <div class="fam-bl-t" onclick="famBloco('${k}',this)">${titulo}<span class="fam-bl-r">${escHtml(famResumoBloco(p,k))}</span>${FAM_SETA}</div>
+    <div class="fam-bl-c">${dentro}</div></div>`;
+}
+// O campo que acompanha o texto: a altura cresce para caber a frase inteira.
+function famCrescer(t){
+  if(!t)return;
+  t.style.height='auto';
+  t.style.height=(t.scrollHeight+2)+'px';
+}
+// Uma fileira de botões de anel: o mesmo desenho para as marcas de herança e
+// para os 5 Elementos, mudando só a lista que entra.
+function famChipsAnel(p,lista){
+  return lista.map(m=>{
+    const on=(p.marcas||[]).indexOf(m.k)>=0;
+    return `<button type="button" class="folha-ch${on?' on':''}" onclick="famMarcar('${p.id}','${m.k}')" title="${escHtml(m.ex)}" style="${on?`border-color:${m.cor};color:${m.cor}`:''}">
+      <span style="display:inline-block;width:7px;height:7px;border-radius:50%;border:2px solid ${m.cor};margin-right:5px;vertical-align:middle"></span>${escHtml(m.rot)}</button>`;
+  }).join('');
+}
 function famRenderEditor(){
   const el=document.getElementById('famEditor');
   if(!el)return;
   const p=famPorId(_famSel);
   if(!p){el.innerHTML='';return;}
-  el.innerHTML=`<div class="fam-ed">
+  const blQuem=`
     <div class="fr">
       <div class="fg"><label>Nome</label><input type="text" value="${escHtml(p.nome||'')}" ${p.eu?'readonly':''} oninput="famCampo('${p.id}','nome',this.value)" placeholder="${p.eu?'':'Como ela chama essa pessoa'}"></div>
       <div class="fg"><label>Quem é</label><input type="text" value="${escHtml(p.papel||'')}" ${p.eu?'readonly':''} oninput="famCampo('${p.id}','papel',this.value)" list="famPapeis" placeholder="mãe, padrasto, filha mais velha..."></div>
     </div>
+    <div class="fr full"><div class="fg"><label>Uma linha sobre essa pessoa</label>
+      <textarea class="fam-cresce" rows="1" oninput="famCampo('${p.id}','obs',this.value);famCrescer(this)" placeholder="o que ela disse dessa pessoa — a peneira também lê daqui">${escHtml(p.obs||'')}</textarea></div></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+      ${FAM_SEXOS.map(s=>`<button type="button" class="folha-ch${p.sexo===s.k?' on':''}"${p.sexo===s.k?'':` onclick="famSexo('${p.id}','${s.k}')"`}>${s.rot}</button>`).join('')}
+      <button type="button" class="folha-ch${p.morto?' on':''}" onclick="famMorto('${p.id}')" title="O traço do genograma: a pessoa continua desenhada">${p.morto?'Já partiu':'Marcar como já partiu'}</button>
+      ${p.eu?'':`<button type="button" class="folha-ch${p.esperado?' on':''}" onclick="famEsperado('${p.id}')" title="Quem está a caminho já ocupa lugar na família — o traço fica pontilhado até nascer">${p.esperado?'Ainda vai nascer':'Marcar como a caminho'}</button>`}
+      ${p.eu?'<span class="fam-nota" style="margin-left:auto">Esta é ela. O nome vem da ficha.</span>':''}
+    </div>`;
+  const blLacos=`
     <div class="fr">
       <div class="fg"><label>Filho(a) de</label><select onchange="famVinculo('${p.id}','de',this.value)">
         <option value="">— ninguém apontado —</option>
@@ -9705,13 +9825,6 @@ function famRenderEditor(){
       </select></div>
     </div>
     <div class="fr">
-      <div class="fg"><label>Nasceu em</label><input type="text" value="${escHtml(p.nasc||'')}" oninput="famCampo('${p.id}','nasc',this.value)" placeholder="${p.eu?'vem da ficha — só escreva se quiser mudar':'1957, 03/1957 ou 04/03/1957'}">
-        <div class="fam-nota" id="famNotaIdade" style="margin-top:3px">${famIdadeRot(p)?escHtml(famIdadeRot(p)):'Só o ano já basta — a idade sai aproximada.'}</div></div>
-      ${p.morto?`<div class="fg"><label>Partiu em</label><input type="text" value="${escHtml(p.fim||'')}" oninput="famCampo('${p.id}','fim',this.value)" placeholder="2019, 07/2019 ou 12/07/2019">
-        <div class="fam-nota" style="margin-top:3px">Com este ano, a idade embaixo do boneco vira a que ficou.</div></div>`:'<div class="fg"></div>'}
-    </div>
-    <div class="fr full"><div class="fg"><label>Uma linha sobre essa pessoa</label><input type="text" value="${escHtml(p.obs||'')}" oninput="famCampo('${p.id}','obs',this.value)" placeholder="o que ela disse dessa pessoa — a peneira também lê daqui"></div></div>
-    <div class="fr">
       <div class="fg"><label>Também é, de alguém</label><select onchange="famLacar('${p.id}','com',this.value)">
         <option value="">— nenhum segundo laço —</option>
         ${_famPessoas.filter(o=>String(o.id)!==String(p.id))
@@ -9720,40 +9833,45 @@ function famRenderEditor(){
       </select></div>
       <div class="fg"><label>E o que é dela</label><input type="text" value="${escHtml(p.lacoRot||'')}" ${p.laco?'':'disabled'} oninput="famCampo('${p.id}','lacoRot',this.value)" placeholder="irmão de, primo de, chefe de..."></div>
     </div>
-    <div class="fam-nota" style="margin-top:-4px;margin-bottom:8px">A árvore só sabe desenhar um laço por pessoa. O segundo laço conta o resto — o pai que é irmão do sogro, a esposa que é prima — sem tirar ninguém do lugar.</div>
-    <div style="margin-top:9px">
-      <label style="display:block;font-size:11px;font-weight:600;color:var(--txt-l);margin-bottom:5px">O que pesa nessa pessoa — vira anel em volta da cabeça</label>
-      <div style="display:flex;gap:5px;flex-wrap:wrap">
-        ${FAM_MARCAS.map(m=>{
-          const on=(p.marcas||[]).indexOf(m.k)>=0;
-          return `<button type="button" class="folha-ch${on?' on':''}" onclick="famMarcar('${p.id}','${m.k}')" title="${escHtml(m.ex)}" style="${on?`border-color:${m.cor};color:${m.cor}`:''}">
-            <span style="display:inline-block;width:7px;height:7px;border-radius:50%;border:2px solid ${m.cor};margin-right:5px;vertical-align:middle"></span>${escHtml(m.rot)}</button>`;
-        }).join('')}
-        <button type="button" class="folha-ch" onclick="famAnelProprio('${p.id}')" title="Cria um anel que não está na lista, com as palavras dele">+ Anel próprio</button>
-      </div>
-      ${famMarcasDe(p).length?`<div style="margin-top:8px;border-top:1px solid #EFE7D6;padding-top:8px">
-        <label style="display:block;font-size:11px;font-weight:600;color:var(--txt-l);margin-bottom:5px">E o que anotar em cada anel — a idade, o ano, o quanto faz</label>
-        ${famMarcasDe(p).map((m,i)=>`<div style="display:flex;align-items:center;gap:7px;margin-bottom:5px">
-          <span style="display:inline-block;width:9px;height:9px;border-radius:50%;border:2px solid ${m.cor};flex-shrink:0"></span>
-          <span style="font-size:11.5px;font-weight:600;color:${m.cor};min-width:104px">${escHtml(m.rot)}</span>
-          <input type="text" style="flex:1;min-width:120px" value="${escHtml(famNotaDe(p,m.k))}" oninput="famNotaMarcaI('${p.id}',${i},this.value)" placeholder="aos 62, desde 2019, há 3 anos...">
-          ${m.livre?`<button type="button" class="btn btn-sec btn-sm" style="color:var(--danger)" onclick="famTirarAnelI('${p.id}',${i})" title="Tira este anel próprio">Tirar</button>`:''}
-        </div>`).join('')}
-      </div>`:''}
-      <div class="fam-nota" style="margin-top:5px">A marca desenha e a peneira lê; a linha acima explica com as palavras dela. Nenhuma das duas fecha diagnóstico.</div>
+    <div class="fam-nota" style="margin-top:7px">A árvore só sabe desenhar um laço por pessoa. O segundo laço conta o resto — o pai que é irmão do sogro, a esposa que é prima — sem tirar ninguém do lugar.</div>`;
+  const blDatas=`
+    <div class="fr">
+      <div class="fg"><label>Nasceu em</label><input type="text" value="${escHtml(p.nasc||'')}" oninput="famCampo('${p.id}','nasc',this.value)" placeholder="${p.eu?'vem da ficha — só escreva se quiser mudar':'1957, 03/1957 ou 04/03/1957'}">
+        <div class="fam-nota" id="famNotaIdade" style="margin-top:3px">${famIdadeRot(p)?escHtml(famIdadeRot(p)):'Só o ano já basta — a idade sai aproximada.'}</div></div>
+      ${p.morto?`<div class="fg"><label>Partiu em</label><input type="text" value="${escHtml(p.fim||'')}" oninput="famCampo('${p.id}','fim',this.value)" placeholder="2019, 07/2019 ou 12/07/2019">
+        <div class="fam-nota" style="margin-top:3px">Com este ano, a idade embaixo do boneco vira a que ficou.</div></div>`:'<div class="fg"></div>'}
+    </div>`;
+  const blPesa=`
+    <div class="fam-nota" style="margin-bottom:5px">O que houve no corpo dessa pessoa — vira anel inteiro em volta da cabeça.</div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap">
+      ${famChipsAnel(p,FAM_MARCAS)}
+      <button type="button" class="folha-ch" onclick="famAnelProprio('${p.id}')" title="Cria um anel que não está na lista, com as palavras dele">+ Anel próprio</button>
     </div>
-    <div class="fam-add" style="padding:9px 0 0">
+    <div class="fam-nota" style="margin:9px 0 5px">E o que <b>você</b> vê de desequilíbrio energético nela — vira anel tracejado, na cor do Elemento.</div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap">${famChipsAnel(p,FAM_ELEM)}</div>
+    ${famMarcasDe(p).length?`<div style="margin-top:9px;border-top:1px solid #EFE7D6;padding-top:9px">
+      <div class="fam-nota" style="margin-bottom:6px">E o que anotar em cada anel — a idade, o ano, o quanto faz, o que ela contou.</div>
+      ${famMarcasDe(p).map((m,i)=>`<div class="fg fam-anel">
+        <div class="fam-anel-t"><span class="pt" style="border:2px solid ${m.cor}"></span><span style="color:${m.cor}">${escHtml(m.rot)}</span>
+          ${m.livre?`<button type="button" class="btn btn-sec btn-sm" style="margin-left:auto;color:var(--danger)" onclick="famTirarAnelI('${p.id}',${i})" title="Tira este anel próprio">Tirar</button>`:''}</div>
+        <textarea class="fam-cresce" rows="1" oninput="famNotaMarcaI('${p.id}',${i},this.value);famCrescer(this)" placeholder="aos 62, desde 2019, há 3 anos — ou a frase inteira que ela contou">${escHtml(famNotaDe(p,m.k))}</textarea>
+      </div>`).join('')}
+    </div>`:''}
+    <div class="fam-nota" style="margin-top:7px">A marca desenha e a peneira lê; a linha acima explica com as palavras dela. Nenhuma das duas fecha diagnóstico.</div>`;
+  el.innerHTML=`<div class="fam-ed">
+    ${famBl(p,'quem','Quem é',blQuem)}
+    ${famBl(p,'lacos','Os laços',blLacos)}
+    ${famBl(p,'datas','As datas',blDatas)}
+    ${famBl(p,'pesa','O que pesa',blPesa)}
+    <div class="fam-add" style="padding:4px 0 0;align-items:center">
       <button type="button" onclick="famBrotar('${p.id}','par')" title="Nasce ao lado, já ligado a esta pessoa">+ Par de ${escHtml(famCurto(p.nome||(p.eu&&_diagPacSel?_diagPacSel.nome:'')||'quem está aberto',14))}</button>
       ${FAM_GERACOES.some(x=>x.g===p.ger+1)?`<button type="button" onclick="famBrotar('${p.id}','filho')" title="Nasce na fileira de baixo, já como filho(a) desta pessoa">+ Filho(a) desta pessoa</button>`:''}
-    </div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px">
-      ${FAM_SEXOS.map(s=>`<button type="button" class="folha-ch${p.sexo===s.k?' on':''}"${p.sexo===s.k?'':` onclick="famSexo('${p.id}','${s.k}')"`}>${s.rot}</button>`).join('')}
-      <button type="button" class="folha-ch${p.morto?' on':''}" onclick="famMorto('${p.id}')" title="O traço do genograma: a pessoa continua desenhada">${p.morto?'Já partiu':'Marcar como já partiu'}</button>
-      ${p.eu?'':`<button type="button" class="folha-ch${p.esperado?' on':''}" onclick="famEsperado('${p.id}')" title="Quem está a caminho já ocupa lugar na família — o traço fica pontilhado até nascer">${p.esperado?'Ainda vai nascer':'Marcar como a caminho'}</button>`}
-      ${p.eu?'<span class="fam-nota" style="margin-left:auto">Esta é ela. O nome vem da ficha.</span>':`<button type="button" class="btn btn-sec btn-sm" style="margin-left:auto;color:var(--danger)" onclick="famTirar('${p.id}')">Tirar do desenho</button>`}
+      ${p.eu?'':`<button type="button" class="btn btn-sec btn-sm" style="margin-left:auto;color:var(--danger)" onclick="famTirar('${p.id}')">Tirar do desenho</button>`}
     </div>
   </div>
   <datalist id="famPapeis">${FAM_PAPEIS.map(x=>`<option value="${x}">`).join('')}</datalist>`;
+  // A altura dos campos que crescem só se sabe depois que eles estão na tela.
+  el.querySelectorAll('.fam-cresce').forEach(famCrescer);
 }
 function famContar(){
   const el=document.getElementById('famConta');

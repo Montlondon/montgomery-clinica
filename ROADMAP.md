@@ -12,49 +12,12 @@ O mapa de onde mora cada coisa dentro do `index.html` mora em
 
 ## O que está pendente agora
 
-- **Arrumar o quadro do boneco** — senha *"Arrumar o quadro"*. Diagnóstico pronto no bloco abaixo,
-  é só executar. Clínica, faixa 3 do Diagnóstico.
 - **Prateleira** — falta ele escrever as primeiras linhas de "Onde comprar" (bloco abaixo).
 - **Nunca o relógio decide** — senha aberta, MMObras.
 - **Montgomery Code** — seguir montando as aulas da grade; matéria-prima acumulada abaixo.
 - **Ideias vivas** — Vitruviano como lugar único, as três portas de 01/08, Ortomolecular,
   terceira aba de Suplementos, o botão do que deu certo, as ideias da Maly.
 - **Em planejamento / Pendências** — as duas listas antigas, mais abaixo, ainda valem.
-
----
-
-## Senha "Arrumar o quadro" — o painel do boneco (Clínica, 02/08/2026)
-
-*Pedido dele, olhando a placa da linha 9339: "teria como melhorar o quadro onde faço a anotação?
-gosto do quadro padronizado com um layout bonito". Diagnóstico feito; falta executar.*
-
-**Onde fica.** O painel que abre ao clicar num boneco do DNA da Família: `index.html`, linhas
-**9690–9755** (a função que monta o `.fam-ed`). O CSS dos primitivos está em 105–111 (`.fr`, `.fg`,
-`label`, `input`) e em 251–255 (`.folha-ch`) e 273–276 (`.fam-ed`, `.fam-nota`).
-
-**Os dois incômodos, ditos por ele (não supor mais nada além disto):**
-
-1. **Está comprido demais.** Campo empilhado sobre campo; cansa rolar até achar o que se quer.
-2. **O campo de anotação de cada anel é pequeno.** A linha estreita não cabe a frase que a pessoa
-   contou — e é justamente a frase que importa ali.
-
-**O que eu tinha diagnosticado por fora** (e que ele *não* apontou — vale corrigir de carona, mas
-não é o pedido): a metade de baixo do painel, das linhas 9724 a 9744, foi escrita com estilo solto
-por dentro (`style="margin-top:9px"`, rótulos com `font-size:11px` à mão) em vez de usar o padrão
-`.fr`/`.fg`/`<label>` da casa. Por isso ela "veste diferente" da metade de cima.
-
-**Caminho sugerido para a janela nova:**
-
-- Para o comprimento: agrupar em blocos com título — *quem é* / *os laços* / *as datas* / *o que
-  pesa* — e deixar os menos usados dobrados, abrindo a clique. A receita das caixas que abrem e
-  fecham já existe na Clínica (`index.html:6207`), não precisa inventar.
-- Para o campo pequeno: trocar o `<input type="text">` da linha 9739 por um campo que **cresce com
-  o texto**, mantendo a mesma moldura e o mesmo foco azul dos outros.
-- Padronizar a metade de baixo usando `.fr`/`.fg`/`<label>`, sem inventar layout novo.
-- **Mostrar antes de aplicar.** Ele pensa por imagem: melhor ver o desenho e opinar do que receber
-  pronto.
-
-**Cuidado:** nada de campo que se apaga. A regra da senha "Sintetizar" continua valendo.
 
 ---
 
