@@ -10,6 +10,19 @@ O mapa de onde mora cada coisa dentro do `index.html` mora em
 > este documento não. O que não está escrito aqui, some. **Ao concluir**, o bloco desce para o
 > arquivo e some daqui: o diário fica magro de propósito.
 
+## PENDENTE — ouvir o que a ponte passou a dizer (04/08/2026)
+
+**v10.4 subiu.** Ele agendou em 04/08 e a sessão não apareceu no Google Agenda do celular,
+mas a tela disse que tinha escrito. Achado: o `pontePush` desistia **em silêncio** em quatro
+pontos (ponte desligada, agenda não escolhida, sessão sem data, Google recusando) e os avisos
+continuavam dizendo "e escrita no Google". Corrigido: a ponte devolve sempre o que aconteceu,
+e os quatro lugares que salvam sessão contam a verdade. Ponte desligada segue sem alarme.
+**Falta a prova ao vivo:** marcar uma sessão de teste e ler o aviso. Se ele acusar
+"Falta escolher a agenda do Google", a causa da falha de 04/08 está achada — a escolha da
+agenda mora no `localStorage`, ou seja, **é por aparelho**, e o computador pode estar sem ela
+mesmo com a ponte ligada no celular.
+*Lição para as aulas: função que desiste calada é pior que função que quebra — a que quebra avisa.*
+
 ## PENDENTE — senha "Ver o halo correr" (aberta em 03/08/2026)
 
 A v10.2 subiu e foi conferida no ar: rodapé `v10.2 · 03/08`, régua dos marcos desenhada,
