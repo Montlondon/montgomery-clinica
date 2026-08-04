@@ -2328,7 +2328,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v10.4 · 04/08';
+const APP_VER='v10.5 · 04/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -5939,9 +5939,18 @@ async function ponteCancelar(s){
 // evento sem dono nunca cria paciente nenhum. Do evento a Clínica aceita só o
 // que ele sabe melhor: o dia e a hora.
 //
-// Apagar não é ouvido de propósito: se um evento sumiu do Google, a sessão fica
-// de pé aqui. Perder atendimento por um toque errado no celular seria caro
-// demais — apagar continua sendo decisão tomada dentro da Clínica.
+// Apagar PASSOU A SER ouvido em 04/08/2026, por decisão dele: apagou o evento no
+// Google, a sessão sai da Clínica também. O risco foi dito antes de fazer — a
+// sessão leva junto valor, forma de pagamento e evolução, e isso não volta — e
+// ele escolheu assim mesmo, porque na prática dele o Google é onde ele desmarca.
+//
+// Duas travas ficam de pé, contra acidente e não contra ele:
+//  1. Só some sessão que a Clínica reconhece por gcalId. Evento sem vínculo, ou
+//     de outra agenda, nunca apaga nada.
+//  2. Se de uma vez só o Google disser que MUITAS sumiram (mais que APAGAR_TETO),
+//     ela para e pergunta. Isso é o cenário de página truncada, agenda trocada ou
+//     Google respondendo torto — não o de um toque no celular.
+const APAGAR_TETO=3;
 function _idDoCarimbo(ev){
   const priv=(ev.extendedProperties&&ev.extendedProperties.private)||{};
   if(priv.clinicaId)return String(priv.clinicaId);
@@ -5962,6 +5971,9 @@ async function pontePull(silencioso=true){
   if(!r)return 0;
   const ss=gD('sessoes');
   let mudou=0;
+  // Quem o Google mostrou nesta janela. Serve para a varredura do apagar, lá
+  // embaixo: o que a Clínica tem e o Google não mostra mais, sumiu de lá.
+  const vistos=new Set((r.items||[]).map(ev=>ev.id));
   for(const ev of (r.items||[])){
     if(ev.status==='cancelled')continue;
     const id=_idDoCarimbo(ev);
@@ -5981,11 +5993,40 @@ async function pontePull(silencioso=true){
     await dbGravar('sessoes',s.id,ss[idx]);
     if(s.data!==data||s.horario!==horario)mudou++;
   }
-  if(mudou){
-    renderSemana();renderAg();atuFin();atuDash();
-    toast(mudou===1?'1 sessão veio remarcada do Google.':mudou+' sessões vieram remarcadas do Google.',null,"ok");
+  // === O APAGAR, ouvido de volta ===
+  // Se o Google devolveu a lista PELA METADE (nextPageToken), a ausência não
+  // prova nada: o evento pode estar na página seguinte. Nesse caso não se apaga
+  // ninguém. Ausência só vira prova quando a lista veio inteira.
+  const sumiram=r.nextPageToken?[]:ss.filter(s=>{
+    if(!s.gcalId||vistos.has(s.gcalId))return false;
+    if(!s.data)return false;
+    const d=new Date(s.data+'T12:00:00');            // meio-dia: fuso não empurra o dia
+    return d>=de&&d<=ate;                            // só o que estava na janela olhada
+  });
+  let apagadas=0;
+  if(sumiram.length){
+    // A trava do acidente em massa: muitas de uma vez não é toque no celular, é
+    // outra coisa acontecendo. Aí ela para e pergunta, mesmo no modo silencioso.
+    const nomes=sumiram.slice(0,6).map(s=>`• ${s.pacienteNome||'sem nome'} — ${fd(s.data)}${s.horario?' às '+s.horario:''}`).join('\n');
+    const pode=sumiram.length<=APAGAR_TETO||confirm(
+      `O Google diz que ${sumiram.length} sessões foram apagadas de lá:\n\n${nomes}`+
+      (sumiram.length>6?`\n• ... e mais ${sumiram.length-6}`:'')+
+      `\n\nApagar essas sessões aqui também? Valor, pagamento e evolução vão junto, e não voltam.`);
+    if(pode){
+      for(const s of sumiram){
+        _cache['sessoes']=gD('sessoes').filter(x=>x.id!==s.id);
+        await supaReq('DELETE','sessoes',null,`?dados->>id=eq.${s.id}`);
+        apagadas++;
+      }
+    }
   }
-  return mudou;
+
+  if(mudou||apagadas){
+    renderSemana();renderAg();atuFin();atuDash();
+  }
+  if(mudou)toast(mudou===1?'1 sessão veio remarcada do Google.':mudou+' sessões vieram remarcadas do Google.',null,"ok");
+  if(apagadas)toast(apagadas===1?'1 sessão foi apagada no Google e saiu daqui também.':apagadas+' sessões foram apagadas no Google e saíram daqui também.','#c62828',"trash");
+  return mudou+apagadas;
 }
 
 // Botão da tela da Agenda: puxar agora, na mão, quando ele quiser conferir.
