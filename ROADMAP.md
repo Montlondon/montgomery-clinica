@@ -10,6 +10,18 @@ O mapa de onde mora cada coisa dentro do `index.html` mora em
 > este documento não. O que não está escrito aqui, some. **Ao concluir**, o bloco desce para o
 > arquivo e some daqui: o diário fica magro de propósito.
 
+## PENDENTE — senha "Ver o halo correr" (aberta em 03/08/2026)
+
+A v10.2 subiu e foi conferida no ar: rodapé `v10.2 · 03/08`, régua dos marcos desenhada,
+janela do marco abrindo, caneta e frases dentro da folha, gatilhos por pessoa, console limpo.
+**Ficou uma só coisa sem prova ao vivo:** o halo da marca repetida (Faixa 3). Ele só aparece
+com **dois bonecos** marcados com a mesma marca, e o paciente usado no teste tinha o DNA vazio.
+Fazer: montar dois bonecos num paciente de teste, pôr a mesma marca nos dois pelo botão
+"Corre na família", e confirmar o halo no desenho e a linha no pé.
+
+*Crédito: na semana de 03/08 o limite semanal chegou a 90% numa segunda-feira. Voltar a esta
+senha só depois de quinta, com a barra cheia.*
+
 ## O FOCO — a semana de organização (decidido por ele em 03/08/2026)
 
 *Ele deu autorização máxima para dizer honestamente o que fazer, e escolheu isto como maior foco
