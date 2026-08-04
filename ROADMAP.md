@@ -19,6 +19,14 @@ com **dois bonecos** marcados com a mesma marca, e o paciente usado no teste tin
 Fazer: montar dois bonecos num paciente de teste, pôr a mesma marca nos dois pelo botão
 "Corre na família", e confirmar o halo no desenho e a linha no pé.
 
+**v10.3 (03/08): a dobra ganha a parede da aba Dados.** Ele disse "continuou feio" e pediu
+"como na aba Dados, simples assim". Medido em vez de chutado — e os dois primeiros palpites
+estavam errados (a largura era só o zoom da foto; o botão verde do WhatsApp é igual nas duas).
+O defeito real: os campos são pixel-idênticos, mas o campo é bege `#F0EBE0` e o painel
+QUEM CHEGOU atrás dele é o **mesmo** bege, separados por 0,8px de borda. Na aba Dados o campo
+se apoia no branco do `.card`. Correção: `.cab-dobra` virou card branco. Uma linha de CSS.
+*Lição para as aulas: quando algo "está feio", medir a cor do fundo antes de mexer na forma.*
+
 *Crédito: na semana de 03/08 o limite semanal chegou a 90% numa segunda-feira. Voltar a esta
 senha só depois de quinta, com a barra cheia.*
 
