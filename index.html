@@ -2328,7 +2328,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v10.3 · 03/08';
+const APP_VER='v10.4 · 04/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -3528,19 +3528,17 @@ async function salvarSessao(e){
     }
     const idEditada=window._editSessId;
     window._editSessId=null;
-    toast('Sessão atualizada!',null,"ok");
     _cache['sessoes']=ss;
     // Com 'await': a ida ao Google devolve o gcalId, e é ele que faz o próximo
     // arrastar MOVER o evento em vez de criar um segundo. Sem esperar, a troca de
     // tela recarregava os dados por cima e o código do evento se perdia.
-    await pontePush(idEditada);
+    ponteAviso(await pontePush(idEditada),'Sessão atualizada!');
   } else {
     const nova={id:Date.now(),...dados};
     ss.push(nova);
     await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':nova}]);
-    toast('Sessão registrada!',null,"ok");
     _cache['sessoes']=ss;
-    await pontePush(nova.id);
+    ponteAviso(await pontePush(nova.id),'Sessão registrada!');
   }
   _cache['sessoes']=ss;
   e.target.reset();
@@ -3563,7 +3561,11 @@ async function salvarEGoogle(){
   // Com a ponte ligada, quem escreve no Google é a ponte — assim o evento nasce
   // com o código guardado na sessão. O caminho antigo (abrir o Google na mão)
   // criava um evento que a Clínica não reconhecia depois: era o começo da duplicata.
-  if(ponteAtiva()){await pontePush(s.id);toast('Salvo e marcado no Google!',null,"ok");}
+  if(ponteAtiva()){
+    const res=await pontePush(s.id);
+    if(res==='ok')toast('Salvo e marcado no Google!',null,"ok");
+    else toast('Salvo aqui, mas NÃO foi para o Google. '+ponteQueixa(res),'#EF6C00',"warn");
+  }
   else{abrirGA(s);toast('Salvo! Abrindo Google Agenda...',null,"ok");}
   document.querySelector('#pg-nova-sessao form').reset();
   document.getElementById('sData').value=dLocal(new Date());
@@ -5846,15 +5848,19 @@ async function gravarSessao(s){
 
 // Cria ou atualiza o evento da sessão no Google. Silenciosa: se a ponte estiver
 // desligada ou o Google não responder, o app segue a vida normalmente.
+// Devolve SEMPRE o que aconteceu, em uma palavra. Antes ela desistia calada em
+// quatro pontos diferentes e a tela continuava dizendo "escrita no Google" —
+// o aviso mentia sem querer. Quem chama agora sabe, e conta a verdade.
+// 'ok' | 'desligada' | 'sem-agenda' | 'sem-data' | 'falhou'
 async function pontePush(sessaoId){
-  if(!ponteAtiva())return;
+  if(!ponteAtiva())return 'desligada';
   const ss=gD('sessoes');
   const idx=ss.findIndex(x=>String(x.id)===String(sessaoId));
-  if(idx<0)return;
+  if(idx<0)return 'falhou';
   const s=ss[idx];
-  if(!s.data)return;
+  if(!s.data)return 'sem-data';
   const ag=agendaEscolhida();
-  if(!ag)return;
+  if(!ag)return 'sem-agenda';
   const corpo=gcalEvento(s);
   let r;
   if(s.gcalId){
@@ -5884,7 +5890,28 @@ async function pontePush(sessaoId){
       _cache['sessoes']=ss;
       await gravarSessao(ss[idx]);
     }
+    if(!r||!r.id)return 'falhou';
+    return 'ok';
   }
+  return r?'ok':'falhou';
+}
+
+// A mesma resposta em uma frase, para os avisos da tela não terem que decorar
+// os códigos. Devolve string vazia quando deu tudo certo — nada a dizer é bom.
+function ponteQueixa(res){
+  if(res==='ok'||!res)return '';
+  if(res==='desligada')return 'A Ponte com o Google está desligada neste aparelho.';
+  if(res==='sem-agenda')return 'Falta escolher a agenda do Google, na Agenda.';
+  if(res==='sem-data')return 'Sem data, não dá para escrever no Google.';
+  return 'O Google não aceitou agora — tente "Atualizar no Google" na agenda.';
+}
+
+// Um aviso só, dizendo a verdade sobre os dois lados. Ponte desligada é escolha
+// dele, não defeito: nesse caso o aviso é o de sempre, sem alarme.
+function ponteAviso(res,frase){
+  if(res==='ok')toast(frase.replace(/!$/,'')+' — e escrita no Google.',null,"ok");
+  else if(res==='desligada')toast(frase,null,"ok");
+  else toast(frase.replace(/!$/,'')+' aqui, mas NÃO foi para o Google. '+ponteQueixa(res),'#EF6C00',"warn");
 }
 
 // Cancela no Google o evento daquela sessão — só se a Clínica tiver criado ele.
@@ -8832,9 +8859,12 @@ async function cabAgendarSessao(){
       data:dia,horario:document.getElementById('diagHora').value||'',procedimentos:'',notas:'',valor:0,formaPgto:'',status:'pendente'};
     const ss=gD('sessoes');ss.push(nova);_cache['sessoes']=ss;
     await supaReq('POST','sessoes',[{'user_id':'montgomery','dados':nova}]);
-    if(ponteAtiva())await pontePush(nova.id);
+    const res=await pontePush(nova.id);
     atuFin();atuDash();cabRender();
-    toast('Sessão marcada'+(ponteAtiva()?' — e escrita no Google.':'. O valor entra depois na agenda.'),null,"ok");
+    // Ponte desligada é escolha dele, não defeito: nada de alarme.
+    if(res==='desligada')toast('Sessão marcada. O valor entra depois na agenda.',null,"ok");
+    else if(res==='ok')toast('Sessão marcada — e escrita no Google.',null,"ok");
+    else toast('Sessão marcada aqui, mas NÃO foi para o Google. '+ponteQueixa(res),'#EF6C00',"warn");
   }finally{_cabSalvando=false;}
 }
 
