@@ -17,10 +17,16 @@ mas a tela disse que tinha escrito. Achado: o `pontePush` desistia **em silênci
 pontos (ponte desligada, agenda não escolhida, sessão sem data, Google recusando) e os avisos
 continuavam dizendo "e escrita no Google". Corrigido: a ponte devolve sempre o que aconteceu,
 e os quatro lugares que salvam sessão contam a verdade. Ponte desligada segue sem alarme.
-**Falta a prova ao vivo:** marcar uma sessão de teste e ler o aviso. Se ele acusar
-"Falta escolher a agenda do Google", a causa da falha de 04/08 está achada — a escolha da
-agenda mora no `localStorage`, ou seja, **é por aparelho**, e o computador pode estar sem ela
-mesmo com a ponte ligada no celular.
+**Provado ao vivo em 04/08, no celular:** o aviso laranja apareceu ("Salvo aqui, mas NÃO foi
+para o Google") e a caixa disse a causa — *a autorização do Google venceu e não consegui
+renovar sozinho*. Não era a agenda. A função no servidor (`google-token-refresh`) está
+**ativa** no projeto `montgomery-clinica`; o que falta é a **chave de renovação** no aparelho,
+que mora no `localStorage` e some quando o navegador limpa os dados do site ou quando o login
+foi feito sem `prompt: consent`. Cura: o OK da própria caixa (`ponteReconectar` pede consent).
+
+**Pendente:** ele religar, subir a sessão de 04/08 pelo "Atualizar no Google", e marcar uma
+sessão de teste para ver o aviso vir verde. Se a chave de renovação sumir de novo em poucos
+dias, aí sim vale guardá-la fora do aparelho.
 *Lição para as aulas: função que desiste calada é pior que função que quebra — a que quebra avisa.*
 
 ## PENDENTE — senha "Ver o halo correr" (aberta em 03/08/2026)
