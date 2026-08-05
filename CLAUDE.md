@@ -38,7 +38,7 @@ real de consultório, nunca de um exercício.
 1. **Tudo se registra no `ROADMAP.md`.** Janelas acabam, o documento não. O que não está
    escrito lá, some. Ao concluir algo, anotar com data e resumo — sem precisar pedir.
    O diário são três arquivos: o `ROADMAP.md` guarda **só o que ainda respira** (e as pendências
-   no alto, dentro das 60 linhas que o Ronda lê); `00_Nucleo/ROADMAP_ARQUIVO.md` guarda o que já
+   no alto, nas primeiras linhas); `00_Nucleo/ROADMAP_ARQUIVO.md` guarda o que já
    foi entregue, inteiro; `00_Nucleo/TELA_UNICA.md` guarda a planta do Diagnóstico.
    **Ao concluir, o bloco desce para o arquivo e sai do vivo.**
 2. **Toda entrega sobe a versão** no rodapé visível do `index.html`, em constante única.
@@ -83,14 +83,17 @@ na tela dele vale mais que dez explicações certas.
 
 ## Os agentes
 
-O primeiro agente próprio dele é o **Ronda** (`01_Codigo/agentes/ronda.mjs`): lê o ROADMAP,
-diz o que está pendente, imprime o custo da corrida. Mãos só de leitura.
+**Hoje não há nenhum agente próprio rodando.** O primeiro foi o **Ronda**
+(`01_Codigo/agentes/ronda.mjs`, ainda no repositório): lia o ROADMAP, dizia o que estava
+pendente, imprimia o custo da corrida. Ele o **aposentou em 04/08/2026**.
+Não propor ressuscitá-lo, nem sugerir agente novo, sem ele pedir.
 
-Ele decidiu que **o Ronda não terá relógio** — roda quando for chamado. A razão é dele:
-*"as ideias vêm sem que eu pense nelas."* Não propor despertador de novo.
+A razão de ele nunca ter tido relógio continua valendo para qualquer agente futuro:
+*"as ideias vêm sem que eu pense nelas."* Não propor despertador.
 
 Regra de agente aprendida na prática: **agente caro costuma ser sintoma de pedido vago.**
 O preço mora no tamanho do arquivo aberto, não no tempo de pensar.
 
-**Atenção:** o `ROADMAP.md` agora tem dois leitores — ele e os agentes. O Ronda lê só as
-60 primeiras linhas. O que for escrito no topo muda o que o agente enxerga.
+**Atenção:** com o Ronda aposentado, o `ROADMAP.md` voltou a ter **um leitor só — ele**.
+Escrever para gente, não para máquina. As pendências continuam no alto, porque é lá que
+o olho cai primeiro.
