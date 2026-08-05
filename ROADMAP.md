@@ -10,6 +10,24 @@ O mapa de onde mora cada coisa dentro do `index.html` mora em
 > este documento não. O que não está escrito aqui, some. **Ao concluir**, o bloco desce para o
 > arquivo e some daqui: o diário fica magro de propósito.
 
+## PENDENTE — provar o apagar que atravessa a ponte (04/08/2026)
+
+**v10.5 subiu.** Ele apagou um evento no Google e a sessão continuou de pé na Clínica.
+Não era defeito: era decisão escrita no código desde a v4.6 ("apagar continua sendo decisão
+tomada dentro da Clínica"). O risco foi dito a ele antes de mexer — a sessão leva junto
+**valor, forma de pagamento e evolução, e isso não volta** — e ele decidiu assim mesmo,
+ciente da irreversibilidade, porque na prática dele **o Google é onde ele desmarca**.
+
+Agora o `pontePull` ouve o sumiço. Duas travas de pé, contra acidente e não contra ele:
+só some sessão que a Clínica reconhece pelo `gcalId`; e se a lista do Google vier truncada
+(`nextPageToken`) ninguém é apagado — **ausência só vira prova quando a lista veio inteira**.
+Acima de 3 de uma vez, ela para e pergunta, com os nomes e as datas à vista (`APAGAR_TETO`).
+
+**Falta a prova ao vivo:** marcar uma sessão de teste, vê-la chegar ao Google, apagar lá e
+tocar em "Puxar do Google" na Agenda. Ela deve sair daqui, com o aviso vermelho.
+*Lição para as aulas: sincronismo de duas pontas não tem resposta certa — tem uma escolha
+sobre qual erro dói menos. Aqui ele preferiu o risco de perder a apagar na mão.*
+
 ## PENDENTE — ouvir o que a ponte passou a dizer (04/08/2026)
 
 **v10.4 subiu.** Ele agendou em 04/08 e a sessão não apareceu no Google Agenda do celular,
