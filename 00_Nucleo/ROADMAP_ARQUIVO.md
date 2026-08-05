@@ -39,6 +39,32 @@ script, gravar sempre em LF.**
 
 A rede embaixo do trapézio rodou antes do push: 11 portas conferidas, nenhuma quebrada.
 
+## Concluído — as três chaves que fechavam o CSS, e a porta nova da rede (Clínica v10.8, 04/08/2026)
+
+A v10.7 subiu **quebrada**, e ele viu antes de mim: a tela de Início abriu com um ícone do
+tamanho da página inteira, roxo, e o menu inteiro sem cor. Ele disse *"algo deu errado"*.
+
+**A causa.** Ao apagar o CSS das faixas retiradas eu usei "apague toda linha que começa com este
+texto". Três linhas de **continuação** de outras regras começavam com exatamente o mesmo texto e
+foram embora junto: a de `.esc-n` (o número na bolinha da Escala), gêmea da de `.mc-badge`; e as
+duas de `.fam-palco:fullscreen`, gêmeas das de `.reg-palco`. Uma regra de CSS sem a chave que
+fecha faz o navegador **engolir todo o CSS de baixo** como se fosse parte dela. Daí tudo: ícone
+sem tamanho cresce até a largura da página (o do endereço do rodapé estava com 1265 pixels), e
+link sem cor volta ao roxo de fábrica. Nada de novo foi desenhado — era o rodapé, pelado.
+
+**O conserto:** as três linhas devolvidas, idênticas às da v10.6.
+
+**A porta nova da rede — "A pintura fecha".** A rede tinha dito "pode subir" com o CSS
+arrebentado, porque só conferia o JavaScript. Agora ela conta chave por chave em cada folha de
+estilo e aponta a linha da regra que ficou aberta. Rodada contra o commit quebrado, acusa:
+*"regra aberta na linha 342 engole a de baixo"*. **São 12 portas.**
+
+*Duas lições, e as duas doeram no mesmo dia. A primeira: **apagar por prefixo de texto apaga o
+gêmeo**. O que salva não é reler a linha que se apaga — é conferir o que sobrou. A segunda, mais
+importante: **a rede só prova o que alguém ensinou a ela**. O JavaScript passou perfeito e a tela
+estava destruída; a diferença entre "conferido" e "conferido de verdade" foi ele olhando o site.
+Toda entrega devia passar pelos olhos numa tela real, não só pela rede.*
+
 ## Concluído — o pé do Diagnóstico sai inteiro (Clínica v10.7, 04/08/2026)
 
 Terceiro pedido da mesma janela, e o maior: *"isso tudo pode sair, sinal verde"* — o pé inteiro
