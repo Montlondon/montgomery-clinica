@@ -2328,7 +2328,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v10.5 · 04/08';
+const APP_VER='v10.6 · 04/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -5965,16 +5965,31 @@ async function pontePull(silencioso=true){
   const hoje=new Date();
   const de=new Date(hoje.getFullYear(),hoje.getMonth(),hoje.getDate()-60);
   const ate=new Date(hoje.getFullYear(),hoje.getMonth(),hoje.getDate()+180);
-  const r=await gcalReq('GET',`/calendars/${encodeURIComponent(ag)}/events`+
-    `?singleEvents=true&orderBy=startTime&maxResults=250&showDeleted=false`+
-    `&timeMin=${encodeURIComponent(de.toISOString())}&timeMax=${encodeURIComponent(ate.toISOString())}`,null,silencioso);
-  if(!r)return 0;
+  // O Google entrega no máximo 250 eventos por vez. A agenda dele, em 240 dias,
+  // tem muito mais — então a primeira resposta vinha SEMPRE pela metade, com um
+  // nextPageToken. E como "lista truncada não apaga ninguém", a varredura do
+  // apagar nunca chegava a rodar: dizia "tudo igual" sem ter olhado o fim.
+  // Agora vira as páginas até acabar. Só quando a última chega é que a ausência
+  // de um evento vira prova de que ele foi apagado.
+  const itens=[];
+  let pagina=null, inteira=true;
+  for(let volta=0;volta<20;volta++){                  // 20 páginas = 5.000 eventos: teto de fuga
+    const r=await gcalReq('GET',`/calendars/${encodeURIComponent(ag)}/events`+
+      `?singleEvents=true&orderBy=startTime&maxResults=250&showDeleted=false`+
+      `&timeMin=${encodeURIComponent(de.toISOString())}&timeMax=${encodeURIComponent(ate.toISOString())}`+
+      (pagina?`&pageToken=${encodeURIComponent(pagina)}`:''),null,silencioso);
+    if(!r){ if(!itens.length)return 0; inteira=false; break; }   // caiu no meio: não é lista inteira
+    itens.push(...(r.items||[]));
+    pagina=r.nextPageToken;
+    if(!pagina)break;
+    if(volta===19)inteira=false;                      // bateu o teto e ainda havia mais
+  }
   const ss=gD('sessoes');
   let mudou=0;
   // Quem o Google mostrou nesta janela. Serve para a varredura do apagar, lá
   // embaixo: o que a Clínica tem e o Google não mostra mais, sumiu de lá.
-  const vistos=new Set((r.items||[]).map(ev=>ev.id));
-  for(const ev of (r.items||[])){
+  const vistos=new Set(itens.map(ev=>ev.id));
+  for(const ev of itens){
     if(ev.status==='cancelled')continue;
     const id=_idDoCarimbo(ev);
     if(!id)continue;                                   // sem etiqueta: não é assunto da Clínica
@@ -5994,10 +6009,10 @@ async function pontePull(silencioso=true){
     if(s.data!==data||s.horario!==horario)mudou++;
   }
   // === O APAGAR, ouvido de volta ===
-  // Se o Google devolveu a lista PELA METADE (nextPageToken), a ausência não
-  // prova nada: o evento pode estar na página seguinte. Nesse caso não se apaga
-  // ninguém. Ausência só vira prova quando a lista veio inteira.
-  const sumiram=r.nextPageToken?[]:ss.filter(s=>{
+  // Se a lista não veio INTEIRA (pedido caiu no meio, ou passou do teto de
+  // páginas), a ausência não prova nada: o evento pode estar no pedaço que não
+  // chegou. Ausência só vira prova quando a última página chegou.
+  const sumiram=!inteira?[]:ss.filter(s=>{
     if(!s.gcalId||vistos.has(s.gcalId))return false;
     if(!s.data)return false;
     const d=new Date(s.data+'T12:00:00');            // meio-dia: fuso não empurra o dia
