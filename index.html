@@ -293,21 +293,6 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .folha-txt::placeholder{color:#B9AF98;font-style:italic}
 .folha-pe{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:7px 12px;border-top:1px solid #EFE7D6}
 .folha-conta{font-size:11px;color:var(--txt-l)}
-/* O QUE SE REPETE E A FRASE QUE FICOU — faixa 2. Os gatilhos são uma lista por
-   pessoa que só cresce; as frases dela são trechos marcados dentro da folha. */
-.fg2{padding:9px 12px 11px;border-top:1px solid #EFE7D6}
-.fg2-t{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--txt-l);margin:0 0 6px}
-.fg2-t:not(:first-child){margin-top:11px}
-.fg2-ch{display:inline-flex;align-items:center;gap:5px;padding:3px 5px 3px 10px;margin:0 5px 5px 0;border-radius:999px;
-  font-size:11.5px;background:#F6EFE2;border:1px solid #E4DCCB;color:var(--txt)}
-.fg2-x{border:none;background:none;color:#B9AF98;cursor:pointer;font-size:13px;line-height:1;padding:0 3px;font-family:inherit}
-.fg2-x:hover{color:#c62828}
-.fg2-novo{display:flex;gap:6px;align-items:center;max-width:340px}
-.fg2-novo input{font-size:12px}
-.fg2-fr{display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-size:12.5px;line-height:1.6;font-family:'Lora',Georgia,serif;color:var(--txt)}
-.fg2-fr q{flex:1 1 auto;min-width:0;font-style:italic}
-.fg2-fr small{font-family:'Inter',sans-serif;font-style:normal;color:var(--txt-l);font-size:10.5px;white-space:nowrap}
-.fg2-vazio{font-size:11.5px;color:var(--txt-l);line-height:1.55}
 .folha-pen{padding:10px 12px 12px;border-top:1px solid #EFE7D6}
 .folha-gr{margin-bottom:9px}
 .folha-gr:last-child{margin-bottom:0}
@@ -375,9 +360,7 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
   display:flex;flex-direction:column;align-items:stretch;overflow:auto}
 .fam-palco.fam-cheio{position:fixed;top:0;left:0;z-index:9999}
 .fam-palco:fullscreen #famTela,.fam-palco.fam-cheio #famTela{
-  flex:1 1 auto;display:flex;align-items:center;justify-content:center;overflow:auto;padding:1vh 1vw}
 .fam-palco:fullscreen .fam-tela,.fam-palco.fam-cheio .fam-tela{
-  max-width:96vw!important;width:auto!important;height:82vh!important;border-top:none}
 .fam-palco:fullscreen .fam-ed,.fam-palco.fam-cheio .fam-ed{flex:0 0 auto}
 /* A ESCALA QUE SE TOCA — os 22 degraus à vista, um toque marca.
    Antes era um <select> de 22 opções: em 19 encontros foi anotado 2 vezes.
@@ -391,52 +374,16 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
   background:var(--cream);cursor:pointer;font-size:12px;color:var(--txt);line-height:1.25;text-align:left;transition:background .12s,border-color .12s}
 .esc-d:hover{background:var(--pri-l);border-color:var(--pri)}
 .esc-n{flex:0 0 auto;width:19px;height:19px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
-  font-size:9.5px;font-weight:700;background:#F1EADC;color:#8A8578}
 .esc-sobe .esc-n{background:var(--pri-l);color:var(--pri-deep)}
 .esc-desce .esc-n{background:#F6EFE2;color:#A8895A}
 .esc-d[aria-pressed="true"]{background:var(--pri-deep);border-color:var(--pri-deep);color:#fff;font-weight:600}
 .esc-d[aria-pressed="true"] .esc-n{background:rgba(255,255,255,.22);color:#fff}
 .esc-pe{font-size:11.5px;color:var(--txt-l);margin-top:10px}
-/* A RÉGUA DE ENCONTROS — mesma marcenaria da faixa dos bonecos (.fam), para
-   que o pé do Diagnóstico não pareça outro programa. */
+/* A moldura .reg — usada hoje pela faixa da recomendação. Nasceu para a régua de
+   encontros, que saiu em 04/08/2026; a marcenaria ficou porque é a mesma do resto. */
 .reg{background:var(--cream);border:1px solid var(--brd);border-radius:11px;margin-bottom:14px;box-shadow:0 1px 4px rgba(43,41,36,.04)}
 .reg-cab{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 12px 8px;font-size:13px;font-weight:600;color:var(--txt)}
 .reg-cab svg{width:17px;height:17px;color:var(--gold,#C9A84C);flex-shrink:0}
-.reg-tela{display:block;width:100%;border-top:1px solid #EFE7D6;background:#FFFDF7}
-.reg-pt{cursor:pointer}
-.reg-pt:hover circle{stroke:var(--gold,#C9A84C);stroke-width:2.4}
-.reg-pe{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:8px 12px;border-top:1px solid #EFE7D6;font-size:11.5px;color:var(--txt-l);line-height:1.6}
-.reg-num{display:inline-flex;align-items:baseline;gap:4px}
-.reg-num b{color:var(--pri-deep);font-size:13px;font-weight:700}
-.reg-vazio{padding:14px 12px;font-size:12px;color:var(--txt-l);line-height:1.6;border-top:1px solid #EFE7D6}
-/* OS MARCOS DA VIDA — faixa 6. A lista que dá nome ao que o desenho só marca:
-   no traço cabe um símbolo e um número; a palavra mora aqui embaixo. */
-.mc{border-top:1px solid #EFE7D6;padding:9px 12px 11px}
-.mc-cab{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:12px;font-weight:600;color:var(--txt);margin-bottom:8px}
-.mc-cab span{font-weight:400;font-size:11px;color:var(--txt-l)}
-.mc-item{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px dashed #EFE7D6;font-size:12px;line-height:1.5}
-.mc-item:last-of-type{border-bottom:none}
-.mc-badge{flex:0 0 auto;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
-  font-size:9.5px;font-weight:700;background:#F1EADC;color:#8A8578;margin-top:1px}
-.mc-corpo{flex:1 1 auto;min-width:0}
-.mc-tit{color:var(--txt);font-weight:600}
-.mc-quando{color:var(--txt-l);font-size:11px}
-.mc-nota{color:var(--txt-l);font-size:11px;font-style:italic}
-.mc-acoes{flex:0 0 auto;display:flex;gap:5px}
-.mc-x{border:none;background:none;color:var(--txt-l);cursor:pointer;font-size:11px;padding:2px 4px;font-family:inherit;text-decoration:underline}
-.mc-x:hover{color:var(--pri-deep)}
-.mc-sem{margin-top:7px;padding:7px 9px;background:#FBF6EA;border-radius:7px;font-size:11px;color:#A8895A;line-height:1.5}
-.mc-form{margin-top:9px;padding:10px;background:#FFFDF7;border:1px solid var(--brd);border-radius:9px}
-.mc-form .fr{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
-.mc-form .fg{flex:1 1 150px;margin:0}
-.mc-pe{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px}
-.mc-vazio{font-size:11.5px;color:var(--txt-l);line-height:1.55}
-.reg-palco:fullscreen #reguaTela,.reg-palco.fam-cheio #reguaTela{
-  flex:1 1 auto;display:flex;align-items:center;justify-content:center;overflow:auto;padding:1vh 1vw}
-.reg-palco:fullscreen .reg-tela,.reg-palco.fam-cheio .reg-tela{
-  max-width:96vw!important;width:auto!important;height:82vh!important;border-top:none}
-/* O CORPO — faixa 4, primeira vela: a coluna como lugar onde se escreve.
-   Mesma marcenaria do resto do pé do Diagnóstico (.reg). */
 /* AO LADO DA MARCA, O QUE ELA DIZ — faixa 4. Uma linha, escrita por ele. */
 .lei-linha{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:6px 0;border-bottom:1px solid var(--brd)}
 .lei-linha:last-child{border-bottom:none}
@@ -445,37 +392,6 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
 .lei-marca .det{font-size:10.5px;color:var(--txt-l)}
 .lei-in{flex:1 1 220px;min-width:0;font-size:12.5px!important;font-family:'Lora',Georgia,serif!important;font-style:italic}
 .lei-in::placeholder{font-style:italic;color:#C4B79A}
-.cp-linha{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start;padding:10px 12px 12px;border-top:1px solid #EFE7D6}
-.cp-palco{flex:0 0 auto;background:#FFFDF7;border-radius:9px}
-.cp-painel{flex:1 1 260px;min-width:250px}
-.cp-tela{display:block;height:430px;width:auto}
-.cp-vt{cursor:pointer}
-.cp-vt rect,.cp-vt path{transition:none}
-.cp-vt:hover .cp-osso{stroke:var(--gold,#C9A84C);stroke-width:1.9}
-.cp-cartao{border:1px solid var(--brd);border-radius:9px;background:#FDFAF6;padding:11px 13px}
-.cp-nivel{font-weight:700;color:var(--pri-d);font-size:14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.cp-rot{font-size:11px;color:var(--txt-l);margin:7px 0 2px;text-transform:uppercase;letter-spacing:.4px}
-.cp-txt{font-size:12.5px;line-height:1.6}
-.cp-vazio{font-size:12.5px;color:var(--txt-l);line-height:1.65}
-.cp-aj{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:5px 7px;border-radius:6px;font-size:12px;line-height:1.55}
-.cp-palco:fullscreen,.cp-palco.fam-cheio{background:var(--cream);display:flex;align-items:center;justify-content:center}
-.cp-palco:fullscreen .cp-tela,.cp-palco.fam-cheio .cp-tela{height:94vh!important}
-.cp-mostrar{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--brd);background:#FDFAF6;color:var(--pri-d);
-  border-radius:999px;padding:4px 12px;font:inherit;font-size:11.5px;font-weight:600;cursor:pointer}
-.cp-mostrar:hover{border-color:var(--gold,#C9A84C)}
-.cp-mostrar svg{width:14px;height:14px}
-/* MOSTRAR AO PACIENTE — a tela do outro leitor. Nada de botão de marcar aqui:
-   quem olha é a pessoa, e ela só precisa reconhecer o próprio corpo. */
-.cpp{position:fixed;inset:0;z-index:9000;background:var(--cream,#FBF7EF);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px}
-.cpp-tela{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center}
-.cpp-svg{height:100%;max-height:78vh;width:auto;max-width:96vw}
-.cpp-vt{cursor:pointer}
-.cpp-legenda{flex:0 0 auto;max-width:760px;text-align:center;min-height:64px}
-.cpp-nivel{font-family:Georgia,serif;font-size:26px;font-weight:700;color:#1E3A5F;display:flex;gap:10px;align-items:baseline;justify-content:center}
-.cpp-nivel span{font-family:inherit;font-size:13px;font-weight:400;color:var(--txt-l)}
-.cpp-txt{font-size:16px;line-height:1.6;color:var(--ink,#2B2B2B);margin-top:6px}
-.cpp-sair{position:absolute;top:14px;right:16px;border:1px solid var(--brd);background:#FFF;color:var(--pri-d);border-radius:999px;padding:6px 16px;font:inherit;font-size:13px;font-weight:600;cursor:pointer}
-@media(max-width:640px){.cpp-svg{max-height:70vh}.cpp-nivel{font-size:21px}.cpp-txt{font-size:14.5px}}
 /* O INTERRUPTOR DE TRÊS POSIÇÕES — a peça reaproveitável.
    Nasce sem posição escolhida (ninguém decide por ele) e cada toque grava.
    Tocar de novo na posição acesa desliga: sai a clique como entrou a clique. */
@@ -1532,15 +1448,8 @@ window.addEventListener('DOMContentLoaded',()=>{
       placeholder="Escreva solto. O que ela disse, o que você viu, o que passou pela sua cabeça. Sem rótulo e sem ordem — classificar vem depois."></textarea>
     <div class="folha-pe">
       <span class="folha-conta" id="folhaConta"></span>
-      <!-- A FRASE DELA: marcar um trecho DENTRO do que já está escrito. Não é
-           campo novo — é seleção de texto, e o gesto é dele. -->
-      <button type="button" class="btn btn-sec btn-sm" style="margin-left:auto" id="folhaBtnFrase" onclick="frasesGuardar()" title="Marque um trecho no que você escreveu e toque aqui: a frase volta na próxima chegada"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h4v4c0 2-1.5 3.5-4 4"/><path d="M15 7h4v4c0 2-1.5 3.5-4 4"/></svg></span> Guardar a frase marcada</button>
       <button type="button" class="btn btn-sec btn-sm" id="folhaBtnPen" onclick="folhaPeneirar()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v6l-4 2v-8Z"/></svg></span> O que a folha reconhece</button>
     </div>
-    <!-- O QUE A FOLHA GUARDA DE UMA VISITA PARA A OUTRA: os gatilhos (a lista
-         curta que só cresce) e as frases dela (as imagens que a pessoa entrega
-         prontas). Vivem na ficha da pessoa, não na avaliação do dia. -->
-    <div id="folhaGuardados"></div>
     <div id="folhaPeneira"></div>
   </div>
 
@@ -1573,34 +1482,11 @@ window.addEventListener('DOMContentLoaded',()=>{
     <div id="famPeneira"></div>
   </div>
 
-  <!-- ===== FAIXA 4: O CORPO — primeira vela (só a coluna) =====
-       "Acho muito mais prático ver uma perna e localizar o E36." O corpo deixa
-       de ser mapa para consultar e passa a ser o lugar ONDE SE ESCREVE. Esta é
-       a primeira vela e acende UMA camada só: a quiropraxia, que já está
-       catalogada vértebra por vértebra em QUIROPRAXIA_REF.
-       Nada foi tirado: a aba de referência, o ABC e o Baguá continuam
-       exatamente onde estavam. Este é outro caminho para o mesmo dado.
-       Visão de COSTAS, decisão dele em 30/07: de costas os lados coincidem,
-       e o desenho não mente sobre qual é a direita da pessoa. -->
-  <div class="reg no-print" id="corpoBloco">
-    <div class="reg-cab">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M9 6h6M9 9.5h6M9 13h6M9 16.5h6"/></svg>
-      O corpo — a coluna, de costas
-      <span style="font-weight:400;font-size:11.5px;color:var(--txt-l)">— toque na vértebra: ela abre o que aquele nível inerva e o que se ajusta ali</span>
-      <span id="corpoConta" style="margin-left:auto;font-weight:400;font-size:11.5px;color:var(--txt-l)"></span>
-      <button type="button" class="cp-mostrar" onclick="cpPacienteAbrir()" title="Corpo grande e limpo, para virar a tela para o paciente (Esc volta)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z"/><circle cx="12" cy="12" r="2.5"/></svg>
-        Mostrar ao paciente
-      </button>
-    </div>
-    <div class="cp-linha">
-      <div class="fam-palco cp-palco" id="corpoPalco">
-        <button type="button" class="fam-tc" onclick="famTelaCheia(this)" title="Ver em tela cheia (Esc volta)" aria-label="Tela cheia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
-        <div id="corpoTela"></div>
-      </div>
-      <div class="cp-painel" id="corpoPainel"></div>
-    </div>
-  </div>
+  <!-- FAIXA 4: O CORPO — a coluna de costas SAIU em 04/08/2026: ele não gostou do corpo
+       desenhado. Saiu o bloco visível, o desenho da tela e a tela "Mostrar ao paciente".
+       O CÓDIGO DAS VÉRTEBRAS FICOU INTEIRO — CP_SEG, cpVertebras(), cpRaiz() — e a coluna
+       continua saindo na folha impressa (cpSvgPapel). A anotação vértebra por vértebra
+       segue viva na aba Quiropraxia, gravando em _diagSelecoes.quiro como sempre. -->
 
   <div class="fc no-print" style="margin-bottom:14px">
     <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--ink,#2B2B2B);margin-bottom:10px"><span style="width:18px;height:18px;color:var(--gold,#C9A84C)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h4M7 12h2M15 8v8M12 16h6"/></svg></span>Calculadora de IMC</div>
@@ -1786,48 +1672,8 @@ window.addEventListener('DOMContentLoaded',()=>{
     <div style="padding:10px 12px 2px;border-top:1px solid #EFE7D6" id="rxSlotDiag"></div>
   </div>
 
-  <!-- ===== O ENCONTRO DE HOJE — o que ficou daquele dia =====
-       A Memória da sessão saiu do meio da avaliação e desceu para cá, colada
-       na régua: o encontro numerado vira o lugar do que ficou daquele dia.
-       Os três campos são os mesmos de sempre (`diagSessaoFeito`,
-       `diagSessaoReacao`, `diagSessaoProx`) — nada de dado mudou, só de lugar.
-       Fica antes da régua e não dentro dela porque a régua só aparece quando
-       já existem encontros, e o primeiro atendimento também precisa escrever. -->
-  <div class="reg no-print" id="encontroHoje" style="display:none">
-    <div class="reg-cab">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11l3 3v13H5z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg>
-      O encontro de hoje<span id="encHojeNum" style="font-weight:400;font-size:11.5px;color:var(--txt-l)"></span>
-      <span id="encHojeEsc" style="margin-left:auto;font-weight:400;font-size:11.5px;color:var(--txt-l)"></span>
-    </div>
-    <div style="padding:11px 13px 4px;border-top:1px solid #EFE7D6">
-      <div class="fr full"><div class="fg"><label>O que foi feito no atendimento</label><textarea id="diagSessaoFeito" rows="3" placeholder="Ajustes, pontos agulhados, técnicas, orientações dadas..." oninput="memSessaoMudou()"></textarea></div></div>
-      <div class="fr full"><div class="fg"><label>Como o paciente reagiu</label><textarea id="diagSessaoReacao" rows="2" placeholder="O que ele sentiu durante e ao final da sessão..." oninput="memSessaoMudou()"></textarea></div></div>
-      <div class="fr full"><div class="fg"><label>Para o próximo encontro</label><textarea id="diagSessaoProx" rows="2" placeholder="O que retomar, o que observar, o que ainda falta tratar..." oninput="memSessaoMudou()"></textarea></div></div>
-      <p style="font-size:11.5px;color:var(--txt-l);margin:2px 0 10px">Isto fica guardado neste encontro. Quando você quiser ver o que ficou de um dia, toque no ponto dele na régua abaixo — a tela não empurra mais nada na chegada.</p>
-    </div>
-  </div>
-
-  <!-- ===== A RÉGUA DE ENCONTROS — o pé do Diagnóstico =====
-       Os encontros em ordem, espaçados pelo TEMPO REAL entre eles: o vão largo
-       mostra sozinho quando a pessoa sumiu. Por cima, a linha da Escala de
-       Orientação Emocional, que ele preenche em toda avaliação e nunca viu
-       desenhada. Clicar num ponto abre o diagnóstico daquele dia. -->
-  <div class="reg no-print" id="reguaBloco" style="display:none">
-    <div class="reg-cab">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19h18"/><path d="M5 19v-3M9 19v-5M13 19v-9M17 19v-6"/><path d="M4 7l5-3 5 4 6-4"/></svg>
-      A régua de encontros
-      <span style="font-weight:400;font-size:11.5px;color:var(--txt-l)">— o vão entre os pontos é o tempo real que passou; toque num ponto para abrir aquele dia</span>
-    </div>
-    <div class="fam-palco reg-palco" id="reguaPalco">
-      <button type="button" class="fam-tc" onclick="famTelaCheia(this)" title="Ver em tela cheia (Esc volta)" aria-label="Tela cheia"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
-      <div id="reguaTela"></div>
-    </div>
-    <div class="reg-pe" id="reguaResumo"></div>
-    <!-- FAIXA 6: os marcos da vida. A régua desenhava encontros; aqui ela passa
-         a desenhar também a vida — a cena que fundou, as reativações e o peso
-         de fora. O desenho marca; a palavra fica nesta lista. -->
-    <div class="mc" id="reguaMarcos"></div>
-  </div>
+  <!-- O ENCONTRO DE HOJE, A RÉGUA DE ENCONTROS e OS MARCOS DA VIDA saíram em
+       04/08/2026, a pedido dele. Os encontros salvos continuam no banco e no histórico. -->
 </section>
 
 <!-- ===== FIM DO DESENHO DO DIAGNÓSTICO — a tela única acaba aqui =====
@@ -2328,7 +2174,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v10.6 · 04/08';
+const APP_VER='v10.7 · 04/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>
@@ -6602,12 +6448,10 @@ const CX_DIAG=[
   {k:'auriculo', el:'auriculoMapaCompleto',resumo:()=>cxConta((_diagSelecoes.auriculo||[]).length,'ponto','pontos')},
   {k:'psic',     el:'psicAnaliseConteudo',resumo:()=>cxConta((_diagSelecoes.psicanalise||[]).length,'conceito','conceitos')},
   {k:'emo',      el:'diagEscalaEmo',      resumo:()=>escEmoRotulo(vDiagEsc())},
-  {k:'memoria',  el:'diagSessaoFeito',    resumo:()=>cxConta(MEM_CAMPOS.filter(id=>vMem(id)).length,'anotação','anotações')}
 ];
 // Os três campos da Memória da sessão, na ordem em que aparecem na caixa
 const MEM_CAMPOS=['diagSessaoFeito','diagSessaoReacao','diagSessaoProx'];
 const vMem=id=>{const e=document.getElementById(id);return e?e.value.trim():'';};
-function memSessaoMudou(){_diagJaSalvo=false;atualizarResumoCaixas();renderDiagPainel();}
 
 /* ===== A ESCALA QUE SE TOCA =====
    Os 22 degraus à vista, um toque marca, um segundo toque desmarca. O valor
@@ -6777,8 +6621,6 @@ function initDiagnostico(){
   folhaContar();
   renderFolhaPeneira();
   famRender();
-  cpDesenhar();
-  cpPainel();
   rxNoDiagSync();
 }
 
@@ -7513,8 +7355,6 @@ function toggleQuiro(grupo,art){
   _diagJaSalvo=false;
   renderQuiroRef();
   renderDiagPainel();
-  // O corpo e a aba mostram o mesmo dado: marcar num lugar acende no outro.
-  if(typeof cpDesenhar==='function'){cpDesenhar();cpPainel();}
 }
 function atualizarObsQuiro(v){_diagSelecoes.quiroObs=v;_diagJaSalvo=false;diagGuardarRascunho();}
 
@@ -7633,87 +7473,9 @@ const CP_PERFIL=[
   [0.018,0.998],[0.020,0.950],[0.027,0.730],[0.006,0.523],[0.006,0.521]
 ];
 
-let _cpSel=null; // vértebra tocada agora (só destaque; não decide nada)
-
-function cpDesenhar(){
-  const tela=document.getElementById('corpoTela');
-  if(!tela)return;
-  const dir=CP_PERFIL.map(([w,y])=>[cpX(w),cpY(y)]);
-  const esq=CP_PERFIL.slice().reverse().map(([w,y])=>[cpX(-w),cpY(y)]);
-  const contorno=cpSuave(dir.concat(esq),true);
-  const braco=lado=>cpSuave([[0.122,0.238],[0.150,0.398],[0.150,0.548],[0.140,0.626]].map(([w,y])=>[cpX(lado*w),cpY(y)]),false);
-  const marcadas=new Set((_diagSelecoes.quiro||[]).filter(q=>q.grupo==='Coluna').map(q=>q.art));
-  const vts=cpVertebras().map(v=>{
-    const on=marcadas.has(v.id), sel=_cpSel===v.id;
-    const x=cpX(-v.w/2), y=cpY(v.y-v.h/2), w=v.w*CP.H, h=v.h*CP.H;
-    const cor=on?'var(--gold,#C9A84C)':'#FFFDF7';
-    const traco=sel?'var(--pri-deep,#2F5D50)':(on?'#9C7C1F':'#B9B2A4');
-    const osso=v.tri
-      ? `<path class="cp-osso" d="M${(x).toFixed(1)},${y.toFixed(1)} L${(x+w).toFixed(1)},${y.toFixed(1)} L${(x+w*0.5).toFixed(1)},${(y+h).toFixed(1)} Z" fill="${cor}" stroke="${traco}" stroke-width="${sel?2.1:1.3}" stroke-linejoin="round"/>`
-      : `<rect class="cp-osso" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" rx="${(h*0.34).toFixed(1)}" fill="${cor}" stroke="${traco}" stroke-width="${sel?2.1:1.3}"/>`;
-    return `<g class="cp-vt" onclick="cpTocar('${v.id}')"><title>${escHtml(v.id)}</title>
-      <rect x="${(CP.CX-CP.H*0.075).toFixed(1)}" y="${(y-1.5).toFixed(1)}" width="${(CP.H*0.15).toFixed(1)}" height="${(h+3).toFixed(1)}" fill="transparent"/>
-      ${osso}</g>`;
-  }).join('');
-  const umbigo=cpY(0.382); // H/φ a contar dos pés — a marca áurea do cânone
-  tela.innerHTML=`<svg class="cp-tela" viewBox="0 0 ${CP.W} ${CP.ALT}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Coluna vertebral, visão de costas">
-    <g fill="none" stroke="#C8C1B2" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-      <path d="${contorno}"/>
-      <ellipse cx="${CP.CX}" cy="${cpY(0.0625).toFixed(1)}" rx="${(0.0355*CP.H).toFixed(1)}" ry="${(0.0625*CP.H).toFixed(1)}"/>
-      <path d="${braco(1)}"/><path d="${braco(-1)}"/>
-      <path d="M${cpX(-0.026).toFixed(1)},${cpY(0.105).toFixed(1)} L${cpX(-0.043).toFixed(1)},${cpY(0.152).toFixed(1)}"/>
-      <path d="M${cpX(0.026).toFixed(1)},${cpY(0.105).toFixed(1)} L${cpX(0.043).toFixed(1)},${cpY(0.152).toFixed(1)}"/>
-    </g>
-    <g stroke="#E3DCCB" stroke-width="1" stroke-dasharray="3 4">
-      <path d="M${cpX(-0.076).toFixed(1)},${umbigo.toFixed(1)} L${cpX(-0.040).toFixed(1)},${umbigo.toFixed(1)}"/>
-      <path d="M${cpX(0.040).toFixed(1)},${umbigo.toFixed(1)} L${cpX(0.076).toFixed(1)},${umbigo.toFixed(1)}"/>
-    </g>
-    ${vts}
-  </svg>`;
-  const c=document.getElementById('corpoConta');
-  if(c)c.textContent=marcadas.size?cxConta(marcadas.size,'vértebra marcada','vértebras marcadas'):'';
-}
-
-function cpTocar(id){
-  _cpSel=(_cpSel===id)?null:id;
-  cpDesenhar();
-  cpPainel();
-}
-// Marcar a vértebra é o mesmo gesto de sempre (toggleQuiro): entra em
-// _diagSelecoes.quiro e vai para o resumo, a ficha e o papel, junto com os
-// outros ajustes. O corpo não inventou um registro só dele.
-function cpPainel(){
-  const el=document.getElementById('corpoPainel');
-  if(!el)return;
-  // Tocou numa vértebra: é aqui que a gaveta da coluna faz falta de verdade.
-  if(_cpSel&&!comDados('quiropraxia',cpPainel)){
-    el.innerHTML='<div class="cp-vazio">Buscando a referência da coluna...</div>';
-    return;
-  }
-  if(!_cpSel){
-    el.innerHTML=`<div class="cp-vazio">Toque numa vértebra para ver o que aquele nível inerva, o que costuma aparecer quando ele está interferido, e marcar o que você ajustou hoje.
-      <br><br>É a mesma anotação da aba <strong>Quiropraxia</strong> — só que pelo corpo. O que você marcar aqui aparece lá, no resumo e na folha impressa.</div>`;
-    return;
-  }
-  const v=cpVertebras().find(x=>x.id===_cpSel);
-  const r=cpRaiz(_cpSel);
-  const on=quiroMarcado('Coluna',_cpSel);
-  const ajustes=(typeof QUIROPRAXIA_REF!=='undefined'&&v)?(QUIROPRAXIA_REF.ajustes[v.regAj]||[]):[];
-  el.innerHTML=`<div class="cp-cartao">
-    <div class="cp-nivel">${escHtml(r?r.nivel:_cpSel)}
-      <span style="font-weight:400;font-size:11px;color:var(--txt-l)">${escHtml(v?v.reg:'')}</span>
-      <span style="margin-left:auto">${btnQuiro('Coluna',_cpSel,on).replace('marcado','ajustado hoje').replace('+ marcar','+ ajustei aqui')}</span>
-    </div>
-    ${on?`<div class="cp-rot">O que isso diz</div>
-      <div class="lei-linha" style="border:none;padding:0 0 4px">${leiCampo(leiChave('Coluna',_cpSel),'a leitura desta marca — uma linha, sua')}</div>`:''}
-    ${r?`<div class="cp-rot">Inerva</div><div class="cp-txt">${escHtml(r.inerva)}</div>
-        <div class="cp-rot">Quando há interferência</div><div class="cp-txt">${escHtml(r.efeito)}</div>`
-      :`<div class="cp-txt" style="color:var(--txt-l)">Sem texto de referência para este nível.</div>`}
-    ${ajustes.length?`<div class="cp-rot">Ajustes de ${escHtml(v.regAj)}</div>
-      ${ajustes.map(a=>{const m=quiroMarcado(v.regAj,a);
-        return `<div class="cp-aj" style="background:${m?'var(--pri-l)':'transparent'}"><div>${escHtml(a)}</div>${btnQuiro(v.regAj,a,m)}</div>`;}).join('')}`:''}
-  </div>`;
-}
+/* O bloco visivel da coluna na tela do Diagnostico (cpDesenhar/cpTocar/cpPainel) saiu em
+   04/08/2026: ele nao gostou do corpo desenhado. O que ficou de pe e o codigo das vertebras --
+   CP_SEG, cpVertebras(), cpRaiz() -- que a folha impressa (cpSvgPapel) usa. */
 
 /* ===== A COLUNA NO PAPEL =====
    Ele já mostra ao paciente uma coluninha física em 3D para a pessoa entender
@@ -7766,135 +7528,7 @@ function cpSvgPapel(quiroSel,altura){
   </svg>`;
 }
 
-/* ===== MOSTRAR AO PACIENTE =====
-   O desenho tem dois leitores, e eles pedem coisas opostas. A tela de trabalho
-   foi feita para ELE: alvo fácil, vértebra pequena, painel do lado. Esta aqui
-   é para o PACIENTE: corpo grande, nada de botão, e só o que ele precisa
-   reconhecer — o próprio corpo e onde foi mexido hoje.
-
-   Não compete com a coluninha de plástico no que ela faz melhor (girar na mão
-   e ser apontada com o dedo). Faz o que o plástico não faz: mostra o nome do
-   nível e o que ele inerva, na hora, na frente da pessoa.
-
-   Mais anatômico, mas nada traçado no olho: as costelas saem de cada torácica
-   e param na largura real do corpo naquela altura (interpolada do CP_PERFIL),
-   as escápulas ocupam T2-T7 e as asas do ilíaco nascem no sacro. Mesmo cânone
-   da tela e do papel — CP, CP_PERFIL e cpVertebras(). */
-
-// Meia-largura do corpo naquela altura, lida do próprio perfil (não é chute:
-// é o mesmo contorno que já desenha o corpo, interpolado entre dois pontos).
-function cpLarg(f){
-  const P=CP_PERFIL.slice(0,9); // o lado direito, que desce do ombro ao pé
-  if(f<=P[0][1])return P[0][0];
-  for(let i=0;i<P.length-1;i++){
-    const [w0,y0]=P[i], [w1,y1]=P[i+1];
-    if(f<=y1)return w0+(w1-w0)*((f-y0)/(y1-y0||1));
-  }
-  return P[P.length-1][0];
-}
-
-let _cpPacSel=null; // vértebra tocada durante a conversa com o paciente
-
-function cpPacienteSvg(){
-  const marcadas=new Set((_diagSelecoes.quiro||[]).filter(q=>q.grupo==='Coluna').map(q=>q.art));
-  const dir=CP_PERFIL.map(([w,y])=>[cpX(w),cpY(y)]);
-  const esq=CP_PERFIL.slice().reverse().map(([w,y])=>[cpX(-w),cpY(y)]);
-  const contorno=cpSuave(dir.concat(esq),true);
-  const braco=lado=>cpSuave([[0.122,0.238],[0.150,0.398],[0.150,0.548],[0.140,0.626]].map(([w,y])=>[cpX(lado*w),cpY(y)]),false);
-  const vts=cpVertebras();
-
-  // As costelas: uma por torácica, de cada lado. Sai da borda da vértebra,
-  // desce e para pouco antes do contorno — que é onde a costela para de verdade.
-  const costelas=vts.filter(v=>v.reg==='Torácica').map((v,i,arr)=>{
-    const t=i/(arr.length-1), lat=cpLarg(v.y)*(0.90-0.16*t), queda=0.018+0.026*t;
-    return [1,-1].map(s=>`<path d="M${cpX(s*v.w*0.5).toFixed(1)},${cpY(v.y).toFixed(1)} Q${cpX(s*lat*0.80).toFixed(1)},${cpY(v.y-0.004).toFixed(1)} ${cpX(s*lat).toFixed(1)},${cpY(v.y+queda).toFixed(1)}"/>`).join('');
-  }).join('');
-
-  // As escápulas ocupam de T2 a T7, como no corpo real.
-  const escapula=s=>cpSuave([[0.030,0.247],[0.108,0.252],[0.118,0.290],[0.052,0.318]].map(([w,y])=>[cpX(s*w),cpY(y)]),true);
-  // As asas do ilíaco nascem na altura do sacro e abrem para fora.
-  const iliaco=s=>cpSuave([[0.020,0.443],[0.088,0.452],[0.096,0.482],[0.036,0.492]].map(([w,y])=>[cpX(s*w),cpY(y)]),true);
-
-  const ossos=vts.map(v=>{
-    const on=marcadas.has(v.id), sel=_cpPacSel===v.id;
-    const x=cpX(-v.w/2), y=cpY(v.y-v.h/2), w=v.w*CP.H, h=v.h*CP.H;
-    const fill=on?'#1E3A5F':'#FFFFFF', st=sel?'#C9A84C':(on?'#12243B':'#BDB6A7'), sw=sel?2.4:(on?1.5:1.1);
-    const forma=v.tri
-      ? `<path d="M${x.toFixed(1)},${y.toFixed(1)} L${(x+w).toFixed(1)},${y.toFixed(1)} L${(x+w*0.5).toFixed(1)},${(y+h).toFixed(1)} Z" fill="${fill}" stroke="${st}" stroke-width="${sw}" stroke-linejoin="round"/>`
-      : `<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" rx="${(h*0.34).toFixed(1)}" fill="${fill}" stroke="${st}" stroke-width="${sw}"/>`;
-    return `<g class="cpp-vt" onclick="cpPacTocar('${v.id}')">
-      <rect x="${(CP.CX-CP.H*0.075).toFixed(1)}" y="${(y-1.5).toFixed(1)}" width="${(CP.H*0.15).toFixed(1)}" height="${(h+3).toFixed(1)}" fill="transparent"/>
-      ${forma}</g>`;
-  }).join('');
-
-  // As etiquetas dos níveis ajustados hoje, com o mesmo empurrão calculado do
-  // papel: quando duas ficam perto demais, a de baixo desce o mínimo que cabe.
-  const GAP=30; let ultima=-1e9;
-  const marcas=vts.filter(v=>marcadas.has(v.id)).map(v=>{
-    const y=Math.max(cpY(v.y),ultima+GAP); ultima=y;
-    return `<path d="M${cpX(v.w/2+0.006).toFixed(1)},${cpY(v.y).toFixed(1)} L${(CP.CX+92).toFixed(1)},${y.toFixed(1)} L${(CP.CX+100).toFixed(1)},${y.toFixed(1)}" fill="none" stroke="#1E3A5F" stroke-width="1.1"/>
-      <text x="${(CP.CX+106).toFixed(1)}" y="${(y+8).toFixed(1)}" font-family="Georgia,serif" font-size="24" fill="#1E3A5F">${escHtml(v.id)}</text>`;
-  }).join('');
-
-  return `<svg class="cpp-svg" viewBox="0 0 ${CP.CX+170} ${CP.ALT}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Coluna vertebral, visão de costas, para mostrar ao paciente">
-    <g fill="none" stroke="#B6AF9F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-      <path d="${contorno}"/>
-      <ellipse cx="${CP.CX}" cy="${cpY(0.0625).toFixed(1)}" rx="${(0.0355*CP.H).toFixed(1)}" ry="${(0.0625*CP.H).toFixed(1)}"/>
-      <path d="${braco(1)}"/><path d="${braco(-1)}"/>
-      <path d="M${cpX(-0.026).toFixed(1)},${cpY(0.105).toFixed(1)} L${cpX(-0.043).toFixed(1)},${cpY(0.152).toFixed(1)}"/>
-      <path d="M${cpX(0.026).toFixed(1)},${cpY(0.105).toFixed(1)} L${cpX(0.043).toFixed(1)},${cpY(0.152).toFixed(1)}"/>
-    </g>
-    <g fill="none" stroke="#D6CFBF" stroke-width="1.2" stroke-linecap="round">${costelas}</g>
-    <g fill="none" stroke="#CFC8B8" stroke-width="1.3" stroke-linejoin="round">
-      <path d="${escapula(1)}"/><path d="${escapula(-1)}"/>
-      <path d="${iliaco(1)}"/><path d="${iliaco(-1)}"/>
-    </g>
-    ${ossos}${marcas}
-  </svg>`;
-}
-
-function cpPacDesenhar(){
-  const tela=document.getElementById('cpPacTela');
-  if(tela)tela.innerHTML=cpPacienteSvg();
-  const leg=document.getElementById('cpPacLegenda');
-  if(!leg)return;
-  const n=(_diagSelecoes.quiro||[]).filter(q=>q.grupo==='Coluna').length;
-  if(_cpPacSel){
-    const v=cpVertebras().find(x=>x.id===_cpPacSel), r=cpRaiz(_cpPacSel);
-    leg.innerHTML=`<div class="cpp-nivel">${escHtml(r?r.nivel:_cpPacSel)}<span>${escHtml(v?v.reg:'')}</span></div>
-      ${r?`<div class="cpp-txt"><strong>Daqui saem os nervos para</strong> ${escHtml(r.inerva)}</div>`
-         :`<div class="cpp-txt">Nível da coluna ${escHtml(_cpPacSel)}.</div>`}`;
-  } else {
-    leg.innerHTML=`<div class="cpp-txt">${n?'Em azul, onde foi ajustado hoje. Toque em qualquer vértebra para ver o que sai dali.':'Toque numa vértebra para ver o que sai daquele nível.'}</div>`;
-  }
-}
-function cpPacTocar(id){_cpPacSel=(_cpPacSel===id)?null:id;cpPacDesenhar();}
-
-function cpPacienteAbrir(){
-  let el=document.getElementById('cpPaciente');
-  if(!el){
-    el=document.createElement('div');
-    el.id='cpPaciente'; el.className='cpp'; el.setAttribute('role','dialog');
-    el.innerHTML=`<button type="button" class="cpp-sair" onclick="cpPacienteFechar()" aria-label="Voltar">Voltar</button>
-      <div class="cpp-tela" id="cpPacTela"></div>
-      <div class="cpp-legenda" id="cpPacLegenda"></div>`;
-    document.body.appendChild(el);
-  }
-  _cpPacSel=null;
-  el.style.display='flex';
-  document.addEventListener('keydown',cpPacEsc);
-  const pede=el.requestFullscreen||el.webkitRequestFullscreen;
-  if(pede){try{const r=pede.call(el);if(r&&r.catch)r.catch(()=>{});}catch(e){}}
-  cpPacDesenhar();
-}
-function cpPacienteFechar(){
-  const el=document.getElementById('cpPaciente');
-  if(el)el.style.display='none';
-  document.removeEventListener('keydown',cpPacEsc);
-  if(document.fullscreenElement&&document.exitFullscreen)document.exitFullscreen();
-  else if(document.webkitFullscreenElement&&document.webkitExitFullscreen)document.webkitExitFullscreen();
-}
-function cpPacEsc(e){if(e.key==='Escape')cpPacienteFechar();}
+/* A tela "Mostrar ao paciente" da coluna saiu em 04/08/2026: ele nao gostou do corpo desenhado. */
 
 let _quiroRefAba='raizes';
 function setQuiroRef(aba){
@@ -8390,23 +8024,9 @@ function sessaoNumero(){
   }
   return ds.length+1;                    // o de hoje ainda não está gravado
 }
-/* O cabeçalho do encontro de hoje: o número que ele vai receber e a escala
-   marcada, se houver. Só aparece com alguém escolhido — sem pessoa não há
-   encontro, e três campos vazios no pé da tela só ocupam lugar. */
-function renderEncontroHoje(){
-  const box=document.getElementById('encontroHoje');
-  if(!box)return;
-  if(!_diagPacSel){box.style.display='none';return;}
-  box.style.display='';
-  const n=sessaoNumero();
-  const num=document.getElementById('encHojeNum');
-  if(num)num.textContent=n?(_diagEditandoId?' — encontro nº '+n+', em edição':' — será o '+n+'º encontro'):'';
-  const esc=document.getElementById('encHojeEsc');
-  if(esc){
-    const v=vDiagEsc();
-    esc.textContent=v?escEmoRotulo(v):'sem escala anotada neste encontro';
-  }
-}
+/* O ENCONTRO DE HOJE saiu da tela em 04/08/2026, a pedido dele: a moldura e os tres
+   campos (o que foi feito, como reagiu, para o proximo). O que ja estava gravado nos
+   encontros antigos continua no banco, no historico e na folha impressa. */
 
 function sessaoRender(vazio){
   const resumo=document.getElementById('diagResumo');
@@ -8417,7 +8037,6 @@ function sessaoRender(vazio){
     const n=sessaoNumero();
     numEl.textContent=n?(_diagEditandoId?'encontro nº '+n+' (em edição)':n+'º encontro com '+(_diagPacSel?_diagPacSel.nome.split(' ')[0]:'')):'';
   }
-  renderEncontroHoje();
   if(acoes)acoes.style.display=vazio?'none':'';
   if(vazio){
     resumo.innerHTML='<p style="font-size:12.5px;color:var(--txt-l);font-style:italic">Nada marcado ainda neste encontro. O que você for clicando nas caixas acima aparece aqui — e é isto que vai para a ficha.</p>';
@@ -9138,7 +8757,6 @@ function diagCarregarRascunho(){
   MEM_CAMPOS.forEach(id=>{const e=document.getElementById(id);if(e&&d.mem)e.value=d.mem[id]||'';});
   _diagJaSalvo=false;
   renderPulsoCard();renderElementosGrid();renderPontosGrid();initBaguaWheel();renderDiagPainel();
-  if(typeof cpDesenhar==='function'){cpDesenhar();cpPainel();}
   toast('A avaliação desta pessoa voltou como estava. Ainda não foi salva.','#1565C0',"info");
 }
 
@@ -11144,8 +10762,6 @@ async function salvarDiagnostico(){
     // E a rede do resto da avaliação: o encontro está no servidor, a rede
     // cumpriu o papel dela e sai de cena.
     diagLimparRascunho();
-    // O encontro de hoje já é história: a régua ganha o ponto na hora.
-    reguaRender();
   }catch(e){
     console.error('Erro ao salvar diagnóstico:',e);
     toast('Erro ao salvar avaliação: '+(e.message||'verifique sua conexão'),'#c62828',"erro");
@@ -11603,11 +11219,6 @@ function htmlUltimoEncontro(diag,opts){
 function renderDiagUltEncontro(ignorarId){
   // O cabeçalho é redesenhado junto: toda troca de pessoa passa por aqui.
   cabRender();
-  // E a régua também: ela é a mesma pessoa vista pelo tempo inteiro.
-  reguaRender();
-  // E o que a folha guarda de uma visita para a outra: os gatilhos e as frases.
-  folhaGuardadosRender();
-  renderEncontroHoje();
   const el=document.getElementById('diagUltEncontro');
   if(el){el.style.display='none';el.innerHTML='';}
 }
@@ -11618,512 +11229,9 @@ function renderUltEncontro(pacId){
   if(el){el.style.display='none';el.innerHTML='';}
 }
 
-/* ===== A RÉGUA DE ENCONTROS — o pé do Diagnóstico =====
-   Duas informações no mesmo desenho, porque no atendimento elas são a mesma:
-   1) EMBAIXO, a régua: um traço por encontro, espaçado pelo TEMPO REAL entre
-      eles. Não é enfeite — o vão largo mostra sozinho quando a pessoa sumiu, e
-      a piora seguinte costuma ter a ver. Vão de 45 dias para cima ganha aviso.
-   2) EM CIMA, a linha da Escala de Orientação Emocional (1 Alegria … 22 Medo),
-      que ele preenche em toda avaliação e nunca viu desenhada. Quanto mais
-      alto na tela, mais alto na escala — subir na tela é subir de verdade.
-   Nada traçado no olho: a altura da faixa e o respiro até a régua saem de φ, e
-   os pontos se distribuem pela data e não por passo igual. Encontro sem escala
-   anotada não é inventado — fica só como traço na régua, e a linha pula ele
-   pontilhada. A ferramenta mostra; quem lê é ele. */
-const REG_PHI=(1+Math.sqrt(5))/2;
-const REG_LARG=640;                                        // largura da prancheta
-const REG_ESQ=38, REG_DIR=16;                              // margens do desenho
-const REG_TOPO=16;                                         // ar acima da escala
-const REG_ESC=Math.round(REG_LARG/Math.pow(REG_PHI,2));    // altura da faixa emocional
-const REG_VAO=Math.round(REG_ESC/Math.pow(REG_PHI,3));     // respiro até a régua
-const REG_PE=34;                                           // números e datas embaixo
-const REG_SUMIU=45;                                        // dias a partir dos quais o vão vira aviso
-// Os 22 degraus, no nome curto. O índice é o número que ele escolhe no campo.
-const REG_EMO=['','Alegria','Paixão','Entusiasmo','Crença','Otimismo','Esperança',
-  'Contentamento','Tédio','Pessimismo','Frustração','Sobrecarregado','Desapontamento',
-  'Dúvida','Preocupação','Culpa','Desencorajamento','Raiva','Vingança','Ódio','Ciúme',
-  'Indignidade','Medo'];
-
-function regGrau(d){const n=parseInt(String((d&&d.escalaEmocional)||'').trim(),10);return(n>=1&&n<=22)?n:0;}
-function regDia(iso){const p=String(iso||'').split('-');return p.length===3?Date.UTC(+p[0],+p[1]-1,+p[2])/86400000:null;}
-function regDias(a,b){const x=regDia(a),y=regDia(b);return(x===null||y===null)?0:Math.round(y-x);}
-// O alto da faixa emocional passou a variar (os marcos da vida pedem ar acima),
-// por isso a altura de um degrau agora recebe de onde a faixa começa.
-const regY=(n,yTopo)=>yTopo+(n-1)/21*REG_ESC;
-// Duração em voz humana — irmã de haQuantoTempo(), mas para um intervalo.
-function regDuracao(dias){
-  if(dias<=0)return'';
-  if(dias<31)return dias+(dias===1?' dia':' dias');
-  const m=Math.round(dias/30.44);
-  if(m<12)return m+(m===1?' mês':' meses');
-  const a=Math.floor(dias/365.25), r=Math.round((dias-a*365.25)/30.44);
-  return a+(a===1?' ano':' anos')+(r?' e '+r+(r===1?' mês':' meses'):'');
-}
-
-function reguaDesenhar(sess,postos){
-  postos=postos||[];
-  // Ar acima da faixa, só quando há marco: sem marco nenhum o desenho fica
-  // exatamente como era, pixel por pixel.
-  const REG_MC=postos.length?30:0;
-  // Os símbolos ficam embaixo do próprio número, e não em cima: o aviso de
-  // sumiço mora logo abaixo, e as duas letras acabavam se atropelando.
-  const yGl=REG_TOPO+16;                                   // a linha dos símbolos
-  const yTopo=REG_TOPO+REG_MC, yBase=yTopo+REG_ESC, yReg=yBase+REG_VAO, alt=yReg+REG_PE;
-  const x0=REG_ESQ, x1=REG_LARG-REG_DIR;
-  const t=sess.map(d=>regDia(d.data));
-  const tMin=Math.min(...t);
-  let tMax=Math.max(...t);
-  const hoje=regDia(dLocal(new Date()));
-  // Um peso de fora que ainda não acabou vai até hoje: é o que "em curso" quer
-  // dizer. E qualquer marco depois do último encontro estica a régua até ele.
-  postos.forEach(o=>{
-    const f=o.fim?o.fim.dia:(o.curso?Math.max(hoje,tMax):o.dia);
-    if(o.dia>tMax)tMax=o.dia;
-    if(f>tMax)tMax=f;
-  });
-  const antes=postos.filter(o=>o.dia<tMin);
-  const tVida=antes.length?Math.min(...antes.map(o=>o.dia)):tMin;
-  // A DOBRA. À esquerda, a vida; à direita, os encontros. São duas réguas de
-  // tempo no mesmo desenho, e por isso a dobra é DESENHADA e não disfarçada:
-  // numa régua só, trinta anos de vida e três meses de acompanhamento cairiam
-  // um em cima do outro. A vida fica com 1/φ² da largura — o resto é o trabalho.
-  const dobra=antes.length?x0+(x1-x0)/(REG_PHI*REG_PHI):x0;
-  const span=tMax-tMin;
-  const spanV=tMin-tVida;
-  const xVida=d=>spanV>0?x0+(d-tVida)/spanV*(dobra-12-x0):x0;
-  const xData=d=>d<tMin&&antes.length?xVida(d)
-    :(span>0?dobra+(Math.min(d,tMax)-tMin)/span*(x1-dobra):(dobra+x1)/2);
-  // A posição é a data. Só quando tudo cai no mesmo dia é que o passo vira igual.
-  const xs=sess.map((d,i)=>span>0?dobra+(t[i]-tMin)/span*(x1-dobra)
-    :(sess.length===1?(dobra+x1)/2:dobra+i*(x1-dobra)/(sess.length-1)));
-  // Dois encontros no mesmo dia se sobrepõem e viram um borrão: afasta o mínimo
-  // para o desenho continuar legível, sem mexer em quem já estava separado.
-  for(let i=1;i<xs.length;i++)if(xs[i]-xs[i-1]<7)xs[i]=Math.min(xs[i-1]+7,x1);
-
-  let svg=`<svg class="reg-tela" viewBox="0 0 ${REG_LARG} ${alt}" preserveAspectRatio="xMidYMid meet" style="max-width:${REG_LARG}px;height:auto;aspect-ratio:${REG_LARG}/${alt};margin:0 auto">`;
-  // As duas espirais, uma em cada metade da faixa, separadas na linha do 7/8.
-  const yMeio=regY(7.5,yTopo);
-  svg+=`<rect x="${x0-4}" y="${yTopo}" width="${x1-x0+8}" height="${(yMeio-yTopo).toFixed(1)}" fill="var(--pri-l)" opacity=".45"/>`;
-  svg+=`<rect x="${x0-4}" y="${yMeio.toFixed(1)}" width="${x1-x0+8}" height="${(yBase-yMeio).toFixed(1)}" fill="#F6EFE2" opacity=".55"/>`;
-  svg+=`<path d="M${x0-4} ${yMeio.toFixed(1)} L${x1+4} ${yMeio.toFixed(1)}" stroke="#E4DCCB" stroke-width="1" fill="none"/>`;
-  [1,7,14,22].forEach(n=>{
-    svg+=`<text x="${x0-7}" y="${(regY(n,yTopo)+3.2).toFixed(1)}" text-anchor="end" font-size="8.5" fill="#B9AF98" font-weight="700">${n}</text>`;
-  });
-  // Os dois extremos por dentro da faixa — fora dela esbarrariam no aviso de sumiço.
-  svg+=`<text x="${(dobra+3).toFixed(1)}" y="${(regY(1,yTopo)+12).toFixed(1)}" font-size="8" fill="#C4B79A" letter-spacing="0.6">ALEGRIA</text>`;
-  svg+=`<text x="${(dobra+3).toFixed(1)}" y="${(regY(22,yTopo)-5).toFixed(1)}" font-size="8" fill="#C4B79A" letter-spacing="0.6">MEDO</text>`;
-
-  // A metade da vida não tem escala emocional para mostrar — e o desenho diz
-  // isso, em vez de deixar o fundo sugerir um degrau que ninguém anotou.
-  if(antes.length){
-    svg+=`<rect x="${x0-4}" y="${yTopo}" width="${(dobra-x0+4).toFixed(1)}" height="${(yBase-yTopo).toFixed(1)}" fill="#FFFDF7" opacity=".72"/>`;
-    svg+=`<path d="M${dobra.toFixed(1)} ${yGl-16} L${dobra.toFixed(1)} ${yReg+10}" stroke="#C9A84C" stroke-width="1" stroke-dasharray="3 3" fill="none" opacity=".85"/>`;
-    svg+=`<text x="${(dobra-6).toFixed(1)}" y="${yReg+28}" text-anchor="end" font-size="8" fill="#C9A84C">a vida</text>`;
-    svg+=`<text x="${(dobra+6).toFixed(1)}" y="${yReg+28}" font-size="8" fill="#C9A84C">os encontros</text>`;
-  }
-
-  // O sumiço, marcado onde ele aconteceu.
-  for(let i=1;i<sess.length;i++){
-    const dias=regDias(sess[i-1].data,sess[i].data);
-    if(dias<REG_SUMIU)continue;
-    const a=xs[i-1], b=xs[i];
-    svg+=`<rect x="${a.toFixed(1)}" y="${yTopo}" width="${(b-a).toFixed(1)}" height="${(yReg-yTopo).toFixed(1)}" fill="#EF6C00" opacity=".05"/>`;
-    if(b-a>=46)svg+=`<text x="${((a+b)/2).toFixed(1)}" y="${yTopo-5}" text-anchor="middle" font-size="8.5" fill="#EF6C00">${regDuracao(dias)} sem vir</text>`;
-  }
-
-  // A linha da escala: liga só quem tem degrau anotado. Quando pula alguém, o
-  // traço vai pontilhado — a linha não finge saber o que não foi escrito.
-  const marc=sess.map((d,i)=>({i,n:regGrau(d)})).filter(o=>o.n);
-  for(let k=1;k<marc.length;k++){
-    const a=marc[k-1], b=marc[k], pulou=b.i-a.i>1;
-    svg+=`<path d="M${xs[a.i].toFixed(1)} ${regY(a.n,yTopo).toFixed(1)} L${xs[b.i].toFixed(1)} ${regY(b.n,yTopo).toFixed(1)}" fill="none" stroke="var(--pri-deep)" stroke-width="1.8" stroke-linecap="round"${pulou?' stroke-dasharray="4 4" opacity=".5"':''}/>`;
-  }
-
-  // OS MARCOS DA VIDA. No desenho cabe o símbolo e o número; a palavra fica na
-  // lista, embaixo. Marco de data aproximada vem pontilhado e com o til —
-  // aproximado é aproximado, e o desenho tem que dizer isso.
-  postos.forEach((o,k)=>{
-    const cor=MC_TIPOS[o.m.tipo].cor, x=+xData(o.dia).toFixed(1), ap=o.aprox;
-    let g=`<g class="reg-mc"><title>${escHtml(mcTitulo(o))}</title>`;
-    g+=`<path d="M${x} ${yGl+7} L${x} ${yReg}" stroke="${cor}" stroke-width="1" stroke-dasharray="2 4" opacity=".42" fill="none"/>`;
-    if(o.m.tipo==='peso'){
-      const xf=+xData(o.fim?o.fim.dia:Math.max(hoje,tMax)).toFixed(1);
-      g+=`<path d="M${x} ${yGl} L${Math.max(xf,x+6).toFixed(1)} ${yGl}" stroke="${cor}" stroke-width="2.4" stroke-linecap="round" opacity=".75"${ap?' stroke-dasharray="5 3"':''} fill="none"/>`;
-      g+=`<path d="M${x} ${yGl-4} L${x} ${yGl+4}" stroke="${cor}" stroke-width="2" stroke-linecap="round"/>`;
-      if(!o.fim)g+=`<text x="${Math.max(xf,x+6).toFixed(1)}" y="${yGl+11}" text-anchor="end" font-size="7.5" fill="${cor}">em curso</text>`;
-    }else if(o.m.tipo==='cena'){
-      g+=`<path d="M${x} ${yGl-5} L${x+5} ${yGl} L${x} ${yGl+5} L${x-5} ${yGl} Z" fill="${ap?'#FFFDF7':cor}" stroke="${cor}" stroke-width="1.6"${ap?' stroke-dasharray="2.5 2"':''}/>`;
-    }else{
-      g+=`<path d="M${x} ${yGl-5} L${x+5} ${yGl+4} L${x-5} ${yGl+4} Z" fill="${ap?'#FFFDF7':cor}" stroke="${cor}" stroke-width="1.6"${ap?' stroke-dasharray="2.5 2"':''}/>`;
-    }
-    g+=`<text x="${x}" y="${yGl-9}" text-anchor="middle" font-size="8" fill="${cor}" font-weight="700">${ap?'~':''}M${k+1}</text>`;
-    g+=`<rect x="${(x-8).toFixed(1)}" y="${yGl-16}" width="16" height="28" fill="transparent"/></g>`;
-    svg+=g;
-  });
-
-  svg+=`<path d="M${(dobra-4).toFixed(1)} ${yReg} L${x1+4} ${yReg}" stroke="#D8CDB6" stroke-width="1.3" fill="none"/>`;
-  if(antes.length)svg+=`<path d="M${x0-4} ${yReg} L${(dobra-10).toFixed(1)} ${yReg}" stroke="#E4DCCB" stroke-width="1.3" stroke-dasharray="5 4" fill="none"/>`;
-  sess.forEach((d,i)=>{
-    const n=regGrau(d), x=+xs[i].toFixed(1);
-    const tit=`${rotuloSessao(d)} — ${fd(d.data)}${n?' · '+n+' '+REG_EMO[n]:' · sem escala anotada'}`;
-    let g=`<g class="reg-pt" onclick="verDiagHist('${d.id}')"><title>${escHtml(tit)}</title>`;
-    g+=`<path d="M${x} ${yReg-5} L${x} ${yReg+5}" stroke="#8A8578" stroke-width="1.3" fill="none"/>`;
-    if(n){
-      g+=`<path d="M${x} ${(regY(n,yTopo)+5).toFixed(1)} L${x} ${yReg-5}" stroke="#E4DCCB" stroke-width="1" stroke-dasharray="2 3" fill="none"/>`;
-      g+=`<circle cx="${x}" cy="${regY(n,yTopo).toFixed(1)}" r="4.6" fill="#FFFDF7" stroke="var(--pri-deep)" stroke-width="2"/>`;
-    }else{
-      g+=`<circle cx="${x}" cy="${yReg}" r="3.2" fill="#FFFDF7" stroke="#B9AF98" stroke-width="1.4"/>`;
-    }
-    if(sess.length<=20)g+=`<text x="${x}" y="${yReg+16}" text-anchor="middle" font-size="8.5" fill="#8A8578" font-weight="600">${String(i+1).padStart(2,'0')}</text>`;
-    g+=`<rect x="${(x-7).toFixed(1)}" y="${yReg-9}" width="14" height="27" fill="transparent"/></g>`;
-    svg+=g;
-  });
-  // A data do primeiro encontro fica onde o primeiro encontro está: quando há
-  // dobra, ela desce junto com a dobra, e a ponta esquerda passa a ser a vida.
-  if(!antes.length)svg+=`<text x="${x0}" y="${yReg+28}" font-size="8.5" fill="#B9AF98">${fd(sess[0].data)}</text>`;
-  if(sess.length>1)svg+=`<text x="${x1}" y="${yReg+28}" text-anchor="end" font-size="8.5" fill="#B9AF98">${fd(sess[sess.length-1].data)}</text>`;
-  return svg+'</svg>';
-}
-
-// O resumo em números, na mesma ordem em que ele lê o desenho.
-function reguaResumoHtml(sess,postos){
-  postos=postos||[];
-  const n=sess.length, p=[];
-  const dias=regDias(sess[0].data,sess[n-1].data);
-  const graus=sess.map(regGrau).filter(Boolean);
-  p.push(`<span class="reg-num"><b>${n}</b> ${n===1?'encontro':'encontros'}</span>`);
-  if(dias>0)p.push(`<span class="reg-num"><b>${regDuracao(dias)}</b> de acompanhamento</span>`);
-  if(graus.length>1){
-    const a=graus[0], z=graus[graus.length-1], dg=a-z;
-    const dito=dg>0?'subiu '+dg+(dg===1?' degrau':' degraus')
-      :dg<0?'desceu '+(-dg)+(dg===-1?' degrau':' degraus'):'no mesmo degrau';
-    p.push(`<span class="reg-num"><b>${a} &rarr; ${z}</b> ${dito}</span>`);
-  }else if(graus.length===1){
-    p.push(`<span class="reg-num"><b>${graus[0]}</b> ${REG_EMO[graus[0]]} — um degrau só anotado</span>`);
-  }
-  p.push(`<span class="reg-num">último <b>${haQuantoTempo(sess[n-1].data)}</b></span>`);
-  const sem=n-graus.length;
-  if(sem)p.push(`<span style="color:#B9AF98">${sem===1?'1 encontro sem a escala anotada':sem+' encontros sem a escala anotada'}</span>`);
-  // Quanto tempo de vida a régua está mostrando antes do primeiro encontro.
-  const antes=postos.filter(o=>o.dia<regDia(sess[0].data));
-  if(antes.length){
-    const recuo=Math.round(regDia(sess[0].data)-Math.min(...antes.map(o=>o.dia)));
-    p.push(`<span class="reg-num"><b>${postos.length}</b> ${postos.length===1?'marco da vida':'marcos da vida'}${recuo>0?', recuando '+regDuracao(recuo):''}</span>`);
-  }else if(postos.length){
-    p.push(`<span class="reg-num"><b>${postos.length}</b> ${postos.length===1?'marco da vida':'marcos da vida'}</span>`);
-  }
-  return p.join('<span style="color:#D8CDB6">·</span>');
-}
-
-/* ===== FAIXA 6 — OS MARCOS DA VIDA =====
-   A régua desenhava encontros. O atendimento pediu que ela desenhasse também a
-   VIDA: a cena que fundou (com data e idade), as reativações — a mesma cena
-   batendo de novo em outra época — e o peso de fora, o fato em curso que tem
-   datas próprias e muda entre um encontro e outro. Sem isso, a piora do sintoma
-   parece aleatória; com isso, ela quase sempre tem endereço.
-   Três honestidades, que valem mais do que o desenho:
-   1) Marco sem data NÃO ENTRA na régua. Fica listado, dizendo que não tem lugar
-      no tempo. Não se inventa data como não se inventa idade.
-   2) Idade e ano viram data aproximada, e o desenho DIZ que é aproximada — vem
-      pontilhado e com til.
-   3) Idade só vira data se a ficha tiver o nascimento. Sem nascimento, o marco
-      espera; a conta seria chute com cara de precisão.
-   Onde mora: no campo `marcos` da própria pessoa, junto do resto da ficha. Não
-   é tabela nova nem sincronismo novo — é a mesma ficha, com um campo a mais. */
-const MC_TIPOS={
-  cena:{rot:'A cena que fundou',cor:'#B4472E'},
-  reativacao:{rot:'Reativação',cor:'#C9A84C'},
-  peso:{rot:'O peso de fora',cor:'#5B7B8A'}
-};
-let _mcEdit=null, _mcSalvando=false;
-
-const marcosDoPac=pacId=>{
-  const p=gD('pacientes').find(x=>String(x.id)===String(pacId));
-  return (p&&Array.isArray(p.marcos))?p.marcos:[];
-};
-
-// De como o marco foi dito para um lugar no tempo — ou para lugar nenhum.
-function mcQuando(m,pac,pref){
-  pref=pref||'';
-  const dt=String(m[pref+'data']||'').trim();
-  if(/^\d{4}-\d{2}-\d{2}$/.test(dt))return{dia:regDia(dt),aprox:false,dito:fd(dt)};
-  const ano=parseInt(String(m[pref+'ano']||'').trim(),10);
-  if(ano>=1900&&ano<=2200)return{dia:Date.UTC(ano,6,1)/86400000,aprox:true,dito:'por volta de '+ano};
-  const id=parseFloat(String(m[pref+'idade']||'').replace(',','.'));
-  if(id>=0&&id<130){
-    const nasc=pac&&pac.nascimento;
-    if(/^\d{4}-\d{2}-\d{2}$/.test(String(nasc||'')))
-      return{dia:regDia(nasc)+Math.round(id*365.25+182),aprox:true,dito:'por volta dos '+String(m[pref+'idade']).trim()+' anos'};
-    return{dia:null,aprox:true,dito:'aos '+String(m[pref+'idade']).trim()+' anos',semNasc:true};
-  }
-  return null;
-}
-
-// A lista de marcos virada em lugares no tempo, na ordem em que aconteceram.
-function mcPostos(pacId){
-  const pac=gD('pacientes').find(x=>String(x.id)===String(pacId))||{};
-  const fora=[];
-  const dentro=marcosDoPac(pacId).map(m=>{
-    const q=mcQuando(m,pac);
-    if(!q||q.dia===null){fora.push({m,motivo:q&&q.semNasc?'a idade só vira data com o nascimento na ficha':'sem data'});return null;}
-    const f=(m.tipo==='peso')?mcQuando(m,pac,'fim'):null;
-    return{m,dia:q.dia,aprox:q.aprox||!!(f&&f.aprox),dito:q.dito,fim:(f&&f.dia!==null)?f:null,curso:m.tipo==='peso'&&!(f&&f.dia!==null)};
-  }).filter(Boolean).sort((a,b)=>a.dia-b.dia);
-  return{postos:dentro,fora};
-}
-
-function mcTitulo(o){
-  const t=MC_TIPOS[o.m.tipo]||MC_TIPOS.cena;
-  let s=t.rot+' — '+(o.m.titulo||'sem título')+' · '+o.dito;
-  if(o.m.tipo==='peso')s+=o.fim?' até '+o.fim.dito:' · em curso';
-  return s;
-}
-
-function reguaMarcosRender(){
-  const el=document.getElementById('reguaMarcos');
-  if(!el)return;
-  if(!_diagPacSel){el.innerHTML='';return;}
-  const {postos,fora}=mcPostos(_diagPacSel.id);
-  let h=`<div class="mc-cab">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;color:var(--gold,#C9A84C)"><path d="M4 20V6M4 6l7-2v6l7-2v6l-7 2V6"/></svg>
-      Os marcos da vida <span>— a régua começa antes do primeiro encontro</span>
-    </div>`;
-  if(!postos.length&&!fora.length){
-    h+=`<div class="mc-vazio">Nada marcado ainda. A cena que fundou, as vezes em que ela bateu de novo e o peso de fora que está em curso entram aqui — e o desenho passa a mostrar quando o sintoma piorou perto de quê.</div>`;
-  }else{
-    postos.forEach((o,k)=>{
-      const t=MC_TIPOS[o.m.tipo];
-      const quando=o.dito+(o.m.tipo==='peso'?(o.fim?' até '+o.fim.dito:' — em curso'):'');
-      h+=`<div class="mc-item">
-        <span class="mc-badge" style="color:${t.cor};background:${t.cor}18">${o.aprox?'~':''}M${k+1}</span>
-        <div class="mc-corpo">
-          <div class="mc-tit">${escHtml(o.m.titulo||'sem título')} <span class="mc-quando" style="color:${t.cor}">· ${escHtml(t.rot)}</span></div>
-          <div class="mc-quando">${escHtml(quando)}${o.aprox?' <em>(aproximado)</em>':''}</div>
-          ${o.m.nota?`<div class="mc-nota">${escHtml(o.m.nota)}</div>`:''}
-        </div>
-        <div class="mc-acoes"><button type="button" class="mc-x" onclick="mcAbrir(${jsq(o.m.id)})">editar</button></div>
-      </div>`;
-    });
-    fora.forEach(f=>{
-      h+=`<div class="mc-item">
-        <span class="mc-badge">—</span>
-        <div class="mc-corpo">
-          <div class="mc-tit">${escHtml(f.m.titulo||'sem título')} <span class="mc-quando">· ${escHtml((MC_TIPOS[f.m.tipo]||MC_TIPOS.cena).rot)}</span></div>
-          <div class="mc-quando">sem lugar no tempo — ${escHtml(f.motivo)}. Não entra no desenho, e nada é inventado por baixo.</div>
-        </div>
-        <div class="mc-acoes"><button type="button" class="mc-x" onclick="mcAbrir(${jsq(f.m.id)})">editar</button></div>
-      </div>`;
-    });
-  }
-  h+=(_mcEdit!==null)?mcFormHtml():
-    `<div class="mc-pe" style="margin-top:9px"><button type="button" class="btn btn-sec btn-sm" onclick="mcAbrir('')"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span> Marcar um tempo</button></div>`;
-  el.innerHTML=h;
-}
-
-function mcFormHtml(){
-  const m=(_mcEdit?marcosDoPac(_diagPacSel.id).find(x=>String(x.id)===String(_mcEdit)):null)||{tipo:'cena'};
-  const op=(k,r)=>`<option value="${k}"${m.tipo===k?' selected':''}>${r}</option>`;
-  return `<div class="mc-form">
-    <div class="fr">
-      <div class="fg" style="flex:0 0 170px"><label>O que é</label>
-        <select id="mcTipo" onchange="mcFormTipo()">${Object.keys(MC_TIPOS).map(k=>op(k,MC_TIPOS[k].rot)).join('')}</select></div>
-      <div class="fg" style="flex:1 1 240px"><label>Em uma linha</label>
-        <input type="text" id="mcTitulo" placeholder="Ex: ficou trancada no quarto" value="${escHtml(m.titulo||'')}"></div>
-    </div>
-    <div class="fr">
-      <div class="fg"><label>Data exata, se houver</label><input type="date" id="mcData" value="${escHtml(m.data||'')}"></div>
-      <div class="fg"><label>Ou o ano</label><input type="text" id="mcAno" placeholder="Ex: 1998" value="${escHtml(m.ano||'')}"></div>
-      <div class="fg"><label>Ou a idade dela</label><input type="text" id="mcIdade" placeholder="Ex: 7" value="${escHtml(m.idade||'')}"></div>
-    </div>
-    <div class="fr" id="mcFimLinha" style="display:${m.tipo==='peso'?'flex':'none'}">
-      <div class="fg"><label>Até (data), se já acabou</label><input type="date" id="mcFimData" value="${escHtml(m.fimdata||'')}"></div>
-      <div class="fg"><label>Ou até o ano</label><input type="text" id="mcFimAno" placeholder="deixe vazio se está em curso" value="${escHtml(m.fimano||'')}"></div>
-    </div>
-    <div class="fr full"><div class="fg" style="flex:1 1 100%"><label>Quem estava junto, o símbolo, o que ficou</label>
-      <input type="text" id="mcNota" value="${escHtml(m.nota||'')}"></div></div>
-    <div class="mc-pe">
-      <span class="mc-quando" style="flex:1 1 auto">Sem data, sem ano e sem idade o marco fica guardado — só não é desenhado.</span>
-      ${_mcEdit?`<button type="button" class="mc-x" onclick="mcApagar(${jsq(_mcEdit)})">apagar</button>`:''}
-      <button type="button" class="btn btn-sec btn-sm" onclick="mcFechar()">Cancelar</button>
-      <button type="button" class="btn btn-pri btn-sm" onclick="mcSalvar()">Guardar o marco</button>
-    </div>
-  </div>`;
-}
-
-function mcFormTipo(){
-  const t=v('mcTipo'), l=document.getElementById('mcFimLinha');
-  if(l)l.style.display=(t==='peso')?'flex':'none';
-}
-function mcAbrir(id){_mcEdit=id||'';reguaMarcosRender();}
-function mcFechar(){_mcEdit=null;reguaMarcosRender();}
-
-/* Guardar UM campo da pessoa sem passar por cima do resto. Mesma receita da
-   dobra do cabeçalho: baixa a ficha INTEIRA primeiro (a lista da tela é leve,
-   sem foto nem exames) e só então grava. Gravar o leve seria apagar o pesado.
-   Serve os marcos da vida, os gatilhos e as frases dela. */
-async function pacGravarCampo(campo,valor){
-  if(!_diagPacSel)return false;
-  const pac=await fetchPacFull(_diagPacSel.id);
-  if(!pac){toast('Não consegui abrir a ficha para guardar','#c62828',"erro");return false;}
-  pac[campo]=valor;
-  const d={...pac};delete d._full;
-  const ok=await dbGravar('pacientes',pac.id,d);
-  return ok!==false;
-}
-const mcGravarLista=arr=>pacGravarCampo('marcos',arr);
-
-async function mcSalvar(){
-  if(!_diagPacSel||_mcSalvando)return;
-  const titulo=v('mcTitulo').trim();
-  if(!titulo){toast('Escreva o marco em uma linha','#c62828',"erro");return;}
-  _mcSalvando=true;
-  try{
-    const arr=marcosDoPac(_diagPacSel.id).map(x=>({...x}));
-    const novo={
-      id:_mcEdit||novoId(), tipo:v('mcTipo')||'cena', titulo,
-      data:v('mcData'), ano:v('mcAno').trim(), idade:v('mcIdade').trim(),
-      fimdata:v('mcFimData')||'', fimano:v('mcFimAno').trim(), nota:v('mcNota').trim()
-    };
-    const i=arr.findIndex(x=>String(x.id)===String(novo.id));
-    if(i>=0)arr[i]=novo;else arr.push(novo);
-    if(!await mcGravarLista(arr))return;
-    _mcEdit=null;
-    reguaRender();
-    toast('Marco guardado na ficha.',null,"ok");
-  }finally{_mcSalvando=false;}
-}
-
-async function mcApagar(id){
-  if(!_diagPacSel||_mcSalvando)return;
-  if(!confirm('Apagar este marco da vida? Ele sai da ficha e do desenho.'))return;
-  _mcSalvando=true;
-  try{
-    const arr=marcosDoPac(_diagPacSel.id).filter(x=>String(x.id)!==String(id)).map(x=>({...x}));
-    if(!await mcGravarLista(arr))return;
-    _mcEdit=null;
-    reguaRender();
-    toast('Marco apagado.',null,"ok");
-  }finally{_mcSalvando=false;}
-}
-
-/* ===== FAIXA 2 — O QUE SE REPETE, E A FRASE QUE FICOU =====
-   Dois acréscimos dentro da folha limpa, os mais baratos das quatro faixas, e
-   os dois nascidos do mesmo atendimento:
-   - OS GATILHOS: uma lista por pessoa que só cresce. Não é campo classificado
-     nem lista fechada — é o que volta em toda sessão e hoje se redigitava ou
-     se perdia. Ele escreve; ninguém sugere.
-   - A FRASE DELA: marcar um trecho DENTRO do que já está escrito, para vê-lo
-     voltar na chegada seguinte. É seleção de texto, não campo novo. Ele pensa
-     por imagens; quando a pessoa entrega uma pronta, ela não pode se dissolver
-     em quatro mil caracteres.
-   A regra da peneira continua valendo: reconhecer não é decidir. Marcar a
-   frase é gesto dele, e nada aqui entra sozinho.
-   Onde moram: na ficha da PESSOA (`gatilhos` e `frases`), não na avaliação do
-   dia — é justamente por atravessarem os encontros que existem. */
-const gatilhosDoPac=pacId=>{
-  const p=gD('pacientes').find(x=>String(x.id)===String(pacId));
-  return (p&&Array.isArray(p.gatilhos))?p.gatilhos:[];
-};
-const frasesDoPac=pacId=>{
-  const p=gD('pacientes').find(x=>String(x.id)===String(pacId));
-  return (p&&Array.isArray(p.frases))?p.frases:[];
-};
-
-function folhaGuardadosRender(){
-  const el=document.getElementById('folhaGuardados');
-  const bf=document.getElementById('folhaBtnFrase');
-  if(!el)return;
-  if(!_diagPacSel){el.innerHTML='';if(bf)bf.style.display='none';return;}
-  if(bf)bf.style.display='';
-  const gat=gatilhosDoPac(_diagPacSel.id), fr=frasesDoPac(_diagPacSel.id);
-  let h='<div class="fg2">';
-  h+=`<div class="fg2-t">Os gatilhos — o que se repete</div>`;
-  if(gat.length){
-    h+=gat.map((g,i)=>`<span class="fg2-ch">${escHtml(g)}<button type="button" class="fg2-x" onclick="gatilhoTirar(${i})" title="Tirar da lista">&times;</button></span>`).join('');
-  }else{
-    h+=`<div class="fg2-vazio" style="margin-bottom:6px">A lista nasce vazia e só cresce. O que volta em toda sessão fica aqui em vez de se redigitar.</div>`;
-  }
-  h+=`<div class="fg2-novo" style="margin-top:4px">
-      <input type="text" id="gatilhoNovo" placeholder="Ex: elevador, ficar sozinha, domingo à noite" onkeydown="if(event.key==='Enter'){event.preventDefault();gatilhoPor()}" autocomplete="off">
-      <button type="button" class="btn btn-sec btn-sm" onclick="gatilhoPor()"><span class="btn-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>Pôr</button>
-    </div>`;
-  h+=`<div class="fg2-t">As frases dela — as imagens que ela entrega prontas</div>`;
-  if(fr.length){
-    h+=fr.slice().reverse().map(f=>`<div class="fg2-fr">
-        <q>${escHtml(f.txt)}</q>
-        <small>${escHtml(fd(f.data))}</small>
-        <button type="button" class="fg2-x" onclick="fraseTirar(${jsq(f.id)})" title="Tirar a frase">&times;</button>
-      </div>`).join('');
-  }else{
-    h+=`<div class="fg2-vazio">Marque um trecho ali em cima, no que você escreveu, e toque em <strong>Guardar a frase marcada</strong>. Ela volta aqui na próxima chegada, com a data do dia em que foi dita.</div>`;
-  }
-  el.innerHTML=h+'</div>';
-}
-
-async function gatilhoPor(){
-  if(!_diagPacSel){toast('Escolha primeiro quem chegou','#c62828',"erro");return;}
-  const t=v('gatilhoNovo').trim();
-  if(!t)return;
-  const arr=gatilhosDoPac(_diagPacSel.id).slice();
-  if(arr.some(g=>g.toLowerCase()===t.toLowerCase())){toast('Esse gatilho já está na lista');return;}
-  arr.push(t);
-  if(!await pacGravarCampo('gatilhos',arr))return;
-  folhaGuardadosRender();
-  toast('Gatilho guardado na ficha.',null,"ok");
-}
-
-async function gatilhoTirar(i){
-  if(!_diagPacSel)return;
-  const arr=gatilhosDoPac(_diagPacSel.id).slice();
-  if(i<0||i>=arr.length)return;
-  if(!confirm('Tirar "'+arr[i]+'" da lista de gatilhos?'))return;
-  arr.splice(i,1);
-  if(!await pacGravarCampo('gatilhos',arr))return;
-  folhaGuardadosRender();
-}
-
-// A frase é o trecho que ELE marcou dentro da folha. Sem trecho marcado não se
-// adivinha qual foi: a máquina não escolhe a imagem da pessoa.
-async function frasesGuardar(){
-  if(!_diagPacSel){toast('Escolha primeiro quem chegou','#c62828',"erro");return;}
-  const t=document.getElementById('diagFolha');
-  if(!t)return;
-  const txt=String(t.value||'').substring(t.selectionStart,t.selectionEnd).trim();
-  if(!txt){toast('Marque um trecho na folha antes — a frase é escolha sua','#c62828',"erro");return;}
-  const arr=frasesDoPac(_diagPacSel.id).slice();
-  if(arr.some(f=>f.txt===txt)){toast('Essa frase já está guardada');return;}
-  const dia=v('diagDt')||dLocal(new Date());
-  arr.push({id:novoId(),txt,data:dia});
-  if(!await pacGravarCampo('frases',arr))return;
-  folhaGuardadosRender();
-  toast('A frase ficou guardada na ficha dela.',null,"ok");
-}
-
-async function fraseTirar(id){
-  if(!_diagPacSel)return;
-  if(!confirm('Tirar esta frase da ficha?'))return;
-  const arr=frasesDoPac(_diagPacSel.id).filter(f=>String(f.id)!==String(id));
-  if(!await pacGravarCampo('frases',arr))return;
-  folhaGuardadosRender();
-}
-
-function reguaRender(){
-  const box=document.getElementById('reguaBloco'), tela=document.getElementById('reguaTela'), pe=document.getElementById('reguaResumo');
-  if(!box||!tela)return;
-  if(!_diagPacSel){box.style.display='none';tela.innerHTML='';if(pe)pe.innerHTML='';reguaMarcosRender();return;}
-  // Só o cache local: a régua não pode custar uma leitura do banco por paciente.
-  const sess=sessoesDoPac(_diagPacSel.id);
-  const {postos}=mcPostos(_diagPacSel.id);
-  box.style.display='block';
-  reguaMarcosRender();
-  if(!sess.length){
-    tela.innerHTML=`<div class="reg-vazio">Ainda não há encontro salvo com <strong>${escHtml(_diagPacSel.nome)}</strong>. A régua nasce no primeiro — e do segundo em diante o vão entre eles começa a contar a história.${postos.length?' Os marcos da vida já estão guardados aqui embaixo e aparecem no desenho assim que houver um encontro para ancorá-lo.':''}</div>`;
-    if(pe)pe.innerHTML='';
-    return;
-  }
-  tela.innerHTML=reguaDesenhar(sess,postos);
-  if(pe)pe.innerHTML=reguaResumoHtml(sess,postos);
-}
+/* A RÉGUA DE ENCONTROS e OS MARCOS DA VIDA sairam em 04/08/2026, a pedido dele.
+   Os encontros salvos continuam no banco e no historico; os marcos que ja estavam
+   gravados seguem no campo marcos da ficha da pessoa, intocados. */
 
 // ===== HISTÓRICO DE DIAGNÓSTICO INTEGRADO POR PACIENTE =====
 async function carregarDiagHistPac(pacId){

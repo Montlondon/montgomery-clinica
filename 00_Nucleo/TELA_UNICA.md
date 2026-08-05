@@ -70,6 +70,11 @@ faixas que já estão desenhadas. Não é planta nova — é a planta se aprofun
 
 #### Faixa 6 — a régua começa antes do primeiro encontro
 
+> **RETIRADA em 04/08/2026 (v10.7), sinal verde dele.** O pé do Diagnóstico saiu inteiro:
+> **O encontro de hoje**, **a régua de encontros** e **os marcos da vida**, com o código e o CSS
+> (910 linhas no dia). Os encontros salvos continuam no banco e no histórico, e os marcos já
+> gravados seguem na ficha da pessoa. O que está descrito abaixo é registro do que foi construído.
+
 Hoje a régua desenha **encontros**. O que o caso pediu é que ela desenhe **a vida**: a cena que
 fundou tem data e idade; as reativações são a mesma cena batendo em outras épocas; o peso de fora
 é um fato em curso, com datas próprias que mudam entre um encontro e outro.
@@ -93,6 +98,11 @@ como porta — e a porta não tem onde ser escrita.
 para o sintoma e para a região. Irmão do ponto 3 da tese: a ferramenta mostra, não conclui.
 
 #### Faixa 2 — a folha guarda o que se repete, e a frase que ficou
+
+> **RETIRADA em 04/08/2026 (v10.7), a pedido dele.** O rodapé da folha — os gatilhos e as frases
+> dela — saiu inteiro da tela, com o código e o CSS (396 linhas). Os campos `gatilhos` e `frases`
+> continuam na ficha de cada pessoa, no banco, intocados. O que está descrito abaixo é registro
+> do que foi construído, não do que está no ar.
 
 Dois acréscimos, os mais baratos de todos, os dois dentro da folha limpa:
 
@@ -451,6 +461,11 @@ avós no prumo do pai. A prancheta cresceu sozinha de 640 para 801.
 
 ### FEITO — a régua de encontros (Clínica v7.3, 01/08/2026)
 
+> **RETIRADA em 04/08/2026 (v10.7), sinal verde dele.** O pé do Diagnóstico saiu inteiro:
+> **O encontro de hoje**, **a régua de encontros** e **os marcos da vida**, com o código e o CSS
+> (910 linhas no dia). Os encontros salvos continuam no banco e no histórico, e os marcos já
+> gravados seguem na ficha da pessoa. O que está descrito abaixo é registro do que foi construído.
+
 O pé do Diagnóstico, exatamente como estava escrito aqui embaixo. Duas informações no mesmo
 desenho, porque no atendimento elas são a mesma coisa:
 
@@ -501,6 +516,13 @@ Levar duas vezes não duplica, e o que ele já tinha escrito à mão não é apa
 de minerais e ervas continuam desaguando nela do mesmo jeito.
 
 ### FEITO — Faixa 4, primeira vela: o corpo (Clínica v7.5, 01/08/2026), senha "Acender o Corpo"
+
+> **RETIRADA em 04/08/2026 (v10.7): ele não gostou do corpo desenhado.** Saiu o bloco visível
+> `#corpoBloco`, o desenho da tela (`cpDesenhar`/`cpTocar`/`cpPainel`) e a tela "Mostrar ao
+> paciente" — 275 linhas. **O código das vértebras ficou inteiro** (`CP_SEG`, `cpVertebras()`,
+> `cpRaiz()`), a anotação vértebra por vértebra continua na aba **Quiropraxia**, e a coluna
+> continua saindo na **folha impressa** (`cpSvgPapel`). O que está descrito abaixo vale como
+> registro do que foi construído; o desenho da tela não existe mais.
 
 **A última das cinco começou** — e começou pequena, de propósito. Entre os bonecos e a
 recomendação, o Diagnóstico agora tem um corpo desenhado de costas com a **coluna clicável,

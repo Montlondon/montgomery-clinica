@@ -9,6 +9,81 @@ Quando algo do ROADMAP vivo for concluído, o bloco desce para cá.
 
 ---
 
+## Concluído — a coluna de costas sai da tela do Diagnóstico (Clínica v10.7, 04/08/2026)
+
+Ele pediu, olhando a tela: retirar a faixa **"O corpo — a coluna, de costas"** do Diagnóstico.
+Saiu só o **bloco visível** (`#corpoBloco`, com o boneco, o painel ao lado e o botão
+"Mostrar ao paciente"). Nada de dado se perdeu: a anotação vértebra por vértebra continua
+inteira na aba **Quiropraxia**, gravando em `_diagSelecoes.quiro` como sempre, e o desenho da
+coluna continua saindo na **folha impressa**.
+
+Ele confirmou em seguida, com franqueza: *"eu honestamente não gostei desse corpo"* — e pediu
+para apagar o código do desenho, **menos o das vértebras**. Foi o que se fez, na mesma janela:
+saíram `cpDesenhar`, `cpTocar`, `cpPainel` e a tela inteira "Mostrar ao paciente"
+(`cpPaciente*`, `cpPac*`, `cpLarg`), mais o CSS `.cp-*` e `.cpp-*` e as três chamadas que
+ficaram sem dono. **275 linhas menos.**
+
+**O que ficou de pé, de propósito:** o código das vértebras — `CP_SEG` (os segmentos
+cervical, torácico, lombar), `cpVertebras()` (a distribuição vértebra por vértebra) e
+`cpRaiz()` (o que cada nível inerva) — e a **folha impressa**, `cpSvgPapel`, que continua
+desenhando a coluna com as vértebras daquele encontro acesas, junto da geometria que ela usa
+(`CP`, `CP_PERFIL`, `cpSuave`). A rede rodou depois de cada corte: 11 portas, nenhuma quebrada.
+
+*Lição para as aulas: as funções já eram escritas com a guarda `if(!el)return` — código que
+confere se a peça existe antes de desenhar nela pode ser desligado tirando só a peça. Foi isso
+que deixou a retirada segura em dois tempos: primeiro tirar a peça e conferir, depois apagar
+o desenho.* Uma segunda lição apareceu de graça: ao reescrever o arquivo por script, o Node
+gravou tudo em CRLF e o `git diff` acusou **13.546 linhas mudadas** em vez de 239 — o fantasma
+do fim de linha outra vez. Corrigido trocando `\r\n` por `\n`. **Ao mexer no `index.html` por
+script, gravar sempre em LF.**
+
+A rede embaixo do trapézio rodou antes do push: 11 portas conferidas, nenhuma quebrada.
+
+## Concluído — o pé do Diagnóstico sai inteiro (Clínica v10.7, 04/08/2026)
+
+Terceiro pedido da mesma janela, e o maior: *"isso tudo pode sair, sinal verde"* — o pé inteiro
+do Diagnóstico. Saíram **O encontro de hoje**, **A régua de encontros** e **Os marcos da vida**,
+com todo o código: `renderEncontroHoje`, `reguaRender`, `reguaDesenhar`, `reguaResumoHtml`, a
+família `mc*` inteira (`mcSalvar`, `mcApagar`, `mcAbrir`, `mcFormHtml`, `mcPostos`, `mcQuando`,
+`MC_TIPOS`, `marcosDoPac`), as constantes `REG_*` e o CSS `.reg-*`/`.mc-*`. **910 linhas menos**
+nas três retiradas do dia — a porta caiu de **914 KB para 856 KB**.
+
+**Uma pergunta foi feita antes de apagar**, e valeu a pena: os três campos de "O encontro de
+hoje" (o que foi feito, como o paciente reagiu, para o próximo) eram o **único** lugar onde
+aquela anotação se escrevia, e na foto ele tinha acabado de digitar neles. Ele respondeu
+**"tira tudo, campos incluídos"** — e assim foi feito. O que já estava gravado nos encontros
+antigos continua no banco, continua no histórico e continua saindo na folha impressa: a
+canalização de leitura (`MEM_CAMPOS`, `vMem`, `preencherMemSessao`) ficou de pé, escrita com
+guarda, e não quebra sem os campos. Os `marcos` já gravados também seguem na ficha da pessoa.
+
+**A prova:** a rede rodou depois de cada corte (11 portas, nenhuma quebrada) e a página foi
+aberta no navegador — **console limpo**, os sete blocos retirados ausentes do DOM, a folha, o
+DNA da Família e a recomendação de pé, `cpSvgPapel` e `cpVertebras` vivos, rodapé `v10.7 · 04/08`.
+
+*Lição para as aulas, e das boas: o primeiro roteiro de remoção mirou o comentário do HTML em
+vez do comentário do JavaScript — os dois tinham a mesma placa `===== A RÉGUA DE ENCONTROS =====`
+— e ia apagar **dez mil linhas** de uma vez. Só não apagou porque o passo seguinte falhou e o
+arquivo nunca foi gravado. O conserto foi trocar "acha a primeira linha que contém isto" por
+"na linha 11332 tem que estar escrito isto, senão pare" — **a âncora tem que ser conferida, não
+adivinhada.** Buscar por texto num arquivo de 12 mil linhas acha o vizinho, não o dono.*
+
+## Concluído — os gatilhos e as frases dela saem da folha (Clínica v10.7, 04/08/2026)
+
+Na mesma janela, olhando a tela, ele pediu para retirar também o rodapé da folha limpa: **"Os
+gatilhos — o que se repete"** e **"As frases dela — as imagens que ela entrega prontas"**. Saiu
+inteiro: o bloco `#folhaGuardados`, o botão *Guardar a frase marcada*, o CSS `.fg2-*` e todo o
+código (`folhaGuardadosRender`, `gatilhoPor`, `gatilhoTirar`, `frasesGuardar`, `fraseTirar`,
+`gatilhosDoPac`, `frasesDoPac`). **396 linhas menos.**
+
+**Os dados não foram tocados.** Os campos `gatilhos` e `frases` continuam na ficha de cada
+pessoa, no banco, e seguem na lista `PAC_LIGHT_KEYS`/`PAC_LISTAS`: se alguém já tinha frase
+guardada, ela está lá. Só a tela e os gestos foram retirados.
+
+*Nota honesta: as duas faixas retiradas hoje — o corpo desenhado e este rodapé — nasceram do
+mesmo atendimento de 03/08 e foram entregues na v10.2 com muita convicção. Menos de um dia de
+uso bastou para ele dizer que não eram. Vale como lição: a prova não é o desenho ficar bonito
+nem o código passar na rede; é ele querer usar aquilo na frente de uma pessoa.*
+
 ## Concluído — as quatro faixas que o atendimento pediu (Clínica v10.2, 03/08/2026)
 
 *Senha "As quatro faixas". Nasceu de um atendimento real trazido por ele: trauma de confinamento
