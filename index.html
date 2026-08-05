@@ -360,7 +360,9 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
   display:flex;flex-direction:column;align-items:stretch;overflow:auto}
 .fam-palco.fam-cheio{position:fixed;top:0;left:0;z-index:9999}
 .fam-palco:fullscreen #famTela,.fam-palco.fam-cheio #famTela{
+  flex:1 1 auto;display:flex;align-items:center;justify-content:center;overflow:auto;padding:1vh 1vw}
 .fam-palco:fullscreen .fam-tela,.fam-palco.fam-cheio .fam-tela{
+  max-width:96vw!important;width:auto!important;height:82vh!important;border-top:none}
 .fam-palco:fullscreen .fam-ed,.fam-palco.fam-cheio .fam-ed{flex:0 0 auto}
 /* A ESCALA QUE SE TOCA — os 22 degraus à vista, um toque marca.
    Antes era um <select> de 22 opções: em 19 encontros foi anotado 2 vezes.
@@ -374,6 +376,7 @@ h1,h2,h3,.serif{font-family:'Lora',serif}
   background:var(--cream);cursor:pointer;font-size:12px;color:var(--txt);line-height:1.25;text-align:left;transition:background .12s,border-color .12s}
 .esc-d:hover{background:var(--pri-l);border-color:var(--pri)}
 .esc-n{flex:0 0 auto;width:19px;height:19px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  font-size:9.5px;font-weight:700;background:#F1EADC;color:#8A8578}
 .esc-sobe .esc-n{background:var(--pri-l);color:var(--pri-deep)}
 .esc-desce .esc-n{background:#F6EFE2;color:#A8895A}
 .esc-d[aria-pressed="true"]{background:var(--pri-deep);border-color:var(--pri-deep);color:#fff;font-weight:600}
@@ -2174,7 +2177,7 @@ window.addEventListener('DOMContentLoaded',()=>{
 </main>
 <script>
 // Versão da plataforma — fonte única, escrita em todos os pontos marcados com .app-ver
-const APP_VER='v10.7 · 04/08';
+const APP_VER='v10.8 · 04/08';
 document.querySelectorAll('.app-ver').forEach(el=>el.textContent=APP_VER);
 </script>
 </div>

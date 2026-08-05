@@ -69,6 +69,38 @@ prova(
 );
 
 // ------------------------------------------------------------
+// 2b) A PINTURA FECHA? — a prova que faltava, aprendida doendo.
+//    Em 04/08/2026 uma regra de CSS ficou sem a chave que fecha.
+//    O navegador nao reclama: ele engole TUDO o que vem depois
+//    como se fosse parte da regra aberta. A pagina abriu com os
+//    icones do tamanho de uma porta e os links roxos, e esta rede
+//    disse "pode subir" — porque o JavaScript estava perfeito.
+//    Aqui se conta chave por chave: cada { tem que achar o seu }.
+// ------------------------------------------------------------
+const estilos = [...html.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)];
+let culpada = null;
+let fundo = 0;
+for (const [, folha] of estilos) {
+  let prof = 0;
+  let abriu = 0;
+  folha.split("\n").forEach((linha, n) => {
+    const limpa = linha.replace(/\/\*.*?\*\//g, "");
+    const antes = prof;
+    prof += (limpa.match(/{/g) || []).length - (limpa.match(/}/g) || []).length;
+    if (antes === 0 && prof > 0) abriu = n + 1;
+    // uma regra aberta seguida de outro seletor: alguem esqueceu o }
+    if (!culpada && prof > 0 && antes > 0 && /^[.#a-zA-Z[]/.test(linha))
+      culpada = `regra aberta na linha ${abriu} da folha de estilo engole a de baixo`;
+  });
+  fundo += prof;
+}
+prova(
+  `A pintura fecha (${estilos.length} folha${estilos.length > 1 ? "s" : ""} de estilo)`,
+  !culpada && fundo === 0,
+  culpada || (fundo === 0 ? "toda chave achou o seu par" : `sobraram ${fundo} chaves abertas`)
+);
+
+// ------------------------------------------------------------
 // 3) OS ARQUIVOS QUE A PORTA CHAMA EXISTEM MESMO?
 //    Um <script src="..."> apontando para arquivo que nao existe
 //    e uma tela que quebra so quando alguem chega naquela parte.
