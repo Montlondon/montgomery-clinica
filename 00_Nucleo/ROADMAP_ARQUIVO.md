@@ -3016,3 +3016,63 @@ quando se procura.
 
 **Regra nova:** ao concluir algo, o bloco **desce para o arquivo** e sai do vivo. O diário fica
 magro de propósito.
+
+---
+
+## 04/08/2026 — a ponte com o Google, consertada nos dois sentidos (v10.4, v10.5, v10.6)
+
+Nasceu de duas queixas do atendimento real, no mesmo dia. Provado ao vivo, no aparelho dele.
+
+### v10.4 — a ponte para de mentir
+
+Ele agendou e a sessão não apareceu no Google Agenda do celular, **mas a tela disse que tinha
+escrito**. Achado: o `pontePush` desistia **em silêncio** em quatro pontos — ponte desligada,
+agenda não escolhida, sessão sem data, Google recusando — e os avisos continuavam dizendo
+"e escrita no Google".
+
+Corrigido: o `pontePush` devolve sempre o que aconteceu em uma palavra (`ok` / `desligada` /
+`sem-agenda` / `sem-data` / `falhou`), e os quatro lugares que salvam sessão contam a verdade
+(`ponteQueixa`, `ponteAviso`). Ponte desligada segue sem alarme: é escolha dele, não defeito.
+
+**Provado ao vivo:** o aviso laranja apareceu — *"Salvo aqui, mas NÃO foi para o Google"* — e a
+caixa disse a causa: *a autorização do Google venceu e não consegui renovar sozinho*. Não era a
+agenda. A função no servidor (`google-token-refresh`) está **ativa** no projeto
+`montgomery-clinica`; o que falta nesses casos é a **chave de renovação** no aparelho, que mora
+no `localStorage` e some quando o navegador limpa os dados do site ou quando o login foi feito
+sem `prompt: consent`. Cura: o OK da própria caixa (`ponteReconectar` pede consent).
+
+*Lição para as aulas: função que desiste calada é pior que função que quebra — a que quebra avisa.*
+
+### v10.5 — o apagar atravessa a ponte
+
+Ele apagou um evento no Google e a sessão continuou de pé na Clínica. **Não era defeito:** era
+decisão escrita no código desde a v4.6 — *"apagar continua sendo decisão tomada dentro da
+Clínica"*. O risco foi dito a ele antes de mexer — a sessão leva junto **valor, forma de
+pagamento e evolução, e isso não volta** — e ele decidiu assim mesmo, **ciente da
+irreversibilidade**, porque na prática dele **o Google é onde ele desmarca**.
+
+O `pontePull` passou a ouvir o sumiço. Duas travas de pé, contra acidente e não contra ele:
+só some sessão que a Clínica reconhece pelo `gcalId`; e se a lista do Google não vier inteira,
+ninguém é apagado — **ausência só vira prova quando a última página chega**. Acima de 3 de uma
+vez (`APAGAR_TETO`), ela para e pergunta, com os nomes e as datas à vista.
+
+*Lição para as aulas: sincronismo de duas pontas não tem resposta certa — tem uma escolha sobre
+qual erro dói menos. Aqui ele preferiu o risco de perder a apagar na mão.*
+
+### v10.6 — virar as páginas até o fim
+
+A v10.5 respondia **"Tudo igual dos dois lados"** mesmo com o evento apagado. Defeito nascido
+dentro da própria trava de segurança: o Google entrega 250 eventos por vez e a agenda dele, em
+240 dias, tem muito mais. A primeira resposta vinha **sempre** pela metade, com `nextPageToken`
+— e a regra "lista truncada não apaga ninguém" engolia a funcionalidade inteira. Ela dizia
+"tudo igual" sem nunca ter olhado o fim da lista.
+
+A trava estava certa; faltava **virar as páginas**. Agora vira até acabar, com teto de 20 voltas
+(5.000 eventos) para não correr sem freio.
+
+**Provado ao vivo em 04/08:** sessão marcada na Clínica, chegada no Google, apagada lá, e o aviso
+vermelho na Agenda — *"1 sessão foi apagada no Google e saiu daqui também."*
+
+*Lição para as aulas: uma trava de segurança que nunca deixa a função rodar é indistinguível de
+uma função quebrada — e é pior, porque parece que está funcionando. Ela respondia "tudo igual"
+com a mesma cara de quem conferiu.*

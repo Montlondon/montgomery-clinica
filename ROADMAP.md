@@ -10,43 +10,6 @@ O mapa de onde mora cada coisa dentro do `index.html` mora em
 > este documento não. O que não está escrito aqui, some. **Ao concluir**, o bloco desce para o
 > arquivo e some daqui: o diário fica magro de propósito.
 
-## PENDENTE — provar o apagar que atravessa a ponte (04/08/2026)
-
-**v10.5 subiu.** Ele apagou um evento no Google e a sessão continuou de pé na Clínica.
-Não era defeito: era decisão escrita no código desde a v4.6 ("apagar continua sendo decisão
-tomada dentro da Clínica"). O risco foi dito a ele antes de mexer — a sessão leva junto
-**valor, forma de pagamento e evolução, e isso não volta** — e ele decidiu assim mesmo,
-ciente da irreversibilidade, porque na prática dele **o Google é onde ele desmarca**.
-
-Agora o `pontePull` ouve o sumiço. Duas travas de pé, contra acidente e não contra ele:
-só some sessão que a Clínica reconhece pelo `gcalId`; e se a lista do Google vier truncada
-(`nextPageToken`) ninguém é apagado — **ausência só vira prova quando a lista veio inteira**.
-Acima de 3 de uma vez, ela para e pergunta, com os nomes e as datas à vista (`APAGAR_TETO`).
-
-**Falta a prova ao vivo:** marcar uma sessão de teste, vê-la chegar ao Google, apagar lá e
-tocar em "Puxar do Google" na Agenda. Ela deve sair daqui, com o aviso vermelho.
-*Lição para as aulas: sincronismo de duas pontas não tem resposta certa — tem uma escolha
-sobre qual erro dói menos. Aqui ele preferiu o risco de perder a apagar na mão.*
-
-## PENDENTE — ouvir o que a ponte passou a dizer (04/08/2026)
-
-**v10.4 subiu.** Ele agendou em 04/08 e a sessão não apareceu no Google Agenda do celular,
-mas a tela disse que tinha escrito. Achado: o `pontePush` desistia **em silêncio** em quatro
-pontos (ponte desligada, agenda não escolhida, sessão sem data, Google recusando) e os avisos
-continuavam dizendo "e escrita no Google". Corrigido: a ponte devolve sempre o que aconteceu,
-e os quatro lugares que salvam sessão contam a verdade. Ponte desligada segue sem alarme.
-**Provado ao vivo em 04/08, no celular:** o aviso laranja apareceu ("Salvo aqui, mas NÃO foi
-para o Google") e a caixa disse a causa — *a autorização do Google venceu e não consegui
-renovar sozinho*. Não era a agenda. A função no servidor (`google-token-refresh`) está
-**ativa** no projeto `montgomery-clinica`; o que falta é a **chave de renovação** no aparelho,
-que mora no `localStorage` e some quando o navegador limpa os dados do site ou quando o login
-foi feito sem `prompt: consent`. Cura: o OK da própria caixa (`ponteReconectar` pede consent).
-
-**Pendente:** ele religar, subir a sessão de 04/08 pelo "Atualizar no Google", e marcar uma
-sessão de teste para ver o aviso vir verde. Se a chave de renovação sumir de novo em poucos
-dias, aí sim vale guardá-la fora do aparelho.
-*Lição para as aulas: função que desiste calada é pior que função que quebra — a que quebra avisa.*
-
 ## PENDENTE — senha "Ver o halo correr" (aberta em 03/08/2026)
 
 A v10.2 subiu e foi conferida no ar: rodapé `v10.2 · 03/08`, régua dos marcos desenhada,
